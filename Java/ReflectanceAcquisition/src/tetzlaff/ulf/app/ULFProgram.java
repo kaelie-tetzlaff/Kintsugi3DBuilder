@@ -1,5 +1,7 @@
 package tetzlaff.ulf.app;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,6 +13,8 @@ import com.trolltech.qt.core.QCoreApplication;
 import com.trolltech.qt.core.Qt.ApplicationAttribute;
 import com.trolltech.qt.gui.QApplication;
 
+import tetzlaff.gl.Program;
+import tetzlaff.gl.ShaderType;
 import tetzlaff.gl.helpers.InteractiveGraphics;
 import tetzlaff.gl.helpers.Trackball;
 import tetzlaff.gl.opengl.OpenGLContext;
@@ -47,12 +51,26 @@ public class ULFProgram
     	// This is the 'controller' in the MVC arrangement.
     	Trackball trackball = new Trackball(1.0f);
         trackball.addAsWindowListener(window);
+        
+        Program<OpenGLContext> program;
+        try
+        {
+    		program = window.getShaderProgramBuilder()
+    				.addShader(ShaderType.VERTEX, new File("shaders/ulr.vert"))
+    				.addShader(ShaderType.FRAGMENT, new File("shaders/ulr.frag"))
+    				.createProgram();
+        }
+        catch (IOException e)
+        {
+        	e.printStackTrace();
+        	throw new IllegalStateException("The shader program could not be initialized.", e);
+        }
 
         // Create a new 'renderer' to be attached to the window and the GUI.
         // This is the object that loads the ULF models and handles drawing them.  This object abstracts
         // the underlying data and provides ways of triggering events via the trackball and the user
         // interface later when it is passed to the ULFUserInterface object.
-        ULFRendererList<OpenGLContext> model = new ULFRendererList<OpenGLContext>(window, trackball);
+        ULFRendererList<OpenGLContext> model = new ULFRendererList<OpenGLContext>(window, program, trackball);
 
     	// Create a new application to run our event loop and give it the GLFWWindow for polling
     	// of events and the OpenGL context.  The ULFRendererList provides the drawable.
