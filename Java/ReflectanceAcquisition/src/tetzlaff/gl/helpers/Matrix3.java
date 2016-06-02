@@ -361,12 +361,30 @@ public class Matrix3
 			this.m[0][2], this.m[1][2], this.m[2][2]
 		);
 	}
-	
+
+	/**
+	 * Gets the determinant of this matrix.
+	 * @return The matrix determinant.
+	 */
 	public float determinant()
 	{
 		return this.m[0][0] * (this.m[1][1] * this.m[2][2] - this.m[2][1] * this.m[1][2])
 				- this.m[0][1] * (this.m[1][0] * this.m[2][2] - this.m[2][0] * this.m[1][2])
 				+ this.m[0][2] * (this.m[1][0] * this.m[2][1] - this.m[2][0] * this.m[1][1]);
+	}
+	
+	/**
+	 * Gets the inverse of this matrix.
+	 * @return The matrix inverse.
+	 */
+	public Matrix3 inverse()
+	{
+		float det = this.determinant();
+		
+		return new Matrix3(
+			(m[1][1] * m[2][2] - m[1][2] * m[2][1]) / det, (m[0][2] * m[2][1] - m[0][1] * m[2][2]) / det, (m[0][1] * m[1][2] - m[0][2] * m[1][1]) / det,
+			(m[1][2] * m[2][0] - m[1][0] * m[2][2]) / det, (m[0][0] * m[2][2] - m[0][2] * m[2][0]) / det, (m[0][2] * m[1][0] - m[0][0] * m[1][2]) / det,
+			(m[1][0] * m[2][1] - m[1][1] * m[2][0]) / det, (m[0][1] * m[2][0] - m[0][0] * m[2][1]) / det, (m[0][0] * m[1][1] - m[0][1] * m[1][0]) / det);
 	}
 	
 	/**
