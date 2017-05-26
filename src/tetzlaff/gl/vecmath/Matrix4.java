@@ -6,10 +6,12 @@ import org.lwjgl.BufferUtils;
 
 public class Matrix4 
 {
-	private float[][] m;
-	private FloatBuffer buffer;
+	public static final Matrix4 IDENTITY = scale(1.0f);
 	
-	public Matrix4(
+	private final float[][] m;
+	private final FloatBuffer buffer;
+	
+	private Matrix4(
 		float m11, float m12, float m13, float m14,
 		float m21, float m22, float m23, float m24,
 		float m31, float m32, float m33, float m34,
@@ -53,74 +55,61 @@ public class Matrix4
         buffer.flip();
     }
 	
-	public Matrix4(Vector4 column1, Vector4 column2, Vector4 column3, Vector4 column4)
+	public static Matrix4 fromColumns(Vector4 column1, Vector4 column2, Vector4 column3, Vector4 column4)
     {
-        this(	column1.x, column2.x, column3.x, column4.x,
-        		column1.y, column2.y, column3.y, column4.y, 
-        		column1.z, column2.z, column3.z, column4.z, 
-        		column1.w, column2.w, column3.w, column4.w	);
+        return new Matrix4(	column1.x, column2.x, column3.x, column4.x,
+			        		column1.y, column2.y, column3.y, column4.y, 
+			        		column1.z, column2.z, column3.z, column4.z, 
+			        		column1.w, column2.w, column3.w, column4.w	);
     }
 	
-	public Matrix4(Matrix3 m3, float tx, float ty, float tz)
+	public static Matrix4 affine(Matrix3 linear, float tx, float ty, float tz)
 	{
-		this(	m3.get(0,0),	m3.get(0,1),	m3.get(0,2),	tx,
-				m3.get(1,0),	m3.get(1,1),	m3.get(1,2),	ty,
-				m3.get(2,0),	m3.get(2,1),	m3.get(2,2),	tz,
-				0.0f,			0.0f,			0.0f,			1.0f	);
+		return new Matrix4(	linear.get(0,0),	linear.get(0,1),	linear.get(0,2),	tx,
+							linear.get(1,0),	linear.get(1,1),	linear.get(1,2),	ty,
+							linear.get(2,0),	linear.get(2,1),	linear.get(2,2),	tz,
+							0.0f,				0.0f,				0.0f,				1.0f	);
 	}
 	
-	public Matrix4(Matrix3 m3)
+	public static Matrix4 linearFrom3x3(Matrix3 m3)
 	{
-		this(m3, 0.0f, 0.0f, 0.0f);
-	}
-
-	public Matrix4(float sx, float sy, float sz, 
-			float tx, float ty, float tz) 
-	{
-		this(	sx, 	0.0f, 	0.0f, 	tx,
-				0.0f,	sy,		0.0f,	ty,
-				0.0f,	0.0f, 	sz,		tz,
-				0.0f,	0.0f,	0.0f,	1.0f	);
-	}
-
-	public Matrix4(float sx, float sy, float sz) 
-	{
-		this(sx, sy, sz, 0.0f, 0.0f, 0.0f);
+		return affine(m3, 0.0f, 0.0f, 0.0f);
 	}
 	
-	public Matrix4(float s)
+	public static Matrix4 fromDoublePrecision(DoubleMatrix4 m4)
 	{
-		this(s, s, s);
+		return new Matrix4(	(float)m4.get(0,0),	(float)m4.get(0,1),	(float)m4.get(0,2),	(float)m4.get(0,3),
+							(float)m4.get(1,0),	(float)m4.get(1,1),	(float)m4.get(1,2),	(float)m4.get(1,3),
+							(float)m4.get(2,0),	(float)m4.get(2,1),	(float)m4.get(2,2),	(float)m4.get(2,3),	
+							(float)m4.get(3,0),	(float)m4.get(3,1),	(float)m4.get(3,2),	(float)m4.get(3,3)	);
 	}
 
-	public Matrix4() 
+	public static Matrix4 scaleAndTranslate(float sx, float sy, float sz, float tx, float ty, float tz) 
 	{
-		this(1.0f);
+		return new Matrix4(	sx, 	0.0f, 	0.0f, 	tx,
+									0.0f,	sy,		0.0f,	ty,
+									0.0f,	0.0f, 	sz,		tz,
+									0.0f,	0.0f,	0.0f,	1.0f	);
 	}
-	
-	public static Matrix4 scale(float sx, float sy, float sz)
+
+	public static Matrix4 scale(float sx, float sy, float sz) 
 	{
-		return new Matrix4(sx, sy, sz);
+		return scaleAndTranslate(sx, sy, sz, 0.0f, 0.0f, 0.0f);
 	}
 	
 	public static Matrix4 scale(float s)
 	{
-		return new Matrix4(s);
-	}
-	
-	public static Matrix4 identity()
-	{
-		return new Matrix4();
+		return scale(s, s, s);
 	}
 	
 	public static Matrix4 translate(float tx, float ty, float tz)
 	{
-		return new Matrix4(1.0f, 1.0f, 1.0f, tx, ty, tz);
+		return scaleAndTranslate(1.0f, 1.0f, 1.0f, tx, ty, tz);
 	}
 	
 	public static Matrix4 translate(Vector3 t)
 	{
-		return new Matrix4(1.0f, 1.0f, 1.0f, t.x, t.y, t.z);
+		return scaleAndTranslate(1.0f, 1.0f, 1.0f, t.x, t.y, t.z);
 	}
 	
 	public static Matrix4 ortho(float left, float right, float bottom, float top, float near, float far)
@@ -183,35 +172,35 @@ public class Matrix4
 		float upX, float upY, float upZ)
 	{
 		return Matrix4.lookAt(
-			new Vector3(eyeX, eyeY, eyeZ),
-			new Vector3(centerX, centerY, centerZ),
-			new Vector3(upX, upY, upZ)
+			Vector3.fromScalars(eyeX, eyeY, eyeZ),
+			Vector3.fromScalars(centerX, centerY, centerZ),
+			Vector3.fromScalars(upX, upY, upZ)
 		);
 	}
 	
 	public static Matrix4 rotateX(double radians)
 	{
-		return new Matrix4(Matrix3.rotateX(radians));
+		return linearFrom3x3(Matrix3.rotateX(radians));
 	}
 	
 	public static Matrix4 rotateY(double radians)
 	{
-		return new Matrix4(Matrix3.rotateY(radians));
+		return linearFrom3x3(Matrix3.rotateY(radians));
 	}
 	
 	public static Matrix4 rotateZ(double radians)
 	{
-		return new Matrix4(Matrix3.rotateZ(radians));
+		return linearFrom3x3(Matrix3.rotateZ(radians));
 	}
 	
 	public static Matrix4 rotateAxis(Vector3 axis, double radians)
 	{
-		return new Matrix4(Matrix3.rotateAxis(axis, radians));
+		return linearFrom3x3(Matrix3.rotateAxis(axis, radians));
 	}
 	
 	public static Matrix4 fromQuaternion(float x, float y, float z, float w)
 	{
-		return new Matrix4(Matrix3.fromQuaternion(x, y, z, w));
+		return linearFrom3x3(Matrix3.fromQuaternion(x, y, z, w));
 	}
 	
 	public Matrix4 plus(Matrix4 other)
@@ -258,7 +247,7 @@ public class Matrix4
 	
 	public Vector4 times(Vector4 vector)
 	{
-		return new Vector4(
+		return Vector4.fromScalars(
 			this.m[0][0] * vector.x + this.m[0][1] * vector.y + this.m[0][2] * vector.z + this.m[0][3] * vector.w,
 			this.m[1][0] * vector.x + this.m[1][1] * vector.y + this.m[1][2] * vector.z + this.m[1][3] * vector.w,
 			this.m[2][0] * vector.x + this.m[2][1] * vector.y + this.m[2][2] * vector.z + this.m[2][3] * vector.w,
@@ -294,10 +283,10 @@ public class Matrix4
 	 */
 	public Matrix4 quickInverse(float tolerance)
 	{
-		Matrix3 rotationScale = new Matrix3(this);
+		Matrix3 rotationScale = Matrix3.takeUpperLeftFrom4x4(this);
 		float scaleSquared = (float)Math.pow(rotationScale.determinant(), 2.0 / 3.0);
 		
-		Matrix4 invCandidate = new Matrix4(rotationScale.transpose().times(1.0f / scaleSquared)).times(Matrix4.translate(new Vector3(this.getColumn(3)).negated()));
+		Matrix4 invCandidate = linearFrom3x3(rotationScale.transpose().times(1.0f / scaleSquared)).times(Matrix4.translate(Vector3.takeXYZ(this.getColumn(3)).negated()));
 		
 		Matrix4 identityCandidate = this.times(invCandidate);
 		
@@ -331,12 +320,12 @@ public class Matrix4
 	
 	public Vector4 getRow(int row)
 	{
-		return new Vector4(this.m[row][0], this.m[row][1], this.m[row][2], this.m[row][3]);
+		return Vector4.fromScalars(this.m[row][0], this.m[row][1], this.m[row][2], this.m[row][3]);
 	}
 	
 	public Vector4 getColumn(int col)
 	{
-		return new Vector4(this.m[0][col], this.m[1][col], this.m[2][col], this.m[3][col]);
+		return Vector4.fromScalars(this.m[0][col], this.m[1][col], this.m[2][col], this.m[3][col]);
 	}
 
 	public FloatBuffer asFloatBuffer() 
