@@ -63,7 +63,7 @@ public class TrackballLightController implements LightController, KeyPressListen
 	}
 	
 	@Override
-	public TrackballLightModel getModel()
+	public TrackballLightModel getLightModel()
 	{
 		return this.model;
 	}
