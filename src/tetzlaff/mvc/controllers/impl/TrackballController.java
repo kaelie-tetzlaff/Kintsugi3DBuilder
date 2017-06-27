@@ -104,7 +104,7 @@ public class TrackballController implements CameraController, CursorPositionList
 	}
 	
 	@Override
-	public ReadonlyCameraModel getModel()
+	public ReadonlyCameraModel getCameraModel()
 	{
 		return this.model;
 	}
