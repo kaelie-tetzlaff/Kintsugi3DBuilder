@@ -28,8 +28,7 @@ public class CameraModel3 implements ControllableCameraModel {
             "backup"
     );
 
-    private Matrix4 orbitCash;
-    private boolean fromRender = false;
+
 
     public void setSelectedCameraSettingProperty(ReadOnlyObjectProperty<CameraSetting> selectedCameraSettingProperty){
         this.selected = selectedCameraSettingProperty;
@@ -41,6 +40,9 @@ public class CameraModel3 implements ControllableCameraModel {
         else return selected.getValue();
     }
 
+
+    private Matrix4 orbitCash;
+    private boolean fromRender = false;
     @Override
     public Matrix4 getLookMatrix() {
         return Matrix4.lookAt(
@@ -107,7 +109,7 @@ public class CameraModel3 implements ControllableCameraModel {
     }
 
     @Override
-    public Double getAzmuth() {
+    public Double getAzimuth() {
         return cam().getAzimuth();
     }
 
