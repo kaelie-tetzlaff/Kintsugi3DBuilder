@@ -1,6 +1,6 @@
 package tetzlaff.ibr.app.old;
 
-import tetzlaff.ibr.ReadonlyLoadOptionsModel;
+import tetzlaff.ibr.core.ReadonlyLoadOptionsModel;
 
 public class IBRLoadOptionsModelImpl implements ReadonlyLoadOptionsModel
 {
