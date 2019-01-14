@@ -65,7 +65,7 @@ public class NewFidelityRequestUI implements IBRRequestUI
 
         newFidelityRequestUI.stage = new Stage();
         newFidelityRequestUI.stage.getIcons().add(new Image(new File("ibr-icon.png").toURI().toURL().toString()));
-        newFidelityRequestUI.stage.setTitle("Resample request");
+        newFidelityRequestUI.stage.setTitle("Fidelity request");
         newFidelityRequestUI.stage.setScene(new Scene(parent));
         newFidelityRequestUI.stage.initOwner(window);
 
