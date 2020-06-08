@@ -30,7 +30,7 @@ layout(location = 1) out vec4 halfway_geom_weight;
 uniform sampler2D normalMap;
 uniform sampler2D roughnessMap;
 
-#define N_DOT_H_CUTOFF 0.0
+#define COSINE_CUTOFF 0.0
 
 vec3 getNormalVector()
 {
@@ -59,16 +59,18 @@ void main()
     float nDotL = max(0.0, dot(normal, light));
     float nDotV = max(0.0, dot(normal, view));
     float nDotH = max(0.0, dot(normal, halfway));
-    float hDotV = max(0.0, dot(halfway, view));
+    float triangleNDotV = max(0.0, dot(normalize(fNormal), view));
 
-    // "Light intensity" is defined in such a way that we need to multiply by pi to be properly normalized.
-    vec3 irradiance = nDotL * PI * lightIntensity / dot(lightDisplacement, lightDisplacement);
-
-    float roughness = texture(roughnessMap, fTexCoord)[0];
-    float maskingShadowing = geom(roughness, nDotH, nDotV, nDotL, hDotV);
-
-    if (nDotH > N_DOT_H_CUTOFF)
+    if (nDotH > COSINE_CUTOFF && nDotL > COSINE_CUTOFF && nDotV > COSINE_CUTOFF && triangleNDotV > COSINE_CUTOFF)
     {
+        float hDotV = max(0.0, dot(halfway, view));
+
+        // "Light intensity" is defined in such a way that we need to multiply by pi to be properly normalized.
+        vec3 irradiance = nDotL * PI * lightIntensity / dot(lightDisplacement, lightDisplacement);
+
+        float roughness = texture(roughnessMap, fTexCoord)[0];
+        float maskingShadowing = geom(roughness, nDotH, nDotV, nDotL, hDotV);
+
         reflectance_visibility = vec4(imgColor.rgb / irradiance, imgColor.a);
 
         // Halfway component should be 1.0 when the angle is 60 degrees, or pi/3.
