@@ -61,7 +61,7 @@ void main()
         - dot(tangent, fBitangent) * tangent);
     mat3 tangentToObject = mat3(tangent, bitangent, triangleNormal);
 
-    vec2 normalDirXY = texture(normalMap, fTexCoord).xy * 2 - vec2(1.0);
+    vec2 normalDirXY = texture(normalEstimate, fTexCoord).xy * 2 - vec2(1.0);
     vec3 normalDirTS = vec3(normalDirXY, sqrt(1 - dot(normalDirXY, normalDirXY)));
     vec3 normal = tangentToObject * normalDirTS;
 
@@ -73,7 +73,7 @@ void main()
     float nDotL = max(0.0, dot(normal, light));
     float nDotV = max(0.0, dot(normal, view));
     float hDotV = max(0.0, dot(halfway, view));
-    float roughness = texture(roughnessMap, fTexCoord)[0];
+    float roughness = texture(roughnessEstimate, fTexCoord)[0];
     float maskingShadowing = geom(roughness, nDotH, nDotV, nDotL, hDotV);
     vec3 incidentRadiance = PI * lightIntensity / dot(lightDisplacement, lightDisplacement);
 

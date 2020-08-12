@@ -16,16 +16,22 @@ in vec3 fNormal;
 in vec3 fTangent;
 in vec3 fBitangent;
 
-uniform sampler2D normalMap;
-uniform sampler2D roughnessMap;
+uniform sampler2D normalEstimate;
+uniform sampler2D roughnessEstimate;
 
+#ifndef MATERIAL_EXPLORATION_MODE
+#define MATERIAL_EXPLORATION_MODE 1
+#endif
+
+#if MATERIAL_EXPLORATION_MODE
+// For debugging or generating comparisons and figures.
+#undef NORMAL_TEXTURE_ENABLED
+#define NORMAL_TEXTURE_ENABLED 1
+#include <shaders/colorappearance/textures.glsl>
+#include <shaders/colorappearance/analytic.glsl>
+#else
 #include <shaders/colorappearance/imgspace.glsl>
-
-//// For debugging
-//#define ANALYTIC_METAL 0
-//#define ANALYTIC_BUMP_HEIGHT 0.0
-//vec3 getNormal(vec2 texCoord) { return vec3(0, 0, 1); }
-//#include <shaders/colorappearance/analytic.glsl>
+#endif
 
 #include <shaders/colorappearance/colorappearance_multi_as_single.glsl>
 #include <shaders/relight/reflectanceequations.glsl>
