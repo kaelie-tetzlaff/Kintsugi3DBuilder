@@ -20,7 +20,7 @@ uniform sampler2D normalEstimate;
 uniform sampler2D roughnessEstimate;
 
 #ifndef MATERIAL_EXPLORATION_MODE
-#define MATERIAL_EXPLORATION_MODE 1
+#define MATERIAL_EXPLORATION_MODE 0
 #endif
 
 #if MATERIAL_EXPLORATION_MODE
