@@ -22,7 +22,6 @@ public class SpecularFitSettings extends TextureFitSettings
     public final int basisCount;
     public final int microfacetDistributionResolution;
 
-
     public SpecularFitSettings(int width, int height, int basisCount, int microfacetDistributionResolution, File outputDirectory, ReadonlySettingsModel additional)
     {
         super(width, height, outputDirectory, additional);
