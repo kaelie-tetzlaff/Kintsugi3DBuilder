@@ -26,7 +26,7 @@ vec3 getPosition()
 {
     // Assume fTexCoord to be declared previously
     // Assume the texture is set to store floating-point elements.
-    return texture(positionTex, fTexCoord);
+    return texture(positionTex, fTexCoord).xyz;
 }
 
 #else
