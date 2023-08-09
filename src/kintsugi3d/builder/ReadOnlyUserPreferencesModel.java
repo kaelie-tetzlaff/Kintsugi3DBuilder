@@ -12,13 +12,15 @@
 
 package kintsugi3d.builder;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import kintsugi3d.builder.core.ReadonlyLoadOptionsModel;
 
 public interface ReadOnlyUserPreferencesModel
 {
-
+    @JsonProperty("loadOptions")
     ReadonlyLoadOptionsModel getReadOnlyLoadOptions();
 
-    Integer getSampleValue();
+    @JsonProperty("directoryPreferences")
+    ReadOnlyDirectoryPreferencesModel getReadOnlyDirectoryPreferences();
 
 }
