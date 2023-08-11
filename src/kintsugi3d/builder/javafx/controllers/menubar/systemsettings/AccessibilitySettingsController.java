@@ -11,5 +11,16 @@
 
 package kintsugi3d.builder.javafx.controllers.menubar.systemsettings;
 
-public class AccessibilitySettingsController {
+import kintsugi3d.builder.javafx.InternalModels;
+
+public class AccessibilitySettingsController implements SystemSettingsControllerBase{
+    @Override
+    public void init() {
+        //nothing here yet
+    }
+
+    @Override
+    public void bindInfo(InternalModels internalModels) {
+        //TODO: imp.
+    }
 }
