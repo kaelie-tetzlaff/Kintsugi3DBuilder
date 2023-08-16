@@ -15,7 +15,6 @@ package kintsugi3d.builder.javafx.controllers.menubar;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
@@ -28,6 +27,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import kintsugi3d.builder.javafx.controllers.scene.ImgThreadCompatibleController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
@@ -36,13 +36,11 @@ import javafx.scene.image.ImageView;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 
-public class ChunkViewerController implements Initializable {
+public class ChunkViewerController extends ImgThreadCompatibleController {
     //TODO: --> "INFO: index exceeds maxCellCount. Check size calculations for class javafx.scene.control.skin.TreeViewSkin$1"
     //suppress warning?
 
@@ -50,29 +48,16 @@ public class ChunkViewerController implements Initializable {
     @FXML
     public TreeView<String> chunkTreeView;
 
-    @FXML
-    public ImageView chunkViewerImgView;
-    public Text imgViewLabel;
+    @FXML public Text imgViewText;
     static final String[] VALID_EXTENSIONS = {"*.jpg", "*.jpeg", "*.png", "*.gif", "*.tif", "*.tiff", "*.png", "*.bmp", "*.wbmp"};
 
     static final int THUMBNAIL_SIZE = 30;
     @FXML
     public ChoiceBox<String> newChunkSelectionChoiceBox;//allows the user to select a new chunk to view
 
-    @FXML
-    public Button selectChunkButton;
-
-    @FXML
-    public TextFlow textFlow;
-    MetashapeObjectChunk metashapeObjectChunk;
+    @FXML public Button selectChunkButton;
 
     private ImgSelectionThread loadImgThread;
-
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        //nothing needed here so far
-    }
 
     public void initializeChunkSelectionAndTreeView(MetashapeObjectChunk metashapeObjectChunk) {
         this.metashapeObjectChunk = metashapeObjectChunk;
@@ -191,7 +176,7 @@ public class ChunkViewerController implements Initializable {
 
             String imageName = selectedItem.getValue();
             updateImageText(imageName);
-            imgViewLabel.setText(imgViewLabel.getText() + " (preview)");
+            imgViewText.setText(imgViewText.getText() + " (preview)");
 
 
             //set thumbnail as main image, then update to full resolution later
@@ -215,7 +200,7 @@ public class ChunkViewerController implements Initializable {
 //                      set label to: psx name + chunk name + cameraID
         File psxFile = new File(psxFilePath);
 
-        imgViewLabel.setText("File: " + psxFile.getName() +
+        imgViewText.setText("File: " + psxFile.getName() +
                             "\nChunk: " + chunkName +
                             "\nImage: " + imageName);
 
