@@ -10,8 +10,8 @@
  *
  */
 
-#ifndef IBR_GLSL
-#define IBR_GLSL
+#ifndef STANDARD_GLSL
+#define STANDARD_GLSL
 
 #include "subject.glsl"
 
@@ -43,7 +43,7 @@ uniform vec3 defaultDiffuseColor;
 
 vec3 global(ViewingParameters v, Material m)
 {
-    return getEnvironmentDiffuse(v.normalDir) * min(vec3(1.0), m.diffuseColor + m.specularColor);
+    return getEnvironmentDiffuse(v.normalDir) * m.occlusion * min(vec3(1.0), m.diffuseColor + m.specularColor);
 }
 
 vec3 specular(LightingParameters l, Material m)
