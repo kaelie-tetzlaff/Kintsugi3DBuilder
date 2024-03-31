@@ -20,5 +20,5 @@ out vec4 fragColor;
 
 void main()
 {
-    fragColor = viewImages(tex, vec3(fTexCoord, viewIndex));
+    fragColor = texture(viewImages, vec3(fTexCoord, viewIndex));
 }
