@@ -16,7 +16,6 @@ import java.io.FileNotFoundException;
 import java.util.Map;
 
 import kintsugi3d.builder.core.CameraViewport;
-import kintsugi3d.builder.core.SceneModel;
 import kintsugi3d.builder.rendering.SceneViewportModel;
 import kintsugi3d.builder.rendering.components.ShaderComponent;
 import kintsugi3d.builder.rendering.components.snap.ViewSelection;
@@ -24,19 +23,18 @@ import kintsugi3d.builder.resources.ibr.IBRResources;
 import kintsugi3d.builder.resources.ibr.IBRResourcesImageSpace;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.vecmath.Matrix4;
+import kintsugi3d.gl.vecmath.Vector3;
 
 public class CameraVisual<ContextType extends Context<ContextType>> extends ShaderComponent<ContextType>
 {
     private final IBRResources<ContextType> resources;
-    private final SceneModel sceneModel;
 
-    private ViewSelection viewSnappable;
+    private ViewSelection viewSelection;
 
-    public CameraVisual(IBRResources<ContextType> resources, SceneViewportModel sceneViewportModel, SceneModel sceneModel)
+    public CameraVisual(IBRResources<ContextType> resources, SceneViewportModel sceneViewportModel)
     {
         super(resources.getContext(), sceneViewportModel, "CameraVisual");
         this.resources = resources;
-        this.sceneModel = sceneModel;
     }
 
     @Override
@@ -68,14 +66,16 @@ public class CameraVisual<ContextType extends Context<ContextType>> extends Shad
             this.getContext().getState().disableDepthWrite();
             this.getContext().getState().enableDepthTest();
 
-            Matrix4 snapViewInverse = viewSnappable.getSelectedView().quickInverse(0.01f);
-            float aspect = viewSnappable.getSelectedCameraProjection().getAspectRatio();
+            Matrix4 snapViewInverse = viewSelection.getSelectedView().quickInverse(0.01f);
+            float aspect = viewSelection.getSelectedCameraProjection().getAspectRatio();
+            float fPlane = getCameraPlane(viewSelection);
 
             this.getProgram().setTexture("viewImages", resourcesImgSpace.colorTextures);
-            this.getProgram().setUniform("viewIndex", viewSnappable.getSelectedViewIndex());
+            this.getProgram().setUniform("viewIndex", viewSelection.getSelectedViewIndex());
             this.getProgram().setUniform("model_view",
                 cameraViewport.getView().times(snapViewInverse)
-                    .times(Matrix4.scale(0.2f * Math.min(1.0f, aspect), 0.2f * Math.min(1.0f, 1.0f / aspect), 1.0f)));
+                    .times(Matrix4.translate(new Vector3(0, 0, -fPlane)))
+                    .times(Matrix4.scale(Math.min(1.0f, aspect), Math.min(1.0f, 1.0f / aspect), 1.0f)));
             this.getProgram().setUniform("projection", cameraViewport.getViewportProjection());
             this.getDrawable().draw(PrimitiveMode.TRIANGLE_FAN, cameraViewport.ofFramebuffer(framebuffer));
 
@@ -84,13 +84,20 @@ public class CameraVisual<ContextType extends Context<ContextType>> extends Shad
         }
     }
 
-    public ViewSelection getViewSnappable()
+    public static float getCameraPlane(ViewSelection viewSelection)
     {
-        return viewSnappable;
+        float fy = 1.0f / (float)Math.tan(viewSelection.getSelectedCameraProjection().getVerticalFieldOfView() / 2);
+        float fx = fy / viewSelection.getSelectedCameraProjection().getAspectRatio();
+        return Math.min(fx, fy);
     }
 
-    public void setViewSnappable(ViewSelection viewSnappable)
+    public ViewSelection getViewSelection()
     {
-        this.viewSnappable = viewSnappable;
+        return viewSelection;
+    }
+
+    public void setViewSelection(ViewSelection viewSelection)
+    {
+        this.viewSelection = viewSelection;
     }
 }
