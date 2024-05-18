@@ -10,6 +10,11 @@ public class CustomImportController extends FXMLPageController {
     }
 
     @Override
+    public void refresh() {
+
+    }
+
+    @Override
     public void openChildPage(String childFXMLPath) {
 
     }
