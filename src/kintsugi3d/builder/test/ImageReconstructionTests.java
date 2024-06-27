@@ -25,6 +25,7 @@ import kintsugi3d.builder.fit.SpecularFitProgramFactory;
 import kintsugi3d.builder.fit.settings.SpecularBasisSettings;
 import kintsugi3d.builder.fit.settings.SpecularFitRequestParams;
 import kintsugi3d.builder.io.ViewSetReaderFromVSET;
+import kintsugi3d.builder.javafx.internal.LoadOptionsModelImpl;
 import kintsugi3d.builder.metrics.ColorAppearanceRMSE;
 import kintsugi3d.builder.rendering.ImageReconstruction;
 import kintsugi3d.builder.rendering.ReconstructionView;
@@ -48,10 +49,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ImageReconstructionTest
+class ImageReconstructionTests
 {
     private static final File TEST_OUTPUT_DIR = new File("test-output");
     private static final boolean SAVE_TEST_IMAGES = true;
+    private static final boolean SAVE_GROUND_TRUTH_SYNTHETIC_IMAGES = false;
 
     private ViewSet potatoViewSet;
     private ViewSet potatoViewSetTonemapped;
@@ -106,7 +108,7 @@ class ImageReconstructionTest
         @Override
         public void setProgress(double progress, String message)
         {
-            System.out.println(MessageFormat.format("[{0}%] {1}", progress / maxProgress, message));
+            System.out.println(MessageFormat.format("[{0}%] {1}", progress / maxProgress * 100, message));
         }
 
         @Override
@@ -157,18 +159,21 @@ class ImageReconstructionTest
             program.setUniform("specularColor", new Vector3(1.0f, 0.8f, 0.2f));
         };
 
-        saveGroundTruthSyntheticImages(potatoViewSet, (factory, resources) -> createGroundTruthProgram(factory, resources, p->{}),
-            "groundTruthSynthetic_grayscale");
-        saveGroundTruthSyntheticImages(potatoViewSet, (factory, resources) -> createGroundTruthProgram(factory, resources, setupColor),
-            "groundTruthSynthetic_color");
-        saveGroundTruthSyntheticImages(potatoViewSet, (factory, resources) -> createGroundTruthProgram(factory, resources, setupMetallic),
-            "groundTruthSynthetic_metallic");
-        saveGroundTruthSyntheticImages(potatoViewSetTonemapped, (factory, resources) -> createGroundTruthProgram(factory, resources, p->{}),
-            "groundTruthSynthetic_grayscaleTonemapped");
-        saveGroundTruthSyntheticImages(potatoViewSetTonemapped, (factory, resources) -> createGroundTruthProgram(factory, resources, setupColor),
-            "groundTruthSynthetic_colorTonemapped");
-        saveGroundTruthSyntheticImages(potatoViewSetTonemapped, (factory, resources) -> createGroundTruthProgram(factory, resources, setupMetallic),
-            "groundTruthSynthetic_metallicTonemapped");
+        if (SAVE_GROUND_TRUTH_SYNTHETIC_IMAGES)
+        {
+            saveGroundTruthSyntheticImages(potatoViewSet, (factory, resources) -> createGroundTruthProgram(factory, resources, p->{}),
+                "groundTruthSynthetic_grayscale");
+            saveGroundTruthSyntheticImages(potatoViewSet, (factory, resources) -> createGroundTruthProgram(factory, resources, setupColor),
+                "groundTruthSynthetic_color");
+            saveGroundTruthSyntheticImages(potatoViewSet, (factory, resources) -> createGroundTruthProgram(factory, resources, setupMetallic),
+                "groundTruthSynthetic_metallic");
+            saveGroundTruthSyntheticImages(potatoViewSetTonemapped, (factory, resources) -> createGroundTruthProgram(factory, resources, p->{}),
+                "groundTruthSynthetic_grayscaleTonemapped");
+            saveGroundTruthSyntheticImages(potatoViewSetTonemapped, (factory, resources) -> createGroundTruthProgram(factory, resources, setupColor),
+                "groundTruthSynthetic_colorTonemapped");
+            saveGroundTruthSyntheticImages(potatoViewSetTonemapped, (factory, resources) -> createGroundTruthProgram(factory, resources, setupMetallic),
+                "groundTruthSynthetic_metallicTonemapped");
+        }
     }
 
     void saveGroundTruthSyntheticImages(
@@ -390,6 +395,21 @@ class ImageReconstructionTest
             (factory, resources) -> createGroundTruthProgram(factory, resources, setupMetallic), validationEncoded, "tonemappedLit_metallicTonemapped");
     }
 
+    @Test
+    @DisplayName("Rodin, from Metashape export")
+    void testRodinMetashape() throws Exception
+    {
+        testFitMetashape(
+            "Rodin/Mia_001239_Rodin_399cameras.xml",
+            "Rodin/Mia_001239_Rodin_200kAverage.obj",
+            "Rodin/Processed dark 25",
+            rmse ->
+            {
+                System.out.println("RMSE: " + rmse.getEncodedGroundTruth());
+            },
+            "Rodin_metashape");
+    }
+
     static ProgramObject<OpenGLContext> createGroundTruthProgram(
         SpecularFitProgramFactory<OpenGLContext> programFactory, IBRResourcesAnalytic<OpenGLContext> resources, Consumer<Program<OpenGLContext>> setupShader)
     {
@@ -525,9 +545,9 @@ class ImageReconstructionTest
         return new ColorArrayImage(groundTruth, 256, 256);
     }
 
-    private void testSyntheticFit(ViewSet viewSet, Consumer<ColorAppearanceRMSE> validation, String testName)
+    private void testFitSynthetic(ViewSet viewSet, Consumer<ColorAppearanceRMSE> validation, String testName)
     {
-        // TODO not working yet
+        // TODO not working yet -- IBRResources doesn't fully implement IBRResourcesCacheable
         try (IBRResourcesCacheable<OpenGLContext> resources = new IBRResourcesAnalytic<>(context, viewSet, potatoGeometry))
         {
             testFit(resources, validation, testName);
@@ -538,13 +558,37 @@ class ImageReconstructionTest
         }
     }
 
-    private void testRealFit(File viewSetFile, Consumer<ColorAppearanceRMSE> validation, String testName) throws Exception
+    private void testFitMetashape(String cameras, String geometry, String imageDirectory,
+        Consumer<ColorAppearanceRMSE> validation, String testName) throws Exception
     {
-        try (IBRResourcesCacheable<OpenGLContext> resources = IBRResourcesImageSpace.getBuilderForContext(context)
-            .loadVSETFile(viewSetFile, viewSetFile.getParentFile())
+        ClassLoader classLoader = getClass().getClassLoader();
+        LoadOptionsModel loadOptions = new LoadOptionsModelImpl();
+        loadOptions.setColorImagesRequested(false); // don't generate/load preview images; not needed for this test
+        try (IBRResourcesImageSpace<OpenGLContext> resources = IBRResourcesImageSpace.getBuilderForContext(context)
+            .setLoadOptions(loadOptions)
             .setProgressMonitor(progressMonitor)
+            .loadAgisoftFiles(
+                new File(classLoader.getResource("test/" + cameras).toURI()),
+                new File(classLoader.getResource("test/" + geometry).toURI()),
+                new File(classLoader.getResource("test/" + imageDirectory).toURI()))
             .create())
         {
+            resources.calibrateLightIntensities(false);
+            testFit(resources, validation, testName);
+        }
+    }
+
+    private void testFitVSET(File viewSetFile, Consumer<ColorAppearanceRMSE> validation, String testName) throws Exception
+    {
+        LoadOptionsModel loadOptions = new LoadOptionsModelImpl();
+        loadOptions.setColorImagesRequested(false); // don't generate/load preview images; not needed for this test
+        try (IBRResourcesImageSpace<OpenGLContext> resources = IBRResourcesImageSpace.getBuilderForContext(context)
+            .setLoadOptions(loadOptions)
+            .setProgressMonitor(progressMonitor)
+            .loadVSETFile(viewSetFile, viewSetFile.getParentFile())
+            .create())
+        {
+            resources.calibrateLightIntensities(false);
             testFit(resources, validation, testName);
         }
         catch (UserCancellationException | IOException e)
@@ -564,6 +608,7 @@ class ImageReconstructionTest
         DefaultSettings.apply(settings);
         SpecularFitRequestParams params = new SpecularFitRequestParams(new TextureResolution(512, 512), settings);
         params.setOutputDirectory(outputDirectory);
+        params.getImageCacheSettings().setCacheParentDirectory(new File (outputDirectory, "cache"));
 
         // Perform the specular fit
         SpecularFitProcess specularFitProcess = new SpecularFitProcess(params);
