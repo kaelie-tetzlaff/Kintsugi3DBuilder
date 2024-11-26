@@ -64,6 +64,11 @@ vec3 diffuse(LightingParameters l, Material m)
     return m.diffuseColor;
 }
 
+vec3 emissive()
+{
+    return vec3(0.0);
+}
+
 #include "subjectMain.glsl"
 
 #endif // BASIS_GLSL
