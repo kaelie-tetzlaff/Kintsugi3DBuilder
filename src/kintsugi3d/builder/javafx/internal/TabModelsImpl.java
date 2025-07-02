@@ -1,5 +1,8 @@
 package kintsugi3d.builder.javafx.internal;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
+import kintsugi3d.builder.state.CardsModel;
 import kintsugi3d.builder.state.TabModels;
 
 import java.util.ArrayList;
@@ -7,33 +10,67 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class TabModelsImpl implements TabModels {
-    LinkedHashMap<String, CardsModelImpl> models;
+    private LinkedHashMap<String, CardsModel> models; //CardsModelImpl
+    private ObservableMap<String, CardsModel> observableModels;
+    //private int modelCount;
 
     public TabModelsImpl() {
-        models = new LinkedHashMap<String, CardsModelImpl>() {{
-                put("Cameras", new CardsModelImpl("Cameras"));
-                put("Textures", new CardsModelImpl("Textures"));
-                //put("Shaders", new CardsModelImpl("Shaders"));
-            }};
+        models = new LinkedHashMap<String, CardsModel>() {{
+            put("Cameras", new CardsModelImpl("Cameras"));
+            put("Textures", new CardsModelImpl("Textures"));
+            //put("Shaders", new CardsModelImpl("Shaders"));
+        }};
+        observableModels = FXCollections.observableMap(models);
     }
 
     @Override
-    public CardsModelImpl getCardModel(String label) {
-        return models.get(label);
+    public CardsModel getCardsModel(String label) {
+        return observableModels.get(label);
     }
 
     @Override
-    public List<CardsModelImpl> getCardModels() {
-        return new ArrayList<CardsModelImpl>(models.values());
+    public List<CardsModel> getAllCardsModels() {
+        return new ArrayList<CardsModel>(models.values());
     }
 
     @Override
-    public void addCardsModel(CardsModelImpl model) {
-        models.put(model.getLabel(), model);
+    public ObservableMap<String, CardsModel> getItems() {
+        return observableModels;
     }
 
     @Override
-    public void setCardModel(String label, CardsModelImpl model) {
+    public void addCardsModel(CardsModel model) {
+        models.put(model.getModelLabel(), model);
+        observableModels.put(model.getModelLabel(), model);
+    }
+
+    @Override
+    public void replaceCardsModel(String label, CardsModel model) {
         models.replace(label, model);
+        observableModels.replace(label, model);
+    }
+
+    @Override
+    public void setAllCardsModels(List<CardsModel> tabCardsModels) {
+        models.clear();
+        tabCardsModels.forEach(model -> {
+            models.put(model.getModelLabel(), model);
+        });
+
+        observableModels.clear();
+        tabCardsModels.forEach(model -> {
+            observableModels.put(model.getModelLabel(), model);
+        });
+    }
+
+    @Override
+    public LinkedHashMap<String, CardsModel> getCardsModelsMap() {
+        return models;
+    }
+
+    @Override
+    public void setCardsModelsMap(LinkedHashMap<String, CardsModel> cardsModelsMap) {
+        models = cardsModelsMap;
+        observableModels = FXCollections.observableMap(cardsModelsMap);
     }
 }
