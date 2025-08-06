@@ -16,7 +16,6 @@ import kintsugi3d.builder.javafx.controllers.paged.DataPassthroughPage;
 import kintsugi3d.builder.javafx.controllers.paged.DataReceiverPageController;
 
 public class HotSwapController extends CustomImportController
-    implements DataReceiverPageController<InputSource, DataPassthroughPage<InputSource, CustomImportController>>
 {
     @Override
     protected boolean shouldHotSwap()
