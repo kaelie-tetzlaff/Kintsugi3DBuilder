@@ -11,16 +11,26 @@
 
 package kintsugi3d.builder.javafx.experience;
 
+import kintsugi3d.builder.javafx.controllers.modals.workflow.ReplaceData;
+
 import java.io.IOException;
 
 public class ReplaceModel extends ExperienceBase
 {
+    ReplaceData currentData = new ReplaceData();
+
+    public void setCurrentData(ReplaceData newData)
+    {
+        this.currentData = newData;
+    }
+
     @Override
     public String getName() { return "Replace Texture"; }
 
     @Override
     protected void open() throws IOException
     {
-        this.openPagedModal("/fxml/modals/workflow/ReplaceModel.fxml");
+//        this.openPagedModal("/fxml/modals/workflow/ReplaceModel.fxml");
+        this.buildPagedModal(currentData).then("/fxml/modals/workflow/ReplaceModel.fxml").finish();
     }
 }
