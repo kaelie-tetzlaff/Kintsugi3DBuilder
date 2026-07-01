@@ -103,8 +103,7 @@ public class SideBarController
                 buttons.get(0).setSelected(true);
             }
         });
-        mainBox.setPrefWidth(DEFAULT_WIDTH);
-        mainBox.setMaxWidth(DEFAULT_WIDTH);
+        resizeWidth(DEFAULT_WIDTH);
     }
 
     private void removeTab(String key)
@@ -255,7 +254,7 @@ public class SideBarController
         double newWidth = event.getX();
 
         //decimal at end is percentage of screen it can be dragged to
-        double upperBound = mainBox.getParent().getScene().getWindow().getWidth() * 0.50;
+        double upperBound = mainBox.getParent().getScene().getWindow().getWidth() * 0.45;
 
         //will only preform actions after this method if the cursor is resize cursor
         if (!mainBox.getCursor().equals(Cursor.E_RESIZE))
@@ -409,4 +408,5 @@ public class SideBarController
     {
         tabControllers.forEach(CardTabController::refreshCardList);
     }
+    public double getTabWidth() {return mainBox.getWidth();}
 }
