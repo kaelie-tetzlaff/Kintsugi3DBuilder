@@ -11,7 +11,7 @@
 
 package kintsugi3d.builder.state;
 
-import kintsugi3d.builder.rendering.ProjectInstanceManager;
+import kintsugi3d.builder.rendering.RenderableInstanceManager;
 import kintsugi3d.builder.state.scene.UserShader;
 import kintsugi3d.gl.window.FramebufferCanvas;
 
@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 
 public interface CanvasListModel
 {
-    void setInstanceManager(ProjectInstanceManager<?> instanceManager);
+    void setInstanceManager(RenderableInstanceManager<?> instanceManager);
     void createCanvas(UserShader shader, int width, int height, int safeStartX, int safeStartY, int safeEndX, int safeEndY,
                       Consumer<FramebufferCanvas<?>> framebufferCallback);
     void removeCanvas(UserShader shader);
