@@ -13,12 +13,14 @@ package kintsugi3d.builder.io;
 
 import kintsugi3d.builder.io.gltf.MaterialExporterFactory;
 import kintsugi3d.builder.io.gltf.kintsugi3dviewer.Kintsugi3DViewerExporterFactory;
-import kintsugi3d.builder.io.usdz.USDZExporterFactory;
+import kintsugi3d.builder.io.usdz.USDZMetallicExporterFactory;
+import kintsugi3d.builder.io.usdz.USDZSpecularExporterFactory;
 
 public enum ExportType
 {
     GLTF(Kintsugi3DViewerExporterFactory.getInstance()),
-    USDZ(USDZExporterFactory.getInstance());
+    USDZ_SPECULAR(USDZSpecularExporterFactory.getInstance()),
+    USDZ_METALLIC(USDZMetallicExporterFactory.getInstance());
 
     private final MaterialExporterFactory factory;
 
