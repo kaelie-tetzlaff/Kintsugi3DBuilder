@@ -19,19 +19,19 @@ public class USDZSpecularExporterFactory implements MaterialExporterFactory
 {
     private static final USDZSpecularExporterFactory INSTANCE = new USDZSpecularExporterFactory();
 
+    private USDZSpecularExporterFactory()
+    {
+    }
+
     public static USDZSpecularExporterFactory getInstance()
     {
         return INSTANCE;
     }
 
-    private USDZSpecularExporterFactory()
-    {
-    }
-
     @Override
     public MaterialExporter getExporter(TextureResources<?> resources)
     {
-        USDZExporter exporter = new USDZExporter(false);
+        USDZSpecularExporter exporter = new USDZSpecularExporter();
         exporter.setTextureResources(resources);
         return exporter;
     }
