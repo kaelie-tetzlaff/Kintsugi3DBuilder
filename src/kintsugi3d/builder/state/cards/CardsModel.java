@@ -31,6 +31,4 @@ public interface CardsModel<T>
     }
 
     void deleteCards(Predicate<ProjectDataCard> filter);
-
-    void confirm(String title, String header, String message, Runnable onConfirm);
 }

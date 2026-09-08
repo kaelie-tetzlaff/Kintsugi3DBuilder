@@ -28,18 +28,20 @@ public interface ProjectDataCardFactory<T>
 
     Class<T> getDataClass();
 
-    /**
-     * Creates all cards from scratch.
-     * @param cardsModel
-     * @return
-     */
-    List<ProjectDataCard> createAllCards(CardsModel<T> cardsModel);
+    ConfirmHandler getConfirmHandler();
+    void setConfirmHandler(ConfirmHandler confirmHandler);
 
     /**
-     * Returns a map from the original card to its replacement after refresh.
-     * @param cardsModel
+     * Creates all cards from scratch.
+     * @return
+     */
+    List<ProjectDataCard> createAllCards();
+
+    /**
+     * Refreshes cards and overwrites any cards which changed in the card list.
+     * @param mutableCardList Must be modifiable on the thread from which this method is called.
      * @param refreshedData
      * @return
      */
-    Map<ProjectDataCard, ProjectDataCard> createRefreshedCards(CardsModel<T> cardsModel, Function<ProjectDataCard, T> refreshedData);
+    void refreshCards(List<ProjectDataCard> mutableCardList, Function<ProjectDataCard, T> refreshedData);
 }
