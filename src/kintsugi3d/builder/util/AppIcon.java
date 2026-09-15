@@ -21,7 +21,7 @@ public final class AppIcon
     public static final String PATH = "Kintsugi3D-icon.png";
 
     private static volatile Image image;
-    private static final Object INIT_LOCK = new Object();
+    private static final Object INITIALIZATION_LOCK = new Object();
 
     private AppIcon()
     {
@@ -43,7 +43,7 @@ public final class AppIcon
     public static void initialize() throws MalformedURLException
     {
         //noinspection SynchronizationOnStaticField
-        synchronized (INIT_LOCK)
+        synchronized (INITIALIZATION_LOCK)
         {
             if (image == null)
             {
