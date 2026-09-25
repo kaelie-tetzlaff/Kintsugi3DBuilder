@@ -15,9 +15,9 @@ import kintsugi3d.gl.core.Context;
 
 public class SimpleBasisResources<ContextType extends Context<ContextType>> extends BasisResourcesBase<ContextType>
 {
-    private final IndexAssignableMaterialBasis materialBasis;
+    private final MaterialBasis materialBasis;
 
-    public SimpleBasisResources(ContextType context, IndexAssignableMaterialBasis materialBasis)
+    public SimpleBasisResources(ContextType context, MaterialBasis materialBasis)
     {
         // Load both enabled and disabled materials.  Enabled materials should always precede disabled materials.
         super(context, materialBasis.getMaterialCount(), materialBasis.getSpecularResolution());
@@ -26,7 +26,7 @@ public class SimpleBasisResources<ContextType extends Context<ContextType>> exte
     }
 
     @Override
-    public IndexAssignableMaterialBasis getBasis()
+    public MaterialBasis getBasis()
     {
         return materialBasis;
     }
