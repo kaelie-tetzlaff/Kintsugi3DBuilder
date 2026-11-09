@@ -11,6 +11,7 @@
 
 package kintsugi3d.builder.rendering;
 
+import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
@@ -87,11 +88,6 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     private DynamicResourceLoader<ContextType> dynamicResourceLoader;
     private final SceneViewportModel sceneViewportModel;
 
-    private int paddingLeft;
-    private int paddingTop;
-    private int paddingRight;
-    private int paddingBottom;
-
     private static final int SHADING_FRAMEBUFFER_COUNT = 2;
     private final Collection<FramebufferObject<ContextType>> shadingFramebuffers = new ArrayList<>(SHADING_FRAMEBUFFER_COUNT);
 
@@ -156,23 +152,6 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         return this.dynamicResourceLoader;
     }
 
-    @Override
-    public void setSafeRegionPadding(int left, int top, int right, int bottom)
-    {
-        this.paddingLeft = left;
-        this.paddingTop = top;
-        this.paddingRight = right;
-        this.paddingBottom = bottom;
-    }
-
-    @Override
-    public void clearSafeRegionPadding()
-    {
-        this.paddingLeft = 0;
-        this.paddingTop = 0;
-        this.paddingRight = 0;
-        this.paddingBottom = 0;
-    }
 
     @Override
     public void initialize() throws InitializationException
@@ -374,8 +353,12 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
             FramebufferSize size = framebuffer.getSize();
 
-            Matrix4 projection;
+            int paddingLeft = Global.state().getCameraModel().getPaddingLeft();
+            int paddingRight = Global.state().getCameraModel().getPaddingRight();
+            int paddingTop = Global.state().getCameraModel().getPaddingTop();
+            int paddingBottom = Global.state().getCameraModel().getPaddingBottom();
 
+            Matrix4 projection;
             if (projectionOverride != null)
             {
                 // Ignore safe region if the projection was overridden.

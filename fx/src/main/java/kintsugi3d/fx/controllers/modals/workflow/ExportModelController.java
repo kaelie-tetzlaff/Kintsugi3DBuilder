@@ -123,7 +123,7 @@ public class ExportModelController extends ProjectSettingsControllerBase
     {
         applySettings();
 
-        if (Global.io().getProgressMonitor().isConflictingProcess())
+        if (Global.io().getAggregateProgressMonitor().isConflictingProcess())
         {
             error("Failed to export model", "Another process is already running.");
             return false;

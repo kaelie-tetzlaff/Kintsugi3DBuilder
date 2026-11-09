@@ -19,6 +19,7 @@ import kintsugi3d.builder.io.events.*;
 import kintsugi3d.builder.io.metashape.MetashapeModel;
 import kintsugi3d.builder.io.metashape.MetashapeTextures;
 import kintsugi3d.builder.rendering.ImageBasedRenderable;
+import kintsugi3d.builder.rendering.ReadonlyImageBasedRenderable;
 import kintsugi3d.builder.rendering.Rendering;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.builder.state.shader.ShaderInfo;
@@ -83,15 +84,24 @@ public class IOModel implements IO
         progressMonitor.addSubMonitor(cancellationMonitor);
     }
 
-    public ProgressMonitor getProgressMonitor()
+    @Override
+    public void initialize(IOHandler handler)
     {
-        return progressMonitor;
+        if (this.handler == null)
+        {
+            this.handler = handler;
+            this.handler.setProgressMonitor(progressMonitor);
+        }
+        else
+        {
+            throw new IllegalStateException("I/O has already been initialized.");
+        }
     }
 
-    public void setLoadingHandler(IOHandler handler)
+    @Override
+    public ProgressMonitor getAggregateProgressMonitor()
     {
-        this.handler = handler;
-        this.handler.setProgressMonitor(progressMonitor);
+        return progressMonitor;
     }
 
     @Override
@@ -160,7 +170,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public ImageBasedRenderable<?> getMainRenderable()
+    public ReadonlyImageBasedRenderable<?> getMainRenderable()
     {
         return this.handler.getMainRenderable();
     }

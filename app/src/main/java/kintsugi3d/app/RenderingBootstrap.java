@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.SynchronizedWindow;
 import kintsugi3d.builder.core.WindowSynchronization;
-import kintsugi3d.builder.io.IOModel;
+import kintsugi3d.builder.io.IO;
 import kintsugi3d.builder.rendering.*;
 import kintsugi3d.builder.state.SelectableViewListModel;
 import kintsugi3d.builder.state.scene.ManipulableLightingEnvironmentModel;
@@ -245,7 +245,7 @@ public final class RenderingBootstrap
             renderableManager.setObjectModel(Global.state().getObjectModel());
         }
 
-        IOModel ioModel = Global.io();
+        IO io = Global.io();
 
         // Replace the temporary sentinel with the actual scene viewport from the instance manager.
         SCENE_VIEWPORT_WRAPPER.setSceneViewport(renderableManager.getSceneViewport());
@@ -259,7 +259,7 @@ public final class RenderingBootstrap
 
         // Pass reference to instance manager to other components as needed.
         Rendering.initialize(context, renderableManager);
-        ioModel.setLoadingHandler(renderableManager);
+        io.initialize(renderableManager);
 
         // Allow frontend to react to IO events
         if (MultithreadState.isInitialized())
@@ -390,7 +390,7 @@ public final class RenderingBootstrap
         }
         catch(RuntimeException|InitializationException|Error e)
         {
-            Optional.ofNullable(ioModel.getProgressMonitor()).ifPresent(monitor -> monitor.fail(e));
+            Optional.ofNullable(io.getAggregateProgressMonitor()).ifPresent(monitor -> monitor.fail(e));
             throw e;
         }
     }

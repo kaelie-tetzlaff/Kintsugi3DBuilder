@@ -14,7 +14,7 @@ package kintsugi3d.builder.io;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.io.events.*;
 import kintsugi3d.builder.io.metashape.MetashapeModel;
-import kintsugi3d.builder.rendering.ImageBasedRenderable;
+import kintsugi3d.builder.rendering.ReadonlyImageBasedRenderable;
 import kintsugi3d.builder.state.shader.ShaderInfo;
 import kintsugi3d.builder.util.events.EventListeners;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
@@ -29,8 +29,11 @@ import java.util.function.DoubleUnaryOperator;
 
 public interface IO
 {
+    void initialize(IOHandler handler);
+
     ReadonlyLoadOptionsModel getLoadOptionsModel();
 
+    ProgressMonitor getAggregateProgressMonitor();
     void addProgressMonitor(ProgressMonitor monitor);
 
     EventListeners<ProjectOpenedListener> projectOpenedListeners();
@@ -45,9 +48,8 @@ public interface IO
     ViewSet getLoadedViewSet();
     ReadonlyVertexGeometry getLoadedGeometry();
 
-    ImageBasedRenderable<?> getMainRenderable();
-    ImageBasedRenderable<?> getRenderableForShader(ShaderInfo shader);
-
+    ReadonlyImageBasedRenderable<?> getMainRenderable();
+    ReadonlyImageBasedRenderable<?> getRenderableForShader(ShaderInfo shader);
 
     void loadFromLooseFiles(File newProjectFile, String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions);
     void hotSwapLooseFiles(String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions);

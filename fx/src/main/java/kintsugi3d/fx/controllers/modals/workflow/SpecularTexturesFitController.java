@@ -84,7 +84,7 @@ public class SpecularTexturesFitController extends ProjectSettingsControllerBase
         // Apply settings so they're seen by the SpecularFitRequest and also remembered for later.
         applySettings();
 
-        if (Global.io().getProgressMonitor().isConflictingProcess())
+        if (Global.io().getAggregateProgressMonitor().isConflictingProcess())
         {
             error("Failed to start process", "Another process is already running.");
             return false;
