@@ -401,7 +401,7 @@ public abstract class CacheModelBase implements CacheModel
                         // Don't delete the current project.
                         deletableProjects.removeIf(file ->
                             Global.io().isProjectOpen() &&
-                                Objects.equals(file.getName(), Global.io().getLoadedViewSet().getUUID().toString()));
+                                Objects.equals(file.getName(), Global.io().getLoadedViewSetOrThrow().getUUID().toString()));
 
                         // Perform cache deletion on directories still in oldProjects.
                         File[] deletableProjectsArr = deletableProjects.toArray(File[]::new);
@@ -568,7 +568,7 @@ public abstract class CacheModelBase implements CacheModel
             .filter(entry -> !retainedProjectIDSet.contains(entry.getKey()))
             .filter(entry ->
                 // Skip the current project
-                !Objects.equals(Global.io().getLoadedViewSet().getUUID().toString(), entry.getKey()))
+                !Objects.equals(Global.io().getLoadedViewSetOrThrow().getUUID().toString(), entry.getKey()))
             // Flatten to a stream of individual cache directories (for a specific project and a specific cache type)
             .flatMap(entry -> entry.getValue().stream())
             .collect(Collectors.toList());

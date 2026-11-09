@@ -88,9 +88,7 @@ public final class SpecularFitRequest implements ProgressMonitoredImageBasedGrap
 
     private static ReadonlySpecularFitSettings getSettingsFromProject()
     {
-        GeneralSettingsModel projectSettings = Global.io()
-            .validateRenderable()
-            .getLoadedViewSet().getProjectSettings();
+        GeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
 
         // Start with texture size
         int textureSize = projectSettings.getInt("textureSize");
@@ -124,9 +122,7 @@ public final class SpecularFitRequest implements ProgressMonitoredImageBasedGrap
 
     private static ReadonlyBasisOptimizationSettings getBasisOptimizationSettingsFromProject()
     {
-        GeneralSettingsModel projectSettings = Global.io()
-            .validateRenderable()
-            .getLoadedViewSet().getProjectSettings();
+        GeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
 
         BasisOptimizationSettings settings = new BasisOptimizationSettings();
 

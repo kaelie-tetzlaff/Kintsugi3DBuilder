@@ -31,6 +31,15 @@ public interface IO
 {
     void initialize(IOHandler handler);
 
+    boolean isInitialized();
+    boolean hasLoadedRenderable();
+
+    /**
+     * Checks if this has a valid project instance loaded.  Otherwise, throws an IllegalStateException.
+     * @return This model if it has a valid project instance.
+     */
+    IO validateRenderable();
+
     ReadonlyLoadOptionsModel getLoadOptionsModel();
 
     ProgressMonitor getAggregateProgressMonitor();
@@ -45,9 +54,28 @@ public interface IO
     boolean isProjectOpen();
     File getViewSetFile();
     File getProjectFile();
-    ViewSet getLoadedViewSet();
-    ReadonlyVertexGeometry getLoadedGeometry();
 
+    default boolean isProjectProcessed()
+    {
+        return hasLoadedRenderable() && getMainRenderable().getResources().hasProcessedWeightMaps();
+    }
+
+    ViewSet getLoadedViewSetOrNull();
+
+    default ViewSet getLoadedViewSetOrThrow()
+    {
+        ViewSet viewSet = getLoadedViewSetOrNull();
+        if (viewSet == null)
+        {
+            throw new IllegalStateException("No project loaded.");
+        }
+        else
+        {
+            return viewSet;
+        }
+    }
+
+    ReadonlyVertexGeometry getLoadedGeometry();
     ReadonlyImageBasedRenderable<?> getMainRenderable();
     ReadonlyImageBasedRenderable<?> getRenderableForShader(ShaderInfo shader);
 
@@ -126,13 +154,4 @@ public interface IO
 
     void closeProject();
     void closeProject(Runnable onCloseComplete);
-
-    boolean hasLoadedRenderable();
-    boolean hasValidHandler();
-
-    /**
-     * Checks if this has a valid project instance loaded.  Otherwise, throws an IllegalStateException.
-     * @return This model if it has a valid project instance.
-     */
-    IOModel validateRenderable();
 }

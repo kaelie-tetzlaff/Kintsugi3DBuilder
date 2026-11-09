@@ -518,53 +518,56 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                               int safeLeftPadding, int safeTopPadding, int safeRightPadding, int safeBottomPadding,
                               Consumer<FramebufferCanvas<?>> framebufferCallback)
     {
-        // Create a new rendering engine instance that references the same resources as the main rendering engine.
-        // This can run on any thread, but initialization needs to run on the graphics thread.
-        ImageBasedRenderingEngine<ContextType> renderView =
-            new ImageBasedRenderingEngine<>(renderableInstance.getInternalName(), context, renderableInstance.getResources());
-
-        RenderViewCameraModel renderViewCameraModel = new RenderViewCameraModel(cameraModel);
-        renderViewCameraModel.setPadding(safeLeftPadding, safeTopPadding, safeRightPadding, safeBottomPadding);
-
-        SceneModel renderViewSceneModel = renderView.getSceneModel();
-        renderViewSceneModel.setCameraModel(renderViewCameraModel);
-        initializeSceneModel(renderViewSceneModel);
-
-        Rendering.runLater(() ->
+        if (renderableInstance != null)
         {
-            // Create framebuffer
-            DoubleFramebufferObject<ContextType> framebuffer =
-                DoubleFramebufferFactory.create(context, viewSize.width, viewSize.height);
+            // Create a new rendering engine instance that references the same resources as the main rendering engine.
+            // This can run on any thread, but initialization needs to run on the graphics thread.
+            ImageBasedRenderingEngine<ContextType> renderView =
+                new ImageBasedRenderingEngine<>(renderableInstance.getInternalName(), context, renderableInstance.getResources());
 
-            // Create and initialize refreshable, which will manage the framebuffer object
-            var refreshable = RenderRefreshable.createWithManagedFrambufferObject(context, renderView, framebuffer);
+            RenderViewCameraModel renderViewCameraModel = new RenderViewCameraModel(cameraModel);
+            renderViewCameraModel.setPadding(safeLeftPadding, safeTopPadding, safeRightPadding, safeBottomPadding);
 
-            try
+            SceneModel renderViewSceneModel = renderView.getSceneModel();
+            renderViewSceneModel.setCameraModel(renderViewCameraModel);
+            initializeSceneModel(renderViewSceneModel);
+
+            Rendering.runLater(() ->
             {
-                // Pre-initialize here so that we can set the shader right away.
-                // RefreshableCollection will just skip this one when processing its initialize queue
-                // as it sees that it is already initialized.
-                refreshable.initialize();
-            }
-            catch (InitializationException e)
-            {
-                LOG.error("Error initialing render view for shader: {}", shader.getFullName(), e);
-            }
+                // Create framebuffer
+                DoubleFramebufferObject<ContextType> framebuffer =
+                    DoubleFramebufferFactory.create(context, viewSize.width, viewSize.height);
 
-            // Set to use the specified shader.
-            RenderingSubject<ContextType> subject = renderView.getSubject();
-            subject.setExtraFragmentShaderDefinesFactory(shader::getDefines);
-            subject.useFragmentShader(shader.getFile());
+                // Create and initialize refreshable, which will manage the framebuffer object
+                var refreshable = RenderRefreshable.createWithManagedFrambufferObject(context, renderView, framebuffer);
 
-            // render views will defer actually adding it to its main list until its own refresh call
-            // so it can safely be added here in the processing of the runLater queue.
-            renderViews.add(refreshable);
+                try
+                {
+                    // Pre-initialize here so that we can set the shader right away.
+                    // RefreshableCollection will just skip this one when processing its initialize queue
+                    // as it sees that it is already initialized.
+                    refreshable.initialize();
+                }
+                catch (InitializationException e)
+                {
+                    LOG.error("Error initialing render view for shader: {}", shader.getFullName(), e);
+                }
 
-            // Also store it in a map so that we can find it by UserShader when it needs to be removed.
-            renderViewMap.put(shader, refreshable);
+                // Set to use the specified shader.
+                RenderingSubject<ContextType> subject = renderView.getSubject();
+                subject.setExtraFragmentShaderDefinesFactory(shader::getDefines);
+                subject.useFragmentShader(shader.getFile());
 
-            framebufferCallback.accept(FramebufferCanvas.createUsingExistingFramebuffer(framebuffer));
-        });
+                // render views will defer actually adding it to its main list until its own refresh call
+                // so it can safely be added here in the processing of the runLater queue.
+                renderViews.add(refreshable);
+
+                // Also store it in a map so that we can find it by UserShader when it needs to be removed.
+                renderViewMap.put(shader, refreshable);
+
+                framebufferCallback.accept(FramebufferCanvas.createUsingExistingFramebuffer(framebuffer));
+            });
+        }
     }
 
     @Override
@@ -709,13 +712,23 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     @Override
     public Optional<EncodableColorImage> loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException
     {
-        return renderableInstance.getDynamicResourceManager().loadEnvironmentMap(environmentMapFile);
+        if (renderableInstance != null)
+        {
+            return renderableInstance.getDynamicResourceManager().loadEnvironmentMap(environmentMapFile);
+        }
+        else
+        {
+            return Optional.empty();
+        }
     }
 
     @Override
     public void loadBackplate(File backplateFile) throws FileNotFoundException
     {
-        renderableInstance.getDynamicResourceManager().loadBackplate(backplateFile);
+        if (renderableInstance != null)
+        {
+            renderableInstance.getDynamicResourceManager().loadBackplate(backplateFile);
+        }
     }
 
     @Override

@@ -205,7 +205,7 @@ public class EyedropperController extends NonDataPageControllerBase
                 IO io = Global.io();
 
                 // Initialize from loaded view set (projectSettingsManager will handle flatfieldCorrected)
-                ViewSet viewSet = io.getLoadedViewSet();
+                ViewSet viewSet = io.getLoadedViewSetOrThrow();
                 useCurveCheckbox.setSelected(viewSet.hasCustomLuminanceEncoding());
 
                 // Refresh the text fields and retrieve their new values.
@@ -266,7 +266,7 @@ public class EyedropperController extends NonDataPageControllerBase
         }
         else
         {
-            ViewSet viewSet = Global.io().validateRenderable().getLoadedViewSet();
+            ViewSet viewSet = Global.io().getLoadedViewSetOrThrow();
             return viewSet.getPrimaryView().tryFindFullResImageFile();
         }
     }
@@ -762,7 +762,7 @@ public class EyedropperController extends NonDataPageControllerBase
         fileChooser.getExtensionFilters().add(new ExtensionFilter("Image Files", VALID_EXTENSIONS));
         fileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
 
-        ViewSet viewSet = Global.io().getLoadedViewSet();
+        ViewSet viewSet = Global.io().getLoadedViewSetOrNull();
         if (viewSet == null)
         {
             Alert alert = new Alert(AlertType.ERROR, "Please load a model before performing tone calibration.");

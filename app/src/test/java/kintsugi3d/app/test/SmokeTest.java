@@ -131,7 +131,7 @@ public class SmokeTest
 
         LOG.debug("Waiting for rendering thread.");
 
-        while (!Global.io().hasValidHandler())
+        while (!Global.io().isInitialized())
         {
             Thread.onSpinWait();
         }
@@ -176,7 +176,7 @@ public class SmokeTest
         LOG_ERROR.set(null);
 
         // Make sure there is no project open.
-        if (Global.io().getLoadedViewSet() != null)
+        if (Global.io().getLoadedViewSetOrNull() != null)
         {
             closeAndWait();
         }
@@ -315,7 +315,7 @@ public class SmokeTest
             originalProcessedCount.set(PROCESSED_COUNTER.get());
             originalSaveCount.set(SAVE_COUNTER.get());
 
-            GeneralSettingsModel projectSettings = Global.io().getLoadedViewSet().getProjectSettings();
+            GeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
             projectSettings.set("textureSize", TEXTURE_RESOLUTION);
             projectSettings.set("textureSampledSize", TEXTURE_SAMPLED_SIZE);
             projectSettings.set("textureSubdivSize", TEXTURE_SUBDIV_SIZE);
@@ -350,16 +350,16 @@ public class SmokeTest
         assertNotNull(Global.io().getLoadedGeometry());
         assertNotNull(Global.io().getViewSetFile());
         assertNotNull(Global.io().getLoadOptionsModel());
-        assertTrue(Global.io().hasLoadedRenderable());
+        assertNotNull(Global.io().getMainRenderable());
     }
 
     private static void assertCameras(int expected)
     {
-        int numLoadedCameras = Global.io().getLoadedViewSet().getViewCount();
+        int numLoadedCameras = Global.io().getLoadedViewSetOrThrow().getViewCount();
         assertEquals(expected, numLoadedCameras);
-        int numEnabledCameras = Global.io().getLoadedViewSet().getEnabledViewCount();
+        int numEnabledCameras = Global.io().getLoadedViewSetOrThrow().getEnabledViewCount();
         assertEquals(expected, numEnabledCameras);
-        int numDisabledCameras = Global.io().getLoadedViewSet().getDisabledViewCount();
+        int numDisabledCameras = Global.io().getLoadedViewSetOrThrow().getDisabledViewCount();
         assertEquals(0, numDisabledCameras);
     }
 
@@ -562,8 +562,8 @@ public class SmokeTest
             "Rodin/Processed dark 25"
         );
 
-        assertEquals(Vector3.ZERO, Global.io().getLoadedViewSet().getLightPosition(0));
-        assertEquals(new Vector3(29.082094f), Global.io().getLoadedViewSet().getLightIntensity(0));
+        assertEquals(Vector3.ZERO, Global.io().getLoadedViewSetOrThrow().getLightPosition(0));
+        assertEquals(new Vector3(29.082094f), Global.io().getLoadedViewSetOrThrow().getLightIntensity(0));
 
         verifyProject(90);
     }
@@ -717,8 +717,8 @@ public class SmokeTest
             "KatrinaFuller/Downscaled25"
         );
 
-        assertEquals(Vector3.ZERO, Global.io().getLoadedViewSet().getLightPosition(0));
-        assertEquals(new Vector3(3242.3916f), Global.io().getLoadedViewSet().getLightIntensity(0));
+        assertEquals(Vector3.ZERO, Global.io().getLoadedViewSetOrThrow().getLightPosition(0));
+        assertEquals(new Vector3(3242.3916f), Global.io().getLoadedViewSetOrThrow().getLightIntensity(0));
 
         verifyProject(158);
     }
@@ -770,7 +770,7 @@ public class SmokeTest
         waitForLoad();
 
         File imgDir = new File(Objects.requireNonNull(CLASS_LOADER.getResource(imageDirectory)).toURI());
-        Global.io().getLoadedViewSet().setFullResImageDirectory(imgDir);
+        Global.io().getLoadedViewSetOrThrow().setFullResImageDirectory(imgDir);
 
         // --- FIRST PROCESS ---
         if (mode == ReloadMode.FIRST_ONLY || mode == ReloadMode.BOTH)
@@ -807,7 +807,7 @@ public class SmokeTest
         waitForLoad();
 
         File imgDir =  new File(Objects.requireNonNull(CLASS_LOADER.getResource(imageDirectory)).toURI());
-        Global.io().getLoadedViewSet().setFullResImageDirectory(imgDir);
+        Global.io().getLoadedViewSetOrThrow().setFullResImageDirectory(imgDir);
 
         // --- PROCESS ---
         runSpecularFit();
@@ -831,17 +831,16 @@ public class SmokeTest
         Global.io().loadExistingProject(projectFile);
         waitForLoad();
 
+        ViewSet viewSet = Global.io().getLoadedViewSetOrNull();
+        assertNotNull(viewSet);
+
         File imgDir =  new File(Objects.requireNonNull(CLASS_LOADER.getResource(imageDirectory)).toURI());
-        Global.io().getLoadedViewSet().setFullResImageDirectory(imgDir);
+        viewSet.setFullResImageDirectory(imgDir);
 
         // Run with default project lights
         runSpecularFit();
 
-        ViewSet viewSet = Global.io().getLoadedViewSet();
-
-        assertNotNull(viewSet);
         assertTrue(viewSet.getLightCount() > 0);
-
         LOG.info("Light count: {}", viewSet.getLightCount());
 
         ArrayList<Vector3> origLightPositions = new ArrayList<>(1);
