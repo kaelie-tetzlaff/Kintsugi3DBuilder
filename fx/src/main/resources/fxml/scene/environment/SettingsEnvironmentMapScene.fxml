@@ -18,6 +18,7 @@
 <VBox stylesheets="@../../kintsugiStyling.css" fx:id="root" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kintsugi3d.fx.controllers.scene.environment.SettingsEnvironmentSceneController">
    <Accordion expandedPane="$lightingPane">
      <panes>
+         <!--suppress JavaFxUnresolvedFxIdReference -->
          <TitledPane fx:id="lightingPane" animated="false" text="Lighting">
              <GridPane  alignment="CENTER_LEFT" hgap="5.0" vgap="10.0">
                  <padding>
@@ -70,7 +71,8 @@
                          GridPane.rowIndex="1"/>
              </GridPane>
          </TitledPane>
-         <TitledPane fx:id="backgroundPane" animated="false" expanded="false"
+         <!-- Background pane -->
+         <TitledPane animated="false" expanded="false"
                      text="Background">
              <GridPane alignment="CENTER_LEFT" hgap="5.0" vgap="10.0">
                  <padding>
