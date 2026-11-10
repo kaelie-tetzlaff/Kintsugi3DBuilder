@@ -150,6 +150,11 @@
         <release-basename>Kintsugi3DBuilder</release-basename>
         <!-- Define skipTests explicitly so that it can be used by test runners other than Surefire. -->
         <skipTests>false</skipTests>
+        <!-- Defaults to suppress errors; should be set by profile -->
+        <jre.os>unknown</jre.os>
+        <jre.arch>unknown</jre.arch>
+        <viewer.os>unknown</viewer.os>
+        <usdz-exporter.os>unknown</usdz-exporter.os>
     </properties>
     <profiles>
         <profile>

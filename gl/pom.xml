@@ -37,6 +37,7 @@
     </build>
     <properties>
         <lwjgl.version>3.3.6</lwjgl.version>
+        <lwjgl.natives>unknown</lwjgl.natives> <!-- Default to suppress errors; should be set by profile -->
     </properties>
     <profiles>
         <profile>
