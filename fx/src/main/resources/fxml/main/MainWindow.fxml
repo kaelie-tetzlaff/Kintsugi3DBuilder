@@ -172,10 +172,12 @@
                 </StackPane>
                 <!-- Carousel container -->
                 <HBox pickOnBounds="false" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0">
-                    <!-- Include Carousel.fxml which contains most of the logic -->
-                    <fx:include source="Carousel.fxml" AnchorPane.bottomAnchor="0.0" HBox.hgrow="ALWAYS"/>
-                    <!-- Include transparent container (to prevent event capture in the unused part of the HBox?) -->
-                    <fx:include source = "TransparentContainer.fxml" VBox.vgrow="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
+                    <!-- Need to suppress inspections since the IntelliJ JavaFX inspector misses instances where the
+                         fx:id is mapped to a controller reference -->
+                    <!--suppress JavaFxUnresolvedFxIdReference -->
+                    <fx:include fx:id="carousel" source="Carousel.fxml" AnchorPane.bottomAnchor="0.0" HBox.hgrow="ALWAYS"/>
+                    <!--suppress JavaFxUnresolvedFxIdReference -->
+                    <fx:include fx:id = "transparentContainer" source = "TransparentContainer.fxml" VBox.vgrow="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
                 </HBox>
                 <AnchorPane fx:id="miniProgressPane" prefHeight="24.0" style="-fx-background-color: #202020;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
                     <HBox fx:id="miniProgBarBoundingHBox" alignment="CENTER_RIGHT" onMouseClicked="#handleMiniProgressBar" onMouseEntered="#mouseEnterMiniBar" onMouseExited="#mouseExitMiniBar" onMouseMoved="#mouseEnterMiniBar" spacing="8.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
