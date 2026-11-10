@@ -49,9 +49,9 @@ public class SettingsModelDeserializer extends StdDeserializer<GeneralSettingsMo
         ObjectMapper mapper = new ObjectMapper();
 
         SimpleModule module = new SimpleModule();
-        module.addDeserializer(Vector2.class, new VectorDeserializer.Vector2Deserializer());
-        module.addDeserializer(Vector3.class, new VectorDeserializer.Vector3Deserializer());
-        module.addDeserializer(Vector4.class, new VectorDeserializer.Vector4Deserializer());
+        module.addDeserializer(Vector2.class, new Vector2Deserializer());
+        module.addDeserializer(Vector3.class, new Vector3Deserializer());
+        module.addDeserializer(Vector4.class, new Vector4Deserializer());
         mapper.registerModule(module);
 
 
