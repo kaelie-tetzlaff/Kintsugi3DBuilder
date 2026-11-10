@@ -79,7 +79,7 @@ class WindowCallback extends WindowListenerManagerInstance
     @SuppressWarnings({ "unused", "FieldCanBeLocal" })
     private GLFWScrollCallback scrollCallback;
 
-    @SuppressWarnings({ "unused", "FieldCanBeLocal" })
+    @SuppressWarnings("unused")
     private GLFWDropCallback dropCallback;
 
     private void createAnonymousInnerCallbacks()

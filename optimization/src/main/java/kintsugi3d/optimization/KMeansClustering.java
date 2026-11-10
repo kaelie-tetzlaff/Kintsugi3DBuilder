@@ -98,7 +98,6 @@ public class KMeansClustering
 
             double x = random.nextDouble() * cdf[colorMap.size() - 1];
 
-            //noinspection FloatingPointEquality
             if (x >= cdf[colorMap.size() - 1]) // It's possible but extremely unlikely that floating-point rounding would cause this to happen.
             {
                 // In that extremely rare case, just set x to 0.0.

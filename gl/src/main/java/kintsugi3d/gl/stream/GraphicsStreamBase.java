@@ -47,7 +47,6 @@ public abstract class GraphicsStreamBase<T> implements GraphicsStream<T>
         return result;
     }
 
-    @SuppressWarnings("AccessingNonPublicFieldOfAnotherObject")
     private static class Mapped<S, T> extends GraphicsStreamBase<T>
     {
         private final GraphicsStream<S> base;
