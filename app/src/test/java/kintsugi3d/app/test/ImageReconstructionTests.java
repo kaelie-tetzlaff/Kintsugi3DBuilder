@@ -47,6 +47,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -60,6 +62,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ImageReconstructionTests
 {
+    private static final Logger LOG = LoggerFactory.getLogger(ImageReconstructionTests.class);
+
     private static final File TEST_OUTPUT_DIR = new File("test-output");
     private static final boolean SAVE_TEST_IMAGES = true;
     private static final boolean SAVE_GROUND_TRUTH_SYNTHETIC_IMAGES = false;
@@ -113,7 +117,7 @@ class ImageReconstructionTests
         public void setStage(int stage, String message)
         {
             this.stage = stage;
-            System.out.println(MessageFormat.format("[{0}/{1}] {2}", stage, stageCount, message));
+            LOG.info("[{}/{}] {}", stage, stageCount, message);
         }
 
         @Override
@@ -807,9 +811,9 @@ class ImageReconstructionTests
             "Rodin/Processed dark 25",
             rmse ->
             {
-                System.out.println("Encoded RMSE: " + rmse.getEncodedGroundTruth());
-                System.out.println("Normalized sRGB RMSE: " + rmse.getNormalizedSRGB());
-                System.out.println("Normalized linear RMSE: " + rmse.getNormalizedLinear());
+                LOG.info("Encoded RMSE: {}", rmse.getEncodedGroundTruth());
+                LOG.info("Normalized sRGB RMSE: {}", rmse.getNormalizedSRGB());
+                LOG.info("Normalized linear RMSE: {}", rmse.getNormalizedLinear());
                 assertTrue (rmse.getEncodedGroundTruth() < 0.1);
                 assertTrue (rmse.getNormalizedSRGB() < 0.1);
                 assertTrue (rmse.getNormalizedLinear() < 0.1);
