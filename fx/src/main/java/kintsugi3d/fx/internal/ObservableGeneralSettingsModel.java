@@ -28,11 +28,11 @@ import java.util.NoSuchElementException;
 
 public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase implements ReadonlyObservableGeneralSettingsModel
 {
-    private static class TypedProperty implements Property<Object>
+    private static final class TypedProperty implements Property<Object>
     {
-        protected final ObjectProperty<Object> base;
-        protected final Class<?> type;
-        protected final boolean serialize;
+        private final ObjectProperty<Object> base;
+        private final Class<?> type;
+        private final boolean serialize;
 
         private TypedProperty(Object initialValue, Class<?> type, boolean serialize)
         {

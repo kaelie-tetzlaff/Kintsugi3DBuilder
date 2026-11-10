@@ -14,23 +14,24 @@ package kintsugi3d.optimization.function;
 import kintsugi3d.optimization.MatrixSystem;
 import org.ejml.simple.SimpleMatrix;
 
+import java.util.Arrays;
 import java.util.function.ObjIntConsumer;
 import java.util.stream.IntStream;
 
 /**
  * Class to store the results of optimizing a small set of functions using a larger library of basis functions.
  */
-public class OptimizedFunctions
+public final class OptimizedFunctions
 {
     /**
      * The library of basis function
      */
-    private BasisFunctions basisFunctions;
+    private final BasisFunctions basisFunctions;
 
     /**
      * The solution vectors
      */
-    private SimpleMatrix[] solutions;
+    private final SimpleMatrix[] solutions;
 
     /**
      * Construct using solution vectors
@@ -54,11 +55,7 @@ public class OptimizedFunctions
     public static OptimizedFunctions solveSystem(BasisFunctions basisFunctions, MatrixSystem system)
     {
         SimpleMatrix[] solutions = new SimpleMatrix[system.rhs.length];
-        for (int i = 0; i < solutions.length; i++)
-        {
-            solutions[i] = system.solve(i);
-        }
-
+        Arrays.setAll(solutions, system::solve);
         return new OptimizedFunctions(basisFunctions, solutions);
     }
 
@@ -75,11 +72,7 @@ public class OptimizedFunctions
             BasisFunctions basisFunctions, MatrixSystem system, double toleranceScale)
     {
         SimpleMatrix[] solutions = new SimpleMatrix[system.rhs.length];
-        for (int i = 0; i < solutions.length; i++)
-        {
-            solutions[i] = system.solveNonNegative(i, toleranceScale);
-        }
-
+        Arrays.setAll(solutions, i -> system.solveNonNegative(i, toleranceScale));
         return new OptimizedFunctions(basisFunctions, solutions);
     }
 

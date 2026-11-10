@@ -11,17 +11,10 @@
 
 package kintsugi3d.builder.state.settings;
 
-public class SafeSettingsModelWrapperFactory
+public final class SafeSettingsModelWrapperFactory
 {
-    private static final SafeSettingsModelWrapperFactory INSTANCE = new SafeSettingsModelWrapperFactory();
-
     private SafeSettingsModelWrapperFactory()
     {
-    }
-
-    public static SafeSettingsModelWrapperFactory getInstance()
-    {
-        return INSTANCE;
     }
 
     private static class Implementation implements SafeReadonlyGlobalSettingsModel
@@ -49,7 +42,7 @@ public class SafeSettingsModelWrapperFactory
         }
     }
 
-    public SafeReadonlyGlobalSettingsModel wrapUnsafeModel(ReadonlyGeneralSettingsModel base)
+    public static SafeReadonlyGlobalSettingsModel wrapUnsafeModel(ReadonlyGeneralSettingsModel base)
     {
         return new Implementation(base);
     }
