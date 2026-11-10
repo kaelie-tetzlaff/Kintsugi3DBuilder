@@ -63,7 +63,7 @@
                         </goals>
                         <configuration>
                             <url>
-                                https://github.com/PoctorDepper/usdz-exporter/releases/download/v${usdz-exporter.version}/usdz-exporter-v${usdz-exporter.version}-${usdz-exporter.os}
+                                https://github.com/kaelie-tetzlaff/usdz-exporter/releases/download/v${usdz-exporter.version}/usdz-exporter-v${usdz-exporter.version}-${usdz-exporter.os}
                             </url>
                             <outputDirectory>
                                 bin
