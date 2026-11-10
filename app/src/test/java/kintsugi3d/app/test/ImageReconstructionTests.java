@@ -284,7 +284,7 @@ class ImageReconstructionTests
     void normalizedLinear_grayscale() throws IOException
     {
         // TODO switch from gamma to sRGB decoding for the cases without ColorChecker values
-        multiTest(potatoViewSet, getProgramCreator("syntheticWithLinearNoise", p->{}),
+        verifyMultiple(potatoViewSet, getProgramCreator("syntheticWithLinearNoise", p->{}),
             factory -> createGroundTruthProgram(factory, p->{}), validationLinear, "normalizedLinear_grayscale");
     }
 
@@ -292,7 +292,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized linear reconstruction error, grayscale tonemapped synthetic data")
     void normalizedLinear_grayscaleTonemapped() throws IOException
     {
-        multiTest(potatoViewSetTonemapped, getProgramCreator("syntheticWithLinearNoise", p->{}),
+        verifyMultiple(potatoViewSetTonemapped, getProgramCreator("syntheticWithLinearNoise", p->{}),
             factory -> createGroundTruthProgram(factory, p->{}), validationLinear, "normalizedLinear_grayscaleTonemapped");
     }
 
@@ -300,7 +300,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized linear reconstruction error, color synthetic data")
     void normalizedLinear_color() throws IOException
     {
-        multiTest(potatoViewSet, getProgramCreator("syntheticWithLinearColorNoise", setupColor),
+        verifyMultiple(potatoViewSet, getProgramCreator("syntheticWithLinearColorNoise", setupColor),
             factory -> createGroundTruthProgram(factory, setupColor), validationLinear, "normalizedLinear_color");
     }
 
@@ -308,7 +308,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized linear reconstruction error, color tonemapped synthetic data")
     void normalizedLinear_colorTonemapped() throws IOException
     {
-        multiTest(potatoViewSetTonemapped, getProgramCreator("syntheticWithLinearColorNoise", setupColor),
+        verifyMultiple(potatoViewSetTonemapped, getProgramCreator("syntheticWithLinearColorNoise", setupColor),
             factory -> createGroundTruthProgram(factory, setupColor), validationLinear, "normalizedLinear_colorTonemapped");
     }
 
@@ -316,7 +316,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized linear reconstruction error, metallic synthetic data")
     void normalizedLinear_metallic() throws IOException
     {
-        multiTest(potatoViewSet, getProgramCreator("syntheticWithLinearColorNoise", setupMetallic),
+        verifyMultiple(potatoViewSet, getProgramCreator("syntheticWithLinearColorNoise", setupMetallic),
             factory -> createGroundTruthProgram(factory, setupMetallic), validationLinear, "normalizedLinear_metallic");
     }
 
@@ -324,7 +324,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized linear reconstruction error, metallic tonemapped synthetic data")
     void normalizedLinear_metallicTonemapped() throws IOException
     {
-        multiTest(potatoViewSetTonemapped, getProgramCreator("syntheticWithLinearColorNoise", setupMetallic),
+        verifyMultiple(potatoViewSetTonemapped, getProgramCreator("syntheticWithLinearColorNoise", setupMetallic),
             factory -> createGroundTruthProgram(factory, setupMetallic), validationLinear, "normalizedLinear_metallicTonemapped");
     }
 
@@ -332,7 +332,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized sRGB reconstruction error, grayscale synthetic data")
     void normalizedSRGB_grayscale() throws IOException
     {
-        multiTest(potatoViewSet, getProgramCreator("syntheticWithSRGBNoise", p->{}),
+        verifyMultiple(potatoViewSet, getProgramCreator("syntheticWithSRGBNoise", p->{}),
             factory -> createGroundTruthProgram(factory, p->{}), validationSRGB, "normalizedSRGB_grayscale");
     }
 
@@ -340,7 +340,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized sRGB reconstruction error, grayscale tonemapped synthetic data")
     void normalizedSRGB_grayscaleTonemapped() throws IOException
     {
-        multiTest(potatoViewSetTonemapped, getProgramCreator("syntheticWithSRGBNoise", p->{}),
+        verifyMultiple(potatoViewSetTonemapped, getProgramCreator("syntheticWithSRGBNoise", p->{}),
             factory -> createGroundTruthProgram(factory, p->{}), validationSRGB, "normalizedSRGB_grayscaleTonemapped");
     }
 
@@ -348,7 +348,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized sRGB reconstruction error, color synthetic data")
     void normalizedSRGB_color() throws IOException
     {
-        multiTest(potatoViewSet, getProgramCreator("syntheticWithSRGBColorNoise", setupColor),
+        verifyMultiple(potatoViewSet, getProgramCreator("syntheticWithSRGBColorNoise", setupColor),
             factory -> createGroundTruthProgram(factory, setupColor), validationSRGB, "normalizedSRGB_color");
     }
 
@@ -356,7 +356,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized sRGB reconstruction error, color tonemapped synthetic data")
     void normalizedSRGB_colorTonemapped() throws IOException
     {
-        multiTest(potatoViewSetTonemapped, getProgramCreator("syntheticWithSRGBColorNoise", setupColor),
+        verifyMultiple(potatoViewSetTonemapped, getProgramCreator("syntheticWithSRGBColorNoise", setupColor),
             factory -> createGroundTruthProgram(factory, setupColor), validationSRGB, "normalizedSRGB_colorTonemapped");
     }
 
@@ -364,7 +364,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized sRGB reconstruction error, metallic synthetic data")
     void normalizedSRGB_metallic() throws IOException
     {
-        multiTest(potatoViewSet, getProgramCreator("syntheticWithSRGBColorNoise", setupMetallic),
+        verifyMultiple(potatoViewSet, getProgramCreator("syntheticWithSRGBColorNoise", setupMetallic),
             factory -> createGroundTruthProgram(factory, setupMetallic), validationSRGB, "normalizedSRGB_metallic");
     }
 
@@ -372,7 +372,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized sRGB reconstruction error, metallic tonemapped synthetic data")
     void normalizedSRGB_metallicTonemapped() throws IOException
     {
-        multiTest(potatoViewSetTonemapped, getProgramCreator("syntheticWithSRGBColorNoise", setupMetallic),
+        verifyMultiple(potatoViewSetTonemapped, getProgramCreator("syntheticWithSRGBColorNoise", setupMetallic),
             factory -> createGroundTruthProgram(factory, setupMetallic), validationSRGB, "normalizedSRGB_metallicTonemapped");
     }
 
@@ -380,7 +380,7 @@ class ImageReconstructionTests
     @DisplayName("Tonemapped and lit reconstruction error, grayscale synthetic data")
     void tonemappedLit_grayscale() throws IOException
     {
-        multiTest(potatoViewSet, getProgramCreator("syntheticWithTonemappedLitNoise", p->{}),
+        verifyMultiple(potatoViewSet, getProgramCreator("syntheticWithTonemappedLitNoise", p->{}),
             factory -> createGroundTruthProgram(factory, p->{}), validationEncoded, "tonemappedLit_grayscale");
     }
 
@@ -388,7 +388,7 @@ class ImageReconstructionTests
     @DisplayName("Tonemapped and lit reconstruction error, grayscale tonemapped synthetic data")
     void tonemappedLit_grayscaleTonemapped() throws IOException
     {
-        multiTest(potatoViewSetTonemapped, getProgramCreator("syntheticWithTonemappedLitNoise", p->{}),
+        verifyMultiple(potatoViewSetTonemapped, getProgramCreator("syntheticWithTonemappedLitNoise", p->{}),
             factory -> createGroundTruthProgram(factory, p->{}), validationEncoded, "tonemappedLit_grayscaleTonemapped");
     }
 
@@ -396,7 +396,7 @@ class ImageReconstructionTests
     @DisplayName("Tonemapped and lit reconstruction error, color synthetic data")
     void tonemappedLit_color() throws IOException
     {
-        multiTest(potatoViewSet, getProgramCreator("syntheticWithTonemappedLitColorNoise", setupColor),
+        verifyMultiple(potatoViewSet, getProgramCreator("syntheticWithTonemappedLitColorNoise", setupColor),
             factory -> createGroundTruthProgram(factory, setupColor), validationEncoded, "tonemappedLit_color");
     }
 
@@ -404,7 +404,7 @@ class ImageReconstructionTests
     @DisplayName("Tonemapped and lit reconstruction error, color tonemapped synthetic data")
     void tonemappedLit_colorTonemapped() throws IOException
     {
-        multiTest(potatoViewSetTonemapped, getProgramCreator("syntheticWithTonemappedLitColorNoise", setupColor),
+        verifyMultiple(potatoViewSetTonemapped, getProgramCreator("syntheticWithTonemappedLitColorNoise", setupColor),
             factory -> createGroundTruthProgram(factory, setupColor), validationEncoded, "tonemappedLit_colorTonemapped");
     }
 
@@ -412,7 +412,7 @@ class ImageReconstructionTests
     @DisplayName("Tonemapped and lit reconstruction error, metallic synthetic data")
     void tonemappedLit_metallic() throws IOException
     {
-        multiTest(potatoViewSet, getProgramCreator("syntheticWithTonemappedLitColorNoise", setupMetallic),
+        verifyMultiple(potatoViewSet, getProgramCreator("syntheticWithTonemappedLitColorNoise", setupMetallic),
             factory -> createGroundTruthProgram(factory, setupMetallic), validationEncoded, "tonemappedLit_metallic");
     }
 
@@ -420,7 +420,7 @@ class ImageReconstructionTests
     @DisplayName("Tonemapped and lit reconstruction error, metallic tonemapped synthetic data")
     void tonemappedLit_metallicTonemapped() throws IOException
     {
-        multiTest(potatoViewSetTonemapped, getProgramCreator("syntheticWithTonemappedLitColorNoise", setupMetallic),
+        verifyMultiple(potatoViewSetTonemapped, getProgramCreator("syntheticWithTonemappedLitColorNoise", setupMetallic),
             factory -> createGroundTruthProgram(factory, setupMetallic), validationEncoded, "tonemappedLit_metallicTonemapped");
     }
 
@@ -834,7 +834,7 @@ class ImageReconstructionTests
         }
     }
 
-    void multiTest(
+    void verifyMultiple(
         ViewSet viewSet,
         Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>> testProgramCreator,
         Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>> groundTruthProgramCreator,
