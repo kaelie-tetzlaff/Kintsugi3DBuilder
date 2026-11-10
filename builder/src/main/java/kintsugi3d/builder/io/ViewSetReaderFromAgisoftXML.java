@@ -309,7 +309,8 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
                                         if (lightIndex < 0)
                                         {
                                             // Set default light index
-                                            lightIndex = defaultLightIndex = nextLightIndex;
+                                            defaultLightIndex = nextLightIndex;
+                                            lightIndex = nextLightIndex;
                                             nextLightIndex++;
                                             LOG.debug("Using default light index: {}", lightIndex);
                                         }
@@ -952,6 +953,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
             // Specify the desired file name
             String targetFileName = "doc.xml";
 
+            //noinspection NestedAssignment
             while ((entry = zis.getNextEntry()) != null)
             {
                 if (entry.getName().equals(targetFileName))
