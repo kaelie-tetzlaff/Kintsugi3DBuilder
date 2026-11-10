@@ -30,6 +30,8 @@ import java.util.Map.Entry;
 
 public class SettingsModelDeserializer extends StdDeserializer<GeneralSettingsModel>
 {
+    private static final long serialVersionUID = -1523438983297165818L;
+
     public SettingsModelDeserializer()
     {
         this(null);

@@ -24,6 +24,8 @@ import java.io.IOException;
 
 public class SettingsModelSerializer extends StdSerializer<GeneralSettingsModel>
 {
+    private static final long serialVersionUID = 869106293418028387L;
+
     public SettingsModelSerializer()
     {
         this(null);

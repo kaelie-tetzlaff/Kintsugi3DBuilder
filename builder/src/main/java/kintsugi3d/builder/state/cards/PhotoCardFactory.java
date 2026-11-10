@@ -66,10 +66,14 @@ public class PhotoCardFactory extends ProjectDataCardFactoryBase<View>
                 view.getImageFile().getName(),
                 fullResFile.getPath(), thumbnailPath,
                 new LinkedHashMap<>()
-                {{
-                    put("Resolution", res);
-                    put("Size", (fullResFile.length() / (1024 * 1024)) + " MB");
-                }},
+                {
+                    private static final long serialVersionUID = -4016579173708691664L;
+
+                    {
+                        put("Resolution", res);
+                        put("Size", (fullResFile.length() / (1024 * 1024)) + " MB");
+                    }
+                },
                 List.of(Map.of(
                     "Remove from Project", () ->
                         Global.state().getProjectModel().confirm("Remove Image", "Remove Image?",
