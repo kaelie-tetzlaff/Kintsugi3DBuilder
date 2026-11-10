@@ -145,18 +145,17 @@ public class MainWindowController
     private Window window;
     private Runnable userDocumentationHandler;
 
-    public MainWindowController()
-    {
-        instance = this;
-    }
-
     static MainWindowController getInstance()
     {
+        //noinspection StaticVariableUsedBeforeInitialization
         return instance;
     }
 
     public void init(Stage injectedStage, JavaFXState javaFXState, Runnable injectedUserDocumentationHandler)
     {
+        //noinspection AssignmentToStaticFieldFromInstanceMethod
+        instance = this;
+
         this.window = injectedStage;
 
         this.framebufferView.registerKeyAndWindowEventsFromStage(injectedStage);

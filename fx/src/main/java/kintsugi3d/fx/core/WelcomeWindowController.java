@@ -57,6 +57,7 @@ public class WelcomeWindowController
 
     static WelcomeWindowController getInstance()
     {
+        //noinspection StaticVariableUsedBeforeInitialization
         return instance;
     }
 
@@ -79,6 +80,7 @@ public class WelcomeWindowController
 
     public void init(Stage injectedStage, JavaFXState state, Runnable injectedUserDocumentationHandler)
     {
+        //noinspection AssignmentToStaticFieldFromInstanceMethod
         instance = this;
 
         this.parentWindow = injectedStage.getOwner();

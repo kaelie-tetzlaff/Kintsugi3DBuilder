@@ -33,7 +33,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ProgressBarsController
 {
     private static final Logger LOG = LoggerFactory.getLogger(ProgressBarsController.class);
-    private static ProgressBarsController INSTANCE;
+
+    private static ProgressBarsController instance;
 
     @FXML private Label localElapsedTimeLabel;
     @FXML private Label localEstimTimeRemainingLabel;
@@ -65,7 +66,8 @@ public class ProgressBarsController
 
     static ProgressBarsController getInstance()
     {
-        return INSTANCE;
+        //noinspection StaticVariableUsedBeforeInitialization
+        return instance;
     }
 
     public void init(Stage stage)
@@ -108,7 +110,8 @@ public class ProgressBarsController
         Global.io().addProgressMonitor(
             new Monitor(cancelRequested, localProgressBar, overallProgressBar, overallTextLabel, localTextLabel, cancelButton));
 
-        INSTANCE = this;
+        //noinspection AssignmentToStaticFieldFromInstanceMethod
+        instance = this;
     }
 
     public Stage getStage()
