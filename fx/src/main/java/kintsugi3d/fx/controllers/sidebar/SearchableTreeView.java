@@ -26,11 +26,10 @@ public final class SearchableTreeView extends SearchableView
     private final TreeView<String> treeView;
     private TreeItem<String> backupRoot;
 
-    private SearchableTreeView(TreeView<String> tree, TextInputControl textInput, CheckBox regexMode)
+    private SearchableTreeView(TreeView<String> treeView, TextInputControl searchTextInput, CheckBox regexMode)
     {
-        this.treeView = tree;
-        this.textInput = textInput;
-        this.regexMode = regexMode;
+        super(searchTextInput, regexMode);
+        this.treeView = treeView;
     }
 
     @Override
@@ -38,11 +37,11 @@ public final class SearchableTreeView extends SearchableView
     {
         backupRoot = deepCopy(treeView.getRoot());
 
-        textInput.textProperty().addListener((obs, oldText, newText) -> updateView());
+        getSearchTextInput().textProperty().addListener((obs, oldText, newText) -> updateView());
 
-        if (regexMode != null)
+        if (getRegexMode() != null)
         {
-            regexMode.selectedProperty().addListener((obs, oldVal, newVal) -> updateView());
+            getRegexMode().selectedProperty().addListener((obs, oldVal, newVal) -> updateView());
         }
         return this;
     }
@@ -62,7 +61,7 @@ public final class SearchableTreeView extends SearchableView
     {
         treeView.setRoot(deepCopy(backupRoot));
 
-        String searchTxt = textInput.getText().trim();
+        String searchTxt = getSearchTextInput().getText().trim();
         if (searchTxt.isBlank())
         {
             treeView.getRoot().setExpanded(true);
@@ -72,7 +71,7 @@ public final class SearchableTreeView extends SearchableView
         ObservableList<TreeItem<String>> leaves = getTreeViewLeaves(backupRoot);
         FilteredList<TreeItem<String>> filteredLeaves = new FilteredList<>(leaves, visibility -> true);
 
-        filteredLeaves.setPredicate(regexMode != null && regexMode.isSelected() ?
+        filteredLeaves.setPredicate(getRegexMode() != null && getRegexMode().isSelected() ?
             leaf -> leaf.getValue().matches(".*" + searchTxt + ".*") :
             leaf -> leaf.getValue().contains(searchTxt));
 

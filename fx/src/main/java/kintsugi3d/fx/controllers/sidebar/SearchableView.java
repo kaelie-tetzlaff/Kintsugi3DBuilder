@@ -16,10 +16,26 @@ import javafx.scene.control.TextInputControl;
 
 public abstract class SearchableView
 {
-    TextInputControl textInput;
-    CheckBox regexMode;
+    private final TextInputControl searchTextInput;
+    private final CheckBox regexMode;
+
+    SearchableView(TextInputControl searchTextInput, CheckBox regexMode)
+    {
+        this.searchTextInput = searchTextInput;
+        this.regexMode = regexMode;
+    }
 
     public abstract SearchableView bind();
 
     protected abstract void updateView();
+
+    TextInputControl getSearchTextInput()
+    {
+        return searchTextInput;
+    }
+
+    CheckBox getRegexMode()
+    {
+        return regexMode;
+    }
 }
