@@ -16,9 +16,10 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import java.util.*;
+import java.util.Objects;
+import java.util.Optional;
 
-public class MetashapeModel
+public final class MetashapeModel
 {
     private static final Logger LOG = LoggerFactory.getLogger(MetashapeModel.class);
     private final MetashapeChunk chunk;
@@ -125,7 +126,6 @@ public class MetashapeModel
     @Override
     public boolean equals(Object obj)
     {
-
         if (!(obj instanceof MetashapeModel))
         {
             return false;
@@ -136,5 +136,11 @@ public class MetashapeModel
         return this.id.equals(other.id) &&
             this.label.equals(other.label) &&
             this.path.equals(other.path);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id, label, path);
     }
 }
