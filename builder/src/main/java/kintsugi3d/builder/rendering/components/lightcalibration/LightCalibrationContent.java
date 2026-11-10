@@ -12,10 +12,10 @@
 package kintsugi3d.builder.rendering.components.lightcalibration;
 
 import kintsugi3d.builder.rendering.CameraViewport;
+import kintsugi3d.builder.rendering.RenderedComponent;
 import kintsugi3d.builder.rendering.SceneModel;
 import kintsugi3d.builder.rendering.SceneViewportModel;
 import kintsugi3d.builder.rendering.components.RenderingSubject;
-import kintsugi3d.builder.rendering.components.snap.ViewSnapContent;
 import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
@@ -25,7 +25,7 @@ import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
 
-public class LightCalibrationContent <ContextType extends Context<ContextType>> extends ViewSnapContent<ContextType>
+public class LightCalibrationContent <ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
     private final ContextType context;
     private final ReadonlyImageBasedGraphicsResources<ContextType> resources;

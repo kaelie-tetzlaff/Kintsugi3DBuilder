@@ -33,7 +33,7 @@ public class ViewSnap<ContextType extends Context<ContextType>> implements Rende
     private final SceneModel sceneModel;
     private final ViewSelection viewSelection;
 
-    private ViewSnapContent<ContextType> contentRoot;
+    private RenderedComponent<ContextType> contentRoot;
 
     private Matrix4 viewSnap = Matrix4.IDENTITY;
     private View lastSnapView;
@@ -44,7 +44,7 @@ public class ViewSnap<ContextType extends Context<ContextType>> implements Rende
         this.viewSelection = viewSelection;
     }
 
-    public ViewSnapContent<ContextType> getContentRoot()
+    public RenderedComponent<ContextType> getContentRoot()
     {
         return contentRoot;
     }
@@ -54,7 +54,7 @@ public class ViewSnap<ContextType extends Context<ContextType>> implements Rende
      * Must be called before initialize
      * @param contentRoot
      */
-    public void takeContentRoot(ViewSnapContent<ContextType> contentRoot)
+    public void takeContentRoot(RenderedComponent<ContextType> contentRoot)
     {
         this.contentRoot = contentRoot;
     }
