@@ -24,10 +24,7 @@ import kintsugi3d.builder.fit.settings.SpecularFitSettings;
 import kintsugi3d.builder.io.*;
 import kintsugi3d.builder.rendering.ImageReconstruction;
 import kintsugi3d.builder.rendering.ReconstructionView;
-import kintsugi3d.builder.resources.project.GraphicsResourcesAnalytic;
-import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace;
-import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
-import kintsugi3d.builder.resources.project.ShaderProgramFactory;
+import kintsugi3d.builder.resources.project.*;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.builder.state.settings.DefaultSettings;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
@@ -1055,7 +1052,7 @@ class ImageReconstructionTests
         }
     }
 
-    private void testFit(ImageBasedGraphicsResources<OpenGLContext> resources, Consumer<ReadonlyColorAppearanceRMSE> validation, String testName)
+    private void testFit(ReadonlyImageBasedGraphicsResources<OpenGLContext> resources, Consumer<ReadonlyColorAppearanceRMSE> validation, String testName)
         throws IOException, UserCancellationException
     {
         // TODO not yet tested
