@@ -174,7 +174,10 @@ public class JavaFXApplication extends Application
     {
         //noinspection AssignmentToStaticFieldFromInstanceMethod
         state = JavaFXState.create();
+
+        //noinspection AssignmentToStaticFieldFromInstanceMethod
         initialized = true;
+
         // Inject dependency for global state.
         MultithreadState multithreadState = MultithreadState.getInstance();
         GlobalBootstrap.initialize(multithreadState, multithreadState.getLoadOptionsModel());
@@ -232,7 +235,10 @@ public class JavaFXApplication extends Application
 
         //load Controllers
         RootSceneController sceneController = sceneFXMLLoader.getController();
+
+        //noinspection AssignmentToStaticFieldFromInstanceMethod
         mainWindowController = mainWindowFXMLLoader.getController();
+
         WelcomeWindowController welcomeWindowController = welcomeWindowFXMLLoader.getController();
         ProgressBarsController progressBarsController = progressBarsFXMLLoader.getController();
 
