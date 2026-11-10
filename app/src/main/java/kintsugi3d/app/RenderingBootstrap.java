@@ -47,6 +47,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public final class RenderingBootstrap
@@ -131,18 +132,19 @@ public final class RenderingBootstrap
             }
             else
             {
-                var framebufferCapture = new Object()
-                {
-                    DoubleFramebufferObject<OpenGLContext> fbo;
-                };
+                var framebufferCapture = new AtomicReference<DoubleFramebufferObject<OpenGLContext>>();
 
                 // Need to still specify a native window to create the context, even though we won't use it.
                 window = OpenGLContextFactory.getInstance().buildWindow("<ignore>", 1, 1)
                     .setDefaultFramebufferCreator(
-                        c -> framebufferCapture.fbo = DoubleFramebufferFactory.create(c, 800, 800))
+                        c ->
+                        {
+                            framebufferCapture.set(DoubleFramebufferFactory.create(c, 800, 800));
+                            return framebufferCapture.get();
+                        })
                     .create();
 
-                FramebufferCanvas<OpenGLContext> canvas = FramebufferCanvas.createUsingExistingFramebuffer(framebufferCapture.fbo);
+                FramebufferCanvas<OpenGLContext> canvas = FramebufferCanvas.createUsingExistingFramebuffer(framebufferCapture.get());
 
                 if (stage != null)
                 {
