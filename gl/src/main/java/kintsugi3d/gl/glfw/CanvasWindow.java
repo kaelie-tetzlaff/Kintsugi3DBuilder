@@ -17,7 +17,6 @@ import kintsugi3d.gl.exceptions.GLFWException;
 import kintsugi3d.gl.window.*;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.Version;
-import org.lwjgl.Version.BuildType;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -51,8 +50,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
         WindowSpecification windowSpec)
     {
         LOG.info("LWJGL version: {}.{}.{}{}",
-            Version.VERSION_MAJOR, Version.VERSION_MINOR, Version.VERSION_REVISION,
-            Version.BUILD_TYPE == BuildType.ALPHA ? "a" : ((Version.BUILD_TYPE == BuildType.BETA) ? "b" : "")
+            Version.VERSION_MAJOR, Version.VERSION_MINOR, Version.VERSION_REVISION, getVersionBuildType()
             /*Version.getVersion()*/ /* <== causes annoying exception breakpoints in Eclipse */);
 
         String glfwVersionString = glfwGetVersionString();
@@ -178,6 +176,19 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
         if (windowSpec.getMultisamples() > 0)
         {
             context.getState().enableMultisampling();
+        }
+    }
+
+    private static String getVersionBuildType()
+    {
+        switch (Version.BUILD_TYPE)
+        {
+            case ALPHA:
+                return "a";
+            case BETA:
+                return "b";
+            default:
+                return "";
         }
     }
 
