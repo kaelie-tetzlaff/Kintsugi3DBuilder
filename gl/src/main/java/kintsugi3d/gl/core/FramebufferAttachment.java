@@ -21,7 +21,7 @@ package kintsugi3d.gl.core;
  * Sub-types should be able to appropriately handle usage in conjunction with to any implementation of Framebuffer&lt;ContextType&gt;.
  * This could mean ensuring compatibility with any such implementation, and/or throwing an exception for implementations that are not compatible.
  */
+@SuppressWarnings("InterfaceMayBeAnnotatedFunctional")
 public interface FramebufferAttachment<ContextType extends Context<ContextType>> extends ContextBound<ContextType>
 {
-
 }
