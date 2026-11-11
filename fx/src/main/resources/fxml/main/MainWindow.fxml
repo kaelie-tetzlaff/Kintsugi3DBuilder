@@ -57,10 +57,8 @@
                         <MenuItem mnemonicParsing="false" text="Action 1" />
                     </Menu>
                     <Menu fx:id="cleanRecentProjectsMenu" mnemonicParsing="false" text="Clear Recent Projects">
-                        <MenuItem fx:id="removeSomeRefsCustMenuItem" text="Clear Missing Projects"
-                                  onAction="#removeInvalidReferences"/>
-                        <MenuItem fx:id="removeAllRefsCustMenuItem" text="Clear All Projects"
-                                  onAction="#removeAllReferences"/>
+                        <MenuItem text="Clear Missing Projects" onAction="#removeInvalidReferences"/>
+                        <MenuItem text="Clear All Projects" onAction="#removeAllReferences"/>
                     </Menu>
 
                     <SeparatorMenuItem mnemonicParsing="false" />
