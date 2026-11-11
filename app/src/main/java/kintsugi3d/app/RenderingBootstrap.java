@@ -227,14 +227,14 @@ public final class RenderingBootstrap
             renderableManager.setSettingsModel(settingsModel);
             ToolBindingModel toolBindingModel = createToolBinding();
 
-            CanvasListener canvasListener = ToolBox.Builder.create()
-            .setCameraModel(cameraModel)
-            .setLightingModel(lightingModel)
-            .setObjectModel(objectModel)
-            .setSettingsModel(settingsModel)
-            .setToolBindingModel(toolBindingModel)
-            .setSceneViewport(renderableManager.getSceneViewport())
-            .build();
+            CanvasListener canvasListener = ToolBox.getBuilder()
+                .setCameraModel(cameraModel)
+                .setLightingModel(lightingModel)
+                .setObjectModel(objectModel)
+                .setSettingsModel(settingsModel)
+                .setToolBindingModel(toolBindingModel)
+                .setSceneViewport(renderableManager.getSceneViewport())
+                .create();
 
             canvasListener.addToCanvas(canvas);
         }

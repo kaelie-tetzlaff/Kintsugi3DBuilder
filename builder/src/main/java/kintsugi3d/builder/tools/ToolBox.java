@@ -282,6 +282,11 @@ public final class ToolBox implements CanvasListener
         lightTool = dependencies.inject(LightTool.getBuilder()).create();
     }
 
+    public static Builder getBuilder()
+    {
+        return new Builder();
+    }
+
     public static final class Builder
     {
         private ToolBindingModel toolBindingModel;
@@ -290,11 +295,6 @@ public final class ToolBox implements CanvasListener
         private ManipulableLightingEnvironmentModel lightingModel;
         private ManipulableObjectPoseModel objectModel;
         private SceneViewport sceneViewport;
-
-        public static Builder create()
-        {
-            return new Builder();
-        }
 
         private Builder()
         {
@@ -336,7 +336,7 @@ public final class ToolBox implements CanvasListener
             return this;
         }
 
-        public CanvasListener build()
+        public CanvasListener create()
         {
             return new ToolBox(cameraModel, lightingModel, objectModel, settingsModel, toolBindingModel, sceneViewport);
         }
