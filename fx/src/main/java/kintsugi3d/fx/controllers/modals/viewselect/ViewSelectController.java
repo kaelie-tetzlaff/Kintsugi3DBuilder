@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.IntStream;
 
 public abstract class ViewSelectController extends DataReceiverPageControllerBase<ViewSelectable>
 {
@@ -137,15 +138,11 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
         String viewName = getData().getViewSelection();
         if (viewName != null)
         {
-            for (int i = 0; i < searchableTreeView.getTreeView().getExpandedItemCount(); i++)
-            {
-                TreeItem<String> item = searchableTreeView.getTreeView().getTreeItem(i);
-                if (Objects.equals(item.getValue(), viewName))
-                {
-                    selectionItem = item;
-                    break;
-                }
-            }
+            selectionItem = IntStream.range(0, searchableTreeView.getTreeView().getExpandedItemCount())
+                .mapToObj(searchableTreeView.getTreeView()::getTreeItem)
+                .filter(item -> Objects.equals(item.getValue(), viewName))
+                .findFirst()
+                .orElse(NONE_ITEM);
         }
 
         searchableTreeView.getTreeView().getSelectionModel().select(selectionItem);

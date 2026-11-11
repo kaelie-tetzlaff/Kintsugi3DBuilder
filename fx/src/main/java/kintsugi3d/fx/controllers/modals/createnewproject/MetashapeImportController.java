@@ -187,24 +187,24 @@ public class MetashapeImportController extends ProjectImportController
         modelSelectionChoiceBox.setValue(modelSelectionChoiceBox.getItems().get(0));
         modelSelectionChoiceBox.setDisable(false);
 
-        if (metashapeDocument.getSelectedChunk().getDefaultModelID().isEmpty())
+        if (metashapeDocument.getSelectedChunk().getDefaultModelID().isPresent())
         {
-            return;
-        }
-
-        for (int i = 0; i < modelSelectionChoiceBox.getItems().size(); ++i)
-        {
-            String obj = modelSelectionChoiceBox.getItems().get(i);
-            String modelID = getModelIDFromSelection(obj);
-            if (modelID != null)
-            {
-                int id = Integer.parseInt(modelID);
-                if (metashapeDocument.getSelectedChunk().getDefaultModelID().get().equals(id))
+            modelSelectionChoiceBox.getItems().stream()
+                .filter(obj ->
                 {
-                    modelSelectionChoiceBox.setValue(obj);
-                    break;
-                }
-            }
+                    String modelID = getModelIDFromSelection(obj);
+                    if (modelID != null)
+                    {
+                        int id = Integer.parseInt(modelID);
+                        return metashapeDocument.getSelectedChunk().getDefaultModelID().get().equals(id);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                })
+                .findFirst()
+                .ifPresent(modelSelectionChoiceBox::setValue);
         }
     }
 

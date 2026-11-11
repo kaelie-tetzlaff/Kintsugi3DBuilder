@@ -150,7 +150,8 @@ public class ProgressBarsController
         // Don't start the thread until the stopwatches have started or it will stop right away.
         new Thread(() ->
         {
-            while (isProcessing())
+            boolean uninterrupted = true;
+            while (isProcessing() && uninterrupted)
             {
                 try
                 {
@@ -167,7 +168,7 @@ public class ProgressBarsController
                 }
                 catch (InterruptedException e)
                 {
-                    break;
+                    uninterrupted = false;
                 }
             }
         }).start();

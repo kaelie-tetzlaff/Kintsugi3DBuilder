@@ -103,13 +103,8 @@ public class Stopwatch
     {
         long recordedTimes = 0;
         int numToDivide = 0;
-        for (int i = 1; i < ARR_SIZE; ++i)
+        for (int i = 1; i < ARR_SIZE && rollingAverageStorage[i] != initTime; ++i)
         {
-            if (rollingAverageStorage[i] == initTime)
-            {
-                break;
-            }
-
             long difference = rollingAverageStorage[i] - rollingAverageStorage[i - 1];
 
             if (difference > 0)
