@@ -20,10 +20,11 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class ImportedMaterial implements ReadonlyImportedMaterial
+public final class ImportedMaterial implements ReadonlyImportedMaterial
 {
     private static final Logger LOG = LoggerFactory.getLogger(ImportedMaterial.class);
-    private String name;
+
+    private final String name;
 
     private Vector3 ambient;
     private Vector3 diffuse;
@@ -56,7 +57,7 @@ public class ImportedMaterial implements ReadonlyImportedMaterial
     private ReadonlyMaterialScalarMap displacementMap;
     private ReadonlyMaterialScalarMap ambientOcclusionMap;
 
-    public ImportedMaterial(String name)
+    private ImportedMaterial(String name)
     {
         this.name = name;
 
@@ -77,7 +78,7 @@ public class ImportedMaterial implements ReadonlyImportedMaterial
     {
         Map<String, ImportedMaterial> materials = new HashMap<>(1);
         ImportedMaterial currentMaterial = null;
-        boolean ambientSet = false;
+        boolean ambientMissing = true;
 
         if (mtlFile.exists())
         {
@@ -98,29 +99,29 @@ public class ImportedMaterial implements ReadonlyImportedMaterial
                     {
                         try
                         {
-                            switch(id.toLowerCase())
+                            switch(id.toLowerCase(Locale.ROOT))
                             {
                                 case "ka":
-                                    currentMaterial.setAmbient(new Vector3(scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat()));
-                                    ambientSet = true;
+                                    currentMaterial.ambient = new Vector3(scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat());
+                                    ambientMissing = false;
                                     break;
                                 case "kd":
-                                    currentMaterial.setDiffuse(new Vector3(scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat()));
+                                    currentMaterial.diffuse = new Vector3(scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat());
                                     break;
                                 case "ks":
-                                    currentMaterial.setSpecular(new Vector3(scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat()));
+                                    currentMaterial.specular = new Vector3(scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat());
                                     break;
                                 case "ke":
-                                    currentMaterial.setEmission(new Vector3(scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat()));
+                                    currentMaterial.emission = new Vector3(scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat());
                                     break;
                                 case "d":
-                                    currentMaterial.setOpacity(scanner.nextFloat());
+                                    currentMaterial.opacity = scanner.nextFloat();
                                     break;
                                 case "tr":
-                                    currentMaterial.setOpacity(1.0f - scanner.nextFloat());
+                                    currentMaterial.opacity = 1.0f - scanner.nextFloat();
                                     break;
                                 case "tf":
-                                    currentMaterial.setTranslucency(scanner.nextFloat());
+                                    currentMaterial.translucency = scanner.nextFloat();
                                     break;
                                 case "ns":
                                     currentMaterial.setExponent(scanner.nextFloat());
@@ -129,32 +130,28 @@ public class ImportedMaterial implements ReadonlyImportedMaterial
                                     currentMaterial.setRoughness(scanner.nextFloat());
                                     break;
                                 case "pm":
-                                    currentMaterial.setMetallic(scanner.nextFloat());
+                                    currentMaterial.metallic = scanner.nextFloat();
                                     break;
                                 case "ps":
-                                    currentMaterial.setSheen(new Vector3(scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat()));
+                                    currentMaterial.sheen = new Vector3(scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat());
                                     break;
                                 case "pc":
-                                    currentMaterial.setClearcoat(new Vector3(scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat()));
+                                    currentMaterial.clearcoat = new Vector3(scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat());
                                     break;
                                 case "pcr":
-                                    currentMaterial.setClearcoatRoughness(scanner.nextFloat());
+                                    currentMaterial.clearcoatRoughness = scanner.nextFloat();
                                     break;
                                 case "map_ka":
-                                    ReadonlyMaterialColorMap ambientMap = parseColorMapStatement(scanner);
-                                    currentMaterial.setAmbientMap(ambientMap);
+                                    currentMaterial.ambientMap = parseColorMapStatement(scanner);
                                     break;
                                 case "map_kd":
-                                    ReadonlyMaterialColorMap diffuseMap = parseColorMapStatement(scanner);
-                                    currentMaterial.setDiffuseMap(diffuseMap);
+                                    currentMaterial.diffuseMap = parseColorMapStatement(scanner);
                                     break;
                                 case "map_ks":
-                                    ReadonlyMaterialColorMap specularMap = parseColorMapStatement(scanner);
-                                    currentMaterial.setSpecularMap(specularMap);
+                                    currentMaterial.specularMap = parseColorMapStatement(scanner);
                                     break;
                                 case "map_ke":
-                                    ReadonlyMaterialColorMap emissionMap = parseColorMapStatement(scanner);
-                                    currentMaterial.setEmissionMap(emissionMap);
+                                    currentMaterial.emissionMap = parseColorMapStatement(scanner);
                                     break;
                                 case "map_d":
                                     MaterialScalarMap opacityMap = parseScalarMapStatement(scanner);
@@ -162,8 +159,8 @@ public class ImportedMaterial implements ReadonlyImportedMaterial
                                     {
                                         opacityMap.setChannel(MaterialTextureChannel.Luminance);
                                     }
-                                    currentMaterial.setOpacityMap(opacityMap);
-                                    currentMaterial.setTransparencyMap(null);
+                                    currentMaterial.opacityMap = opacityMap;
+                                    currentMaterial.transparencyMap = null;
                                     break;
                                 case "map_tr":
                                     MaterialScalarMap transparencyMap = parseScalarMapStatement(scanner);
@@ -171,8 +168,8 @@ public class ImportedMaterial implements ReadonlyImportedMaterial
                                     {
                                         transparencyMap.setChannel(MaterialTextureChannel.Luminance);
                                     }
-                                    currentMaterial.setTransparencyMap(transparencyMap);
-                                    currentMaterial.setOpacityMap(null);
+                                    currentMaterial.transparencyMap = transparencyMap;
+                                    currentMaterial.opacityMap = null;
                                     break;
                                 case "map_tf":
                                     MaterialScalarMap translucencyMap = parseScalarMapStatement(scanner);
@@ -180,8 +177,8 @@ public class ImportedMaterial implements ReadonlyImportedMaterial
                                     {
                                         translucencyMap.setChannel(MaterialTextureChannel.Luminance);
                                     }
-                                    currentMaterial.setTranslucencyMap(translucencyMap);
-                                    currentMaterial.setOpacityMap(null);
+                                    currentMaterial.translucencyMap = translucencyMap;
+                                    currentMaterial.opacityMap = null;
                                     break;
                                 case "map_ns":
                                     MaterialScalarMap exponentMap = parseScalarMapStatement(scanner);
@@ -189,8 +186,8 @@ public class ImportedMaterial implements ReadonlyImportedMaterial
                                     {
                                         exponentMap.setChannel(MaterialTextureChannel.Luminance);
                                     }
-                                    currentMaterial.setExponentMap(exponentMap);
-                                    currentMaterial.setRoughnessMap(null);
+                                    currentMaterial.exponentMap = exponentMap;
+                                    currentMaterial.roughnessMap = null;
                                     break;
                                 case "map_pr":
                                     MaterialScalarMap roughnessMap = parseScalarMapStatement(scanner);
@@ -198,8 +195,8 @@ public class ImportedMaterial implements ReadonlyImportedMaterial
                                     {
                                         roughnessMap.setChannel(MaterialTextureChannel.Luminance);
                                     }
-                                    currentMaterial.setRoughnessMap(roughnessMap);
-                                    currentMaterial.setExponentMap(null);
+                                    currentMaterial.roughnessMap = roughnessMap;
+                                    currentMaterial.exponentMap = null;
                                     break;
                                 case "map_pm":
                                     MaterialScalarMap metallicMap = parseScalarMapStatement(scanner);
@@ -207,11 +204,10 @@ public class ImportedMaterial implements ReadonlyImportedMaterial
                                     {
                                         metallicMap.setChannel(MaterialTextureChannel.Luminance);
                                     }
-                                    currentMaterial.setMetallicMap(metallicMap);
+                                    currentMaterial.metallicMap = metallicMap;
                                     break;
                                 case "map_ps":
-                                    ReadonlyMaterialColorMap sheenMap = parseColorMapStatement(scanner);
-                                    currentMaterial.setSheenMap(sheenMap);
+                                    currentMaterial.sheenMap = parseColorMapStatement(scanner);
                                     break;
                                 case "aniso":
                                     MaterialScalarMap anisotropyMap = parseScalarMapStatement(scanner);
@@ -219,7 +215,7 @@ public class ImportedMaterial implements ReadonlyImportedMaterial
                                     {
                                         anisotropyMap.setChannel(MaterialTextureChannel.Luminance);
                                     }
-                                    currentMaterial.setAnisotropyMap(anisotropyMap);
+                                    currentMaterial.anisotropyMap = anisotropyMap;
                                     break;
                                 case "anisor":
                                     MaterialScalarMap anisotropyRotationMap = parseScalarMapStatement(scanner);
@@ -227,7 +223,7 @@ public class ImportedMaterial implements ReadonlyImportedMaterial
                                     {
                                         anisotropyRotationMap.setChannel(MaterialTextureChannel.Luminance);
                                     }
-                                    currentMaterial.setAnisotropyRotationMap(anisotropyRotationMap);
+                                    currentMaterial.anisotropyRotationMap = anisotropyRotationMap;
                                     break;
                                 case "bump":
                                     MaterialBumpMap bumpMap = parseBumpMapStatement(scanner);
@@ -235,7 +231,7 @@ public class ImportedMaterial implements ReadonlyImportedMaterial
                                     {
                                         bumpMap.setChannel(MaterialTextureChannel.Luminance);
                                     }
-                                    currentMaterial.setBumpMap(bumpMap);
+                                    currentMaterial.bumpMap = bumpMap;
                                     break;
                                 case "disp":
                                     MaterialScalarMap displacementMap = parseScalarMapStatement(scanner);
@@ -243,18 +239,18 @@ public class ImportedMaterial implements ReadonlyImportedMaterial
                                     {
                                         displacementMap.setChannel(MaterialTextureChannel.Luminance);
                                     }
-                                    currentMaterial.setDisplacementMap(displacementMap);
+                                    currentMaterial.displacementMap = displacementMap;
                                     break;
                                 case "normal":
                                 case "norm":
                                 case "map_bump": // Metashape convention
-                                    ReadonlyMaterialTextureMap normalMap = parseTextureStatement(scanner);
-                                    currentMaterial.setNormalMap(normalMap);
+                                    currentMaterial.normalMap = parseTextureStatement(scanner);
                                     break;
                                 case "map_ao": // Metashape convention
-                                    ReadonlyMaterialScalarMap aoMap = parseScalarMapStatement(scanner);
-                                    currentMaterial.setAmbientOcclusionMap(aoMap);
+                                    currentMaterial.ambientOcclusionMap = parseScalarMapStatement(scanner);
                                     break;
+                                default:
+                                    LOG.warn("Unrecognized material attribute: {}", id);
                             }
                         }
                         catch(InputMismatchException e)
@@ -279,14 +275,14 @@ public class ImportedMaterial implements ReadonlyImportedMaterial
 
         if (currentMaterial != null)
         {
-            if(!ambientSet)
+            if(ambientMissing)
             {
-                currentMaterial.setAmbient(currentMaterial.getDiffuse());
+                currentMaterial.ambient = currentMaterial.getDiffuse();
             }
 
             if (currentMaterial.getAmbientMap() == null)
             {
-                currentMaterial.setAmbientMap(currentMaterial.getDiffuseMap());
+                currentMaterial.ambientMap = currentMaterial.getDiffuseMap();
             }
         }
 
@@ -298,7 +294,7 @@ public class ImportedMaterial implements ReadonlyImportedMaterial
         try
         {
             // Option statement
-            switch(option.toLowerCase())
+            switch(option.toLowerCase(Locale.ROOT))
             {
                 case "-mm":
                     texture.setBase(scanner.nextFloat());
@@ -453,30 +449,8 @@ public class ImportedMaterial implements ReadonlyImportedMaterial
             {
                 if ("-imfchan".equals(nextPart))
                 {
-                    switch(scanner.next().toLowerCase())
-                    {
-                        case "r":
-                            texture.setChannel(MaterialTextureChannel.Red);
-                            break;
-                        case "g":
-                            texture.setChannel(MaterialTextureChannel.Green);
-                            break;
-                        case "b":
-                            texture.setChannel(MaterialTextureChannel.Blue);
-                            break;
-                        case "m":
-                        case "a":
-                            texture.setChannel(MaterialTextureChannel.Alpha);
-                            break;
-                        case "l":
-                        case "y":
-                            texture.setChannel(MaterialTextureChannel.Luminance);
-                            break;
-                        case "z":
-                        case "d":
-                            texture.setChannel(MaterialTextureChannel.Depth);
-                            break;
-                    }
+                    String element = scanner.next();
+                    parseChannel(element, texture);
                 }
                 else
                 {
@@ -521,30 +495,8 @@ public class ImportedMaterial implements ReadonlyImportedMaterial
                 }
                 else if ("-imfchan".equals(nextPart))
                 {
-                    switch(scanner.next().toLowerCase())
-                    {
-                        case "r":
-                            texture.setChannel(MaterialTextureChannel.Red);
-                            break;
-                        case "g":
-                            texture.setChannel(MaterialTextureChannel.Green);
-                            break;
-                        case "b":
-                            texture.setChannel(MaterialTextureChannel.Blue);
-                            break;
-                        case "m":
-                        case "a":
-                            texture.setChannel(MaterialTextureChannel.Alpha);
-                            break;
-                        case "l":
-                        case "y":
-                            texture.setChannel(MaterialTextureChannel.Luminance);
-                            break;
-                        case "z":
-                        case "d":
-                            texture.setChannel(MaterialTextureChannel.Depth);
-                            break;
-                    }
+                    String element = scanner.next();
+                    parseChannel(element, texture);
                 }
                 else
                 {
@@ -561,15 +513,40 @@ public class ImportedMaterial implements ReadonlyImportedMaterial
         return texture;
     }
 
+    private static void parseChannel(String channel, MaterialScalarMap texture)
+    {
+        switch(channel.toLowerCase(Locale.ROOT))
+        {
+            case "r":
+                texture.setChannel(MaterialTextureChannel.Red);
+                break;
+            case "g":
+                texture.setChannel(MaterialTextureChannel.Green);
+                break;
+            case "b":
+                texture.setChannel(MaterialTextureChannel.Blue);
+                break;
+            case "m":
+            case "a":
+                texture.setChannel(MaterialTextureChannel.Alpha);
+                break;
+            case "l":
+            case "y":
+                texture.setChannel(MaterialTextureChannel.Luminance);
+                break;
+            case "z":
+            case "d":
+                texture.setChannel(MaterialTextureChannel.Depth);
+                break;
+            default:
+                LOG.warn("Unexpected channel: {}", channel);
+        }
+    }
+
     @Override
     public String getName()
     {
         return this.name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
     }
 
     @Override
