@@ -71,10 +71,14 @@ public final class SearchableTreeView extends SearchableView
         ObservableList<TreeItem<String>> leaves = getTreeViewLeaves(backupRoot);
         FilteredList<TreeItem<String>> filteredLeaves = new FilteredList<>(leaves, visibility -> true);
 
-        filteredLeaves.setPredicate(getRegexMode() != null && getRegexMode().isSelected() ?
-            leaf -> leaf.getValue().matches(".*" + searchTxt + ".*") :
-            leaf -> leaf.getValue().contains(searchTxt));
-
+        if (getRegexMode() != null && getRegexMode().isSelected())
+        {
+            filteredLeaves.setPredicate(leaf -> leaf.getValue().matches(String.format(".*%s.*", searchTxt)));
+        }
+        else
+        {
+            filteredLeaves.setPredicate(leaf -> leaf.getValue().contains(searchTxt));
+        }
 
         for (TreeItem<String> leaf : leaves)
         {
