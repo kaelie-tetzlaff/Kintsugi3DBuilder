@@ -43,23 +43,21 @@ public class SettingsModelSerializer extends StdSerializer<GeneralSettingsModel>
 
         for (Setting setting : settingsModel)
         {
-            if (!setting.shouldSerialize())
+            if (setting.shouldSerialize())
             {
-                continue;
-            }
+                if (shouldStandardSerialize(setting.getType()))
+                {
+                    jGen.writeObjectField(setting.getName(), setting.getValue());
+                }
+                else
+                {
+                    jGen.writeObjectFieldStart(setting.getName());
 
-            if (shouldStandardSerialize(setting.getType()))
-            {
-                jGen.writeObjectField(setting.getName(), setting.getValue());
-            }
-            else
-            {
-                jGen.writeObjectFieldStart(setting.getName());
+                    jGen.writeObjectField("$TYPE", setting.getType());
+                    jGen.writeObjectField("$VALUE", setting.getValue());
 
-                jGen.writeObjectField("$TYPE", setting.getType());
-                jGen.writeObjectField("$VALUE", setting.getValue());
-
-                jGen.writeEndObject();
+                    jGen.writeEndObject();
+                }
             }
         }
 
