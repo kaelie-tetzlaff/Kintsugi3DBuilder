@@ -32,6 +32,7 @@ import javax.xml.stream.XMLStreamReader;
 import java.io.*;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.function.Function;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -42,9 +43,9 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
 {
     private static final Logger LOG = LoggerFactory.getLogger(ViewSetReaderFromAgisoftXML.class);
 
-    private static final ViewSetReader INSTANCE = new ViewSetReaderFromAgisoftXML();
+    private static final ViewSetReaderFromAgisoftXML INSTANCE = new ViewSetReaderFromAgisoftXML();
 
-    public static ViewSetReader getInstance()
+    public static ViewSetReaderFromAgisoftXML getInstance()
     {
         return INSTANCE;
     }
@@ -192,8 +193,39 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
                                                  Map<Integer, String> imagePathMap, Map<Integer, String> maskPathMap, boolean ignoreGlobalTransforms)
         throws XMLStreamException
     {
-        Map<String, Sensor> sensorSet = new HashMap<>(16);
-        TreeSet<Camera> cameraSet = new TreeSet<>((c1, c2) ->
+        Helper helper = new Helper(modelID);
+
+        XMLInputFactory factory = XMLInputFactory.newInstance();
+        XMLStreamReader reader = factory.createXMLStreamReader(stream);
+        while (reader.hasNext())
+        {
+            int event = reader.next();
+            String name = reader.getLocalName();
+            String elementText = reader.getElementText();
+
+            switch (event)
+            {
+                case XMLStreamConstants.START_ELEMENT:
+                    helper.startElement(name, elementText,
+                        attributeName -> reader.getAttributeValue(null, attributeName));
+                    break;
+                case XMLStreamConstants.END_ELEMENT:
+                    helper.endElement(name);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return helper.getBuilder(directories, imagePathMap, maskPathMap, ignoreGlobalTransforms);
+    }
+
+    private static final class Helper
+    {
+        private final String modelID;
+
+        private final Map<String, Sensor> sensorSet = new HashMap<>(16);
+        private final Set<Camera> cameraSet = new TreeSet<>((c1, c2) ->
         {
             // Attempt to sort the camera IDs which are probably integers but not guaranteed to be.
             try
@@ -229,491 +261,414 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
             }
         });
 
-        Sensor sensor = null;
-        Camera camera = null;
-        int lightIndex = -1;
-        int nextLightIndex = 0;
-        int defaultLightIndex = -1;
-        int disabledCameraCount = 0;
+        private Sensor sensor;
+        private Camera camera;
+        private int lightIndex = -1;
+        private int nextLightIndex = 0;
+        private int defaultLightIndex = -1;
+        private int disabledCameraCount = 0;
 
-        Matrix4 globalTransform = Matrix4.IDENTITY;
-        float globalScale = 1.0f;
-        Vector3 globalTranslate = new Vector3(0.0f, 0.0f, 0.0f);
+        private Matrix4 globalTransform = Matrix4.IDENTITY;
+        private float globalScale = 1.0f;
+        private Vector3 globalTranslate = new Vector3(0.0f, 0.0f, 0.0f);
 
-        String currentModelID = null; // takes on the model ID while within a <model> tag
-        Matrix4 modelTransform = Matrix4.IDENTITY;
+        private String currentModelID; // takes on the model ID while within a <model> tag
+        private Matrix4 modelTransform = Matrix4.IDENTITY;
 
-        float b1 = 0.0f; // fx - fy: https://www.agisoft.com/forum/index.php?topic=6437.0
+        private float b1 = 0.0f; // fx - fy: https://www.agisoft.com/forum/index.php?topic=6437.0
 
-        String chunkLabel = "";
-        String groupLabel = "";
-        String sensorID = "";
-        String cameraID = "";
-        String imageFile = "";
+        private String chunkLabel = "";
+        private String groupLabel = "";
+        private String sensorID = "";
+        private String cameraID = "";
+        private String imageFile = "";
+        private boolean hasUnsupportedCorrections = false;
 
-        XMLInputFactory factory = XMLInputFactory.newInstance();
-
-        XMLStreamReader reader = factory.createXMLStreamReader(stream);
-        boolean hasUnsupportedCorrections = false;
-        while (reader.hasNext())
+        Helper(String modelID)
         {
-            int event = reader.next();
-            switch (event)
+            this.modelID = modelID;
+        }
+
+        void startElement(String name, String elementText, Function<String, String> attributeLookup)
+        {
+            switch (name)
             {
-                case XMLStreamConstants.START_ELEMENT:
-                    switch (reader.getLocalName())
+                case "document":
+                    break;
+                case "chunk":
+                    chunkLabel = attributeLookup.apply("label");
+                    if (chunkLabel == null)
                     {
-                        case "document":
+                        chunkLabel = "unnamed";
+                    }
+                    LOG.debug("Reading chunk '{}'", chunkLabel);
+                    break;
+                case "group":
+                    groupLabel = attributeLookup.apply("label");
+                    LOG.debug("Reading group '{}'", groupLabel);
+                    lightIndex = nextLightIndex;
+                    nextLightIndex++;
+                    LOG.debug("Light index: {}", lightIndex);
+                    break;
+                case "sensor":
+                    sensorID = attributeLookup.apply("id");
+                    LOG.debug("\tAdding sensor '{}'", sensorID);
+                    sensor = new Sensor(sensorID);
+                    break;
+                case "camera":
+                    cameraID = attributeLookup.apply("id");
+                    if (cameraID == null || cameraSet.contains(new Camera(cameraID)))
+                    {
+                        camera = null;
+                    }
+                    else
+                    {
+                        String enabled = attributeLookup.apply("enabled");
+                        if (Objects.equals(enabled, "true") || Objects.equals(enabled, "1") ||
+                            Objects.equals(enabled, null))
                         {
-                            break;
-                        }
-                        case "chunk":
-                        {
-                            chunkLabel = reader.getAttributeValue(null, "label");
-                            if (chunkLabel == null)
+                            sensorID = attributeLookup.apply("sensor_id");
+                            imageFile = attributeLookup.apply("label");
+
+                            if (sensorID != null && imageFile != null)
                             {
-                                chunkLabel = "unnamed";
+                                if (lightIndex < 0)
+                                {
+                                    // Set default light index
+                                    defaultLightIndex = nextLightIndex;
+                                    lightIndex = nextLightIndex;
+                                    nextLightIndex++;
+                                    LOG.debug("Using default light index: {}", lightIndex);
+                                }
+
+                                camera = new Camera(cameraID, sensorSet.get(sensorID), lightIndex);
+                                camera.filename = imageFile;
                             }
-                            LOG.debug("Reading chunk '{}'", chunkLabel);
-                            break;
-                        }
-                        case "group":
-                            groupLabel = reader.getAttributeValue(null, "label");
-                            LOG.debug("Reading group '{}'", groupLabel);
-                            lightIndex = nextLightIndex;
-                            nextLightIndex++;
-                            LOG.debug("Light index: {}", lightIndex);
-                            break;
-                        case "sensor":
-                            sensorID = reader.getAttributeValue(null, "id");
-                            LOG.debug("\tAdding sensor '{}'", sensorID);
-                            sensor = new Sensor(sensorID);
-                            break;
-                        case "camera":
-                            cameraID = reader.getAttributeValue(null, "id");
-                            if (cameraID == null || cameraSet.contains(new Camera(cameraID)))
+                            else
                             {
+                                // Camera is incomplete for use as a calibrated photo (i.e. keyframe)
                                 camera = null;
                             }
-                            else
-                            {
-                                if (Objects.equals(reader.getAttributeValue(null, "enabled"), "true") ||
-                                    Objects.equals(reader.getAttributeValue(null, "enabled"), "1") ||
-                                    Objects.equals(reader.getAttributeValue(null, "enabled"), null))
-                                {
-                                    sensorID = reader.getAttributeValue(null, "sensor_id");
-                                    imageFile = reader.getAttributeValue(null, "label");
-
-                                    if (sensorID != null && imageFile != null)
-                                    {
-                                        if (lightIndex < 0)
-                                        {
-                                            // Set default light index
-                                            defaultLightIndex = nextLightIndex;
-                                            lightIndex = nextLightIndex;
-                                            nextLightIndex++;
-                                            LOG.debug("Using default light index: {}", lightIndex);
-                                        }
-
-                                        camera = new Camera(cameraID, sensorSet.get(sensorID), lightIndex);
-                                        camera.filename = imageFile;
-                                    }
-                                    else
-                                    {
-                                        // Camera is incomplete for use as a calibrated photo (i.e. keyframe)
-                                        camera = null;
-                                    }
-                                }
-                                else
-                                {
-                                    // Camera is disabled
-                                    camera = null;
-                                }
-
-                            }
-                            break;
-                        case "orientation":
-                            if (camera != null)
-                            {
-                                camera.orientation = Integer.parseInt(reader.getElementText());
-                            }
-                            break;
-                        case "image":
-                            if (camera != null)
-                            {
-                                camera.filename = reader.getAttributeValue(null, "path");
-                            }
-                            break;
-                        case "resolution":
-                            if (sensor != null)
-                            {
-                                sensor.width = Float.parseFloat(reader.getAttributeValue(null, "width"));
-                                sensor.height = Float.parseFloat(reader.getAttributeValue(null, "height"));
-                            }
-                            break;
-                        case "f":
-                            if (sensor != null)
-                            {
-                                sensor.fy = Float.parseFloat(reader.getElementText());
-                                sensor.fx = sensor.fy + b1;
-                            }
-                            break;
-                        case "fx":
-                            if (sensor != null)
-                            {
-                                sensor.fx = Float.parseFloat(reader.getElementText());
-                            }
-                            break;
-                        case "fy":
-                            if (sensor != null)
-                            {
-                                sensor.fy = Float.parseFloat(reader.getElementText());
-                            }
-                            break;
-                        case "cx":
-                            if (sensor != null)
-                            {
-                                sensor.cx = Float.parseFloat(reader.getElementText());
-                            }
-                            break;
-                        case "cy":
-                            if (sensor != null)
-                            {
-                                sensor.cy = Float.parseFloat(reader.getElementText());
-                            }
-                            break;
-                        case "p1":
-                            if (sensor != null)
-                            {
-                                sensor.p1 = Float.parseFloat(reader.getElementText());
-                            }
-                            break;
-                        case "p2":
-                            if (sensor != null)
-                            {
-                                sensor.p2 = Float.parseFloat(reader.getElementText());
-                            }
-                            break;
-                        case "k1":
-                            if (sensor != null)
-                            {
-                                sensor.k1 = Float.parseFloat(reader.getElementText());
-                            }
-                            break;
-                        case "k2":
-                            if (sensor != null)
-                            {
-                                sensor.k2 = Float.parseFloat(reader.getElementText());
-                            }
-                            break;
-                        case "k3":
-                            if (sensor != null)
-                            {
-                                sensor.k3 = Float.parseFloat(reader.getElementText());
-                            }
-                            break;
-                        case "k4":
-                            if (sensor != null)
-                            {
-                                sensor.k4 = Float.parseFloat(reader.getElementText());
-                            }
-                            break;
-                        case "b1":
-                            b1 = Float.parseFloat(reader.getElementText());
-                            if (sensor != null)
-                            {
-                                sensor.fx = sensor.fy + b1;
-                            }
-                            break;
-                        case "b2": // See https://www.agisoft.com/forum/index.php?topic=6437.0
-                        case "skew":
-                            if (sensor != null)
-                            {
-                                sensor.skew = Float.parseFloat(reader.getElementText());
-                            }
-                            break;
-                        case "transform":
-                            if (currentModelID == null && camera == null)
-                            {
-                                break;
-                            }
-                        case "rotation":
-                        {
-                            String[] components = reader.getElementText().split("\\s");
-                            if (("transform".equals(reader.getLocalName()) && components.length < 16) ||
-                                ("rotation".equals(reader.getLocalName()) && components.length < 9))
-                            {
-                                System.err.println("Error: Not enough components in the transform/rotation matrix");
-                            }
-                            else
-                            {
-                                int expectedSize = 16;
-                                if ("rotation".equals(reader.getLocalName()))
-                                {
-                                    expectedSize = 9;
-                                }
-
-                                if (components.length > expectedSize)
-                                {
-                                    System.err.println("Warning: Too many components in the transform/rotation matrix, ignoring extras.");
-                                }
-
-                                float[] m = new float[expectedSize];
-                                for (int i = 0; i < expectedSize; i++)
-                                {
-                                    m[i] = Float.parseFloat(components[i]);
-                                }
-
-                                if (camera != null)
-                                {
-                                    // Negate 2nd and 3rd column to rotate 180 degrees around x-axis
-                                    // Invert matrix by transposing rotation and negating translation
-                                    Matrix4 trans;
-                                    if (expectedSize == 9)
-                                    {
-                                        trans = Matrix3.fromRows(
-                                                new Vector3(m[0], m[3], m[6]),
-                                                new Vector3(-m[1], -m[4], -m[7]),
-                                                new Vector3(-m[2], -m[5], -m[8]))
-                                            .asMatrix4();
-                                    }
-                                    else
-                                    {
-                                        trans = Matrix3.fromRows(
-                                                new Vector3(m[0], m[4], m[8]),
-                                                new Vector3(-m[1], -m[5], -m[9]),
-                                                new Vector3(-m[2], -m[6], -m[10]))
-                                            .asMatrix4()
-                                            .times(Matrix4.translate(-m[3], -m[7], -m[11]));
-                                    }
-
-                                    camera.transform = trans;
-                                }
-                                else if (modelID != null && Objects.equals(currentModelID, modelID))
-                                {
-                                    // model transform (nested within a <model> tag)
-                                    // This is only expected for PSX import (not exported XML files)
-                                    // See Mia's shishi model for an example of where this is used.
-                                    // I don't know if we've actually tested for any models where the upper-left 3x3 was anything other than identity
-                                    // -- but I think this is NOT supposed to be inverted
-                                    // (previously it was partially inverted where the rotation-scale was transposed,
-                                    // and the translation was applied first but NOT negated -- which would yield
-                                    // the same result as not inverting if the matrix was pure translation)
-                                    if (expectedSize == 9)
-                                    {
-                                        LOG.debug("\tSetting model rotation.");
-                                        modelTransform = Matrix3.fromColumns(
-                                                new Vector3(m[0], m[3], m[6]),
-                                                new Vector3(m[1], m[4], m[7]),
-                                                new Vector3(m[2], m[5], m[8]))
-                                            .asMatrix4();
-                                    }
-                                    else
-                                    {
-                                        LOG.debug("\tSetting model transformation.");
-                                        modelTransform = Matrix4.fromColumns(
-                                            new Vector4(m[0], m[4], m[8], 0),
-                                            new Vector4(m[1], m[5], m[9], 0),
-                                            new Vector4(m[2], m[6], m[10], 0),
-                                            new Vector4(m[3], m[7], m[11], 1));
-                                    }
-                                }
-                                else
-                                {
-                                    if (expectedSize == 9)
-                                    {
-                                        LOG.debug("\tSetting global rotation.");
-                                        globalTransform = Matrix3.fromColumns(
-                                                new Vector3(m[0], m[3], m[6]),
-                                                new Vector3(m[1], m[4], m[7]),
-                                                new Vector3(m[2], m[5], m[8]))
-                                            .asMatrix4();
-                                    }
-                                    else
-                                    {
-                                        LOG.debug("\tSetting global transformation.");
-
-                                        globalTransform = Matrix4.fromColumns(
-                                            new Vector4(m[0], m[4], m[8], 0),
-                                            new Vector4(m[1], m[5], m[9], 0),
-                                            new Vector4(m[2], m[6], m[10], 0),
-                                            new Vector4(m[3], m[7], m[11], 1));
-
-//                                        Matrix3 rotationScaleTranspose = Matrix3.fromRows(
-//                                            new Vector3(m[0], m[4], m[8]),
-//                                            new Vector3(m[1], m[5], m[9]),
-//                                            new Vector3(m[2], m[6], m[10]));
-//                                        float scale = rotationScaleTranspose.determinant();
-//
-//                                        // Note: for the longest time this translation was not negated,  nor was the scale inverted
-//                                        // and I'm not sure if 4x4 global transforms actually exist in real Metashape files
-//                                        // (typically they're separated as rotation / translation / scale -- going back even to old light field datasets)
-//                                        // but I'm pretty sure this is basically inverting the matrix
-//                                        // (transposing the rotation and applying the inverse translation first)
-//                                        // so these other inverse steps should be necessary.
-//                                        globalTransform = rotationScaleTranspose.times(1.0f / (scale * scale)).asMatrix4()
-//                                            .times(Matrix4.translate(-m[3], -m[7], -m[11]));
-                                    }
-                                }
-                            }
                         }
-                        break;
+                        else
+                        {
+                            // Camera is disabled
+                            camera = null;
+                        }
 
-                        case "translation":
-                            if (camera == null)
-                            {
-                                LOG.debug("\tSetting global translate.");
-                                String[] components = reader.getElementText().split("\\s");
-                                globalTranslate = new Vector3(
-                                    Float.parseFloat(components[0]),
-                                    Float.parseFloat(components[1]),
-                                    Float.parseFloat(components[2]));
-                            }
-                            break;
-
-                        case "scale":
-                            if (camera == null)
-                            {
-                                LOG.debug("\tSetting global scale.");
-                                globalScale = Float.parseFloat(reader.getElementText());
-                            }
-                            break;
-
-                        case "property":
-                            if (sensor != null)
-                            {
-                                if (Objects.equals(reader.getAttributeValue(null, "name"), "pixel_width"))
-                                {
-                                    sensor.pixelWidth = Float.parseFloat(reader.getAttributeValue(null, "value"));
-                                }
-                                else if (Objects.equals(reader.getAttributeValue(null, "name"), "pixel_height"))
-                                {
-                                    sensor.pixelHeight = Float.parseFloat(reader.getAttributeValue(null, "value"));
-                                }
-                            }
-                            break;
-                        case "model":
-                            currentModelID = reader.getAttributeValue(null, "id");
-                            break;
-                        case "corrections":
-                            hasUnsupportedCorrections = true;
-                            break;
-                        case "projections":
-                        case "depth":
-                        case "frames":
-                        case "frame":
-                        case "meta":
-                        case "R":
-                        case "size":
-                        case "center":
-                        case "region":
-                        case "settings":
-                        case "ground_control":
-                        case "mesh":
-                        case "texture":
-                        case "calibration":
-                        case "thumbnail":
-                        case "point_cloud":
-                        case "points":
-                        case "sensors":
-                        case "cameras":
-                            // These can all be safely ignored
-                            break;
-
-                        case "photo":
-                        case "tracks":
-                        case "depth_maps":
-                        case "depth_map":
-                        case "dense_cloud":
-                            break;
-                        default:
-//                            LOG.debug("Unexpected tag '{}'", reader.getLocalName());
-                            break;
                     }
                     break;
-
-                case XMLStreamConstants.END_ELEMENT:
-                {
-                    switch (reader.getLocalName())
+                case "orientation":
+                    if (camera != null)
                     {
-                        case "chunk":
-                            LOG.debug("Finished chunk '{}'", chunkLabel);
-                            chunkLabel = "";
-                            break;
-                        case "group":
-                            LOG.debug("Finished group '{}'", groupLabel);
-                            groupLabel = "";
-                            lightIndex = defaultLightIndex;
-                            break;
-                        case "sensor":
-                            if (sensor != null)
+                        camera.orientation = Integer.parseInt(elementText);
+                    }
+                    break;
+                case "image":
+                    if (camera != null)
+                    {
+                        camera.filename = attributeLookup.apply("path");
+                    }
+                    break;
+                case "resolution":
+                    if (sensor != null)
+                    {
+                        sensor.width = Float.parseFloat(attributeLookup.apply("width"));
+                        sensor.height = Float.parseFloat(attributeLookup.apply("height"));
+                    }
+                    break;
+                case "f":
+                    if (sensor != null)
+                    {
+                        sensor.fy = Float.parseFloat(elementText);
+                        sensor.fx = sensor.fy + b1;
+                    }
+                    break;
+                case "fx":
+                    if (sensor != null)
+                    {
+                        sensor.fx = Float.parseFloat(elementText);
+                    }
+                    break;
+                case "fy":
+                    if (sensor != null)
+                    {
+                        sensor.fy = Float.parseFloat(elementText);
+                    }
+                    break;
+                case "cx":
+                    if (sensor != null)
+                    {
+                        sensor.cx = Float.parseFloat(elementText);
+                    }
+                    break;
+                case "cy":
+                    if (sensor != null)
+                    {
+                        sensor.cy = Float.parseFloat(elementText);
+                    }
+                    break;
+                case "p1":
+                    if (sensor != null)
+                    {
+                        sensor.p1 = Float.parseFloat(elementText);
+                    }
+                    break;
+                case "p2":
+                    if (sensor != null)
+                    {
+                        sensor.p2 = Float.parseFloat(elementText);
+                    }
+                    break;
+                case "k1":
+                    if (sensor != null)
+                    {
+                        sensor.k1 = Float.parseFloat(elementText);
+                    }
+                    break;
+                case "k2":
+                    if (sensor != null)
+                    {
+                        sensor.k2 = Float.parseFloat(elementText);
+                    }
+                    break;
+                case "k3":
+                    if (sensor != null)
+                    {
+                        sensor.k3 = Float.parseFloat(elementText);
+                    }
+                    break;
+                case "k4":
+                    if (sensor != null)
+                    {
+                        sensor.k4 = Float.parseFloat(elementText);
+                    }
+                    break;
+                case "b1":
+                    b1 = Float.parseFloat(elementText);
+                    if (sensor != null)
+                    {
+                        sensor.fx = sensor.fy + b1;
+                    }
+                    break;
+                case "b2": // See https://www.agisoft.com/forum/index.php?topic=6437.0
+                case "skew":
+                    if (sensor != null)
+                    {
+                        sensor.skew = Float.parseFloat(elementText);
+                    }
+                    break;
+                case "transform":
+                case "rotation":
+                {
+                    if (currentModelID != null || camera != null || "rotation".equals(name))
+                    {
+                        String[] components = elementText.split("\\s");
+                        if (("transform".equals(name) && components.length < 16) ||
+                            ("rotation".equals(name) && components.length < 9))
+                        {
+                            System.err.println("Error: Not enough components in the transform/rotation matrix");
+                        }
+                        else
+                        {
+                            int expectedSize = "rotation".equals(name) ? 9 : 16;
+                            if (components.length > expectedSize)
                             {
-                                sensorSet.put(sensor.id, sensor);
-                                sensor = null;
+                                System.err.println("Warning: Too many components in the transform/rotation matrix, ignoring extras.");
                             }
-                            break;
-                        case "camera":
+
+                            float[] m = new float[expectedSize];
+                            for (int i = 0; i < expectedSize; i++)
+                            {
+                                m[i] = Float.parseFloat(components[i]);
+                            }
+
                             if (camera != null)
                             {
-                                if (camera.transform != null)
-                                {
-                                    // Only add camera if it has a valid transform
-                                    cameraSet.add(camera);
-                                    LOG.debug("\tAdding camera {}, with sensor {} and image {}",
-                                        cameraID, sensorID, imageFile);
-                                }
-                                camera = null; // Clear the camera regardless
+                                LOG.debug("Setting camera transformation.");
+                                camera.transform = arrayToCameraMatrix(m);
                             }
-                            break;
-                        case "model":
-                            currentModelID = null;
-                            break;
+                            else if (modelID != null && Objects.equals(currentModelID, modelID))
+                            {
+                                // model transform (nested within a <model> tag)
+                                // This is only expected for PSX import (not exported XML files)
+                                // See Mia's shishi model for an example of where this is used.
+                                // I don't know if we've actually tested for any models where the upper-left 3x3 was anything other than identity
+                                // -- but I think this is NOT supposed to be inverted
+                                // (previously it was partially inverted where the rotation-scale was transposed,
+                                // and the translation was applied first but NOT negated -- which would yield
+                                // the same result as not inverting if the matrix was pure translation)
+                                LOG.debug("Setting model transformation.");
+                                modelTransform = arrayToMatrix(m);
+                            }
+                            else
+                            {
+                                LOG.debug("Setting global transformation.");
+                                globalTransform = arrayToMatrix(m);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
                 break;
+
+                case "translation":
+                    if (camera == null)
+                    {
+                        LOG.debug("\tSetting global translate.");
+                        String[] components = elementText.split("\\s");
+                        globalTranslate = new Vector3(
+                            Float.parseFloat(components[0]),
+                            Float.parseFloat(components[1]),
+                            Float.parseFloat(components[2]));
+                    }
+                    break;
+
+                case "scale":
+                    if (camera == null)
+                    {
+                        LOG.debug("\tSetting global scale.");
+                        globalScale = Float.parseFloat(elementText);
+                    }
+                    break;
+
+                case "property":
+                    if (sensor != null)
+                    {
+                        if (Objects.equals(attributeLookup.apply("name"), "pixel_width"))
+                        {
+                            sensor.pixelWidth = Float.parseFloat(attributeLookup.apply("value"));
+                        }
+                        else if (Objects.equals(attributeLookup.apply("name"), "pixel_height"))
+                        {
+                            sensor.pixelHeight = Float.parseFloat(attributeLookup.apply("value"));
+                        }
+                    }
+                    break;
+                case "model":
+                    currentModelID = attributeLookup.apply("id");
+                    break;
+                case "corrections":
+                    hasUnsupportedCorrections = true;
+                    break;
+                case "projections":
+                case "depth":
+                case "frames":
+                case "frame":
+                case "meta":
+                case "R":
+                case "size":
+                case "center":
+                case "region":
+                case "settings":
+                case "ground_control":
+                case "mesh":
+                case "texture":
+                case "calibration":
+                case "thumbnail":
+                case "point_cloud":
+                case "points":
+                case "sensors":
+                case "cameras":
+                case "photo":
+                case "tracks":
+                case "depth_maps":
+                case "depth_map":
+                case "dense_cloud":
+                default:
+                    // These can all be safely ignored
+                    break;
             }
         }
 
-        ViewSetBuilder builder = ViewSet.getBuilder(directories.projectRoot, directories.supportingFilesDirectory, cameraSet.size());
-
-        Sensor[] sensors = sensorSet.values().toArray(new Sensor[0]);
-
-        for (Sensor s : sensors)
+        void endElement(String name)
         {
-            s.cx += s.width * 0.5f;
-            s.cy += s.height * 0.5f;
+            switch (name)
+            {
+                case "chunk":
+                    LOG.debug("Finished chunk '{}'", chunkLabel);
+                    chunkLabel = "";
+                    break;
+                case "group":
+                    LOG.debug("Finished group '{}'", groupLabel);
+                    groupLabel = "";
+                    lightIndex = defaultLightIndex;
+                    break;
+                case "sensor":
+                    if (sensor != null)
+                    {
+                        sensorSet.put(sensor.id, sensor);
+                        sensor = null;
+                    }
+                    break;
+                case "camera":
+                    if (camera != null)
+                    {
+                        if (camera.transform != null)
+                        {
+                            // Only add camera if it has a valid transform
+                            cameraSet.add(camera);
+                            LOG.debug("\tAdding camera {}, with sensor {} and image {}",
+                                cameraID, sensorID, imageFile);
+                        }
+                        camera = null; // Clear the camera regardless
+                    }
+                    break;
+                case "model":
+                    currentModelID = null;
+                    break;
+                default:
+                    break;
+            }
         }
 
-        // Reassign the ID for each sensor to correspond with the sensor's index
-        // and add the corresponding projection to the list.
-        for (int i = 0; i < sensors.length; i++)
+        ViewSetBuilder getBuilder(
+            ViewSetDirectories directories, Map<Integer, String> imagePathMap,  Map<Integer, String> maskPathMap,
+            boolean ignoreGlobalTransforms)
         {
-            sensors[i].index = i;
-            Projection distortionProj = new DistortionProjection(
-                sensors[i].width,
-                sensors[i].height,
-                sensors[i].fx,
-                sensors[i].fy,
-                sensors[i].cx,
-                sensors[i].cy,
-                sensors[i].k1,
-                sensors[i].k2,
-                sensors[i].k3,
-                sensors[i].k4,
-                sensors[i].p1,
-                sensors[i].p2,
-                sensors[i].skew
-            );
+            ViewSetBuilder builder = ViewSet.getBuilder(directories.projectRoot, directories.supportingFilesDirectory, cameraSet.size());
 
-            if (directories.fullResImagesNeedUndistort)
+            Sensor[] sensors = sensorSet.values().toArray(new Sensor[0]);
+
+            for (Sensor s : sensors)
             {
-                builder.addCameraProjection(distortionProj);
+                s.cx += s.width * 0.5f;
+                s.cy += s.height * 0.5f;
             }
-            else
+
+            // Reassign the ID for each sensor to correspond with the sensor's index
+            // and add the corresponding projection to the list.
+            for (int i = 0; i < sensors.length; i++)
             {
-                // TODO Metashape now seems to be doing some weird rescaling that it didn't used to do before.
-                // TODO The below code is an attempt to reverse engineer it but doesn't seem quite right...
-                // TODO for instance, the absolute difference should probably be doubled if it's just trying to keep all pixels in frame?
+                sensors[i].index = i;
+                Projection distortionProj = new DistortionProjection(
+                    sensors[i].width,
+                    sensors[i].height,
+                    sensors[i].fx,
+                    sensors[i].fy,
+                    sensors[i].cx,
+                    sensors[i].cy,
+                    sensors[i].k1,
+                    sensors[i].k2,
+                    sensors[i].k3,
+                    sensors[i].k4,
+                    sensors[i].p1,
+                    sensors[i].p2,
+                    sensors[i].skew
+                );
+
+                if (directories.fullResImagesNeedUndistort)
+                {
+                    builder.addCameraProjection(distortionProj);
+                }
+                else
+                {
+                    // TODO Metashape now seems to be doing some weird rescaling that it didn't used to do before.
+                    // TODO The below code is an attempt to reverse engineer it but doesn't seem quite right...
+                    // TODO for instance, the absolute difference should probably be doubled if it's just trying to keep all pixels in frame?
 //                float adjustedFOV = new DistortionProjection(
 //                    sensors[i].width + Math.abs(sensors[i].cx - sensors[i].width / 2),
 //                    sensors[i].height + Math.abs(sensors[i].cy - sensors[i].height / 2),
@@ -723,179 +678,228 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
 //                    0)
 //                    .getVerticalFieldOfView();
 
-                builder.addCameraProjection(new SimpleProjection(
-                    distortionProj.getAspectRatio(), distortionProj.getVerticalFieldOfView()));
+                    builder.addCameraProjection(new SimpleProjection(
+                        distortionProj.getAspectRatio(), distortionProj.getVerticalFieldOfView()));
+                }
             }
-        }
 
-        // Try to separate rotation and scale from the model transform
-        // Scale based on determinant
-        float modelScale = modelTransform.getUpperLeft3x3().determinant();
+            // Try to separate rotation and scale from the model transform
+            // Scale based on determinant
+            float modelScale = modelTransform.getUpperLeft3x3().determinant();
 
-        // If non-zero, remove scale from the rest of the model transform
-        Matrix4 modelTransformNoScale;
-        if (modelScale == 0.0f)
-        {
-            modelTransformNoScale = modelTransform;
-        }
-        else
-        {
-            modelTransformNoScale = Matrix4.scale(1.0f / modelScale).times(modelTransform);
-        }
-
-        // Do the same to extract global scale from transform
-        float globalScaleFromTransform = globalTransform.getUpperLeft3x3().determinant();
-
-        Matrix4 globalTransformNoScale;
-        if (globalScaleFromTransform == 0.0f)
-        {
-            globalTransformNoScale = globalTransform;
-        }
-        else
-        {
-            globalTransformNoScale = Matrix4.scale(1.0f / globalScaleFromTransform).times(globalTransform);
-        }
-
-        // "World transform" for projective texture mapping might be based on "global" transform
-        // (typical for XML import, need to account for transformation from camera optimization space to XML export space)
-        // or could be based on "model" transform (typical for PSX import, transformation from raw PLY space to camera optimization space
-        //  -- often identity but not always especially with an imported and/or aligned model).
-        Matrix4 projTexWorldTransform;
-
-        // Similarly, keep track of the scale that we want to ultimately apply when exporting.
-        float projTexWorldScaleCombined;
-
-        if (ignoreGlobalTransforms)
-        {
-            // PSX import typically
-            // modelTransform includes, translation, rotation, and scale.
-            // We do the model rotation and translation to get the orientation and location right for projective texture mapping,
-            // but we keep the scale at the imported model scale
-            // Order of transformation is:
-            // 1. "model" transformation from internal PLY space to global camera optimization space
-            // 2. camera transformation from global camera optimization space to individual camera POV
-            projTexWorldTransform = modelTransformNoScale;
-            projTexWorldScaleCombined = modelScale;
-
-            // Transform object all the way from imported PLY space, first to camera optimization space
-            // and then to the space that would be used for OBJ export
-
-            // Scale may come from the globalTransform and modelTransform matrices, or from a separate global scale attribute.
-            // All three should be accounted for when exporting the object scale.
-            builder.setObjectScale(globalScale * globalScaleFromTransform * modelScale);
-
-            Matrix4 combinedTransformNoScale = globalTransformNoScale.times(modelTransformNoScale);
-            builder.setOrientationMatrix(combinedTransformNoScale.getUpperLeft3x3());
-            builder.setObjectTranslation(combinedTransformNoScale.getColumn(3).getXYZ().plus(globalTranslate));
-        }
-        else
-        {
-            // XML import typically
-            // globalTransform may be just rotation, or may also incorporate translation and scale.
-            // We do the global rotation and translation to get the orientation and location right for projective texture mapping,
-            // but we keep the scale at the imported model scale
-            // Order of transformation is:
-            // 1. inverse of "global" transformation, i.e. from OBJ export space to camera optimization space
-            // 2. camera transformation from camera optimization space to individual camera POV
-            // The global transformation needs to be inverted based on how it's represented by Metashape
-            // (camera opt. space to OBJ export space) so we would do translation, then rotation, than scale last.
-            // Rather than actually applying the scale, we will adjust the camera transformations later.
-            projTexWorldTransform = globalTransformNoScale.quickInverse(0.001f)
-                .times(Matrix4.translate(globalTranslate.negated()));
-            projTexWorldScaleCombined = 1.0f / (globalScale * globalScaleFromTransform);
-
-            // Object orientation, translation, and scale should just default; imported mesh should already be at the right orientation.
-            // Since we avoid actually scaling the model, the glTF will export at the same scale as imported aside from any user adjustments
-        }
-
-        Camera[] cameras = cameraSet.toArray(new Camera[0]);
-
-        // Fill out the camera pose, projection index, and light index lists
-        for (Camera cam : cameras)
-        {
-            int camID = Integer.parseInt(cam.id);
-            File imgFile = null;
-
-            if (imagePathMap == null)
+            // If non-zero, remove scale from the rest of the model transform
+            Matrix4 modelTransformNoScale;
+            if (modelScale == 0.0f)
             {
-                imgFile = new File(cam.filename);
+                modelTransformNoScale = modelTransform;
             }
             else
             {
-                String resolvedPath = imagePathMap.get(camID);
-                if (resolvedPath == null)
+                modelTransformNoScale = Matrix4.scale(1.0f / modelScale).times(modelTransform);
+            }
+
+            // Do the same to extract global scale from transform
+            float globalScaleFromTransform = globalTransform.getUpperLeft3x3().determinant();
+
+            Matrix4 globalTransformNoScale;
+            if (globalScaleFromTransform == 0.0f)
+            {
+                globalTransformNoScale = globalTransform;
+            }
+            else
+            {
+                globalTransformNoScale = Matrix4.scale(1.0f / globalScaleFromTransform).times(globalTransform);
+            }
+
+            // "World transform" for projective texture mapping might be based on "global" transform
+            // (typical for XML import, need to account for transformation from camera optimization space to XML export space)
+            // or could be based on "model" transform (typical for PSX import, transformation from raw PLY space to camera optimization space
+            //  -- often identity but not always especially with an imported and/or aligned model).
+            Matrix4 projTexWorldTransform;
+
+            // Similarly, keep track of the scale that we want to ultimately apply when exporting.
+            float projTexWorldScaleCombined;
+
+            if (ignoreGlobalTransforms)
+            {
+                // PSX import typically
+                // modelTransform includes, translation, rotation, and scale.
+                // We do the model rotation and translation to get the orientation and location right for projective texture mapping,
+                // but we keep the scale at the imported model scale
+                // Order of transformation is:
+                // 1. "model" transformation from internal PLY space to global camera optimization space
+                // 2. camera transformation from global camera optimization space to individual camera POV
+                projTexWorldTransform = modelTransformNoScale;
+                projTexWorldScaleCombined = modelScale;
+
+                // Transform object all the way from imported PLY space, first to camera optimization space
+                // and then to the space that would be used for OBJ export
+
+                // Scale may come from the globalTransform and modelTransform matrices, or from a separate global scale attribute.
+                // All three should be accounted for when exporting the object scale.
+                builder.setObjectScale(globalScale * globalScaleFromTransform * modelScale);
+
+                Matrix4 combinedTransformNoScale = globalTransformNoScale.times(modelTransformNoScale);
+                builder.setOrientationMatrix(combinedTransformNoScale.getUpperLeft3x3());
+                builder.setObjectTranslation(combinedTransformNoScale.getColumn(3).getXYZ().plus(globalTranslate));
+            }
+            else
+            {
+                // XML import typically
+                // globalTransform may be just rotation, or may also incorporate translation and scale.
+                // We do the global rotation and translation to get the orientation and location right for projective texture mapping,
+                // but we keep the scale at the imported model scale
+                // Order of transformation is:
+                // 1. inverse of "global" transformation, i.e. from OBJ export space to camera optimization space
+                // 2. camera transformation from camera optimization space to individual camera POV
+                // The global transformation needs to be inverted based on how it's represented by Metashape
+                // (camera opt. space to OBJ export space) so we would do translation, then rotation, than scale last.
+                // Rather than actually applying the scale, we will adjust the camera transformations later.
+                projTexWorldTransform = globalTransformNoScale.quickInverse(0.001f)
+                    .times(Matrix4.translate(globalTranslate.negated()));
+                projTexWorldScaleCombined = 1.0f / (globalScale * globalScaleFromTransform);
+
+                // Object orientation, translation, and scale should just default; imported mesh should already be at the right orientation.
+                // Since we avoid actually scaling the model, the glTF will export at the same scale as imported aside from any user adjustments
+            }
+
+            Camera[] cameras = cameraSet.toArray(new Camera[0]);
+
+            // Fill out the camera pose, projection index, and light index lists
+            for (Camera cam : cameras)
+            {
+                int camID = Integer.parseInt(cam.id);
+                File imgFile = null;
+
+                if (imagePathMap == null)
                 {
-                    ++disabledCameraCount;
-                    LOG.warn("Cannot find camera: {}", camID);
+                    imgFile = new File(cam.filename);
                 }
                 else
                 {
-                    imgFile = new File(resolvedPath);
+                    String resolvedPath = imagePathMap.get(camID);
+                    if (resolvedPath == null)
+                    {
+                        ++disabledCameraCount;
+                        LOG.warn("Cannot find camera: {}", camID);
+                    }
+                    else
+                    {
+                        imgFile = new File(resolvedPath);
+                    }
                 }
-            }
 
-            if (imgFile != null)
-            {
-                // camera's coordinates are expressed in optimization coordinates
-                // we're planning to work in exported model coordinates
-                // so we need to scale the camera's displacement by 1 / projTexWorldScaleCombined
-                // unscaledCamTransform should basically be equivalent to scale(1 / projTexWorldScaleCombined) * cam.transform * scale(projTexWorldScaleCombined)
-                Vector3 displacement = cam.transform.getColumn(3).getXYZ();
-                Matrix4 unscaledCamTransform = Matrix4.translate(displacement.times(1.0f / projTexWorldScaleCombined).minus(displacement))
-                    .times(cam.transform);
-
-                // Technically we'd need to also apply scale from global or model tramsform to cam.transform.
-                // Rather than actually applying the scale, we just adjusted the camera translation above.
-                // We could apply global scale after unscaledCamTransform (scale(projTexWorldScaleCombined) * unscaledCamTransform)
-                // and it would be equivalent to applying scale before the original cam.transform (i.e. cam.transform * scale(projTexWorldScaleCombined))
-                // Keeping the original scale avoids breaking code that assumes rendering at the scale of the raw geometry
-                // but doesn't affect projective texture mapping if scale would be the last transformation in the sequence
-                cam.transform = unscaledCamTransform.times(projTexWorldTransform);
-
-                builder.setCurrentCameraPose(cam.transform);
-
-                builder.setCurrentCameraProjectionIndex(cam.sensor.index);
-                builder.setCurrentLightIndex(cam.lightIndex);
-
-                if (maskPathMap != null && maskPathMap.containsKey(camID))
+                if (imgFile != null)
                 {
-                    builder.setCurrentMaskFile(new File(maskPathMap.get(camID)));
+                    // camera's coordinates are expressed in optimization coordinates
+                    // we're planning to work in exported model coordinates
+                    // so we need to scale the camera's displacement by 1 / projTexWorldScaleCombined
+                    // unscaledCamTransform should basically be equivalent to scale(1 / projTexWorldScaleCombined) * cam.transform * scale(projTexWorldScaleCombined)
+                    Vector3 displacement = cam.transform.getColumn(3).getXYZ();
+                    Matrix4 unscaledCamTransform = Matrix4.translate(displacement.times(1.0f / projTexWorldScaleCombined).minus(displacement))
+                        .times(cam.transform);
+
+                    // Technically we'd need to also apply scale from global or model tramsform to cam.transform.
+                    // Rather than actually applying the scale, we just adjusted the camera translation above.
+                    // We could apply global scale after unscaledCamTransform (scale(projTexWorldScaleCombined) * unscaledCamTransform)
+                    // and it would be equivalent to applying scale before the original cam.transform (i.e. cam.transform * scale(projTexWorldScaleCombined))
+                    // Keeping the original scale avoids breaking code that assumes rendering at the scale of the raw geometry
+                    // but doesn't affect projective texture mapping if scale would be the last transformation in the sequence
+                    cam.transform = unscaledCamTransform.times(projTexWorldTransform);
+
+                    builder.setCurrentCameraPose(cam.transform);
+
+                    builder.setCurrentCameraProjectionIndex(cam.sensor.index);
+                    builder.setCurrentLightIndex(cam.lightIndex);
+
+                    if (maskPathMap != null && maskPathMap.containsKey(camID))
+                    {
+                        builder.setCurrentMaskFile(new File(maskPathMap.get(camID)));
+                    }
+
+                    builder.commitCurrentView(imgFile);
                 }
-
-                builder.commitCurrentView(imgFile);
             }
-        }
 
-        for (int i = 0; i < nextLightIndex; i++)
-        {
-            // Setup default light calibration.
-            // Set light intensity to zero to signal that it needs to be calibrated.
-            builder.addLight(Vector3.ZERO, Vector3.ZERO);
-        }
+            for (int i = 0; i < nextLightIndex; i++)
+            {
+                // Setup default light calibration.
+                // Set light intensity to zero to signal that it needs to be calibrated.
+                builder.addLight(Vector3.ZERO, Vector3.ZERO);
+            }
 
-        if (disabledCameraCount > 0)
-        {
-            LOG.warn(
+            if (disabledCameraCount > 0)
+            {
+                LOG.warn(
                     "Skipped {} of {} cameras absent from image directory",
                     disabledCameraCount,
                     cameras.length
-            );
-        }
+                );
+            }
 
-        if (hasUnsupportedCorrections)
-        {
-            LOG.warn(
+            if (hasUnsupportedCorrections)
+            {
+                LOG.warn(
                     "Metashape project uses 'Fit additional corrections' which are not supported. "
-                    + "Results may be inaccurate. Consider re-calibrating without additional corrections."
-            );
+                        + "Results may be inaccurate. Consider re-calibrating without additional corrections."
+                );
+            }
+
+            // Set full res image directory according to input argument
+            builder.setFullResImageDirectory(directories.fullResImageDirectory);
+
+            //Set if camera contains corrections tag
+            builder.setHasUnsupportedCorrections(hasUnsupportedCorrections);
+            return builder;
+        }
+    }
+
+    private static Matrix4 arrayToCameraMatrix(float[] m)
+    {
+        // Negate 2nd and 3rd column to rotate 180 degrees around x-axis
+        // Invert matrix by transposing rotation and negating translation
+        if (m.length == 9)
+        {
+            LOG.debug("Rotation transform found.");
+            return Matrix3.fromRows(
+                    new Vector3(m[0], m[3], m[6]),
+                    new Vector3(-m[1], -m[4], -m[7]),
+                    new Vector3(-m[2], -m[5], -m[8]))
+                .asMatrix4();
+        }
+        else
+        {
+            LOG.debug("Affine transform found.");
+            return Matrix3.fromRows(
+                    new Vector3(m[0], m[4], m[8]),
+                    new Vector3(-m[1], -m[5], -m[9]),
+                    new Vector3(-m[2], -m[6], -m[10]))
+                .asMatrix4()
+                .times(Matrix4.translate(-m[3], -m[7], -m[11]));
+        }
+    }
+
+    private static Matrix4 arrayToMatrix(float[] m)
+    {
+        if (m.length == 9)
+        {
+            LOG.debug("Rotation transform found.");
+            return Matrix3.fromColumns(
+                    new Vector3(m[0], m[3], m[6]),
+                    new Vector3(m[1], m[4], m[7]),
+                    new Vector3(m[2], m[5], m[8]))
+                .asMatrix4();
+        }
+        else
+        {
+            LOG.debug("Affine transform found.");
+            return Matrix4.fromColumns(
+                    new Vector4(m[0], m[4], m[8], 0),
+                    new Vector4(m[1], m[5], m[9], 0),
+                    new Vector4(m[2], m[6], m[10], 0),
+                    new Vector4(m[3], m[7], m[11], 1));
         }
 
-        // Set full res image directory according to input argument
-        builder.setFullResImageDirectory(directories.fullResImageDirectory);
-
-        //Set if camera contains corrections tag
-        builder.setHasUnsupportedCorrections(hasUnsupportedCorrections);
-        return builder;
     }
 
     /**
