@@ -14,7 +14,12 @@ package kintsugi3d.fx.controllers.modals.systemsettings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
 import javafx.stage.Window;
 import kintsugi3d.builder.util.Launch4jConfiguration;
 import kintsugi3d.fx.core.JavaFXState;
@@ -69,7 +74,7 @@ public class SystemMemoryController implements SystemSettingsControllerBase
         configuration.setEnableMaxMemory(maxMemCheckbox.isSelected());
         configuration.setMaxMemoryMb(maxMemory.get());
 
-        ButtonType ok = new ButtonType("OK", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType ok = new ButtonType("OK", ButtonData.CANCEL_CLOSE);
         try
         {
             try
@@ -86,14 +91,14 @@ public class SystemMemoryController implements SystemSettingsControllerBase
         catch (IOException e)
         {
             LOG.error("Failed to write to launch4j configuration file", e);
-            Alert alert = new Alert(Alert.AlertType.NONE, "", ok);
+            Alert alert = new Alert(AlertType.NONE, "", ok);
             alert.setTitle("Kintsugi 3D Builder");
             alert.setHeaderText("Writing failed");
             alert.setContentText("Kintsugi 3D Builder failed to write to the configuration file. Try restarting Kintsugi 3D Builder as administrator and try again.");
             alert.show();
         }
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "", ok);
+        Alert alert = new Alert(AlertType.INFORMATION, "", ok);
         alert.setTitle("Kintsugi 3D Builder");
         alert.setHeaderText("Restart Required");
         alert.setContentText("A restart of Kintsugi 3D Builder is needed for changes to take effect.");

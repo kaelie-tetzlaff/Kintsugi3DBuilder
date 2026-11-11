@@ -28,7 +28,7 @@ abstract class PageBase<InType, OutType, ControllerType extends PageController<?
 
     private final ObjectProperty<Page<? super OutType, ?>> nextPageProperty = new SimpleObjectProperty<>(null);
 
-    private Page<?, ? extends InType> prevPage = null;
+    private Page<?, ? extends InType> prevPage;
 
     private final Map<String, Page<? super OutType,?>> fallbackPages = new LinkedHashMap<>();
 

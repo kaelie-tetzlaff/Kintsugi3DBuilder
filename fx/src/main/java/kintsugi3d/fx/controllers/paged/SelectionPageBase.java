@@ -13,7 +13,11 @@ package kintsugi3d.fx.controllers.paged;
 
 import javafx.fxml.FXMLLoader;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 
 public abstract class SelectionPageBase<T, ControllerType extends SelectionPageController<T>>
     extends PageBase<T, T, ControllerType> implements SelectionPage<T>
@@ -70,7 +74,7 @@ public abstract class SelectionPageBase<T, ControllerType extends SelectionPageC
     }
 
     @Override
-    public Set<Map.Entry<String, Page<? super T, ?>>> getChoices()
+    public Set<Entry<String, Page<? super T, ?>>> getChoices()
     {
         return Collections.unmodifiableSet(choicePages.entrySet());
     }

@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -49,7 +50,7 @@ public class SystemSettingsController
                 Map.entry("Visual Settings", "/fxml/modals/systemsettings/VisualSettings.fxml"),
                 Map.entry("External Application Settings", "/fxml/modals/systemsettings/ExternalApplicationSettings.fxml")
             )
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (u, v) -> u, LinkedHashMap::new)));
+            .collect(Collectors.toMap(Entry::getKey, Entry::getValue, (u, v) -> u, LinkedHashMap::new)));
 
     public void initializeSettingsPages(Window parentWindow, JavaFXState state)
     {

@@ -26,14 +26,11 @@ public class Stopwatch
     private long initTime;
     private final BooleanProperty running = new SimpleBooleanProperty(false);
 
-    //used to manually set elapsed time for a stopwatch which is stopped and
-    //   has its elapsed time retrieved later
+    /**
+     * used to manually set elapsed time for a stopwatch which is stopped and
+     * has its elapsed time retrieved later
+     */
     private long manualElapsedTime = -1;
-
-
-    public Stopwatch()
-    {
-    }
 
     public long start()
     {
