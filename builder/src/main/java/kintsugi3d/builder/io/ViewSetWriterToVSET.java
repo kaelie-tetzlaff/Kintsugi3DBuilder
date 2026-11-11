@@ -13,7 +13,7 @@ package kintsugi3d.builder.io;
 
 import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.core.viewset.View;
-import kintsugi3d.builder.state.settings.ReadonlyGeneralSettingsModel.Setting;
+import kintsugi3d.builder.state.settings.Setting;
 import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;

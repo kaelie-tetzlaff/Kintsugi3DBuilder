@@ -14,6 +14,7 @@ package kintsugi3d.fx.multithread;
 import javafx.beans.value.WritableValue;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.state.settings.GeneralSettingsModelBase;
+import kintsugi3d.builder.state.settings.Setting;
 
 import java.util.HashMap;
 import java.util.Iterator;

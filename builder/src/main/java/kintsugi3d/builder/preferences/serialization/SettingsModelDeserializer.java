@@ -24,9 +24,6 @@ import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
 
 public class SettingsModelDeserializer extends StdDeserializer<GeneralSettingsModel>
 {
@@ -54,11 +51,9 @@ public class SettingsModelDeserializer extends StdDeserializer<GeneralSettingsMo
         module.addDeserializer(Vector4.class, new Vector4Deserializer());
         mapper.registerModule(module);
 
-
         JsonNode rootNode = jsonParser.getCodec().readTree(jsonParser);
-        for (Iterator<Entry<String, JsonNode>> it = rootNode.fields(); it.hasNext(); )
+        for (var entry : rootNode.properties())
         {
-            Map.Entry<String, JsonNode> entry = it.next();
             JsonNode node = entry.getValue();
 
             switch (node.getNodeType())

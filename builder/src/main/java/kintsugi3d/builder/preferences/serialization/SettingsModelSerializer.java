@@ -15,7 +15,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
-import kintsugi3d.builder.state.settings.ReadonlyGeneralSettingsModel;
+import kintsugi3d.builder.state.settings.Setting;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
@@ -41,7 +41,7 @@ public class SettingsModelSerializer extends StdSerializer<GeneralSettingsModel>
     {
         jGen.writeStartObject();
 
-        for (ReadonlyGeneralSettingsModel.Setting setting : settingsModel)
+        for (Setting setting : settingsModel)
         {
             if (!setting.shouldSerialize())
             {
@@ -68,12 +68,8 @@ public class SettingsModelSerializer extends StdSerializer<GeneralSettingsModel>
 
     private boolean shouldStandardSerialize(Class<?> type)
     {
-        if (type.isAssignableFrom(Boolean.class) || type.isAssignableFrom(Number.class) || type.isAssignableFrom(String.class))
-            return true;
-
-        if (type.isAssignableFrom(Vector2.class) || type.isAssignableFrom(Vector3.class) || type.isAssignableFrom(Vector4.class))
-            return true;
-
-        return false;
+        return type.isAssignableFrom(Boolean.class) || type.isAssignableFrom(Number.class)
+            || type.isAssignableFrom(String.class) || type.isAssignableFrom(Vector2.class)
+            || type.isAssignableFrom(Vector3.class) || type.isAssignableFrom(Vector4.class);
     }
 }
