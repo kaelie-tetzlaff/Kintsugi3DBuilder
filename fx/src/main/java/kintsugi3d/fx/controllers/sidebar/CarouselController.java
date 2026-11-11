@@ -219,50 +219,51 @@ public class CarouselController
      */
     private void updateScrollbarVisibility()
     {
-        if (dragging) //if its being dragged
+        // Update visibility only when not dragged and content of carousel does not inside available space for it
+        if (!dragging ||
+            mainBox.getParent().getScene().getWidth() - mainWindowBox.getRightTabWidth() - SCROLLBAR_BUFFER
+                <= (carouselScrollPane.getWidth() + mainWindowBox.getLeftTabWidth()))
         {
-            //If content of carousel fits inside available space for it
-            if ((mainBox.getParent().getScene().getWidth() - mainWindowBox.getRightTabWidth() - SCROLLBAR_BUFFER) > (carouselScrollPane.getWidth() + mainWindowBox.getLeftTabWidth())){
-                return; //Ends method
-            }
-        }
-        //If the scroll pane or its content is null end method here
-        if ((carouselScrollPane == null) || (carouselScrollPane.getContent() == null)) return;
-
-        // Apply css to keep scrollbar up to date
-        carouselScrollPane.getContent().applyCss();
-
-        //Gets width of carousel content and the viewport width
-        double contentWidth = carouselScrollPane.getContent().getBoundsInParent().getWidth();
-        double viewportWidth = carouselScrollPane.getViewportBounds().getWidth();
-
-        //Checks for non initialized viewport
-        if (viewportWidth <= 0) return;
-
-        // If the content is bigger than viewPort + the scroll bar buffer
-        boolean isScrollable = contentWidth > (viewportWidth + SCROLLBAR_BUFFER);
-
-        if (!isScrollable) //If not scrollable
-        {
-            carouselScrollPane.getStyleClass().remove("hide-hbar"); //Removes css hide-bar
-            AnchorPane.setTopAnchor(resizeHandle, 10.0); //Resets resize handle drag point
-        }
-        else
-        {
-            //If there is no css hide-hbar applied
-            if (!carouselScrollPane.getStyleClass().contains("hide-hbar"))
+            // The scroll pane and its content must not be null
+            if (carouselScrollPane != null && carouselScrollPane.getContent() != null)
             {
-                carouselScrollPane.getStyleClass().add("hide-hbar"); //Adds css hide-hbar
-                AnchorPane.setTopAnchor(resizeHandle, -5.0); //Resize handle shifts to include scrollbar
-            }
-        }
+                // Apply css to keep scrollbar up to date
+                carouselScrollPane.getContent().applyCss();
 
-        // Mouse transparent logic (Not sure if it helps)
-        Node hBar = carouselScrollPane.lookup(".scroll-bar:horizontal");
-        if (hBar != null)
-        {
-            // Sets mouse Transparency based on scrollbar
-            hBar.setMouseTransparent(!isScrollable);
+                // Gets width of carousel content and the viewport width
+                double contentWidth = carouselScrollPane.getContent().getBoundsInParent().getWidth();
+                double viewportWidth = carouselScrollPane.getViewportBounds().getWidth();
+
+                // Checks for non initialized viewport
+                if (viewportWidth > 0)
+                {
+                    // If the content is bigger than viewPort + the scroll bar buffer
+                    boolean isScrollable = contentWidth > (viewportWidth + SCROLLBAR_BUFFER);
+
+                    if (isScrollable)
+                    {
+                        // If there is no css hide-hbar applied
+                        if (!carouselScrollPane.getStyleClass().contains("hide-hbar"))
+                        {
+                            carouselScrollPane.getStyleClass().add("hide-hbar"); // Adds css hide-hbar
+                            AnchorPane.setTopAnchor(resizeHandle, -5.0); // Resize handle shifts to include scrollbar
+                        }
+                    }
+                    else
+                    {
+                        carouselScrollPane.getStyleClass().remove("hide-hbar"); // Removes css hide-bar
+                        AnchorPane.setTopAnchor(resizeHandle, 10.0); // Resets resize handle drag point
+                    }
+
+                    // Mouse transparent logic (Not sure if it helps)
+                    Node hBar = carouselScrollPane.lookup(".scroll-bar:horizontal");
+                    if (hBar != null)
+                    {
+                        // Sets mouse Transparency based on scrollbar
+                        hBar.setMouseTransparent(!isScrollable);
+                    }
+                }
+            }
         }
     }
 
