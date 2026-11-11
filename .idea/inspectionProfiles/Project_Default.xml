@@ -823,7 +823,7 @@
     </inspection_tool>
     <inspection_tool class="ReturnOfDateField" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ReturnOfInnerClass" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="ReturnSeparatedFromComputation" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ReturnSeparatedFromComputation" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
     <inspection_tool class="ReturnThis" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="ReuseOfLocalVariable" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RuntimeExec" enabled="true" level="WARNING" enabled_by_default="true" />
