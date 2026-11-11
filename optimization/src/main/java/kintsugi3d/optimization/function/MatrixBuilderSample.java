@@ -75,7 +75,7 @@ public class MatrixBuilderSample
 
         // Calculate which discretized element the current sample belongs to.
         this.floor = Math.min(basisLibrary.getOptimizedDomainSize() - 1, (int) Math.floor(actual));
-        this.inOptimizedDomain = (actual < basisLibrary.getOptimizedDomainSize());
+        this.inOptimizedDomain = actual < basisLibrary.getOptimizedDomainSize();
 
         this.analytic = analytic;
         this.sampleWeight = sampleWeight;
