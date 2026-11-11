@@ -23,14 +23,14 @@ import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 
-public abstract class AnimationRequest implements ProgressMonitoredImageBasedGraphicsRequest
+abstract class AnimationRequest implements ProgressMonitoredImageBasedGraphicsRequest
 {
     private final int width;
     private final int height;
     private final int frameCount;
     private final File exportPath;
 
-    protected abstract static class BuilderBase
+    abstract static class BuilderBase
     {
         private int width;
         private int height;
