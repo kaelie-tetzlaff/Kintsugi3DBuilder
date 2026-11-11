@@ -73,9 +73,9 @@ public class ImportedMaterial implements ReadonlyImportedMaterial
         this.clearcoatRoughness = 0.0f;
     }
 
-    public static Dictionary<String, ImportedMaterial> loadFromMTLFile(File mtlFile) throws IOException
+    public static Map<String, ImportedMaterial> loadFromMTLFile(File mtlFile) throws IOException
     {
-        Dictionary<String, ImportedMaterial> materials = new Hashtable<>();
+        Map<String, ImportedMaterial> materials = new HashMap<>(1);
         ImportedMaterial currentMaterial = null;
         boolean ambientSet = false;
 

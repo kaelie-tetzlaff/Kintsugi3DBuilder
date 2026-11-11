@@ -298,7 +298,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         {
             try
             {
-                Dictionary<String, ImportedMaterial> materialLibrary = ImportedMaterial.loadFromMTLFile(new File(file.getParentFile(), inst.materialFileName));
+                Map<String, ImportedMaterial> materialLibrary = ImportedMaterial.loadFromMTLFile(new File(file.getParentFile(), inst.materialFileName));
                 inst.material = materialLibrary.get(materialName);
             }
             catch(IOException e)
