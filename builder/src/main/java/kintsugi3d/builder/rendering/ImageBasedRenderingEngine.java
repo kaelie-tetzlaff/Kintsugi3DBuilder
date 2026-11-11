@@ -294,6 +294,8 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
             {
                 View orientationView = viewSet.getOrientationView();
 
+                // Inspection suppressed for now; remove suppression once scale handling has been investigated more.
+                //noinspection IfStatementWithIdenticalBranches
                 if (orientationView == null) // check for override
                 {
                     // Imported orientation and object center if no override
