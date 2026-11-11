@@ -816,6 +816,9 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
                         destFBO.getViewport(destX, destY, destWidth, destHeight)
                             .blitDepthStencilAttachmentFromFramebuffer(sourceFBO.getViewport(srcX, srcY, srcWidth, srcHeight));
                         break;
+                    case NULL:
+                        // Do nothing
+                        break;
                 }
             }
         }

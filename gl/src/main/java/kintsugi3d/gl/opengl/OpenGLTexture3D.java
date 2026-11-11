@@ -681,6 +681,9 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
                             destFBO.blitDepthStencilAttachmentFromFramebufferViewport(destX, destY, destWidth, destHeight,
                                 sourceFBO.getViewport(srcX, srcY, srcWidth, srcHeight));
                             break;
+                        case NULL:
+                            // Do nothing
+                            break;
                     }
                 }
             }
