@@ -15,7 +15,7 @@ import kintsugi3d.fx.internal.ObservableGeneralSettingsModel;
 
 public class LiveProjectSettingsManager extends ProjectSettingsManager
 {
-    private final ObservableGeneralSettingsModel revertSettingsModel = ProjectSettingsManager.getDefaultSettingsModel();
+    private final ObservableGeneralSettingsModel revertSettingsModel = getDefaultSettingsModel();
 
     @Override
     public void trackSetting(String settingName)

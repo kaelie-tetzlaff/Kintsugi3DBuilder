@@ -18,7 +18,7 @@ public class OpenGLNullTexture extends OpenGLTexture
 {
     OpenGLNullTexture(OpenGLContext context, SamplerType type)
     {
-        super(context, OpenGLTexture.translateSamplerType(type), TextureType.NULL, 0, new Parameters());
+        super(context, translateSamplerType(type), TextureType.NULL, 0, new Parameters());
     }
 
     @Override

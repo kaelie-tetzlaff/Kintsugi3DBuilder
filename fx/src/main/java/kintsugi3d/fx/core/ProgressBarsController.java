@@ -446,7 +446,7 @@ public class ProgressBarsController
             currentStage = stage + 1; //index from 1, copy so we can update currentStageProperty w/ Platform.runLater to avoid threading issue
 
             // Reset text that displays when finishing up for a new stage
-            finishingUpText = ProgressMonitor.FINISHING_UP;
+            finishingUpText = FINISHING_UP_DEFAULT;
 
             Platform.runLater(() ->
             {
@@ -574,7 +574,7 @@ public class ProgressBarsController
                 }
 
                 //only revert text for processes which are not lightweight
-                if (localTextLabel.getText().equals(FINISHING_UP))
+                if (localTextLabel.getText().equals(FINISHING_UP_DEFAULT))
                 {
                     localTextLabel.setText(localText);
                 }
