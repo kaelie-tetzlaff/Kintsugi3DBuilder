@@ -28,7 +28,7 @@ import java.util.stream.Stream;
  */
 public class MatrixBuilder
 {
-    private MatrixBuilderSample samplePrevious = null;
+    private MatrixBuilderSample samplePrevious;
 
     /**
      * The number of "instances" being optimized in the fitting system.

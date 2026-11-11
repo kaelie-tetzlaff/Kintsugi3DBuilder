@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class TextureExtras
 {
-    private Integer baseRes = null;
+    private Integer baseRes;
 
     private final Map<Integer, Integer> lods = new HashMap<>();
 

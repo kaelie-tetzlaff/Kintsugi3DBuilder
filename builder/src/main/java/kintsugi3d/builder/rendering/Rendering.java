@@ -23,7 +23,7 @@ public final class Rendering
     private static volatile Context<?> context;
     private static volatile RenderableManager<?> renderableManager;
     private static volatile GraphicsRequestManager<?> requestQueue;
-    private static volatile Thread renderingThread = null;
+    private static volatile Thread renderingThread;
     private static boolean terminateRequested = false;
 
     private static final Object INITIALIZATION_LOCK = new Object();

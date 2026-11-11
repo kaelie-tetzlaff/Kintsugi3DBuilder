@@ -44,8 +44,8 @@ public final class MetashapeChunk
     private Optional<Integer> defaultModelID;
     private MetashapeModel currModel;
     private File thumbnailsDir;
-    private File masksDir = null;
-    private File masksDirOverride = null;
+    private File masksDir;
+    private File masksDirOverride;
 
     public static MetashapeChunk parseFromElement(MetashapeDocument document, Element chunkElement) throws IOException
     {

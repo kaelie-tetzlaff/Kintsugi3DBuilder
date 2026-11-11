@@ -15,15 +15,15 @@ import de.javagl.jgltf.impl.v2.TextureInfo;
 
 public class Kintsugi3DViewerExtras
 {
-    private TextureInfo diffuseTexture = null;
+    private TextureInfo diffuseTexture;
 
-    private TextureInfo diffuseConstantTexture = null;
+    private TextureInfo diffuseConstantTexture;
 
-    private TextureInfo specularTexture = null;
+    private TextureInfo specularTexture;
 
-    private String basisFunctionsUri = null;
+    private String basisFunctionsUri;
 
-    private SpecularWeights specularWeights = null;
+    private SpecularWeights specularWeights;
 
     public TextureInfo getSpecularTexture()
     {
