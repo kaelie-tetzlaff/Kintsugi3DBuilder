@@ -48,7 +48,7 @@ public interface ShaderProgramFactory<ContextType extends Context<ContextType>> 
         // Common definitions for all specular fitting related shaders.
         ProgramBuilder<ContextType> programBuilder = getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, vertexShader)
-            .addShader(ShaderType.FRAGMENT, fragmentShader);;
+            .addShader(ShaderType.FRAGMENT, fragmentShader);
 
         // Add additional defines provided to the function.
         for (Entry<String, Object> definition : additionalDefines.entrySet())
