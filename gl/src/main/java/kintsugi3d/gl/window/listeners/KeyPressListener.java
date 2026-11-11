@@ -11,6 +11,7 @@
 
 package kintsugi3d.gl.window.listeners;
 
+import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.window.Canvas3D;
 import kintsugi3d.gl.window.Key;
 import kintsugi3d.gl.window.ModifierKeys;
@@ -18,5 +19,5 @@ import kintsugi3d.gl.window.ModifierKeys;
 @FunctionalInterface
 public interface KeyPressListener
 {
-    void keyPressed(Canvas3D<? extends kintsugi3d.gl.core.Context<?>> canvas, Key key, ModifierKeys mods);
+    void keyPressed(Canvas3D<? extends Context<?>> canvas, Key key, ModifierKeys mods);
 }

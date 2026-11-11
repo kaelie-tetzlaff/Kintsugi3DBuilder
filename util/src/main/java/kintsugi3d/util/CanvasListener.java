@@ -11,12 +11,13 @@
 
 package kintsugi3d.util;
 
+import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.window.Canvas3D;
 import kintsugi3d.gl.window.listeners.*;
 
 public interface CanvasListener extends CursorPositionListener, MouseButtonPressListener, MouseButtonReleaseListener, ScrollListener, KeyPressListener
 {
-    default void addToCanvas(Canvas3D<? extends kintsugi3d.gl.core.Context<?>> canvas)
+    default void addToCanvas(Canvas3D<? extends Context<?>> canvas)
     {
         canvas.addCursorPositionListener(this);
         canvas.addMouseButtonPressListener(this);

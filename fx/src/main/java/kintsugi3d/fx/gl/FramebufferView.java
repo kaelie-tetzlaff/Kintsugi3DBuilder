@@ -28,6 +28,7 @@ import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Duration;
 import javafx.util.converter.CharacterStringConverter;
 import kintsugi3d.gl.core.FramebufferSize;
@@ -260,7 +261,7 @@ public final class FramebufferView extends Region
             }
         });
 
-        javafx.stage.Window owner = stage.getOwner();
+        Window owner = stage.getOwner();
         Stage primaryStage = owner instanceof Stage ? (Stage) owner : stage;
         primaryStage.iconifiedProperty().addListener((event1, oldValue, newValue) ->
         {

@@ -17,6 +17,7 @@ import kintsugi3d.builder.state.scene.ManipulableObjectPoseModel;
 import kintsugi3d.builder.state.scene.ManipulableViewpointModel;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.tools.MultiplierTool.Type;
+import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.window.Canvas3D;
 import kintsugi3d.gl.window.CursorPosition;
 import kintsugi3d.gl.window.Key;
@@ -63,7 +64,7 @@ public final class ToolBox implements CanvasListener
 
     //pass methods to selected tool
     @Override
-    public void scroll(Canvas3D<? extends kintsugi3d.gl.core.Context<?>> canvas, double xOffset, double yOffset)
+    public void scroll(Canvas3D<? extends Context<?>> canvas, double xOffset, double yOffset)
     {
         try
         {
@@ -82,7 +83,7 @@ public final class ToolBox implements CanvasListener
     }
 
     @Override
-    public void cursorMoved(Canvas3D<? extends kintsugi3d.gl.core.Context<?>> canvas, double xPos, double yPos)
+    public void cursorMoved(Canvas3D<? extends Context<?>> canvas, double xPos, double yPos)
     {
         try
         {
@@ -108,7 +109,7 @@ public final class ToolBox implements CanvasListener
     }
 
     @Override
-    public void keyPressed(Canvas3D<? extends kintsugi3d.gl.core.Context<?>> canvas, Key key, ModifierKeys mods)
+    public void keyPressed(Canvas3D<? extends Context<?>> canvas, Key key, ModifierKeys mods)
     {
         try
         {
@@ -131,7 +132,7 @@ public final class ToolBox implements CanvasListener
     }
 
     @Override
-    public void mouseButtonPressed(Canvas3D<? extends kintsugi3d.gl.core.Context<?>> canvas, int buttonIndex, ModifierKeys mods)
+    public void mouseButtonPressed(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods)
     {
         if (getSelectedDragTool() == null) // Only do something if another drag isn't already in progress.
         {
@@ -161,7 +162,7 @@ public final class ToolBox implements CanvasListener
     }
 
     @Override
-    public void mouseButtonReleased(Canvas3D<? extends kintsugi3d.gl.core.Context<?>> canvas, int buttonIndex, ModifierKeys mods)
+    public void mouseButtonReleased(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods)
     {
         try
         {

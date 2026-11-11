@@ -11,10 +11,11 @@
 
 package kintsugi3d.gl.window.listeners;
 
+import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.window.Canvas3D;
 
 @FunctionalInterface
 public interface WindowIconifiedListener
 {
-    void windowIconified(Canvas3D<? extends kintsugi3d.gl.core.Context<?>> canvas);
+    void windowIconified(Canvas3D<? extends Context<?>> canvas);
 }
