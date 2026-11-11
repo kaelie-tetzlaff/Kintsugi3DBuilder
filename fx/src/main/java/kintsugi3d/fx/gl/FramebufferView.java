@@ -48,11 +48,12 @@ public final class FramebufferView extends Region
 
     private WritableImage frontImage;
     private WritableImage backImage;
-    private boolean copyThreadRunning = false;
+
+    private volatile boolean copyThreadRunning = false;
     private Thread nextCopyThread;
     private final Object nextCopyThreadLock = new Object();
-    private volatile boolean frontImagePending = false;
 
+    private volatile boolean frontImagePending = false;
     private volatile ByteBuffer frontCopyBuffer;
 
     private ByteBuffer backCopyBuffer;
