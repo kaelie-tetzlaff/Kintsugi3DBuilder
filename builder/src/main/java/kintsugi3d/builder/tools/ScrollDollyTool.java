@@ -33,7 +33,7 @@ public final class ScrollDollyTool implements ScrollListener
 
     static ToolBuilder<ScrollDollyTool> getBuilder()
     {
-        return new ScrollDollyTool.Builder();
+        return new Builder();
     }
 
     private ScrollDollyTool(ManipulableViewpointModel cameraModel)
