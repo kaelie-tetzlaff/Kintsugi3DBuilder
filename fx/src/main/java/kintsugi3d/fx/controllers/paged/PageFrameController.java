@@ -228,9 +228,9 @@ public class PageFrameController
         return new NonDataSentinelPageBuilder(this,
             () ->
             {
-                PageFrameController.this.init();
+                this.init();
                 callback.run();
-                return PageFrameController.this;
+                return this;
             });
     }
 
@@ -239,9 +239,9 @@ public class PageFrameController
         return new DataSentinelPageBuilder<>(this,
             () ->
             {
-                PageFrameController.this.init();
+                this.init();
                 callback.run();
-                return PageFrameController.this;
+                return this;
             },
             data);
     }
