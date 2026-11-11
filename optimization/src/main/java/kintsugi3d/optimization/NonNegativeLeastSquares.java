@@ -27,6 +27,10 @@ public final class NonNegativeLeastSquares
 {
     private static final Logger LOG = LoggerFactory.getLogger(NonNegativeLeastSquares.class);
 
+    private NonNegativeLeastSquares()
+    {
+    }
+
     private static SimpleMatrix solvePartial(
         SimpleMatrix mATA, SimpleMatrix vATb, boolean[] p, List<Integer> mapping, SimpleMatrix sOut, int constraintCount)
     {
