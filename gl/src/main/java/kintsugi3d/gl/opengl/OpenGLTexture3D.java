@@ -222,7 +222,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         this.height = height;
         this.depth = layerCount;
 
-        init(openGLTextureTarget, multisamples, OpenGLContext.getOpenGLInternalColorFormat(colorFormat), layerCount, format,
+        init(openGLTextureTarget, multisamples, OpenGLContext.getInternalColorFormat(colorFormat), layerCount, format,
             fixedSampleLocations, useLinearFiltering, maxMipmapLevel, maxAnisotropy);
     }
 
@@ -238,7 +238,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         this.height = height;
         this.depth = layerCount;
 
-        init(openGLTextureTarget, multisamples, OpenGLContext.getOpenGLCompressionFormat(compressionFormat), layerCount, format,
+        init(openGLTextureTarget, multisamples, OpenGLContext.getCompressionFormat(compressionFormat), layerCount, format,
             fixedSampleLocations, useLinearFiltering, maxMipmapLevel, maxAnisotropy);
     }
 

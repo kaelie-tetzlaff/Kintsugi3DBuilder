@@ -150,7 +150,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         return textureType;
     }
 
-    protected int getOpenGLTextureTarget()
+    protected int getTextureTarget()
     {
         return this.openGLTextureTarget;
     }
@@ -200,29 +200,29 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         {
             if (maxMipmapLevel < Integer.MAX_VALUE)
             {
-                glTexParameteri(this.getOpenGLTextureTarget(), GL_TEXTURE_MAX_LEVEL, maxMipmapLevel);
+                glTexParameteri(this.getTextureTarget(), GL_TEXTURE_MAX_LEVEL, maxMipmapLevel);
                 OpenGLContext.errorCheck();
             }
 
             if (generateMipmaps)
             {
                 // Create mipmaps
-                glGenerateMipmap(this.getOpenGLTextureTarget());
+                glGenerateMipmap(this.getTextureTarget());
                 OpenGLContext.errorCheck();
             }
 
             if (useLinearFiltering)
             {
-                glTexParameteri(this.getOpenGLTextureTarget(), GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+                glTexParameteri(this.getTextureTarget(), GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
                 OpenGLContext.errorCheck();
-                glTexParameteri(this.getOpenGLTextureTarget(), GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                glTexParameteri(this.getTextureTarget(), GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                 OpenGLContext.errorCheck();
             }
             else
             {
-                glTexParameteri(this.getOpenGLTextureTarget(), GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+                glTexParameteri(this.getTextureTarget(), GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
                 OpenGLContext.errorCheck();
-                glTexParameteri(this.getOpenGLTextureTarget(), GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                glTexParameteri(this.getTextureTarget(), GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 OpenGLContext.errorCheck();
             }
         }
@@ -230,16 +230,16 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         {
             if (useLinearFiltering)
             {
-                glTexParameteri(this.getOpenGLTextureTarget(), GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(this.getTextureTarget(), GL_TEXTURE_MIN_FILTER, GL_LINEAR);
                 OpenGLContext.errorCheck();
-                glTexParameteri(this.getOpenGLTextureTarget(), GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                glTexParameteri(this.getTextureTarget(), GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                 OpenGLContext.errorCheck();
             }
             else
             {
-                glTexParameteri(this.getOpenGLTextureTarget(), GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                glTexParameteri(this.getTextureTarget(), GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                 OpenGLContext.errorCheck();
-                glTexParameteri(this.getOpenGLTextureTarget(), GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                glTexParameteri(this.getTextureTarget(), GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 OpenGLContext.errorCheck();
             }
         }
@@ -272,9 +272,9 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         switch(textureType)
         {
         case DEPTH:
-            return OpenGLContext.getOpenGLInternalDepthFormat(precision);
+            return getInternalDepthFormat(precision);
         case STENCIL:
-            return OpenGLContext.getOpenGLInternalStencilFormat(precision);
+            return getInternalStencilFormat(precision);
         case DEPTH_STENCIL:
             return GL_DEPTH24_STENCIL8;
         case FLOATING_POINT_DEPTH:
@@ -283,8 +283,44 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
             return GL_DEPTH32F_STENCIL8;
         case COLOR:
         default:
-            return OpenGLContext.getOpenGLInternalColorFormat(
+            return OpenGLContext.getInternalColorFormat(
                 ColorFormat.createCustom(precision, precision, precision, precision, DataType.NORMALIZED_FIXED_POINT));
+        }
+    }
+
+    private static int getInternalDepthFormat(int precision)
+    {
+        if (precision <= 16)
+        {
+            return GL_DEPTH_COMPONENT16;
+        }
+        else if (precision <= 24)
+        {
+            return GL_DEPTH_COMPONENT24;
+        }
+        else
+        {
+            return GL_DEPTH_COMPONENT32;
+        }
+    }
+
+    private static int getInternalStencilFormat(int precision)
+    {
+        if (precision == 1)
+        {
+            return GL_STENCIL_INDEX1;
+        }
+        if (precision <= 4)
+        {
+            return GL_STENCIL_INDEX4;
+        }
+        else if (precision <= 8)
+        {
+            return GL_STENCIL_INDEX8;
+        }
+        else
+        {
+            return GL_STENCIL_INDEX16;
         }
     }
 

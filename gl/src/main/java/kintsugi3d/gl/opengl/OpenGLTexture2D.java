@@ -480,7 +480,7 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
         this.width = width;
         this.height = height;
 
-        init(openGLTextureTarget, OpenGLContext.getOpenGLInternalColorFormat(colorFormat), format, type, buffer,
+        init(openGLTextureTarget, OpenGLContext.getInternalColorFormat(colorFormat), format, type, buffer,
                 useLinearFiltering, maxMipmapLevel, maxAnisotropy);
     }
 
@@ -493,7 +493,7 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
         this.width = width;
         this.height = height;
 
-        init(openGLTextureTarget, OpenGLContext.getOpenGLCompressionFormat(compressionFormat), format, type, buffer,
+        init(openGLTextureTarget, OpenGLContext.getCompressionFormat(compressionFormat), format, type, buffer,
                 useLinearFiltering, maxMipmapLevel, maxAnisotropy);
     }
 
@@ -508,7 +508,7 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
         this.width = width;
         this.height = height;
 
-        init(openGLTextureTarget, multisamples, OpenGLContext.getOpenGLInternalColorFormat(colorFormat), format,
+        init(openGLTextureTarget, multisamples, OpenGLContext.getInternalColorFormat(colorFormat), format,
                 fixedMultisampleLocations, useLinearFiltering, maxMipmapLevel, maxAnisotropy);
     }
 
@@ -523,7 +523,7 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
         this.width = width;
         this.height = height;
 
-        init(openGLTextureTarget, multisamples, OpenGLContext.getOpenGLCompressionFormat(compressionFormat), format,
+        init(openGLTextureTarget, multisamples, OpenGLContext.getCompressionFormat(compressionFormat), format,
                 fixedMultisampleLocations, useLinearFiltering, maxMipmapLevel, maxAnisotropy);
     }
 

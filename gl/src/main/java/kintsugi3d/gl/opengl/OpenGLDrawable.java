@@ -63,7 +63,7 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
         return this.program;
     }
 
-    private static int getOpenGLPrimitiveModeConst(PrimitiveMode primitiveMode)
+    private static int getPrimitiveModeConst(PrimitiveMode primitiveMode)
     {
         switch(primitiveMode)
         {
@@ -91,7 +91,7 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
         {
             s.set();
         }
-        vao.draw(getOpenGLPrimitiveModeConst(primitiveMode));
+        vao.draw(getPrimitiveModeConst(primitiveMode));
     }
 
     @Override
@@ -103,7 +103,7 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
         {
             s.set();
         }
-        vao.draw(getOpenGLPrimitiveModeConst(primitiveMode));
+        vao.draw(getPrimitiveModeConst(primitiveMode));
     }
 
     @Override

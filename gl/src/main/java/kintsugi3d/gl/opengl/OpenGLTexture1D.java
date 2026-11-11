@@ -94,7 +94,7 @@ final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLCon
         super(context, textureTarget, colorFormat, new Parameters(format, useLinearFiltering, useMipmaps, maxMipmapLevel, maxAnisotropy));
         this.width = width;
 
-        init(textureTarget, OpenGLContext.getOpenGLInternalColorFormat(colorFormat), format, type, buffer, useLinearFiltering, maxMipmapLevel, maxAnisotropy);
+        init(textureTarget, OpenGLContext.getInternalColorFormat(colorFormat), format, type, buffer, useLinearFiltering, maxMipmapLevel, maxAnisotropy);
     }
 
     private OpenGLTexture1D(OpenGLContext context, int textureTarget, CompressionFormat compressionFormat, int width, int format, int type, ByteBuffer buffer,
@@ -104,7 +104,7 @@ final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLCon
         super(context, textureTarget, compressionFormat, new Parameters(format, useLinearFiltering, useMipmaps, maxMipmapLevel, maxAnisotropy));
         this.width = width;
 
-        init(textureTarget, OpenGLContext.getOpenGLCompressionFormat(compressionFormat), format, type, buffer, useLinearFiltering, maxMipmapLevel, maxAnisotropy);
+        init(textureTarget, OpenGLContext.getCompressionFormat(compressionFormat), format, type, buffer, useLinearFiltering, maxMipmapLevel, maxAnisotropy);
     }
 
     private void init(int textureTarget, int internalFormat, int format, int type, ByteBuffer buffer,
@@ -186,19 +186,19 @@ final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLCon
         switch(wrap)
         {
         case None:
-            glTexParameteri(getOpenGLTextureTarget(), GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             OpenGLContext.errorCheck();
             break;
         case MirrorOnce:
-            glTexParameteri(getOpenGLTextureTarget(), GL_TEXTURE_WRAP_S, GL_MIRROR_CLAMP_TO_EDGE);
+            glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_S, GL_MIRROR_CLAMP_TO_EDGE);
             OpenGLContext.errorCheck();
             break;
         case Repeat:
-            glTexParameteri(getOpenGLTextureTarget(), GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_S, GL_REPEAT);
             OpenGLContext.errorCheck();
             break;
         case MirroredRepeat:
-            glTexParameteri(getOpenGLTextureTarget(), GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+            glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
             OpenGLContext.errorCheck();
             break;
         }

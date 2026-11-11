@@ -289,7 +289,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
         super(context, textureTarget, colorFormat,
             new Parameters(opt.format, opt.useLinearFiltering, opt.useMipmaps, opt.maxMipmapLevel, opt.maxAnisotropy));
         this.faceSize = faceSize;
-        init(OpenGLContext.getOpenGLInternalColorFormat(colorFormat), opt);
+        init(OpenGLContext.getInternalColorFormat(colorFormat), opt);
     }
 
     private OpenGLCubemap(OpenGLContext context, int textureTarget, CompressionFormat compressionFormat, int faceSize, OptionalParameters opt)
@@ -298,7 +298,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
         super(context, textureTarget, compressionFormat,
             new Parameters(opt.format, opt.useLinearFiltering, opt.useMipmaps, opt.maxMipmapLevel, opt.maxAnisotropy));
         this.faceSize = faceSize;
-        init(OpenGLContext.getOpenGLCompressionFormat(compressionFormat), opt);
+        init(OpenGLContext.getCompressionFormat(compressionFormat), opt);
     }
 
     private OpenGLCubemap(OpenGLContext context, int textureTarget, TextureType textureType, int precision, int faceSize, OptionalParameters opt)
@@ -415,7 +415,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
 
         if (opt.maxAnisotropy > 1.0f)
         {
-            glTexParameterf(getOpenGLTextureTarget(), GL_TEXTURE_MAX_ANISOTROPY_EXT, opt.maxAnisotropy);
+            glTexParameterf(getTextureTarget(), GL_TEXTURE_MAX_ANISOTROPY_EXT, opt.maxAnisotropy);
             OpenGLContext.errorCheck();
         }
     }
@@ -442,10 +442,10 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
             this.levelCount = 1;
         }
 
-        glTexParameteri(getOpenGLTextureTarget(), GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         OpenGLContext.errorCheck();
         
-        glTexParameteri(getOpenGLTextureTarget(), GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         OpenGLContext.errorCheck();
         
         glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
@@ -473,13 +473,13 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
 
         if (numericWrapS != 0)
         {
-            glTexParameteri(getOpenGLTextureTarget(), GL_TEXTURE_WRAP_S, numericWrapS);
+            glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_S, numericWrapS);
             OpenGLContext.errorCheck();
         }
 
         if (numericWrapT != 0)
         {
-            glTexParameteri(getOpenGLTextureTarget(), GL_TEXTURE_WRAP_T, numericWrapT);
+            glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_T, numericWrapT);
             OpenGLContext.errorCheck();
         }
     }
