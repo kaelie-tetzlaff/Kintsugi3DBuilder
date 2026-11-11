@@ -24,7 +24,7 @@ class OpenGLVertexArray implements ManagedResource
     private final boolean usesIndexing = false;
     private final int vaoId;
     private int count = Integer.MAX_VALUE;
-    private boolean closed = false;
+    private boolean live = true;
 
     OpenGLVertexArray(OpenGLContext context)
     {
@@ -89,11 +89,11 @@ class OpenGLVertexArray implements ManagedResource
     @Override
     public void close()
     {
-        if (!closed)
+        if (live)
         {
             glDeleteVertexArrays(this.vaoId);
             OpenGLContext.errorCheck();
-            closed = true;
+            live = false;
         }
     }
 }

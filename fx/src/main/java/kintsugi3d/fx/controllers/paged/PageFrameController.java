@@ -67,7 +67,7 @@ public class PageFrameController
         this.state = state;
     }
 
-    private boolean isConfirmed = false;
+    private boolean isIncomplete = true;
 
     public void init()
     {
@@ -132,7 +132,7 @@ public class PageFrameController
     {
         // If confirmed, do nothing.
         // Otherwise, try to close the current page, but if it's overridden, consume the event to prevent the modal from closing.
-        if (!isConfirmed && !currentPage.get().getController().cancel())
+        if (isIncomplete && !currentPage.get().getController().cancel())
         {
             windowEvent.consume();
         }
@@ -287,7 +287,7 @@ public class PageFrameController
                 {
                     if (currentPage.get().getController().confirm())
                     {
-                        isConfirmed = true;
+                        isIncomplete = false;
                         close();
                     }
                 }

@@ -141,37 +141,32 @@ public class CardTabController
 
     public void initialize()
     {
-        //Listener to detect scroll bar
+        // Listener to detect scroll bar
         scrollpane.viewportBoundsProperty().addListener((obs, oldBounds, newBounds) ->
         {
-            //Exits if we are not dragging or if scrollbar is locked
-            if (!isDragging || scrollbarLockedDuringDrag)
+            // Only need to respond if we're dragging and scrollbar is not locked
+            if (isDragging && !scrollbarLockedDuringDrag)
             {
-                return;
-            }
+                // Old and new widths
+                double oldWidth = oldBounds.getWidth();
+                double newWidth = newBounds.getWidth();
 
-            //Old and new widths
-            double oldWidth = oldBounds.getWidth();
-            double newWidth = newBounds.getWidth();
+                if (oldWidth > 0 && newWidth > 0) // Check for negative widths
+                {
+                    double viewportShrink = oldWidth - newWidth; // amount changed
 
-            if (oldWidth <= 0 || newWidth <= 0) //If negative widths
-            {
-                return;
-            }
+                    // If viewport lost about the amount of width of the scrollbar
+                    if (viewportShrink >= (SCROLLBAR_WIDTH - WIDTH_TOLERANCE))
+                    {
+                        scrollbarLockedDuringDrag = true; //Locks scrollbar
 
-            double viewportShrink = oldWidth - newWidth; //amount changed
+                        // Gets the last sidebar width
+                        scrollbarActivationWidth = lastSidebarWidth;
 
-
-            //If viewport lost about the amount of width of the scrollbar
-            if (viewportShrink >= (SCROLLBAR_WIDTH - WIDTH_TOLERANCE))
-            {
-                scrollbarLockedDuringDrag = true; //Locks scrollbar
-
-                //Gets the last sidebar width
-                scrollbarActivationWidth = lastSidebarWidth;
-
-                //Makes scroll bar always appear
-                scrollpane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+                        // Makes scroll bar always appear
+                        scrollpane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+                    }
+                }
             }
         });
     }

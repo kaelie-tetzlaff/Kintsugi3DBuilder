@@ -49,10 +49,10 @@ public class ExternalApplicationSettingsController implements SystemSettingsCont
         );
 
         // Open the file window and assign the path if valid
-        file = fileChooser.showOpenDialog(((Node) e.getSource()).getScene().getWindow());
-        if ((file != null) && file.canExecute())
+        File newFile = fileChooser.showOpenDialog(((Node) e.getSource()).getScene().getWindow());
+        if ((newFile != null) && newFile.canExecute())
         {
-            label.setText(file.getAbsolutePath());
+            label.setText(newFile.getAbsolutePath());
         }
     }
 

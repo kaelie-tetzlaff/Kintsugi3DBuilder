@@ -114,7 +114,7 @@ public class EyedropperController extends NonDataPageControllerBase
      * Set to true after the first time the warning about using multiple images for tone calibration has been shown
      * to prevent the warning from appearing every time.
      */
-    private boolean multiImageWarningShown = false;
+    private boolean showMultiImageWarning = true;
 
     private final Map<Button, TextField> textFieldForButton = new HashMap<>(6);
     private final Map<Button, Rectangle> rectangleForButton = new HashMap<>(6);
@@ -738,7 +738,7 @@ public class EyedropperController extends NonDataPageControllerBase
     @FXML
     private void selectImage(ActionEvent actionEvent)
     {
-        if (!multiImageWarningShown)
+        if (showMultiImageWarning)
         {
             Alert alert = new Alert(AlertType.WARNING,
                 "Warning: using multiple images for tone calibration can result in inconsistencies in tone interpretation.  To be used for advanced workflows only.",
@@ -753,7 +753,7 @@ public class EyedropperController extends NonDataPageControllerBase
             else
             {
                 // User confirmed; do not show warning again while this controller is active.
-                multiImageWarningShown = true;
+                showMultiImageWarning = false;
             }
         }
 

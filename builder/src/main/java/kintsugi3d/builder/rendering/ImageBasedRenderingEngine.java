@@ -62,7 +62,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     private final ContextType context;
 
     private volatile ProgressMonitor progressMonitor;
-    private boolean suppressErrors = false;
+    private boolean logErrors = true;
 
     private final Builder<ContextType> resourceBuilder;
     private GraphicsResourcesImageSpace<ContextType> resources;
@@ -119,6 +119,11 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         this.managedResources = false;
         this.sceneModel = new SceneModel();
         this.sceneViewportModel = createSceneViewportModel(this.sceneModel);
+    }
+
+    public boolean isLoaded()
+    {
+        return loaded;
     }
 
     private static SceneViewportModel createSceneViewportModel(SceneModel sceneModel)
@@ -481,10 +486,10 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         }
         catch(RuntimeException e)
         {
-            if (!suppressErrors)
+            if (logErrors)
             {
                 LOG.error("Error during draw call", e);
-                suppressErrors = true; // Prevent excessive errors
+                logErrors = false; // Prevent excessive errors
             }
         }
         catch (Error e)
@@ -590,7 +595,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
             lightCalibration.reloadShaders();
             lightCalibration3DRoot.reloadShaders();
 
-            suppressErrors = false;
+            logErrors = true;
         }
         catch (RuntimeException e)
         {

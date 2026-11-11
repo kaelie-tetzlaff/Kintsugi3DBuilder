@@ -30,7 +30,7 @@ public final class GlobalUserPreferencesManager
     private final UserPreferencesSerializer serializer = new JacksonUserPreferencesSerializer();
 
     private UserPreferencesModel preferencesModel;
-    private boolean modelLoaded = false;
+    private boolean needsReadFromSerializer = true;
 
     private GlobalUserPreferencesManager() {}
 
@@ -56,9 +56,9 @@ public final class GlobalUserPreferencesManager
 
     public UserPreferencesModel getPreferences()
     {
-        if (!modelLoaded)
+        if (needsReadFromSerializer)
         {
-            rollback();
+            readFromSerializer();
         }
 
         return preferencesModel;
@@ -81,7 +81,7 @@ public final class GlobalUserPreferencesManager
      */
     public void load(LoadOptionsModel loadOptionsModel, GeneralSettingsModel settingsModel)
     {
-        rollback();
+        readFromSerializer();
         inject(loadOptionsModel, settingsModel);
     }
 
@@ -113,10 +113,10 @@ public final class GlobalUserPreferencesManager
         serializer.writeUserPreferences(preferencesModel);
     }
 
-    private void rollback()
+    private void readFromSerializer()
     {
         preferencesModel = serializer.readOrDefault();
-        modelLoaded = true;
+        needsReadFromSerializer = false;
     }
 
     public boolean hasStartupFailures()

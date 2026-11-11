@@ -36,7 +36,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     protected final OpenGLContext context;
 
     private final int textureId;
-    private boolean closed = false;
+    private boolean live = true;
 
     protected final int openGLTextureTarget;
     protected boolean staleMipmaps = false;
@@ -526,11 +526,11 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     @Override
     public void close()
     {
-        if (!closed)
+        if (live)
         {
             glDeleteTextures(this.textureId);
             OpenGLContext.errorCheck();
-            closed = true;
+            live = false;
         }
     }
 

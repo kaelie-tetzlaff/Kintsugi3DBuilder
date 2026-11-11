@@ -38,7 +38,7 @@ class OpenGLShader implements Shader<OpenGLContext>
     protected final OpenGLContext context;
 
     private int shaderId;
-    private boolean closed = false;
+    private boolean live = true;
 
     OpenGLShader(OpenGLContext context, int shaderType, File file, Map<String, Object> defines) throws IOException
     {
@@ -101,7 +101,7 @@ class OpenGLShader implements Shader<OpenGLContext>
     private static void loadSource(File file, StringBuilder sb, Map<String, Object> defines) throws IOException
     {
         int lineCounter = 1;
-        boolean definesAdded = defines.isEmpty();
+        boolean needsDefines = !defines.isEmpty();
 
         // Sometimes the interrupted flag gets stuck on and needs to be reset or all File IO on the thread will fail.
         if (Thread.interrupted())
@@ -119,7 +119,7 @@ class OpenGLShader implements Shader<OpenGLContext>
 
                 String trimmedLine = nextLine.trim();
 
-                if (!definesAdded && !trimmedLine.isEmpty() && !trimmedLine.startsWith("#version") && !trimmedLine.startsWith("#extension"))
+                if (needsDefines && !trimmedLine.isEmpty() && !trimmedLine.startsWith("#version") && !trimmedLine.startsWith("#extension"))
                 {
                     for (Entry<String, Object> define : defines.entrySet())
                     {
@@ -169,7 +169,7 @@ class OpenGLShader implements Shader<OpenGLContext>
                     sb.append(" 0");
                     sb.append(System.lineSeparator());
 
-                    definesAdded = true;
+                    needsDefines = false;
                 }
 
                 if (trimmedLine.startsWith("#include"))
@@ -257,11 +257,11 @@ class OpenGLShader implements Shader<OpenGLContext>
     @Override
     public void close()
     {
-        if (!closed)
+        if (live)
         {
             glDeleteShader(shaderId);
             OpenGLContext.errorCheck();
-            closed = true;
+            live = false;
         }
     }
 }
