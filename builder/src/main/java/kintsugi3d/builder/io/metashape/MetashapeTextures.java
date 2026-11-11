@@ -24,11 +24,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.AbstractMap.SimpleEntry;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.IntStream;
-
 public class MetashapeTextures implements TextureSupplier
 {
     private static final Logger LOG = LoggerFactory.getLogger(MetashapeTextures.class);
@@ -56,23 +53,24 @@ public class MetashapeTextures implements TextureSupplier
             // Get all the textures
             NodeList textures = document.getElementsByTagName("texture");
 
-            return Map.ofEntries(IntStream.range(0, textures.getLength())
-                .<Entry<String, File>>mapToObj(i ->
+            Map<String, File> result = new HashMap<>(textures.getLength());
+            for (int i = 0; i < textures.getLength(); i++)
+            {
+                Element e = (Element) textures.item(i);
+
+                // Get some needed metadata
+                String texType = e.getAttribute("type");
+                String texName = ((Element) e.getElementsByTagName("page").item(0)).getAttribute("path");
+
+                if ("normals".equals(texType))
                 {
-                    Element e = (Element) textures.item(i);
+                    texType = "normal";
+                }
 
-                    // Get some needed metadata
-                    String texType = e.getAttribute("type");
-                    String texName = ((Element) e.getElementsByTagName("page").item(0)).getAttribute("path");
+                result.put(texType, new File(modelXMLFile.getParentFile(), texName));
+            }
 
-                    if ("normals".equals(texType))
-                    {
-                        texType = "normal";
-                    }
-
-                    return new SimpleEntry<>(texType, new File(modelXMLFile.getParentFile(), texName));
-                })
-                .toArray(length -> (Entry<String, File>[]) new Entry[length]));
+            return result;
         }
         catch (ParserConfigurationException | IOException | SAXException e)
         {
