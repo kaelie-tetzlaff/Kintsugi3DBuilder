@@ -284,7 +284,7 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
                     try
                     {
                         // Use Michael Ludwig's code to convert to a cube map (supports either cross or panorama input)
-                        this.newEnvironmentData = EnvironmentMap.createFromHDRFile(environmentFile);
+                        this.newEnvironmentData = EnvironmentMap.loadFromHDRFile(environmentFile);
                         this.currentEnvironmentFile = environmentFile;
                         width = newEnvironmentData.getSide() * 4;
                         height = newEnvironmentData.getSide() * 2;
