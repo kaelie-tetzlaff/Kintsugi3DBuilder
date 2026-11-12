@@ -67,6 +67,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
 
     private SpecularFitOptimizable(
         ReadonlyGraphicsResources<ContextType> resources, BasisResources<ContextType> basisResources,
+        ReadonlyTextureResources<ContextType> textureResources,
         SpecularFitResourcesWrapper<ContextType> programFactory, TextureResolution textureResolution,
         ReadonlyNormalOptimizationSettings normalOptimizationSettings, boolean includeConstantTerm)
         throws IOException
@@ -88,6 +89,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
         // Normal optimization module that manages its own resources
         normalOptimization = new NormalOptimization<>(
             wrappedResources,
+            textureResources,
             estimationProgram -> getNormalDrawable(estimationProgram, wrappedResources),
             textureResolution, normalOptimizationSettings);
 
@@ -219,13 +221,14 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
     }
 
     public static <ContextType extends Context<ContextType>> SpecularFitOptimizable<ContextType> createNew(
-        ReadonlyGraphicsResources<ContextType> resources, SpecularFitResourcesWrapper<ContextType> programFactory,
-        MaterialBasis materialBasis, TextureResolution textureResolution,
-        ReadonlyNormalOptimizationSettings normalOptimizationSettings, boolean includeConstantTerm)
+        ReadonlyGraphicsResources<ContextType> resources, ReadonlyTextureResources<ContextType> textureResources,
+        SpecularFitResourcesWrapper<ContextType> programFactory, MaterialBasis materialBasis,
+        TextureResolution textureResolution, ReadonlyNormalOptimizationSettings normalOptimizationSettings,
+        boolean includeConstantTerm)
         throws IOException
     {
         return new SpecularFitOptimizable<>(resources,
-            new SimpleBasisResources<>(resources.getContext(), materialBasis),
+            new SimpleBasisResources<>(resources.getContext(), materialBasis), textureResources,
             programFactory, textureResolution, normalOptimizationSettings, includeConstantTerm);
     }
 

@@ -281,6 +281,12 @@ public interface TextureResources<ContextType extends Context<ContextType>>
             }
 
             @Override
+            public TextureResources<ContextType> crop(int x, int y, int cropWidth, int cropHeight)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
             public void setupShaderProgram(Program<ContextType> program)
             {
             }

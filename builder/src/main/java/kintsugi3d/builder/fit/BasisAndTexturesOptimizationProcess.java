@@ -154,8 +154,8 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
         }
 
         SpecularFitOptimizable<ContextType> specularFit = SpecularFitOptimizable.createNew(
-            resources, programFactory, decomposition.getMaterialBasis(), decomposition.getTextureResolution(),
-            getSettings().getNormalOptimizationSettings(), false);
+            resources, resources.getTextureResources(), programFactory, decomposition.getMaterialBasis(),
+            decomposition.getTextureResolution(), getSettings().getNormalOptimizationSettings(), false);
 
         try
         {

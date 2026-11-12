@@ -63,6 +63,12 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
     }
 
     @Override
+    public TextureResources<ContextType> crop(int x, int y, int cropWidth, int cropHeight)
+    {
+        return new CroppedTextureResources<>(this, x, y, cropWidth, cropHeight);
+    }
+
+    @Override
     public void saveTexture(String texName, String format, File outputDirectory, String filenameOverride)
     {
         try

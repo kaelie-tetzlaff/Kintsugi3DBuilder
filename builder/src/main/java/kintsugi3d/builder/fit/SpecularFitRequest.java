@@ -105,6 +105,7 @@ public final class SpecularFitRequest implements ProgressMonitoredImageBasedGrap
 
         // Normal estimation settings
         settings.getNormalOptimizationSettings().setNormalRefinementEnabled(projectSettings.getBoolean("normalOptimizationEnabled"));
+        settings.getNormalOptimizationSettings().setResetNormalMapEnabled(projectSettings.getBoolean("resetNormalMapEnabled"));
         settings.getNormalOptimizationSettings().setMinNormalDamping(projectSettings.getFloat("minNormalDamping"));
         settings.getNormalOptimizationSettings().setNormalSmoothingIterations(projectSettings.getInt("normalSmoothIterations"));
         settings.getNormalOptimizationSettings().setUnsuccessfulLMIterationsAllowed(projectSettings.getInt("unsuccessfulLMIterationsAllowed"));

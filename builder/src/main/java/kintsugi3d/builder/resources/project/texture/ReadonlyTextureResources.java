@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public interface ReadonlyTextureResources<ContextType extends Context<ContextType>>
-    extends ContextBound<ContextType>, TwoDimensional
+    extends Croppable<TextureResources<ContextType>>, ContextBound<ContextType>, TwoDimensional
 {
     Map<TextureInfo, ? extends ReadonlyTexture2D<ContextType>> getTextures();
 

@@ -287,7 +287,7 @@ public abstract class SpecularFitProcess
                         try (SpecularFitOptimizable<ContextType> blockOptimization = SpecularFitOptimizable.createNew(
                             // Basis copy technically needed here since the GPU indices for basis functions
                             // could technically be modified while setting up the new instance of the basis resources.
-                            blockResources, resourcesWrapper, basis.copy(), blockResolution,
+                            blockResources, blockResources.getTextureResources(), resourcesWrapper, basis.copy(), blockResolution,
                             settings.getNormalOptimizationSettings(), settings.shouldIncludeConstantTerm()))
                         {
                             if (inputNormalMapFile != null)
