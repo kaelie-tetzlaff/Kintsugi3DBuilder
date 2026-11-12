@@ -71,9 +71,9 @@ public class ObservableEnvironmentModel extends EnvironmentModelFromSettings
         if (newFile == null)
         {
             loadedEnvironmentMapImage.setValue(null);
-            lastEnvironmentMapTime = 0;
+            setLastEnvironmentMapTime(0);
         }
-        else if (!Objects.equals(oldFile, newFile) || newFile.lastModified() != lastEnvironmentMapTime)
+        else if (!Objects.equals(oldFile, newFile) || newFile.lastModified() != getLastEnvironmentMapTime())
         {
             loadEnvironmentMap(newFile);
         }
@@ -81,7 +81,7 @@ public class ObservableEnvironmentModel extends EnvironmentModelFromSettings
 
     private final ChangeListener<File> bpFileChange = (observable, oldFile, newFile) ->
     {
-        if (newFile != null && (!Objects.equals(oldFile, newFile) || newFile.lastModified() != lastBackplateTime))
+        if (newFile != null && (!Objects.equals(oldFile, newFile) || newFile.lastModified() != getLastBackplateTime()))
         {
             loadBackplate(newFile);
         }

@@ -43,13 +43,13 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
 
     static final class Parameters
     {
-        final int multisamples;
-        final int format;
-        final boolean fixedMultisampleLocations;
-        final boolean useLinearFiltering;
-        final boolean useMipmaps;
-        final int maxMipmapLevel;
-        final float maxAnisotropy;
+        public final int multisamples;
+        public final int format;
+        public final boolean fixedMultisampleLocations;
+        public final boolean useLinearFiltering;
+        public final boolean useMipmaps;
+        public final int maxMipmapLevel;
+        public final float maxAnisotropy;
 
         /**
          * Default constructor for a null texture
@@ -76,11 +76,11 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         }
     }
 
-    final Parameters parameters;
+    public final Parameters parameters;
 
+    public final int precision;
     private final ColorFormat colorFormat;
     private final CompressionFormat compressionFormat;
-    final int precision;
     private final TextureType textureType;
 
     private OpenGLTexture(OpenGLContext context, int openGLTextureTarget, ColorFormat colorFormat,

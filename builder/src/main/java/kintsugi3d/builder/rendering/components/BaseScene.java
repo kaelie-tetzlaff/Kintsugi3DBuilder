@@ -30,17 +30,18 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.IntStream;
 
 public class BaseScene<ContextType extends Context<ContextType>> extends LitContent<ContextType>
 {
     private static final Logger LOG = LoggerFactory.getLogger(BaseScene.class);
 
-    protected final ContextType context;
-    protected final SceneModel sceneModel;
-    protected final SceneViewportModel sceneViewportModel;
-    protected final Collection<RenderedComponent<ContextType>> components = new ArrayList<>(5);
-    protected final ReadonlyImageBasedGraphicsResources<ContextType> resources;
+    private final ContextType context;
+    private final SceneModel sceneModel;
+    private final SceneViewportModel sceneViewportModel;
+    private final Collection<RenderedComponent<ContextType>> components = new ArrayList<>(5);
+    private final ReadonlyImageBasedGraphicsResources<ContextType> resources;
     private RenderingSubject<ContextType> renderingSubject;
 
     public BaseScene(ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel, SceneViewportModel sceneViewportModel)
@@ -145,5 +146,35 @@ public class BaseScene<ContextType extends Context<ContextType>> extends LitCont
         }
 
         components.clear();
+    }
+
+    protected ContextType getContext()
+    {
+        return context;
+    }
+
+    protected SceneModel getSceneModel()
+    {
+        return sceneModel;
+    }
+
+    protected SceneViewportModel getSceneViewportModel()
+    {
+        return sceneViewportModel;
+    }
+
+    protected Collection<RenderedComponent<ContextType>> getComponents()
+    {
+        return Collections.unmodifiableCollection(components);
+    }
+
+    protected void addComponent(RenderedComponent<ContextType> component)
+    {
+        components.add(component);
+    }
+
+    protected ReadonlyImageBasedGraphicsResources<ContextType> getResources()
+    {
+        return resources;
     }
 }

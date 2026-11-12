@@ -85,7 +85,8 @@ public class SettingsEnvironmentSceneController implements Initializable
 
     private ObservableEnvironmentModel environmentMapModel;
 
-    final ChangeListener<ObservableEnvironmentSettings> changeListener = (observable, oldValue, newValue) ->
+    private final ChangeListener<ObservableEnvironmentSettings> changeListener =
+        (observable, oldValue, newValue) ->
     {
         if (oldValue != null)
         {
@@ -300,6 +301,11 @@ public class SettingsEnvironmentSceneController implements Initializable
     public void setEnvironmentMapModel(ObservableEnvironmentModel environmentMapModel)
     {
         this.environmentMapModel = environmentMapModel;
+    }
+
+    public ChangeListener<ObservableEnvironmentSettings> getChangeListener()
+    {
+        return changeListener;
     }
 }
 

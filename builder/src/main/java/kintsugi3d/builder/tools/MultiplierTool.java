@@ -32,7 +32,7 @@ public final class MultiplierTool implements KeyPressTool
         UP_SMALL(SMALL_FACTOR),
         DOWN_SMALL(1 / SMALL_FACTOR);
 
-        private final float factor;
+        public final float factor;
 
         Type(float factor)
         {

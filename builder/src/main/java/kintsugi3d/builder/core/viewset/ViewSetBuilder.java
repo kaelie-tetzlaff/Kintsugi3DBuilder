@@ -122,7 +122,7 @@ public final class ViewSetBuilder
         View currentView = new View(cameraPose, cameraPose.quickInverse(0.002f),
             cameraProjectionIndex, lightIndex, result.getGPUBufferSize(),
             imageFile, maskFile, new ViewRMSE(), result);
-        currentView.isEnabled = enabled;
+        currentView.setEnabled(enabled);
         result.addView(currentView);
 
         // Reset maskFile to null for the next camera pose.
@@ -369,7 +369,7 @@ public final class ViewSetBuilder
         }
 
         // Fill with default lights if not specified
-        int maxLightIndex = views.stream().mapToInt(data -> data.lightIndex).max().orElse(1);
+        int maxLightIndex = views.stream().mapToInt(View::getLightIndex).max().orElse(1);
         for (int i = getNextLightIndex(); i <= maxLightIndex; i = getNextLightIndex())
         {
             result.addLight(Vector3.ZERO, Vector3.ZERO);
@@ -409,7 +409,7 @@ public final class ViewSetBuilder
 
         for (View view : viewSetDataList)
         {
-            Vector4 position = view.cameraPoseInverse.getColumn(3);
+            Vector4 position = view.getCameraPoseInverse().getColumn(3);
             minX = Math.min(minX, position.x);
             minY = Math.min(minY, position.y);
             minZ = Math.min(minZ, position.z);

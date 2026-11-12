@@ -36,9 +36,9 @@ public class Potato
 
     private static class Bump
     {
-        private Vector3 direction;
-        private float size;
-        private float height;
+        Vector3 direction;
+        float size;
+        float height;
     }
 
     private double computeR(Vector3 direction)

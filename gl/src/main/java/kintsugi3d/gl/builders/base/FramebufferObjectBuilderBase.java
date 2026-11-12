@@ -22,9 +22,9 @@ import java.util.List;
 
 public abstract class FramebufferObjectBuilderBase<ContextType extends Context<ContextType>> implements FramebufferObjectBuilder<ContextType>
 {
-    protected final ContextType context;
-    protected final int width;
-    protected final int height;
+    private final ContextType context;
+    private final int width;
+    private final int height;
 
     private final List<TextureBuilder<ContextType, ? extends ReadonlyTexture2D<ContextType>>> colorAttachmentFormats = new ArrayList<>(8);
 
@@ -277,5 +277,20 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
         {
             throw new IllegalStateException("A depth or stencil attachment already exists.");
         }
+    }
+
+    protected ContextType getContext()
+    {
+        return context;
+    }
+
+    protected int getWidth()
+    {
+        return width;
+    }
+
+    protected int getHeight()
+    {
+        return height;
     }
 }

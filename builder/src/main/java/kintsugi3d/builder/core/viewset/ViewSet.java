@@ -297,7 +297,7 @@ public final class ViewSet implements ReadonlyViewSet
                     {
                         for (int row = 0; row < 4; row++) // row
                         {
-                            cameraPoseData.set(view.getGPUViewIndex(), d, view.cameraPose.get(row, col));
+                            cameraPoseData.set(view.getGPUViewIndex(), d, view.getCameraPose().get(row, col));
                             d++;
                         }
                     }
@@ -356,7 +356,7 @@ public final class ViewSet implements ReadonlyViewSet
                 int[] indexArray = new int[gpuBufferSize];
                 for (View view : views.values())
                 {
-                    indexArray[view.gpuViewIndex] = view.cameraProjectionIndex;
+                    indexArray[view.getGPUViewIndex()] = view.getCameraProjectionIndex();
                 }
                 return NativeVectorBufferFactory.getInstance().createFromIntArray(false, 1, gpuBufferSize, indexArray);
             }
@@ -429,7 +429,7 @@ public final class ViewSet implements ReadonlyViewSet
                 int[] indexArray = new int[gpuBufferSize];
                 for (View view : views.values())
                 {
-                    indexArray[view.gpuViewIndex] = view.lightIndex;
+                    indexArray[view.getGPUViewIndex()] = view.getLightIndex();
                 }
                 return NativeVectorBufferFactory.getInstance().createFromIntArray(false, 1, gpuBufferSize, indexArray);
             }
@@ -580,7 +580,7 @@ public final class ViewSet implements ReadonlyViewSet
         View view = findViewByName(image.getName());
         if (view != null)
         {
-            setViewEnabled(image, !view.isEnabled);
+            setViewEnabled(image, !view.isEnabled());
         }
     }
 
@@ -588,21 +588,21 @@ public final class ViewSet implements ReadonlyViewSet
     {
         View view = findViewByName(image.getName());
 
-        if (view.isEnabled) // Currently enabled, so disable camera
+        if (view.isEnabled()) // Currently enabled, so disable camera
         {
-            view.isEnabled = isEnabled;
+            view.setEnabled(isEnabled);
             if (!isEnabled)
             {
-                viewsObservable.notify(new MappedChange<>(Type.MODIFIED, view.imageFile, view));
+                viewsObservable.notify(new MappedChange<>(Type.MODIFIED, view.getImageFile(), view));
             }
             // Else still enabled so nothing needs to change
         }
         else // Currently disabled, so enable camera
         {
-            view.isEnabled = isEnabled;
+            view.setEnabled(isEnabled);
             if (isEnabled)
             {
-                viewsObservable.notify(new MappedChange<>(Type.MODIFIED, view.imageFile, view));
+                viewsObservable.notify(new MappedChange<>(Type.MODIFIED, view.getImageFile(), view));
             }
             // Else still disabled so nothing needs to change
         }
@@ -616,7 +616,7 @@ public final class ViewSet implements ReadonlyViewSet
             for (File image : images)
             {
                 View view = findViewByName(image.getName());
-                view.isEnabled = isEnabled;
+                view.setEnabled(isEnabled);
                 imageFilesModified.put(view.getImageFile(), view);
             }
         }
@@ -1058,7 +1058,7 @@ public final class ViewSet implements ReadonlyViewSet
             }
         }
 
-        viewsObservable.notify(new MappedChange<>(Type.ADDED, view.imageFile, view));
+        viewsObservable.notify(new MappedChange<>(Type.ADDED, view.getImageFile(), view));
     }
 
     public void removeViewByImageFilename(File image)
@@ -1070,7 +1070,7 @@ public final class ViewSet implements ReadonlyViewSet
             removed = views.remove(image);
 
             // Check to see if we just removed the tone calibration primary or orientation views.
-            if (primaryView != null && Objects.equals(image.getName(), primaryView.imageFile.getName()))
+            if (primaryView != null && Objects.equals(image.getName(), primaryView.getImageFile().getName()))
             {
                 // Primary view should always be non-null, if possible.
                 // NOTE: This will not automatically re-calculate light intensity;
@@ -1081,7 +1081,7 @@ public final class ViewSet implements ReadonlyViewSet
                 primaryView = views.isEmpty() ? null : getRepresentativeView();
             }
 
-            if (orientationView != null && Objects.equals(image.getName(), orientationView.imageFile.getName()))
+            if (orientationView != null && Objects.equals(image.getName(), orientationView.getImageFile().getName()))
             {
                 // Orientation view can be null.
                 // TODO notify renderer that the orientation has changed.
@@ -1091,7 +1091,7 @@ public final class ViewSet implements ReadonlyViewSet
 
         if (removed != null)
         {
-            viewsObservable.notify(new MappedChange<>(Type.REMOVED, removed.imageFile, removed));
+            viewsObservable.notify(new MappedChange<>(Type.REMOVED, removed.getImageFile(), removed));
         }
     }
 
@@ -1260,7 +1260,7 @@ public final class ViewSet implements ReadonlyViewSet
             // Reassign view indices for smaller data set.
             for (int i = 0; i < sortedViews.size(); ++i)
             {
-                sortedViews.get(i).gpuViewIndex = i;
+                sortedViews.get(i).setGpuViewIndex(i);
             }
             gpuBufferSize = views.size();
         }
@@ -1447,7 +1447,7 @@ public final class ViewSet implements ReadonlyViewSet
                 }
 
                 // Remove if no mask file was found, otherwise overwrite based on the file that was found
-                view.maskFile = maskFile;
+                view.setMaskFile(maskFile);
             }
         }
     }

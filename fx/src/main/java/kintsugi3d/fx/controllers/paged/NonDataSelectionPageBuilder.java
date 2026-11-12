@@ -27,7 +27,7 @@ public class NonDataSelectionPageBuilder<FinishType> extends SelectionPageBuilde
         SimpleNonDataSelectionPage<ControllerType> nextPage = frameController.createPage(
             SELECTION_PAGE_FXML, SimpleNonDataSelectionPage<ControllerType>::new, controllerConstructorOverride);
         nextPage.setPrompt(subprompt);
-        this.page.addChoice(choiceLabel, nextPage);
+        this.getPage().addChoice(choiceLabel, nextPage);
         return new NonDataSelectionPageBuilder<>(nextPage, frameController, finisher);
     }
 

@@ -29,7 +29,7 @@ import static org.lwjgl.opengl.GL31.*;
 
 final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
 {
-    final OpenGLContext context;
+    private final OpenGLContext context;
     private final Map<String, Object> defines;
 
     private int programId;

@@ -19,11 +19,8 @@ import static org.lwjgl.opengl.GL31.*;
 
 public class OpenGLContextState implements ContextState
 {
-    OpenGLContext context;
-
-    OpenGLContextState(OpenGLContext context)
+    OpenGLContextState()
     {
-        this.context = context;
     }
 
     @Override

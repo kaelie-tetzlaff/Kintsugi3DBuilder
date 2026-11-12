@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 
 public class SelectionPageBuilder<T, FinishType> extends PageBuilder<FinishType>
 {
-    final SelectionPage<T> page;
+    private final SelectionPage<T> page;
 
     SelectionPageBuilder(SelectionPage<T> page, PageFrameController frameController, Supplier<FinishType> finisher)
     {

@@ -52,7 +52,7 @@ public class RootEnvironmentSceneController
         this.projectModel = injectedProjectModel;
 
         environmentListView.setItems(projectModel.getEnvironmentList());
-        environmentListView.getSelectionModel().selectedItemProperty().addListener(settingsController.changeListener);
+        environmentListView.getSelectionModel().selectedItemProperty().addListener(settingsController.getChangeListener());
 
         settingsController.setEnvironmentMapModel(environmentMapModel);
 

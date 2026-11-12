@@ -81,7 +81,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
                 }
             }
 
-            return new OpenGLFramebufferObject(super.context, super.width, super.height, colorAttachments, depthAttachment, stencilAttachment, depthStencilAttachment);
+            return new OpenGLFramebufferObject(super.getContext(), super.getWidth(), super.getHeight(), colorAttachments, depthAttachment, stencilAttachment, depthStencilAttachment);
         }
     }
 

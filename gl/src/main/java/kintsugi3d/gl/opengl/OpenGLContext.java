@@ -46,7 +46,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
     OpenGLContext(long handle)
     {
         super(handle);
-        this.state = new OpenGLContextState(this);
+        this.state = new OpenGLContextState();
         this.textureFactory = new OpenGLTextureFactory(this);
         this.textureBindings = new HashMap<>(48);
         this.uniformBufferBindings = new HashMap<>(24);
