@@ -17,7 +17,7 @@ import kintsugi3d.gl.core.Texture;
 
 public abstract class TextureBuilderBase<ContextType extends Context<ContextType>, TextureType extends Texture<ContextType>> implements TextureBuilder<ContextType, TextureType>
 {
-    protected final ContextType context;
+    private final ContextType context;
     private int multisamples = 1;
     private boolean fixedMultisampleLocations = true;
     private boolean mipmapsEnabled = false;
@@ -94,5 +94,10 @@ public abstract class TextureBuilderBase<ContextType extends Context<ContextType
     {
         this.maxAnisotropy = maxAnisotropy;
         return this;
+    }
+
+    public ContextType getContext()
+    {
+        return context;
     }
 }

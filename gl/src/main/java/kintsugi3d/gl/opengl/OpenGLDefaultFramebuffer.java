@@ -28,7 +28,7 @@ class OpenGLDefaultFramebuffer extends OpenGLFramebuffer implements DoubleFrameb
     @Override
     public FramebufferSize getSize()
     {
-        return this.context.getDefaultFramebufferSize();
+        return this.getContext().getDefaultFramebufferSize();
     }
 
     @Override
@@ -40,7 +40,7 @@ class OpenGLDefaultFramebuffer extends OpenGLFramebuffer implements DoubleFrameb
     @Override
     public void swapBuffers()
     {
-        this.context.swapDefaultFramebuffer();
+        this.getContext().swapDefaultFramebuffer();
     }
 
     @Override

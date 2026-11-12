@@ -50,16 +50,16 @@ public class GroundPlane<ContextType extends Context<ContextType>> extends Stand
     @Override
     public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
-        if (sceneModel.getLightingModel().isGroundPlaneEnabled())
+        if (getSceneModel().getLightingModel().isGroundPlaneEnabled())
         {
-            Matrix4 model = sceneModel.getUnscaledMatrix(Matrix4.translate(new Vector3(0, sceneModel.getLightingModel().getGroundPlaneHeight(), 0)))
+            Matrix4 model = getSceneModel().getUnscaledMatrix(Matrix4.translate(new Vector3(0, getSceneModel().getLightingModel().getGroundPlaneHeight(), 0)))
                 .times(Matrix4.rotateX(Math.PI / 2))
-                .times(Matrix4.scale(sceneModel.getScale() * sceneModel.getLightingModel().getGroundPlaneSize()));
+                .times(Matrix4.scale(getSceneModel().getScale() * getSceneModel().getLightingModel().getGroundPlaneSize()));
 
             setupShader(cameraViewport, model);
 
             getDrawable().program().setUniform("defaultDiffuseColor",
-                sceneModel.getLightingModel().getGroundPlaneColor().applyOperator(x -> Math.pow(x, 2.2)));
+                getSceneModel().getLightingModel().getGroundPlaneColor().applyOperator(x -> Math.pow(x, 2.2)));
 
             // Disable back face culling since the plane is one-sided.
             getContext().getState().disableBackFaceCulling();

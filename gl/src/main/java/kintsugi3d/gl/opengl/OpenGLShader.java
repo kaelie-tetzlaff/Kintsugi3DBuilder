@@ -35,7 +35,7 @@ class OpenGLShader implements Shader<OpenGLContext>
     private static final Logger LOG = LoggerFactory.getLogger(OpenGLShader.class);
     private static final Pattern QUOTATION_MARK_PATTERN = Pattern.compile("['\"]");
     private static final Pattern WHITESPACE_PATTERN = Pattern.compile("\\s");
-    protected final OpenGLContext context;
+    private final OpenGLContext context;
 
     private int shaderId;
     private boolean live = true;

@@ -141,7 +141,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
             if (this.isInternalFormatCompressed())
             {
                 return new OpenGLCubemap(
-                        this.context,
+                    this.getContext(),
                         this.textureTarget,
                         this.getInternalCompressionFormat(),
                         this.faceSize,
@@ -150,7 +150,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
             else
             {
                 return new OpenGLCubemap(
-                        this.context,
+                    this.getContext(),
                         this.textureTarget,
                         this.getInternalColorFormat(),
                         this.faceSize,
@@ -181,7 +181,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
             opt.maxAnisotropy = this.getMaxAnisotropy();
 
             return new OpenGLCubemap(
-                    this.context,
+                this.getContext(),
                     this.textureTarget,
                     TextureType.DEPTH,
                     this.getInternalPrecision(),
@@ -212,7 +212,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
             opt.maxAnisotropy = this.getMaxAnisotropy();
 
             return new OpenGLCubemap(
-                    this.context,
+                this.getContext(),
                     this.textureTarget,
                     TextureType.STENCIL,
                     this.getInternalPrecision(),
@@ -243,7 +243,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
             opt.maxAnisotropy = this.getMaxAnisotropy();
 
             return new OpenGLCubemap(
-                    this.context,
+                this.getContext(),
                     this.textureTarget,
                     this.isFloatingPointEnabled() ? TextureType.FLOATING_POINT_DEPTH_STENCIL : TextureType.DEPTH_STENCIL,
                     this.isFloatingPointEnabled() ? 40 : 32,
@@ -507,7 +507,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
             @Override
             public OpenGLContext getContext()
             {
-                return context;
+                return OpenGLCubemap.this.getContext();
             }
 
             @Override

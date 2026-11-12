@@ -48,7 +48,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
         @Override
         public OpenGLProgramObject createProgram() throws IOException
         {
-            OpenGLProgramObject program = new OpenGLProgramObject(this.context, this.getDefines());
+            OpenGLProgramObject program = new OpenGLProgramObject(this.getContext(), this.getDefines());
             Iterable<Shader<OpenGLContext>> compiledShaders = this.compileShaders();
             for (Shader<OpenGLContext> shader : compiledShaders)
             {

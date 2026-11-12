@@ -54,7 +54,7 @@ final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLCon
             if (this.isInternalFormatCompressed())
             {
                 return new OpenGLTexture1D(
-                        this.context,
+                    this.getContext(),
                         this.textureTarget,
                         this.getInternalCompressionFormat(),
                         this.width,
@@ -69,7 +69,7 @@ final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLCon
             else
             {
                 return new OpenGLTexture1D(
-                        this.context,
+                    this.getContext(),
                         this.textureTarget,
                         this.getInternalColorFormat(),
                         this.width,

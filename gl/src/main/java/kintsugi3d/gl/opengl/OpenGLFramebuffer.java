@@ -22,7 +22,7 @@ import static org.lwjgl.opengl.GL30.*;
 
 abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
 {
-    protected final OpenGLContext context;
+    private final OpenGLContext context;
 
     OpenGLFramebuffer(OpenGLContext context)
     {
@@ -37,13 +37,6 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
 
     abstract class ContentsBase implements FramebufferDrawContents<OpenGLContext>, FramebufferReadContents<OpenGLContext>
     {
-        private final OpenGLContext context;
-
-        protected ContentsBase()
-        {
-            this.context = OpenGLFramebuffer.this.context;
-        }
-
         abstract int getId();
 
         @Override

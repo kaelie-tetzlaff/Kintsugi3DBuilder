@@ -24,11 +24,11 @@ public class NonDataSelectionPageBuilder<FinishType> extends SelectionPageBuilde
     public <ControllerType extends SelectionPageController<Object>>
     NonDataSelectionPageBuilder<FinishType> choiceSubSelect(String choiceLabel, String subprompt, Supplier<ControllerType> controllerConstructorOverride)
     {
-        SimpleNonDataSelectionPage<ControllerType> nextPage = frameController.createPage(
+        SimpleNonDataSelectionPage<ControllerType> nextPage = getFrameController().createPage(
             SELECTION_PAGE_FXML, SimpleNonDataSelectionPage<ControllerType>::new, controllerConstructorOverride);
         nextPage.setPrompt(subprompt);
         this.getPage().addChoice(choiceLabel, nextPage);
-        return new NonDataSelectionPageBuilder<>(nextPage, frameController, finisher);
+        return new NonDataSelectionPageBuilder<>(nextPage, getFrameController(), getFinisher());
     }
 
     @Override

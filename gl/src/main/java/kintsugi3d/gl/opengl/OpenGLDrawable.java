@@ -31,7 +31,7 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
         void set();
     }
 
-    protected final OpenGLContext context;
+    private final OpenGLContext context;
 
     private final OpenGLProgramObject program;
     private final OpenGLVertexArray vao;

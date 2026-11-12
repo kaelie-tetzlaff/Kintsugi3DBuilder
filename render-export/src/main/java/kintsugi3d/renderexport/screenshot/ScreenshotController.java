@@ -19,7 +19,6 @@ import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.io.RecentProjects;
 import kintsugi3d.builder.rendering.Rendering;
 import kintsugi3d.builder.util.FXWindowHelper;
-import kintsugi3d.renderexport.screenshot.ScreenshotRequest.Builder;
 
 import java.io.File;
 
@@ -68,7 +67,7 @@ public class ScreenshotController
         }
 
         Rendering.getRequestQueue().addGraphicsRequest(
-            new Builder()
+            ScreenshotRequest.getBuilder()
                 .setWidth(Integer.parseInt(widthTextField.getText()))
                 .setHeight(Integer.parseInt(heightTextField.getText()))
                 .setExportFile(new File(exportFileField.getText()))

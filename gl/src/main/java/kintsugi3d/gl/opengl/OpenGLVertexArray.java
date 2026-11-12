@@ -19,7 +19,7 @@ import static org.lwjgl.opengl.GL30.*;
 
 class OpenGLVertexArray implements ManagedResource
 {
-    protected final OpenGLContext context;
+    private final OpenGLContext context;
 
     private final boolean usesIndexing = false;
     private final int vaoId;
@@ -95,5 +95,10 @@ class OpenGLVertexArray implements ManagedResource
             OpenGLContext.errorCheck();
             live = false;
         }
+    }
+
+    public OpenGLContext getContext()
+    {
+        return context;
     }
 }

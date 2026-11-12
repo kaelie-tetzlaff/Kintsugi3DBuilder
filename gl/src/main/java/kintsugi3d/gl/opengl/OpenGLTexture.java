@@ -33,13 +33,12 @@ import static org.lwjgl.opengl.GL44.*;
 
 abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebufferAttachment, ManagedResource
 {
-    protected final OpenGLContext context;
-
+    private final OpenGLContext context;
     private final int textureId;
-    private boolean live = true;
+    private final int openGLTextureTarget;
 
-    protected final int openGLTextureTarget;
-    protected boolean staleMipmaps = false;
+    private boolean live = true;
+    private boolean staleMipmaps = false;
 
     static final class Parameters
     {
@@ -163,6 +162,11 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     int getTextureId()
     {
         return this.textureId;
+    }
+
+    void invalidateMipmaps()
+    {
+        this.staleMipmaps = true;
     }
 
     void bindToTextureUnit(int textureUnitIndex)
