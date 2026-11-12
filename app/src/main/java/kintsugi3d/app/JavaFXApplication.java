@@ -84,7 +84,7 @@ public class JavaFXApplication extends Application
 
     public static void setArgs(String[] args)
     {
-        arguments = args;
+        arguments = args.clone();
     }
 
     public static boolean isInitialized()

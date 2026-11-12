@@ -371,8 +371,8 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
     @Override
     public void setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
     {
-        this.newLinearLuminanceValues = linearLuminanceValues;
-        this.newEncodedLuminanceValues = encodedLuminanceValues;
+        this.newLinearLuminanceValues = linearLuminanceValues.clone();
+        this.newEncodedLuminanceValues = encodedLuminanceValues.clone();
         this.newLuminanceEncodingDataAvailable = true;
     }
 

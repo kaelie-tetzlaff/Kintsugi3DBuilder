@@ -114,7 +114,7 @@ public final class RecentLogMessageAppender extends LogMessageAppenderBase
     @Override
     public ObservableList<LogMessage> getMessages()
     {
-        return messages;
+        return FXCollections.unmodifiableObservableList(messages);
     }
 
 }

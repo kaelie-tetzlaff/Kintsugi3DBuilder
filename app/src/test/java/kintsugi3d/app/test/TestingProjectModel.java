@@ -78,24 +78,28 @@ public class TestingProjectModel extends ProjectModelBase<SerializableCameraSett
         });
     }
 
+    @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     @Override
     public List<SerializableCameraSettings> getCameraList()
     {
         return cameraList;
     }
 
+    @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     @Override
     public List<SerializableEnvironmentSettings> getEnvironmentList()
     {
         return environmentList;
     }
 
+    @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     @Override
     public List<SerializableLightGroupSettings<SerializableLightSettings>> getLightGroupList()
     {
         return lightList;
     }
 
+    @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     @Override
     public List<SerializableObjectPoseSettings> getObjectPoseList()
     {

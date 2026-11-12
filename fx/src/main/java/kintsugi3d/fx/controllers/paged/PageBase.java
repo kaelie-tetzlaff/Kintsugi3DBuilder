@@ -16,6 +16,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -91,7 +92,7 @@ abstract class PageBase<InType, OutType, ControllerType extends PageController<?
     @Override
     public Map<String, Page<? super OutType, ?>> getFallbackPages()
     {
-        return fallbackPages;
+        return Collections.unmodifiableMap(fallbackPages);
     }
 
     @Override

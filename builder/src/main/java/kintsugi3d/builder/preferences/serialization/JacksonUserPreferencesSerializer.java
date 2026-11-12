@@ -21,6 +21,7 @@ import kintsugi3d.builder.util.ApplicationFolders;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class JacksonUserPreferencesSerializer implements UserPreferencesSerializer
@@ -71,7 +72,7 @@ public class JacksonUserPreferencesSerializer implements UserPreferencesSerializ
     @Override
     public List<Exception> getStartupExceptions()
     {
-        return startupExceptions;
+        return Collections.unmodifiableList(startupExceptions);
     }
 
     public static File getPreferencesFile()

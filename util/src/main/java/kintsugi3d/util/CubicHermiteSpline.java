@@ -11,6 +11,7 @@
 
 package kintsugi3d.util;
 
+import java.util.Arrays;
 import java.util.function.DoubleUnaryOperator;
 
 public class CubicHermiteSpline implements DoubleUnaryOperator
@@ -31,14 +32,11 @@ public class CubicHermiteSpline implements DoubleUnaryOperator
             throw new IllegalArgumentException("Input arrays must have length of at least 2.");
         }
 
-        this.x = x;
-        this.y = y;
+        this.x = x.clone();
+        this.y = y.clone();
 
         double[] d = new double[x.length-1];
-        for (int k = 0; k < d.length; k++)
-        {
-            d[k] = (y[k+1] - y[k]) / (x[k+1] - x[k]);
-        }
+        Arrays.setAll(d, k -> (y[k + 1] - y[k]) / (x[k + 1] - x[k]));
 
         this.m = new double[x.length];
         m[0] = d[0];
@@ -94,9 +92,9 @@ public class CubicHermiteSpline implements DoubleUnaryOperator
             throw new IllegalArgumentException("Input arrays must have length of at least 2.");
         }
 
-        this.x = x;
-        this.y = y;
-        this.m = m;
+        this.x = x.clone();
+        this.y = y.clone();
+        this.m = m.clone();
     }
 
     @Override

@@ -11,6 +11,7 @@
 
 package kintsugi3d.builder.io.gltf;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ public class TextureExtras
 {
     private Integer baseRes;
 
-    private final Map<Integer, Integer> lods = new HashMap<>();
+    private final Map<Integer, Integer> lods = new HashMap<>(1);
 
     public void setLodImageIndex(int resolution, int index)
     {
@@ -32,7 +33,7 @@ public class TextureExtras
 
     public Map<Integer, Integer> getLods()
     {
-        return lods;
+        return Collections.unmodifiableMap(lods);
     }
 
     public Integer getBaseRes()

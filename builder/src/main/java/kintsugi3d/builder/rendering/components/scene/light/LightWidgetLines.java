@@ -50,7 +50,7 @@ public class LightWidgetLines<ContextType extends Context<ContextType>> implemen
 
     public void refreshWidgetInfo(LightWidgetInfo[] widgetInfo)
     {
-        this.widgetInfo = widgetInfo;
+        this.widgetInfo = widgetInfo.clone();
     }
 
     @Override

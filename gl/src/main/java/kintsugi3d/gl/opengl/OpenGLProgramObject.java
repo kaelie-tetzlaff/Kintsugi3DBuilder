@@ -123,7 +123,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     @Override
     public Map<String, Object> getDefines()
     {
-        return defines;
+        return Collections.unmodifiableMap(defines);
     }
 
     @Override

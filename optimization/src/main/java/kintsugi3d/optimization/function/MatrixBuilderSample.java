@@ -68,6 +68,7 @@ public class MatrixBuilderSample
      */
     private final double[] observed;
 
+    @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     public MatrixBuilderSample(double actual, BasisFunctions basisLibrary, double analytic, double sampleWeight,
                                IntToDoubleFunction weightByInstance, double... observed)
     {

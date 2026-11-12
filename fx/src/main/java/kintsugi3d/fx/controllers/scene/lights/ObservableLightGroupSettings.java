@@ -96,6 +96,7 @@ public class ObservableLightGroupSettings extends SerializableLightGroupSettings
         return lightList.get();
     }
 
+    @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     public ListProperty<ObservableLightSettings> lightListProperty()
     {
         return lightList;
