@@ -66,6 +66,10 @@ public final class MetashapeChunk
 
         //get default model id if the chunk has one
         Integer defaultModelID = null;
+
+        // TODO Figure out why NullPointException would be thrown, change to explicit null check,
+        //  and remove inspection suppression.
+        //noinspection ProhibitedExceptionCaught
         try
         {
             Element modelsElem = (Element) fullChunkDocument.getElementsByTagName("models").item(0);

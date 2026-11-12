@@ -40,10 +40,7 @@ import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.ColorArrayImage;
 import kintsugi3d.util.ImageFinder;
 import kintsugi3d.util.Potato;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,8 +51,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ImageReconstructionTests
 {
@@ -155,7 +151,7 @@ class ImageReconstructionTests
     }
 
     @BeforeEach
-    void setUp() throws Exception
+    void setUp() throws IOException
     {
         progressMonitor = new ProgressMonitorImpl();
         ViewSetDirectories directories = new ViewSetDirectories();
@@ -275,7 +271,7 @@ class ImageReconstructionTests
                 }
                 catch (IOException e)
                 {
-                    throw new RuntimeException(e);
+                    throw new UncheckedIOException(e);
                 }
             };
     }
@@ -831,7 +827,7 @@ class ImageReconstructionTests
         }
         catch (IOException e)
         {
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -996,7 +992,7 @@ class ImageReconstructionTests
                             }
                             catch (IOException e)
                             {
-                                throw new RuntimeException(e);
+                                throw new UncheckedIOException(e);
                             }
                         }
 
@@ -1004,9 +1000,13 @@ class ImageReconstructionTests
                     });
             }
         }
-        catch (UserCancellationException | IOException e)
+        catch (UserCancellationException e)
         {
-            throw new RuntimeException(e);
+            fail("Unexpected user cancellation.", e);
+        }
+        catch (IOException e)
+        {
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -1033,7 +1033,7 @@ class ImageReconstructionTests
         }
     }
 
-    private void testFitVSET(File viewSetFile, Consumer<ReadonlyColorAppearanceRMSE> validation, String testName) throws Exception
+    private void testFitVSET(File viewSetFile, Consumer<ReadonlyColorAppearanceRMSE> validation, String testName) throws MeshImportException
     {
         LoadOptionsModel loadOptions = new SimpleLoadOptionsModel();
         loadOptions.setColorImagesRequested(false); // don't generate/load preview images; not needed for this test
@@ -1046,9 +1046,13 @@ class ImageReconstructionTests
             resources.calibrateLightIntensities();
             testFit(resources, validation, testName);
         }
-        catch (UserCancellationException | IOException e)
+        catch (UserCancellationException e)
         {
-            throw new RuntimeException(e);
+            fail("Unexpected user cancellation.", e);
+        }
+        catch (IOException e)
+        {
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -1087,7 +1091,7 @@ class ImageReconstructionTests
                     }
                     catch (IOException e)
                     {
-                        throw new RuntimeException(e);
+                        throw new UncheckedIOException(e);
                     }
                 }
 

@@ -40,10 +40,7 @@ import org.ejml.simple.SimpleMatrix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
@@ -116,7 +113,7 @@ public abstract class SpecularFitProcess
                 }
                 catch (IOException e)
                 {
-                    throw new RuntimeException(e);
+                    throw new UncheckedIOException(e);
                 }
             });
             ProgramObject<ContextType> basisModelReconstructionProgram =

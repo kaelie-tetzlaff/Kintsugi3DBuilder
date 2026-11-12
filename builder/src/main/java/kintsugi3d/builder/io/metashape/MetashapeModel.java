@@ -65,6 +65,9 @@ public final class MetashapeModel
 
     private static String findModelPath(MetashapeChunk chunk, Integer modelID)
     {
+        // TODO Figure out why NullPointException would be thrown, change to explicit null check,
+        //  and remove inspection suppression.
+        //noinspection ProhibitedExceptionCaught
         try
         {
             NodeList elems = ((Element) chunk.getFrameXML()

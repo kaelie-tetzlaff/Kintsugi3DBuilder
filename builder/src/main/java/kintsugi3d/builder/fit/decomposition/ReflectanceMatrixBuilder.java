@@ -91,7 +91,7 @@ final class ReflectanceMatrixBuilder
     {
         if (!condition)
         {
-            throw new RuntimeException(message);
+            throw new AssertionError(message);
         }
     }
 
