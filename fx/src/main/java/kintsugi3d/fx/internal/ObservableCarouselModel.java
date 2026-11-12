@@ -55,7 +55,7 @@ public class ObservableCarouselModel implements CarouselModel
     @Override
     public ObservableList<CarouselItem> getCarouselItems()
     {
-        return carouselItems;
+        return FXCollections.unmodifiableObservableList(carouselItems);
     }
 
     public double getCarouselHeight()
