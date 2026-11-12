@@ -128,7 +128,7 @@ public class MaterialExporter
             }
             else if (method.isAnnotationPresent(StandardTextureExport.class))
             {
-                supportedTextures.add(method.getAnnotation(StandardTextureExport.class).value().details.name);
+                supportedTextures.add(method.getAnnotation(StandardTextureExport.class).value().getDetails().name);
             }
         }
 
@@ -154,7 +154,7 @@ public class MaterialExporter
             else if (method.isAnnotationPresent(StandardTextureExport.class))
             {
                 StandardTextureExport annotation = method.getAnnotation(StandardTextureExport.class);
-                texName = annotation.value().details.name;
+                texName = annotation.value().getDetails().name;
                 requiresAlpha = annotation.requiresAlpha();
             }
             else
@@ -202,7 +202,7 @@ public class MaterialExporter
         {
             for (var texEntry : textures.entrySet())
             {
-                addLodsToTexture(texEntry.getValue().info, texEntry.getKey(), baseRes, minLODSize);
+                addLodsToTexture(texEntry.getValue().getInfo(), texEntry.getKey(), baseRes, minLODSize);
             }
         }
     }

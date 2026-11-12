@@ -69,10 +69,10 @@ public class BlenderExporter extends MaterialExporter
     protected void postExport()
     {
         File model = new File(outputPath, getFilename());
-        File normal = new File(outputPath, getTextureFilename(StandardTexture.NORMAL_MAP.details.name, getTextureFileFormat()));
-        File diffuse = new File(outputPath, getTextureFilename(StandardTexture.DIFFUSE_COLOR.details.name, getTextureFileFormat()));
-        File specular = new File(outputPath, getTextureFilename(StandardTexture.SPECULAR_COLOR.details.name, getTextureFileFormat()));
-        File roughness = new File(outputPath, getTextureFilename(StandardTexture.ROUGHNESS.details.name, getTextureFileFormat()));
+        File normal = new File(outputPath, getTextureFilename(StandardTexture.NORMAL_MAP.getDetails().name, getTextureFileFormat()));
+        File diffuse = new File(outputPath, getTextureFilename(StandardTexture.DIFFUSE_COLOR.getDetails().name, getTextureFileFormat()));
+        File specular = new File(outputPath, getTextureFilename(StandardTexture.SPECULAR_COLOR.getDetails().name, getTextureFileFormat()));
+        File roughness = new File(outputPath, getTextureFilename(StandardTexture.ROUGHNESS.getDetails().name, getTextureFileFormat()));
 
         // Command list for the ProcessBuilder
         List<String> command = new ArrayList<>(8);

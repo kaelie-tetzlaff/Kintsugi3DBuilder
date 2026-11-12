@@ -153,7 +153,7 @@ public interface ColorTextureReader
     default ColorList readColorListRGBA(int x, int y, int width, int height)
     {
         ColorNativeBufferList list = new ColorNativeBufferList(width * height);
-        readFloatingPointRGBA(list.buffer, x, y, width, height);
+        readFloatingPointRGBA(list.getBuffer(), x, y, width, height);
         return list;
     }
 
@@ -165,7 +165,7 @@ public interface ColorTextureReader
     default ColorList readColorListRGBA()
     {
         ColorNativeBufferList list = new ColorNativeBufferList(getWidth() * getHeight());
-        readFloatingPointRGBA(list.buffer);
+        readFloatingPointRGBA(list.getBuffer());
         return list;
     }
 

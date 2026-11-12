@@ -110,7 +110,7 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     public FramebufferObjectBuilder<ContextType> addColorAttachment(ColorAttachmentSpec builder)
     {
         this.colorAttachmentFormats.add(context.getTextureFactory().build2DColorTexture(width, height)
-                .setInternalFormat(builder.internalFormat)
+                .setInternalFormat(builder.getInternalFormat())
                 .setMultisamples(builder.getMultisamples(), builder.areMultisampleLocationsFixed())
                 .setMipmapsEnabled(builder.areMipmapsEnabled())
                 .setLinearFilteringEnabled(builder.isLinearFilteringEnabled()));

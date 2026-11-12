@@ -103,24 +103,29 @@ public class SettingsCameraSceneController implements Initializable
         });
     }
 
-    public final ChangeListener<ObservableCameraSettings> changeListener =
+    private final ChangeListener<ObservableCameraSettings> changeListener =
         (observable, oldValue, newValue) ->
+    {
+        if (oldValue != null)
         {
-            if (oldValue != null)
-            {
-                unbind(oldValue);
-            }
+            unbind(oldValue);
+        }
 
-            if (newValue != null)
-            {
-                bind(newValue);
-                setDisabled(newValue.isLocked());
-            }
-            if (newValue == null)
-            {
-                setDisabled(true);
-            }
-        };
+        if (newValue != null)
+        {
+            bind(newValue);
+            setDisabled(newValue.isLocked());
+        }
+        if (newValue == null)
+        {
+            setDisabled(true);
+        }
+    };
+
+    public ChangeListener<ObservableCameraSettings> getChangeListener()
+    {
+        return changeListener;
+    }
 
     public void setDisabled(Boolean disabled)
     {

@@ -56,7 +56,7 @@ public class CarouselController
     private double dragStartY;
     private double initialHeight;
     private boolean minimized = false;
-    private boolean dragging = false;
+    private boolean sizeLocked = true;
     private double minimizedValue;
 
     private ObservableCarouselModel carouselModel;
@@ -219,8 +219,8 @@ public class CarouselController
      */
     private void updateScrollbarVisibility()
     {
-        // Update visibility only when not dragged and content of carousel does not inside available space for it
-        if (!dragging ||
+        // Update visibility only when size is locked (i.e. not dragged) and content of carousel does not inside available space for it
+        if (sizeLocked ||
             mainBox.getParent().getScene().getWidth() - mainWindowBox.getRightTabWidth() - SCROLLBAR_BUFFER
                 <= (carouselScrollPane.getWidth() + mainWindowBox.getLeftTabWidth()))
         {
@@ -324,7 +324,7 @@ public class CarouselController
     @FXML
     public void mouseDragged(MouseEvent event)
     {
-        dragging = true;
+        sizeLocked = false;
 
         if ((resizeHandle.getCursor() == null) || !resizeHandle.getCursor().equals(Cursor.S_RESIZE))
         {
@@ -382,7 +382,7 @@ public class CarouselController
         buttonBox.setMinHeight(MINIMIZED_HEIGHT);
         buttonBox.setMaxHeight(MINIMIZED_HEIGHT);
 
-        dragging = false;
+        sizeLocked = true;
     }
 
     /**

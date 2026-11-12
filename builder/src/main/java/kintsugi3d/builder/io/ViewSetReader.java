@@ -41,7 +41,7 @@ public interface ViewSetReader
     {
         try (InputStream stream = new FileInputStream(cameraFile))
         {
-            directories.projectRoot = cameraFile.getParentFile();
+            directories.setProjectRoot(cameraFile.getParentFile());
             return readFromStream(stream, directories);
         }
     }
@@ -56,30 +56,30 @@ public interface ViewSetReader
      */
     default ViewSetBuilder readFromFile(File cameraFile, ViewSetLoadOptions loadOptions) throws Exception
     {
-        ViewSetBuilder builder = this.readFromFile(cameraFile, loadOptions.mainDirectories);
+        ViewSetBuilder builder = this.readFromFile(cameraFile, loadOptions.getMainDirectories());
 
-        if (loadOptions.disabledImages != null)
+        if (loadOptions.getDisabledImages() != null)
         {
-            builder.removeViewsByImageFilename(loadOptions.disabledImages);
+            builder.removeViewsByImageFilename(loadOptions.getDisabledImages());
         }
 
-        if (loadOptions.geometryFile != null)
+        if (loadOptions.getGeometryFile() != null)
         {
-            builder.setGeometryFile(loadOptions.geometryFile);
+            builder.setGeometryFile(loadOptions.getGeometryFile());
         }
 
-        if (loadOptions.masksDirectory != null)
+        if (loadOptions.getMasksDirectory() != null)
         {
-            builder.setMasksDirectory(loadOptions.masksDirectory);
+            builder.setMasksDirectory(loadOptions.getMasksDirectory());
         }
 
         // Set even if orientationViewName is null (to use default orientation in that case).
-        builder.setOrientationViewByName(loadOptions.orientationViewName)
-            .setOrientationViewRotation(loadOptions.orientationViewRotation);
+        builder.setOrientationViewByName(loadOptions.getOrientationViewName())
+            .setOrientationViewRotation(loadOptions.getOrientationViewRotation());
 
-        if (loadOptions.uuid != null)
+        if (loadOptions.getUUID() != null)
         {
-            builder.setUUID(loadOptions.uuid);
+            builder.setUUID(loadOptions.getUUID());
         }
 
         return builder;

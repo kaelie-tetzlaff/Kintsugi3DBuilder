@@ -54,14 +54,14 @@ public final class ViewSetReaderFromVSET implements ViewSetReader
     @Override
     public ViewSetBuilder readFromStream(InputStream stream, ViewSetDirectories directories)
     {
-        File root = directories.projectRoot;
-        File supportingFilesDirectory = directories.supportingFilesDirectory;
-        boolean needsUndistort = directories.fullResImagesNeedUndistort;
+        File root = directories.getProjectRoot();
+        File supportingFilesDirectory = directories.getSupportingFilesDirectory();
+        boolean needsUndistort = directories.isFullResImagesNeedUndistort();
 
         ViewSetBuilder builder = ViewSet.getBuilder(root, supportingFilesDirectory, 128);
 
         // Set default full res image directory in case it's not specified in the VSET file (could also be null).
-        builder.setFullResImageDirectory(directories.fullResImageDirectory);
+        builder.setFullResImageDirectory(directories.getFullResImageDirectory());
 
         List<Double> linearLuminanceList = new ArrayList<>(8);
         List<Byte> encodedLuminanceList = new ArrayList<>(8);
@@ -434,9 +434,9 @@ public final class ViewSetReaderFromVSET implements ViewSetReader
     {
         // Use root directory as supporting files directory
         ViewSetDirectories directories = new ViewSetDirectories();
-        directories.projectRoot = root;
-        directories.supportingFilesDirectory = root;
-        directories.fullResImagesNeedUndistort = true;
+        directories.setProjectRoot(root);
+        directories.setSupportingFilesDirectory(root);
+        directories.setFullResImagesNeedUndistort(true);
         return readFromStream(stream, directories);
     }
 
@@ -454,9 +454,9 @@ public final class ViewSetReaderFromVSET implements ViewSetReader
         try (InputStream stream = new FileInputStream(file))
         {
             ViewSetDirectories directories = new ViewSetDirectories();
-            directories.projectRoot = file.getParentFile();
-            directories.supportingFilesDirectory = supportingFilesDirectory;
-            directories.fullResImagesNeedUndistort = true;
+            directories.setProjectRoot(file.getParentFile());
+            directories.setSupportingFilesDirectory(supportingFilesDirectory);
+            directories.setFullResImagesNeedUndistort(true);
             return readFromStream(stream, directories);
         }
     }

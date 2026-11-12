@@ -108,9 +108,9 @@ public abstract class USDZExporter extends MaterialExporter
         command.add("--format");
         command.add(getTextureFileFormat());
         command.add("--normal");
-        command.add(new File(tempPath, getTextureFilename(StandardTexture.NORMAL_MAP.details.name, getTextureFileFormat())).getPath());
+        command.add(new File(tempPath, getTextureFilename(StandardTexture.NORMAL_MAP.getDetails().name, getTextureFileFormat())).getPath());
         command.add("--roughness");
-        command.add(new File(tempPath, getTextureFilename(StandardTexture.ROUGHNESS.details.name, getTextureFileFormat())).getPath());
+        command.add(new File(tempPath, getTextureFilename(StandardTexture.ROUGHNESS.getDetails().name, getTextureFileFormat())).getPath());
         // Add inheritance specified commands
         addCommands(command);
 

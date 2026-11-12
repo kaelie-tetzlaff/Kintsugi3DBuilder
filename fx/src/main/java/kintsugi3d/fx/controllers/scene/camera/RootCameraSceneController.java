@@ -49,7 +49,7 @@ public class RootCameraSceneController
         this.projectModel = injectedProjectModel;
 
         cameraListView.setItems(projectModel.getCameraList());
-        cameraListView.getSelectionModel().selectedItemProperty().addListener(settingsController.changeListener);
+        cameraListView.getSelectionModel().selectedItemProperty().addListener(settingsController.getChangeListener());
 
         ObservableCameraSettings freeCam = new ObservableCameraSettings();
         freeCam.setName("Free Camera");

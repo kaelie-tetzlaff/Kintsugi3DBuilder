@@ -813,7 +813,7 @@ public class EyedropperController extends NonDataPageControllerBase
 
         // Clear tonemapping and reset text fields to a standard curve
         ioModel.clearTonemapping();
-        refreshToneValueTextFields(new SampledLuminanceEncoding().encodeFunction);
+        refreshToneValueTextFields(new SampledLuminanceEncoding().getEncodeFunction());
 
         // Disable curve
         useCurveCheckbox.setSelected(false);

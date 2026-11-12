@@ -241,8 +241,8 @@ public class SmokeTest
             {
                 ErrorMessage firstError = errorsLive.get(startingErrorCount);
                 throw new ReportedErrorException(
-                    String.format("Error occurred during project %s: %s", operation, firstError.message),
-                    firstError.throwable);
+                    String.format("Error occurred during project %s: %s", operation, firstError.getMessage()),
+                    firstError.getThrowable());
             }
 
             if (System.nanoTime() - start > TIMEOUT)
@@ -727,10 +727,9 @@ public class SmokeTest
         throws URISyntaxException
     {
         ViewSetLoadOptions viewSetLoadOptions = new ViewSetLoadOptions();
-        viewSetLoadOptions.geometryFile = new File(Objects.requireNonNull(CLASS_LOADER.getResource(geometry)).toURI());
-        viewSetLoadOptions.mainDirectories.fullResImageDirectory =
-            new File(Objects.requireNonNull(CLASS_LOADER.getResource(imageDirectory)).toURI());
-        viewSetLoadOptions.mainDirectories.fullResImagesNeedUndistort = true;
+        viewSetLoadOptions.setGeometryFile(new File(Objects.requireNonNull(CLASS_LOADER.getResource(geometry)).toURI()));
+        viewSetLoadOptions.getMainDirectories().setFullResImageDirectory(new File(Objects.requireNonNull(CLASS_LOADER.getResource(imageDirectory)).toURI()));
+        viewSetLoadOptions.getMainDirectories().setFullResImagesNeedUndistort(true);
 
         LOAD_FINISHED.set(false);
         File newFile = new File(TEST_OUTPUT_DIR,String.format("%s.k3d", testName));

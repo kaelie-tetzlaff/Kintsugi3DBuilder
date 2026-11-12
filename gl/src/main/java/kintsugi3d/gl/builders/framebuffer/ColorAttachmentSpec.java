@@ -15,7 +15,7 @@ import kintsugi3d.gl.core.ColorFormat;
 
 public final class ColorAttachmentSpec extends AttachmentSpec
 {
-    public final ColorFormat internalFormat;
+    private final ColorFormat internalFormat;
 
     private ColorAttachmentSpec(ColorFormat internalFormat)
     {
@@ -46,5 +46,10 @@ public final class ColorAttachmentSpec extends AttachmentSpec
     {
         super.setLinearFilteringEnabled(enabled);
         return this;
+    }
+
+    public ColorFormat getInternalFormat()
+    {
+        return internalFormat;
     }
 }

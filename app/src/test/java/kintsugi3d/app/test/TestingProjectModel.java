@@ -29,13 +29,23 @@ public class TestingProjectModel extends ProjectModelBase<SerializableCameraSett
 {
     public static final class ErrorMessage
     {
-        public final String message;
-        public final Throwable throwable;
+        private final String message;
+        private final Throwable throwable;
 
         private ErrorMessage(String message, Throwable throwable)
         {
             this.message = message;
             this.throwable = throwable;
+        }
+
+        public String getMessage()
+        {
+            return message;
+        }
+
+        public Throwable getThrowable()
+        {
+            return throwable;
         }
     }
 

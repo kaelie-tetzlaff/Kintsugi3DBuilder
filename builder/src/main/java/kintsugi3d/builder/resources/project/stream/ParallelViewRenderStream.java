@@ -136,7 +136,7 @@ public class ParallelViewRenderStream<ContextType extends Context<ContextType>> 
 
 
             // Copy framebuffer from GPU to main memory.
-            IntStream.range(0, attachmentCount).forEach(i -> framebuffer.getTextureReaderForColorAttachment(i).readFloatingPointRGBA(colorBuffers[i].buffer));
+            IntStream.range(0, attachmentCount).forEach(i -> framebuffer.getTextureReaderForColorAttachment(i).readFloatingPointRGBA(colorBuffers[i].getBuffer()));
 
             synchronized (threadsRunningLock)
             {

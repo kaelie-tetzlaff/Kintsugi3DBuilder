@@ -112,15 +112,15 @@ public final class ViewSetReaderFromRealityCaptureCSV implements ViewSetReader
             .withType(Camera.class).build().parse();
 
         // Start building the view set
-        ViewSetBuilder builder = ViewSet.getBuilder(directories.projectRoot, cameras.size());
+        ViewSetBuilder builder = ViewSet.getBuilder(directories.getProjectRoot(), cameras.size());
 
         // Try to figure out what the camera groups were
         Map<Projection, List<String>> cameraMap = new HashMap<>(1);
         for (Camera cam : cameras)
         {
-            DistortionProjection distortionProjection = cam.getDistortionProjection(directories.fullResImageDirectory);
+            DistortionProjection distortionProjection = cam.getDistortionProjection(directories.getFullResImageDirectory());
 
-            if (directories.fullResImagesNeedUndistort)
+            if (directories.isFullResImagesNeedUndistort())
             {
                 cameraMap.computeIfAbsent(distortionProjection, k -> new ArrayList<>(1)).add(cam.name);
             }
@@ -162,7 +162,7 @@ public final class ViewSetReaderFromRealityCaptureCSV implements ViewSetReader
         builder.addLight(Vector3.ZERO, Vector3.ZERO);
 
         // Set full res image directory according to input argument
-        builder.setFullResImageDirectory(directories.fullResImageDirectory);
+        builder.setFullResImageDirectory(directories.getFullResImageDirectory());
 
         return builder;
     }

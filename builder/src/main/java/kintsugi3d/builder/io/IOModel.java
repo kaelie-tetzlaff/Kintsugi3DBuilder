@@ -222,7 +222,7 @@ public class IOModel implements IO
         {
             try
             {
-                viewSetLoadOptions.uuid = getLoadedViewSet() != null ? getLoadedViewSet().getUUID() : null;
+                viewSetLoadOptions.setUUID(getLoadedViewSet() != null ? getLoadedViewSet().getUUID() : null);
                 this.handler.loadFromLooseFiles(projectFile, internalName, xmlFile, viewSetLoadOptions, loadOptionsModel);
             }
             catch (Exception e)

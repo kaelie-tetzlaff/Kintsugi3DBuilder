@@ -37,7 +37,7 @@ public final class LODGenerator
     {
         for (TextureExportSpecification t : originalTextureSpecs)
         {
-            generateLODs(t.format, minResolution, directory, t.uri);
+            generateLODs(t.getFormat(), minResolution, directory, t.getURI());
         }
     }
 

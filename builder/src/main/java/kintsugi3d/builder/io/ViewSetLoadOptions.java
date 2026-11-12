@@ -14,15 +14,86 @@ package kintsugi3d.builder.io;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.UUID;
 
 public class ViewSetLoadOptions
 {
-    public ViewSetDirectories mainDirectories = new ViewSetDirectories();
-    public File geometryFile;
-    public File masksDirectory;
-    public String orientationViewName;
-    public double orientationViewRotation;
-    public UUID uuid;
-    public Collection<File> disabledImages = new ArrayList<>(8);
+    private ViewSetDirectories mainDirectories = new ViewSetDirectories();
+    private File geometryFile;
+    private File masksDirectory;
+    private String orientationViewName;
+    private double orientationViewRotation;
+    private UUID uuid;
+    private Collection<File> disabledImages = new ArrayList<>(8);
+
+    public ViewSetDirectories getMainDirectories()
+    {
+        return mainDirectories;
+    }
+
+    public void setMainDirectories(ViewSetDirectories mainDirectories)
+    {
+        this.mainDirectories = mainDirectories;
+    }
+
+    public File getGeometryFile()
+    {
+        return geometryFile;
+    }
+
+    public void setGeometryFile(File geometryFile)
+    {
+        this.geometryFile = geometryFile;
+    }
+
+    public File getMasksDirectory()
+    {
+        return masksDirectory;
+    }
+
+    public void setMasksDirectory(File masksDirectory)
+    {
+        this.masksDirectory = masksDirectory;
+    }
+
+    public String getOrientationViewName()
+    {
+        return orientationViewName;
+    }
+
+    public void setOrientationViewName(String orientationViewName)
+    {
+        this.orientationViewName = orientationViewName;
+    }
+
+    public double getOrientationViewRotation()
+    {
+        return orientationViewRotation;
+    }
+
+    public void setOrientationViewRotation(double orientationViewRotation)
+    {
+        this.orientationViewRotation = orientationViewRotation;
+    }
+
+    public UUID getUUID()
+    {
+        return uuid;
+    }
+
+    public void setUUID(UUID uuid)
+    {
+        this.uuid = uuid;
+    }
+
+    public Collection<File> getDisabledImages()
+    {
+        return Collections.unmodifiableCollection(disabledImages);
+    }
+
+    public void setDisabledImages(Collection<File> disabledImages)
+    {
+        this.disabledImages = new ArrayList<>(disabledImages);
+    }
 }

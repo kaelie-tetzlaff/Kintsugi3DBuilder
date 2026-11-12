@@ -49,7 +49,7 @@ public class RootObjectSceneController
         this.projectModel = injectedProjectModel;
 
         objectPoseListView.setItems(projectModel.getObjectPoseList());
-        objectPoseListView.getSelectionModel().selectedItemProperty().addListener(settingsController.changeListener);
+        objectPoseListView.getSelectionModel().selectedItemProperty().addListener(settingsController.getChangeListener());
 
         ObservableObjectPoseSettings defaultPose = new ObservableObjectPoseSettings();
 

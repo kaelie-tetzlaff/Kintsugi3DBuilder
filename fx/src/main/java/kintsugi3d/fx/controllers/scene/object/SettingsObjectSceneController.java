@@ -87,24 +87,29 @@ public class SettingsObjectSceneController implements Initializable
         });
     }
 
-    public final ChangeListener<ObservableObjectPoseSettings> changeListener =
+    private final ChangeListener<ObservableObjectPoseSettings> changeListener =
         (observable, oldValue, newValue) ->
+    {
+        if (oldValue != null)
         {
-            if (oldValue != null)
-            {
-                unbind(oldValue);
-            }
+            unbind(oldValue);
+        }
 
-            if (newValue != null)
-            {
-                bind(newValue);
-                setDisabled(newValue.isLocked());
-            }
-            if (newValue == null)
-            {
-                setDisabled(true);
-            }
-        };
+        if (newValue != null)
+        {
+            bind(newValue);
+            setDisabled(newValue.isLocked());
+        }
+        if (newValue == null)
+        {
+            setDisabled(true);
+        }
+    };
+
+    public ChangeListener<ObservableObjectPoseSettings> getChangeListener()
+    {
+        return changeListener;
+    }
 
     public void setDisabled(Boolean disabled)
     {

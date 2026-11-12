@@ -60,7 +60,7 @@ public class OBJMaterialTextures implements TextureSupplier
             File textureFile = new File(directory, diffuseMap.getMapName());
             if (textureFile.exists())
             {
-                textures.put(textureType.details.name, new File(directory, diffuseMap.getMapName()));
+                textures.put(textureType.getDetails().name, new File(directory, diffuseMap.getMapName()));
             }
         }
     }

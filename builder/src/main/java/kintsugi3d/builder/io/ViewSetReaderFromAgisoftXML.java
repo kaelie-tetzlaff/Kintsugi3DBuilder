@@ -145,9 +145,9 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
     @Override
     public ViewSetBuilder readFromStream(InputStream stream, ViewSetDirectories directories) throws XMLStreamException
     {
-        if (directories.supportingFilesDirectory == null)
+        if (directories.getSupportingFilesDirectory() == null)
         {
-            directories.supportingFilesDirectory = directories.projectRoot;
+            directories.setSupportingFilesDirectory(directories.getProjectRoot());
         }
 
         return readFromLooseFiles(stream, directories);
@@ -629,7 +629,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
             ViewSetDirectories directories, Map<Integer, String> imagePathMap,  Map<Integer, String> maskPathMap,
             boolean ignoreGlobalTransforms)
         {
-            ViewSetBuilder builder = ViewSet.getBuilder(directories.projectRoot, directories.supportingFilesDirectory, cameraSet.size());
+            ViewSetBuilder builder = ViewSet.getBuilder(directories.getProjectRoot(), directories.getSupportingFilesDirectory(), cameraSet.size());
 
             Sensor[] sensors = sensorSet.values().toArray(new Sensor[0]);
 
@@ -660,7 +660,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
                     sensors[i].skew
                 );
 
-                if (directories.fullResImagesNeedUndistort)
+                if (directories.isFullResImagesNeedUndistort())
                 {
                     builder.addCameraProjection(distortionProj);
                 }
@@ -846,7 +846,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
             }
 
             // Set full res image directory according to input argument
-            builder.setFullResImageDirectory(directories.fullResImageDirectory);
+            builder.setFullResImageDirectory(directories.getFullResImageDirectory());
 
             //Set if camera contains corrections tag
             builder.setHasUnsupportedCorrections(hasUnsupportedCorrections);
@@ -966,9 +966,9 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
                     InputStream fileStream = new BufferedInputStream(zis);
 
                     ViewSetDirectories directories = new ViewSetDirectories();
-                    directories.projectRoot = rootDirectory;
-                    directories.supportingFilesDirectory = null;
-                    directories.fullResImagesNeedUndistort = true;
+                    directories.setProjectRoot(rootDirectory);
+                    directories.setSupportingFilesDirectory(null);
+                    directories.setFullResImagesNeedUndistort(true);
 
                     // cameraPathsMap was already built with disabledImageFiles excluded
                     // (see metashapeChunk.buildCameraPathsMap above), so cameras whose images

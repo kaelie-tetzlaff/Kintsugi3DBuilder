@@ -77,9 +77,9 @@ public class LightWidgetLines<ContextType extends Context<ContextType>> implemen
                 {
                     if (sceneModel.getLightingModel().getLightWidgetModel(i).isDistanceWidgetVisible() || sceneModel.getLightingModel().getLightWidgetModel(i).isCenterWidgetVisible())
                     {
-                        Vector3 lineEndpoint = widgetInfo[i].widgetPosition.minus(widgetInfo[i].lightCenter)
-                            .times(0.5f / widgetInfo[i].widgetPosition.getXY().distance(widgetInfo[i].lightCenter.getXY()))
-                            .minus(widgetInfo[i].lightCenter);
+                        Vector3 lineEndpoint = widgetInfo[i].getWidgetPosition().minus(widgetInfo[i].getLightCenter())
+                            .times(0.5f / widgetInfo[i].getWidgetPosition().getXY().distance(widgetInfo[i].getLightCenter().getXY()))
+                            .minus(widgetInfo[i].getLightCenter());
 
                         try
                             (
@@ -88,7 +88,7 @@ public class LightWidgetLines<ContextType extends Context<ContextType>> implemen
                                         .setData(NativeVectorBufferFactory.getInstance()
                                             .createFromFloatArray(3, 2,
                                                 lineEndpoint.x, lineEndpoint.y, lineEndpoint.z,
-                                                widgetInfo[i].lightCenter.x, widgetInfo[i].lightCenter.y,widgetInfo[i]. lightCenter.z));
+                                                widgetInfo[i].getLightCenter().x, widgetInfo[i].getLightCenter().y, widgetInfo[i].getLightCenter().z));
                                 Drawable<ContextType> lineRenderable = context.createDrawable(solidProgram)
                             )
                         {
@@ -106,10 +106,10 @@ public class LightWidgetLines<ContextType extends Context<ContextType>> implemen
                     if (sceneModel.getLightingModel().getLightWidgetModel(i).isInclinationWidgetVisible()
                         && sceneModel.getLightingModel().getLightWidgetModel(i).isInclinationWidgetSelected())
                     {
-                        Vector3 lineEndpoint1 = widgetInfo[i].lightCenter
-                            .plus(cameraViewport.getView().times(new Vector4(0, widgetInfo[i].widgetDistance, 0, 0)).getXYZ());
-                        Vector3 lineEndpoint2 = widgetInfo[i].lightCenter
-                            .plus(cameraViewport.getView().times(new Vector4(0, -widgetInfo[i].widgetDistance, 0, 0)).getXYZ());
+                        Vector3 lineEndpoint1 = widgetInfo[i].getLightCenter()
+                            .plus(cameraViewport.getView().times(new Vector4(0, widgetInfo[i].getWidgetDistance(), 0, 0)).getXYZ());
+                        Vector3 lineEndpoint2 = widgetInfo[i].getLightCenter()
+                            .plus(cameraViewport.getView().times(new Vector4(0, -widgetInfo[i].getWidgetDistance(), 0, 0)).getXYZ());
 
                         try
                             (

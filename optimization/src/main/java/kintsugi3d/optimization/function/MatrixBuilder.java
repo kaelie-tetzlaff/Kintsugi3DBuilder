@@ -197,8 +197,8 @@ public class MatrixBuilder
             // Update to ATy
             for (int i = 0; i < observationCount; i++)
             {
-                contribution.addToRHS(b1, i, sample.weightByInstance.applyAsDouble(b1)
-                        * sample.sampleWeight * sample.observed[i] * constantTerm);
+                contribution.addToRHS(b1, i, sample.getWeightForInstance(b1)
+                        * sample.sampleWeight * sample.getObserved(i) * constantTerm);
             }
 
             for (int b2 = 0; b2 < instanceCount; b2++)
@@ -206,8 +206,8 @@ public class MatrixBuilder
                 // Updates to ATA
                 // Top left partition of the matrix: row and column both correspond to constant-term coefficients
                 // (i.e. diffuse for reflectance)
-                double weightProduct = sample.weightByInstance.applyAsDouble(b1)
-                        * sample.weightByInstance.applyAsDouble(b2) * sample.sampleWeight;
+                double weightProduct = sample.getWeightForInstance(b1)
+                        * sample.getWeightForInstance(b2) * sample.sampleWeight;
                 contribution.addToLHS(b1, b2, weightProduct * constantTermSquared);
             }
         }

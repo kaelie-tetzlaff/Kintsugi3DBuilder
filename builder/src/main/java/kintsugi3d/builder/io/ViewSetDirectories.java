@@ -15,8 +15,48 @@ import java.io.File;
 
 public class ViewSetDirectories
 {
-    public File projectRoot;
-    public File supportingFilesDirectory;
-    public File fullResImageDirectory;
-    public boolean fullResImagesNeedUndistort;
+    private File projectRoot;
+    private File supportingFilesDirectory;
+    private File fullResImageDirectory;
+    private boolean fullResImagesNeedUndistort;
+
+    public File getProjectRoot()
+    {
+        return projectRoot;
+    }
+
+    public void setProjectRoot(File projectRoot)
+    {
+        this.projectRoot = projectRoot;
+    }
+
+    public File getSupportingFilesDirectory()
+    {
+        return supportingFilesDirectory;
+    }
+
+    public void setSupportingFilesDirectory(File supportingFilesDirectory)
+    {
+        this.supportingFilesDirectory = supportingFilesDirectory;
+    }
+
+    public File getFullResImageDirectory()
+    {
+        return fullResImageDirectory;
+    }
+
+    public void setFullResImageDirectory(File fullResImageDirectory)
+    {
+        this.fullResImageDirectory = fullResImageDirectory;
+    }
+
+    public boolean isFullResImagesNeedUndistort()
+    {
+        return fullResImagesNeedUndistort;
+    }
+
+    public void setFullResImagesNeedUndistort(boolean fullResImagesNeedUndistort)
+    {
+        this.fullResImagesNeedUndistort = fullResImagesNeedUndistort;
+    }
 }

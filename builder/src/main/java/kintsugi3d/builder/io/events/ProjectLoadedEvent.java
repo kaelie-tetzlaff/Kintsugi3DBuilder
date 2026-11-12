@@ -15,10 +15,15 @@ import kintsugi3d.gl.vecmath.Vector3;
 
 public class ProjectLoadedEvent
 {
-    public final Vector3 modelSize;
+    private final Vector3 modelSize;
 
     public ProjectLoadedEvent(Vector3 modelSize)
     {
         this.modelSize = modelSize;
+    }
+
+    public Vector3 getModelSize()
+    {
+        return modelSize;
     }
 }

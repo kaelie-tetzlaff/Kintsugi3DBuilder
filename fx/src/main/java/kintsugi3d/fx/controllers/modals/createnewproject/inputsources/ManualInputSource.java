@@ -101,14 +101,14 @@ public class ManualInputSource extends NonValidatedInputSourceBase
             private ViewSetLoadOptions getViewSetLoadOptions()
             {
                 ViewSetLoadOptions loadOptions = new ViewSetLoadOptions();
-                loadOptions.mainDirectories.projectRoot = cameraFile.getParentFile();
-                loadOptions.geometryFile = meshFile;
-                loadOptions.masksDirectory = masksDir;
-                loadOptions.mainDirectories.fullResImageDirectory = photosDir;
-                loadOptions.mainDirectories.fullResImagesNeedUndistort = needsUndistort;
-                loadOptions.orientationViewName = getViewSelection();
-                loadOptions.orientationViewRotation = getViewRotation();
-                loadOptions.disabledImages = getDisabledImages();
+                loadOptions.getMainDirectories().setProjectRoot(cameraFile.getParentFile());
+                loadOptions.setGeometryFile(meshFile);
+                loadOptions.setMasksDirectory(masksDir);
+                loadOptions.getMainDirectories().setFullResImageDirectory(photosDir);
+                loadOptions.getMainDirectories().setFullResImagesNeedUndistort(needsUndistort);
+                loadOptions.setOrientationViewName(getViewSelection());
+                loadOptions.setOrientationViewRotation(getViewRotation());
+                loadOptions.setDisabledImages(getDisabledImages());
                 return loadOptions;
             }
         };
@@ -123,9 +123,9 @@ public class ManualInputSource extends NonValidatedInputSourceBase
         else if (cameraFile.getName().endsWith(".csv")) // RealityCapture
         {
             ViewSetDirectories directories = new ViewSetDirectories();
-            directories.projectRoot = cameraFile.getParentFile();
-            directories.fullResImageDirectory = photosDir;
-            directories.fullResImagesNeedUndistort = needsUndistort;
+            directories.setProjectRoot(cameraFile.getParentFile());
+            directories.setFullResImageDirectory(photosDir);
+            directories.setFullResImagesNeedUndistort(needsUndistort);
 
             ViewSet viewSet = ViewSetReaderFromRealityCaptureCSV.getInstance()
                 .readFromFile(cameraFile, directories)

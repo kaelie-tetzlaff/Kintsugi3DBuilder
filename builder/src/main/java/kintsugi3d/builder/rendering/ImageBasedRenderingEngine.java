@@ -355,7 +355,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
     private Vector3 calculateClearColor()
     {
-        float maxLuminance = (float) SRGB.fromLinear(resources.getViewSet().getLuminanceEncoding().decodeFunction.applyAsDouble(255.0));
+        float maxLuminance = (float) SRGB.fromLinear(resources.getViewSet().getLuminanceEncoding().getDecodeFunction().applyAsDouble(255.0));
         return new Vector3(
                 sceneModel.getLightingModel().getBackgroundColor().x / maxLuminance,
                 sceneModel.getLightingModel().getBackgroundColor().y / maxLuminance,

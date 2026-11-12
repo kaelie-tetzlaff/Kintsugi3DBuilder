@@ -61,12 +61,12 @@ public class MatrixBuilderSample
     /**
      * The weight of each basis function to be optimized for the current sample.
      */
-    public final IntToDoubleFunction weightByInstance;
+    private final IntToDoubleFunction weightByInstance;
 
     /**
      * The observations at the current sample (i.e. an RGB color).
      */
-    public final double[] observed;
+    private final double[] observed;
 
     public MatrixBuilderSample(double actual, BasisFunctions basisLibrary, double analytic, double sampleWeight,
                                IntToDoubleFunction weightByInstance, double... observed)
@@ -87,5 +87,15 @@ public class MatrixBuilderSample
 
         this.weightByInstance = weightByInstance;
         this.observed = observed;
+    }
+
+    public double getWeightForInstance(int instance)
+    {
+        return weightByInstance.applyAsDouble(instance);
+    }
+
+    public double getObserved(int index)
+    {
+        return observed[index];
     }
 }

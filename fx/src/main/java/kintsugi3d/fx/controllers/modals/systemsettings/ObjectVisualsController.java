@@ -47,26 +47,26 @@ public class ObjectVisualsController implements SystemSettingsControllerBase
         depthHeightTxtField.disableProperty().bind(preloadVisibilityEtcCheckBox.selectedProperty().not());
 
         imageCompressionCheckBox.selectedProperty().bindBidirectional(
-            state.getLoadOptionsModel().compression);
+            state.getLoadOptionsModel().compressionRequestedProperty());
 
         setupTxtFieldProperties(previewWidthIntProperty, previewWidthTxtField);
         setupTxtFieldProperties(previewHeightIntProperty, previewHeightTxtField);
         setupTxtFieldProperties(depthWidthIntProperty, depthWidthTxtField);
         setupTxtFieldProperties(depthHeightIntProperty, depthHeightTxtField);
 
-        previewWidthIntProperty.bindBidirectional(state.getLoadOptionsModel().previewWidth);
-        previewHeightIntProperty.bindBidirectional(state.getLoadOptionsModel().previewHeight);
+        previewWidthIntProperty.bindBidirectional(state.getLoadOptionsModel().previewImageWidthProperty());
+        previewHeightIntProperty.bindBidirectional(state.getLoadOptionsModel().previewImageHeightProperty());
 
         depthWidthTxtField.disableProperty().bind(preloadVisibilityEtcCheckBox.selectedProperty().not());
         depthHeightTxtField.disableProperty().bind(preloadVisibilityEtcCheckBox.selectedProperty().not());
 
         preloadVisibilityEtcCheckBox.selectedProperty().bindBidirectional(
-            state.getLoadOptionsModel().depthImages);
+            state.getLoadOptionsModel().depthImagesRequestedProperty());
 
-        depthWidthIntProperty.bindBidirectional(state.getLoadOptionsModel().depthWidth);
-        depthHeightIntProperty.bindBidirectional(state.getLoadOptionsModel().depthHeight);
+        depthWidthIntProperty.bindBidirectional(state.getLoadOptionsModel().depthImageWidthProperty());
+        depthHeightIntProperty.bindBidirectional(state.getLoadOptionsModel().depthImageHeightProperty());
 
-        mipmapCheckBox.selectedProperty().bindBidirectional(state.getLoadOptionsModel().mipmaps);
+        mipmapCheckBox.selectedProperty().bindBidirectional(state.getLoadOptionsModel().mipmapsRequestedProperty());
         reduceViewportResCheckBox.selectedProperty().bindBidirectional(
             state.getSettingsModel().getBooleanProperty("halfResolutionEnabled"));
     }

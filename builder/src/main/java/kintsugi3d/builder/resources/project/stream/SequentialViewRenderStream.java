@@ -84,7 +84,7 @@ public class SequentialViewRenderStream<ContextType extends Context<ContextType>
             drawable.draw(framebuffer);
 
             // Copy framebuffer from GPU to main memory.
-            IntStream.range(0, attachmentCount).forEach(i -> framebuffer.getTextureReaderForColorAttachment(i).readFloatingPointRGBA(framebufferData[i].buffer));
+            IntStream.range(0, attachmentCount).forEach(i -> framebuffer.getTextureReaderForColorAttachment(i).readFloatingPointRGBA(framebufferData[i].getBuffer()));
             action.accept(framebufferData);
         }
     }

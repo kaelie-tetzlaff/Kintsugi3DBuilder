@@ -15,14 +15,29 @@ import de.javagl.jgltf.impl.v2.TextureInfo;
 
 class TextureExportSpecification
 {
-    public final TextureInfo info;
-    public final String uri;
-    public final String format;
+    private final TextureInfo info;
+    private final String uri;
+    private final String format;
 
     TextureExportSpecification(TextureInfo info, String uri, String format)
     {
         this.info = info;
         this.uri = uri;
         this.format = format;
+    }
+
+    public TextureInfo getInfo()
+    {
+        return info;
+    }
+
+    public String getURI()
+    {
+        return uri;
+    }
+
+    public String getFormat()
+    {
+        return format;
     }
 }

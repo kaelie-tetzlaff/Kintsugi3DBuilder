@@ -339,16 +339,16 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         {
             CardsModel<V> texturesTab = Global.state().getTabModels().getTab(tabName, dataClass);
 
-            switch (change.changeType)
+            switch (change.getType())
             {
                 case ADDED:
                     tabsManager.refreshTab(tabName); // TODO implement support for adding individual card without rebuilding
                     break;
                 case REMOVED:
-                    texturesTab.deleteCards(card -> change.changeMap.get(keyConstructor.apply(card.getInternalName())) != null);
+                    texturesTab.deleteCards(card -> change.getMap().get(keyConstructor.apply(card.getInternalName())) != null);
                     break;
                 case MODIFIED:
-                    texturesTab.refreshCards(card -> change.changeMap.get(keyConstructor.apply(card.getInternalName())));
+                    texturesTab.refreshCards(card -> change.getMap().get(keyConstructor.apply(card.getInternalName())));
                     break;
             }
         };
@@ -598,12 +598,12 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     {
         if (renderableInstance != null)
         {
-            return renderableInstance.getViewSet().getLuminanceEncoding().encodeFunction;
+            return renderableInstance.getViewSet().getLuminanceEncoding().getEncodeFunction();
         }
         else
         {
             // Default if no instance is loaded.
-            return new SampledLuminanceEncoding().encodeFunction;
+            return new SampledLuminanceEncoding().getEncodeFunction();
         }
     }
 

@@ -159,7 +159,7 @@ class ImageReconstructionTests
     {
         progressMonitor = new ProgressMonitorImpl();
         ViewSetDirectories directories = new ViewSetDirectories();
-        directories.fullResImagesNeedUndistort = true;
+        directories.setFullResImagesNeedUndistort(true);
         potatoViewSet = ViewSetReaderFromVSET.getInstance().readFromStream(getClass().getClassLoader().getResourceAsStream("Structured34View.vset"), directories).finish();
         potatoViewSet.getProjectSettings().set("occlusionEnabled", false);
 
@@ -1018,9 +1018,9 @@ class ImageReconstructionTests
         imageLoadOptions.setColorImagesRequested(false); // don't generate/load preview images; not needed for this test
 
         ViewSetLoadOptions viewSetLoadOptions = new ViewSetLoadOptions();
-        viewSetLoadOptions.geometryFile = new File(classLoader.getResource(geometry).toURI());
-        viewSetLoadOptions.mainDirectories.fullResImageDirectory = new File(classLoader.getResource(imageDirectory).toURI());
-        viewSetLoadOptions.mainDirectories.fullResImagesNeedUndistort = true;
+        viewSetLoadOptions.setGeometryFile(new File(classLoader.getResource(geometry).toURI()));
+        viewSetLoadOptions.getMainDirectories().setFullResImageDirectory(new File(classLoader.getResource(imageDirectory).toURI()));
+        viewSetLoadOptions.getMainDirectories().setFullResImagesNeedUndistort(true);
 
         try (GraphicsResourcesImageSpace<OpenGLContext> resources = GraphicsResourcesImageSpace.getBuilderForContext(context)
                 .setImageLoadOptions(imageLoadOptions)

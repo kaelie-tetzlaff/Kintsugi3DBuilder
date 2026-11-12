@@ -97,7 +97,8 @@ public class SettingsLightSceneController implements Initializable
     private final SafeNumberStringConverter numberStringConverter = new SafeNumberStringConverter(0);
     private final SafeLogScaleNumberStringConverter logScaleNumberStringConverter = new SafeLogScaleNumberStringConverter(1);
 
-    public final ChangeListener<ObservableLightSettings> changeListener = (observable, oldValue, newValue) ->
+    private final ChangeListener<ObservableLightSettings> changeListener =
+        (observable, oldValue, newValue) ->
     {
         if (oldValue != null)
         {
@@ -114,6 +115,11 @@ public class SettingsLightSceneController implements Initializable
             setDisabled(true);
         }
     };
+
+    public ChangeListener<ObservableLightSettings> getChangeListener()
+    {
+        return changeListener;
+    }
 
     public void setDisabled(Boolean disabled)
     {
