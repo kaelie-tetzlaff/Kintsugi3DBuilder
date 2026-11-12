@@ -27,20 +27,19 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.GlobalBootstrap;
 import kintsugi3d.builder.core.SynchronizedWindow;
 import kintsugi3d.builder.core.WindowSynchronization;
 import kintsugi3d.builder.io.RecentProjects;
 import kintsugi3d.builder.preferences.GlobalUserPreferencesManager;
 import kintsugi3d.builder.preferences.serialization.JacksonUserPreferencesSerializer;
-import kintsugi3d.builder.rendering.ImageBasedRenderable;
 import kintsugi3d.builder.state.CarouselItem;
 import kintsugi3d.builder.state.settings.DefaultSettings;
 import kintsugi3d.builder.util.AppIcon;
 import kintsugi3d.builder.util.OperatingSystem;
 import kintsugi3d.fx.controllers.scene.RootSceneController;
 import kintsugi3d.fx.core.*;
+import kintsugi3d.fx.internal.ObservableCameraModel;
 import kintsugi3d.fx.internal.ObservableCarouselModel;
 import kintsugi3d.fx.internal.ObservableGeneralSettingsModel;
 import kintsugi3d.gl.window.FramebufferCanvas;
@@ -387,56 +386,21 @@ public class JavaFXApplication extends Application
 
     private static void setupCarouselListeners(ObservableCarouselModel carouselModel)
     {
-        carouselModel.carouselHeightProperty().addListener(
-            (observable, oldValue, newValue) ->
-        {
-            // Refresh safe region for main view
-            refreshMainViewSafeRegion(carouselModel.getCarouselHeight());
-        });
-
         ObservableList<CarouselItem> items = carouselModel.getCarouselItems();
         items.addListener((Observable observable) ->
         {
+            ObservableCameraModel cameraModel = state.getCameraModel();
             if (items.isEmpty())
             {
-                // Recenter main view now that the carousel is gone.
-                refreshMainViewSafeRegion(carouselModel.getCarouselHeight());
+                cameraModel.paddingBottomProperty().bind(carouselModel.carouselHeightProperty());
             }
             else
             {
-                clearMainViewSafeRegion();
+                // Recenter main view now that the carousel is gone.
+                cameraModel.paddingBottomProperty().unbind();
+                cameraModel.clearPadding();
             }
         });
-    }
-
-    /**
-     * No-op if there's no renderable loaded.
-     */
-    private static void clearMainViewSafeRegion()
-    {
-        if (Global.io().hasLoadedRenderable())
-        {
-            ImageBasedRenderable<?> instance = Global.io().getMainRenderable();
-            if (instance != null)
-            {
-                instance.clearSafeRegionPadding();
-            }
-        }
-    }
-
-    /**
-     * No-op if there's no renderable loaded.
-     */
-    private static void refreshMainViewSafeRegion(double carouselHeight)
-    {
-        if (Global.io().hasLoadedRenderable())
-        {
-            ImageBasedRenderable<?> instance = Global.io().getMainRenderable();
-            if (instance != null)
-            {
-                instance.setSafeRegionPadding(0, 0, 0, (int) Math.round(carouselHeight));
-            }
-        }
     }
 
     public static void launchWrapper(String args)

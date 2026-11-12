@@ -34,9 +34,9 @@ public class TabsManager
     {
         factories.add(new TabInfo(PHOTOS, new PhotoCardFactory(instance), null));
         factories.add(new TabInfo(MATERIALS, new MaterialCardFactory(instance),
-            Global.io().getLoadedViewSet().getSupportingFilesDirectory().getPath()));
+            Global.io().getLoadedViewSetOrThrow().getSupportingFilesDirectory().getPath()));
         factories.add(new TabInfo(TEXTURES, new TextureCardFactory(instance),
-            Global.io().getLoadedViewSet().getSupportingFilesDirectory().getPath()));
+            Global.io().getLoadedViewSetOrThrow().getSupportingFilesDirectory().getPath()));
         factories.add(new TabInfo(SHADERS, new ShaderCardFactory(instance), null));
     }
 

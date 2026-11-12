@@ -16,16 +16,16 @@ import kintsugi3d.builder.state.CarouselModel;
 import kintsugi3d.builder.state.SelectableViewListModel;
 import kintsugi3d.builder.state.cards.TabsModel;
 import kintsugi3d.builder.state.project.ProjectModel;
+import kintsugi3d.builder.state.scene.ReadonlyCameraModel;
 import kintsugi3d.builder.state.scene.ReadonlyLightingEnvironmentModel;
 import kintsugi3d.builder.state.scene.ReadonlyObjectPoseModel;
-import kintsugi3d.builder.state.scene.ReadonlyViewpointModel;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.state.shader.ActiveShaderModel;
 
 public interface Kintsugi3DBuilderState
 {
     // Models related to presentation within Kintsugi 3D Builder
-    ReadonlyViewpointModel getCameraModel();
+    ReadonlyCameraModel getCameraModel();
     ReadonlyLightingEnvironmentModel getLightingModel();
     ReadonlyObjectPoseModel getObjectModel();
     ActiveShaderModel getUserShaderModel();

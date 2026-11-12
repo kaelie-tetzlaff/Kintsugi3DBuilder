@@ -50,7 +50,7 @@ public class NamedTextureInfo extends TextureInfo
     public ImageReplacer getReplaceData(ImageBasedRenderable<?> instance)
     {
                 return new NamedTextureReplacer(instance.getResources().getTextureResources(), this,
-            new File(Global.io().validateRenderable().getLoadedViewSet().getSupportingFilesDirectory(),
+            new File(Global.io().getLoadedViewSetOrThrow().getSupportingFilesDirectory(),
                 TextureResources.getTextureFilename(name)));
     }
 }

@@ -47,9 +47,7 @@ public class ExportTexturesRequest implements ProgressMonitoredImageBasedGraphic
 
     private static ExportSettings getExportSettingsFromProject()
     {
-        GeneralSettingsModel projectSettings = Global.io()
-            .validateRenderable()
-            .getLoadedViewSet().getProjectSettings();
+        GeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
 
         ExportSettings exportSettings = new ExportSettings();
 

@@ -57,7 +57,7 @@ public class WeightmapTextureInfo extends TextureInfo
     @Override
     public ImageReplacer getReplaceData(ImageBasedRenderable<?> instance)
     {
-        File supportingFilesDirectory = Global.io().validateRenderable().getLoadedViewSet().getSupportingFilesDirectory();
+        File supportingFilesDirectory = Global.io().getLoadedViewSetOrThrow().getSupportingFilesDirectory();
         try
         {
             return new WeightmapReplacer(instance.getResources().getTextureResources(), material,

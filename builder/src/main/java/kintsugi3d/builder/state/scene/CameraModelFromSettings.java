@@ -14,7 +14,7 @@ package kintsugi3d.builder.state.scene;
 import kintsugi3d.builder.state.project.CameraSettings;
 import kintsugi3d.gl.vecmath.Vector3;
 
-public abstract class CameraModelFromSettings extends ViewpointModelBase
+public abstract class CameraModelFromSettings extends ViewpointModelBase implements ManipulableCameraModel
 {
     protected abstract CameraSettings getCameraSettings();
 

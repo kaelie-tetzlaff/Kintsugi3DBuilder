@@ -14,7 +14,7 @@ package kintsugi3d.builder.io;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.io.events.*;
 import kintsugi3d.builder.io.metashape.MetashapeModel;
-import kintsugi3d.builder.rendering.ImageBasedRenderable;
+import kintsugi3d.builder.rendering.ReadonlyImageBasedRenderable;
 import kintsugi3d.builder.state.shader.ShaderInfo;
 import kintsugi3d.builder.util.events.EventListeners;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
@@ -29,8 +29,20 @@ import java.util.function.DoubleUnaryOperator;
 
 public interface IO
 {
+    void initialize(IOHandler handler);
+
+    boolean isInitialized();
+    boolean hasLoadedRenderable();
+
+    /**
+     * Checks if this has a valid project instance loaded.  Otherwise, throws an IllegalStateException.
+     * @return This model if it has a valid project instance.
+     */
+    IO validateRenderable();
+
     ReadonlyLoadOptionsModel getLoadOptionsModel();
 
+    ProgressMonitor getAggregateProgressMonitor();
     void addProgressMonitor(ProgressMonitor monitor);
 
     EventListeners<ProjectOpenedListener> projectOpenedListeners();
@@ -42,12 +54,30 @@ public interface IO
     boolean isProjectOpen();
     File getViewSetFile();
     File getProjectFile();
-    ViewSet getLoadedViewSet();
+
+    default boolean isProjectProcessed()
+    {
+        return hasLoadedRenderable() && getMainRenderable().getResources().hasProcessedWeightMaps();
+    }
+
+    ViewSet getLoadedViewSetOrNull();
+
+    default ViewSet getLoadedViewSetOrThrow()
+    {
+        ViewSet viewSet = getLoadedViewSetOrNull();
+        if (viewSet == null)
+        {
+            throw new IllegalStateException("No project loaded.");
+        }
+        else
+        {
+            return viewSet;
+        }
+    }
+
     ReadonlyVertexGeometry getLoadedGeometry();
-
-    ImageBasedRenderable<?> getMainRenderable();
-    ImageBasedRenderable<?> getRenderableForShader(ShaderInfo shader);
-
+    ReadonlyImageBasedRenderable<?> getMainRenderable();
+    ReadonlyImageBasedRenderable<?> getRenderableForShader(ShaderInfo shader);
 
     void loadFromLooseFiles(File newProjectFile, String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions);
     void hotSwapLooseFiles(String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions);
@@ -124,13 +154,4 @@ public interface IO
 
     void closeProject();
     void closeProject(Runnable onCloseComplete);
-
-    boolean hasLoadedRenderable();
-    boolean hasValidHandler();
-
-    /**
-     * Checks if this has a valid project instance loaded.  Otherwise, throws an IllegalStateException.
-     * @return This model if it has a valid project instance.
-     */
-    IOModel validateRenderable();
 }

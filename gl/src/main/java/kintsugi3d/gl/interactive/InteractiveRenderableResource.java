@@ -21,8 +21,6 @@ import kintsugi3d.gl.core.Context;
  */
 public interface InteractiveRenderableResource<ContextType extends Context<ContextType>> extends InteractiveRenderable<ContextType>
 {
-
-
     /**
      * Sets the application managing this renderable.
      * @param app

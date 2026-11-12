@@ -89,7 +89,7 @@ public class ResampleRequestController
     @FXML
     public void run()
     {
-        if (Global.io().getProgressMonitor().isConflictingProcess())
+        if (Global.io().getAggregateProgressMonitor().isConflictingProcess())
         {
             return;
         }

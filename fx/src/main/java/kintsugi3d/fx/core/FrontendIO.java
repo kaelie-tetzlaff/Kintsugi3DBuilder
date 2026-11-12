@@ -20,7 +20,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Window;
 import kintsugi3d.builder.core.Global;
-import kintsugi3d.builder.io.IOModel;
+import kintsugi3d.builder.io.IO;
 import kintsugi3d.builder.io.RecentProjects;
 import kintsugi3d.fx.experience.CreateProject;
 import kintsugi3d.gl.interactive.DefaultProgressMonitor;
@@ -225,9 +225,9 @@ public final class FrontendIO
         projectFileChooser.getExtensionFilters().add(new ExtensionFilter("Standalone view sets", "*.vset"));
         fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
 
-        IOModel ioModel = Global.io();
-        File projectFile = ioModel.getProjectFile();
-        File vsetFile = ioModel.getViewSetFile();
+        IO io = Global.io();
+        File projectFile = io.getProjectFile();
+        File vsetFile = io.getViewSetFile();
 
         if (projectFile != null && !Objects.equals(projectFile, vsetFile))
         {

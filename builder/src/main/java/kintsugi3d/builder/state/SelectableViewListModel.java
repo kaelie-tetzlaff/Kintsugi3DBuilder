@@ -15,12 +15,9 @@ import kintsugi3d.builder.core.viewset.View;
 
 import java.util.List;
 
-public interface SelectableViewListModel
+public interface SelectableViewListModel extends ReadonlySelectableViewListModel
 {
-    View getSelectedView();
     void setSelectedView(View cameraView);
-    List<View> getViewList();
     void setViewList(List<View> cameraViewList);
-    boolean isViewSnapEnabled();
     void setViewSnapEnabled(boolean cameraViewSnapEnabled);
 }

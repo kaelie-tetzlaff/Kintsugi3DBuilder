@@ -18,10 +18,7 @@ import kintsugi3d.builder.state.CarouselModel;
 import kintsugi3d.builder.state.SelectableViewListModel;
 import kintsugi3d.builder.state.cards.TabsModel;
 import kintsugi3d.builder.state.project.ProjectModel;
-import kintsugi3d.builder.state.scene.ReadonlyLightingEnvironmentModel;
-import kintsugi3d.builder.state.scene.ReadonlyObjectPoseModel;
-import kintsugi3d.builder.state.scene.ReadonlyViewpointModel;
-import kintsugi3d.builder.state.scene.SimpleCameraModel;
+import kintsugi3d.builder.state.scene.*;
 import kintsugi3d.builder.state.settings.DefaultSettings;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.state.settings.SimpleGeneralSettingsModel;
@@ -33,7 +30,7 @@ class TestingState implements Kintsugi3DBuilderState
 {
     private final TestingProjectModel projectModel = new TestingProjectModel();
     private final GeneralSettingsModel settings = new SimpleGeneralSettingsModel();
-    private final ReadonlyViewpointModel cameraModel = new SimpleCameraModel();
+    private final ReadonlyCameraModel cameraModel = new SimpleCameraModel();
     private final ReadonlyLightingEnvironmentModel lightingEnvironmentModel = new TestingLightingModel();
     private final SelectableViewListModel viewListModel = new TestingViewListModel();
     private final TabsModel tabsModel = new TestingTabsModel();
@@ -46,7 +43,7 @@ class TestingState implements Kintsugi3DBuilderState
     }
 
     @Override
-    public ReadonlyViewpointModel getCameraModel()
+    public ReadonlyCameraModel getCameraModel()
     {
         return cameraModel;
     }

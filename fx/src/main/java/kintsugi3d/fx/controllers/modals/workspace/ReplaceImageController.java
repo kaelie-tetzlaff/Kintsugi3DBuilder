@@ -54,7 +54,7 @@ public class ReplaceImageController extends DataReceiverPageControllerBase<Image
 
         replacementFileChooser.setTitle("Replace with...");
         replacementFileChooser.getExtensionFilters().add(new ExtensionFilter("Texture image", "*.png"));
-        setCurrentDirectoryFile(Global.io().getLoadedViewSet().getSupportingFilesDirectory());
+        setCurrentDirectoryFile(Global.io().getLoadedViewSetOrThrow().getSupportingFilesDirectory());
 
         setCanConfirm(true);
         setCanAdvance(true);

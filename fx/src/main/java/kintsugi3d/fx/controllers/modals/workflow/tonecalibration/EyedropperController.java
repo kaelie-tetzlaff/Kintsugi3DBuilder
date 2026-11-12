@@ -39,7 +39,7 @@ import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.viewset.SampledLuminanceEncoding;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
-import kintsugi3d.builder.io.IOModel;
+import kintsugi3d.builder.io.IO;
 import kintsugi3d.builder.io.RecentProjects;
 import kintsugi3d.fx.controllers.modals.LiveProjectSettingsManager;
 import kintsugi3d.fx.controllers.paged.NonDataPageControllerBase;
@@ -202,14 +202,14 @@ public class EyedropperController extends NonDataPageControllerBase
             //initialize txtFields with their respective values
             if (hasValidIOModel())
             {
-                IOModel ioModel = Global.io();
+                IO io = Global.io();
 
                 // Initialize from loaded view set (projectSettingsManager will handle flatfieldCorrected)
-                ViewSet viewSet = ioModel.getLoadedViewSet();
+                ViewSet viewSet = io.getLoadedViewSetOrThrow();
                 useCurveCheckbox.setSelected(viewSet.hasCustomLuminanceEncoding());
 
                 // Refresh the text fields and retrieve their new values.
-                refreshToneValueTextFields(ioModel.getLuminanceEncodingFunction());
+                refreshToneValueTextFields(io.getLuminanceEncodingFunction());
 
                 if (viewSet.hasCustomLuminanceEncoding())
                 {
@@ -266,7 +266,7 @@ public class EyedropperController extends NonDataPageControllerBase
         }
         else
         {
-            ViewSet viewSet = Global.io().validateRenderable().getLoadedViewSet();
+            ViewSet viewSet = Global.io().getLoadedViewSetOrThrow();
             return viewSet.getPrimaryView().tryFindFullResImageFile();
         }
     }
@@ -285,17 +285,17 @@ public class EyedropperController extends NonDataPageControllerBase
         {
             projectSettingsManager.cancel(); // for flatfield setting
 
-            IOModel ioModel = Global.io();
-            ioModel.requestLightIntensityCalibration(); // in case "infinite light sources" was toggled
+            IO io = Global.io();
+            io.requestLightIntensityCalibration(); // in case "infinite light sources" was toggled
 
             // revert the tone calibration to what it was when the page was opened.
             if (prevEncodedLuminanceValues != null)
             {
-                ioModel.setTonemapping(LINEAR_LUMINANCE_VALUES, prevEncodedLuminanceValues);
+                io.setTonemapping(LINEAR_LUMINANCE_VALUES, prevEncodedLuminanceValues);
             }
             else
             {
-                ioModel.clearTonemapping();
+                io.clearTonemapping();
             }
 
             return true;
@@ -643,19 +643,19 @@ public class EyedropperController extends NonDataPageControllerBase
     @FXML
     private void apply()
     {
-        IOModel ioModel = Global.io();
+        IO io = Global.io();
 
         // light intensities depend on whether inverse-square attenuation is enabled
-        ioModel.requestLightIntensityCalibration();
+        io.requestLightIntensityCalibration();
 
         if (!useCurveCheckbox.selectedProperty().get())
         {
             // tone curve is disabled
-            ioModel.clearTonemapping();
+            io.clearTonemapping();
         }
         else if (areAllFieldsValid() && hasValidIOModel()) // check to see if all text fields contain valid input, and model is loaded
         {
-            ioModel.setTonemapping(
+            io.setTonemapping(
                 LINEAR_LUMINANCE_VALUES,
                 new byte[]
                 {
@@ -762,7 +762,7 @@ public class EyedropperController extends NonDataPageControllerBase
         fileChooser.getExtensionFilters().add(new ExtensionFilter("Image Files", VALID_EXTENSIONS));
         fileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
 
-        ViewSet viewSet = Global.io().getLoadedViewSet();
+        ViewSet viewSet = Global.io().getLoadedViewSetOrNull();
         if (viewSet == null)
         {
             Alert alert = new Alert(AlertType.ERROR, "Please load a model before performing tone calibration.");
@@ -809,10 +809,8 @@ public class EyedropperController extends NonDataPageControllerBase
 
     public void reset()
     {
-        IOModel ioModel = Global.io();
-
         // Clear tonemapping and reset text fields to a standard curve
-        ioModel.clearTonemapping();
+        Global.io().clearTonemapping();
         refreshToneValueTextFields(new SampledLuminanceEncoding().encodeFunction);
 
         // Disable curve

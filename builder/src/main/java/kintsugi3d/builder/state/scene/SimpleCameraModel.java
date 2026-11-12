@@ -14,9 +14,14 @@ package kintsugi3d.builder.state.scene;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 
-public class SimpleCameraModel implements ViewpointModel
+public class SimpleCameraModel implements CameraModel
 {
     private Matrix4 lookMatrix;
+
+    private int paddingLeft;
+    private int paddingTop;
+    private int paddingRight;
+    private int paddingBottom;
 
     public SimpleCameraModel()
     {
@@ -56,5 +61,53 @@ public class SimpleCameraModel implements ViewpointModel
     public void setOrthographic(boolean orthographic)
     {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int getPaddingLeft()
+    {
+        return paddingLeft;
+    }
+
+    @Override
+    public int getPaddingTop()
+    {
+        return paddingTop;
+    }
+
+    @Override
+    public int getPaddingRight()
+    {
+        return paddingRight;
+    }
+
+    @Override
+    public int getPaddingBottom()
+    {
+        return paddingBottom;
+    }
+
+    @Override
+    public void setPaddingLeft(int paddingLeft)
+    {
+        this.paddingLeft = paddingLeft;
+    }
+
+    @Override
+    public void setPaddingRight(int paddingRight)
+    {
+        this.paddingRight = paddingRight;
+    }
+
+    @Override
+    public void setPaddingTop(int paddingTop)
+    {
+        this.paddingTop = paddingTop;
+    }
+
+    @Override
+    public void setPaddingBottom(int paddingBottom)
+    {
+        this.paddingBottom = paddingBottom;
     }
 }

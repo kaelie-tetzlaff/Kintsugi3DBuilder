@@ -24,7 +24,7 @@ import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 
-public class SceneModel
+public class SceneModel implements ReadonlySceneModel
 {
     private ReadonlyObjectPoseModel objectModel;
     private ReadonlyViewpointModel cameraModel;
@@ -38,50 +38,60 @@ public class SceneModel
 
     private Vector3 clearColor = Vector3.ZERO;
 
+    @Override
     public ReadonlyObjectPoseModel getObjectModel()
     {
         return objectModel;
     }
 
+    @Override
     public ReadonlyViewpointModel getCameraModel()
     {
         return cameraModel;
     }
 
+    @Override
     public ReadonlyLightingEnvironmentModel getLightingModel()
     {
         return lightingModel;
     }
 
+    @Override
     public SafeReadonlyGlobalSettingsModel getSettingsModel()
     {
         return this.settingsModel;
     }
 
+    @Override
     public SelectableViewListModel getCameraViewListModel()
     {
         return viewListModel;
     }
 
+    @Override
     public Vector3 getCentroid()
     {
         return centroid;
     }
 
+    @Override
     public Matrix3 getOrientation()
     {
         return orientation;
     }
 
+    @Override
     public float getScale()
     {
         return this.scale;
     }
 
+    @Override
     public Vector3 getClearColor()
     {
         return clearColor;
     }
+
     public void setObjectModel(ReadonlyObjectPoseModel objectModel)
     {
         this.objectModel = objectModel;
@@ -127,16 +137,19 @@ public class SceneModel
         this.clearColor = clearColor;
     }
 
+    @Override
     public Matrix4 getLightViewMatrix(int lightIndex)
     {
         return getUnscaledMatrix(lightingModel.getLightMatrix(lightIndex));
     }
 
+    @Override
     public Matrix4 getInverseLightViewMatrix(int lightIndex)
     {
         return getUnscaledMatrix(lightingModel.getLightMatrix(lightIndex).quickInverse(0.01f));
     }
 
+    @Override
     public Matrix4 getLightModelViewMatrix(int lightIndex)
     {
         return getUnscaledMatrix(
@@ -145,16 +158,19 @@ public class SceneModel
             .times(getBaseModelMatrix());
     }
 
+    @Override
     public Matrix4 getEnvironmentMapMatrix(Matrix4 modelMatrix)
     {
         return getUnscaledMatrix(lightingModel.getEnvironmentMapMatrix()).times(modelMatrix);
     }
 
+    @Override
     public Matrix4 getCurrentViewMatrix()
     {
         return getUnscaledMatrix(cameraModel.getLookMatrix());
     }
 
+    @Override
     public Matrix4 getViewMatrixFromCameraPose(Matrix4 cameraPoseMatrix)
     {
         return cameraPoseMatrix
@@ -162,12 +178,14 @@ public class SceneModel
                 .times(orientation.asMatrix4().quickInverse(0.01f));
     }
 
+    @Override
     public Matrix4 getCameraPoseFromViewMatrix(Matrix4 cameraPoseMatrix)
     {
         return cameraPoseMatrix
                 .times(getBaseModelMatrix());
     }
 
+    @Override
     public Matrix4 getUnscaledMatrix(Matrix4 scaledMatrix)
     {
         return Matrix4.scale(scale)
@@ -175,30 +193,26 @@ public class SceneModel
                 .times(Matrix4.scale(1.0f / scale));
     }
 
-    /**
-     * Recenters and reorients the model using base model matrix, then applies the user-specified model transformation.
-     * @return
-     */
+    @Override
     public Matrix4 getFullModelMatrix()
     {
         return getUnscaledMatrix(this.objectModel.getTransformationMatrix()).times(getBaseModelMatrix());
     }
 
-    /**
-     * Just recentering and reorienting the model
-     * @return
-     */
+    @Override
     public Matrix4 getBaseModelMatrix()
     {
         return orientation.asMatrix4()
                 .times(Matrix4.translate(this.centroid.negated()));
     }
 
+    @Override
     public Matrix4 getModelViewMatrix(Matrix4 view)
     {
         return view.times(getFullModelMatrix());
     }
 
+    @Override
     public Matrix4 getViewFromModelViewMatrix(Matrix4 modelViewMatrix)
     {
         return modelViewMatrix
@@ -207,6 +221,7 @@ public class SceneModel
                 .times(getUnscaledMatrix(this.objectModel.getTransformationMatrix().quickInverse(0.01f)));
     }
 
+    @Override
     public float getVerticalFieldOfView(FramebufferSize size)
     {
         return 2 * (float)Math.atan(Math.tan(cameraModel.getHorizontalFOV() / 2) * size.height / size.width);
