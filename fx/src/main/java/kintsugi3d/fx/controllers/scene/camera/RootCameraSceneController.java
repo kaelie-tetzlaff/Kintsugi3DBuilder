@@ -86,7 +86,7 @@ public class RootCameraSceneController
     @FXML
     private void saveCameraButton()
     {
-        LOG.debug("TODO: saved " + getCameraSelectionModel().getSelectedItem() + " to the library.");
+        LOG.debug("TODO: saved {} to the library.", getCameraSelectionModel().getSelectedItem());
     }
 
     @FXML
@@ -190,7 +190,7 @@ public class RootCameraSceneController
     void keyframeCameraButton()
     {
         //TODO
-        LOG.debug("TODO: keyframe added for " + getCameraSelectionModel().getSelectedItem());
+        LOG.debug("TODO: keyframe added for {}", getCameraSelectionModel().getSelectedItem());
     }
 
     @FXML
@@ -200,8 +200,8 @@ public class RootCameraSceneController
         if (selectedIndex != 0)
         {
             Dialog<ButtonType> confirmation = new Alert(AlertType.CONFIRMATION, "This action cannot be reversed.");
-            confirmation.setHeaderText("Are you sure you want to delete the following camera: "
-                + projectModel.getCameraList().get(selectedIndex).getName() + '?');
+            confirmation.setHeaderText(String.format("Are you sure you want to delete the following camera: %s?",
+                projectModel.getCameraList().get(selectedIndex).getName()));
             confirmation.setTitle("Delete?");
 
             confirmation.showAndWait()

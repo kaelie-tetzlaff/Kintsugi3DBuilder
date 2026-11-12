@@ -98,7 +98,7 @@ public class LightWidgetLines<ContextType extends Context<ContextType>> implemen
                                 new Vector3(sceneModel.getLightingModel().getLightWidgetModel(i).isDistanceWidgetSelected()
                                     || sceneModel.getLightingModel().getLightWidgetModel(i).isCenterWidgetSelected() ? 1.0f : 0.5f)
                                     .asVector4(1));
-                            solidProgram.setUniform("objectID", sceneViewportModel.lookupSceneObjectID("Light." + i + ".Distance"));
+                            solidProgram.setUniform("objectID", sceneViewportModel.lookupSceneObjectID(String.format("Light.%d.Distance", i)));
                             lineRenderable.draw(PrimitiveMode.LINES, cameraViewport.ofFramebuffer(framebuffer));
                         }
                     }

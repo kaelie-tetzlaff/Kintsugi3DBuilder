@@ -182,10 +182,7 @@ public class DoubleVector2 implements Iterable<Double>
     @Override
     public String toString()
     {
-        return "DoubleVector2{" +
-            "x=" + x +
-            ", y=" + y +
-            '}';
+        return String.format("DoubleVector2{x=%s, y=%s}", x, y);
     }
 
     @Override

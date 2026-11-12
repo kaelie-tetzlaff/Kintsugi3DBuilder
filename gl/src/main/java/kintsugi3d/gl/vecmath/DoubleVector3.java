@@ -202,11 +202,7 @@ public class DoubleVector3 implements Iterable<Double>
     @Override
     public String toString()
     {
-        return "DoubleVector3{" +
-            "x=" + x +
-            ", y=" + y +
-            ", z=" + z +
-            '}';
+        return String.format("DoubleVector3{x=%s, y=%s, z=%s}", x, y, z);
     }
 
     @Override

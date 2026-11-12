@@ -840,8 +840,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
             if (hasUnsupportedCorrections)
             {
                 LOG.warn(
-                    "Metashape project uses 'Fit additional corrections' which are not supported. "
-                        + "Results may be inaccurate. Consider re-calibrating without additional corrections."
+                    "Metashape project uses 'Fit additional corrections' which are not supported. Results may be inaccurate. Consider re-calibrating without additional corrections."
                 );
             }
 

@@ -285,11 +285,7 @@ public class Vector3 implements Iterable<Float>
     @Override
     public String toString()
     {
-        return "Vector3{" +
-                "x=" + x +
-                ", y=" + y +
-                ", z=" + z +
-                '}';
+        return String.format("Vector3{x=%s, y=%s, z=%s}", x, y, z);
     }
 
     @Override

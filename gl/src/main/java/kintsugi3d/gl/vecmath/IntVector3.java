@@ -160,11 +160,7 @@ public class IntVector3 implements Iterable<Integer>
     @Override
     public String toString()
     {
-        return "IntVector3{" +
-            "x=" + x +
-            ", y=" + y +
-            ", z=" + z +
-            '}';
+        return String.format("IntVector3{x=%d, y=%d, z=%d}", x, y, z);
     }
 
     @Override

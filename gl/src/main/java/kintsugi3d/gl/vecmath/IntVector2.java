@@ -147,10 +147,7 @@ public class IntVector2 implements Iterable<Integer>
     @Override
     public String toString()
     {
-        return "IntVector2{" +
-            "x=" + x +
-            ", y=" + y +
-            '}';
+        return String.format("IntVector2{x=%d, y=%d}", x, y);
     }
 
     @Override

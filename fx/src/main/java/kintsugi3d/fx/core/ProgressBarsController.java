@@ -602,9 +602,9 @@ public class ProgressBarsController
             {
                 ButtonType ok = new ButtonType("OK", ButtonData.OK_DONE);
                 //ButtonType stopProcess = new ButtonType("Start New Process", ButtonBar.ButtonData.YES);
-                Alert alert = new Alert(AlertType.NONE, "Cannot run multiple tasks at the same time.\n" +
-                    "Either wait for the current task to complete or cancel it." /*+
-                        "Press OK to finish the current process."*/, ok/*, stopProcess*/);
+                Alert alert = new Alert(AlertType.NONE,
+                    String.format("Cannot run multiple tasks at the same time.\nEither wait for the current task to complete or cancel it.")
+                    /*+ "Press OK to finish the current process."*/, ok/*, stopProcess*/);
                 alert.setHeaderText("Conflicting Tasks");
 
 //                    //continue current process, don't start a new one

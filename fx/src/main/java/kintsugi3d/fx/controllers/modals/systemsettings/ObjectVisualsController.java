@@ -103,14 +103,17 @@ public class ObjectVisualsController implements SystemSettingsControllerBase
                 }
             }
         };
+
         txtField.textProperty().bindBidirectional(integerProperty, numberStringConverter);
+
         txtField.focusedProperty().addListener((ob, o, n) ->
         {
             if (o && !n)
             {
-                txtField.setText(integerProperty.getValue().toString());
+                txtField.setText(String.format("%d", integerProperty.getValue()));
             }
         });
+
         integerProperty.addListener((ob, o, n) ->
         {
             if (n.intValue() < 1)

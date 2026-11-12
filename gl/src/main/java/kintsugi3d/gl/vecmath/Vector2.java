@@ -253,10 +253,7 @@ public class Vector2 implements Iterable<Float>
     @Override
     public String toString()
     {
-        return "Vector2{" +
-                "x=" + x +
-                ", y=" + y +
-                '}';
+        return String.format("Vector2{x=%s, y=%s}", x, y);
     }
 
     @Override

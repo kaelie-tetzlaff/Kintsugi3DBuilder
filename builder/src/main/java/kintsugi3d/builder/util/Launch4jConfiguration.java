@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -133,7 +134,7 @@ public final class Launch4jConfiguration
         }
 
         float multiplier = 1;
-        if (suffix.toLowerCase().charAt(0) == 'g')
+        if (suffix.toLowerCase(Locale.ROOT).charAt(0) == 'g')
         {
             multiplier = 1024;
         }
