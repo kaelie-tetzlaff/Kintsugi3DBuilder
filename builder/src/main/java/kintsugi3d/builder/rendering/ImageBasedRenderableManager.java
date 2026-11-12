@@ -78,6 +78,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     private final Map<ShaderInfo, RenderRefreshable<ContextType, ImageBasedRenderingEngine<ContextType>>> renderViewMap
         = new HashMap<>(8);
 
+    @SuppressWarnings("ThisEscapedInObjectConstruction")
     private final SceneViewport sceneViewport = new ManagedSceneViewport(this);
 
     private volatile ViewSet loadedViewSet;

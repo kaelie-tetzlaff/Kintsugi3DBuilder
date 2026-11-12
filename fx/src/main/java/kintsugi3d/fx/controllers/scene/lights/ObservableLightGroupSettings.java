@@ -35,7 +35,7 @@ public class ObservableLightGroupSettings extends SerializableLightGroupSettings
 
     public ObservableLightGroupSettings(String name)
     {
-        this.setName(name);
+        this.name.set(name);
     }
 
     @Override

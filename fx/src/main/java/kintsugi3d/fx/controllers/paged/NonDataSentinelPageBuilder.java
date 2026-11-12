@@ -15,12 +15,19 @@ import java.util.function.Supplier;
 
 public class NonDataSentinelPageBuilder extends NonDataPageBuilder<PageFrameController>
 {
-    NonDataSentinelPageBuilder(PageFrameController frameController, Supplier<PageFrameController> finisher)
+    private NonDataSentinelPageBuilder(PageFrameController frameController, Supplier<PageFrameController> finisher)
     {
         super(new SentinelPage<>(), frameController, finisher);
+    }
+
+    static NonDataSentinelPageBuilder of(PageFrameController frameController, Supplier<PageFrameController> finisher)
+    {
+        NonDataSentinelPageBuilder result = new NonDataSentinelPageBuilder(frameController, finisher);
 
         // Whenever the next page (i.e. true first page) is assigned, make it the current page of the frame controller.
-        getPage().getNextPageObservable().addListener(
-            obs -> frameController.setCurrentPage(getPage().getNextPage()));
+        result.getPage().getNextPageObservable().addListener(
+            obs -> frameController.setCurrentPage(result.getPage().getNextPage()));
+
+        return result;
     }
 }

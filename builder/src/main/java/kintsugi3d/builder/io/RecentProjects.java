@@ -151,7 +151,8 @@ public final class RecentProjects
 
     public static File getMostRecentDirectory()
     {
-        if ((recentDirectory != null) && recentDirectory.exists())
+        //noinspection StaticVariableUsedBeforeInitialization
+        if (recentDirectory != null && recentDirectory.exists())
         {
             return recentDirectory;
         }

@@ -225,7 +225,7 @@ public class PageFrameController
 
     public NonDataPageBuilder<PageFrameController> buildPage(Runnable callback)
     {
-        return new NonDataSentinelPageBuilder(this,
+        return NonDataSentinelPageBuilder.of(this,
             () ->
             {
                 this.init();
@@ -236,7 +236,7 @@ public class PageFrameController
 
     public <T> SimplePageBuilder<Object, T, PageFrameController> buildPage(Runnable callback, T data)
     {
-        return new DataSentinelPageBuilder<>(this,
+        return DataSentinelPageBuilder.of(this,
             () ->
             {
                 this.init();

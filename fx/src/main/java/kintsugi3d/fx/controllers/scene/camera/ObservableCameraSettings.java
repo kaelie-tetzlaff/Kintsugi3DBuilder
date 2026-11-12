@@ -37,7 +37,7 @@ public class ObservableCameraSettings extends SerializableCameraSettings
 
     public ObservableCameraSettings(String name)
     {
-        this.setName(name);
+        this.name.set(name);
     }
 
     @Override

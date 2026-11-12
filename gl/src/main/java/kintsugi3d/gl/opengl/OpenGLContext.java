@@ -47,7 +47,10 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
     {
         super(handle);
         this.state = new OpenGLContextState();
+
+        //noinspection ThisEscapedInObjectConstruction
         this.textureFactory = new OpenGLTextureFactory(this);
+
         this.textureBindings = new HashMap<>(48);
         this.uniformBufferBindings = new HashMap<>(24);
     }

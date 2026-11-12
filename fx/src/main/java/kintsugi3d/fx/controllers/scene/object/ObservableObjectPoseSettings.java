@@ -34,7 +34,7 @@ public class ObservableObjectPoseSettings extends SerializableObjectPoseSettings
 
     public ObservableObjectPoseSettings(String name)
     {
-        this.setName(name);
+        this.name.set(name);
     }
 
     @Override

@@ -52,7 +52,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
 
     public ObservableEnvironmentSettings(String name)
     {
-        setName(name);
+        this.name.set(name);
     }
 
     @Override

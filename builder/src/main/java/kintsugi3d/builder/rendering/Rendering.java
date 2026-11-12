@@ -139,6 +139,7 @@ public final class Rendering
 
     public static void runNowOrLater(Runnable runnable)
     {
+        //noinspection StaticVariableUsedBeforeInitialization
         if (Objects.equals(Thread.currentThread(), renderingThread))
         {
             runnable.run();

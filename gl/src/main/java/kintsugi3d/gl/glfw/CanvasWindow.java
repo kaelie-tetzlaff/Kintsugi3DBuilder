@@ -129,6 +129,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
 
         this.handle = handleIfSuccessful;
 
+        //noinspection ThisEscapedInObjectConstruction
         this.listenerManager = new WindowCallback(this);
 
         // Query height and width of screen to set center point
