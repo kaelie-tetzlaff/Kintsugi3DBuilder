@@ -212,24 +212,7 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
     @Override
     public Iterator<Setting> iterator()
     {
-        return new Iterator<>()
-        {
-            private final Iterator<Entry<String, TypedProperty>> innerIterator = settingsMap.entrySet().iterator();
-
-            @Override
-            public boolean hasNext()
-            {
-                return innerIterator.hasNext();
-            }
-
-            @Override
-            public Setting next()
-            {
-                Entry<String, TypedProperty> nextEntry = innerIterator.next();
-
-                return new ObservableSetting(nextEntry);
-            }
-        };
+        return new SettingsIterator(settingsMap.entrySet().iterator());
     }
 
     @Override
@@ -282,6 +265,30 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
         else
         {
             settingsMap.put(name, new TypedProperty(initialValue, settingType, serialize));
+        }
+    }
+
+    private static class SettingsIterator implements Iterator<Setting>
+    {
+        private final Iterator<Entry<String, TypedProperty>> innerIterator;
+
+        SettingsIterator(Iterator<Entry<String, TypedProperty>> innerIterator)
+        {
+            this.innerIterator = innerIterator;
+        }
+
+        @Override
+        public boolean hasNext()
+        {
+            return innerIterator.hasNext();
+        }
+
+        @Override
+        public Setting next()
+        {
+            Entry<String, TypedProperty> nextEntry = innerIterator.next();
+
+            return new ObservableSetting(nextEntry);
         }
     }
 }

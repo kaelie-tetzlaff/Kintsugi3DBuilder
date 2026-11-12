@@ -498,29 +498,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
     public OpenGLFramebufferAttachment getLayerAsFramebufferAttachment(int layerIndex)
     {
         int textureId = this.getTextureId();
-        return new OpenGLFramebufferAttachment()
-        {
-            @Override
-            public OpenGLContext getContext()
-            {
-                return OpenGLTexture3D.this.getContext();
-            }
-
-            @Override
-            public void attachToDrawFramebuffer(int attachment, int level)
-            {
-                glFramebufferTextureLayer(GL_DRAW_FRAMEBUFFER, attachment, textureId, level, layerIndex);
-                OpenGLContext.errorCheck();
-            }
-
-            @Override
-            public void attachToReadFramebuffer(int attachment, int level)
-            {
-                glFramebufferTextureLayer(GL_READ_FRAMEBUFFER, attachment, textureId, level, layerIndex);
-                OpenGLContext.errorCheck();
-            }
-
-        };
+        return new TextureLayer(this, textureId, layerIndex);
     }
 
     @Override
@@ -687,6 +665,40 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
                     }
                 }
             }
+        }
+    }
+
+    private static class TextureLayer implements OpenGLFramebufferAttachment
+    {
+        private final OpenGLTexture3D texture;
+        private final int textureId;
+        private final int layerIndex;
+
+        TextureLayer(OpenGLTexture3D texture, int textureId, int layerIndex)
+        {
+            this.texture = texture;
+            this.textureId = textureId;
+            this.layerIndex = layerIndex;
+        }
+
+        @Override
+        public OpenGLContext getContext()
+        {
+            return texture.getContext();
+        }
+
+        @Override
+        public void attachToDrawFramebuffer(int attachment, int level)
+        {
+            glFramebufferTextureLayer(GL_DRAW_FRAMEBUFFER, attachment, textureId, level, layerIndex);
+            OpenGLContext.errorCheck();
+        }
+
+        @Override
+        public void attachToReadFramebuffer(int attachment, int level)
+        {
+            glFramebufferTextureLayer(GL_READ_FRAMEBUFFER, attachment, textureId, level, layerIndex);
+            OpenGLContext.errorCheck();
         }
     }
 }

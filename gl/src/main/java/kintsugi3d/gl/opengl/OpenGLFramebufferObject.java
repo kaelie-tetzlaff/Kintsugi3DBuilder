@@ -27,7 +27,8 @@ import static org.lwjgl.opengl.GL30.*;
 
 final class OpenGLFramebufferObject extends OpenGLFramebuffer implements FramebufferObject<OpenGLContext>
 {
-    private final Contents contents;
+    private FBOContents contents;
+    private final int id;
     private final int width;
     private final int height;
     private final AbstractCollection<ManagedResource> ownedAttachments;
@@ -45,7 +46,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         }
 
         @Override
-        public OpenGLFramebufferObject createFramebufferObject()
+        public FramebufferObject<OpenGLContext> createFramebufferObject()
         {
             if (this.getColorAttachmentCount() > GL_MAX_COLOR_ATTACHMENTS)
             {
@@ -85,20 +86,21 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         }
     }
 
-    private class Contents extends ContentsBase
+    private static class FBOContents extends Contents
     {
-        final int fboId;
+        private final OpenGLFramebufferObject fbo;
         IntBuffer drawBufferList;
 
-        Contents(int fboId)
+        FBOContents(OpenGLFramebufferObject fbo)
         {
-            this.fboId = fboId;
+            super(fbo);
+            this.fbo = fbo;
         }
 
         @Override
         int getId()
         {
-            return fboId;
+            return fbo.id;
         }
 
         @Override
@@ -118,7 +120,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         @Override
         void useAllColorDestinationsForDraw()
         {
-            if (colorAttachments.length > 0)
+            if (fbo.colorAttachments.length > 0)
             {
                 glDrawBuffers(drawBufferList);
                 OpenGLContext.errorCheck();
@@ -136,10 +138,8 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
     {
         super(context);
 
-        int fboId = glGenFramebuffers();
+        this.id = glGenFramebuffers();
         OpenGLContext.errorCheck();
-
-        this.contents = new Contents(fboId);
 
         this.width = width;
         this.height = height;
@@ -149,15 +149,11 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         this.stencilAttachment = stencilAttachment;
         this.depthStencilAttachment = depthStencilAttachment;
 
-        contents.drawBufferList = BufferUtils.createIntBuffer(colorAttachments.length);
-
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, contents.fboId);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, id);
         OpenGLContext.errorCheck();
 
         for (int i = 0; i < colorAttachments.length; i++)
         {
-            contents.drawBufferList.put(i, GL_COLOR_ATTACHMENT0 + i);
-
             if (colorAttachments[i] != null)
             {
                 this.colorAttachments[i] = colorAttachments[i];
@@ -195,6 +191,16 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
     @Override
     public Contents getContents()
     {
+        if (this.contents == null)
+        {
+            this.contents = new FBOContents(this);
+            contents.drawBufferList = BufferUtils.createIntBuffer(colorAttachments.length);
+            for (int i = 0; i < colorAttachments.length; i++)
+            {
+                contents.drawBufferList.put(i, GL_COLOR_ATTACHMENT0 + i);
+            }
+        }
+
         return this.contents;
     }
 
@@ -213,128 +219,13 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
     @Override
     public ColorTextureReader getTextureReaderForColorAttachment(int attachmentIndex)
     {
-        return new ColorTextureReaderBase()
-        {
-            @Override
-            public int getWidth()
-            {
-                return getSizeForRead().width;
-            }
-
-            @Override
-            public int getHeight()
-            {
-                return getSizeForRead().height;
-            }
-
-            @Override
-            public void readARGB(ByteBuffer destination, int x, int y, int readWidth, int readHeight)
-            {
-                if (destination.remaining() < readWidth * readHeight * 4)
-                {
-                    throw new IllegalArgumentException(
-                        MessageFormat.format(
-                            "The destination buffer (capacity: {0}, limit: {1}, position: {2}, remaining: {3}) " +
-                                "is not big enough to hold the requested data (width: {4}, height: {5}).",
-                            destination.capacity(), destination.limit(),  destination.position(), destination.remaining(),
-                            readWidth, readHeight));
-                }
-
-                getReadContents().bindForRead(attachmentIndex);
-
-                glPixelStorei(GL_PACK_ALIGNMENT, 4);
-                OpenGLContext.errorCheck();
-
-                // use BGRA because due to byte order differences it ends up being ARGB
-                glReadPixels(x, y, readWidth, readHeight, GL_BGRA, GL_UNSIGNED_BYTE, destination);
-                OpenGLContext.errorCheck();
-            }
-
-            @Override
-            public void readFloatingPointRGBA(FloatBuffer destination, int x, int y, int readWidth, int readHeight)
-            {
-                if (destination.remaining() < readWidth * readHeight * 4)
-                {
-                    throw new IllegalArgumentException(
-                        MessageFormat.format(
-                            "The destination buffer (capacity: {0}, limit: {1}, position: {2}, remaining: {3}) " +
-                                "is not big enough to hold the requested data (width: {4}, height: {5}).",
-                            destination.capacity(), destination.limit(),  destination.position(), destination.remaining(),
-                            readWidth, readHeight));
-                }
-
-                getReadContents().bindForRead(attachmentIndex);
-
-                glPixelStorei(GL_PACK_ALIGNMENT, 4);
-                OpenGLContext.errorCheck();
-
-                glReadPixels(x, y, readWidth, readHeight, GL_RGBA, GL_FLOAT, destination);
-                OpenGLContext.errorCheck();
-            }
-
-            @Override
-            public void readIntegerRGBA(IntBuffer destination, int x, int y, int readWidth, int readHeight)
-            {
-                if (destination.remaining() < readWidth * readHeight * 4)
-                {
-                    throw new IllegalArgumentException(
-                        MessageFormat.format(
-                            "The destination buffer (capacity: {0}, limit: {1}, position: {2}, remaining: {3}) " +
-                                "is not big enough to hold the requested data (width: {4}, height: {5}).",
-                            destination.capacity(), destination.limit(),  destination.position(), destination.remaining(),
-                            readWidth, readHeight));
-                }
-
-                getReadContents().bindForRead(attachmentIndex);
-
-                glPixelStorei(GL_PACK_ALIGNMENT, 4);
-                OpenGLContext.errorCheck();
-
-                glReadPixels(x, y, readWidth, readHeight, GL_RGBA_INTEGER, GL_INT, destination);
-                OpenGLContext.errorCheck();
-            }
-        };
+        return new ColorFBOReader(this, attachmentIndex);
     }
 
     @Override
     public DepthTextureReader getTextureReaderForDepthAttachment()
     {
-        return new DepthTextureReaderBase()
-        {
-            @Override
-            public int getWidth()
-            {
-                return getSizeForRead().width;
-            }
-
-            @Override
-            public int getHeight()
-            {
-                return getSizeForRead().height;
-            }
-
-            @Override
-            public void read(ShortBuffer destination, int x, int y, int width, int height)
-            {
-                if (destination.remaining() < width * height)
-                {
-                    throw new IllegalArgumentException(
-                        MessageFormat.format(
-                            "The destination buffer (capacity: {0}, limit: {1}, position: {2}, remaining: {3}) " +
-                                "is not big enough to hold the requested data (width: {4}, height: {5}).",
-                            destination.capacity(), destination.limit(),  destination.position(), destination.remaining(),
-                            width, height));
-                }
-
-                getReadContents().bindForRead(0);
-
-                glPixelStorei(GL_PACK_ALIGNMENT, 2);
-                OpenGLContext.errorCheck();
-
-                glReadPixels(x, y, width, height, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, destination);
-                OpenGLContext.errorCheck();
-            }
-        };
+        return new DepthFBOReader(this);
     }
 
     @Override
@@ -376,7 +267,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
                 }
             }
 
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, contents.fboId);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, id);
             OpenGLContext.errorCheck();
             attachmentCast.attachToDrawFramebuffer(GL_COLOR_ATTACHMENT0 + index, 0);
             this.colorAttachments[index] = attachmentCast;
@@ -417,7 +308,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
                 }
             }
 
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, contents.fboId);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, id);
             OpenGLContext.errorCheck();
             attachmentCast.attachToDrawFramebuffer(GL_DEPTH_ATTACHMENT, 0);
 
@@ -460,7 +351,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
                 }
             }
 
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, contents.fboId);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, id);
             OpenGLContext.errorCheck();
             attachmentCast.attachToDrawFramebuffer(GL_STENCIL_ATTACHMENT, 0);
 
@@ -503,7 +394,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
                 }
             }
 
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, contents.fboId);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, id);
             OpenGLContext.errorCheck();
             attachmentCast.attachToDrawFramebuffer(GL_DEPTH_STENCIL_ATTACHMENT, 0);
 
@@ -526,13 +417,148 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
     {
         if (live)
         {
-            glDeleteFramebuffers(contents.fboId);
+            glDeleteFramebuffers(id);
             OpenGLContext.errorCheck();
             for (ManagedResource attachment : ownedAttachments)
             {
                 attachment.close();
             }
             live = false;
+        }
+    }
+
+    private static class ColorFBOReader extends ColorTextureReaderBase
+    {
+        private final OpenGLFramebufferObject fbo;
+        private final int attachmentIndex;
+
+        ColorFBOReader(OpenGLFramebufferObject fbo, int attachmentIndex)
+        {
+            this.fbo = fbo;
+            this.attachmentIndex = attachmentIndex;
+        }
+
+        @Override
+        public int getWidth()
+        {
+            return fbo.getSizeForRead().width;
+        }
+
+        @Override
+        public int getHeight()
+        {
+            return fbo.getSizeForRead().height;
+        }
+
+        @Override
+        public void readARGB(ByteBuffer destination, int x, int y, int readWidth, int readHeight)
+        {
+            if (destination.remaining() < readWidth * readHeight * 4)
+            {
+                throw new IllegalArgumentException(
+                    MessageFormat.format(
+                        "The destination buffer (capacity: {0}, limit: {1}, position: {2}, remaining: {3}) " +
+                            "is not big enough to hold the requested data (width: {4}, height: {5}).",
+                        destination.capacity(), destination.limit(),  destination.position(), destination.remaining(),
+                        readWidth, readHeight));
+            }
+
+            fbo.getReadContents().bindForRead(attachmentIndex);
+
+            glPixelStorei(GL_PACK_ALIGNMENT, 4);
+            OpenGLContext.errorCheck();
+
+            // use BGRA because due to byte order differences it ends up being ARGB
+            glReadPixels(x, y, readWidth, readHeight, GL_BGRA, GL_UNSIGNED_BYTE, destination);
+            OpenGLContext.errorCheck();
+        }
+
+        @Override
+        public void readFloatingPointRGBA(FloatBuffer destination, int x, int y, int readWidth, int readHeight)
+        {
+            if (destination.remaining() < readWidth * readHeight * 4)
+            {
+                throw new IllegalArgumentException(
+                    MessageFormat.format(
+                        "The destination buffer (capacity: {0}, limit: {1}, position: {2}, remaining: {3}) " +
+                            "is not big enough to hold the requested data (width: {4}, height: {5}).",
+                        destination.capacity(), destination.limit(),  destination.position(), destination.remaining(),
+                        readWidth, readHeight));
+            }
+
+            fbo.getReadContents().bindForRead(attachmentIndex);
+
+            glPixelStorei(GL_PACK_ALIGNMENT, 4);
+            OpenGLContext.errorCheck();
+
+            glReadPixels(x, y, readWidth, readHeight, GL_RGBA, GL_FLOAT, destination);
+            OpenGLContext.errorCheck();
+        }
+
+        @Override
+        public void readIntegerRGBA(IntBuffer destination, int x, int y, int readWidth, int readHeight)
+        {
+            if (destination.remaining() < readWidth * readHeight * 4)
+            {
+                throw new IllegalArgumentException(
+                    MessageFormat.format(
+                        "The destination buffer (capacity: {0}, limit: {1}, position: {2}, remaining: {3}) " +
+                            "is not big enough to hold the requested data (width: {4}, height: {5}).",
+                        destination.capacity(), destination.limit(),  destination.position(), destination.remaining(),
+                        readWidth, readHeight));
+            }
+
+            fbo.getReadContents().bindForRead(attachmentIndex);
+
+            glPixelStorei(GL_PACK_ALIGNMENT, 4);
+            OpenGLContext.errorCheck();
+
+            glReadPixels(x, y, readWidth, readHeight, GL_RGBA_INTEGER, GL_INT, destination);
+            OpenGLContext.errorCheck();
+        }
+    }
+
+    private static class DepthFBOReader extends DepthTextureReaderBase
+    {
+        private final OpenGLFramebufferObject fbo;
+
+        DepthFBOReader(OpenGLFramebufferObject fbo)
+        {
+            this.fbo = fbo;
+        }
+
+        @Override
+        public int getWidth()
+        {
+            return fbo.getSizeForRead().width;
+        }
+
+        @Override
+        public int getHeight()
+        {
+            return fbo.getSizeForRead().height;
+        }
+
+        @Override
+        public void read(ShortBuffer destination, int x, int y, int width, int height)
+        {
+            if (destination.remaining() < width * height)
+            {
+                throw new IllegalArgumentException(
+                    MessageFormat.format(
+                        "The destination buffer (capacity: {0}, limit: {1}, position: {2}, remaining: {3}) " +
+                            "is not big enough to hold the requested data (width: {4}, height: {5}).",
+                        destination.capacity(), destination.limit(),  destination.position(), destination.remaining(),
+                        width, height));
+            }
+
+            fbo.getReadContents().bindForRead(0);
+
+            glPixelStorei(GL_PACK_ALIGNMENT, 2);
+            OpenGLContext.errorCheck();
+
+            glReadPixels(x, y, width, height, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, destination);
+            OpenGLContext.errorCheck();
         }
     }
 }

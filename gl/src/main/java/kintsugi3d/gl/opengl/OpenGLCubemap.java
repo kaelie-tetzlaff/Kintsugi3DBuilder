@@ -493,37 +493,49 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
 
         switch(face)
         {
-        case POSITIVE_X: layerIndex = 0; break;
-        case NEGATIVE_X: layerIndex = 1; break;
-        case POSITIVE_Y: layerIndex = 2; break;
-        case NEGATIVE_Y: layerIndex = 3; break;
-        case POSITIVE_Z: layerIndex = 4; break;
-        case NEGATIVE_Z: layerIndex = 5; break;
-        default: layerIndex = -1; break; // Should never happen
+            case POSITIVE_X: layerIndex = 0; break;
+            case NEGATIVE_X: layerIndex = 1; break;
+            case POSITIVE_Y: layerIndex = 2; break;
+            case NEGATIVE_Y: layerIndex = 3; break;
+            case POSITIVE_Z: layerIndex = 4; break;
+            case NEGATIVE_Z: layerIndex = 5; break;
+            default: layerIndex = -1; break; // Should never happen
         }
 
-        return new OpenGLFramebufferAttachment()
+        return new CubemapSide(getContext(), textureId, layerIndex);
+    }
+
+    private static class CubemapSide implements OpenGLFramebufferAttachment
+    {
+        private final int textureId;
+        private final int layerIndex;
+        private final OpenGLContext context;
+
+        CubemapSide(OpenGLContext context, int textureId, int layerIndex)
         {
-            @Override
-            public OpenGLContext getContext()
-            {
-                return OpenGLCubemap.this.getContext();
-            }
+            this.context = context;
+            this.textureId = textureId;
+            this.layerIndex = layerIndex;
+        }
 
-            @Override
-            public void attachToDrawFramebuffer(int attachment, int level)
-            {
-                glFramebufferTextureLayer(GL_DRAW_FRAMEBUFFER, attachment, textureId, level, layerIndex);
-                OpenGLContext.errorCheck();
-            }
+        @Override
+        public OpenGLContext getContext()
+        {
+            return context;
+        }
 
-            @Override
-            public void attachToReadFramebuffer(int attachment, int level)
-            {
-                glFramebufferTextureLayer(GL_READ_FRAMEBUFFER, attachment, textureId, level, layerIndex);
-                OpenGLContext.errorCheck();
-            }
+        @Override
+        public void attachToDrawFramebuffer(int attachment, int level)
+        {
+            glFramebufferTextureLayer(GL_DRAW_FRAMEBUFFER, attachment, textureId, level, layerIndex);
+            OpenGLContext.errorCheck();
+        }
 
-        };
+        @Override
+        public void attachToReadFramebuffer(int attachment, int level)
+        {
+            glFramebufferTextureLayer(GL_READ_FRAMEBUFFER, attachment, textureId, level, layerIndex);
+            OpenGLContext.errorCheck();
+        }
     }
 }
