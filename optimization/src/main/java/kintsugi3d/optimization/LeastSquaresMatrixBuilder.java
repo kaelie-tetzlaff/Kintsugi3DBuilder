@@ -182,7 +182,7 @@ public class LeastSquaresMatrixBuilder
                     // Evaluate the "basisCalculator" to get another function that can provide the actual basis function values.
                     IntFunction<T> basisFunctions = leastSquaresModel.getBasisFunctions(reflectanceData, p);
 
-                    ArrayList<T> basisEval = new ArrayList<T>(weightCount);
+                    ArrayList<T> basisEval = new ArrayList<>(weightCount);
 
                     for (int b = 0; b < weightCount; b++)
                     {

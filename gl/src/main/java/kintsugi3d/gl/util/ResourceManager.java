@@ -73,7 +73,7 @@ public class ResourceManager<ResourceType>
 
     public List<Optional<ResourceType>> asReadonlyList()
     {
-        return new AbstractList<Optional<ResourceType>>()
+        return new AbstractList<>()
         {
             @Override
             public int size()
@@ -85,7 +85,7 @@ public class ResourceManager<ResourceType>
             @SuppressWarnings("unchecked")
             public Optional<ResourceType> get(int index)
             {
-                return Optional.ofNullable((ResourceType)resources[index]);
+                return Optional.ofNullable((ResourceType) resources[index]);
             }
         };
     }
