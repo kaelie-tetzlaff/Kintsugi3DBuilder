@@ -159,21 +159,7 @@ public class WelcomeWindowController
     public void runOnceWhenShown(Runnable runnable)
     {
         ReadOnlyBooleanProperty showing = window.showingProperty();
-
-        ChangeListener<Boolean> runOnce = new ChangeListener<>()
-        {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean wasShown, Boolean isShown)
-            {
-                if (isShown)
-                {
-                    runnable.run();
-                    showing.removeListener(this);
-                }
-            }
-        };
-
-        showing.addListener(runOnce);
+        showing.addListener(new OneShotChangeListener(runnable, showing));
     }
 
     private static void handleMenuItemSelection(MenuItem item)
@@ -439,6 +425,28 @@ public class WelcomeWindowController
         catch (IOException e)
         {
             LOG.warn("Could not find preview image for {}", projFile.getName(), e);
+        }
+    }
+
+    private static final class OneShotChangeListener implements ChangeListener<Boolean>
+    {
+        private final Runnable runnable;
+        private final ObservableValue<Boolean> property;
+
+        private OneShotChangeListener(Runnable runnable, ObservableValue<Boolean> property)
+        {
+            this.runnable = runnable;
+            this.property = property;
+        }
+
+        @Override
+        public void changed(ObservableValue<? extends Boolean> observable, Boolean wasTrue, Boolean isTrue)
+        {
+            if (isTrue)
+            {
+                runnable.run();
+                property.removeListener(this);
+            }
         }
     }
 }

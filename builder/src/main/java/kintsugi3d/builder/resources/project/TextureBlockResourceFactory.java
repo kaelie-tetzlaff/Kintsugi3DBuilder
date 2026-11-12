@@ -14,6 +14,7 @@ package kintsugi3d.builder.resources.project;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.ManagedResource;
 import kintsugi3d.gl.geometry.GeometryTextures;
+import kintsugi3d.gl.interactive.CancellationPassthroughMonitor;
 import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
@@ -64,14 +65,7 @@ public class TextureBlockResourceFactory<ContextType extends Context<ContextType
             LOG.warn("Incomplete cache; will try to rebuild.");
 
             // Try to reinitialize in case the cache was only partially complete.
-            imageCache.initialize(new DefaultProgressMonitor()
-            {
-                @Override
-                public void allowUserCancellation() throws UserCancellationException
-                {
-                    monitor.allowUserCancellation();
-                }
-            });
+            imageCache.initialize(new CancellationPassthroughMonitor(monitor));
 
             // If initialize() completed without exceptions, then createSampledResources() should work now.
             return createBlockResources(i, j, monitor);

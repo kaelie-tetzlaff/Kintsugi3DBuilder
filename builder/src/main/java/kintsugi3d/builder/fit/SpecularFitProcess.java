@@ -253,32 +253,8 @@ public abstract class SpecularFitProcess
                         monitor.allowUserCancellation();
                     }
 
-                    try (GraphicsResourcesTextureSpace<ContextType> blockResources = blockResourceFactory.createBlockResources(i, j,
-                            new DefaultProgressMonitor() // simple progress monitor for logging; will not be shown in the UI
-                            {
-                                private double maxProgress = 0.0;
-
-                                @Override
-                                public void allowUserCancellation() throws UserCancellationException
-                                {
-                                    if (monitor != null)
-                                    {
-                                        monitor.allowUserCancellation();
-                                    }
-                                }
-
-                                @Override
-                                public void setMaxProgress(double maxProgress)
-                                {
-                                    this.maxProgress = maxProgress;
-                                }
-
-                                @Override
-                                public void setProgress(double progress, String message)
-                                {
-                                    LOG.info("[{}%] {}", new DecimalFormat("#.##").format(progress / maxProgress * 100), message);
-                                }
-                            }))
+                    try (GraphicsResourcesTextureSpace<ContextType> blockResources =
+                             blockResourceFactory.createBlockResources(i, j, new BlockResourcesProgressMonitor(monitor)))
                     {
                         TextureResolution blockResolution = blockResources.getTextureResolution();
                         try (SpecularFitOptimizable<ContextType> blockOptimization = SpecularFitOptimizable.createNew(
@@ -319,52 +295,7 @@ public abstract class SpecularFitProcess
                                 (stream, monitorLocal) -> blockOptimization.optimizeFromExistingBasis(
                                     blockDecomposition, stream, settings.getConvergenceTolerance(), monitorLocal,
                                     TRACE_IMAGES && outputDirectory != null ? outputDirectory : null),
-                                new DefaultProgressMonitor() // wrap progress monitor with logic to account for it being just one block out of the whole.
-                                {
-                                    private double maxProgress = 0.0;
-
-                                    @Override
-                                    public void allowUserCancellation() throws UserCancellationException
-                                    {
-                                        if (monitor != null)
-                                        {
-                                            monitor.allowUserCancellation();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void setMaxProgress(double maxProgress)
-                                    {
-                                        this.maxProgress = maxProgress;
-                                    }
-
-                                    @Override
-                                    public void setProgress(double progress, String message)
-                                    {
-                                        if (monitor != null)
-                                        {
-                                            monitor.setProgress(blockProgress + progress / maxProgress, message);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void complete()
-                                    {
-                                        if (monitor != null)
-                                        {
-                                            monitor.setProgress(blockProgress + 1, "Block complete.");
-                                        }
-                                    }
-
-                                    @Override
-                                    public void fail(Throwable e)
-                                    {
-                                        if (monitor != null)
-                                        {
-                                            monitor.fail(e);
-                                        }
-                                    }
-                                }
+                                new OptimizationProgressMonitor(monitor, blockProgress)
                             );
 
                             // Fill holes in the weight map
@@ -451,4 +382,93 @@ public abstract class SpecularFitProcess
     }
 
     protected abstract <ContextType extends Context<ContextType>> SpecularFitResourcesWrapper<ContextType> getResourcesWrapper();
+
+    private static final class BlockResourcesProgressMonitor extends DefaultProgressMonitor
+    {
+        private final ProgressMonitor monitor;
+        private double maxProgress;
+
+        private BlockResourcesProgressMonitor(ProgressMonitor monitor)
+        {
+            this.monitor = monitor;
+            maxProgress = 0.0;
+        }
+
+        @Override
+        public void allowUserCancellation() throws UserCancellationException
+        {
+            if (monitor != null)
+            {
+                monitor.allowUserCancellation();
+            }
+        }
+
+        @Override
+        public void setMaxProgress(double maxProgress)
+        {
+            this.maxProgress = maxProgress;
+        }
+
+        @Override
+        public void setProgress(double progress, String message)
+        {
+            LOG.info("[{}%] {}", new DecimalFormat("#.##").format(progress / maxProgress * 100), message);
+        }
+    }
+
+    private static final class OptimizationProgressMonitor extends DefaultProgressMonitor
+    {
+        private final ProgressMonitor monitor;
+        private final int blockProgress;
+        private double maxProgress;
+
+        private OptimizationProgressMonitor(ProgressMonitor monitor, int blockProgress)
+        {
+            this.monitor = monitor;
+            this.blockProgress = blockProgress;
+            maxProgress = 0.0;
+        }
+
+        @Override
+        public void allowUserCancellation() throws UserCancellationException
+        {
+            if (monitor != null)
+            {
+                monitor.allowUserCancellation();
+            }
+        }
+
+        @Override
+        public void setMaxProgress(double maxProgress)
+        {
+            this.maxProgress = maxProgress;
+        }
+
+        @Override
+        public void setProgress(double progress, String message)
+        {
+            if (monitor != null)
+            {
+                monitor.setProgress(blockProgress + progress / maxProgress, message);
+            }
+        }
+
+        @Override
+        public void complete()
+        {
+            if (monitor != null)
+            {
+                monitor.setProgress(blockProgress + 1, "Block complete.");
+            }
+        }
+
+        @Override
+        public void fail(Throwable e)
+        {
+            if (monitor != null)
+            {
+                monitor.fail(e);
+            }
+        }
+    }
 }

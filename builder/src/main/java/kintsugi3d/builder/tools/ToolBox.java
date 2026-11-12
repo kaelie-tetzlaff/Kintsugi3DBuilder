@@ -216,18 +216,7 @@ public final class ToolBox implements CanvasListener
         dragToolBuilders.put(DragToolType.LOOK_AT_POINT, LookAtPointTool.getBuilder());
 
         // A little bit weird but using a closure here simultaneously avoids copy-pasting code and boilerplate classes
-        var dependencies = new Object()
-        {
-            <ToolType> ToolBuilder<? extends ToolType> inject(ToolBuilder<ToolType> builder)
-            {
-                return builder
-                    .setCameraModel(cameraModel)
-                    .setLightingEnvironmentModel(lightingModel)
-                    .setObjectModel(objectModel)
-                    .setSettingsModel(settingsModel)
-                    .setSceneViewport(sceneViewport);
-            }
-        };
+        var dependencies = new DependencyContainer(cameraModel, lightingModel, objectModel, settingsModel, sceneViewport);
 
         for (Entry<DragToolType, ToolBuilder<? extends DragTool>> entries : dragToolBuilders.entrySet())
         {
@@ -340,6 +329,36 @@ public final class ToolBox implements CanvasListener
         public CanvasListener create()
         {
             return new ToolBox(cameraModel, lightingModel, objectModel, settingsModel, toolBindingModel, sceneViewport);
+        }
+    }
+
+    private static final class DependencyContainer
+    {
+        private final ManipulableViewpointModel cameraModel;
+        private final ManipulableLightingEnvironmentModel lightingModel;
+        private final ManipulableObjectPoseModel objectModel;
+        private final GeneralSettingsModel settingsModel;
+        private final SceneViewport sceneViewport;
+
+        private DependencyContainer(
+            ManipulableViewpointModel cameraModel, ManipulableLightingEnvironmentModel lightingModel,
+            ManipulableObjectPoseModel objectModel, GeneralSettingsModel settingsModel, SceneViewport sceneViewport)
+        {
+            this.cameraModel = cameraModel;
+            this.lightingModel = lightingModel;
+            this.objectModel = objectModel;
+            this.settingsModel = settingsModel;
+            this.sceneViewport = sceneViewport;
+        }
+
+        <ToolType> ToolBuilder<? extends ToolType> inject(ToolBuilder<ToolType> builder)
+        {
+            return builder
+                .setCameraModel(cameraModel)
+                .setLightingEnvironmentModel(lightingModel)
+                .setObjectModel(objectModel)
+                .setSettingsModel(settingsModel)
+                .setSceneViewport(sceneViewport);
         }
     }
 }
