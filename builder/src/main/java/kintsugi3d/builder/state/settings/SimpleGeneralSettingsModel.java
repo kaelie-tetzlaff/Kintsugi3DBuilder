@@ -11,10 +11,7 @@
 
 package kintsugi3d.builder.state.settings;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public class SimpleGeneralSettingsModel extends GeneralSettingsModelBase
 {
@@ -63,64 +60,53 @@ public class SimpleGeneralSettingsModel extends GeneralSettingsModelBase
     @Override
     protected void setUnchecked(String name, Object value)
     {
-        Setting old = settingMap.get(name);
-        settingMap.put(name, new Setting()
-        {
-            @Override
-            public String getName()
-            {
-                return name;
-            }
-
-            @Override
-            public Class<?> getType()
-            {
-                // Don't change the type as that can cause unexpected issues especially with number types.
-                return old.getType();
-            }
-
-            @Override
-            public Object getValue()
-            {
-                return value;
-            }
-
-            @Override
-            public boolean shouldSerialize()
-            {
-                return old.shouldSerialize();
-            }
-        });
+        settingMap.compute(name, (n, old) ->
+            new GeneralSetting(name, Objects.requireNonNull(old).getType(), value, old.shouldSerialize()));
     }
 
     @Override
     public void createSetting(String name, Class<?> type, Object initialValue, boolean serialize)
     {
-        settingMap.put(name, new Setting()
+        settingMap.put(name, new GeneralSetting(name, type, initialValue, serialize));
+    }
+
+    private static final class GeneralSetting implements Setting
+    {
+        private final String name;
+        private final Class<?> type;
+        private final Object initialValue;
+        private final boolean serialize;
+
+        private GeneralSetting(String name, Class<?> type, Object initialValue, boolean serialize)
         {
-            @Override
-            public String getName()
-            {
-                return name;
-            }
+            this.name = name;
+            this.type = type;
+            this.initialValue = initialValue;
+            this.serialize = serialize;
+        }
 
-            @Override
-            public Class<?> getType()
-            {
-                return type;
-            }
+        @Override
+        public String getName()
+        {
+            return name;
+        }
 
-            @Override
-            public Object getValue()
-            {
-                return initialValue;
-            }
+        @Override
+        public Class<?> getType()
+        {
+            return type;
+        }
 
-            @Override
-            public boolean shouldSerialize()
-            {
-                return serialize;
-            }
-        });
+        @Override
+        public Object getValue()
+        {
+            return initialValue;
+        }
+
+        @Override
+        public boolean shouldSerialize()
+        {
+            return serialize;
+        }
     }
 }

@@ -18,6 +18,7 @@ import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.geometry.GeometryFramebuffer;
 import kintsugi3d.gl.geometry.GeometryTextures;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
+import kintsugi3d.gl.interactive.CancellationPassthroughMonitor;
 import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
@@ -449,14 +450,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
             LOG.warn("Incomplete cache; will try to rebuild.");
 
             // Try to reinitialize in case the cache was only partially complete.
-            this.initialize(new DefaultProgressMonitor()
-            {
-                @Override
-                public void allowUserCancellation() throws UserCancellationException
-                {
-                    monitor.allowUserCancellation();
-                }
-            });
+            this.initialize(new CancellationPassthroughMonitor(monitor));
 
             // If initialize() completed without exceptions, then createSampledResources() should work now.
             return createSampledResources(monitor);

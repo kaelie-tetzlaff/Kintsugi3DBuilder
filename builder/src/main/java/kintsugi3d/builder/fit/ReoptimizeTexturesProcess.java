@@ -18,7 +18,7 @@ import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.gl.core.Context;
-import kintsugi3d.gl.interactive.CancellationMonitorWrapper;
+import kintsugi3d.gl.interactive.CancellationPassthroughMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 
@@ -38,7 +38,7 @@ public class ReoptimizeTexturesProcess extends SpecularFitProcess
         throws IOException, UserCancellationException
     {
         // Get cache (should already be generated).
-        ImageCache<ContextType> cache = resources.cache(getSettings().getImageCacheSettings(), new CancellationMonitorWrapper(monitor));
+        ImageCache<ContextType> cache = resources.cache(getSettings().getImageCacheSettings(), new CancellationPassthroughMonitor(monitor));
 
         // Runs the fit (long process) and then returns the old material resources / textures
        return reoptimizeTexturesWithCache(cache, resources.getTextureResources(), monitor);

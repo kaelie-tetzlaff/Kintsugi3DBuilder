@@ -47,20 +47,7 @@ public class AdvPhotoViewController implements SystemSettingsControllerBase
         isotropyFactorSlider.disableProperty().bind(buehlerCheckBox.selectedProperty());
         isotropyFactorTextField.disableProperty().bind(buehlerCheckBox.selectedProperty());
 
-        weightModeChoiceBox.setConverter(new StringConverter<>()
-        {
-            @Override
-            public String toString(ShadingParameterMode object)
-            {
-                return object.name();
-            }
-
-            @Override
-            public ShadingParameterMode fromString(String string)
-            {
-                return ShadingParameterMode.valueOf(string);
-            }
-        });
+        weightModeChoiceBox.setConverter(new WeightModeStringConverter());
         weightModeChoiceBox.getItems().addAll(ShadingParameterMode.values());
 
         StaticUtilities.makeClampedNumeric(1, 1000000, weightExponentTextField);
@@ -105,5 +92,20 @@ public class AdvPhotoViewController implements SystemSettingsControllerBase
 
         isotropyFactorSlider.valueProperty().unbindBidirectional(settingsModel.getNumericProperty("isotropyFactor"));
         isotropyFactorTextField.textProperty().unbindBidirectional(settingsModel.getNumericProperty("isotropyFactor"));
+    }
+
+    private static class WeightModeStringConverter extends StringConverter<ShadingParameterMode>
+    {
+        @Override
+        public String toString(ShadingParameterMode object)
+        {
+            return object.name();
+        }
+
+        @Override
+        public ShadingParameterMode fromString(String string)
+        {
+            return ShadingParameterMode.valueOf(string);
+        }
     }
 }

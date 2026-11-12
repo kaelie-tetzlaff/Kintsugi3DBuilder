@@ -15,6 +15,7 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringBinding;
+import javafx.beans.binding.StringExpression;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -170,7 +171,8 @@ public class PageFrameController
         PageController<?> controller = page.getController();
         controller.setPageFrameController(this);
 
-        BooleanBinding advanceLabelOverrideNotNull = controller.getAdvanceLabelOverrideObservable().isNotNull();
+        StringExpression advanceLabelOverride = controller.getAdvanceLabelOverrideObservable();
+        BooleanBinding advanceLabelOverrideNotNull = advanceLabelOverride.isNotNull();
         BooleanBinding shouldConfirm = page.getNextPageObservable().isNull().and(controller.getCanConfirmObservable());
 
         currentPage.addListener(obs ->
@@ -179,26 +181,7 @@ public class PageFrameController
             if (currentPage.get() == page)
             {
                 nextButton.textProperty().unbind();
-                nextButton.textProperty().bind(new ObjectBinding<>()
-                {
-                    {
-                        bind(advanceLabelOverrideNotNull);
-                        bind(shouldConfirm);
-                    }
-
-                    @Override
-                    protected String computeValue()
-                    {
-                        if (advanceLabelOverrideNotNull.get())
-                        {
-                            return controller.getAdvanceLabelOverrideObservable().get();
-                        }
-                        else
-                        {
-                            return shouldConfirm.get() ? "Confirm" : "Next";
-                        }
-                    }
-                });
+                nextButton.textProperty().bind(new NextButtonTextBinding(shouldConfirm, advanceLabelOverride));
 
                 nextButton.disableProperty().unbind();
                 nextButton.disableProperty().bind(
@@ -330,5 +313,35 @@ public class PageFrameController
     public void setCurrentPage(Page<?, ?> page)
     {
         currentPage.set(page);
+    }
+
+    private static final class NextButtonTextBinding extends ObjectBinding<String>
+    {
+        private final BooleanBinding shouldConfirm;
+        private final StringExpression advanceLabelOverride;
+        private final BooleanBinding advanceLabelOverrideNotNull;
+
+        private NextButtonTextBinding(BooleanBinding shouldConfirm, StringExpression advanceLabelOverride)
+        {
+            this.shouldConfirm = shouldConfirm;
+            this.advanceLabelOverride = advanceLabelOverride;
+            this.advanceLabelOverrideNotNull = advanceLabelOverride.isNotNull();
+
+            bind(shouldConfirm);
+            bind(advanceLabelOverrideNotNull);
+        }
+
+        @Override
+        protected String computeValue()
+        {
+            if (advanceLabelOverrideNotNull.get())
+            {
+                return advanceLabelOverride.get();
+            }
+            else
+            {
+                return shouldConfirm.get() ? "Confirm" : "Next";
+            }
+        }
     }
 }

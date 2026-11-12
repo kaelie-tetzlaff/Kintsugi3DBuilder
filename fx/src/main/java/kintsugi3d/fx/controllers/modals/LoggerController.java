@@ -179,69 +179,7 @@ public class LoggerController implements Initializable
         @Override
         public ListCell<LogMessage> call(ListView<LogMessage> logMessageListView)
         {
-            return new ListCell<>()
-            {
-                @Override
-                public void updateItem(LogMessage message, boolean empty)
-                {
-                    Platform.runLater(() ->
-                    {
-                        super.updateItem(message, empty);
-                        if (empty || message == null)
-                        {
-                            setText(null);
-                            setGraphic(null);
-                            setStyle(null);
-                        } else
-                        {
-                            setText(null);
-
-                            Label levelLabel = new Label(message.getLogLevel().toString());
-                            levelLabel.setPrefWidth(40);
-
-                            StringBuilder labelText = new StringBuilder(message.getMessage());
-
-                            if (message.getThrown() != null)
-                            {
-                                if (this.isSelected())
-                                {
-                                    labelText.append('\n');
-                                    labelText.append(strStackTrace(message.getThrown()));
-                                }
-                                else
-                                {
-                                    labelText.append("... (Click for more)");
-                                }
-                            }
-
-                            Label messageLabel = new Label(labelText.toString());
-
-                            HBox box = new HBox(levelLabel, messageLabel);
-
-                            box.setSpacing(10);
-
-                            Tooltip.install(box, new Tooltip(formatTooltip(message)));
-
-                            if (message.getLogLevel() == Level.ERROR)
-                            {
-                                setStyle("-fx-background-color: #fa6d6d");
-                                //TODO: MAKE TEXT BLACK
-                            }
-                            else if (message.getLogLevel() == Level.WARN)
-                            {
-                                setStyle("-fx-background-color: #fab66d");
-                                //TODO: MAKE TEXT BLACK
-                            }
-                            else
-                            {
-                                setStyle(null);
-                            }
-
-                            setGraphic(box);
-                        }
-                    });
-                }
-            };
+            return new LogMessageCell();
         }
 
         private static String strStackTrace(Throwable thrown)
@@ -265,6 +203,70 @@ public class LoggerController implements Initializable
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyy hh:mm:ss").withZone(ZoneId.systemDefault());
             sb.append(formatter.format(message.getTimestamp()));
             return sb.toString();
+        }
+
+        private static class LogMessageCell extends ListCell<LogMessage>
+        {
+            @Override
+            public void updateItem(LogMessage message, boolean empty)
+            {
+                Platform.runLater(() ->
+                {
+                    super.updateItem(message, empty);
+                    if (empty || message == null)
+                    {
+                        setText(null);
+                        setGraphic(null);
+                        setStyle(null);
+                    } else
+                    {
+                        setText(null);
+
+                        Label levelLabel = new Label(message.getLogLevel().toString());
+                        levelLabel.setPrefWidth(40);
+
+                        StringBuilder labelText = new StringBuilder(message.getMessage());
+
+                        if (message.getThrown() != null)
+                        {
+                            if (this.isSelected())
+                            {
+                                labelText.append('\n');
+                                labelText.append(strStackTrace(message.getThrown()));
+                            }
+                            else
+                            {
+                                labelText.append("... (Click for more)");
+                            }
+                        }
+
+                        Label messageLabel = new Label(labelText.toString());
+
+                        HBox box = new HBox(levelLabel, messageLabel);
+
+                        box.setSpacing(10);
+
+                        Tooltip.install(box, new Tooltip(formatTooltip(message)));
+
+                        if (message.getLogLevel() == Level.ERROR)
+                        {
+                            setStyle("-fx-background-color: #fa6d6d");
+                            //TODO: MAKE TEXT BLACK
+                        }
+                        else if (message.getLogLevel() == Level.WARN)
+                        {
+                            setStyle("-fx-background-color: #fab66d");
+                            //TODO: MAKE TEXT BLACK
+                        }
+                        else
+                        {
+                            setStyle(null);
+                        }
+
+                        setGraphic(box);
+                    }
+                });
+            }
         }
     }
 }
