@@ -98,7 +98,7 @@ public final class Kintsugi3DBuilder
                 JavaFXApplication.addStartListener(stage -> RenderingBootstrap.startRenderThread(stage, args));
 
                 log.info("Starting JavaFX UI");
-                JavaFXApplication.launchWrapper("");
+                JavaFXApplication.launchExternal("");
             }
 
             System.exit(0);

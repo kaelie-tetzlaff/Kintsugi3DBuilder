@@ -140,12 +140,12 @@ public final class ModelExporter
         materialExporter.postExport();
     }
 
-    public static ModelExporter fromVertexGeometry(ReadonlyVertexGeometry geometry) throws IOException
+    public static ModelExporter fromVertexGeometry(ReadonlyVertexGeometry geometry)
     {
         return fromVertexGeometry(geometry, Matrix4.IDENTITY);
     }
 
-    public static ModelExporter fromVertexGeometry(ReadonlyVertexGeometry geometry, Matrix4 transformation) throws IOException
+    public static ModelExporter fromVertexGeometry(ReadonlyVertexGeometry geometry, Matrix4 transformation)
     {
         GltfModelBuilder builder = GltfModelBuilder.create();
 

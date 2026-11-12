@@ -11,7 +11,6 @@
 
 package kintsugi3d.builder.preferences.serialization;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -23,7 +22,7 @@ import java.io.IOException;
 public class Vector3Deserializer extends JsonDeserializer<Vector3>
 {
     @Override
-    public Vector3 deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException
+    public Vector3 deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException
     {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         return new Vector3(node.get("x").floatValue(), node.get("y").floatValue(), node.get("z").floatValue());

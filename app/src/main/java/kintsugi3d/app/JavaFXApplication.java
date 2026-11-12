@@ -445,7 +445,11 @@ public class JavaFXApplication extends Application
         }
     }
 
-    public static void launchWrapper(String args)
+    /**
+     * Allows launching the application from another class (launch itself fails when called from another class)
+     * @param args
+     */
+    public static void launchExternal(String args)
     {
         launch(args);
     }

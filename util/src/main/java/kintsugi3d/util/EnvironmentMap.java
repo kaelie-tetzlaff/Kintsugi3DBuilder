@@ -789,6 +789,8 @@ public final class EnvironmentMap
             for (int x = 0; x < side; x++)
             {
                 int crossX = side + x;
+
+                @SuppressWarnings("UnnecessaryLocalVariable")
                 int crossY = y;
 
                 int faceOffset = 3 * y * side + 3 * x;

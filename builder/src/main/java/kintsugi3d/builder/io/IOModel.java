@@ -409,7 +409,7 @@ public class IOModel implements IO
         return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(projectFile);
     }
 
-    private static String getViewSetFilenameFromXMLDocument(Document document) throws IOException, ParserConfigurationException, SAXException
+    private static String getViewSetFilenameFromXMLDocument(Document document) throws IOException
     {
         Node vsetNode = document.getElementsByTagName("ViewSet").item(0);
         if (vsetNode instanceof Element)

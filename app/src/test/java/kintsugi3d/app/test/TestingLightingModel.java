@@ -39,12 +39,6 @@ public class TestingLightingModel implements ReadonlyLightingEnvironmentModel
     }
 
     @Override
-    public boolean isLightVisualizationEnabled(int index)
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean isLightWidgetEnabled(int index)
     {
         throw new UnsupportedOperationException();

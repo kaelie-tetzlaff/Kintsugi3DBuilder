@@ -20,7 +20,7 @@ public interface ReadonlyLightingEnvironmentModel
 
     int getLightCount();
     int getMaxLightCount();
-    boolean isLightVisualizationEnabled(int index);
+
     boolean isLightWidgetEnabled(int index);
     boolean areLightWidgetsEthereal();
 

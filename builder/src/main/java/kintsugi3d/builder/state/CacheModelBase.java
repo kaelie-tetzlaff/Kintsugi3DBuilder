@@ -342,26 +342,15 @@ public abstract class CacheModelBase implements CacheModel
     @Override
     public void requestCleanUpBothCaches(Map<File, Consumer<File[]>> deleteMethods)
     {
-        new Thread(() ->
-        {
-            try
-            {
-                cleanCacheSubDirs(deleteMethods);
-            }
-            catch (IOException e)
-            {
-                handleCacheCleanupError(e);
-            }
-        }, "Clean Up Cache").start();
+        new Thread(() -> cleanCacheSubDirs(deleteMethods), "Clean Up Cache").start();
     }
 
     /**
      * Cleans up the cache based on user settings, and then refreshes the cache size.
      *
      * @param deleteMethods
-     * @throws IOException
      */
-    private void cleanCacheSubDirs(Map<File, Consumer<File[]>> deleteMethods) throws IOException
+    private void cleanCacheSubDirs(Map<File, Consumer<File[]>> deleteMethods)
     {
         if (cacheCleanupInProgress.compareAndSet(false, true))
         {

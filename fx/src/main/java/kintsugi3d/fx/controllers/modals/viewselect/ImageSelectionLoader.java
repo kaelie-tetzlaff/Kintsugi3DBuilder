@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 class ImageSelectionLoader implements Runnable
@@ -50,7 +49,7 @@ class ImageSelectionLoader implements Runnable
             {
                 loadFullResImg();
             }
-            catch (FileNotFoundException|RuntimeException e)
+            catch (RuntimeException e)
             {
                 preview.setImageViewText(
                     String.format("%s (full res image not found)", preview.getImageViewText()));
@@ -63,7 +62,7 @@ class ImageSelectionLoader implements Runnable
         stopRequested = true;
     }
 
-    private void loadFullResImg() throws FileNotFoundException
+    private void loadFullResImg()
     {
         ImageView imgView = preview.getImageView();
         Image image = preview.retrieveFromCache(imageName); //use cached img if possible
