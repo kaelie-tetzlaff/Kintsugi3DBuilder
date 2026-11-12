@@ -31,25 +31,25 @@ public enum ShaderType
 
     /**
      * A shader that governs the processing of primitives.
-     * For more information, see: https://www.opengl.org/wiki/Geometry_Shader
+     * For more information, see: <a href="https://www.opengl.org/wiki/Geometry_Shader">Geometry Shader</a>
      */
     GEOMETRY,
 
     /**
      * A shader used for tessellation that controls how much tessellation occurs.
-     * For more information, see: https://www.opengl.org/wiki/Tessellation_Control_Shader
+     * For more information, see: <a href="https://www.opengl.org/wiki/Tessellation_Control_Shader">Tessellation Control Shader</a>
      */
     TESSELATION_CONTROL,
 
     /**
      * A shader used for tesselation that evaluates interpolated per-vertex data.
-     * For more information, see: https://www.opengl.org/wiki/Tessellation_Evaluation_Shader
+     * For more information, see: <a href="https://www.opengl.org/wiki/Tessellation_Evaluation_Shader">Tessellation Evaluation Shader</a>
      */
     TESSELATION_EVALUATION,
 
     /**
      * A shader for arbitrary, general-purpose computation.
-     * For more information, see: https://www.opengl.org/wiki/Compute_Shader
+     * For more information, see: <a href="https://www.opengl.org/wiki/Compute_Shader">Compute Shader</a>
      */
     COMPUTE
 }

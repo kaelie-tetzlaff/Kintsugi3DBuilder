@@ -125,7 +125,7 @@ public final class NonNegativeLeastSquares
      * Solves a non-negative least squares problem that minimizes ||Ax - b||^2, using the premultiplied form A'Ax - A'b.
      * This overload also supports additional equality constraints that must be satisfied in addition to non-negativity.
      * This constraints should be appended to the premultiplied form A'Ax - A'b to form an augmented linear system.
-     * https://en.wikipedia.org/wiki/Quadratic_programming#Equality_constraints
+     * See <a href="https://en.wikipedia.org/wiki/Quadratic_programming#Equality_constraints">Quadratic_programming#Equality_constraints</a>
      * @param augmentedATA The upper left partition of this matrix is the matrix product A' (A transpose) times A.
      *                     The bottom left partition of this matrix stores the LHS of the equality constraints.
      *                     The top right partition should have be the same as the bottom left, but transposed.
