@@ -169,7 +169,7 @@ public class MetashapeImportController extends ProjectImportController
 
         for (MetashapeModel model : metashapeDocument.getSelectedChunk().getModels())
         {
-            String modelID = model.getId().isPresent() ? String.valueOf(model.getId().get()) : NO_MODEL_ID_MSG;
+            String modelID = model.getId() != null ? String.valueOf(model.getId()) : NO_MODEL_ID_MSG;
             String modelName = model.getLabel().isBlank() ? NO_MODEL_NAME_MSG : model.getLabel();
             modelSelectionChoiceBox.getItems().add(String.format("%s%s%s", modelID, SPACER, modelName));
         }
@@ -187,7 +187,8 @@ public class MetashapeImportController extends ProjectImportController
         modelSelectionChoiceBox.setValue(modelSelectionChoiceBox.getItems().get(0));
         modelSelectionChoiceBox.setDisable(false);
 
-        if (metashapeDocument.getSelectedChunk().getDefaultModelID().isPresent())
+        Integer defaultModelID = metashapeDocument.getSelectedChunk().getDefaultModelID();
+        if (defaultModelID != null)
         {
             modelSelectionChoiceBox.getItems().stream()
                 .filter(obj ->
@@ -196,7 +197,7 @@ public class MetashapeImportController extends ProjectImportController
                     if (modelID != null)
                     {
                         int id = Integer.parseInt(modelID);
-                        return metashapeDocument.getSelectedChunk().getDefaultModelID().get().equals(id);
+                        return defaultModelID.equals(id);
                     }
                     else
                     {

@@ -974,7 +974,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
                     // (see metashapeChunk.buildCameraPathsMap above), so cameras whose images
                     // are disabled simply won't be in the map and will be skipped downstream.
                     ViewSetBuilder viewSetBuilder = readFromMetashapeChunk(fileStream, directories,
-                            String.valueOf(metashapeChunk.getCurrModelID()),
+                            String.valueOf(metashapeChunk.getCurrentModelID()),
                             cameraPathsMap, maskPathsMap);
 
                     // Send masksDirectory to viewset and have it process them once the progress bars are ready for it
