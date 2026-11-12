@@ -83,12 +83,6 @@ public abstract class GraphicsStreamBase<T> implements GraphicsStream<T>
         }
 
         @Override
-        public <R> GraphicsStream<R> map(Function<T, ? extends R> mapper)
-        {
-            return new Mapped<>(this, mapper);
-        }
-
-        @Override
         public void forEach(Consumer<? super T> action)
         {
             // Apply the current mapping before executing the action.
