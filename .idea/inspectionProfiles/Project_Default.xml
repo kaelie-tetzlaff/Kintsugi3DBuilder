@@ -178,7 +178,7 @@
     <inspection_tool class="ClassWithTooManyTransitiveDependents" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="limit" value="35" />
     </inspection_tool>
-    <inspection_tool class="ClassWithoutLogger" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <inspection_tool class="ClassWithoutLogger" enabled="false" level="WEAK WARNING" enabled_by_default="false">
       <option name="loggerNamesString" value="java.util.logging.Logger,org.slf4j.Logger,org.apache.commons.logging.Log,org.apache.log4j.Logger" />
       <option name="ignoreSuperLoggers" value="false" />
     </inspection_tool>
@@ -465,7 +465,7 @@
     </inspection_tool>
     <inspection_tool class="LambdaParameterTypeCanBeSpecified" enabled="false" level="INFORMATION" enabled_by_default="false" />
     <inspection_tool class="LambdaUnfriendlyMethodOverload" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="LawOfDemeter" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <inspection_tool class="LawOfDemeter" enabled="false" level="WEAK WARNING" enabled_by_default="false">
       <option name="ignoreLibraryCalls" value="true" />
     </inspection_tool>
     <inspection_tool class="LengthOneStringInIndexOf" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -782,7 +782,7 @@
       </option>
       <option name="onlyWarnIfContainingClassImplementsAnInterface" value="false" />
     </inspection_tool>
-    <inspection_tool class="PublicMethodWithoutLogging" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <inspection_tool class="PublicMethodWithoutLogging" enabled="false" level="WEAK WARNING" enabled_by_default="false">
       <option name="loggerClassName" value="" />
     </inspection_tool>
     <inspection_tool class="PublicStaticArrayField" enabled="true" level="WARNING" enabled_by_default="true" />
