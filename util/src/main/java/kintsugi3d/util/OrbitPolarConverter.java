@@ -16,11 +16,11 @@ import kintsugi3d.gl.vecmath.Vector3;
 
 public class OrbitPolarConverter 
 {
-    private static final OrbitPolarConverter instance = new OrbitPolarConverter();
+    private static final OrbitPolarConverter INSTANCE = new OrbitPolarConverter();
     
     public static OrbitPolarConverter getInstance()
     {
-        return instance;
+        return INSTANCE;
     }
 
     public Matrix4 convertToOrbitMatrix(Vector3 polarCoordinatesDegrees)

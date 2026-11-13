@@ -36,11 +36,14 @@ import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.opengl.OpenGLContext;
 import kintsugi3d.gl.opengl.OpenGLContextFactory;
-import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.util.ColorArrayImage;
+import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.ImageFinder;
 import kintsugi3d.util.Potato;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,9 +56,9 @@ import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ImageReconstructionTests
+class ImageReconstructionTest
 {
-    private static final Logger LOG = LoggerFactory.getLogger(ImageReconstructionTests.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ImageReconstructionTest.class);
 
     private static final File TEST_OUTPUT_DIR = new File("test-output");
     private static final boolean SAVE_TEST_IMAGES = true;
@@ -128,19 +131,19 @@ class ImageReconstructionTests
         @Override
         public void setProgress(double progress, String message)
         {
-            System.out.println(MessageFormat.format("[{0}%] {1}", progress / maxProgress * 100, message));
+            LOG.info("[{}%] {}", progress / maxProgress * 100, message);
         }
 
         @Override
         public void complete()
         {
-            System.out.println("COMPLETE!");
+            LOG.info("COMPLETE!");
         }
 
         @Override
         public void fail(Throwable e)
         {
-            e.printStackTrace();
+            LOG.error("FAILED!", e);
         }
 
         @Override
@@ -983,7 +986,7 @@ class ImageReconstructionTests
                             try
                             {
                                 view.getReconstructionFramebuffer().getTextureReaderForColorAttachment(0).saveToFile("PNG",
-                                    new File(outputDirectory, ImageFinder.getInstance().getImageFileNameWithExtension(
+                                    new File(outputDirectory, ImageFinder.getImageFileNameWithExtension(
                                         view.getView().getImageFile().getName(), "png")),
                                     // Luminance encoding expects [0, 1] range, but encodes in [0, 255] range.
                                     // Tonemapper parameter taken by saveToFile assumes both are [0, 255]
@@ -1082,7 +1085,7 @@ class ImageReconstructionTests
                     try
                     {
                         view.getReconstructionFramebuffer().getTextureReaderForColorAttachment(0).saveToFile("PNG",
-                            new File(outputDirectory, ImageFinder.getInstance().getImageFileNameWithExtension(
+                            new File(outputDirectory, ImageFinder.getImageFileNameWithExtension(
                                 view.getView().getImageFile().getName(), "png")),
                             // Luminance encoding expects [0, 1] range, but encodes in [0, 255] range.
                             // Tonemapper parameter taken by saveToFile assumes both are [0, 255]

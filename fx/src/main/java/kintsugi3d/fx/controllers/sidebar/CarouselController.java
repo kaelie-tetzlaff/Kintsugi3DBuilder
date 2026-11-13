@@ -27,6 +27,8 @@ import kintsugi3d.builder.state.CarouselItem;
 import kintsugi3d.builder.state.shader.ShaderInfo;
 import kintsugi3d.fx.core.MainWindowController;
 import kintsugi3d.fx.internal.ObservableCarouselModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -44,6 +46,7 @@ public class CarouselController
     private static final int DEFAULT_HEIGHT = 180;
     private static final int MINIMIZED_HEIGHT = 23;
     private static final int SCROLLBAR_BUFFER = 15;
+    private static final Logger LOG = LoggerFactory.getLogger(CarouselController.class);
 
     @FXML private HBox containerHBox;
     @FXML private ScrollPane carouselScrollPane;
@@ -297,7 +300,7 @@ public class CarouselController
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            LOG.error("Error loading carousel card FXML.", e);
             return null;
         }
     }

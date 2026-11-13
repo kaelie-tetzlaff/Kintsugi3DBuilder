@@ -71,7 +71,7 @@ class ImageSelectionLoader implements Runnable
             try
             {
                 String path = model.findFullResImagePath(imageName).orElse("");
-                File imgFile = ImageFinder.getInstance().findImageFile(new File(path));
+                File imgFile = ImageFinder.findImageFile(new File(path));
 
                 if (stopRequested)
                 {

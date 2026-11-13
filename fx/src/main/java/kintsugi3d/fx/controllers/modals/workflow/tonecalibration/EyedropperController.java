@@ -70,7 +70,12 @@ public class EyedropperController extends NonDataPageControllerBase
     @FXML private Pane selectionPane;
 
     @FXML private Rectangle selectionRectangle;
-    @FXML private Rectangle finalSelectRect1, finalSelectRect2, finalSelectRect3, finalSelectRect4, finalSelectRect5, finalSelectRect6;
+    @FXML private Rectangle finalSelectRect1;
+    @FXML private Rectangle finalSelectRect2;
+    @FXML private Rectangle finalSelectRect3;
+    @FXML private Rectangle finalSelectRect4;
+    @FXML private Rectangle finalSelectRect5;
+    @FXML private Rectangle finalSelectRect6;
 
     @FXML private CheckBox useCurveCheckbox;
     @FXML private CheckBox distanceCompensationCheckbox; // inverse-square attenuation

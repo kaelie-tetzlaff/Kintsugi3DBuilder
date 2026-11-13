@@ -107,12 +107,12 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public void addBackgroundGraphicsRequest(ImageBasedGraphicsRequest request)
+    public void addBackgroundImageBasedGraphicsRequest(ImageBasedGraphicsRequest request)
     {
         if (renderableManager.getMainRenderable() == null)
         {
             // Instance is currently null, wait for a load and then call this function again (recursive-ish)
-            renderableManager.addMainRenderableLoadCallback(instance -> addBackgroundGraphicsRequest(request));
+            renderableManager.addMainRenderableLoadCallback(instance -> addBackgroundImageBasedGraphicsRequest(request));
         }
         else
         {
@@ -124,7 +124,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
                     if (renderableManager.getMainRenderable() == null)
                     {
                         // Instance is currently null, wait for a load and then call this function again (recursive-ish)
-                        renderableManager.addMainRenderableLoadCallback(instance -> addBackgroundGraphicsRequest(request));
+                        renderableManager.addMainRenderableLoadCallback(instance -> addBackgroundImageBasedGraphicsRequest(request));
                     }
                     else
                     {
@@ -156,7 +156,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public void addGraphicsRequest(ProgressMonitoredImageBasedGraphicsRequest request)
+    public void addImageBasedGraphicsRequest(ProgressMonitoredImageBasedGraphicsRequest request)
     {
         if (this.progressMonitor.isConflictingProcess())
         {
@@ -166,7 +166,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
         if (renderableManager.getMainRenderable() == null)
         {
             // Instance is currently null, wait for a load and then call this function again (recursive-ish)
-            renderableManager.addMainRenderableLoadCallback(instance -> addGraphicsRequest(request));
+            renderableManager.addMainRenderableLoadCallback(instance -> addImageBasedGraphicsRequest(request));
         }
         else
         {
@@ -183,7 +183,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
                     if (renderableManager.getMainRenderable() == null)
                     {
                         // Instance is currently null, wait for a load and then call this function again (recursive-ish)
-                        renderableManager.addMainRenderableLoadCallback(instance -> addGraphicsRequest(request));
+                        renderableManager.addMainRenderableLoadCallback(instance -> addImageBasedGraphicsRequest(request));
                     }
                     else
                     {

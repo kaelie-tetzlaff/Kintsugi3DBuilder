@@ -25,7 +25,6 @@ import kintsugi3d.gl.geometry.GeometryMode;
 import kintsugi3d.gl.geometry.VertexGeometry;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
-import kintsugi3d.builder.io.TextureLoadOptions;
 import kintsugi3d.gl.nativebuffer.NativeDataType;
 import kintsugi3d.gl.nativebuffer.NativeVectorBuffer;
 import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
@@ -865,17 +864,17 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         try
         {
             // See if the preview image is already there
-            return ImageFinder.getInstance().findImageFile(view.getPreviewImageFile());
+            return ImageFinder.findImageFile(view.getPreviewImageFile());
         }
         catch (FileNotFoundException e)
         {
             if (generatePreviewImages(view)) // Generate file if necessary
             {
-                return ImageFinder.getInstance().findImageFile(view.getPreviewImageFile());
+                return ImageFinder.findImageFile(view.getPreviewImageFile());
             }
             else // File was not generated: no distortion and preview dimensions are zero.
             {
-                return ImageFinder.getInstance().findImageFile(view.getFullResImageFile());
+                return ImageFinder.findImageFile(view.getFullResImageFile());
             }
         }
     }

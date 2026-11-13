@@ -15,16 +15,16 @@ import kintsugi3d.gl.window.ModifierKeysBase;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class ModifierKeys extends ModifierKeysBase
+public class GLFWModifierKeys extends ModifierKeysBase
 {
     private final int glfwCode;
 
-    ModifierKeys(int glfwCode)
+    GLFWModifierKeys(int glfwCode)
     {
         this.glfwCode = glfwCode;
     }
 
-    ModifierKeys(boolean shiftMod, boolean controlMod, boolean altMod, boolean superMod)
+    GLFWModifierKeys(boolean shiftMod, boolean controlMod, boolean altMod, boolean superMod)
     {
         glfwCode =
             (shiftMod ? GLFW_MOD_SHIFT : 0)     |

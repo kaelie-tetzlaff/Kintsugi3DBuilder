@@ -139,7 +139,7 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
                             .setLinearFilteringEnabled(true)
                             .createTexture();
 
-                        newEnvironmentTexture.setTextureWrap(TextureWrapMode.Repeat, TextureWrapMode.None);
+                        newEnvironmentTexture.setTextureWrap(TextureWrapMode.REPEAT, TextureWrapMode.NONE);
                     }
                 }
 

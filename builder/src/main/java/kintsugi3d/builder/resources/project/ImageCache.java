@@ -14,6 +14,7 @@ package kintsugi3d.builder.resources.project;
 import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.io.SimpleLoadOptionsModel;
+import kintsugi3d.builder.io.TextureLoadOptions;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.geometry.GeometryFramebuffer;
 import kintsugi3d.gl.geometry.GeometryTextures;
@@ -21,7 +22,6 @@ import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
 import kintsugi3d.gl.interactive.CancellationPassthroughMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
-import kintsugi3d.builder.io.TextureLoadOptions;
 import kintsugi3d.gl.nativebuffer.NativeDataType;
 import kintsugi3d.gl.nativebuffer.NativeVectorBuffer;
 import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
@@ -336,7 +336,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
                     texSpaceDrawable.draw(fbo);
 
                     // Force PNG format for lossless encoding
-                    String pngFilename = ImageFinder.getInstance().getImageFileNameWithExtension(
+                    String pngFilename = ImageFinder.getImageFileNameWithExtension(
                         view.getImageFile().getName(), "png");
 
                     // "Sampled" image to store randomly selected pixels for preliminary optimization at a lower resolution.

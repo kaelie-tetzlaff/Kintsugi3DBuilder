@@ -89,7 +89,7 @@ public class ProgressBarsController
         overallStopwatch = new Stopwatch();
         localStopwatch = new Stopwatch();
 
-        processingProperty.bind(overallStopwatch.isRunningProperty());
+        processingProperty.bind(overallStopwatch.runningProperty());
 
         localProgressBar.getScene().getWindow().setOnCloseRequest(
             event -> MainWindowController.getInstance().showMiniProgressBar());

@@ -224,6 +224,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
         return helper.getBuilder(directories, imagePathMap, maskPathMap, ignoreGlobalTransforms);
     }
 
+    @FunctionalInterface
     private interface ElementTextSupplier
     {
         String get() throws XMLStreamException;

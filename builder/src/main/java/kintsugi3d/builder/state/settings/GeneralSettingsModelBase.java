@@ -69,7 +69,7 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
     }
 
     @Override
-    public void copyFrom(ReadonlyGeneralSettingsModel other)
+    public void copyAllFrom(ReadonlyGeneralSettingsModel other)
     {
         for (Setting s : other)
         {
@@ -85,7 +85,7 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
     {
         for (String name : settingNames)
         {
-            if (exists(name))
+            if (exists(name) && other.exists(name))
             {
                 set(name, other.getObject(name));
             }
@@ -97,7 +97,7 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
     {
         for (String name : settingNames)
         {
-            if (exists(name))
+            if (exists(name) && other.exists(name))
             {
                 set(name, other.getObject(name));
             }

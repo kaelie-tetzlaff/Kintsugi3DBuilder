@@ -66,7 +66,7 @@ public class ScreenshotController
             return;
         }
 
-        Rendering.getRequestQueue().addGraphicsRequest(
+        Rendering.getRequestQueue().addImageBasedGraphicsRequest(
             ScreenshotRequest.getBuilder()
                 .setWidth(Integer.parseInt(widthTextField.getText()))
                 .setHeight(Integer.parseInt(heightTextField.getText()))

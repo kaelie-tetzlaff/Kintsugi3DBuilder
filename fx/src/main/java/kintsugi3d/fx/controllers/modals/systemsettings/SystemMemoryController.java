@@ -69,7 +69,7 @@ public class SystemMemoryController implements SystemSettingsControllerBase
         maxMemTextField.textProperty().bindBidirectional(maxMemory, converter);
     }
 
-    public void button_Apply()
+    public void apply()
     {
         configuration.setEnableMaxMemory(maxMemCheckbox.isSelected());
         configuration.setMaxMemoryMb(maxMemory.get());

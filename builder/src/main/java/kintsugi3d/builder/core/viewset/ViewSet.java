@@ -529,7 +529,7 @@ public final class ViewSet implements ReadonlyViewSet
         result.previewWidth = this.previewWidth;
         result.previewHeight = this.previewHeight;
 
-        result.projectSettings.copyFrom(this.projectSettings);
+        result.projectSettings.copyAllFrom(this.projectSettings);
         result.resourceMap.putAll(this.resourceMap);
 
         return result;
@@ -1429,7 +1429,7 @@ public final class ViewSet implements ReadonlyViewSet
 
                     // Could set maskFile to null if it doesn't actually exist,
                     // or change the file extension if it exists with a different file extension.
-                    maskFile = ImageFinder.getInstance().tryFindImageFile(maskFile);
+                    maskFile = ImageFinder.tryFindImageFile(maskFile);
 
                     if (maskFile == null)
                     {
@@ -1441,7 +1441,7 @@ public final class ViewSet implements ReadonlyViewSet
                 {
                     // Search for the name of the photo in the masks directory
                     // Will check both with and without _mask suffix
-                    maskFile = ImageFinder.getInstance().tryFindImageFile(
+                    maskFile = ImageFinder.tryFindImageFile(
                         new File(getMasksDirectory(), view.getFullResImageFile().getName()),
                         "_mask");
                 }

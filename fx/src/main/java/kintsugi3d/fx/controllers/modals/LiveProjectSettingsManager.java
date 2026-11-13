@@ -33,7 +33,7 @@ public class LiveProjectSettingsManager extends ProjectSettingsManager
         super.refresh();
 
         // Remember what to set back to if the user cancels
-        this.revertSettingsModel.copyFrom(getProjectSettingsModel());
+        this.revertSettingsModel.copyAllFrom(getProjectSettingsModel());
     }
 
     public void cancel()

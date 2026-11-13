@@ -327,7 +327,7 @@ public final class ViewSetBuilder
 
     public ViewSetBuilder applySettings(ReadonlyGeneralSettingsModel settings)
     {
-        result.getProjectSettings().copyFrom(settings);
+        result.getProjectSettings().copyAllFrom(settings);
         return this;
     }
 

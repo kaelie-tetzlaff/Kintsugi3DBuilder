@@ -401,9 +401,9 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public kintsugi3d.gl.window.ModifierKeys getModifierKeys()
+    public ModifierKeys getModifierKeys()
     {
-        return new ModifierKeys(
+        return new GLFWModifierKeys(
             getKeyState(GLFW_KEY_LEFT_SHIFT) == KeyState.PRESSED || getKeyState(GLFW_KEY_RIGHT_SHIFT) == KeyState.PRESSED,
             getKeyState(GLFW_KEY_LEFT_CONTROL) == KeyState.PRESSED || getKeyState(GLFW_KEY_RIGHT_CONTROL) == KeyState.PRESSED,
             getKeyState(GLFW_KEY_LEFT_ALT) == KeyState.PRESSED || getKeyState(GLFW_KEY_RIGHT_ALT) == KeyState.PRESSED,

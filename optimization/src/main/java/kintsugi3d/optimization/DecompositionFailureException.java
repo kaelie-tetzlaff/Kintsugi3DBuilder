@@ -13,6 +13,8 @@ package kintsugi3d.optimization;
 
 public class DecompositionFailureException extends RuntimeException
 {
+    private static final long serialVersionUID = -6801667382287594753L;
+
     public DecompositionFailureException(String message)
     {
         super(message);

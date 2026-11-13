@@ -65,7 +65,7 @@ public class NativeByteVectorBuffer implements NativeVectorBuffer
         this.buffer = buffer;
     }
 
-    NativeByteVectorBuffer(int dimensions, int count, byte... buffer)
+    NativeByteVectorBuffer(int dimensions, int count, byte[] buffer)
     {
         this(dimensions, count);
         this.buffer.put(buffer);
@@ -106,7 +106,8 @@ public class NativeByteVectorBuffer implements NativeVectorBuffer
         return this.buffer.get(index * this.dimensions + dimension);
     }
 
-    public void set(int index, int dimension, byte value)
+    @Override
+    public void set(int index, int dimension, Number value)
     {
         if (index < 0)
         {
@@ -124,13 +125,7 @@ public class NativeByteVectorBuffer implements NativeVectorBuffer
         {
             throw new IndexOutOfBoundsException("Dimension (" + dimension + ") is greater than the dimensions of the vertex list (" + this.dimensions + ").");
         }
-        this.buffer.put(index * this.dimensions + dimension, value);
-    }
-
-    @Override
-    public void set(int index, int dimension, Number value)
-    {
-        this.set(index, dimension, value.byteValue());
+        this.buffer.put(index * this.dimensions + dimension, value.byteValue());
     }
 
     @Override

@@ -71,7 +71,7 @@ public class Stopwatch
         return initTime;
     }
 
-    public ReadOnlyBooleanProperty isRunningProperty()
+    public ReadOnlyBooleanProperty runningProperty()
     {
         return running;
     }

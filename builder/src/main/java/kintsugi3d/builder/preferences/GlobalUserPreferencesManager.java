@@ -99,7 +99,7 @@ public final class GlobalUserPreferencesManager
     private void inject(LoadOptionsModel loadOptionsModel, GeneralSettingsModel settingsModel)
     {
         loadOptionsModel.copyFrom(preferencesModel.getLoadOptions());
-        settingsModel.copyFrom(preferencesModel.getSettings());
+        settingsModel.copyAllFrom(preferencesModel.getSettings());
     }
 
     private void collect(LoadOptionsModel loadOptionsModel, GeneralSettingsModel settingsModel)

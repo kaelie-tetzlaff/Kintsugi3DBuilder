@@ -507,57 +507,57 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         this.bind();
         switch (wrapS)
         {
-            case None:
+            case NONE:
                 glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
                 OpenGLContext.errorCheck();
                 break;
-            case MirrorOnce:
+            case MIRROR_ONCE:
                 glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_S, GL_MIRROR_CLAMP_TO_EDGE);
                 OpenGLContext.errorCheck();
                 break;
-            case Repeat:
+            case REPEAT:
                 glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_S, GL_REPEAT);
                 OpenGLContext.errorCheck();
                 break;
-            case MirroredRepeat:
+            case MIRRORED_REPEAT:
                 glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
                 OpenGLContext.errorCheck();
                 break;
         }
         switch (wrapT)
         {
-            case None:
+            case NONE:
                 glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
                 OpenGLContext.errorCheck();
                 break;
-            case MirrorOnce:
+            case MIRROR_ONCE:
                 glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_T, GL_MIRROR_CLAMP_TO_EDGE);
                 OpenGLContext.errorCheck();
                 break;
-            case Repeat:
+            case REPEAT:
                 glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_T, GL_REPEAT);
                 OpenGLContext.errorCheck();
                 break;
-            case MirroredRepeat:
+            case MIRRORED_REPEAT:
                 glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
                 OpenGLContext.errorCheck();
                 break;
         }
         switch (wrapR)
         {
-            case None:
+            case NONE:
                 glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
                 OpenGLContext.errorCheck();
                 break;
-            case MirrorOnce:
+            case MIRROR_ONCE:
                 glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_R, GL_MIRROR_CLAMP_TO_EDGE);
                 OpenGLContext.errorCheck();
                 break;
-            case Repeat:
+            case REPEAT:
                 glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_R, GL_REPEAT);
                 OpenGLContext.errorCheck();
                 break;
-            case MirroredRepeat:
+            case MIRRORED_REPEAT:
                 glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_R, GL_MIRRORED_REPEAT);
                 OpenGLContext.errorCheck();
                 break;

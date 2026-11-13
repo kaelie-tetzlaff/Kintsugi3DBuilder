@@ -210,7 +210,8 @@ class PreviewImages
         int fullWidth = fullResImage.getBufferedImage().getWidth();
         int fullHeight = fullResImage.getBufferedImage().getHeight();
 
-        int thumbnailWidth, thumbnailHeight;
+        int thumbnailWidth;
+        int thumbnailHeight;
         if (fullWidth > fullHeight)
         {
             // Landscape: thumbnail size limited by width

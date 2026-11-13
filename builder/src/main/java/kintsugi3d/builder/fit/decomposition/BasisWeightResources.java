@@ -85,7 +85,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
         this.basis = basis;
         this.weightMaps = weightMaps;
         this.weightMask = weightMask;
-        this.weightMaps.setTextureWrap(TextureWrapMode.None, TextureWrapMode.None, TextureWrapMode.None);
+        this.weightMaps.setTextureWrap(TextureWrapMode.NONE, TextureWrapMode.NONE, TextureWrapMode.NONE);
 
         for (BasisMaterialInfo material : basis.getMaterials())
         {
@@ -181,7 +181,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
 
         try
         {
-            return ImageFinder.getInstance().findImageFile(file);
+            return ImageFinder.findImageFile(file);
         }
         catch (FileNotFoundException e)
         {
@@ -189,7 +189,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
             {
                 // Fallback for loading older projects that may not have had zero-padding in basisFunctions.csv
                 int index = Integer.parseInt(materialName);
-                File altFile = ImageFinder.getInstance().tryFindImageFile(
+                File altFile = ImageFinder.tryFindImageFile(
                     new File(solutionDirectory, getUnpackedWeightMapFilename(String.format("%02d", index))));
 
                 if (altFile != null)

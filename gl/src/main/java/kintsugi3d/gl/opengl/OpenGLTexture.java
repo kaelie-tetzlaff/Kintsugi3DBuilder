@@ -332,10 +332,10 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     {
         switch(wrapMode)
         {
-        case None: return GL_CLAMP_TO_EDGE;
-        case MirrorOnce: return GL_MIRROR_CLAMP_TO_EDGE;
-        case Repeat: return GL_REPEAT;
-        case MirroredRepeat: return GL_MIRRORED_REPEAT;
+        case NONE: return GL_CLAMP_TO_EDGE;
+        case MIRROR_ONCE: return GL_MIRROR_CLAMP_TO_EDGE;
+        case REPEAT: return GL_REPEAT;
+        case MIRRORED_REPEAT: return GL_MIRRORED_REPEAT;
         default: return 0;
         }
     }

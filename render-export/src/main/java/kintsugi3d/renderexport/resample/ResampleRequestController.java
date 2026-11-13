@@ -94,7 +94,7 @@ public class ResampleRequestController
             return;
         }
 
-        Rendering.getRequestQueue().addGraphicsRequest(
+        Rendering.getRequestQueue().addImageBasedGraphicsRequest(
             new ResampleRequest(
                 Integer.parseInt(widthTextField.getText()),
                 Integer.parseInt(heightTextField.getText()),

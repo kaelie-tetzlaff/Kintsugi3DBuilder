@@ -33,8 +33,8 @@ import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.material.ReadonlyImportedMaterial;
 import kintsugi3d.gl.material.ReadonlyMaterialTextureMap;
 import kintsugi3d.gl.stream.GraphicsStreamResource;
-import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.gl.util.BufferedImageColorList;
+import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.util.ImageFinder;
 import org.ejml.simple.SimpleMatrix;
 import org.slf4j.Logger;
@@ -152,7 +152,7 @@ public abstract class SpecularFitProcess
             ReadonlyImportedMaterial material = cache.getGeometry().getMaterial();
             ReadonlyMaterialTextureMap normalMap = material == null ? null : material.getNormalMap();
             File inputNormalMap = geometryFile == null || material == null || normalMap == null ? null :
-                ImageFinder.getInstance().tryFindImageFile(new File(geometryFile.getParentFile(), normalMap.getMapName()));
+                ImageFinder.tryFindImageFile(new File(geometryFile.getParentFile(), normalMap.getMapName()));
 
             // Optimize weight maps and normal maps by blocks to fill the full resolution textures
             optimizeBlocks(fullResolution, cache, basis, inputNormalMap, monitor);

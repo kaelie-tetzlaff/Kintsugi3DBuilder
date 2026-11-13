@@ -120,7 +120,7 @@ public class ExportModelController extends ProjectSettingsControllerBase
             exportLocationFile = objFileChooser.showSaveDialog(root.getScene().getWindow());
             if (exportLocationFile != null)
             {
-                Rendering.getRequestQueue().addGraphicsRequest(new ExportTexturesRequest(
+                Rendering.getRequestQueue().addImageBasedGraphicsRequest(new ExportTexturesRequest(
                     exportLocationFile,
                     () ->
                     {

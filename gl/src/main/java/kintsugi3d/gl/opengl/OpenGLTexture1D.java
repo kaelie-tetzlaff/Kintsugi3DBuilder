@@ -185,19 +185,19 @@ final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLCon
         this.bind();
         switch(wrap)
         {
-        case None:
+        case NONE:
             glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             OpenGLContext.errorCheck();
             break;
-        case MirrorOnce:
+        case MIRROR_ONCE:
             glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_S, GL_MIRROR_CLAMP_TO_EDGE);
             OpenGLContext.errorCheck();
             break;
-        case Repeat:
+        case REPEAT:
             glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_S, GL_REPEAT);
             OpenGLContext.errorCheck();
             break;
-        case MirroredRepeat:
+        case MIRRORED_REPEAT:
             glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
             OpenGLContext.errorCheck();
             break;

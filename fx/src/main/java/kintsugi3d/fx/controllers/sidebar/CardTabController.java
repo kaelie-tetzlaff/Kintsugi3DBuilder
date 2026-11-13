@@ -461,13 +461,13 @@ public class CardTabController
                 }
                 else
                 {
-                    System.err.println("The folder does not exist.");
+                    LOG.error("The folder does not exist: {}", folder);
                 }
             }
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            LOG.error("Error opening file path: {}", path, e);
         }
     }
 

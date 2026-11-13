@@ -67,7 +67,7 @@ public class OrbitAnimationController
             return;
         }
 
-        Rendering.getRequestQueue().addGraphicsRequest(
+        Rendering.getRequestQueue().addImageBasedGraphicsRequest(
             OrbitAnimationRequest.getBuilder()
                 .setWidth(Integer.parseInt(widthTextField.getText()))
                 .setHeight(Integer.parseInt(heightTextField.getText()))

@@ -363,7 +363,7 @@ public final class MetashapeChunk
             {
                 String pathAttributeName = new File(pathAttribute).getName();
                 imageFile = new File(fullResSearchDirectory, pathAttributeName);
-                File foundImageFile = ImageFinder.getInstance().tryFindImageFile(imageFile);
+                File foundImageFile = ImageFinder.tryFindImageFile(imageFile);
                 if (foundImageFile != null)
                 {
                     path = foundImageFile.getName();
@@ -372,7 +372,7 @@ public final class MetashapeChunk
             else
             {
                 imageFile = new File(fullResSearchDirectory, pathAttribute);
-                File foundImageFile = ImageFinder.getInstance().tryFindImageFile(imageFile);
+                File foundImageFile = ImageFinder.tryFindImageFile(imageFile);
                 if (foundImageFile != null)
                 {
                     path = rootDirectory.toPath().toAbsolutePath().relativize(foundImageFile.toPath().toAbsolutePath()).toString();

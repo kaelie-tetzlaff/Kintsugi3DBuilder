@@ -212,6 +212,7 @@ public class Potato
         }
         catch (IOException e)
         {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
     }

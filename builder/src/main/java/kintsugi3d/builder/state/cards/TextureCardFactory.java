@@ -97,7 +97,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
 
                 try
                 {
-                    thumbnailPath = ImageFinder.getInstance().findImageFile(newTextureImage).toString();
+                    thumbnailPath = ImageFinder.findImageFile(newTextureImage).toString();
                 }
                 catch (FileNotFoundException e)
                 {

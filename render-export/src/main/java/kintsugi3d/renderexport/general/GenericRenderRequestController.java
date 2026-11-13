@@ -112,7 +112,7 @@ public class GenericRenderRequestController implements Initializable
         builder.setWidth(Integer.parseInt(this.widthTextField.getText()));
         builder.setHeight(Integer.parseInt(this.heightTextField.getText()));
 
-        Rendering.getRequestQueue().addGraphicsRequest(builder.create());
+        Rendering.getRequestQueue().addImageBasedGraphicsRequest(builder.create());
     }
 
     @FXML

@@ -76,7 +76,7 @@ class MultiviewRenderRequest extends RenderRequestBase
 
                 render(drawable, framebuffer);
 
-                String fileName = ImageFinder.getInstance().getImageFileNameWithExtension(
+                String fileName = ImageFinder.getImageFileNameWithExtension(
                     view.getImageFile().getName(), "png");
 
                 File exportFile = new File(getOutputDirectory(), fileName);

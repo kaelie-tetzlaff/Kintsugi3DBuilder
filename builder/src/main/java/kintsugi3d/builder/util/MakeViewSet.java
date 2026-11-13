@@ -63,6 +63,7 @@ public final class MakeViewSet
         }
         catch (IOException|RuntimeException e)
         {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
     }

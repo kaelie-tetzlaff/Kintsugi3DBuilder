@@ -268,26 +268,26 @@ class WindowCallback extends WindowListenerManagerInstance
                 {
                     for (KeyPressListener listener : getKeyPressListeners())
                     {
-                        listener.keyPressed(window, key, new ModifierKeys(mods));
+                        listener.keyPressed(window, key, new GLFWModifierKeys(mods));
                     }
 
                     for (KeyTypeListener listener : getKeyTypeListeners())
                     {
-                        listener.keyTyped(window, key, new ModifierKeys(mods));
+                        listener.keyTyped(window, key, new GLFWModifierKeys(mods));
                     }
                 }
                 else if (action == GLFW_RELEASE)
                 {
                     for (KeyReleaseListener listener : getKeyReleaseListeners())
                     {
-                        listener.keyReleased(window, key, new ModifierKeys(mods));
+                        listener.keyReleased(window, key, new GLFWModifierKeys(mods));
                     }
                 }
                 else if (action == GLFW_REPEAT)
                 {
                     for (KeyTypeListener listener : getKeyTypeListeners())
                     {
-                        listener.keyTyped(window, key, new ModifierKeys(mods));
+                        listener.keyTyped(window, key, new GLFWModifierKeys(mods));
                     }
                 }
             }
@@ -318,7 +318,7 @@ class WindowCallback extends WindowListenerManagerInstance
             {
                 for (CharacterModifiersListener listener : getCharModsListeners())
                 {
-                    listener.characterTypedWithModifiers(window, (char)codepoint, new ModifierKeys(mods));
+                    listener.characterTypedWithModifiers(window, (char)codepoint, new GLFWModifierKeys(mods));
                 }
             }
         }
@@ -335,14 +335,14 @@ class WindowCallback extends WindowListenerManagerInstance
                 {
                     for (MouseButtonPressListener listener : getMouseButtonPressListeners())
                     {
-                        listener.mouseButtonPressed(window, button, new ModifierKeys(mods));
+                        listener.mouseButtonPressed(window, button, new GLFWModifierKeys(mods));
                     }
                 }
                 else if (action == GLFW_RELEASE)
                 {
                     for (MouseButtonReleaseListener listener : getMouseButtonReleaseListeners())
                     {
-                        listener.mouseButtonReleased(window, button, new ModifierKeys(mods));
+                        listener.mouseButtonReleased(window, button, new GLFWModifierKeys(mods));
                     }
                 }
             }

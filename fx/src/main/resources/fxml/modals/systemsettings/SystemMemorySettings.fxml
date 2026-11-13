@@ -32,6 +32,6 @@
         </padding>
     </HBox>
     <HBox alignment="CENTER_RIGHT">
-        <Button mnemonicParsing="false" onAction="#button_Apply" styleClass="wireframeBodyLarge" text="Apply"/>
+        <Button mnemonicParsing="false" onAction="#apply" styleClass="wireframeBodyLarge" text="Apply"/>
     </HBox>
 </VBox>

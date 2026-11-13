@@ -320,7 +320,7 @@ public class SmokeTest
             projectSettings.set("textureSampledSize", TEXTURE_SAMPLED_SIZE);
             projectSettings.set("textureSubdivSize", TEXTURE_SUBDIV_SIZE);
             SpecularFitRequest request = SpecularFitRequest.createBasisAndTexturesOptimizationRequest();
-            Rendering.getRequestQueue().addGraphicsRequest(request);
+            Rendering.getRequestQueue().addImageBasedGraphicsRequest(request);
         });
 
         LOG.debug("Waiting for processing to complete...");
@@ -813,7 +813,7 @@ public class SmokeTest
 
         EXPORT_FINISHED.set(false);
         File newFile = new File("test-output/export-output",String.format("%s.k3d",testName));
-        Rendering.getRequestQueue().addGraphicsRequest(new ExportTexturesRequest(newFile, settings, () ->
+        Rendering.getRequestQueue().addImageBasedGraphicsRequest(new ExportTexturesRequest(newFile, settings, () ->
         {
             LOG.info("Project Exported");
             EXPORT_FINISHED.set(true);

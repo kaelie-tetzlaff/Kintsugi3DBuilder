@@ -50,30 +50,30 @@ public final class NonNegativeLeastSquares
 
         // Create versions of A'A and A'b containing only the rows and columns
         // corresponding to the free variables.
-        SimpleMatrix mATA_P = new SimpleMatrix(mapping.size(), mapping.size());
-        SimpleMatrix vATb_P = new SimpleMatrix(mapping.size(), 1);
+        SimpleMatrix mATAForP = new SimpleMatrix(mapping.size(), mapping.size());
+        SimpleMatrix vATbForP = new SimpleMatrix(mapping.size(), 1);
 
-        for (int i = 0; i < mATA_P.numRows(); i++)
+        for (int i = 0; i < mATAForP.numRows(); i++)
         {
-            vATb_P.set(i, vATb.get(mapping.get(i)));
+            vATbForP.set(i, vATb.get(mapping.get(i)));
 
-            for (int j = 0; j < mATA_P.numCols(); j++)
+            for (int j = 0; j < mATAForP.numCols(); j++)
             {
-                mATA_P.set(i, j, mATA.get(mapping.get(i), mapping.get(j)));
+                mATAForP.set(i, j, mATA.get(mapping.get(i), mapping.get(j)));
             }
         }
 
         // Solve the system.
-        SimpleMatrix s_P = mATA_P.solve(vATb_P);
+        SimpleMatrix sForP = mATAForP.solve(vATbForP);
 
         // Copy the solution for the free variables into a vector containing the full solution,
         // including the variables fixed at zero.
-        for (int i = 0; i < s_P.numRows(); i++)
+        for (int i = 0; i < sForP.numRows(); i++)
         {
-            sOut.set(mapping.get(i), s_P.get(i));
+            sOut.set(mapping.get(i), sForP.get(i));
         }
 
-        return s_P;
+        return sForP;
     }
 
     private static double minNonConstraint(SimpleMatrix s, int constraintCount)
@@ -204,19 +204,19 @@ public final class NonNegativeLeastSquares
                 try
                 {
                     // Populates the mapping, solves the system and copies it into s, and returns a vector containing only the free variables.
-                    SimpleMatrix s_P = solvePartial(augmentedATA, augmentedATb, p, mapping, s, constraintCount);
+                    SimpleMatrix sForP = solvePartial(augmentedATA, augmentedATb, p, mapping, s, constraintCount);
 
                     // Update size of P based on the number of mappings, accounting for the space used for equality constraints at the end of the mappings.
                     sizeP = mapping.size() - constraintCount;
 
                     // Make sure that none of the free variables went negative.
-                    while (minNonConstraint(s_P, constraintCount) < 0.0)
+                    while (minNonConstraint(sForP, constraintCount) < 0.0)
                     {
                         double alpha = 1.0;
                         int j = -1;
                         for (int i = 0; i < sizeP; i++)
                         {
-                            double sVal = s_P.get(i);
+                            double sVal = sForP.get(i);
 
                             if (sVal <= 0.0)
                             {
@@ -259,7 +259,7 @@ public final class NonNegativeLeastSquares
                         s.set(0.0); // Set all elements to zero.
 
                         // Populates the mapping, solves the system and copies it into s, and returns a vector containing only the free variables.
-                        s_P = solvePartial(augmentedATA, augmentedATb, p, mapping, s, constraintCount);
+                        sForP = solvePartial(augmentedATA, augmentedATb, p, mapping, s, constraintCount);
 
                         // Update size of P based on the number of mappings.
                         sizeP = mapping.size() - constraintCount;

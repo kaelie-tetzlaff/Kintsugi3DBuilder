@@ -78,7 +78,7 @@ public final class ViewSetReaderFromRealityCaptureCSV implements ViewSetReader
 
         public DistortionProjection getDistortionProjection(File imageRootDirectory) throws IOException
         {
-            File imageFile = ImageFinder.getInstance().findImageFile(new File(imageRootDirectory, name));
+            File imageFile = ImageFinder.findImageFile(new File(imageRootDirectory, name));
 
             // Have to read part of image file to determine aspect ratio
             try (var in = ImageIO.createImageInputStream(imageFile))

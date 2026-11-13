@@ -34,8 +34,8 @@ import kintsugi3d.gl.interactive.InteractiveApplication;
 import kintsugi3d.gl.interactive.InteractiveGraphics;
 import kintsugi3d.gl.opengl.OpenGLContext;
 import kintsugi3d.gl.opengl.OpenGLContextFactory;
-import kintsugi3d.gl.window.*;
 import kintsugi3d.gl.util.CanvasListener;
+import kintsugi3d.gl.window.*;
 import kintsugi3d.util.KeyPress;
 import kintsugi3d.util.MouseMode;
 import org.slf4j.Logger;
@@ -458,7 +458,7 @@ public final class RenderingBootstrap
                     // Quit after the request finishes
                     // Use ProjectGraphicsRequest (rather than GraphicsRequest) so that it gets queued up after the actual request,
                     // once the project has finished loading
-                    requestQueue.addBackgroundGraphicsRequest(new ImageBasedGraphicsRequest()
+                    requestQueue.addBackgroundImageBasedGraphicsRequest(new ImageBasedGraphicsRequest()
                     {
                         @Override
                         public <ContextType extends Context<ContextType>> void executeRequest(ImageBasedRenderable<ContextType> instance)

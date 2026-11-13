@@ -179,18 +179,18 @@ public class View
 
     public File findFullResImageFile() throws FileNotFoundException
     {
-        return ImageFinder.getInstance().findImageFile(getFullResImageFile());
+        return ImageFinder.findImageFile(getFullResImageFile());
     }
 
     public File tryFindFullResImageFile()
     {
-        return ImageFinder.getInstance().tryFindImageFile(getFullResImageFile());
+        return ImageFinder.tryFindImageFile(getFullResImageFile());
     }
 
     public File getPreviewImageFile(String extension)
     {
         return new File(containingViewSet.getPreviewImageDirectory(),
-            ImageFinder.getInstance().getImageFileNameWithExtension(imageFile.getName(), extension));
+            ImageFinder.getImageFileNameWithExtension(imageFile.getName(), extension));
     }
 
     public File getPreviewImageFile()
@@ -201,18 +201,18 @@ public class View
 
     public File findPreviewImageFile() throws FileNotFoundException
     {
-        return ImageFinder.getInstance().findImageFile(getPreviewImageFile());
+        return ImageFinder.findImageFile(getPreviewImageFile());
     }
 
     public File tryFindPreviewImageFile()
     {
-        return ImageFinder.getInstance().tryFindImageFile(getPreviewImageFile());
+        return ImageFinder.tryFindImageFile(getPreviewImageFile());
     }
 
     public File getThumbnailImageFile(String extension)
     {
         return new File(containingViewSet.getThumbnailImageDirectory(),
-            ImageFinder.getInstance().getImageFileNameWithExtension(imageFile.getName(), extension));
+            ImageFinder.getImageFileNameWithExtension(imageFile.getName(), extension));
     }
 
     public File getThumbnailImageFile()
@@ -222,12 +222,12 @@ public class View
 
     public File findThumbnailImageFile() throws FileNotFoundException
     {
-        return ImageFinder.getInstance().findImageFile(getThumbnailImageFile());
+        return ImageFinder.findImageFile(getThumbnailImageFile());
     }
 
     public File tryFindThumbnailImageFile()
     {
-        return ImageFinder.getInstance().tryFindImageFile(getThumbnailImageFile());
+        return ImageFinder.tryFindImageFile(getThumbnailImageFile());
     }
 
     public File getMaskFile()

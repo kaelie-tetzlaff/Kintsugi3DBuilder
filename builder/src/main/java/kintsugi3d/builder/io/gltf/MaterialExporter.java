@@ -239,7 +239,7 @@ public class MaterialExporter
 
     public void makeLODs(File outputDirectory)
     {
-        LODGenerator.getInstance().generateLODs(minLODSize, outputDirectory,
+        LODGenerator.generateLODs(minLODSize, outputDirectory,
             textures.values().toArray(TextureExportSpecification[]::new));
     }
 
