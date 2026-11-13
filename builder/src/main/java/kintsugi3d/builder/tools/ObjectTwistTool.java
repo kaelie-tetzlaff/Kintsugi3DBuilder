@@ -19,7 +19,7 @@ import kintsugi3d.gl.window.CursorPosition;
 
 final class ObjectTwistTool implements DragTool
 {
-    private static final double ORBIT_SENSITIVITY = 1.0 * Math.PI; //todo: get from gui somehow
+    private static final double ORBIT_SENSITIVITY = Math.PI; //todo: get from gui somehow
     private double orbitSensitivityAdjusted = 1.0;
 
     private Matrix4 oldOrbitMatrix;
@@ -63,6 +63,7 @@ final class ObjectTwistTool implements DragTool
     @Override
     public void cursorDragged(CursorPosition cursorPosition, CanvasSize canvasSize)
     {
+        //noinspection FloatingPointEquality
         if (cursorPosition.x != mouseStart.x)
         {
             objectModel.setOrbit(

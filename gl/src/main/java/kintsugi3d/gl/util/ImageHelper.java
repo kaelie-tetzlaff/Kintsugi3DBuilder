@@ -182,6 +182,7 @@ public final class ImageHelper
 
     public ImageHelper scaledBy(double factorX, double factorY)
     {
+        //noinspection FloatingPointEquality
         if (factorX == 1.0 && factorY == 1.0)
         {
             return this;

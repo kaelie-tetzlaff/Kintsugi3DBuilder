@@ -564,12 +564,12 @@ public class ProgressBarsController
 
             Platform.runLater(() ->
             {
-                if (overallProgressBar.getProgress() == ProgressIndicator.INDETERMINATE_PROGRESS)
+                if (overallProgressBar.isIndeterminate())
                 {
                     overallProgressBar.setProgress(1.0);
                 }
 
-                if (localProgressBar.getProgress() == ProgressIndicator.INDETERMINATE_PROGRESS)
+                if (localProgressBar.isIndeterminate())
                 {
                     localProgressBar.setProgress(1.0);
                 }

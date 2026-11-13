@@ -66,15 +66,15 @@ public class InteractiveApplication
         Date timestampA = startTimestamp;
         LOG.info("Main loop started.");
         boolean shouldTerminate = false;
-        int refreshTime = 0;
-        int pollingTime = 0;
+        long refreshTime = 0;
+        long pollingTime = 0;
 
         long lastSecond = startTimestamp.getTime();
         int frames = 0;
 
         while (!shouldTerminate)
         {
-            int frameTime = 0;
+            long frameTime = 0;
 
             for (Refreshable refreshable : this.refreshables)
             {

@@ -186,17 +186,17 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
 
             if (!Double.isNaN(lastCursorX) && !Double.isNaN(lastCursorY))
             {
-                theta += (ignoreSensitivity ? 1.0f : SENSITIVITY) * 2 * Math.PI * (xPos - lastCursorX) / size.width;
-                phi += (ignoreSensitivity ? 1.0f : SENSITIVITY) * Math.PI * (yPos - lastCursorY) / size.height;
+                theta += (ignoreSensitivity ? 1.0f : SENSITIVITY) * 2 * (float)Math.PI * (float)(xPos - lastCursorX) / size.width;
+                phi += (ignoreSensitivity ? 1.0f : SENSITIVITY) * (float)Math.PI * (float)(yPos - lastCursorY) / size.height;
 
                 if (theta < 0.0f)
                 {
-                    theta += 2 * Math.PI;
+                    theta += 2 * (float)Math.PI;
                 }
 
                 if (theta > 2 * Math.PI)
                 {
-                    theta -= 2 * Math.PI;
+                    theta -= 2 * (float)Math.PI;
                 }
 
                 if (phi > Math.PI / 2)
