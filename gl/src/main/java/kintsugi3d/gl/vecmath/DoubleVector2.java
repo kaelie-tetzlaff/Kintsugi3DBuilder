@@ -50,7 +50,7 @@ public class DoubleVector2 implements Iterable<Double>
      * Construct a vector in two dimensions with the given values.
      * @param value Value of both dimensions.
      */
-    public DoubleVector2(double value)
+    public DoubleVector2(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") double value)
     {
         this(value, value);
     }

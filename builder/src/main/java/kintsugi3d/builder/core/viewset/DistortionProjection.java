@@ -153,8 +153,7 @@ public class DistortionProjection implements Projection
      * @param focalLength The focal distance in the same units as the sensor dimensions, which determines the field-of-view of the projection matrix.
      */
     public DistortionProjection(
-        float width, float height,
-        float focalLength)
+        float width, float height, @SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") float focalLength)
     {
         this(width, height, focalLength, focalLength, width / 2, height / 2, 0.0f, 0.0f, 0.0f);
     }

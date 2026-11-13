@@ -20,7 +20,7 @@ public interface PageController<T>
     Page<?, ?> getPage();
 
     PageFrameController getPageFrameController();
-    void setPageFrameController(PageFrameController scroller);
+    void setPageFrameController(PageFrameController pageFrameController);
 
     /**
      * Returns the outer AnchorPane, VBox, GridPane, etc. for the controller's fxml

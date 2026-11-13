@@ -63,7 +63,7 @@ public class DoubleVector4 implements Iterable<Double>
         this.w = w;
     }
 
-    public DoubleVector4 (double value)
+    public DoubleVector4 (@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") double value)
     {
         this(value, value, value, value);
     }

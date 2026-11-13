@@ -40,7 +40,7 @@ public class IntVector3 implements Iterable<Integer>
      * Construct a vector in three dimensions with the given values.
      * @param value Value of all three dimensions.
      */
-    public IntVector3(int value)
+    public IntVector3(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") int value)
     {
         this(value, value, value);
     }

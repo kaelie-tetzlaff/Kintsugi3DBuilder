@@ -210,51 +210,51 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         }
     }
 
-    private OpenGLTexture3D(OpenGLContext context, int openGLTextureTarget, int multisamples, ColorFormat colorFormat,
+    private OpenGLTexture3D(OpenGLContext context, int textureTarget, int multisamples, ColorFormat colorFormat,
                             int width, int height, int layerCount, int format, boolean fixedSampleLocations, boolean useLinearFiltering,
                             boolean useMipmaps, int maxMipmapLevel, float maxAnisotropy)
     {
         // Create and allocate a 3D texture or 2D texture array
-        super(context, openGLTextureTarget, colorFormat,
+        super(context, textureTarget, colorFormat,
             new Parameters(format, useLinearFiltering, useMipmaps, maxMipmapLevel, maxAnisotropy, multisamples, fixedSampleLocations));
 
         this.width = width;
         this.height = height;
         this.depth = layerCount;
 
-        init(openGLTextureTarget, multisamples, OpenGLContext.getInternalColorFormat(colorFormat), layerCount, format,
+        init(textureTarget, multisamples, OpenGLContext.getInternalColorFormat(colorFormat), layerCount, format,
             fixedSampleLocations, useLinearFiltering, maxMipmapLevel, maxAnisotropy);
     }
 
-    private OpenGLTexture3D(OpenGLContext context, int openGLTextureTarget, int multisamples, CompressionFormat compressionFormat,
+    private OpenGLTexture3D(OpenGLContext context, int textureTarget, int multisamples, CompressionFormat compressionFormat,
                             int width, int height, int layerCount, int format, boolean fixedSampleLocations, boolean useLinearFiltering,
                             boolean useMipmaps, int maxMipmapLevel, float maxAnisotropy)
     {
         // Create and allocate a 3D texture or 2D texture array
-        super(context, openGLTextureTarget, compressionFormat,
+        super(context, textureTarget, compressionFormat,
             new Parameters(format, useLinearFiltering, useMipmaps, maxMipmapLevel, maxAnisotropy, multisamples, fixedSampleLocations));
 
         this.width = width;
         this.height = height;
         this.depth = layerCount;
 
-        init(openGLTextureTarget, multisamples, OpenGLContext.getCompressionFormat(compressionFormat), layerCount, format,
+        init(textureTarget, multisamples, OpenGLContext.getCompressionFormat(compressionFormat), layerCount, format,
             fixedSampleLocations, useLinearFiltering, maxMipmapLevel, maxAnisotropy);
     }
 
-    private OpenGLTexture3D(OpenGLContext context, int openGLTextureTarget, int multisamples, TextureType textureType,
+    private OpenGLTexture3D(OpenGLContext context, int textureTarget, int multisamples, TextureType textureType,
                             int precision, int width, int height, int layerCount, int format, boolean fixedSampleLocations,
                             boolean useLinearFiltering, boolean useMipmaps, int maxMipmapLevel, float maxAnisotropy)
     {
         // Create and allocate a 3D texture or 2D texture array
-        super(context, openGLTextureTarget, textureType, precision,
+        super(context, textureTarget, textureType, precision,
             new Parameters(format, useLinearFiltering, useMipmaps, maxMipmapLevel, maxAnisotropy, multisamples, fixedSampleLocations));
 
         this.width = width;
         this.height = height;
         this.depth = layerCount;
 
-        init(openGLTextureTarget, multisamples, getSpecialInternalFormat(textureType, precision), layerCount, format,
+        init(textureTarget, multisamples, getSpecialInternalFormat(textureType, precision), layerCount, format,
             fixedSampleLocations, useLinearFiltering, maxMipmapLevel, maxAnisotropy);
     }
 

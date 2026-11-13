@@ -82,11 +82,11 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     private final CompressionFormat compressionFormat;
     private final TextureType textureType;
 
-    private OpenGLTexture(OpenGLContext context, int openGLTextureTarget, ColorFormat colorFormat,
+    private OpenGLTexture(OpenGLContext context, int textureTarget, ColorFormat colorFormat,
         CompressionFormat compressionFormat, TextureType textureType, int precision, Parameters parameters)
     {
         this.context = context;
-        this.openGLTextureTarget = openGLTextureTarget;
+        this.openGLTextureTarget = textureTarget;
         this.textureType = textureType;
         this.colorFormat = colorFormat;
         this.compressionFormat = compressionFormat;
@@ -104,19 +104,19 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         }
     }
 
-    OpenGLTexture(OpenGLContext context, int openGLTextureTarget, TextureType textureType, int precision, Parameters parameters)
+    OpenGLTexture(OpenGLContext context, int textureTarget, TextureType textureType, int precision, Parameters parameters)
     {
-        this(context, openGLTextureTarget, null, null, textureType, precision, parameters);
+        this(context, textureTarget, null, null, textureType, precision, parameters);
     }
 
-    OpenGLTexture(OpenGLContext context, int openGLTextureTarget, ColorFormat colorFormat, Parameters parameters)
+    OpenGLTexture(OpenGLContext context, int textureTarget, ColorFormat colorFormat, Parameters parameters)
     {
-        this(context, openGLTextureTarget, colorFormat, null, TextureType.COLOR, 0, parameters);
+        this(context, textureTarget, colorFormat, null, TextureType.COLOR, 0, parameters);
     }
 
-    OpenGLTexture(OpenGLContext context, int openGLTextureTarget, CompressionFormat compressionFormat, Parameters parameters)
+    OpenGLTexture(OpenGLContext context, int textureTarget, CompressionFormat compressionFormat, Parameters parameters)
     {
-        this(context, openGLTextureTarget, null, compressionFormat, TextureType.COLOR, 0, parameters);
+        this(context, textureTarget, null, compressionFormat, TextureType.COLOR, 0, parameters);
     }
 
     @Override

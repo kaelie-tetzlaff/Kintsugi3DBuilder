@@ -21,7 +21,7 @@ interface ToolBuilder<ToolType>
 {
     ToolBuilder<ToolType> setCameraModel(ManipulableViewpointModel cameraModel);
     ToolBuilder<ToolType> setLightingEnvironmentModel(ManipulableLightingEnvironmentModel lightingModel);
-    ToolBuilder<ToolType> setObjectModel(ManipulableObjectPoseModel lightingModel);
+    ToolBuilder<ToolType> setObjectModel(ManipulableObjectPoseModel objectModel);
     ToolBuilder<ToolType> setSettingsModel(GeneralSettingsModel settingsModel);
     ToolBuilder<ToolType> setSceneViewport(SceneViewport sceneViewport);
     ToolType create();

@@ -207,9 +207,9 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public void scroll(double xOffset, double yOffset)
+    public void scroll(double deltaX, double deltaY)
     {
-        eventCollector.scroll(l -> l.scroll(this, xOffset, yOffset));
+        eventCollector.scroll(l -> l.scroll(this, deltaX, deltaY));
     }
 
     @Override

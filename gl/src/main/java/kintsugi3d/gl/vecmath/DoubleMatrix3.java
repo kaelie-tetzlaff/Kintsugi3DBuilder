@@ -97,7 +97,7 @@ public final class DoubleMatrix3
      * @param s The scale along all axes.
      * @return The specified scale matrix.
      */
-    public static DoubleMatrix3 scale(double s)
+    public static DoubleMatrix3 scale(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") double s)
     {
         return scale(s, s, s);
     }

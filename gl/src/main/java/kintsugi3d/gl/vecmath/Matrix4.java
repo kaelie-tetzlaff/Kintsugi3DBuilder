@@ -130,7 +130,7 @@ public final class Matrix4
         return scale(s.x, s.y, s.z);
     }
 
-    public static Matrix4 scale(float s)
+    public static Matrix4 scale(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") float s)
     {
         return scale(s, s, s);
     }

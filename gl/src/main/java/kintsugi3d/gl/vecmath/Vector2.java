@@ -48,7 +48,7 @@ public class Vector2 implements Iterable<Float>
      * Construct a vector in two dimensions with the given values.
      * @param value Value of both dimensions.
      */
-    public Vector2(float value)
+    public Vector2(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") float value)
     {
         this(value, value);
     }

@@ -67,7 +67,7 @@ public final class MultiplierTool implements KeyPressTool
         }
 
         @Override
-        public ToolBuilder<MultiplierTool> setObjectModel(ManipulableObjectPoseModel lightingModel)
+        public ToolBuilder<MultiplierTool> setObjectModel(ManipulableObjectPoseModel objectModel)
         {
             return this;
         }

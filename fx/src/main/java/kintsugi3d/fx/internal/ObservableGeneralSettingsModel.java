@@ -250,21 +250,21 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
     }
 
     @Override
-    public void createSetting(String name, Class<?> settingType, Object initialValue, boolean serialize)
+    public void createSetting(String name, Class<?> type, Object initialValue, boolean serialize)
     {
         if(settingsMap.containsKey(name))
         {
             // Set value to new initialValue if it already exists.
             // Note: this will not change whether serialize was set.
             TypedProperty entry = settingsMap.get(name);
-            if (settingType.isAssignableFrom(entry.getType()))
+            if (type.isAssignableFrom(entry.getType()))
             {
                 setUnchecked(name, initialValue);
             }
         }
         else
         {
-            settingsMap.put(name, new TypedProperty(initialValue, settingType, serialize));
+            settingsMap.put(name, new TypedProperty(initialValue, type, serialize));
         }
     }
 

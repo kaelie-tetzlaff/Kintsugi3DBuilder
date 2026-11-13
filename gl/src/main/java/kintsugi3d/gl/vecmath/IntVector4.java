@@ -38,7 +38,7 @@ public class IntVector4 implements Iterable<Integer>
         this.w = w;
     }
 
-    public IntVector4(int value)
+    public IntVector4(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") int value)
     {
         this(value, value, value, value);
     }

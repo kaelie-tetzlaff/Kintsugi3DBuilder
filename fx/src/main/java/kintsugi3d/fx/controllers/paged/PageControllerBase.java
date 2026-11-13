@@ -50,9 +50,9 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
     }
 
     @Override
-    public final void setPageFrameController(PageFrameController frameController)
+    public final void setPageFrameController(PageFrameController pageFrameController)
     {
-        this.pageFrameController = frameController;
+        this.pageFrameController = pageFrameController;
     }
 
     protected final JavaFXState getState()

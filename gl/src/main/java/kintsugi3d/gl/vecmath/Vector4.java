@@ -58,7 +58,7 @@ public class Vector4 implements Iterable<Float>
         this.w = w;
     }
 
-    public Vector4 (float value)
+    public Vector4 (@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") float value)
     {
         this(value, value, value, value);
     }

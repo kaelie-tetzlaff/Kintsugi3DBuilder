@@ -471,29 +471,29 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
         }
     }
 
-    private OpenGLTexture2D(OpenGLContext context, int openGLTextureTarget, ColorFormat colorFormat, int width, int height, int format, int type, ByteBuffer buffer,
+    private OpenGLTexture2D(OpenGLContext context, int textureTarget, ColorFormat colorFormat, int width, int height, int format, int type, ByteBuffer buffer,
             boolean useLinearFiltering, boolean useMipmaps, int maxMipmapLevel, float maxAnisotropy)
     {
         // Create an empty texture to be used as a render target for a framebuffer.
-        super(context, openGLTextureTarget, colorFormat, new Parameters(format, useLinearFiltering, useMipmaps, maxMipmapLevel, maxAnisotropy));
+        super(context, textureTarget, colorFormat, new Parameters(format, useLinearFiltering, useMipmaps, maxMipmapLevel, maxAnisotropy));
 
         this.width = width;
         this.height = height;
 
-        init(openGLTextureTarget, OpenGLContext.getInternalColorFormat(colorFormat), format, type, buffer,
+        init(textureTarget, OpenGLContext.getInternalColorFormat(colorFormat), format, type, buffer,
                 useLinearFiltering, maxMipmapLevel, maxAnisotropy);
     }
 
-    private OpenGLTexture2D(OpenGLContext context, int openGLTextureTarget, CompressionFormat compressionFormat, int width, int height, int format, int type, ByteBuffer buffer,
+    private OpenGLTexture2D(OpenGLContext context, int textureTarget, CompressionFormat compressionFormat, int width, int height, int format, int type, ByteBuffer buffer,
             boolean useLinearFiltering, boolean useMipmaps, int maxMipmapLevel, float maxAnisotropy)
     {
         // Create an empty texture to be used as a render target for a framebuffer.
-        super(context, openGLTextureTarget, compressionFormat, new Parameters(format, useLinearFiltering, useMipmaps, maxMipmapLevel, maxAnisotropy));
+        super(context, textureTarget, compressionFormat, new Parameters(format, useLinearFiltering, useMipmaps, maxMipmapLevel, maxAnisotropy));
 
         this.width = width;
         this.height = height;
 
-        init(openGLTextureTarget, OpenGLContext.getCompressionFormat(compressionFormat), format, type, buffer,
+        init(textureTarget, OpenGLContext.getCompressionFormat(compressionFormat), format, type, buffer,
                 useLinearFiltering, maxMipmapLevel, maxAnisotropy);
     }
 

@@ -15,8 +15,8 @@ public class IllegalShaderDefineException extends GLException
 {
     private static final long serialVersionUID = 1905386674496150406L;
 
-    public IllegalShaderDefineException(String reason)
+    public IllegalShaderDefineException(String message)
     {
-        super(reason);
+        super(message);
     }
 }
