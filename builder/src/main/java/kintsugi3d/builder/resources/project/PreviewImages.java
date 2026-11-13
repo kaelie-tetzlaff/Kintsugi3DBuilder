@@ -88,7 +88,7 @@ class PreviewImages
         }
     }
 
-    boolean fullResImageExists()
+    boolean doesFullResImageExist()
     {
         return fullResImage != null;
     }

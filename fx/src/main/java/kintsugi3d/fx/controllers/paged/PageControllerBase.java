@@ -123,21 +123,21 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
     }
 
     @Override
-    public boolean advance()
+    public boolean tryAdvance()
     {
         // By default, advance without any additional logic other than what page has been assigned as nextPage.
         return true;
     }
 
     @Override
-    public boolean confirm()
+    public boolean tryConfirm()
     {
         // Allow silent exit by default if no confirmation is implemented.
         return true;
     }
 
     @Override
-    public boolean cancel()
+    public boolean tryCancel()
     {
         // Close without any additional logic by default.
         return true;

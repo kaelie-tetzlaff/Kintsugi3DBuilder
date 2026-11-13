@@ -44,25 +44,25 @@ public class MouseMode
             new ModifierKeys()
             {
                 @Override
-                public boolean getShiftModifier()
+                public boolean isShiftModifierActive()
                 {
                     return (ordinal & 1) != 0;
                 }
 
                 @Override
-                public boolean getControlModifier()
+                public boolean isControlModifierActive()
                 {
                     return (ordinal & 2) != 0;
                 }
 
                 @Override
-                public boolean getAltModifier()
+                public boolean isAltModifierActive()
                 {
                     return (ordinal & 4) != 0;
                 }
 
                 @Override
-                public boolean getSuperModifier()
+                public boolean isSuperModifierActive()
                 {
                     return (ordinal & 8) != 0;
                 }
@@ -71,10 +71,10 @@ public class MouseMode
 
     public int getOrdinal()
     {
-        return  (modifierKeys.getShiftModifier()   ? 1 : 0) |
-                (modifierKeys.getControlModifier() ? 2 : 0) |
-                (modifierKeys.getAltModifier()     ? 4 : 0) |
-                (modifierKeys.getSuperModifier()   ? 8 : 0) |
+        return  (modifierKeys.isShiftModifierActive()   ? 1 : 0) |
+                (modifierKeys.isControlModifierActive() ? 2 : 0) |
+                (modifierKeys.isAltModifierActive()     ? 4 : 0) |
+                (modifierKeys.isSuperModifierActive()   ? 8 : 0) |
                 (buttonIndex << 4);
     }
 
@@ -103,22 +103,22 @@ public class MouseMode
     {
         StringBuilder builder = new StringBuilder(25);
 
-        if (modifierKeys.getShiftModifier())
+        if (modifierKeys.isShiftModifierActive())
         {
             builder.append("SHIFT-");
         }
 
-        if (modifierKeys.getSuperModifier())
+        if (modifierKeys.isSuperModifierActive())
         {
             builder.append("SUPER-");
         }
 
-        if (modifierKeys.getControlModifier())
+        if (modifierKeys.isControlModifierActive())
         {
             builder.append("CTRL-");
         }
 
-        if (modifierKeys.getAltModifier())
+        if (modifierKeys.isAltModifierActive())
         {
             builder.append("ALT-");
         }

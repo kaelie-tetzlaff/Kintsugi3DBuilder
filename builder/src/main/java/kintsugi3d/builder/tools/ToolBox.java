@@ -18,12 +18,12 @@ import kintsugi3d.builder.state.scene.ManipulableViewpointModel;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.tools.MultiplierTool.Type;
 import kintsugi3d.gl.core.Context;
+import kintsugi3d.gl.util.CanvasListener;
 import kintsugi3d.gl.window.Canvas3D;
 import kintsugi3d.gl.window.CursorPosition;
 import kintsugi3d.gl.window.Key;
 import kintsugi3d.gl.window.ModifierKeys;
 import kintsugi3d.gl.window.listeners.ScrollListener;
-import kintsugi3d.gl.util.CanvasListener;
 import kintsugi3d.util.KeyPress;
 import kintsugi3d.util.MouseMode;
 import org.slf4j.Logger;
@@ -87,7 +87,8 @@ public final class ToolBox implements CanvasListener
     {
         try
         {
-            if (!lightTool.cursorMoved(canvas, xPos, yPos))
+            lightTool.cursorMoved(canvas, xPos, yPos);
+            if (!lightTool.isDragging())
             {
                 DragTool selectedTool = getSelectedDragTool();
                 if (selectedTool != null)
@@ -138,7 +139,8 @@ public final class ToolBox implements CanvasListener
         {
             try
             {
-                if (!lightTool.mouseButtonPressed(canvas, buttonIndex, mods))
+                lightTool.mouseButtonPressed(canvas, buttonIndex, mods);
+                if (!lightTool.isDragging())
                 {
                     currentMode = new MouseMode(buttonIndex, mods);
                     DragTool selectedTool = getSelectedDragTool();

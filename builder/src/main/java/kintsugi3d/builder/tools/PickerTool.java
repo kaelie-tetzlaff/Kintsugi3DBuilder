@@ -17,7 +17,8 @@ import kintsugi3d.gl.window.ModifierKeys;
 
 public interface PickerTool
 {
-    boolean mouseButtonPressed(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods);
-    boolean mouseButtonReleased(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods);
-    boolean cursorMoved(Canvas3D<? extends Context<?>> canvas, double xPos, double yPos);
+    boolean isDragging();
+    void mouseButtonPressed(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods);
+    void mouseButtonReleased(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods);
+    void cursorMoved(Canvas3D<? extends Context<?>> canvas, double xPos, double yPos);
 }

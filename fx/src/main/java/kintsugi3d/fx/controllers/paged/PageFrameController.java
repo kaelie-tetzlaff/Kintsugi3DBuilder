@@ -133,7 +133,7 @@ public class PageFrameController
     {
         // If confirmed, do nothing.
         // Otherwise, try to close the current page, but if it's overridden, consume the event to prevent the modal from closing.
-        if (isIncomplete && !currentPage.get().getController().cancel())
+        if (isIncomplete && !currentPage.get().getController().tryCancel())
         {
             windowEvent.consume();
         }
@@ -233,7 +233,7 @@ public class PageFrameController
     {
         if (currentPage.get().hasPrevPage())
         {
-            if (currentPage.get().getController().cancel()) // Cancel the current page, could be overridden.
+            if (currentPage.get().getController().tryCancel()) // Cancel the current page, could be overridden.
             {
                 currentPage.set(currentPage.get().getPrevPage());
                 initControllerAndUpdatePanel();
@@ -249,7 +249,7 @@ public class PageFrameController
     {
         if (currentPage.get().getController().canAdvance())
         {
-            if (currentPage.get().getController().advance()) // Finishes up on the current page
+            if (currentPage.get().getController().tryAdvance()) // Finishes up on the current page
             {
                 if (currentPage.get().hasNextPage()) // next page exists
                 {
@@ -268,7 +268,7 @@ public class PageFrameController
                 }
                 else if (currentPage.get().getController().canConfirm()) // no next page but can submit
                 {
-                    if (currentPage.get().getController().confirm())
+                    if (currentPage.get().getController().tryConfirm())
                     {
                         isIncomplete = false;
                         close();

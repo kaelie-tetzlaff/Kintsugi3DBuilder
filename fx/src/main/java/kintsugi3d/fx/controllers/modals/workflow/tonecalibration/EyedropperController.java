@@ -277,14 +277,14 @@ public class EyedropperController extends NonDataPageControllerBase
     }
 
     @Override
-    public boolean confirm()
+    public boolean tryConfirm()
     {
         apply();
         return true;
     }
 
     @Override
-    public boolean cancel()
+    public boolean tryCancel()
     {
         if (StaticUtilities.confirmCancel())
         {

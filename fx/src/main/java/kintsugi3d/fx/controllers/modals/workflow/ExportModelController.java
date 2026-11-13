@@ -105,7 +105,7 @@ public class ExportModelController extends ProjectSettingsControllerBase
     }
 
     @Override
-    public boolean confirm()
+    public boolean tryConfirm()
     {
         applySettings();
 

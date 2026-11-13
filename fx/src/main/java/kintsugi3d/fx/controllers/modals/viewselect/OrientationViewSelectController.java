@@ -28,14 +28,14 @@ public class OrientationViewSelectController extends ViewSelectController
     }
 
     @Override
-    public boolean advance()
+    public boolean tryAdvance()
     {
         getData().selectView(getSelectedViewName(), getPrimaryViewRotation());
         return true;
     }
 
     @Override
-    public boolean confirm()
+    public boolean tryConfirm()
     {
         // If a view set was already loaded, apply changes.
         ViewSet currentViewSet = Global.io().getLoadedViewSet();
@@ -58,7 +58,7 @@ public class OrientationViewSelectController extends ViewSelectController
     }
 
     @Override
-    public boolean cancel()
+    public boolean tryCancel()
     {
         return StaticUtilities.confirmCancel();
     }

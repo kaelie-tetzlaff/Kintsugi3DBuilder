@@ -46,22 +46,22 @@ public class KeyPress
     {
         StringBuilder builder = new StringBuilder(40);
 
-        if (modifierKeys.getShiftModifier())
+        if (modifierKeys.isShiftModifierActive())
         {
             builder.append("SHIFT-");
         }
 
-        if (modifierKeys.getSuperModifier())
+        if (modifierKeys.isSuperModifierActive())
         {
             builder.append("SUPER-");
         }
 
-        if (modifierKeys.getControlModifier())
+        if (modifierKeys.isControlModifierActive())
         {
             builder.append("CTRL-");
         }
 
-        if (modifierKeys.getAltModifier())
+        if (modifierKeys.isAltModifierActive())
         {
             builder.append("ALT-");
         }

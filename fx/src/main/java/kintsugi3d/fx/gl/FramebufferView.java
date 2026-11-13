@@ -79,25 +79,25 @@ public final class FramebufferView extends Region
         }
 
         @Override
-        public boolean getShiftModifier()
+        public boolean isShiftModifierActive()
         {
             return shiftModifier;
         }
 
         @Override
-        public boolean getControlModifier()
+        public boolean isControlModifierActive()
         {
             return controlModifier;
         }
 
         @Override
-        public boolean getAltModifier()
+        public boolean isAltModifierActive()
         {
             return altModifier;
         }
 
         @Override
-        public boolean getSuperModifier()
+        public boolean isSuperModifierActive()
         {
             return superModifier;
         }

@@ -84,7 +84,7 @@ public abstract class ProjectImportController extends DataSourcePageControllerBa
     }
 
     @Override
-    public boolean advance()
+    public boolean tryAdvance()
     {
         NonValidatedInputSource data = getData();
 
@@ -106,7 +106,7 @@ public abstract class ProjectImportController extends DataSourcePageControllerBa
     }
 
     @Override
-    public boolean confirm()
+    public boolean tryConfirm()
     {
         return getPage().getOutData().confirm();
     }

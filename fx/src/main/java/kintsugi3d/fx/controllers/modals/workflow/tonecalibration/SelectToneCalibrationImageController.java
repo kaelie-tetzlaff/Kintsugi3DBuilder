@@ -118,7 +118,7 @@ public class SelectToneCalibrationImageController extends NonDataPageControllerB
     }
 
     @Override
-    public boolean advance()
+    public boolean tryAdvance()
     {
         ViewSet viewSet = Global.io().validateRenderable().getLoadedViewSet();
 

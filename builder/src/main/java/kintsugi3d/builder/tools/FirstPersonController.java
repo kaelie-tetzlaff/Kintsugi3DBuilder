@@ -69,7 +69,7 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
         windowListenerManager.addCursorPositionListener(this);
     }
 
-    public boolean getEnabled()
+    public boolean isEnabled()
     {
         return this.enabled;
     }
@@ -135,7 +135,7 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
             this.model.setLookMatrix(Matrix4.IDENTITY);
         }
 
-        ignoreSensitivity = mods.getControlModifier();
+        ignoreSensitivity = mods.isControlModifierActive();
     }
 
     @Override
@@ -174,7 +174,7 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
             }
         }
 
-        ignoreSensitivity = mods.getControlModifier();
+        ignoreSensitivity = mods.isControlModifierActive();
     }
 
     @Override

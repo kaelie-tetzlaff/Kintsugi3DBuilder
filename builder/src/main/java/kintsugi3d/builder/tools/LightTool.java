@@ -55,7 +55,13 @@ final class LightTool implements PickerTool
     }
 
     @Override
-    public boolean mouseButtonPressed(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods)
+    public boolean isDragging()
+    {
+        return updateFunction != null;
+    }
+
+    @Override
+    public void mouseButtonPressed(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods)
     {
         if (buttonIndex == 0)
         {
@@ -139,12 +145,10 @@ final class LightTool implements PickerTool
 
             lightingModel.setLightWidgetsEthereal(true);
         }
-
-        return updateFunction != null;
     }
 
     @Override
-    public boolean mouseButtonReleased(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods)
+    public void mouseButtonReleased(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods)
     {
         if (buttonIndex == 0)
         {
@@ -161,8 +165,20 @@ final class LightTool implements PickerTool
 
             updateFunction = null;
         }
+    }
 
-        return updateFunction != null;
+    @Override
+    public void cursorMoved(Canvas3D<? extends Context<?>> canvas, double xPos, double yPos)
+    {
+        if (updateFunction == null)
+        {
+            updateForHoverState(canvas, xPos, yPos);
+        }
+        else
+        {
+            CanvasSize canvasSize = canvas.getSize();
+            updateFunction.accept(new DoubleVector2(xPos / canvasSize.width, yPos / canvasSize.height));
+        }
     }
 
     private void updateForHoverState(Canvas3D<? extends Context<?>> canvas, double xPos, double yPos)
@@ -292,22 +308,6 @@ final class LightTool implements PickerTool
         if ("RenderingSubject".equals(sceneViewport.getObjectAtCoordinates(normalizedPosition.x, normalizedPosition.y)))
         {
             lightingModel.setLightCenter(lightIndex, sceneViewport.get3DPositionAtCoordinates(normalizedPosition.x, normalizedPosition.y));
-        }
-    }
-
-    @Override
-    public boolean cursorMoved(Canvas3D<? extends Context<?>> canvas, double xPos, double yPos)
-    {
-        if (updateFunction == null)
-        {
-            updateForHoverState(canvas, xPos, yPos);
-            return false;
-        }
-        else
-        {
-            CanvasSize canvasSize = canvas.getSize();
-            updateFunction.accept(new DoubleVector2(xPos / canvasSize.width, yPos / canvasSize.height));
-            return true;
         }
     }
 }
