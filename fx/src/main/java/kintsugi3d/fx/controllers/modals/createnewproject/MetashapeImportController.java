@@ -11,7 +11,6 @@
 
 package kintsugi3d.fx.controllers.modals.createnewproject;
 
-
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,7 +33,7 @@ import kintsugi3d.fx.core.FrontendIO;
 
 import java.io.File;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 public class MetashapeImportController extends ProjectImportController
 {
@@ -88,12 +87,12 @@ public class MetashapeImportController extends ProjectImportController
 
             String name = getModelNameFromSelection(selection);
             String id = getModelIDFromSelection(selection);
-            Optional<Integer> optId = id != null ? Optional.of(Integer.parseInt(id)) : Optional.empty();
+            Integer optId = id != null ? Integer.parseInt(id) : null;
 
             for (MetashapeModel model : metashapeDocument.getSelectedChunk().getModels())
             {
                 if (name.equals(model.getLabel()) &&
-                    optId.equals(model.getId()))
+                    Objects.equals(optId, model.getId()))
                 {
                     metashapeDocument.getSelectedChunk().selectModel(model);
                 }
