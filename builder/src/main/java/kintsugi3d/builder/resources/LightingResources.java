@@ -26,6 +26,12 @@ import java.io.IOException;
 public class LightingResources<ContextType extends Context<ContextType>> implements ManagedResource
 {
     private static final Logger LOG = LoggerFactory.getLogger(LightingResources.class);
+
+    /**
+     * 0.5 / sqrt(3)
+     */
+    public static final float CLIP_PLANE_SCALE_MULTIPLIER = 0.28867513f;
+
     private final ContextType context;
     private final SceneModel sceneModel;
 
@@ -160,10 +166,8 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
         float lightDist = lightDisplacement.getXYZ().length();
         float lookAtDist = lightDisplacement.getXY().length();
 
-        float radius = (float)
-                (sceneModel.getOrientation()
-                        .times(new Vector3(0.5f * sceneModel.getScale()))
-                        .length() / Math.sqrt(3));
+        float radius =
+            sceneModel.getOrientation().times(new Vector3(CLIP_PLANE_SCALE_MULTIPLIER * sceneModel.getScale())).length();
 
         float fov;
         float farPlane;

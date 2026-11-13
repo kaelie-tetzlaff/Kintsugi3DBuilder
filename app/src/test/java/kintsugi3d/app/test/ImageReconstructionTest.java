@@ -64,6 +64,11 @@ class ImageReconstructionTest
     private static final boolean SAVE_TEST_IMAGES = true;
     private static final boolean SAVE_GROUND_TRUTH_SYNTHETIC_IMAGES = false;
 
+    /**
+     * Square root of 12
+     */
+    public static final float SQRT12 = 3.4641016151377544f;
+
     private ViewSet potatoViewSet;
     private ViewSet potatoViewSetTonemapped;
     private OpenGLContext context;
@@ -178,11 +183,11 @@ class ImageReconstructionTest
         ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
         potatoGeometry = VertexGeometry.createFromOBJStream(in);
 
-        validationLinear = (rmse, noiseScale) -> assertEquals(noiseScale / (float) Math.sqrt(12.0f), rmse.getNormalizedLinear(), 0.001);
-        validationSRGB = (rmse, noiseScale) -> assertEquals(noiseScale / (float) Math.sqrt(12.0f), rmse.getNormalizedSRGB(), 0.001);
+        validationLinear = (rmse, noiseScale) -> assertEquals(noiseScale / SQRT12, rmse.getNormalizedLinear(), 0.001);
+        validationSRGB = (rmse, noiseScale) -> assertEquals(noiseScale / SQRT12, rmse.getNormalizedSRGB(), 0.001);
 
         // TODO figure out why we need a higher validation delta for this one?
-        validationEncoded = (rmse, noiseScale) -> assertEquals(noiseScale / (float) Math.sqrt(12.0f), rmse.getEncodedGroundTruth(), 0.005);
+        validationEncoded = (rmse, noiseScale) -> assertEquals(noiseScale / SQRT12, rmse.getEncodedGroundTruth(), 0.005);
 
         setupColor = program -> program.setUniform("diffuseColor", new Vector3(1.0f, 0.8f, 0.2f));
         setupMetallic = program ->
@@ -255,7 +260,7 @@ class ImageReconstructionTest
 
     private float noiseScaleToRMSE(float noiseScale)
     {
-        return noiseScale / (float) Math.sqrt(12.0f);
+        return noiseScale / SQRT12;
     }
 
     private Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>>
