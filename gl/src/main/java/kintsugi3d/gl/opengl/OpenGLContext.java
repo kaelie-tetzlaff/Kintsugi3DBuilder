@@ -253,7 +253,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         }
     }
 
-    private static <T> void updateBindingsGeneric(Map<Integer, T> oldBindings, List<Optional<T>> newBindings,
+    private static <T> void updateBindingsGeneric(Map<Integer, T> oldBindings, List<T> newBindings,
         BiPredicate<T, T> needsUnbindPredicate, BiConsumer<Integer, T> unbindFunction, BiConsumer<Integer, T> bindFunction)
     {
         // Iterate through all of the previous bindings and unbind any that will not be overwritten otherwise.
@@ -263,9 +263,9 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
             Entry<Integer, T> oldBinding = iterator.next();
             int bindingIndex = oldBinding.getKey();
             T objectToUnbind = oldBinding.getValue();
-            Optional<? extends T> newObjectToBind = newBindings.get(bindingIndex);
+            T newObjectToBind = newBindings.get(bindingIndex);
 
-            if (newObjectToBind.isEmpty() || needsUnbindPredicate.test(objectToUnbind, newObjectToBind.get()))
+            if (newObjectToBind == null || needsUnbindPredicate.test(objectToUnbind, newObjectToBind))
             {
                 unbindFunction.accept(bindingIndex, objectToUnbind);
                 iterator.remove();
@@ -274,9 +274,9 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
 
         for (int i = 0; i < newBindings.size(); i++)
         {
-            if (newBindings.get(i).isPresent())
+            if (newBindings.get(i) != null)
             {
-                T newObjectToBind = newBindings.get(i).get();
+                T newObjectToBind = newBindings.get(i);
 
                 if (!oldBindings.containsKey(i) || !Objects.equals(oldBindings.get(i), newObjectToBind))
                 {
@@ -286,7 +286,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         }
     }
 
-    void updateTextureBindings(List<Optional<OpenGLTexture>> newTextureBindings)
+    void updateTextureBindings(List<OpenGLTexture> newTextureBindings)
     {
         updateBindingsGeneric(textureBindings, newTextureBindings,
             (oldTexture, newTexture) -> oldTexture.getTextureTarget() != newTexture.getTextureTarget(),
@@ -301,7 +301,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
             (textureUnitIndex, textureToBind) -> textureToBind.bindToTextureUnit(textureUnitIndex));
     }
 
-    void updateUniformBufferBindings(List<Optional<OpenGLUniformBuffer>> newUniformBufferBindings)
+    void updateUniformBufferBindings(List<OpenGLUniformBuffer> newUniformBufferBindings)
     {
         updateBindingsGeneric(uniformBufferBindings, newUniformBufferBindings,
             (oldBuffer, newBuffer) -> oldBuffer.getBufferTarget() != newBuffer.getBufferTarget(),

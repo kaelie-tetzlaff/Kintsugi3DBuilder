@@ -54,35 +54,7 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
     @Override
     public SpecularBasisWeights getWeights()
     {
-        return new SpecularBasisWeights()
-        {
-            private final MaterialBasis basis = getMaterialBasis();
-
-            @Override
-            public double getWeight(int b, int p)
-            {
-                return weightsByTexel[p].get(b);
-            }
-
-            @Override
-            public boolean areWeightsValid(int p)
-            {
-                return weightsValidity[p];
-            }
-
-            @Override
-            public int getCount()
-            {
-                return basis.getEnabledMaterialCount();
-            }
-
-            @Override
-            public void save(File outputDirectory)
-            {
-                SpecularFitSerializer.saveWeightImages(
-                    basis, textureResolution.width, textureResolution.height, this, outputDirectory);
-            }
-        };
+        return new SpecularDecompositionWeights(this);
     }
 
     @Override
@@ -258,5 +230,42 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
     public void saveWeightMaps(File outputDirectory)
     {
         getWeights().save(outputDirectory);
+    }
+
+    private static class SpecularDecompositionWeights implements SpecularBasisWeights
+    {
+        private final SpecularDecompositionBase specularDecomposition;
+        private final MaterialBasis basis;
+
+        SpecularDecompositionWeights(SpecularDecompositionBase specularDecomposition)
+        {
+            this.specularDecomposition = specularDecomposition;
+            this.basis = specularDecomposition.getMaterialBasis();
+        }
+
+        @Override
+        public double getWeight(int b, int p)
+        {
+            return specularDecomposition.weightsByTexel[p].get(b);
+        }
+
+        @Override
+        public boolean areWeightsValid(int p)
+        {
+            return specularDecomposition.weightsValidity[p];
+        }
+
+        @Override
+        public int getCount()
+        {
+            return basis.getEnabledMaterialCount();
+        }
+
+        @Override
+        public void save(File outputDirectory)
+        {
+            SpecularFitSerializer.saveWeightImages(
+                basis, specularDecomposition.textureResolution.width, specularDecomposition.textureResolution.height, this, outputDirectory);
+        }
     }
 }

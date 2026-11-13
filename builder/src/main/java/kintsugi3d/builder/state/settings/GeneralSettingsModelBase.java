@@ -103,4 +103,44 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
             }
         }
     }
+
+    protected static final class GeneralSetting implements Setting
+    {
+        private final String name;
+        private final Class<?> type;
+        private final Object initialValue;
+        private final boolean serialize;
+
+        public GeneralSetting(String name, Class<?> type, Object value, boolean serialize)
+        {
+            this.name = name;
+            this.type = type;
+            this.initialValue = value;
+            this.serialize = serialize;
+        }
+
+        @Override
+        public String getName()
+        {
+            return name;
+        }
+
+        @Override
+        public Class<?> getType()
+        {
+            return type;
+        }
+
+        @Override
+        public Object getValue()
+        {
+            return initialValue;
+        }
+
+        @Override
+        public boolean shouldSerialize()
+        {
+            return serialize;
+        }
+    }
 }

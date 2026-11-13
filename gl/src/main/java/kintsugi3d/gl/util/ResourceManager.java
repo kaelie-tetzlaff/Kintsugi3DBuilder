@@ -13,9 +13,7 @@ package kintsugi3d.gl.util;
 
 import kintsugi3d.gl.exceptions.NoAvailableTextureUnitsException;
 
-import java.util.AbstractList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class ResourceManager<ResourceType>
 {
@@ -71,22 +69,9 @@ public class ResourceManager<ResourceType>
         return (ResourceType)resources[index];
     }
 
-    public List<Optional<ResourceType>> asReadonlyList()
+    public List<ResourceType> asReadonlyList()
     {
-        return new AbstractList<>()
-        {
-            @Override
-            public int size()
-            {
-                return length;
-            }
-
-            @Override
-            @SuppressWarnings("unchecked")
-            public Optional<ResourceType> get(int index)
-            {
-                return Optional.ofNullable((ResourceType) resources[index]);
-            }
-        };
+        //noinspection unchecked
+        return Collections.unmodifiableList((List<ResourceType>)Arrays.asList(resources));
     }
 }

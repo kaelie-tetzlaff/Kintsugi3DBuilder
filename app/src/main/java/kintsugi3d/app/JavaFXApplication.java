@@ -162,6 +162,7 @@ public class JavaFXApplication extends Application
         }
     }
 
+    @SuppressWarnings("StaticCollection")
     private static final Collection<Consumer<Stage>> START_LISTENERS = new ArrayList<>(1);
 
     public static void addStartListener(Consumer<Stage> startListener)

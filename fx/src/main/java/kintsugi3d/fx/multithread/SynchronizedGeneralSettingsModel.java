@@ -87,34 +87,9 @@ public class SynchronizedGeneralSettingsModel extends GeneralSettingsModelBase
         return false;
     }
 
-    protected Setting getSetting(String settingName)
+    private Setting getSetting(String settingName)
     {
-        return new Setting()
-        {
-            @Override
-            public String getName()
-            {
-                return settingName;
-            }
-
-            @Override
-            public Class<?> getType()
-            {
-                return SynchronizedGeneralSettingsModel.this.getType(settingName);
-            }
-
-            @Override
-            public Object getValue()
-            {
-                return getObject(settingName);
-            }
-
-            @Override
-            public boolean shouldSerialize()
-            {
-                return SynchronizedGeneralSettingsModel.this.shouldSerialize(settingName);
-            }
-        };
+        return new GeneralSetting(settingName, getType(settingName), getObject(settingName), shouldSerialize(settingName));
     }
 
     @Override
@@ -126,22 +101,7 @@ public class SynchronizedGeneralSettingsModel extends GeneralSettingsModelBase
             initSetting(setting.getName());
         }
 
-        return new Iterator<>()
-        {
-            private final Iterator<String> base = settings.keySet().iterator();
-
-            @Override
-            public boolean hasNext()
-            {
-                return base.hasNext();
-            }
-
-            @Override
-            public Setting next()
-            {
-                return getSetting(base.next());
-            }
-        };
+        return new SynchronizedGeneralSettingsIterator(this);
     }
 
     @Override
@@ -149,5 +109,29 @@ public class SynchronizedGeneralSettingsModel extends GeneralSettingsModelBase
     {
         baseModel.createSetting(name, type, initialValue, serialize);
         initSetting(name);
+    }
+
+    private static class SynchronizedGeneralSettingsIterator implements Iterator<Setting>
+    {
+        private final SynchronizedGeneralSettingsModel settings;
+        private final Iterator<String> base;
+
+        SynchronizedGeneralSettingsIterator(SynchronizedGeneralSettingsModel settingsModel)
+        {
+            this.settings = settingsModel;
+            base = settingsModel.settings.keySet().iterator();
+        }
+
+        @Override
+        public boolean hasNext()
+        {
+            return base.hasNext();
+        }
+
+        @Override
+        public Setting next()
+        {
+            return settings.getSetting(base.next());
+        }
     }
 }

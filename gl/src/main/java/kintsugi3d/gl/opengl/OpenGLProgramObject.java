@@ -145,11 +145,14 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
         }
     }
 
-    private static final class TextureListWrapper extends AbstractList<Optional<OpenGLTexture>>
+    /**
+     * Needed because texture slot 0 is used as a sentinel.
+     */
+    private static final class TextureSentinelList extends AbstractList<OpenGLTexture>
     {
-        private final List<Optional<OpenGLTexture>> baseTextureList;
+        private final List<OpenGLTexture> baseTextureList;
 
-        private TextureListWrapper(List<Optional<OpenGLTexture>> baseTextureList)
+        private TextureSentinelList(List<OpenGLTexture> baseTextureList)
         {
             this.baseTextureList = baseTextureList;
         }
@@ -161,9 +164,9 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
         }
 
         @Override
-        public Optional<OpenGLTexture> get(int index)
+        public OpenGLTexture get(int index)
         {
-            return index == 0 ? Optional.empty() : baseTextureList.get(index - 1);
+            return index == 0 ? null : baseTextureList.get(index - 1);
         }
     }
 
@@ -171,7 +174,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     {
         if (this.isLinked())
         {
-            this.context.updateTextureBindings(new TextureListWrapper(textureManager.asReadonlyList()));
+            this.context.updateTextureBindings(new TextureSentinelList(textureManager.asReadonlyList()));
             this.context.updateUniformBufferBindings(uniformBufferManager.asReadonlyList());
 
             vao.bind(); // needs to be bound to validate program

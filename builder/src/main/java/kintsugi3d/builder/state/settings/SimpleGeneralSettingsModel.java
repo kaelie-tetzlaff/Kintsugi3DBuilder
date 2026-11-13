@@ -70,43 +70,4 @@ public class SimpleGeneralSettingsModel extends GeneralSettingsModelBase
         settingMap.put(name, new GeneralSetting(name, type, initialValue, serialize));
     }
 
-    private static final class GeneralSetting implements Setting
-    {
-        private final String name;
-        private final Class<?> type;
-        private final Object initialValue;
-        private final boolean serialize;
-
-        private GeneralSetting(String name, Class<?> type, Object initialValue, boolean serialize)
-        {
-            this.name = name;
-            this.type = type;
-            this.initialValue = initialValue;
-            this.serialize = serialize;
-        }
-
-        @Override
-        public String getName()
-        {
-            return name;
-        }
-
-        @Override
-        public Class<?> getType()
-        {
-            return type;
-        }
-
-        @Override
-        public Object getValue()
-        {
-            return initialValue;
-        }
-
-        @Override
-        public boolean shouldSerialize()
-        {
-            return serialize;
-        }
-    }
 }

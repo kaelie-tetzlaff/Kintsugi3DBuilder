@@ -59,13 +59,13 @@ public class ReadableFramebufferViewport<ContextType extends Context<ContextType
         }
     }
 
-    private final ReadableFramebuffer<ContextType> readableFramebuffer;
+    private final ReadableFramebuffer<ContextType> framebuffer;
 
     ReadableFramebufferViewport(
         ReadableFramebuffer<ContextType> fullFramebuffer, IntVector2 viewportOffset, FramebufferSize viewportSize)
     {
         super(fullFramebuffer, viewportOffset, viewportSize);
-        this.readableFramebuffer = fullFramebuffer;
+        this.framebuffer = fullFramebuffer;
     }
 
     @Override
@@ -77,73 +77,19 @@ public class ReadableFramebufferViewport<ContextType extends Context<ContextType
     @Override
     public FramebufferReadContents<ContextType> getReadContents()
     {
-        return new ReadContents<>(this, readableFramebuffer.getReadContents());
+        return new ReadContents<>(this, framebuffer.getReadContents());
     }
 
     @Override
     public ColorTextureReader getTextureReaderForColorAttachment(int attachmentIndex)
     {
-        return new ColorTextureReaderBase()
-        {
-            @Override
-            public int getWidth()
-            {
-                return getSizeForRead().width;
-            }
-
-            @Override
-            public int getHeight()
-            {
-                return getSizeForRead().height;
-            }
-
-            @Override
-            public void readARGB(ByteBuffer destination, int x, int y, int readWidth, int readHeight)
-            {
-                readableFramebuffer.getTextureReaderForColorAttachment(attachmentIndex)
-                    .readARGB(destination, x + getOffset().x, y + getOffset().y, readWidth, readHeight);
-            }
-
-            @Override
-            public void readFloatingPointRGBA(FloatBuffer destination, int x, int y, int readWidth, int readHeight)
-            {
-                readableFramebuffer.getTextureReaderForColorAttachment(attachmentIndex)
-                    .readFloatingPointRGBA(destination, x + getOffset().x, y + getOffset().y, readWidth, readHeight);
-            }
-
-            @Override
-            public void readIntegerRGBA(IntBuffer destination, int x, int y, int readWidth, int readHeight)
-            {
-                readableFramebuffer.getTextureReaderForColorAttachment(attachmentIndex)
-                    .readIntegerRGBA(destination, x + getOffset().x, y + getOffset().y, readWidth, readHeight);
-            }
-        };
+        return new FramebufferViewportColorTextureReader<>(this, attachmentIndex);
     }
 
     @Override
     public DepthTextureReader getTextureReaderForDepthAttachment()
     {
-        return new DepthTextureReaderBase()
-        {
-            @Override
-            public int getWidth()
-            {
-                return getSizeForRead().width;
-            }
-
-            @Override
-            public int getHeight()
-            {
-                return getSizeForRead().height;
-            }
-
-            @Override
-            public void read(ShortBuffer destination, int x, int y, int width, int height)
-            {
-                readableFramebuffer.getTextureReaderForDepthAttachment()
-                    .read(destination, x + getOffset().x, y + getOffset().y, width, height);
-            }
-        };
+        return new FramebufferViewportDepthTextureReader<>(this);
     }
 
     /**
@@ -159,5 +105,81 @@ public class ReadableFramebufferViewport<ContextType extends Context<ContextType
     {
         return new ReadableFramebufferViewport<>(this,
             new IntVector2(x + this.getOffset().x, y + this.getOffset().y), new FramebufferSize(width, height));
+    }
+
+    private static class FramebufferViewportColorTextureReader<ContextType extends Context<ContextType>>
+        extends ColorTextureReaderBase
+    {
+        private final int attachmentIndex;
+        private final ReadableFramebufferViewport<ContextType> readableFramebufferViewport;
+
+        FramebufferViewportColorTextureReader(
+            ReadableFramebufferViewport<ContextType> readableFramebufferViewport, int attachmentIndex)
+        {
+            this.attachmentIndex = attachmentIndex;
+            this.readableFramebufferViewport = readableFramebufferViewport;
+        }
+
+        @Override
+        public int getWidth()
+        {
+            return readableFramebufferViewport.getSizeForRead().width;
+        }
+
+        @Override
+        public int getHeight()
+        {
+            return readableFramebufferViewport.getSizeForRead().height;
+        }
+
+        @Override
+        public void readARGB(ByteBuffer destination, int x, int y, int readWidth, int readHeight)
+        {
+            readableFramebufferViewport.framebuffer.getTextureReaderForColorAttachment(attachmentIndex)
+                .readARGB(destination, x + readableFramebufferViewport.getOffset().x, y + readableFramebufferViewport.getOffset().y, readWidth, readHeight);
+        }
+
+        @Override
+        public void readFloatingPointRGBA(FloatBuffer destination, int x, int y, int readWidth, int readHeight)
+        {
+            readableFramebufferViewport.framebuffer.getTextureReaderForColorAttachment(attachmentIndex)
+                .readFloatingPointRGBA(destination, x + readableFramebufferViewport.getOffset().x, y + readableFramebufferViewport.getOffset().y, readWidth, readHeight);
+        }
+
+        @Override
+        public void readIntegerRGBA(IntBuffer destination, int x, int y, int readWidth, int readHeight)
+        {
+            readableFramebufferViewport.framebuffer.getTextureReaderForColorAttachment(attachmentIndex)
+                .readIntegerRGBA(destination, x + readableFramebufferViewport.getOffset().x, y + readableFramebufferViewport.getOffset().y, readWidth, readHeight);
+        }
+    }
+
+    private static class FramebufferViewportDepthTextureReader<ContextType extends Context<ContextType>> extends DepthTextureReaderBase
+    {
+        private final ReadableFramebufferViewport<ContextType> readableFramebufferViewport;
+
+        FramebufferViewportDepthTextureReader(ReadableFramebufferViewport<ContextType> readableFramebufferViewport)
+        {
+            this.readableFramebufferViewport = readableFramebufferViewport;
+        }
+
+        @Override
+        public int getWidth()
+        {
+            return readableFramebufferViewport.getSizeForRead().width;
+        }
+
+        @Override
+        public int getHeight()
+        {
+            return readableFramebufferViewport.getSizeForRead().height;
+        }
+
+        @Override
+        public void read(ShortBuffer destination, int x, int y, int width, int height)
+        {
+            readableFramebufferViewport.framebuffer.getTextureReaderForDepthAttachment()
+                .read(destination, x + readableFramebufferViewport.getOffset().x, y + readableFramebufferViewport.getOffset().y, width, height);
+        }
     }
 }
