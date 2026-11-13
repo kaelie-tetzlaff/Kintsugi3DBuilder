@@ -13,7 +13,7 @@ package kintsugi3d.fx.controllers.paged;
 
 import java.util.function.Supplier;
 
-public class DataSentinelPageBuilder<T> extends DataPageBuilder<Object, T, PageFrameController>
+public final class DataSentinelPageBuilder<T> extends DataPageBuilder<Object, T, PageFrameController>
 {
     private DataSentinelPageBuilder(PageFrameController frameController, Supplier<PageFrameController> finisher, T data)
     {

@@ -13,7 +13,7 @@ package kintsugi3d.fx.controllers.paged;
 
 import java.util.function.Supplier;
 
-public class NonDataSentinelPageBuilder extends NonDataPageBuilder<PageFrameController>
+public final class NonDataSentinelPageBuilder extends NonDataPageBuilder<PageFrameController>
 {
     private NonDataSentinelPageBuilder(PageFrameController frameController, Supplier<PageFrameController> finisher)
     {

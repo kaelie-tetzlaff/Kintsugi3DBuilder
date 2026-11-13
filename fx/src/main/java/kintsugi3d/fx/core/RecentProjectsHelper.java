@@ -35,7 +35,7 @@ public final class RecentProjectsHelper
         for (String item : items)
         {
             String fileName = RecentProjects.getInstance().getRecentProjectFilenames().get(i);
-            String shortPath = RecentProjects.getInstance().shortenedPath(item);
+            String shortPath = RecentProjects.shortenedPath(item);
 
             if (OperatingSystem.getCurrentOS() == OperatingSystem.MACOS)
             {

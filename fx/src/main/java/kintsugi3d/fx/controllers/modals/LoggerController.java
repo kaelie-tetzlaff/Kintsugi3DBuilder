@@ -37,6 +37,7 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class LoggerController implements Initializable
@@ -200,7 +201,7 @@ public class LoggerController implements Initializable
             StringBuilder sb = new StringBuilder("Logged by ");
             sb.append(message.getSourceClassName());
             sb.append(" at ");
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyy hh:mm:ss").withZone(ZoneId.systemDefault());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyy hh:mm:ss", Locale.ROOT).withZone(ZoneId.systemDefault());
             sb.append(formatter.format(message.getTimestamp()));
             return sb.toString();
         }
