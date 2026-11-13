@@ -205,9 +205,8 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
             {
                 case XMLStreamConstants.START_ELEMENT:
                 {
-                    String elementText = reader.getElementText();
                     String name = reader.getLocalName();
-                    helper.startElement(name, elementText,
+                    helper.startElement(name, reader::getElementText,
                         attributeName -> reader.getAttributeValue(null, attributeName));
                 }
                     break;
@@ -223,6 +222,11 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
         }
 
         return helper.getBuilder(directories, imagePathMap, maskPathMap, ignoreGlobalTransforms);
+    }
+
+    private interface ElementTextSupplier
+    {
+        String get() throws XMLStreamException;
     }
 
     private static final class Helper
@@ -294,7 +298,8 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
             this.modelID = modelID;
         }
 
-        void startElement(String name, String elementText, Function<String, String> attributeLookup)
+        void startElement(String name, ElementTextSupplier elementText, Function<String, String> attributeLookup)
+            throws XMLStreamException
         {
             switch (name)
             {
@@ -366,7 +371,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
                 case "orientation":
                     if (camera != null)
                     {
-                        camera.orientation = Integer.parseInt(elementText);
+                        camera.orientation = Integer.parseInt(elementText.get());
                     }
                     break;
                 case "image":
@@ -385,72 +390,72 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
                 case "f":
                     if (sensor != null)
                     {
-                        sensor.fy = Float.parseFloat(elementText);
+                        sensor.fy = Float.parseFloat(elementText.get());
                         sensor.fx = sensor.fy + b1;
                     }
                     break;
                 case "fx":
                     if (sensor != null)
                     {
-                        sensor.fx = Float.parseFloat(elementText);
+                        sensor.fx = Float.parseFloat(elementText.get());
                     }
                     break;
                 case "fy":
                     if (sensor != null)
                     {
-                        sensor.fy = Float.parseFloat(elementText);
+                        sensor.fy = Float.parseFloat(elementText.get());
                     }
                     break;
                 case "cx":
                     if (sensor != null)
                     {
-                        sensor.cx = Float.parseFloat(elementText);
+                        sensor.cx = Float.parseFloat(elementText.get());
                     }
                     break;
                 case "cy":
                     if (sensor != null)
                     {
-                        sensor.cy = Float.parseFloat(elementText);
+                        sensor.cy = Float.parseFloat(elementText.get());
                     }
                     break;
                 case "p1":
                     if (sensor != null)
                     {
-                        sensor.p1 = Float.parseFloat(elementText);
+                        sensor.p1 = Float.parseFloat(elementText.get());
                     }
                     break;
                 case "p2":
                     if (sensor != null)
                     {
-                        sensor.p2 = Float.parseFloat(elementText);
+                        sensor.p2 = Float.parseFloat(elementText.get());
                     }
                     break;
                 case "k1":
                     if (sensor != null)
                     {
-                        sensor.k1 = Float.parseFloat(elementText);
+                        sensor.k1 = Float.parseFloat(elementText.get());
                     }
                     break;
                 case "k2":
                     if (sensor != null)
                     {
-                        sensor.k2 = Float.parseFloat(elementText);
+                        sensor.k2 = Float.parseFloat(elementText.get());
                     }
                     break;
                 case "k3":
                     if (sensor != null)
                     {
-                        sensor.k3 = Float.parseFloat(elementText);
+                        sensor.k3 = Float.parseFloat(elementText.get());
                     }
                     break;
                 case "k4":
                     if (sensor != null)
                     {
-                        sensor.k4 = Float.parseFloat(elementText);
+                        sensor.k4 = Float.parseFloat(elementText.get());
                     }
                     break;
                 case "b1":
-                    b1 = Float.parseFloat(elementText);
+                    b1 = Float.parseFloat(elementText.get());
                     if (sensor != null)
                     {
                         sensor.fx = sensor.fy + b1;
@@ -460,7 +465,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
                 case "skew":
                     if (sensor != null)
                     {
-                        sensor.skew = Float.parseFloat(elementText);
+                        sensor.skew = Float.parseFloat(elementText.get());
                     }
                     break;
                 case "transform":
@@ -468,7 +473,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
                 {
                     if (currentModelID != null || camera != null || "rotation".equals(name))
                     {
-                        String[] components = elementText.split("\\s");
+                        String[] components = elementText.get().split("\\s");
                         if (("transform".equals(name) && components.length < 16) ||
                             ("rotation".equals(name) && components.length < 9))
                         {
@@ -524,7 +529,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
                     if (camera == null)
                     {
                         LOG.debug("\tSetting global translate.");
-                        String[] components = elementText.split("\\s");
+                        String[] components = elementText.get().split("\\s");
                         globalTranslate = new Vector3(
                             Float.parseFloat(components[0]),
                             Float.parseFloat(components[1]),
@@ -536,7 +541,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
                     if (camera == null)
                     {
                         LOG.debug("\tSetting global scale.");
-                        globalScale = Float.parseFloat(elementText);
+                        globalScale = Float.parseFloat(elementText.get());
                     }
                     break;
 
@@ -992,33 +997,36 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
                         throw new FileNotFoundException("Could not find model path");
                     }
 
-                    // 4) Set image directory to be parent directory of MetaShape project (and add to the photos' paths)
-                    File psxFile = new File(metashapeChunk.getParentDocument().getPsxFilePath());
-
-                    //TODO: how is this working? This is not the directory of full res photos. Does this work because of relative paths in frame.xml or something?
-                    File fullResImageDirectory = new File(psxFile.getParent()); // The directory of full res photos
-                    // Print error to log if unable to find fullResImageDirectory
-                    if (!fullResImageDirectory.exists())
-                    {
-                        throw new FileNotFoundException(MessageFormat.format("Unable to find fullResImageDirectory: {0}", fullResImageDirectory));
-                    }
-
+                    // 4) Set image directory
                     File override = metashapeChunk.getSelectedModel().getLoadPreferences().getFullResOverride();
+
+                    // If override is null, set the full res image directory to be the parent directory of Metashape project.
                     if (override != null)
                     {
                         viewSetBuilder.setFullResImageDirectory(override);
                     }
                     else
                     {
+                        // Parent directory of the PSX file.
+                        // Image paths are expressed relative to that directory.
+                        File psxDirectory = new File(metashapeChunk.getParentDocument().getPsxFilePath()).getParentFile();
+                        if (psxDirectory == null || !psxDirectory.exists())
+                        {
+                            // Throw exception if unable to find psxDirectory
+                            throw new FileNotFoundException(
+                                MessageFormat.format("Unable to find psx file''s parent directory: {0}", psxDirectory));
+                        }
+
                         // Set the fullResImage Directory to be the root directory
-                        viewSetBuilder.setFullResImageDirectory(fullResImageDirectory);
+                        viewSetBuilder.setFullResImageDirectory(psxDirectory);
                     }
 
                     return viewSetBuilder;
                 }
             }
 
-            throw new FileNotFoundException(MessageFormat.format("Could not find file {0} in zip {1}", targetFileName, zipFile));
+            throw new FileNotFoundException(
+                MessageFormat.format("Could not find file {0} in zip {1}", targetFileName, zipFile));
         }
     }
 
