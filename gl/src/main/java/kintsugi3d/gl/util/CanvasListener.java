@@ -9,13 +9,20 @@
  * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
-package kintsugi3d.util;
+package kintsugi3d.gl.util;
 
-import kintsugi3d.gl.vecmath.DoubleVector4;
+import kintsugi3d.gl.core.Context;
+import kintsugi3d.gl.window.Canvas3D;
+import kintsugi3d.gl.window.listeners.*;
 
-public interface AbstractImage
+public interface CanvasListener extends CursorPositionListener, MouseButtonPressListener, MouseButtonReleaseListener, ScrollListener, KeyPressListener
 {
-    int getWidth();
-    int getHeight();
-    DoubleVector4 getRGBA(int x, int y);
+    default void addToCanvas(Canvas3D<? extends Context<?>> canvas)
+    {
+        canvas.addCursorPositionListener(this);
+        canvas.addMouseButtonPressListener(this);
+        canvas.addMouseButtonReleaseListener(this);
+        canvas.addScrollListener(this);
+        canvas.addKeyPressListener(this);
+    }
 }

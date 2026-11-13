@@ -13,7 +13,7 @@ package kintsugi3d.optimization;
 
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
-import kintsugi3d.util.ColorArrayList;
+import kintsugi3d.gl.util.ColorArrayList;
 import org.ejml.simple.SimpleMatrix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

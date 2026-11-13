@@ -9,12 +9,11 @@
  * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
-package kintsugi3d.util;
+package kintsugi3d.builder.util;
 
-import kintsugi3d.gl.util.ColorList;
-
-public interface ColorImage extends ColorList
+public enum ShadingParameterMode 
 {
-    int getWidth();
-    int getHeight();
+    UNIFORM,
+    PER_VERTEX,
+    PER_PIXEL
 }

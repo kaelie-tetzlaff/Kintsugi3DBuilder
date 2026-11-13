@@ -34,7 +34,7 @@ import kintsugi3d.gl.material.ReadonlyImportedMaterial;
 import kintsugi3d.gl.material.ReadonlyMaterialTextureMap;
 import kintsugi3d.gl.stream.GraphicsStreamResource;
 import kintsugi3d.gl.util.ImageHelper;
-import kintsugi3d.util.BufferedImageColorList;
+import kintsugi3d.gl.util.BufferedImageColorList;
 import kintsugi3d.util.ImageFinder;
 import org.ejml.simple.SimpleMatrix;
 import org.slf4j.Logger;

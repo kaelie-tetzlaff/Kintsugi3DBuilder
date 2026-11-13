@@ -37,7 +37,7 @@ import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.opengl.OpenGLContext;
 import kintsugi3d.gl.opengl.OpenGLContextFactory;
 import kintsugi3d.gl.vecmath.Vector3;
-import kintsugi3d.util.ColorArrayImage;
+import kintsugi3d.gl.util.ColorArrayImage;
 import kintsugi3d.util.ImageFinder;
 import kintsugi3d.util.Potato;
 import org.junit.jupiter.api.*;

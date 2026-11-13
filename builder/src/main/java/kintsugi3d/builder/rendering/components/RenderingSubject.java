@@ -23,7 +23,7 @@ import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
 import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
-import kintsugi3d.util.ShadingParameterMode;
+import kintsugi3d.builder.util.ShadingParameterMode;
 
 import java.util.Collections;
 import java.util.Map;

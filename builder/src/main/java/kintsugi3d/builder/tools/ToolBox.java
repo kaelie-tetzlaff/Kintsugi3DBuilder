@@ -23,7 +23,7 @@ import kintsugi3d.gl.window.CursorPosition;
 import kintsugi3d.gl.window.Key;
 import kintsugi3d.gl.window.ModifierKeys;
 import kintsugi3d.gl.window.listeners.ScrollListener;
-import kintsugi3d.util.CanvasListener;
+import kintsugi3d.gl.util.CanvasListener;
 import kintsugi3d.util.KeyPress;
 import kintsugi3d.util.MouseMode;
 import org.slf4j.Logger;

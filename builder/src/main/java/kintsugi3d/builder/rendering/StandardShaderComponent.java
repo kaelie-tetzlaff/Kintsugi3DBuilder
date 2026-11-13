@@ -20,7 +20,7 @@ import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
 import kintsugi3d.util.SRGB;
-import kintsugi3d.util.ShadingParameterMode;
+import kintsugi3d.builder.util.ShadingParameterMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

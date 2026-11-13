@@ -9,28 +9,41 @@
  * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
-package kintsugi3d.gl.exceptions;
+package kintsugi3d.builder.io;
 
-public class UncompiledShaderException extends IllegalStateException 
+public class TextureLoadOptions
 {
-    private static final long serialVersionUID = 323471236897721345L;
+    private boolean linearFilteringRequested = true;
+    private boolean mipmapsRequested = false;
+    private boolean compressionRequested = false;
 
-    public UncompiledShaderException()
+    public boolean isLinearFilteringRequested()
     {
+        return linearFilteringRequested;
     }
 
-    public UncompiledShaderException(String message, Throwable cause)
+    public void setLinearFilteringRequested(boolean linearFilteringRequested)
     {
-        super(message, cause);
+        this.linearFilteringRequested = linearFilteringRequested;
     }
 
-    public UncompiledShaderException(String message)
+    public boolean areMipmapsRequested()
     {
-        super(message);
+        return mipmapsRequested;
     }
 
-    public UncompiledShaderException(Throwable cause)
+    public void setMipmapsRequested(boolean mipmapsRequested)
     {
-        super(cause);
+        this.mipmapsRequested = mipmapsRequested;
+    }
+
+    public boolean isCompressionRequested()
+    {
+        return compressionRequested;
+    }
+
+    public void setCompressionRequested(boolean compressionRequested)
+    {
+        this.compressionRequested = compressionRequested;
     }
 }

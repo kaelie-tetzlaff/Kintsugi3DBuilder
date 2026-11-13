@@ -18,7 +18,7 @@ import kintsugi3d.gl.core.Drawable;
 import kintsugi3d.gl.core.Program;
 import kintsugi3d.gl.geometry.GeometryMode;
 import kintsugi3d.gl.geometry.VertexGeometry;
-import kintsugi3d.gl.material.TextureLoadOptions;
+import kintsugi3d.builder.io.TextureLoadOptions;
 
 public class GraphicsResourcesAnalytic<ContextType extends Context<ContextType>> extends ImageBasedGraphicsResourcesBase<ContextType>
 {

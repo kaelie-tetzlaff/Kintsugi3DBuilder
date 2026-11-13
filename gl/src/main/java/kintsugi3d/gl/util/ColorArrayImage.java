@@ -9,41 +9,32 @@
  * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
-package kintsugi3d.gl.material;
+package kintsugi3d.gl.util;
 
-public class TextureLoadOptions
+/**
+ * Extends ColorArrayList with explicit width and height
+ */
+public class ColorArrayImage extends ColorArrayList implements ColorImage
 {
-    private boolean linearFilteringRequested = true;
-    private boolean mipmapsRequested = false;
-    private boolean compressionRequested = false;
+    private final int width;
+    private final int height;
 
-    public boolean isLinearFilteringRequested()
+    public ColorArrayImage(float[] colorData, int width, int height)
     {
-        return linearFilteringRequested;
+        super(colorData);
+        this.width = width;
+        this.height = height;
     }
 
-    public void setLinearFilteringRequested(boolean linearFilteringRequested)
+    @Override
+    public int getWidth()
     {
-        this.linearFilteringRequested = linearFilteringRequested;
+        return width;
     }
 
-    public boolean areMipmapsRequested()
+    @Override
+    public int getHeight()
     {
-        return mipmapsRequested;
-    }
-
-    public void setMipmapsRequested(boolean mipmapsRequested)
-    {
-        this.mipmapsRequested = mipmapsRequested;
-    }
-
-    public boolean isCompressionRequested()
-    {
-        return compressionRequested;
-    }
-
-    public void setCompressionRequested(boolean compressionRequested)
-    {
-        this.compressionRequested = compressionRequested;
+        return height;
     }
 }

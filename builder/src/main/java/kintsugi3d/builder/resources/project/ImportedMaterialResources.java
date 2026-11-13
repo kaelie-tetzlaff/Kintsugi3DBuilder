@@ -15,7 +15,7 @@ import kintsugi3d.builder.core.texture.StandardTexture;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.material.ImportedMaterial;
 import kintsugi3d.gl.material.ReadonlyImportedMaterial;
-import kintsugi3d.gl.material.TextureLoadOptions;
+import kintsugi3d.builder.io.TextureLoadOptions;
 import kintsugi3d.util.ImageFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -23,7 +23,7 @@ import kintsugi3d.fx.internal.ObservableGeneralSettingsModel;
 import kintsugi3d.fx.util.SafeFloatStringConverter;
 import kintsugi3d.fx.util.SafeNumberStringConverter;
 import kintsugi3d.fx.util.StaticUtilities;
-import kintsugi3d.util.ShadingParameterMode;
+import kintsugi3d.builder.util.ShadingParameterMode;
 
 public class AdvPhotoViewController implements SystemSettingsControllerBase
 {

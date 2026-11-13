@@ -35,7 +35,7 @@ import kintsugi3d.gl.interactive.InteractiveGraphics;
 import kintsugi3d.gl.opengl.OpenGLContext;
 import kintsugi3d.gl.opengl.OpenGLContextFactory;
 import kintsugi3d.gl.window.*;
-import kintsugi3d.util.CanvasListener;
+import kintsugi3d.gl.util.CanvasListener;
 import kintsugi3d.util.KeyPress;
 import kintsugi3d.util.MouseMode;
 import org.slf4j.Logger;

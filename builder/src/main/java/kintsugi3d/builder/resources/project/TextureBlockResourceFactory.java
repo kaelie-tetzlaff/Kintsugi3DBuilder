@@ -15,10 +15,9 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.ManagedResource;
 import kintsugi3d.gl.geometry.GeometryTextures;
 import kintsugi3d.gl.interactive.CancellationPassthroughMonitor;
-import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
-import kintsugi3d.gl.material.TextureLoadOptions;
+import kintsugi3d.builder.io.TextureLoadOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
