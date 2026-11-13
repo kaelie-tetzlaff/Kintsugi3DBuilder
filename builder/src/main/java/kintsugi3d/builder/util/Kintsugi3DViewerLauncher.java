@@ -20,10 +20,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class Kintsugi3DViewerLauncher
 {
+    private static final Pattern REGISTRY_PATTERN = Pattern.compile("^\\s*Install_Dir\\s+REG_SZ\\s+(.*)$");
+    private static final Pattern KINTSUGI_3D_VIEWER = Pattern.compile("^Kintsugi\\s?3D\\s?Viewer((.exe)|(.app))?$");
+
     private Kintsugi3DViewerLauncher()
     {
     }
@@ -72,13 +76,16 @@ public final class Kintsugi3DViewerLauncher
     {
         String path = System.getenv("PATH");
 
-        for (String dirStr : path.split("[;:](?!\\\\)"))
+        if (path != null)
         {
-            File dir = new File(dirStr);
-            Optional<File> exec = getExecFromDirectory(dir);
-            if (exec.isPresent())
+            for (String dirStr : path.split(Pattern.quote(File.pathSeparator)))
             {
-                return exec;
+                File dir = new File(dirStr);
+                Optional<File> exec = getExecFromDirectory(dir);
+                if (exec.isPresent())
+                {
+                    return exec;
+                }
             }
         }
 
@@ -95,22 +102,28 @@ public final class Kintsugi3DViewerLauncher
         ProcessBuilder builder = new ProcessBuilder("reg", "query",
                 "HKEY_LOCAL_MACHINE\\SOFTWARE\\Kintsugi3DViewer");
         Process reg = builder.start();
-        Optional<String> key;
-        try (BufferedReader output = new BufferedReader(
-                new InputStreamReader(reg.getInputStream(), StandardCharsets.UTF_8))) {
 
-            Stream<String> keys = output.lines().filter(l -> !l.isEmpty());
-            Stream<String> matches = keys.filter(l -> l.contains("Install_Dir"));
-            key = matches.findFirst();
+        Optional<String> viewerLocation;
+        try (BufferedReader output =
+                 new BufferedReader(new InputStreamReader(reg.getInputStream(), StandardCharsets.UTF_8)))
+        {
+            viewerLocation = output.lines()
+                .map(REGISTRY_PATTERN::matcher)
+                .filter(Matcher::matches)
+                .map(match -> match.group(1))
+                .findFirst();
         }
+
         reg.waitFor();
 
-        if (key.isPresent())
+        if (viewerLocation.isPresent())
         {
-            String[] keyStrArr = key.get().split("    ");
-            String keyStr = keyStrArr[keyStrArr.length - 1];
-            File directory = new File(keyStr);
-            return getExecFromDirectory(directory);
+            File directory = new File(viewerLocation.get().trim());
+
+            if (directory.exists() && directory.isDirectory())
+            {
+                return getExecFromDirectory(directory);
+            }
         }
 
         return Optional.empty();
@@ -119,7 +132,7 @@ public final class Kintsugi3DViewerLauncher
     private static Optional<File> getExecFromDirectory(File dir)
     {
         // Match "Kintsugi3DViewer", "Kintsugi3DViewer.exe" and "Kintsugi3DViewer.app"
-        File[] foundFiles = dir.listFiles((dir1, name) -> name.matches("^Kintsugi\\s?3D\\s?Viewer((.exe)|(.app))?$"));
+        File[] foundFiles = dir.listFiles((dir1, name) -> KINTSUGI_3D_VIEWER.matcher(name).matches());
         if (foundFiles != null && foundFiles.length > 0)
         {
             return Optional.of(foundFiles[0]);

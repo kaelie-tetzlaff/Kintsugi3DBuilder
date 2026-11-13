@@ -252,6 +252,12 @@ public interface TextureResources<ContextType extends Context<ContextType>>
             }
 
             @Override
+            public String sanitizeTextureName(CharSequence name)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
             public void close()
             {
             }

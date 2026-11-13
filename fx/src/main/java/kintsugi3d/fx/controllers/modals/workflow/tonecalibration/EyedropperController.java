@@ -639,7 +639,7 @@ public class EyedropperController extends NonDataPageControllerBase
     private void autoApply()
     {
         // Only apply if all fields contain good data (integers) and model is loaded
-        if (areAllFieldsValid() && hasValidIOModel())
+        if (hasValidIOModel())
         {
             apply();
         }
@@ -653,45 +653,46 @@ public class EyedropperController extends NonDataPageControllerBase
         // light intensities depend on whether inverse-square attenuation is enabled
         ioModel.requestLightIntensityCalibration();
 
-        if (!useCurveCheckbox.selectedProperty().get())
+        if (useCurveCheckbox.selectedProperty().get())
+        {
+            if (hasValidIOModel()) // check to see if all text fields contain valid input, and model is loaded
+            {
+                try
+                {
+                    ioModel.setTonemapping(
+                        LINEAR_LUMINANCE_VALUES,
+                        new byte[]
+                            {
+                                (byte) Integer.parseInt(txtField1.getText()),
+                                (byte) Integer.parseInt(txtField2.getText()),
+                                (byte) Integer.parseInt(txtField3.getText()),
+                                (byte) Integer.parseInt(txtField4.getText()),
+                                (byte) Integer.parseInt(txtField5.getText()),
+                                (byte) Integer.parseInt(txtField6.getText())
+                            });
+                }
+                catch (NumberFormatException e)
+                {
+                    applyFailed();
+                }
+            }
+            else
+            {
+                applyFailed();
+            }
+        }
+        else
         {
             // tone curve is disabled
             ioModel.clearTonemapping();
         }
-        else if (areAllFieldsValid() && hasValidIOModel()) // check to see if all text fields contain valid input, and model is loaded
-        {
-            ioModel.setTonemapping(
-                LINEAR_LUMINANCE_VALUES,
-                new byte[]
-                {
-                    (byte) Integer.parseInt(txtField1.getText()),
-                    (byte) Integer.parseInt(txtField2.getText()),
-                    (byte) Integer.parseInt(txtField3.getText()),
-                    (byte) Integer.parseInt(txtField4.getText()),
-                    (byte) Integer.parseInt(txtField5.getText()),
-                    (byte) Integer.parseInt(txtField6.getText())
-                });
-        }
-        else
-        {
-//            Toolkit.getDefaultToolkit().beep();
-            //TODO: PROBABLY CHANGE THIS VERIFICATION METHOD
-            LOG.error("Please fill all fields and load a model before performing tone calibration.");
-        }
     }
 
-    private boolean areAllFieldsValid()
+    private static void applyFailed()
     {
-        // only return true if all text fields are filled with good info (integers)
-        for (TextField field : colorSelectTxtFields)
-        {   //TODO: CHECK IF VALS ARE 0-255?
-            if (!field.getText().matches("-?\\d+"))
-            {
-                // regex to check if input is integer
-                return false;
-            }
-        }
-        return true;
+        //            Toolkit.getDefaultToolkit().beep();
+        //TODO: PROBABLY CHANGE THIS VERIFICATION METHOD
+        LOG.error("Please fill all fields and load a model before performing tone calibration.");
     }
 
     @FXML

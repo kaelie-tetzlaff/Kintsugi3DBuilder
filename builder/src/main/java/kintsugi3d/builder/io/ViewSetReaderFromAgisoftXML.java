@@ -33,6 +33,7 @@ import java.io.*;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -232,6 +233,8 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
 
     private static final class Helper
     {
+        private static final Pattern WHITESPACE = Pattern.compile("\\s+");
+
         private final String modelID;
 
         private final Map<String, Sensor> sensorSet = new HashMap<>(16);
@@ -474,7 +477,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
                 {
                     if (currentModelID != null || camera != null || "rotation".equals(name))
                     {
-                        String[] components = elementText.get().split("\\s");
+                        String[] components = WHITESPACE.split(elementText.get());
                         if (("transform".equals(name) && components.length < 16) ||
                             ("rotation".equals(name) && components.length < 9))
                         {
@@ -530,7 +533,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
                     if (camera == null)
                     {
                         LOG.debug("\tSetting global translate.");
-                        String[] components = elementText.get().split("\\s");
+                        String[] components = WHITESPACE.split(elementText.get());
                         globalTranslate = new Vector3(
                             Float.parseFloat(components[0]),
                             Float.parseFloat(components[1]),

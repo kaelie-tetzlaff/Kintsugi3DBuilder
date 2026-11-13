@@ -28,7 +28,7 @@ public class JacksonUserPreferencesSerializer implements UserPreferencesSerializ
 {
     private static final File DIRECTORY = ApplicationFolders.getUserAppDirectory().toFile();
     private static final String FILE_NAME = "preferences.json";
-    private final List<Exception> startupExceptions = new ArrayList<>();
+    private final List<Exception> startupExceptions = new ArrayList<>(1);
 
     @Override
     public void writeUserPreferences(ReadOnlyUserPreferencesModel preferencesModel) throws IOException

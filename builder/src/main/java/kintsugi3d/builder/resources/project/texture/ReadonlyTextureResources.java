@@ -55,6 +55,8 @@ public interface ReadonlyTextureResources<ContextType extends Context<ContextTyp
 
     ReadonlyBasisWeightResources<ContextType> getBasisWeightResources();
 
+    String sanitizeTextureName(CharSequence name);
+
     void setupShaderProgram(Program<ContextType> program);
 
     /**

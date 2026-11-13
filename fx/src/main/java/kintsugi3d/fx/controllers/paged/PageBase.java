@@ -31,7 +31,7 @@ abstract class PageBase<InType, OutType, ControllerType extends PageController<?
 
     private Page<?, ? extends InType> prevPage;
 
-    private final Map<String, Page<? super OutType,?>> fallbackPages = new LinkedHashMap<>();
+    private final Map<String, Page<? super OutType,?>> fallbackPages = new LinkedHashMap<>(1);
 
     protected PageBase(FXMLLoader loader)
     {
