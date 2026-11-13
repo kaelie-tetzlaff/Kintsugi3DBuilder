@@ -200,17 +200,22 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
         while (reader.hasNext())
         {
             int event = reader.next();
-            String name = reader.getLocalName();
-            String elementText = reader.getElementText();
 
             switch (event)
             {
                 case XMLStreamConstants.START_ELEMENT:
+                {
+                    String elementText = reader.getElementText();
+                    String name = reader.getLocalName();
                     helper.startElement(name, elementText,
                         attributeName -> reader.getAttributeValue(null, attributeName));
+                }
                     break;
                 case XMLStreamConstants.END_ELEMENT:
+                {
+                    String name = reader.getLocalName();
                     helper.endElement(name);
+                }
                     break;
                 default:
                     break;
