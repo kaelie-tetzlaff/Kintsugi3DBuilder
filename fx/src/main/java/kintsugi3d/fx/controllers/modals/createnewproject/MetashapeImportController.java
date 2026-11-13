@@ -65,7 +65,7 @@ public class MetashapeImportController extends ProjectImportController
         psxFileChooser = new FileChooser();
         psxFileChooser.setTitle("Choose .psx file");
         psxFileChooser.getExtensionFilters().add(new ExtensionFilter("Metashape files (*.psx)", "*.psx"));
-        psxFileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+        psxFileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
 
         setCanConfirm(true);
     }
@@ -100,7 +100,7 @@ public class MetashapeImportController extends ProjectImportController
             }
         });
 
-        psxFileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+        psxFileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
     }
 
     @Override
@@ -142,8 +142,8 @@ public class MetashapeImportController extends ProjectImportController
 
         if (file != null)
         {
-            RecentProjects.setMostRecentDirectory(file.getParentFile());
-            psxFileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+            RecentProjects.getInstance().setMostRecentDirectory(file.getParentFile());
+            psxFileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
 
             fileNameTxtField.setText(file.getName());
             updateChoiceBoxes(file);

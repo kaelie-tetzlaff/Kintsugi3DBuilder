@@ -760,7 +760,7 @@ public class EyedropperController extends NonDataPageControllerBase
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Image File");
         fileChooser.getExtensionFilters().add(new ExtensionFilter("Image Files", VALID_EXTENSIONS));
-        fileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+        fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
 
         ViewSet viewSet = Global.io().getLoadedViewSet();
         if (viewSet == null)
@@ -797,7 +797,7 @@ public class EyedropperController extends NonDataPageControllerBase
     {
         if (file != null)
         {
-            RecentProjects.setMostRecentDirectory(file.getParentFile());
+            RecentProjects.getInstance().setMostRecentDirectory(file.getParentFile());
             selectedFile.set(new Image(file.toURI().toString()));
             imageDetailsController.setImage(file.getPath());
 

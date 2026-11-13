@@ -54,7 +54,7 @@ public class ManualImportController extends ProjectImportController
     @Override
     public final void initPage()
     {
-        File recentFile = RecentProjects.getMostRecentDirectory();
+        File recentFile = RecentProjects.getInstance().getMostRecentDirectory();
         setInitDirectories(recentFile);
 
         objFileChooser.setTitle("Select 3D model file");
@@ -87,7 +87,7 @@ public class ManualImportController extends ProjectImportController
     @Override
     public final void refresh()
     {
-        File recentFile = RecentProjects.getMostRecentDirectory();
+        File recentFile = RecentProjects.getInstance().getMostRecentDirectory();
         setInitDirectories(recentFile);
     }
 
@@ -166,7 +166,7 @@ public class ManualImportController extends ProjectImportController
         objFileChooser.setInitialDirectory(file);
         photoDirectoryChooser.setInitialDirectory(file);
 
-        RecentProjects.setMostRecentDirectory(file);
+        RecentProjects.getInstance().setMostRecentDirectory(file);
     }
 
     @Override

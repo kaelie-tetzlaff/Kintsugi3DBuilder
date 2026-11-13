@@ -85,7 +85,7 @@ public final class FrontendIO
             projectFileChooser = new FileChooser();
         }
 
-        projectFileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+        projectFileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
 
         return projectFileChooser;
     }

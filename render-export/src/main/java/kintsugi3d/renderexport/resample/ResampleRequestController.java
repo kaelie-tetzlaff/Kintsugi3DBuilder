@@ -41,7 +41,7 @@ public class ResampleRequestController
         this.directoryChooser.setTitle("Choose an export directory");
         if (exportDirectoryField.getText().isEmpty())
         {
-            this.directoryChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+            this.directoryChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         }
         else
         {
@@ -52,7 +52,7 @@ public class ResampleRequestController
         if (file != null)
         {
             exportDirectoryField.setText(file.toString());
-            RecentProjects.setMostRecentDirectory(file);
+            RecentProjects.getInstance().setMostRecentDirectory(file);
         }
     }
 
@@ -64,7 +64,7 @@ public class ResampleRequestController
         this.fileChooser.getExtensionFilters().add(new ExtensionFilter("View set files", "*.vset"));
         if (targetVSetFileField.getText().isEmpty())
         {
-            this.fileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+            this.fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         }
         else
         {
@@ -76,7 +76,7 @@ public class ResampleRequestController
         if (file != null)
         {
             targetVSetFileField.setText(file.toString());
-            RecentProjects.setMostRecentDirectory(file.getParentFile());
+            RecentProjects.getInstance().setMostRecentDirectory(file.getParentFile());
         }
     }
 

@@ -226,7 +226,7 @@ public class WelcomeWindowController
 
     private void handleButtonSelection(Button item)
     {
-        ArrayList<String> recentFileNames = (ArrayList<String>) RecentProjects.getRecentProjectFilenames();
+        ArrayList<String> recentFileNames = (ArrayList<String>) RecentProjects.getInstance().getRecentProjectFilenames();
         int i = 0;
         for (Button button : recentButtons)
         {
@@ -252,7 +252,7 @@ public class WelcomeWindowController
 
     public void updateRecentProjects()
     {
-        List<String> items = RecentProjects.getRecentProjectFilenames();
+        List<String> items = RecentProjects.getInstance().getRecentProjectFilenames();
         List<MenuItem> recentItems = RecentProjectsHelper.getMenuItems(items);
 
         recentProjectsSplitMenuButton.getItems().clear();
@@ -346,22 +346,12 @@ public class WelcomeWindowController
 
     private static void removeReference(String fileName)
     {
-        List<String> newRecentItems = RecentProjects.getRecentProjectFilenames().stream()
+        List<String> newRecentItems = RecentProjects.getInstance().getRecentProjectFilenames().stream()
             .filter(item -> !item.equals(fileName))
             .collect(Collectors.toList());
 
         // Write the updated content back to the file
-        try (PrintWriter writer = new PrintWriter(new FileWriter(RecentProjects.RECENT_PROJECTS_FILE, StandardCharsets.UTF_8)))
-        {
-            for (String name : newRecentItems)
-            {
-                writer.println(name);
-            }
-        }
-        catch (IOException ioe)
-        {
-            LOG.error("Failed to update recent files list while removing invalid reference.", ioe);
-        }
+        RecentProjects.getInstance().refreshRecentProjectsFile(newRecentItems);
 
         RecentProjectsHelper.updateAllControlStructures();
     }

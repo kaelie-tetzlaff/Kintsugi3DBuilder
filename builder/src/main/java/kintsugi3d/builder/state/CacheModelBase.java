@@ -573,7 +573,7 @@ public abstract class CacheModelBase implements CacheModel
 
     private static List<UUID> getRecentUUIDs(int numProjectsToKeep)
     {
-        List<String> recentProjects = RecentProjects.getRecentProjectFilenames().stream().limit(numProjectsToKeep).collect(Collectors.toList());
+        List<String> recentProjects = RecentProjects.getInstance().getRecentProjectFilenames().stream().limit(numProjectsToKeep).collect(Collectors.toList());
         // Load view sets of recent projects to get their UUID.
         List<UUID> recentUUIDs = new ArrayList<>(recentProjects.size());
         for (String recentProject : recentProjects)

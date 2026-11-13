@@ -367,7 +367,7 @@ public class MainWindowController
             cleanRecentProjectsMenu.getItems().clear();
 
             CustomMenuItem removeSomeRefsCustMenuItem = new CustomMenuItem(new Label("Clear Missing Projects"));
-            removeSomeRefsCustMenuItem.setOnAction(event -> RecentProjects.removeInvalidReferences());
+            removeSomeRefsCustMenuItem.setOnAction(event -> RecentProjects.getInstance().removeInvalidReferences());
 
             Tooltip.install(removeSomeRefsCustMenuItem.getContent(),
                 new Tooltip("Remove references to items not found in file explorer. Will not modify your file system."));
@@ -375,7 +375,7 @@ public class MainWindowController
             cleanRecentProjectsMenu.getItems().add(removeSomeRefsCustMenuItem);
 
             CustomMenuItem removeAllRefsCustMenuItem = new CustomMenuItem(new Label("Clear All Projects"));
-            removeAllRefsCustMenuItem.setOnAction(event -> RecentProjects.removeInvalidReferences());
+            removeAllRefsCustMenuItem.setOnAction(event -> RecentProjects.getInstance().removeAllReferences());
 
             Tooltip.install(removeAllRefsCustMenuItem.getContent(),
                 new Tooltip("Remove references to all recent projects. Will not modify your file system."));
@@ -664,12 +664,12 @@ public class MainWindowController
 
     @FXML public void removeInvalidReferences()
     {
-        RecentProjects.removeInvalidReferences();
+        RecentProjects.getInstance().removeInvalidReferences();
     }
 
     @FXML public void removeAllReferences()
     {
-        RecentProjects.removeAllReferences();
+        RecentProjects.getInstance().removeAllReferences();
     }
 
     public Menu getRecentProjectsMenu()

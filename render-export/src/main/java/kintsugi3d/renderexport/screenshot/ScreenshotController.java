@@ -37,7 +37,7 @@ public class ScreenshotController
         this.fileChooser.setTitle("Choose an export file");
         if (exportFileField.getText().isEmpty())
         {
-            this.fileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+            this.fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         }
         else
         {
@@ -48,7 +48,7 @@ public class ScreenshotController
         if (file != null)
         {
             exportFileField.setText(file.toString());
-            RecentProjects.setMostRecentDirectory(file);
+            RecentProjects.getInstance().setMostRecentDirectory(file);
         }
     }
 

@@ -25,28 +25,35 @@ import java.util.stream.Collectors;
 
 public final class RecentProjects
 {
-    public static final File RECENT_PROJECTS_FILE
-        = new File(ApplicationFolders.getUserAppDirectory().toFile(), "recentFiles.txt");
+    private static final Logger LOG = LoggerFactory.getLogger(RecentProjects.class);
 
     public static final int MAX_RECENT_PROJECTS = 20;
+    public static final String RECENT_PROJECTS_FILENAME = "recentFiles.txt";
 
-    private static final Logger LOG = LoggerFactory.getLogger(RecentProjects.class);
-    private static File recentDirectory;
+    private static final RecentProjects INSTANCE = new RecentProjects();
 
-    private static final Collection<Runnable> RECENT_FILES_CHANGED_LISTENERS = new ArrayList<>(1);
+    private final File recentProjectsFile;
+    private final Collection<Runnable> recentFilesChangedListeners = new ArrayList<>(1);
+
+    private File recentDirectory;
 
     private RecentProjects()
     {
-        throw new IllegalStateException("Utility class");
+        this.recentProjectsFile = new File(ApplicationFolders.getUserAppDirectory().toFile(), RECENT_PROJECTS_FILENAME);
     }
 
-    public static List<String> getRecentProjectFilenames()
+    public static RecentProjects getInstance()
+    {
+        return INSTANCE;
+    }
+
+    public List<String> getRecentProjectFilenames()
     {
         List<String> projectItems = List.of();
 
-        if (RECENT_PROJECTS_FILE.exists())
+        if (recentProjectsFile.exists())
         {
-            try (BufferedReader reader = new BufferedReader(new FileReader(RECENT_PROJECTS_FILE.getAbsolutePath(), StandardCharsets.UTF_8)))
+            try (BufferedReader reader = new BufferedReader(new FileReader(recentProjectsFile.getAbsolutePath(), StandardCharsets.UTF_8)))
             {
                 projectItems = reader.lines().limit(MAX_RECENT_PROJECTS).collect(Collectors.toUnmodifiableList());
             }
@@ -78,7 +85,7 @@ public final class RecentProjects
         return ancestorFile;
     }
 
-    public static void addToRecentFiles(String fileName)
+    public void addToRecentFiles(String fileName)
     {
         List<String> existingFileNames = getRecentProjectFilenames();
 
@@ -94,17 +101,17 @@ public final class RecentProjects
         refreshRecentProjectsFile(existingFileNames);
     }
 
-    private static void refreshRecentProjectsFile(Iterable<String> existingFileNames)
+    public void refreshRecentProjectsFile(Iterable<String> existingFileNames)
     {
         // Make sure that parent directory exists.
-        boolean failed = !RECENT_PROJECTS_FILE.getParentFile().mkdirs();
-        if (failed && !RECENT_PROJECTS_FILE.getParentFile().exists())
+        boolean failed = !recentProjectsFile.getParentFile().mkdirs();
+        if (failed && !recentProjectsFile.getParentFile().exists())
         {
             LOG.warn("Failed to create app data directory for recent files list.");
         }
 
         // Write the updated content back to the file
-        try (PrintWriter writer = new PrintWriter(new FileWriter(RECENT_PROJECTS_FILE, StandardCharsets.UTF_8)))
+        try (PrintWriter writer = new PrintWriter(new FileWriter(recentProjectsFile, StandardCharsets.UTF_8)))
         {
             for (String name : existingFileNames)
             {
@@ -120,7 +127,7 @@ public final class RecentProjects
         fireListeners();
     }
 
-    public static void removeInvalidReferences()
+    public void removeInvalidReferences()
     {
         List<String> newRecentItems = getRecentProjectFilenames().stream()
             .map(File::new)
@@ -132,26 +139,25 @@ public final class RecentProjects
         refreshRecentProjectsFile(newRecentItems);
     }
 
-    public static void removeAllReferences()
+    public void removeAllReferences()
     {
         // Wipe recent projects list
         refreshRecentProjectsFile(List.of());
     }
 
-    public static String getMostRecentProjectPath()
+    public String getMostRecentProjectPath()
     {
         return getRecentProjectFilenames().get(0);
     }
 
     //use these functions to make file selection more user-friendly across multiple File/Directory Choosers
-    public static void setMostRecentDirectory(File file)
+    public void setMostRecentDirectory(File file)
     {
         recentDirectory = file;
     }
 
-    public static File getMostRecentDirectory()
+    public File getMostRecentDirectory()
     {
-        //noinspection StaticVariableUsedBeforeInitialization
         if (recentDirectory != null && recentDirectory.exists())
         {
             return recentDirectory;
@@ -171,14 +177,14 @@ public final class RecentProjects
         return new File(System.getProperty("user.home"));
     }
 
-    public static void addRecentProjectsChangedListener(Runnable listener)
+    public void addRecentProjectsChangedListener(Runnable listener)
     {
-        RECENT_FILES_CHANGED_LISTENERS.add(listener);
+        recentFilesChangedListeners.add(listener);
     }
 
-    private static void fireListeners()
+    private void fireListeners()
     {
-        for (Runnable listener : RECENT_FILES_CHANGED_LISTENERS)
+        for (Runnable listener : recentFilesChangedListeners)
         {
             listener.run();
         }
