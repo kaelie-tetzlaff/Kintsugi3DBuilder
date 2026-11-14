@@ -202,6 +202,35 @@ public abstract class SpecularFitProcess
         LOG.info("Total processing time: {}", duration);
     }
 
+    private static <ContextType extends Context<ContextType>>
+    Texture2D<ContextType> loadInitialNormalMap(ContextType context, int targetWidth, int targetHeight, File inputNormalMapFile)
+        throws IOException
+    {
+        Texture2D<ContextType> normalMap = context.getTextureFactory()
+            .build2DColorTexture(targetWidth, targetHeight)
+            .setInternalFormat(ColorFormat.RGBA8)
+            .setMipmapsEnabled(false)
+            .setLinearFilteringEnabled(true)
+            .createTexture();
+
+        if (inputNormalMapFile != null)
+        {
+            // Reload input normal map since it needs to be uncompressed for blit operations
+            try (Texture2D<ContextType> inputNormalMap = context.getTextureFactory()
+                .build2DColorTextureFromFile(inputNormalMapFile, true)
+                .setInternalFormat(ColorFormat.RGBA8)
+                .setMipmapsEnabled(false)
+                .setLinearFilteringEnabled(true)
+                .createTexture())
+            {
+                // May need to rescale to the target resolution
+                normalMap.blitScaled(inputNormalMap, true);
+            }
+        }
+
+        return normalMap;
+    }
+
     private <ContextType extends Context<ContextType>> void optimizeBlocks(
         Blittable<ReadonlyTextureResources<ContextType>> fullResolutionDestination,
         ImageCache<ContextType> cache,
@@ -213,28 +242,11 @@ public abstract class SpecularFitProcess
         SpecularFitResourcesWrapper<ContextType> resourcesWrapper = getResourcesWrapper();
 
         try(TextureBlockResourceFactory<ContextType> blockResourceFactory = cache.createBlockResourceFactory();
-            Texture2D<ContextType> initialNormalMap = cache.getContext().getTextureFactory()
-                .build2DColorTexture(fullResolutionDestination.getWidth(), fullResolutionDestination.getHeight())
-                .setInternalFormat(ColorFormat.RGBA8)
-                .setMipmapsEnabled(false)
-                .setLinearFilteringEnabled(true)
-                .createTexture())
+            OptionalManagedResource<Texture2D<ContextType>> initialNormalMap = inputNormalMapFile == null ?
+                OptionalManagedResource.empty() :
+                OptionalManagedResource.of(loadInitialNormalMap(cache.getContext(),
+                    fullResolutionDestination.getWidth(), fullResolutionDestination.getHeight(), inputNormalMapFile)))
         {
-            if (inputNormalMapFile != null)
-            {
-                // Reload input normal map since it needs to be uncompressed for blit operations
-                try (Texture2D<ContextType> inputNormalMap = cache.getContext().getTextureFactory()
-                    .build2DColorTextureFromFile(inputNormalMapFile, true)
-                    .setInternalFormat(ColorFormat.RGBA8)
-                    .setMipmapsEnabled(false)
-                    .setLinearFilteringEnabled(true)
-                    .createTexture())
-                {
-                    // May need to rescale to the target resolution
-                    initialNormalMap.blitScaled(inputNormalMap, true);
-                }
-            }
-
             if (monitor != null)
             {
                 monitor.setMaxProgress(cache.getSettings().getTextureSubdiv() * cache.getSettings().getTextureSubdiv());
@@ -263,7 +275,7 @@ public abstract class SpecularFitProcess
                             blockResources, resourcesWrapper, basis.copy(), blockResolution,
                             settings.getNormalOptimizationSettings(), settings.shouldIncludeConstantTerm()))
                         {
-                            if (inputNormalMapFile != null)
+                            if (initialNormalMap.isPresent())
                             {
                                 int x = settings.getImageCacheSettings().getBlockStartX(i);
                                 int y = settings.getImageCacheSettings().getBlockStartY(j);
@@ -271,7 +283,7 @@ public abstract class SpecularFitProcess
                                 int height = settings.getImageCacheSettings().getBlockStartY(j + 1) - y;
 
                                 blockOptimization.getNormalOptimization().getNormalMap().blitCropped(
-                                    initialNormalMap, x, y, width, height);
+                                    initialNormalMap.get(), x, y, width, height);
                             }
 
                             // Use basis functions previously optimized at a lower resolution
