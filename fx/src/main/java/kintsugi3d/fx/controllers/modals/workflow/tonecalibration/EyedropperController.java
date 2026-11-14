@@ -95,8 +95,6 @@ public class EyedropperController extends NonDataPageControllerBase
 
     private List<Rectangle> finalSelectRectangles;
 
-    private List<TextField> colorSelectTxtFields;
-
     private List<Color> selectedColors;
 
     static final String DEFAULT_BUTTON_TEXT = "Select Tone Patch";
@@ -143,14 +141,6 @@ public class EyedropperController extends NonDataPageControllerBase
         selectionPane.setMouseTransparent(true); //Prevent pane from absorbing clicks
 
         selectedColors = new ArrayList<>(6);
-
-        colorSelectTxtFields = new ArrayList<>(6);
-        colorSelectTxtFields.add(txtField1);
-        colorSelectTxtFields.add(txtField2);
-        colorSelectTxtFields.add(txtField3);
-        colorSelectTxtFields.add(txtField4);
-        colorSelectTxtFields.add(txtField5);
-        colorSelectTxtFields.add(txtField6);
 
         finalSelectRectangles = new ArrayList<>(6);
         finalSelectRectangles.add(finalSelectRect1);

@@ -11,6 +11,8 @@
 
 package kintsugi3d.fx.controllers.paged;
 
+import java.util.Objects;
+
 public class SentinelPage<T> extends PageBase<Object, T, PageController<? super Object>>
 {
     public SentinelPage()
@@ -34,7 +36,7 @@ public class SentinelPage<T> extends PageBase<Object, T, PageController<? super 
     {
         super.setNextPage(page);
 
-        if (page.getPrevPage() == this)
+        if (Objects.equals(page.getPrevPage(), this))
         {
             // don't link back to this page
             page.setPrevPage(null);

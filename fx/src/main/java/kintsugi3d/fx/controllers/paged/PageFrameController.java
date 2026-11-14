@@ -35,6 +35,7 @@ import javafx.stage.WindowEvent;
 import kintsugi3d.builder.util.FXWindowHelper;
 import kintsugi3d.fx.core.JavaFXState;
 
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -178,7 +179,7 @@ public class PageFrameController
         currentPage.addListener(obs ->
         {
             // if the current page is changed to the page just created, bind it to button attributes as needed
-            if (currentPage.get() == page)
+            if (Objects.equals(currentPage.get(), page))
             {
                 nextButton.textProperty().unbind();
                 nextButton.textProperty().bind(new NextButtonTextBinding(shouldConfirm, advanceLabelOverride));
@@ -193,7 +194,7 @@ public class PageFrameController
 
         controller.getCanConfirmObservable().addListener(observable ->
         {
-            if (currentPage == page) // only should apply if on the page just created
+            if (Objects.equals(currentPage.get(), page)) // only should apply if on the page just created
             {
                 nextButton.setFont(Font.font(
                     nextButton.getFont().getFamily(),

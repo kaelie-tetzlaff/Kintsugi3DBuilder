@@ -482,14 +482,16 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
 
     static ByteBuffer hdrImageToNativeBuffer(Image colorImg, BufferedImage maskImg)
     {
-        ByteBuffer buffer = BufferUtils.createByteBuffer(colorImg.width * colorImg.height * (maskImg == null ? 12 : 16));
-        FloatBuffer floatBuffer = buffer.asFloatBuffer();
-
         // Use parallel stream to accelerate image copy
         IntStream scanlineRange = IntStream.range(0, colorImg.height);
 
+        ByteBuffer buffer;
+
         if (maskImg == null)
         {
+            buffer = BufferUtils.createByteBuffer(colorImg.width * colorImg.height * 12);
+            FloatBuffer floatBuffer = buffer.asFloatBuffer();
+
             scanlineRange.forEach(y ->
             {
                 int k = y * colorImg.width * 3;
@@ -506,6 +508,9 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         }
         else
         {
+            buffer = BufferUtils.createByteBuffer(colorImg.width * colorImg.height * 16);
+            FloatBuffer floatBuffer = buffer.asFloatBuffer();
+
             scanlineRange.forEach(y ->
             {
                 int k = y * colorImg.width * 4;

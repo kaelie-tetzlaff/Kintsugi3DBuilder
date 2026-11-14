@@ -190,15 +190,9 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     @Override
     public boolean add(RenderableType e)
     {
-        if (renderables.add(e))
-        {
-            addedRenderables.add(e);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        renderables.add(e);
+        addedRenderables.add(e);
+        return true;
     }
 
     @Override

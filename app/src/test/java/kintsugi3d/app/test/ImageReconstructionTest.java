@@ -50,6 +50,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -1026,14 +1027,15 @@ class ImageReconstructionTest
         imageLoadOptions.setColorImagesRequested(false); // don't generate/load preview images; not needed for this test
 
         ViewSetLoadOptions viewSetLoadOptions = new ViewSetLoadOptions();
-        viewSetLoadOptions.setGeometryFile(new File(classLoader.getResource(geometry).toURI()));
-        viewSetLoadOptions.getMainDirectories().setFullResImageDirectory(new File(classLoader.getResource(imageDirectory).toURI()));
+        viewSetLoadOptions.setGeometryFile(new File(Objects.requireNonNull(classLoader.getResource(geometry)).toURI()));
+        viewSetLoadOptions.getMainDirectories().setFullResImageDirectory(
+            new File(Objects.requireNonNull(classLoader.getResource(imageDirectory)).toURI()));
         viewSetLoadOptions.getMainDirectories().setFullResImagesNeedUndistort(true);
 
         try (GraphicsResourcesImageSpace<OpenGLContext> resources = GraphicsResourcesImageSpace.getBuilderForContext(context)
                 .setImageLoadOptions(imageLoadOptions)
                 .setProgressMonitor(progressMonitor)
-                .loadLooseFiles(new File(classLoader.getResource(cameras).toURI()), viewSetLoadOptions)
+                .loadLooseFiles(new File(Objects.requireNonNull(classLoader.getResource(cameras)).toURI()), viewSetLoadOptions)
                 .create())
         {
             resources.calibrateLightIntensities();

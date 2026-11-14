@@ -333,12 +333,12 @@ public final class MetashapeChunk
             .getElementsByTagName("camera");
 
         List<File> missingFiles = new ArrayList<>(8);
-        File fullResOverride = this.getSelectedModel().getLoadPreferences().getFullResOverride();
-        File fullResSearchDirectory = fullResOverride == null ?
-            //full res image paths in frame.xml are relative to the frame document itself
-            new File(getFramePath()).getParentFile() :
-            fullResOverride;
 
+        // full res image paths in frame.xml are relative to the frame document itself
+        File defaultFullResSearchDirectory = new File(getFramePath()).getParentFile();
+
+        // Override is used in place of defaultFullResSearchDirectory, if present.
+        File fullResOverride = this.getSelectedModel().getLoadPreferences().getFullResOverride();
 
         File exceptionFolder = null;
 
@@ -362,7 +362,7 @@ public final class MetashapeChunk
             if (fullResOverride != null)
             {
                 String pathAttributeName = new File(pathAttribute).getName();
-                imageFile = new File(fullResSearchDirectory, pathAttributeName);
+                imageFile = new File(fullResOverride, pathAttributeName);
                 File foundImageFile = ImageFinder.tryFindImageFile(imageFile);
                 if (foundImageFile != null)
                 {
@@ -371,7 +371,7 @@ public final class MetashapeChunk
             }
             else
             {
-                imageFile = new File(fullResSearchDirectory, pathAttribute);
+                imageFile = new File(defaultFullResSearchDirectory, pathAttribute);
                 File foundImageFile = ImageFinder.tryFindImageFile(imageFile);
                 if (foundImageFile != null)
                 {
