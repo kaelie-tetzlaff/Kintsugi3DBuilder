@@ -27,6 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.DecimalFormat;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -35,6 +37,8 @@ public class ProgressBarsController
     private static final Logger LOG = LoggerFactory.getLogger(ProgressBarsController.class);
 
     private static ProgressBarsController instance;
+
+    private Stage stage;
 
     @FXML private Label localElapsedTimeLabel;
     @FXML private Label localEstimTimeRemainingLabel;
@@ -54,15 +58,50 @@ public class ProgressBarsController
     private Stopwatch overallStopwatch;
     private Stopwatch localStopwatch;
 
-    private String defaultLocalText;
-    private String defaultOverallText;
-    private String defaultTotalTimeElapsedText;
-    private String defaultEstimLocalTimeRemainingTxt;
     private String defaultTitle;
 
-    private Stage stage;
+    /**
+     * Typically something like "Working..."
+     */
+    private String defaultOverallText;
+
+    /**
+     * Typically something like "(--:--:-- Lapsed)"
+     */
+    private String defaultTotalTimeElapsedText;
+
+    /**
+     * Typically something like "Please wait.."
+     */
+    private String defaultLocalText;
+
+    /**
+     * Typically something like "Calculating remaining time... "
+     */
+    private String defaultEstimLocalTimeRemainingTxt;
+
+    /**
+     * Typically something like "(--:--:-- Lapsed)"
+     */
     private String defaultOverallElapsedTimeTxt;
+
     private final BooleanProperty processingProperty = new SimpleBooleanProperty(false);
+
+    /**
+     * Source of truth for the countdown timer - stores the remaining duration
+     */
+    private final ObjectProperty<Duration> estimatedRemainingDuration = new SimpleObjectProperty<>(null);
+
+    /**
+     * Holds manual text overrides (e.g., "Calculating remaining time...") when set explicitly
+     */
+    private final StringProperty estimatedRemainingOverride = new SimpleStringProperty("");
+
+    /**
+     * Target expiry instant for the countdown — the moment when the countdown reaches zero.
+     * Null means no active countdown.
+     */
+    private Instant countdownExpiry;
 
     static ProgressBarsController getInstance()
     {
@@ -82,7 +121,26 @@ public class ProgressBarsController
 
         defaultTitle = stage.getTitle();
 
-        //remove estimated times from view if not processing (would just be 00:00:00/otherwise useless anyway)
+        localEstimTimeRemainingLabel.textProperty().bind(
+            Bindings.when(estimatedRemainingOverride.isNotNull())
+                .then(estimatedRemainingOverride)
+                .otherwise(
+                    Bindings.createStringBinding(() ->
+                    {
+                        Duration duration = estimatedRemainingDuration.get();
+
+                        if (duration == null || duration.isZero() || duration.isNegative())
+                        {
+                            return "Almost done...";
+                        }
+                        else
+                        {
+                            return String.format("%02d:%02d:%02d Remaining", duration.toHours(), duration.toMinutesPart(), duration.toSecondsPart());
+                        }
+                    },
+                    estimatedRemainingDuration)));
+
+        // remove estimated times from view if not processing
         localEstimTimeRemainingLabel.managedProperty().bind(processingProperty);
         localEstimTimeRemainingLabel.visibleProperty().bind(processingProperty);
 
@@ -127,7 +185,9 @@ public class ProgressBarsController
         totalElapsedTimeLabel.setText(defaultTotalTimeElapsedText);
         localElapsedTimeLabel.setText(defaultOverallElapsedTimeTxt);
 
-        localEstimTimeRemainingLabel.setText(defaultEstimLocalTimeRemainingTxt);
+        estimatedRemainingOverride.set(defaultEstimLocalTimeRemainingTxt);
+        estimatedRemainingDuration.setValue(null);
+        countdownExpiry = null;
 
         stage.setTitle(defaultTitle);
     }
@@ -164,7 +224,7 @@ public class ProgressBarsController
 
                     Thread.sleep(800);
 
-                    tickDownRemainingTime();
+                    Platform.runLater(this::tickDownRemainingTime);
                 }
                 catch (InterruptedException e)
                 {
@@ -178,45 +238,63 @@ public class ProgressBarsController
 
     private void tickDownRemainingTime()
     {
-        String remainingTimeStr = localEstimTimeRemainingLabel.getText();
-        if (remainingTimeStr.matches("[A-Za-z].*"))
+        // If manual text is set, don't tick down — it's a non-countdown message
+        if (estimatedRemainingOverride.getValue() != null && !estimatedRemainingOverride.getValue().isEmpty())
         {
-            //text is "Almost done..." or some other manually entered message
             return;
         }
 
-        int hours = Integer.parseInt(remainingTimeStr.substring(0, 2));
-        int minutes = Integer.parseInt(remainingTimeStr.substring(3, 5));
-        int seconds = Integer.parseInt(remainingTimeStr.substring(6, 8));
+        // If no active countdown expiry, nothing to tick
+        if (countdownExpiry == null)
+        {
+            return;
+        }
 
-        long estimatedRemaining = TimeUnit.HOURS.toNanos(hours) +
-            TimeUnit.MINUTES.toNanos(minutes) +
-            TimeUnit.SECONDS.toNanos(seconds);
+        // Calculate remaining duration from the target expiry timestamp
+        Duration remaining = Duration.between(Instant.now(), countdownExpiry);
 
-        estimatedRemaining -= TimeUnit.SECONDS.toNanos(1);
-
-        updateTimeEstimationLabel(estimatedRemaining);
+        if (remaining.isZero() || remaining.isNegative())
+        {
+            estimatedRemainingDuration.setValue(Duration.ZERO);
+            countdownExpiry = null;
+        }
+        else
+        {
+            estimatedRemainingDuration.setValue(remaining);
+        }
     }
 
     private void updateTimeEstimationLabel(long estimatedRemaining)
     {
         long secondsRemaining = TimeUnit.NANOSECONDS.toSeconds(estimatedRemaining);
+        Platform.runLater(() ->
+        {
+            // Clear any manual override when updating the estimate
+            estimatedRemainingOverride.set(null);
 
-        if (secondsRemaining > 0)
-        {
-            String timeTxt = nanosecToFormatTime(estimatedRemaining, true);
-            Platform.runLater(() -> localEstimTimeRemainingLabel.setText(String.format("%s Remaining", timeTxt)));
-        }
-        else
-        {
-            Platform.runLater(() -> localEstimTimeRemainingLabel.setText("Almost done..."));
-        }
+            if (secondsRemaining > 0)
+            {
+                Duration duration = Duration.ofSeconds(secondsRemaining);
+                estimatedRemainingDuration.setValue(duration);
+
+                // Set the target expiry timestamp so tickDownRemainingTime uses real time
+                countdownExpiry = Instant.now().plus(duration);
+            }
+            else
+            {
+                estimatedRemainingDuration.setValue(Duration.ZERO);
+                countdownExpiry = null;
+            }
+        });
     }
 
     private void clickStopwatches(double progress, double maximum)
     {
         Platform.runLater(() ->
         {
+            // Set manual text to default, so the binding shows the default message
+            estimatedRemainingOverride.set(defaultEstimLocalTimeRemainingTxt);
+
             overallStopwatch.click();
             localStopwatch.click();
             updateLocalRemainingTime(progress, maximum);
@@ -579,6 +657,9 @@ public class ProgressBarsController
                 {
                     localTextLabel.setText(localText);
                 }
+
+                // Clear countdown state on complete
+                estimatedRemainingDuration.setValue(null);
 
                 cancelButton.setText("Cancel");
             });
