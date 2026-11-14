@@ -11,7 +11,6 @@
 
 package kintsugi3d.app;
 
-import javafx.stage.Stage;
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.SynchronizedWindow;
 import kintsugi3d.builder.core.WindowSynchronization;
@@ -28,7 +27,6 @@ import kintsugi3d.gl.builders.framebuffer.DoubleFramebufferFactory;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.DoubleFramebufferObject;
 import kintsugi3d.gl.glfw.CanvasWindow;
-import kintsugi3d.gl.interactive.EventPollable;
 import kintsugi3d.gl.interactive.InitializationException;
 import kintsugi3d.gl.interactive.InteractiveApplication;
 import kintsugi3d.gl.interactive.InteractiveGraphics;
@@ -53,10 +51,8 @@ import java.util.stream.Collectors;
 public final class RenderingBootstrap
 {
     private static final Logger LOG = LoggerFactory.getLogger(RenderingBootstrap.class);
-    private static final int ICONIFIED_TIMEOUT_MILLIS = 5000;
-    private static final int UNFOCUSED_TIMEOUT_MILLIS = 1000;
 
-    // Allows us to pass the scene viewport to JavaFX before it is ready, using a temporary sentinel.
+    // Allows us to pass the scene viewport to the UI (i.e. JavaFX) before it is ready, using a temporary sentinel.
     private static final SceneViewportSafeWrapper SCENE_VIEWPORT_WRAPPER = new SceneViewportSafeWrapper();
 
     private static boolean started = false;
@@ -75,19 +71,19 @@ public final class RenderingBootstrap
         return SCENE_VIEWPORT_WRAPPER;
     }
 
-    public static void startRenderThread(Stage stage, String... args)
+    public static void startRenderThread(RenderingUI renderingUI, String... args)
     {
-        startRenderThread(stage, false, args);
+        startRenderThread(renderingUI, false, args);
     }
 
-    public static void startRenderThread(Stage stage, boolean standaloneWindow, String... args)
+    public static void startRenderThread(RenderingUI renderingUI, boolean standaloneWindow, String... args)
     {
         LOG.info("Starting Render Thread");
         new Thread(() ->
         {
             try
             {
-                runProgram(stage, standaloneWindow, args);
+                runProgram(renderingUI, standaloneWindow, args);
             }
             catch (InitializationException e)
             {
@@ -103,12 +99,12 @@ public final class RenderingBootstrap
         runProgram(null, true, args);
     }
 
-    public static void runProgram(Stage stage, String... args) throws InitializationException
+    public static void runProgram(RenderingUI renderingUI, String... args) throws InitializationException
     {
-        runProgram(stage, false, args);
+        runProgram(renderingUI, false, args);
     }
 
-    public static void runProgram(Stage stage, boolean standaloneWindow, String... args) throws InitializationException
+    public static void runProgram(RenderingUI renderingUI, boolean standaloneWindow, String... args) throws InitializationException
     {
         started = true;
 
@@ -128,7 +124,7 @@ public final class RenderingBootstrap
                     .setMultisamples(4)
                     .create();
                 setup3DWindow(window);
-                runProgram(stage, window.getCanvas(), args);
+                runProgram(renderingUI, window.getCanvas(), args);
             }
             else
             {
@@ -146,12 +142,12 @@ public final class RenderingBootstrap
 
                 FramebufferCanvas<OpenGLContext> canvas = FramebufferCanvas.createUsingExistingFramebuffer(framebufferCapture.get());
 
-                if (stage != null)
+                if (renderingUI != null)
                 {
-                    JavaFXApplication.setCanvas(canvas);
+                    renderingUI.setCanvas(canvas);
                 }
 
-                runProgram(stage, canvas, args);
+                runProgram(renderingUI, canvas, args);
             }
         }
         finally
@@ -203,7 +199,7 @@ public final class RenderingBootstrap
         window.show();
     }
 
-    private static void runProgram(Stage stage, PollableCanvas3D<OpenGLContext> canvas, String... args) throws InitializationException
+    private static void runProgram(RenderingUI renderingUI, PollableCanvas3D<OpenGLContext> canvas, String... args) throws InitializationException
     {
         OpenGLContext context = canvas.getContext();
         context.getState().enableDepthTest();
@@ -263,12 +259,6 @@ public final class RenderingBootstrap
         Rendering.initialize(context, renderableManager);
         ioModel.setLoadingHandler(renderableManager);
 
-        // Allow frontend to react to IO events
-        if (MultithreadState.isInitialized())
-        {
-            JavaFXApplication.getState().getProjectModel().registerIOListeners();
-        }
-
         canvas.addKeyPressListener((win, key, modifierKeys) ->
         {
             if (key == Key.F11)
@@ -293,94 +283,9 @@ public final class RenderingBootstrap
             }
         });
 
-        GraphicsRequestQueue requestQueue = Rendering.getRequestQueue();
-
-        // Used for wait / notify on rendering thread.
-        Object waitForRenderingWork = new Object();
-
-        // Keep the graphics thread paused while the window is minimized.
-        if (MultithreadState.isInitialized() && stage != null)
+        if (renderingUI != null)
         {
-            app.addPollable(new EventPollable()
-            {
-                @Override
-                public void pollEvents()
-                {
-                    synchronized (waitForRenderingWork)
-                    {
-                        while ((stage.isIconified() ||
-                            javafx.stage.Window.getWindows().filtered(javafx.stage.Window::isFocused).isEmpty()) &&
-                            requestQueue.isEmpty())
-                        {
-                            try
-                            {
-                                if (stage.isIconified())
-                                {
-                                    // Longer timeout (5 seconds) while minimized
-                                    // Just wake it up periodically just in case we missed a condition for notifying the thread.
-                                    waitForRenderingWork.wait(ICONIFIED_TIMEOUT_MILLIS);
-                                }
-                                else
-                                {
-                                    // Shorter timeout (1 second) while unfocused
-                                    // This still reduces GPU load while still rendering regularly as a safeguard for edge cases
-                                    // (such as refocusing using a window other than the main window).
-                                    waitForRenderingWork.wait(UNFOCUSED_TIMEOUT_MILLIS);
-                                }
-                            }
-                            catch (InterruptedException e)
-                            {
-                                LOG.warn("Wait interrupted", e);
-                            }
-                        }
-                    }
-                }
-
-                @Override
-                public boolean shouldTerminate()
-                {
-                    return false;
-                }
-            });
-        }
-
-        if (MultithreadState.isInitialized() && stage != null)
-        {
-            // Wake the graphics thread up when the window is un-minimized.
-            stage.iconifiedProperty().addListener((observable, wasIconified, isIconified) ->
-            {
-                if (wasIconified && !isIconified && requestQueue.isEmpty())
-                {
-                    synchronized (waitForRenderingWork)
-                    {
-                        waitForRenderingWork.notifyAll();
-                    }
-                }
-            });
-
-            // Wake the graphics thread up when the window is refocused.
-            stage.focusedProperty().addListener((observable, wasFocused, isFocused) ->
-            {
-                var focusedWindows = javafx.stage.Window.getWindows().filtered(javafx.stage.Window::isFocused);
-
-                if (!wasFocused && isFocused && focusedWindows.size() == 1 && focusedWindows.get(0).equals(stage)
-                    && requestQueue.isEmpty())
-                {
-                    synchronized (waitForRenderingWork)
-                    {
-                        waitForRenderingWork.notifyAll();
-                    }
-                }
-            });
-
-            // Wake the graphics thread up when work is added to the request queue.
-            requestQueue.addRequestAddedListener(() ->
-            {
-                synchronized (waitForRenderingWork)
-                {
-                    waitForRenderingWork.notifyAll();
-                }
-            });
+            renderingUI.initialize(app);
         }
 
         // Process CLI args after the main window has loaded.
