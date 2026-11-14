@@ -223,7 +223,6 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
             throws IOException
     {
         String testImageName = basis.getMaterials().stream()
-            .filter(BasisMaterialInfo::isEnabled)
             .findAny().orElseThrow()
             .getName();
 
