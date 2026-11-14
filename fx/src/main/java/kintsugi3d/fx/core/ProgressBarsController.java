@@ -11,6 +11,7 @@
 
 package kintsugi3d.fx.core;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
@@ -93,15 +94,21 @@ public class ProgressBarsController
     private final ObjectProperty<Duration> estimatedRemainingDuration = new SimpleObjectProperty<>(null);
 
     /**
-     * Holds manual text overrides (e.g., "Calculating remaining time...") when set explicitly
+     * Holds manual text overrides (e.g., "Calculating remaining time...") when set explicitly.
+     * Null means no override (show the countdown). An empty string is a valid override that displays nothing.
      */
-    private final StringProperty estimatedRemainingOverride = new SimpleStringProperty("");
+    private final StringProperty estimatedRemainingOverride = new SimpleStringProperty(null);
 
     /**
      * Target expiry instant for the countdown — the moment when the countdown reaches zero.
      * Null means no active countdown.
      */
     private Instant countdownExpiry;
+
+    /**
+     * Periodic timer for updating elapsed time and ticking down the countdown.
+     */
+    private PauseTransition timer;
 
     static ProgressBarsController getInstance()
     {
@@ -207,85 +214,74 @@ public class ProgressBarsController
         overallStopwatch.start();
         localStopwatch.start();
 
-        // Don't start the thread until the stopwatches have started or it will stop right away.
-        new Thread(() ->
+        // Use a PauseTransition to periodically update elapsed time and tick down the countdown.
+        // Runs on the JavaFX application thread, so no Platform.runLater is needed.
+        // Cycle count is 1; playFromStart() in onFinished handles repetition while processing.
+        timer = new PauseTransition(javafx.util.Duration.millis(1000));
+        timer.setCycleCount(1);
+        timer.setOnFinished(event ->
         {
-            boolean uninterrupted = true;
-            while (isProcessing() && uninterrupted)
+            tickTimer();
+            if (isProcessing())
             {
-                try
-                {
-                    Thread.sleep(200);
-
-                    if (isProcessing())
-                    {
-                        updateElapsedTime();
-                    }
-
-                    Thread.sleep(800);
-
-                    Platform.runLater(this::tickDownRemainingTime);
-                }
-                catch (InterruptedException e)
-                {
-                    uninterrupted = false;
-                }
+                timer.playFromStart();
             }
-        }).start();
+        });
+        timer.playFromStart();
 
         saturateProgressBars();
     }
 
-    private void tickDownRemainingTime()
+    private void tickTimer()
     {
-        // If manual text is set, don't tick down — it's a non-countdown message
-        if (estimatedRemainingOverride.getValue() != null && !estimatedRemainingOverride.getValue().isEmpty())
-        {
-            return;
-        }
+        // Update elapsed time labels
+        long totalElapsedTime = overallStopwatch.getElapsedTime();
+        long localElapsedTime = localStopwatch.getElapsedTime();
 
-        // If no active countdown expiry, nothing to tick
-        if (countdownExpiry == null)
-        {
-            return;
-        }
+        String totalTimeTxt = nanosecToFormatTime(totalElapsedTime, true);
+        String localTimeTxt = nanosecToFormatTime(localElapsedTime, true);
 
-        // Calculate remaining duration from the target expiry timestamp
-        Duration remaining = Duration.between(Instant.now(), countdownExpiry);
+        totalElapsedTimeLabel.setText(String.format("%s Lapsed", totalTimeTxt));
+        localElapsedTimeLabel.setText(String.format("(%s Lapsed)", localTimeTxt));
 
-        if (remaining.isZero() || remaining.isNegative())
+        // Tick down the countdown, if active (null override means no override, empty string is a valid override)
+        if (estimatedRemainingOverride.getValue() == null && countdownExpiry != null)
         {
-            estimatedRemainingDuration.setValue(Duration.ZERO);
-            countdownExpiry = null;
-        }
-        else
-        {
-            estimatedRemainingDuration.setValue(remaining);
+            // Calculate remaining duration from the target expiry timestamp
+            Duration remaining = Duration.between(Instant.now(), countdownExpiry);
+
+            if (remaining.isZero() || remaining.isNegative())
+            {
+                estimatedRemainingDuration.setValue(Duration.ZERO);
+                countdownExpiry = null;
+            }
+            else
+            {
+                estimatedRemainingDuration.setValue(remaining);
+            }
         }
     }
 
     private void updateTimeEstimationLabel(long estimatedRemaining)
     {
         long secondsRemaining = TimeUnit.NANOSECONDS.toSeconds(estimatedRemaining);
-        Platform.runLater(() ->
+
+        // Clear any manual override when updating the estimate
+        estimatedRemainingOverride.set(null);
+
+        if (secondsRemaining > 0)
         {
-            // Clear any manual override when updating the estimate
-            estimatedRemainingOverride.set(null);
+            Duration duration = Duration.ofSeconds(secondsRemaining);
+            estimatedRemainingDuration.setValue(duration);
 
-            if (secondsRemaining > 0)
-            {
-                Duration duration = Duration.ofSeconds(secondsRemaining);
-                estimatedRemainingDuration.setValue(duration);
-
-                // Set the target expiry timestamp so tickDownRemainingTime uses real time
-                countdownExpiry = Instant.now().plus(duration);
-            }
-            else
-            {
-                estimatedRemainingDuration.setValue(Duration.ZERO);
-                countdownExpiry = null;
-            }
-        });
+            // Set the target expiry timestamp so tickTimer uses real time
+            countdownExpiry = Instant.now().plus(duration);
+        }
+        else
+        {
+            estimatedRemainingDuration.setValue(Duration.ZERO);
+            countdownExpiry = null;
+        }
     }
 
     private void clickStopwatches(double progress, double maximum)
@@ -312,22 +308,6 @@ public class ProgressBarsController
         updateTimeEstimationLabel(estimatedRemaining);
     }
 
-
-    private void updateElapsedTime()
-    {
-        long totalElapsedTime = overallStopwatch.getElapsedTime();
-        long localElapsedTime = localStopwatch.getElapsedTime();
-
-        String totalTimeTxt = nanosecToFormatTime(totalElapsedTime, true);
-        String localTimeTxt = nanosecToFormatTime(localElapsedTime, true);
-
-        if (isProcessing())
-        {
-            Platform.runLater(() -> totalElapsedTimeLabel.setText(String.format("%s Lapsed", totalTimeTxt)));
-            Platform.runLater(() -> localElapsedTimeLabel.setText(String.format("(%s Lapsed)", localTimeTxt)));
-        }
-    }
-
     private static String nanosecToFormatTime(long nanoTime, boolean useSeconds)
     {
         long hours = TimeUnit.NANOSECONDS.toHours(nanoTime);
@@ -347,6 +327,12 @@ public class ProgressBarsController
     {
         Platform.runLater(() ->
         {
+            // Stop the periodic timer first
+            if (timer != null)
+            {
+                timer.stop();
+            }
+
             overallStopwatch.stop();
             localStopwatch.stop();
 
@@ -684,7 +670,7 @@ public class ProgressBarsController
                 ButtonType ok = new ButtonType("OK", ButtonData.OK_DONE);
                 //ButtonType stopProcess = new ButtonType("Start New Process", ButtonBar.ButtonData.YES);
                 Alert alert = new Alert(AlertType.NONE,
-                    String.format("Cannot run multiple tasks at the same time.\nEither wait for the current task to complete or cancel it.")
+                    "Cannot run multiple tasks at the same time.\nEither wait for the current task to complete or cancel it."
                     /*+ "Press OK to finish the current process."*/, ok/*, stopProcess*/);
                 alert.setHeaderText("Conflicting Tasks");
 
