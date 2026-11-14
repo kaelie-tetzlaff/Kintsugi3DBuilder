@@ -112,6 +112,11 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
             this.lightIndex = lightIndex;
         }
 
+        boolean isValid()
+        {
+            return transform != null;
+        }
+
         @Override
         public boolean equals(Object obj)
         {
@@ -621,7 +626,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
                 case "camera":
                     if (camera != null)
                     {
-                        if (camera.transform != null)
+                        if (camera.isValid())
                         {
                             // Only add camera if it has a valid transform
                             cameraSet.add(camera);
