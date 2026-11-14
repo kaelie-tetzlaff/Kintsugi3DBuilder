@@ -84,7 +84,7 @@ public class JavaFXApplication extends Application
 
     public static void setArgs(String[] args)
     {
-        arguments = args;
+        arguments = args.clone();
     }
 
     public static boolean isInitialized()
@@ -162,6 +162,7 @@ public class JavaFXApplication extends Application
         }
     }
 
+    @SuppressWarnings("StaticCollection")
     private static final Collection<Consumer<Stage>> START_LISTENERS = new ArrayList<>(1);
 
     public static void addStartListener(Consumer<Stage> startListener)
@@ -174,7 +175,10 @@ public class JavaFXApplication extends Application
     {
         //noinspection AssignmentToStaticFieldFromInstanceMethod
         state = JavaFXState.create();
+
+        //noinspection AssignmentToStaticFieldFromInstanceMethod
         initialized = true;
+
         // Inject dependency for global state.
         MultithreadState multithreadState = MultithreadState.getInstance();
         GlobalBootstrap.initialize(multithreadState, multithreadState.getLoadOptionsModel());
@@ -232,7 +236,10 @@ public class JavaFXApplication extends Application
 
         //load Controllers
         RootSceneController sceneController = sceneFXMLLoader.getController();
+
+        //noinspection AssignmentToStaticFieldFromInstanceMethod
         mainWindowController = mainWindowFXMLLoader.getController();
+
         WelcomeWindowController welcomeWindowController = welcomeWindowFXMLLoader.getController();
         ProgressBarsController progressBarsController = progressBarsFXMLLoader.getController();
 
@@ -322,7 +329,7 @@ public class JavaFXApplication extends Application
             () -> getHostServices().showDocument("https://kaelie-tetzlaff.github.io/Kintsugi3DBuilder/Kintsugi3DDocumentation.pdf"));
 
         // Register JavaFX recent projects helper with the backend recent projects utility class.
-        RecentProjects.addRecentProjectsChangedListener(() -> Platform.runLater(RecentProjectsHelper::updateAllControlStructures));
+        RecentProjects.getInstance().addRecentProjectsChangedListener(() -> Platform.runLater(RecentProjectsHelper::updateAllControlStructures));
 
         Accelerators.initForScene(welcomeStage.getScene());
         Accelerators.initForScene(progressBarsStage.getScene());
@@ -439,7 +446,11 @@ public class JavaFXApplication extends Application
         }
     }
 
-    public static void launchWrapper(String args)
+    /**
+     * Allows launching the application from another class (launch itself fails when called from another class)
+     * @param args
+     */
+    public static void launchExternal(String args)
     {
         launch(args);
     }

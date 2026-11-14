@@ -16,19 +16,19 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import java.util.*;
+import java.util.Objects;
 
-public class MetashapeModel
+public final class MetashapeModel
 {
     private static final Logger LOG = LoggerFactory.getLogger(MetashapeModel.class);
     private final MetashapeChunk chunk;
-    private final Optional<Integer> id;
+    private final Integer id;
     private final String label;
     private final String path;
 
     private final LoadPreferences loadPreferences = new LoadPreferences();
 
-    private MetashapeModel(MetashapeChunk chunk, Optional<Integer> id, String label, String path)
+    private MetashapeModel(MetashapeChunk chunk, Integer id, String label, String path)
     {
         this.id = id;
         this.label = label;
@@ -38,11 +38,11 @@ public class MetashapeModel
 
     public static MetashapeModel parseFromElement(MetashapeChunk chunk, Element elem)
     {
-        Optional<Integer> modelID = Optional.empty();
+        Integer modelID = null;
         String tempLabel = null;
         try
         {
-            modelID = Optional.of(Integer.parseInt(elem.getAttribute("id")));
+            modelID = Integer.parseInt(elem.getAttribute("id"));
         }
         catch (NumberFormatException nfe)
         {
@@ -63,8 +63,11 @@ public class MetashapeModel
         return new MetashapeModel(chunk, modelID, tempLabel, path);
     }
 
-    private static String findModelPath(MetashapeChunk chunk, Optional<Integer> modelID)
+    private static String findModelPath(MetashapeChunk chunk, Integer modelID)
     {
+        // TODO Figure out why NullPointException would be thrown, change to explicit null check,
+        //  and remove inspection suppression.
+        //noinspection ProhibitedExceptionCaught
         try
         {
             NodeList elems = ((Element) chunk.getFrameXML()
@@ -83,7 +86,7 @@ public class MetashapeModel
             {
                 Element element = (Element) elems.item(i);
 
-                if (Objects.equals(element.getAttribute("id"), String.valueOf(modelID.get())))
+                if (Objects.equals(element.getAttribute("id"), String.valueOf(modelID)))
                 {
                     return element.getAttribute("path");
                 }
@@ -102,7 +105,11 @@ public class MetashapeModel
         return loadPreferences;
     }
 
-    public Optional<Integer> getId()
+    /**
+     * May be null.
+     * @return
+     */
+    public Integer getId()
     {
         return id;
     }
@@ -125,7 +132,6 @@ public class MetashapeModel
     @Override
     public boolean equals(Object obj)
     {
-
         if (!(obj instanceof MetashapeModel))
         {
             return false;
@@ -136,5 +142,11 @@ public class MetashapeModel
         return this.id.equals(other.id) &&
             this.label.equals(other.label) &&
             this.path.equals(other.path);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id, label, path);
     }
 }

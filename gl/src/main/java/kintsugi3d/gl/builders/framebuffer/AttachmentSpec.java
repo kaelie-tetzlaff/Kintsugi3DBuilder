@@ -11,12 +11,16 @@
 
 package kintsugi3d.gl.builders.framebuffer;
 
-public abstract class AttachmentSpec
+public class AttachmentSpec
 {
     private int multisamples = 1;
     private boolean fixedMultisampleLocations = true;
     private boolean mipmapsEnabled = false;
     private boolean linearFilteringEnabled = false;
+
+    protected AttachmentSpec()
+    {
+    }
 
     public int getMultisamples()
     {

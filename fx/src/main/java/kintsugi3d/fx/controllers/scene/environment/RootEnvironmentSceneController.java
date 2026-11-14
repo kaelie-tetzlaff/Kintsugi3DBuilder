@@ -52,7 +52,7 @@ public class RootEnvironmentSceneController
         this.projectModel = injectedProjectModel;
 
         environmentListView.setItems(projectModel.getEnvironmentList());
-        environmentListView.getSelectionModel().selectedItemProperty().addListener(settingsController.changeListener);
+        environmentListView.getSelectionModel().selectedItemProperty().addListener(settingsController.getChangeListener());
 
         settingsController.setEnvironmentMapModel(environmentMapModel);
 
@@ -110,7 +110,7 @@ public class RootEnvironmentSceneController
     private void saveEnvButton()
     {
         //TODO
-        LOG.debug("TODO: saved " + environmentListView.getSelectionModel().getSelectedItem() + " to the library.");
+        LOG.debug("TODO: saved {} to the library.", environmentListView.getSelectionModel().getSelectedItem());
     }
 
     @FXML
@@ -216,7 +216,7 @@ public class RootEnvironmentSceneController
         if (!Objects.equals(selectedEnvironment, projectModel.getNoEnvironment()))
         {
             Dialog<ButtonType> confirmation = new Alert(AlertType.CONFIRMATION, "This action cannot be reversed.");
-            confirmation.setHeaderText("Are you sure you want to delete the following environment: " + selectedEnvironment.getName() + '?');
+            confirmation.setHeaderText(String.format("Are you sure you want to delete the following environment: %s?", selectedEnvironment.getName()));
             confirmation.setTitle("Delete?");
 
             confirmation.showAndWait()

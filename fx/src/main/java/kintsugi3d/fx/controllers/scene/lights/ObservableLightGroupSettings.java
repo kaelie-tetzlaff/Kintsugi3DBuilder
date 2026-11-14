@@ -35,7 +35,7 @@ public class ObservableLightGroupSettings extends SerializableLightGroupSettings
 
     public ObservableLightGroupSettings(String name)
     {
-        this.setName(name);
+        this.name.set(name);
     }
 
     @Override
@@ -96,6 +96,7 @@ public class ObservableLightGroupSettings extends SerializableLightGroupSettings
         return lightList.get();
     }
 
+    @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     public ListProperty<ObservableLightSettings> lightListProperty()
     {
         return lightList;

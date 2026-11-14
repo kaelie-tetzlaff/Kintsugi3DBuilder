@@ -23,7 +23,7 @@ import java.util.Collection;
 public interface GeneralSettingsModel extends ReadonlyGeneralSettingsModel
 {
     <T> void set(String name, T value);
-    void copyFrom(ReadonlyGeneralSettingsModel other);
+    void copyAllFrom(ReadonlyGeneralSettingsModel other);
     void createSetting(String name, Class<?> type, Object initialValue, boolean serialize);
     default void createBooleanSetting(String name, boolean initialValue)
     {

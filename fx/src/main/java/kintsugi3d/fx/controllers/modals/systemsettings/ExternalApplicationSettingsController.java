@@ -16,6 +16,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Window;
 import kintsugi3d.fx.core.JavaFXState;
 
@@ -43,15 +44,15 @@ public class ExternalApplicationSettingsController implements SystemSettingsCont
 
         // Add file selection options
         fileChooser.getExtensionFilters().addAll(
-            new FileChooser.ExtensionFilter("Executable", "*.exe"),
-            new FileChooser.ExtensionFilter("All Files", "*.*")
+            new ExtensionFilter("Executable", "*.exe"),
+            new ExtensionFilter("All Files", "*.*")
         );
 
         // Open the file window and assign the path if valid
-        file = fileChooser.showOpenDialog(((Node) e.getSource()).getScene().getWindow());
-        if ((file != null) && file.canExecute())
+        File newFile = fileChooser.showOpenDialog(((Node) e.getSource()).getScene().getWindow());
+        if ((newFile != null) && newFile.canExecute())
         {
-            label.setText(file.getAbsolutePath());
+            label.setText(newFile.getAbsolutePath());
         }
     }
 

@@ -85,7 +85,8 @@ public class SettingsEnvironmentSceneController implements Initializable
 
     private ObservableEnvironmentModel environmentMapModel;
 
-    final ChangeListener<ObservableEnvironmentSettings> changeListener = (observable, oldValue, newValue) ->
+    private final ChangeListener<ObservableEnvironmentSettings> changeListener =
+        (observable, oldValue, newValue) ->
     {
         if (oldValue != null)
         {
@@ -255,7 +256,7 @@ public class SettingsEnvironmentSceneController implements Initializable
     @FXML
     private void pickEnvImageFile()
     {
-        envImageFileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+        envImageFileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         File newFile = envImageFileChooser.showOpenDialog(root.getScene().getWindow());
         if (newFile != null)
         {
@@ -264,14 +265,14 @@ public class SettingsEnvironmentSceneController implements Initializable
             envImageFileChooser.initialDirectoryProperty().set(newFile.getParentFile());
             envImageFileChooser.initialFileNameProperty().set(newFile.getName());
 
-            RecentProjects.setMostRecentDirectory(newFile.getParentFile());
+            RecentProjects.getInstance().setMostRecentDirectory(newFile.getParentFile());
         }
     }
 
     @FXML
     private void pickBPImageFile()
     {
-        bpImageFileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+        bpImageFileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         File newFile = bpImageFileChooser.showOpenDialog(root.getScene().getWindow());
         if (newFile != null)
         {
@@ -280,7 +281,7 @@ public class SettingsEnvironmentSceneController implements Initializable
             bpImageFileChooser.initialDirectoryProperty().set(newFile.getParentFile());
             bpImageFileChooser.initialFileNameProperty().set(newFile.getName());
 
-            RecentProjects.setMostRecentDirectory(newFile.getParentFile());
+            RecentProjects.getInstance().setMostRecentDirectory(newFile.getParentFile());
         }
     }
 
@@ -300,6 +301,11 @@ public class SettingsEnvironmentSceneController implements Initializable
     public void setEnvironmentMapModel(ObservableEnvironmentModel environmentMapModel)
     {
         this.environmentMapModel = environmentMapModel;
+    }
+
+    public ChangeListener<ObservableEnvironmentSettings> getChangeListener()
+    {
+        return changeListener;
     }
 }
 

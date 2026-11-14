@@ -274,8 +274,8 @@ public final class SpecularFitRequest implements ProgressMonitoredImageBasedGrap
                     try (PrintStream rmseOut = new PrintStream(new File(outputDirectory, "rmse.txt"), StandardCharsets.UTF_8))
                     // Text file containing error information
                     {
-                        rmseOut.printf("basis, %s%n", reconstructionRMSE);
-                        rmseOut.printf("reflectivity, %s%n", fittedRMSE);
+                        rmseOut.printf("basis, %s\n", reconstructionRMSE);
+                        rmseOut.printf("reflectivity, %s\n", fittedRMSE);
                     }
                 }
             }

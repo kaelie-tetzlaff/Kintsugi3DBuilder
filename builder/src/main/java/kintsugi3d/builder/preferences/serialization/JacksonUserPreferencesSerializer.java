@@ -21,13 +21,14 @@ import kintsugi3d.builder.util.ApplicationFolders;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class JacksonUserPreferencesSerializer implements UserPreferencesSerializer
 {
     private static final File DIRECTORY = ApplicationFolders.getUserAppDirectory().toFile();
     private static final String FILE_NAME = "preferences.json";
-    private final List<Exception> startupExceptions = new ArrayList<>();
+    private final List<Exception> startupExceptions = new ArrayList<>(1);
 
     @Override
     public void writeUserPreferences(ReadOnlyUserPreferencesModel preferencesModel) throws IOException
@@ -71,7 +72,7 @@ public class JacksonUserPreferencesSerializer implements UserPreferencesSerializ
     @Override
     public List<Exception> getStartupExceptions()
     {
-        return startupExceptions;
+        return Collections.unmodifiableList(startupExceptions);
     }
 
     public static File getPreferencesFile()

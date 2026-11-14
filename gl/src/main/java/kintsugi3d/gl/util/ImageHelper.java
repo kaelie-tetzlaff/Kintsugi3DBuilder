@@ -182,6 +182,7 @@ public final class ImageHelper
 
     public ImageHelper scaledBy(double factorX, double factorY)
     {
+        //noinspection FloatingPointEquality
         if (factorX == 1.0 && factorY == 1.0)
         {
             return this;
@@ -192,7 +193,7 @@ public final class ImageHelper
         }
     }
 
-    public ImageHelper scaledBy(double factor)
+    public ImageHelper scaledBy(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") double factor)
     {
         return scaledBy(factor, factor);
     }

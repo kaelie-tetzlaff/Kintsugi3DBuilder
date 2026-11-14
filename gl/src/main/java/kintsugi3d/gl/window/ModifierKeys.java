@@ -16,32 +16,32 @@ public interface ModifierKeys
     ModifierKeys NONE = new ModifierKeysBase()
     {
         @Override
-        public boolean getShiftModifier()
+        public boolean isShiftModifierActive()
         {
             return false;
         }
 
         @Override
-        public boolean getControlModifier()
+        public boolean isControlModifierActive()
         {
             return false;
         }
 
         @Override
-        public boolean getAltModifier()
+        public boolean isAltModifierActive()
         {
             return false;
         }
 
         @Override
-        public boolean getSuperModifier()
+        public boolean isSuperModifierActive()
         {
             return false;
         }
     };
 
-    boolean getShiftModifier();
-    boolean getControlModifier();
-    boolean getAltModifier();
-    boolean getSuperModifier();
+    boolean isShiftModifierActive();
+    boolean isControlModifierActive();
+    boolean isAltModifierActive();
+    boolean isSuperModifierActive();
 }

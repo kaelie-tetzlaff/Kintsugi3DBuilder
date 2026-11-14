@@ -13,7 +13,7 @@ package kintsugi3d.optimization;
 
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
-import kintsugi3d.util.ColorArrayList;
+import kintsugi3d.gl.util.ColorArrayList;
 import org.ejml.simple.SimpleMatrix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,7 +98,6 @@ public class KMeansClustering
 
             double x = random.nextDouble() * cdf[colorMap.size() - 1];
 
-            //noinspection FloatingPointEquality
             if (x >= cdf[colorMap.size() - 1]) // It's possible but extremely unlikely that floating-point rounding would cause this to happen.
             {
                 // In that extremely rare case, just set x to 0.0.

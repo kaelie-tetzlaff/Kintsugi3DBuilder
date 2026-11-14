@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Kintsugi3DBuilder" pattern="!src[sjm-ply]:*..*&amp;&amp;!lib:*..*||src[app]:*..*||src[builder]:*..*||src[fx]:*..*||src[gl]:*..*||src[Kintsugi3DBuilder]:*..*||src[optimization]:*..*||src[render-export]:*..*||src[util]:*..*||test:*..*" />
+</component>

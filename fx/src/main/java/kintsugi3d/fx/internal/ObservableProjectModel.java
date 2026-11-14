@@ -348,7 +348,7 @@ public class ObservableProjectModel extends ProjectModelBase<
             Platform.runLater(() ->
             {
                 setProjectLoaded(true);
-                setModelSize(event.modelSize);
+                setModelSize(event.getModelSize());
             }));
 
         ioModel.projectProcessedListeners().register(event ->

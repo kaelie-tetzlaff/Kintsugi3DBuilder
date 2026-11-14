@@ -49,7 +49,7 @@ public class RootObjectSceneController
         this.projectModel = injectedProjectModel;
 
         objectPoseListView.setItems(projectModel.getObjectPoseList());
-        objectPoseListView.getSelectionModel().selectedItemProperty().addListener(settingsController.changeListener);
+        objectPoseListView.getSelectionModel().selectedItemProperty().addListener(settingsController.getChangeListener());
 
         ObservableObjectPoseSettings defaultPose = new ObservableObjectPoseSettings();
 
@@ -87,7 +87,7 @@ public class RootObjectSceneController
     private void savePoseButton()
     {
         //TODO
-        LOG.debug("TODO: saved " + getObjectPoseSelectionModel().getSelectedItem() + " to the library.");
+        LOG.debug("TODO: saved {} to the library.", getObjectPoseSelectionModel().getSelectedItem());
     }
 
     @FXML
@@ -191,7 +191,7 @@ public class RootObjectSceneController
     void keyframePoseButton()
     {
         //TODO
-        LOG.debug("TODO: keyframe added for " + getObjectPoseSelectionModel().getSelectedItem());
+        LOG.debug("TODO: keyframe added for {}", getObjectPoseSelectionModel().getSelectedItem());
     }
 
     @FXML
@@ -201,8 +201,8 @@ public class RootObjectSceneController
         if (selectedIndex != 0)
         {
             Dialog<ButtonType> confirmation = new Alert(AlertType.CONFIRMATION, "This action cannot be reversed.");
-            confirmation.setHeaderText("Are you sure you want to delete the following object pose: "
-                + projectModel.getObjectPoseList().get(selectedIndex).getName() + '?');
+            confirmation.setHeaderText(String.format("Are you sure you want to delete the following object pose: %s?",
+                projectModel.getObjectPoseList().get(selectedIndex).getName()));
             confirmation.setTitle("Delete?");
 
             confirmation.showAndWait()

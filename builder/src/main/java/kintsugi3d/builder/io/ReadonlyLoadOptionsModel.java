@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import kintsugi3d.gl.builders.ColorTextureBuilder;
 import kintsugi3d.gl.core.ColorFormat;
 import kintsugi3d.gl.core.CompressionFormat;
-import kintsugi3d.gl.material.TextureLoadOptions;
 
 /**
  * For serialization purposes, this class should always return primitives

@@ -38,7 +38,7 @@ public class IntVector4 implements Iterable<Integer>
         this.w = w;
     }
 
-    public IntVector4(int value)
+    public IntVector4(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") int value)
     {
         this(value, value, value, value);
     }
@@ -161,12 +161,7 @@ public class IntVector4 implements Iterable<Integer>
     @Override
     public String toString()
     {
-        return "IntVector4{" +
-            "x=" + x +
-            ", y=" + y +
-            ", z=" + z +
-            ", w=" + w +
-            '}';
+        return String.format("IntVector4{x=%d, y=%d, z=%d, w=%d}", x, y, z, w);
     }
 
     @Override

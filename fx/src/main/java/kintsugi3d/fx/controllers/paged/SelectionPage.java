@@ -11,7 +11,7 @@
 
 package kintsugi3d.fx.controllers.paged;
 
-import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 public interface SelectionPage<T> extends Page<T, T>
@@ -19,7 +19,7 @@ public interface SelectionPage<T> extends Page<T, T>
     String getPrompt();
     void setPrompt(String prompt);
 
-    Set<Map.Entry<String, Page<? super T, ?>>> getChoices();
+    Set<Entry<String, Page<? super T, ?>>> getChoices();
     Page<? super T, ?> getChoicePage(String choiceLabel);
     void addChoice(String choiceLabel, Page<? super T, ?> page);
 

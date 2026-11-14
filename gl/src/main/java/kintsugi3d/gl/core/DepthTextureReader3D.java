@@ -9,51 +9,41 @@
  * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
-package kintsugi3d.gl.glfw;
+package kintsugi3d.gl.core;
 
-import kintsugi3d.gl.window.ModifierKeysBase;
+import java.nio.ShortBuffer;
 
-import static org.lwjgl.glfw.GLFW.*;
-
-public class ModifierKeys extends ModifierKeysBase
+class DepthTextureReader3D<ContextType extends Context<ContextType>> extends DepthTextureReaderBase
 {
-    private final int glfwCode;
+    private final Texture3D<ContextType> texture;
+    private final int layerIndex;
 
-    ModifierKeys(int glfwCode)
+    DepthTextureReader3D(Texture3D<ContextType> texture, int layerIndex)
     {
-        this.glfwCode = glfwCode;
-    }
-
-    ModifierKeys(boolean shiftMod, boolean controlMod, boolean altMod, boolean superMod)
-    {
-        glfwCode =
-            (shiftMod ? GLFW_MOD_SHIFT : 0)     |
-            (controlMod ? GLFW_MOD_CONTROL : 0) |
-            (altMod ? GLFW_MOD_ALT : 0)         |
-            (superMod ? GLFW_MOD_SUPER : 0);
+        this.texture = texture;
+        this.layerIndex = layerIndex;
     }
 
     @Override
-    public boolean getShiftModifier()
+    public int getWidth()
     {
-        return (glfwCode & GLFW_MOD_SHIFT) != 0;
+        return texture.getWidth();
     }
 
     @Override
-    public boolean getControlModifier()
+    public int getHeight()
     {
-        return (glfwCode & GLFW_MOD_CONTROL) != 0;
+        return texture.getHeight();
     }
 
     @Override
-    public boolean getAltModifier()
+    public void read(ShortBuffer destination, int x, int y, int width, int height)
     {
-        return (glfwCode & GLFW_MOD_ALT) != 0;
-    }
-
-    @Override
-    public boolean getSuperModifier()
-    {
-        return (glfwCode & GLFW_MOD_SUPER) != 0;
+        try (FramebufferObject<ContextType> fbo = texture.getContext()
+            .buildFramebufferObject(this.getWidth(), this.getHeight()).createFramebufferObject())
+        {
+            fbo.setDepthAttachment(texture.getLayerAsFramebufferAttachment(layerIndex));
+            fbo.getTextureReaderForDepthAttachment().read(destination, x, y, width, height);
+        }
     }
 }

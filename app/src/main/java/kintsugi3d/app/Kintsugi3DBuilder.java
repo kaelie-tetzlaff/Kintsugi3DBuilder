@@ -69,7 +69,7 @@ public final class Kintsugi3DBuilder
         File logDirectory = ApplicationFolders.getLogFileDirectory().toAbsolutePath().toFile();
         File stderrFileName = new File(logDirectory,
             String.format("Kintsugi3DBuilder-%s-standard-error.log",
-                DateTimeFormatter.ofPattern("yyyy-MM-dd-HHmmss").format(LocalDateTime.now())));
+                DateTimeFormatter.ofPattern("yyyy-MM-dd-HHmmss", Locale.ROOT).format(LocalDateTime.now())));
 
         logDirectory.mkdirs();
 
@@ -98,9 +98,10 @@ public final class Kintsugi3DBuilder
                 JavaFXApplication.addStartListener(stage -> RenderingBootstrap.startRenderThread(stage, args));
 
                 log.info("Starting JavaFX UI");
-                JavaFXApplication.launchWrapper("");
+                JavaFXApplication.launchExternal("");
             }
 
+            //noinspection CallToSystemExit
             System.exit(0);
         }
     }

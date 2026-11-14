@@ -19,6 +19,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import kintsugi3d.builder.state.settings.GeneralSettingsModelBase;
+import kintsugi3d.builder.state.settings.Setting;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,11 +29,11 @@ import java.util.NoSuchElementException;
 
 public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase implements ReadonlyObservableGeneralSettingsModel
 {
-    private static class TypedProperty implements Property<Object>
+    private static final class TypedProperty implements Property<Object>
     {
-        protected final ObjectProperty<Object> base;
-        protected final Class<?> type;
-        protected final boolean serialize;
+        private final ObjectProperty<Object> base;
+        private final Class<?> type;
+        private final boolean serialize;
 
         private TypedProperty(Object initialValue, Class<?> type, boolean serialize)
         {
@@ -211,24 +212,7 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
     @Override
     public Iterator<Setting> iterator()
     {
-        return new Iterator<>()
-        {
-            private final Iterator<Entry<String, TypedProperty>> innerIterator = settingsMap.entrySet().iterator();
-
-            @Override
-            public boolean hasNext()
-            {
-                return innerIterator.hasNext();
-            }
-
-            @Override
-            public Setting next()
-            {
-                Entry<String, TypedProperty> nextEntry = innerIterator.next();
-
-                return new ObservableSetting(nextEntry);
-            }
-        };
+        return new SettingsIterator(settingsMap.entrySet().iterator());
     }
 
     @Override
@@ -266,21 +250,45 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
     }
 
     @Override
-    public void createSetting(String name, Class<?> settingType, Object initialValue, boolean serialize)
+    public void createSetting(String name, Class<?> type, Object initialValue, boolean serialize)
     {
         if(settingsMap.containsKey(name))
         {
             // Set value to new initialValue if it already exists.
             // Note: this will not change whether serialize was set.
             TypedProperty entry = settingsMap.get(name);
-            if (settingType.isAssignableFrom(entry.getType()))
+            if (type.isAssignableFrom(entry.getType()))
             {
                 setUnchecked(name, initialValue);
             }
         }
         else
         {
-            settingsMap.put(name, new TypedProperty(initialValue, settingType, serialize));
+            settingsMap.put(name, new TypedProperty(initialValue, type, serialize));
+        }
+    }
+
+    private static class SettingsIterator implements Iterator<Setting>
+    {
+        private final Iterator<Entry<String, TypedProperty>> innerIterator;
+
+        SettingsIterator(Iterator<Entry<String, TypedProperty>> innerIterator)
+        {
+            this.innerIterator = innerIterator;
+        }
+
+        @Override
+        public boolean hasNext()
+        {
+            return innerIterator.hasNext();
+        }
+
+        @Override
+        public Setting next()
+        {
+            Entry<String, TypedProperty> nextEntry = innerIterator.next();
+
+            return new ObservableSetting(nextEntry);
         }
     }
 }

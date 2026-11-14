@@ -17,13 +17,22 @@ import java.io.File;
 
 public final class OrbitAnimationRequest extends AnimationRequest
 {
-    protected static class Builder extends BuilderBase
+    static final class Builder extends BuilderBase
     {
+        private Builder()
+        {
+        }
+
         @Override
         public OrbitAnimationRequest create()
         {
             return new OrbitAnimationRequest(getWidth(), getHeight(), getFrameCount(), getExportPath());
         }
+    }
+
+    static Builder getBuilder()
+    {
+        return new Builder();
     }
 
     private OrbitAnimationRequest(int width, int height, int frameCount, File exportPath)

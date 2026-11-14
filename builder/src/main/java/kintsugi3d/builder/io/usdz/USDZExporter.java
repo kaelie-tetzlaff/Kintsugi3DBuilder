@@ -21,10 +21,7 @@ import kintsugi3d.builder.util.OperatingSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -83,7 +80,7 @@ public abstract class USDZExporter extends MaterialExporter
                 break;
 
             default:
-                throw new RuntimeException(String.format("OS environment not supported: %s", OperatingSystem.getCurrentOS()));
+                throw new UnsupportedOperationException(String.format("OS environment not supported: %s", OperatingSystem.getCurrentOS()));
         }
 
         // Attempt to realize path for the exporter application
@@ -91,16 +88,19 @@ public abstract class USDZExporter extends MaterialExporter
         {
             Path path = stream.iterator().next();
 
-            if (!Files.exists(path))
+            if (Files.exists(path))
             {
-                throw new IOException(String.format("Could not find USDZ exporter binary: %s", path));
+                command.add(path.toString());
+            }
+            else
+            {
+                throw new UncheckedIOException(new IOException(String.format("Could not find USDZ exporter binary: %s", path)));
             }
 
-            command.add(path.toString());
         }
         catch (IOException e)
         {
-            throw new RuntimeException(e.getMessage(), e);
+            throw new UncheckedIOException(e);
         }
 
         command.add("--model");
@@ -108,13 +108,13 @@ public abstract class USDZExporter extends MaterialExporter
         command.add("--format");
         command.add(getTextureFileFormat());
         command.add("--normal");
-        command.add(new File(tempPath, getTextureFilename(StandardTexture.NORMAL_MAP.details.name, getTextureFileFormat())).getPath());
+        command.add(new File(tempPath, getTextureFilename(StandardTexture.NORMAL_MAP.getDetails().name, getTextureFileFormat())).getPath());
         command.add("--roughness");
-        command.add(new File(tempPath, getTextureFilename(StandardTexture.ROUGHNESS.details.name, getTextureFileFormat())).getPath());
+        command.add(new File(tempPath, getTextureFilename(StandardTexture.ROUGHNESS.getDetails().name, getTextureFileFormat())).getPath());
         // Add inheritance specified commands
         addCommands(command);
 
-        ProcessBuilder pb = new ProcessBuilder(command);
+        @SuppressWarnings("UseOfProcessBuilder") ProcessBuilder pb = new ProcessBuilder(command);
 
         // Change the working directory of the exporter to the output path
         pb.directory(outputPath);
@@ -130,12 +130,12 @@ public abstract class USDZExporter extends MaterialExporter
             // If the exporter didn't exit with a 0, an error occurred
             if (process.waitFor() != 0)
             {
-                throw new RuntimeException("Passed files don't match requirements.");
+                throw new IllegalStateException("Passed files don't match requirements.");
             }
         }
         catch (IOException e)
         {
-            throw new RuntimeException("Couldn't open the USDZ exporter.", e);
+            throw new UncheckedIOException("Couldn't open the USDZ exporter.", e);
         }
         catch (InterruptedException e)
         {

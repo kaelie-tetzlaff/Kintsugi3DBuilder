@@ -342,26 +342,15 @@ public abstract class CacheModelBase implements CacheModel
     @Override
     public void requestCleanUpBothCaches(Map<File, Consumer<File[]>> deleteMethods)
     {
-        new Thread(() ->
-        {
-            try
-            {
-                cleanCacheSubDirs(deleteMethods);
-            }
-            catch (IOException e)
-            {
-                handleCacheCleanupError(e);
-            }
-        }, "Clean Up Cache").start();
+        new Thread(() -> cleanCacheSubDirs(deleteMethods), "Clean Up Cache").start();
     }
 
     /**
      * Cleans up the cache based on user settings, and then refreshes the cache size.
      *
      * @param deleteMethods
-     * @throws IOException
      */
-    private void cleanCacheSubDirs(Map<File, Consumer<File[]>> deleteMethods) throws IOException
+    private void cleanCacheSubDirs(Map<File, Consumer<File[]>> deleteMethods)
     {
         if (cacheCleanupInProgress.compareAndSet(false, true))
         {
@@ -584,7 +573,7 @@ public abstract class CacheModelBase implements CacheModel
 
     private static List<UUID> getRecentUUIDs(int numProjectsToKeep)
     {
-        List<String> recentProjects = RecentProjects.getRecentProjectFilenames().stream().limit(numProjectsToKeep).collect(Collectors.toList());
+        List<String> recentProjects = RecentProjects.getInstance().getRecentProjectFilenames().stream().limit(numProjectsToKeep).collect(Collectors.toList());
         // Load view sets of recent projects to get their UUID.
         List<UUID> recentUUIDs = new ArrayList<>(recentProjects.size());
         for (String recentProject : recentProjects)

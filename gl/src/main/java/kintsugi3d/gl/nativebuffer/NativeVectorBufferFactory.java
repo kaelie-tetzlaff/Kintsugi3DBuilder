@@ -109,13 +109,13 @@ public final class NativeVectorBufferFactory
      */
     public ReadonlyNativeVectorBuffer createFromShortArray(boolean unsigned, int dimensions, int count, short... shortArray)
     {
-        if (!unsigned)
+        if (unsigned)
         {
-            return new NativeShortVectorBuffer(dimensions, count, shortArray);
+            return new NativeUnsignedShortVectorBuffer(dimensions, count, shortArray);
         }
         else
         {
-            return new NativeUnsignedShortVectorBuffer(dimensions, count, shortArray);
+            return new NativeShortVectorBuffer(dimensions, count, shortArray);
         }
     }
 
@@ -129,13 +129,13 @@ public final class NativeVectorBufferFactory
      */
     public ReadonlyNativeVectorBuffer createFromIntArray(boolean unsigned, int dimensions, int count, int... intArray)
     {
-        if (!unsigned)
+        if (unsigned)
         {
-            return new NativeIntVectorBuffer(dimensions, count, intArray);
+            return new NativeUnsignedIntVectorBuffer(dimensions, count, intArray);
         }
         else
         {
-            return new NativeUnsignedIntVectorBuffer(dimensions, count, intArray);
+            return new NativeIntVectorBuffer(dimensions, count, intArray);
         }
     }
 

@@ -48,7 +48,7 @@ public class Vector2 implements Iterable<Float>
      * Construct a vector in two dimensions with the given values.
      * @param value Value of both dimensions.
      */
-    public Vector2(float value)
+    public Vector2(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") float value)
     {
         this(value, value);
     }
@@ -253,10 +253,7 @@ public class Vector2 implements Iterable<Float>
     @Override
     public String toString()
     {
-        return "Vector2{" +
-                "x=" + x +
-                ", y=" + y +
-                '}';
+        return String.format("Vector2{x=%s, y=%s}", x, y);
     }
 
     @Override

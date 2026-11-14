@@ -18,7 +18,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 class OpenGLDefaultFramebuffer extends OpenGLFramebuffer implements DoubleFramebuffer<OpenGLContext>
 {
-    private final ContentsImpl contentsImpl = new ContentsImpl();
+    private DefaultFramebufferContents contents;
 
     OpenGLDefaultFramebuffer(OpenGLContext context)
     {
@@ -28,7 +28,7 @@ class OpenGLDefaultFramebuffer extends OpenGLFramebuffer implements DoubleFrameb
     @Override
     public FramebufferSize getSize()
     {
-        return this.context.getDefaultFramebufferSize();
+        return this.getContext().getDefaultFramebufferSize();
     }
 
     @Override
@@ -40,17 +40,28 @@ class OpenGLDefaultFramebuffer extends OpenGLFramebuffer implements DoubleFrameb
     @Override
     public void swapBuffers()
     {
-        this.context.swapDefaultFramebuffer();
+        this.getContext().swapDefaultFramebuffer();
     }
 
     @Override
-    protected ContentsImpl getContents()
+    protected DefaultFramebufferContents getContents()
     {
-        return contentsImpl;
+        // Lazy initialization
+        if (contents == null)
+        {
+             contents = new DefaultFramebufferContents(this);
+        }
+
+        return contents;
     }
 
-    private class ContentsImpl extends ContentsBase
+    protected static class DefaultFramebufferContents extends Contents
     {
+        DefaultFramebufferContents(OpenGLFramebuffer framebuffer)
+        {
+            super(framebuffer);
+        }
+
         @Override
         int getId()
         {

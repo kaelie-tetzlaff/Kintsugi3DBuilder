@@ -21,8 +21,8 @@ class NativeFloatVectorBuffer implements NativeVectorBuffer
 {
     private final ByteBuffer buffer;
 
-    final int dimensions;
-    final int count;
+    private final int dimensions;
+    private final int count;
 
     NativeFloatVectorBuffer(int dimensions, int count)
     {
@@ -65,14 +65,14 @@ class NativeFloatVectorBuffer implements NativeVectorBuffer
         this.buffer = buffer;
     }
 
-    NativeFloatVectorBuffer(int dimensions, int count, byte... buffer)
+    NativeFloatVectorBuffer(int dimensions, int count, byte[] buffer)
     {
         this(dimensions, count);
         this.buffer.put(buffer);
         this.buffer.flip();
     }
 
-    NativeFloatVectorBuffer(int dimensions, int count, float... buffer)
+    NativeFloatVectorBuffer(int dimensions, int count, float[] buffer)
     {
         this(dimensions, count);
         this.buffer.asFloatBuffer().put(buffer);
@@ -112,7 +112,8 @@ class NativeFloatVectorBuffer implements NativeVectorBuffer
         return this.buffer.asFloatBuffer().get(index * this.dimensions + dimension);
     }
 
-    public void set(int index, int dimension, float value)
+    @Override
+    public void set(int index, int dimension, Number value)
     {
         if (index < 0)
         {
@@ -130,13 +131,7 @@ class NativeFloatVectorBuffer implements NativeVectorBuffer
         {
             throw new IndexOutOfBoundsException("Dimension (" + dimension + ") is greater than the dimensions of the vertex list (" + this.dimensions + ").");
         }
-        this.buffer.asFloatBuffer().put(index * this.dimensions + dimension, value);
-    }
-
-    @Override
-    public void set(int index, int dimension, Number value)
-    {
-        this.set(index, dimension, value.floatValue());
+        this.buffer.asFloatBuffer().put(index * this.dimensions + dimension, value.floatValue());
     }
 
     @Override

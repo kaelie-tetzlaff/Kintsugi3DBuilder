@@ -34,7 +34,7 @@ public class ObservableObjectPoseSettings extends SerializableObjectPoseSettings
 
     public ObservableObjectPoseSettings(String name)
     {
-        this.setName(name);
+        this.name.set(name);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ObservableObjectPoseSettings extends SerializableObjectPoseSettings
     {
         if (locked.getValue())
         {
-            return "(L) " + name.getValue();
+            return String.format("(L) %s", name.getValue());
         }
         else
         {
@@ -64,7 +64,7 @@ public class ObservableObjectPoseSettings extends SerializableObjectPoseSettings
 
         copy.setLocked(this.isLocked());
         copy.setScale(this.getScale());
-        copy.setName(this.getName() + " copy");
+        copy.setName(String.format("%s copy", this.getName()));
 
         return copy;
     }

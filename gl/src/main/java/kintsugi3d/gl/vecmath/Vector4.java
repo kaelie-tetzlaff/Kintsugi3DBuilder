@@ -58,7 +58,7 @@ public class Vector4 implements Iterable<Float>
         this.w = w;
     }
 
-    public Vector4 (float value)
+    public Vector4 (@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") float value)
     {
         this(value, value, value, value);
     }
@@ -277,12 +277,7 @@ public class Vector4 implements Iterable<Float>
     @Override
     public String toString()
     {
-        return "Vector4{" +
-            "x=" + x +
-            ", y=" + y +
-            ", z=" + z +
-            ", w=" + w +
-            '}';
+        return String.format("Vector4{x=%s, y=%s, z=%s, w=%s}", x, y, z, w);
     }
 
     @Override

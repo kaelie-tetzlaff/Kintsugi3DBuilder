@@ -32,37 +32,37 @@ import java.util.function.Function;
 public abstract class ColorTextureReaderBase implements ColorTextureReader
 {
     @Override
-    public int[] readARGB(int x, int y, int width, int height)
+    public int[] readARGB(int x, int y, int readWidth, int readHeight)
     {
-        ByteBuffer pixelBuffer = BufferUtils.createByteBuffer(width * height * 4);
+        ByteBuffer pixelBuffer = BufferUtils.createByteBuffer(readWidth * readHeight * 4);
 
-        readARGB(pixelBuffer, x, y, width, height);
+        readARGB(pixelBuffer, x, y, readWidth, readHeight);
 
-        int[] pixelArray = new int[width * height];
+        int[] pixelArray = new int[readWidth * readHeight];
         pixelBuffer.asIntBuffer().get(pixelArray);
         return pixelArray;
     }
 
     @Override
-    public float[] readFloatingPointRGBA(int x, int y, int width, int height)
+    public float[] readFloatingPointRGBA(int x, int y, int readWidth, int readHeight)
     {
-        FloatBuffer pixelBuffer = BufferUtils.createFloatBuffer(width * height * 4);
+        FloatBuffer pixelBuffer = BufferUtils.createFloatBuffer(readWidth * readHeight * 4);
 
-        readFloatingPointRGBA(pixelBuffer, x, y, width, height);
+        readFloatingPointRGBA(pixelBuffer, x, y, readWidth, readHeight);
 
-        float[] pixelArray = new float[width * height * 4];
+        float[] pixelArray = new float[readWidth * readHeight * 4];
         pixelBuffer.get(pixelArray);
         return pixelArray;
     }
 
     @Override
-    public int[] readIntegerRGBA(int x, int y, int width, int height)
+    public int[] readIntegerRGBA(int x, int y, int readWidth, int readHeight)
     {
-        IntBuffer pixelBuffer = BufferUtils.createIntBuffer(width * height * 4);
+        IntBuffer pixelBuffer = BufferUtils.createIntBuffer(readWidth * readHeight * 4);
 
-        readIntegerRGBA(pixelBuffer, x, y, width, height);
+        readIntegerRGBA(pixelBuffer, x, y, readWidth, readHeight);
 
-        int[] pixelArray = new int[width * height * 4];
+        int[] pixelArray = new int[readWidth * readHeight * 4];
         pixelBuffer.get(pixelArray);
         return pixelArray;
     }

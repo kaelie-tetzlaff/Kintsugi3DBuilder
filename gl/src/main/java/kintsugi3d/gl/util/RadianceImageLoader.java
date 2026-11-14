@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
  * http://paulbourke.net/dataformats/pic/
  */
 
+@SuppressWarnings("ALL")
 public class RadianceImageLoader
 {
     private static final Pattern COMMON_RES = Pattern.compile("-Y (\\d+) \\+X (\\d+)");

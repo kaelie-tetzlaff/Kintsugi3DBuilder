@@ -17,7 +17,7 @@ import java.util.function.IntFunction;
 
 public abstract class LightingEnvironmentModelFromSettings<LightType extends DiscreteLightModel> extends LightingEnvironmentModelBase<LightType>
 {
-    public LightingEnvironmentModelFromSettings(int lightCount, IntFunction<LightType> lightInstanceCreator, EnvironmentModel environmentModel)
+    protected LightingEnvironmentModelFromSettings(int lightCount, IntFunction<LightType> lightInstanceCreator, EnvironmentModel environmentModel)
     {
         super(lightCount, lightInstanceCreator, environmentModel);
     }

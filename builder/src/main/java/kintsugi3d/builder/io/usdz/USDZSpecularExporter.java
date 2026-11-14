@@ -34,8 +34,8 @@ public class USDZSpecularExporter extends USDZExporter
     protected void addCommands(List<String> commandList)
     {
         commandList.add("--diffuse");
-        commandList.add(new File(getTempPath(), getTextureFilename(StandardTexture.DIFFUSE_COLOR.details.name, getTextureFileFormat())).getPath());
+        commandList.add(new File(getTempPath(), getTextureFilename(StandardTexture.DIFFUSE_COLOR.getDetails().name, getTextureFileFormat())).getPath());
         commandList.add("--specular");
-        commandList.add(new File(getTempPath(), getTextureFilename(StandardTexture.SPECULAR_COLOR.details.name, getTextureFileFormat())).getPath());
+        commandList.add(new File(getTempPath(), getTextureFilename(StandardTexture.SPECULAR_COLOR.getDetails().name, getTextureFileFormat())).getPath());
     }
 }

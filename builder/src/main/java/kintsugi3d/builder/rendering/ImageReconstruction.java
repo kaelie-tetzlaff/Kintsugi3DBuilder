@@ -21,8 +21,8 @@ import kintsugi3d.gl.builders.framebuffer.FramebufferObjectBuilder;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.gl.vecmath.DoubleVector3;
-import kintsugi3d.util.BufferedImageColorList;
-import kintsugi3d.util.ColorImage;
+import kintsugi3d.gl.util.BufferedImageColorList;
+import kintsugi3d.gl.util.ColorImage;
 import kintsugi3d.util.SRGB;
 import org.lwjgl.BufferUtils;
 

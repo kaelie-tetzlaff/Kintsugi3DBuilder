@@ -12,4 +12,4 @@
   -->
 
 <?import kintsugi3d.fx.gl.FramebufferView?>
-<FramebufferView xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" />
+<FramebufferView xmlns="http://javafx.com/javafx" />

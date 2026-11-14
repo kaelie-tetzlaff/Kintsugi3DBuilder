@@ -25,7 +25,6 @@ import kintsugi3d.gl.geometry.GeometryMode;
 import kintsugi3d.gl.geometry.VertexGeometry;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
-import kintsugi3d.gl.material.TextureLoadOptions;
 import kintsugi3d.gl.nativebuffer.NativeDataType;
 import kintsugi3d.gl.nativebuffer.NativeVectorBuffer;
 import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
@@ -776,7 +775,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
                 {
                     previewImageGenerator.allowUserCancellation();
                     PreviewImages previewImages = previewImageGenerator.forView(view);
-                    if (previewImages.fullResImageExists() && previewImages.hasMissingFiles())
+                    if (previewImages.doesFullResImageExist() && previewImages.hasMissingFiles())
                     {
                         previewImages.tryCreateMissingFiles(context);
                     }
@@ -797,7 +796,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             .forEach(view ->
             {
                 PreviewImages previewImages = previewImageGenerator.forView(view);
-                if (previewImages.fullResImageExists() && previewImages.hasMissingFiles())
+                if (previewImages.doesFullResImageExist() && previewImages.hasMissingFiles())
                 {
                     if (previewImages.needsUndistortion())
                     {
@@ -826,56 +825,47 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         LOG.info("Finished reading all images; waiting for undistortion to finish on other threads");
     }
 
-    /**
-     * Used to generate a single preview image if one is missing
-     *
-     * @param view
-     * @throws IOException
-     */
-    private boolean generatePreviewImages(View view)
-    {
-        PreviewImageGenerator previewImageGenerator = PreviewImageGenerator.start(getViewSet());
-        PreviewImages previewImages = previewImageGenerator.forView(view);
-
-        if (previewImages.hasMissingFiles())
-        {
-            if (previewImages.needsUndistortion())
-            {
-                // Distortion exists; undistort
-                LOG.info("Undistorting image {}", view);
-            }
-            else if (getViewSet().getPreviewWidth() > 0 && getViewSet().getPreviewHeight() > 0)
-            {
-                LOG.info("Resizing image {} : No distortion parameters", view);
-            }
-            else
-            {
-                // No distortion or preview dimensions, just use the original image
-                LOG.warn("Using full resolution image {} : No distortion and preview width and/or preview height are 0", view);
-            }
-
-            previewImages.tryCreateMissingFiles(getContext());
-        }
-
-        return previewImages.needsUndistortion() || (getViewSet().getPreviewWidth() > 0 && getViewSet().getPreviewHeight() > 0);
-    }
-
     private File findOrGeneratePreviewImageFile(View view) throws IOException
     {
         try
         {
             // See if the preview image is already there
-            return ImageFinder.getInstance().findImageFile(view.getPreviewImageFile());
+            return ImageFinder.findImageFile(view.getPreviewImageFile());
         }
         catch (FileNotFoundException e)
         {
-            if (generatePreviewImages(view)) // Generate file if necessary
+            PreviewImageGenerator previewImageGenerator = PreviewImageGenerator.start(getViewSet());
+            PreviewImages previewImages = previewImageGenerator.forView(view);
+
+            boolean needsResizing = getViewSet().getPreviewWidth() > 0 && getViewSet().getPreviewHeight() > 0;
+            if (previewImages.hasMissingFiles())
             {
-                return ImageFinder.getInstance().findImageFile(view.getPreviewImageFile());
+                if (previewImages.needsUndistortion())
+                {
+                    // Distortion exists; undistort.
+                    LOG.info("Images require undistortion.");
+                }
+                else if (needsResizing)
+                {
+                    LOG.info("Images require resizing, but not undistortion.");
+                }
+                else
+                {
+                    // No distortion or preview dimensions, just use the original image.
+                    LOG.warn("Images do not require undistortion or resizing (preview width and/or preview height are 0); use full-resolution images instead.");
+                }
+
+                // Generate missing files.
+                previewImages.tryCreateMissingFiles(getContext());
             }
-            else // File was not generated: no distortion and preview dimensions are zero.
+
+            if (previewImages.needsUndistortion() || needsResizing)
             {
-                return ImageFinder.getInstance().findImageFile(view.getFullResImageFile());
+                return ImageFinder.findImageFile(view.getPreviewImageFile());
+            }
+            else // No distortion set and preview dimensions are zero: use original (full-resolution) image.
+            {
+                return ImageFinder.findImageFile(view.getFullResImageFile());
             }
         }
     }

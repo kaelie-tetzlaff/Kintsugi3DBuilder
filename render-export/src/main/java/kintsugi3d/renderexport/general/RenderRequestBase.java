@@ -54,7 +54,7 @@ abstract class RenderRequestBase implements ProgressMonitoredImageBasedGraphicsR
         private int width = 1024;
         private int height = 1024;
         private File vertexShader = TEX_SPACE_VERTEX_SHADER;
-        private Consumer<Program<? extends Context<?>>> shaderSetupCallback = null;
+        private Consumer<Program<? extends Context<?>>> shaderSetupCallback;
 
         BuilderBase( File fragmentShader, File outputDirectory)
         {

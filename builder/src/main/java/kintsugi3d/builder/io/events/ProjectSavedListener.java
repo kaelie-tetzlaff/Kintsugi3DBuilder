@@ -11,6 +11,7 @@
 
 package kintsugi3d.builder.io.events;
 
+@FunctionalInterface
 public interface ProjectSavedListener
 {
     void onProjectSaved(ProjectSavedEvent event);

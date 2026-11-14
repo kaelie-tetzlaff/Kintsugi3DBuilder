@@ -141,12 +141,6 @@ public abstract class LightingEnvironmentModelBase<DiscreteLightType extends Dis
     }
 
     @Override
-    public boolean isLightVisualizationEnabled(int index)
-    {
-        return true;
-    }
-
-    @Override
     public LightPrototypeModel getLightPrototype(int i)
     {
         return lightInstanceModels.get(i);

@@ -52,7 +52,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
 
     public ObservableEnvironmentSettings(String name)
     {
-        setName(name);
+        this.name.set(name);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
     {
         if (!this.isNoEnvironment() && locked.getValue())
         {
-            return "(L) " + this.name.getValue();
+            return String.format("(L) %s", this.name.getValue());
         }
         else
         {
@@ -84,7 +84,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         newEnvironment.envFilteringBias.setValue(envFilteringBias.getValue());
         newEnvironment.envColor.setValue(envColor.getValue());
         newEnvironment.bpColor.setValue(bpColor.getValue());
-        newEnvironment.name.setValue(name.getValue() + " copy");
+        newEnvironment.name.setValue(String.format("%s copy", name.getValue()));
         newEnvironment.locked.setValue(locked.getValue());
         newEnvironment.envLoaded.setValue(envLoaded.getValue());
         newEnvironment.bpLoaded.setValue(bpLoaded.getValue());

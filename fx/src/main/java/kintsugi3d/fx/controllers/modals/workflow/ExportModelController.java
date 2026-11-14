@@ -73,21 +73,7 @@ public class ExportModelController extends ProjectSettingsControllerBase
         objFileChooser.getExtensionFilters().setAll(getLocalSettingsModel().get("exportType", ExportType.class).getFilter());
 
         // Friendly display name
-        exportTypeComboBox.setConverter(new StringConverter<>()
-        {
-            @Override
-            public String toString(ExportType type)
-            {
-                return (type != null) ? type.toString() : "";
-            }
-
-            @Override
-            public ExportType fromString(String string)
-            {
-                // Not strictly needed unless the ComboBox is editable
-                return null;
-            }
-        });
+        exportTypeComboBox.setConverter(new ExportTypeStringConverter());
 
         // Update extension filters based on the selected export type.
         exportTypeComboBox.valueProperty().addListener(
@@ -119,7 +105,7 @@ public class ExportModelController extends ProjectSettingsControllerBase
     }
 
     @Override
-    public boolean confirm()
+    public boolean tryConfirm()
     {
         applySettings();
 
@@ -134,7 +120,7 @@ public class ExportModelController extends ProjectSettingsControllerBase
             exportLocationFile = objFileChooser.showSaveDialog(root.getScene().getWindow());
             if (exportLocationFile != null)
             {
-                Rendering.getRequestQueue().addGraphicsRequest(new ExportTexturesRequest(
+                Rendering.getRequestQueue().addImageBasedGraphicsRequest(new ExportTexturesRequest(
                     exportLocationFile,
                     () ->
                     {
@@ -172,6 +158,22 @@ public class ExportModelController extends ProjectSettingsControllerBase
         {
             objFileChooser.setInitialDirectory(currentDirectoryFile);
             objFileChooser.setInitialFileName(currentDirectoryFile.getName());
+        }
+    }
+
+    private static class ExportTypeStringConverter extends StringConverter<ExportType>
+    {
+        @Override
+        public String toString(ExportType type)
+        {
+            return (type != null) ? type.toString() : "";
+        }
+
+        @Override
+        public ExportType fromString(String string)
+        {
+            // Not strictly needed unless the ComboBox is editable
+            return null;
         }
     }
 }

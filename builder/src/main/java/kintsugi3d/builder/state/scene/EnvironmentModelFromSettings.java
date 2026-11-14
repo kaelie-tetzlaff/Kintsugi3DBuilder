@@ -28,8 +28,8 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
 {
     private static final Logger LOG = LoggerFactory.getLogger(EnvironmentModelFromSettings.class);
 
-    protected long lastEnvironmentMapTime;
-    protected long lastBackplateTime;
+    private long lastEnvironmentMapTime;
+    private long lastBackplateTime;
     private boolean environmentMapLoaded = false;
     private boolean backplateLoaded = false;
 
@@ -281,5 +281,25 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     public float getGroundPlaneSize()
     {
         return isEnabled() ? (float)getEnvironmentSettings().getGroundPlaneSize() : 1.0f;
+    }
+
+    protected long getLastEnvironmentMapTime()
+    {
+        return lastEnvironmentMapTime;
+    }
+
+    protected void setLastEnvironmentMapTime(long lastEnvironmentMapTime)
+    {
+        this.lastEnvironmentMapTime = lastEnvironmentMapTime;
+    }
+
+    protected long getLastBackplateTime()
+    {
+        return lastBackplateTime;
+    }
+
+    protected void setLastBackplateTime(long lastBackplateTime)
+    {
+        this.lastBackplateTime = lastBackplateTime;
     }
 }

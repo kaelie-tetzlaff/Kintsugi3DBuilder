@@ -50,14 +50,14 @@ public class RenderingSubject<ContextType extends Context<ContextType>> extends 
     protected Drawable<ContextType> createDrawable(Program<ContextType> program)
     {
         // Use GraphicsResources to create a drawable with all the available vertex buffers.
-        return resources.createDrawable(program);
+        return getResources().createDrawable(program);
     }
 
     private ReadonlyNativeVectorBuffer generateViewWeights(Matrix4 targetView)
     {
         float[] viewWeights = //new PowerViewWeightGenerator(settings.getWeightExponent())
             new KNNViewWeightGenerator(4)
-                .generateWeights(resources, resources.getViewSet().getEnabledViews(), targetView);
+                .generateWeights(getResources(), getResources().getViewSet().getEnabledViews(), targetView);
 
         return NativeVectorBufferFactory.getInstance().createFromFloatArray(1, viewWeights.length, viewWeights);
     }
@@ -67,9 +67,9 @@ public class RenderingSubject<ContextType extends Context<ContextType>> extends 
     {
         super.setupModelView(p, modelView);
 
-        if (!this.sceneModel.getSettingsModel().getBoolean("relightingEnabled")
+        if (!this.getSceneModel().getSettingsModel().getBoolean("relightingEnabled")
             && !isLightCalibrationMode()
-            && this.sceneModel.getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM)
+            && this.getSceneModel().getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM)
         {
             if (weightBuffer == null)
             {

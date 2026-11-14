@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,7 +30,7 @@ public final class Launch4jConfiguration
 {
     private static final Logger LOG = LoggerFactory.getLogger(Launch4jConfiguration.class);
 
-    private static final Path l4jIniFile = Paths.get(ApplicationFolders.APP_FOLDER_NAME + ".l4j.ini");
+    private static final Path L4J_INI_FILE = Paths.get(ApplicationFolders.APP_FOLDER_NAME + ".l4j.ini");
 
     private boolean enableMaxMemory = false;
     private int maxMemoryMb = 4096;
@@ -38,8 +39,8 @@ public final class Launch4jConfiguration
 
     public void write() throws IOException
     {
-        LOG.info("Writing launch4j configuration file to {}", l4jIniFile.toAbsolutePath());
-        BufferedWriter writer = Files.newBufferedWriter(l4jIniFile);
+        LOG.info("Writing launch4j configuration file to {}", L4J_INI_FILE.toAbsolutePath());
+        BufferedWriter writer = Files.newBufferedWriter(L4J_INI_FILE);
         writeTo(writer);
     }
 
@@ -49,7 +50,7 @@ public final class Launch4jConfiguration
      */
     public void writeAsSuperuser() throws IOException
     {
-        LOG.info("Writing launch4j configuration file AS ADMINISTRATOR to {}", l4jIniFile.toAbsolutePath());
+        LOG.info("Writing launch4j configuration file AS ADMINISTRATOR to {}", L4J_INI_FILE.toAbsolutePath());
         if (OperatingSystem.getCurrentOS() != OperatingSystem.WINDOWS)
         {
             throw new IllegalStateException("Writing as superuser not supported for OS");
@@ -60,7 +61,9 @@ public final class Launch4jConfiguration
         String fileContent = writer.toString();
 
         String subcommand = String.format("\\\"New-Item '%s' -ItemType File -Force -Value '%s'\\\"",
-                l4jIniFile.toFile().getAbsolutePath(), fileContent);
+                L4J_INI_FILE.toFile().getAbsolutePath(), fileContent);
+
+        @SuppressWarnings("UseOfProcessBuilder")
         ProcessBuilder pb = new ProcessBuilder("powershell.exe", "-Command", "Start-Process", "PowerShell",
                 "-verb", "runas", "-ArgumentList", subcommand);
         pb.start();
@@ -78,13 +81,13 @@ public final class Launch4jConfiguration
 
     public static Launch4jConfiguration read() throws IOException
     {
-        if (! Files.exists(l4jIniFile))
+        if (! Files.exists(L4J_INI_FILE))
         {
             return new Launch4jConfiguration();
         }
 
         Launch4jConfiguration config = new Launch4jConfiguration();
-        List<String> lines = Files.readAllLines(l4jIniFile);
+        List<String> lines = Files.readAllLines(L4J_INI_FILE);
 
         for (String line : lines)
         {
@@ -133,7 +136,7 @@ public final class Launch4jConfiguration
         }
 
         float multiplier = 1;
-        if (suffix.toLowerCase().charAt(0) == 'g')
+        if (suffix.toLowerCase(Locale.ROOT).charAt(0) == 'g')
         {
             multiplier = 1024;
         }

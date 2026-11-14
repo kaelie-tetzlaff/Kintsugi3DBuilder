@@ -30,8 +30,8 @@ public class StandardScene<ContextType extends Context<ContextType>> extends Bas
     protected void addPostLitComponents(LightingResources<ContextType> lightingResources)
     {
         // the on-screen representation of lights
-        components.add(new LightVisualsGroup<>(context, sceneModel, sceneViewportModel));
-        components.add(new CameraWidgetGroup<>(resources, sceneModel, sceneViewportModel));
+        addComponent(new LightVisualsGroup<>(getContext(), getSceneModel(), getSceneViewportModel()));
+        addComponent(new CameraWidgetGroup<>(getResources(), getSceneModel(), getSceneViewportModel()));
     }
 
 }

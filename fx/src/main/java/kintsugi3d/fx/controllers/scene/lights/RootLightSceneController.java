@@ -134,7 +134,7 @@ public class RootLightSceneController implements Initializable
         tableView.setSortPolicy(param -> false);
         tableView.setColumnResizePolicy(param -> false);
 
-        selectedLight.addListener(settingsController.changeListener);
+        selectedLight.addListener(settingsController.getChangeListener());
     }
 
     private InvalidationListener generateLightChangeListener(ObservableLightGroupSettings lightGroup)

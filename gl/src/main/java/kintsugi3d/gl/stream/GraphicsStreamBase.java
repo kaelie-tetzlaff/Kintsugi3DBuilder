@@ -47,7 +47,6 @@ public abstract class GraphicsStreamBase<T> implements GraphicsStream<T>
         return result;
     }
 
-    @SuppressWarnings("AccessingNonPublicFieldOfAnotherObject")
     private static class Mapped<S, T> extends GraphicsStreamBase<T>
     {
         private final GraphicsStream<S> base;
@@ -81,12 +80,6 @@ public abstract class GraphicsStreamBase<T> implements GraphicsStream<T>
         public int getCount()
         {
             return base.getCount();
-        }
-
-        @Override
-        public <R> GraphicsStream<R> map(Function<T, ? extends R> mapper)
-        {
-            return new Mapped<>(this, mapper);
         }
 
         @Override

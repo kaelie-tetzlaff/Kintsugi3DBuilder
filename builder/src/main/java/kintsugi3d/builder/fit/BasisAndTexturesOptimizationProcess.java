@@ -79,32 +79,7 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
             monitor.setStage(1, "Performing low-res fit...");
         }
 
-        try (GraphicsResourcesTextureSpace<ContextType> sampled = cache.createSampledResources(
-            new DefaultProgressMonitor() // simple progress monitor for logging; will not be shown in the UI
-            {
-                private double maxProgress = 0.0;
-
-                @Override
-                public void allowUserCancellation() throws UserCancellationException
-                {
-                    if (monitor != null)
-                    {
-                        monitor.allowUserCancellation();
-                    }
-                }
-
-                @Override
-                public void setMaxProgress(double maxProgress)
-                {
-                    this.maxProgress = maxProgress;
-                }
-
-                @Override
-                public void setProgress(double progress, String message)
-                {
-                    LOG.info("[{}%] {}", new DecimalFormat("#.##").format(progress / maxProgress * 100), message);
-                }
-            }))
+        try (GraphicsResourcesTextureSpace<ContextType> sampled = cache.createSampledResources(new CacheProgressMonitor(monitor)))
         {
             ContextType context = sampled.getContext();
             // Disable back face culling since we're rendering in texture space
@@ -198,5 +173,41 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
     protected <ContextType extends Context<ContextType>> SpecularFitResourcesWrapper<ContextType> getResourcesWrapper()
     {
         return new SpecularFitResourcesWrapper<>(getSettings().isSmithMaskingShadowingEnabled(), basisOptimizationSettings);
+    }
+
+    /**
+     * Simple progress monitor for logging; will not be shown in the UI
+     */
+    private static final class CacheProgressMonitor extends DefaultProgressMonitor
+    {
+        private final ProgressMonitor monitor;
+        private double maxProgress;
+
+        private CacheProgressMonitor(ProgressMonitor monitor)
+        {
+            this.monitor = monitor;
+            maxProgress = 0.0;
+        }
+
+        @Override
+        public void allowUserCancellation() throws UserCancellationException
+        {
+            if (monitor != null)
+            {
+                monitor.allowUserCancellation();
+            }
+        }
+
+        @Override
+        public void setMaxProgress(double maxProgress)
+        {
+            this.maxProgress = maxProgress;
+        }
+
+        @Override
+        public void setProgress(double progress, String message)
+        {
+            LOG.info("[{}%] {}", new DecimalFormat("#.##").format(progress / maxProgress * 100), message);
+        }
     }
 }

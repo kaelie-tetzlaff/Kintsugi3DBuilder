@@ -37,7 +37,7 @@ public class ObservableCameraSettings extends SerializableCameraSettings
 
     public ObservableCameraSettings(String name)
     {
-        this.setName(name);
+        this.name.set(name);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ObservableCameraSettings extends SerializableCameraSettings
     {
         if (locked.getValue())
         {
-            return "(L) " + name.getValue();
+            return String.format("(L) %s", name.getValue());
         }
         else
         {
@@ -66,7 +66,7 @@ public class ObservableCameraSettings extends SerializableCameraSettings
         newCamera.setFOV(this.fov.getValue());
         newCamera.setLocked(this.locked.getValue());
         newCamera.setOrthographic(this.orthographic.getValue());
-        newCamera.setName(this.name.getValue() + " copy");
+        newCamera.setName(String.format("%s copy", this.name.getValue()));
         return newCamera;
     }
 

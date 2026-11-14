@@ -116,7 +116,7 @@ public final class DoubleMatrix4
         return scaleAndTranslate(sx, sy, sz, 0.0, 0.0, 0.0);
     }
 
-    public static DoubleMatrix4 scale(double s)
+    public static DoubleMatrix4 scale(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") double s)
     {
         return scale(s, s, s);
     }

@@ -23,6 +23,7 @@ import org.slf4j.event.Level;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Plugin(
@@ -86,6 +87,6 @@ public final class TestingLogMessageAppender extends LogMessageAppenderBase
     @Override
     public List<LogMessage> getMessages()
     {
-        return messages;
+        return Collections.unmodifiableList(messages);
     }
 }

@@ -24,10 +24,7 @@ import kintsugi3d.builder.fit.settings.SpecularFitSettings;
 import kintsugi3d.builder.io.*;
 import kintsugi3d.builder.rendering.ImageReconstruction;
 import kintsugi3d.builder.rendering.ReconstructionView;
-import kintsugi3d.builder.resources.project.GraphicsResourcesAnalytic;
-import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace;
-import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
-import kintsugi3d.builder.resources.project.ShaderProgramFactory;
+import kintsugi3d.builder.resources.project.*;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.builder.state.settings.DefaultSettings;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
@@ -39,14 +36,16 @@ import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.opengl.OpenGLContext;
 import kintsugi3d.gl.opengl.OpenGLContextFactory;
+import kintsugi3d.gl.util.ColorArrayImage;
 import kintsugi3d.gl.vecmath.Vector3;
-import kintsugi3d.util.ColorArrayImage;
 import kintsugi3d.util.ImageFinder;
 import kintsugi3d.util.Potato;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -55,14 +54,20 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-class ImageReconstructionTests
+class ImageReconstructionTest
 {
+    private static final Logger LOG = LoggerFactory.getLogger(ImageReconstructionTest.class);
+
     private static final File TEST_OUTPUT_DIR = new File("test-output");
     private static final boolean SAVE_TEST_IMAGES = true;
     private static final boolean SAVE_GROUND_TRUTH_SYNTHETIC_IMAGES = false;
+
+    /**
+     * Square root of 12
+     */
+    public static final float SQRT12 = 3.4641016151377544f;
 
     private ViewSet potatoViewSet;
     private ViewSet potatoViewSetTonemapped;
@@ -113,7 +118,7 @@ class ImageReconstructionTests
         public void setStage(int stage, String message)
         {
             this.stage = stage;
-            System.out.println(MessageFormat.format("[{0}/{1}] {2}", stage, stageCount, message));
+            LOG.info("[{}/{}] {}", stage, stageCount, message);
         }
 
         @Override
@@ -131,19 +136,19 @@ class ImageReconstructionTests
         @Override
         public void setProgress(double progress, String message)
         {
-            System.out.println(MessageFormat.format("[{0}%] {1}", progress / maxProgress * 100, message));
+            LOG.info("[{}%] {}", progress / maxProgress * 100, message);
         }
 
         @Override
         public void complete()
         {
-            System.out.println("COMPLETE!");
+            LOG.info("COMPLETE!");
         }
 
         @Override
         public void fail(Throwable e)
         {
-            e.printStackTrace();
+            LOG.error("FAILED!", e);
         }
 
         @Override
@@ -154,11 +159,11 @@ class ImageReconstructionTests
     }
 
     @BeforeEach
-    void setUp() throws Exception
+    void setUp() throws IOException
     {
         progressMonitor = new ProgressMonitorImpl();
         ViewSetDirectories directories = new ViewSetDirectories();
-        directories.fullResImagesNeedUndistort = true;
+        directories.setFullResImagesNeedUndistort(true);
         potatoViewSet = ViewSetReaderFromVSET.getInstance().readFromStream(getClass().getClassLoader().getResourceAsStream("Structured34View.vset"), directories).finish();
         potatoViewSet.getProjectSettings().set("occlusionEnabled", false);
 
@@ -178,11 +183,11 @@ class ImageReconstructionTests
         ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
         potatoGeometry = VertexGeometry.createFromOBJStream(in);
 
-        validationLinear = (rmse, noiseScale) -> assertEquals(noiseScale / (float) Math.sqrt(12.0f), rmse.getNormalizedLinear(), 0.001);
-        validationSRGB = (rmse, noiseScale) -> assertEquals(noiseScale / (float) Math.sqrt(12.0f), rmse.getNormalizedSRGB(), 0.001);
+        validationLinear = (rmse, noiseScale) -> assertEquals(noiseScale / SQRT12, rmse.getNormalizedLinear(), 0.001);
+        validationSRGB = (rmse, noiseScale) -> assertEquals(noiseScale / SQRT12, rmse.getNormalizedSRGB(), 0.001);
 
         // TODO figure out why we need a higher validation delta for this one?
-        validationEncoded = (rmse, noiseScale) -> assertEquals(noiseScale / (float) Math.sqrt(12.0f), rmse.getEncodedGroundTruth(), 0.005);
+        validationEncoded = (rmse, noiseScale) -> assertEquals(noiseScale / SQRT12, rmse.getEncodedGroundTruth(), 0.005);
 
         setupColor = program -> program.setUniform("diffuseColor", new Vector3(1.0f, 0.8f, 0.2f));
         setupMetallic = program ->
@@ -255,7 +260,7 @@ class ImageReconstructionTests
 
     private float noiseScaleToRMSE(float noiseScale)
     {
-        return noiseScale / (float) Math.sqrt(12.0f);
+        return noiseScale / SQRT12;
     }
 
     private Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>>
@@ -274,7 +279,7 @@ class ImageReconstructionTests
                 }
                 catch (IOException e)
                 {
-                    throw new RuntimeException(e);
+                    throw new UncheckedIOException(e);
                 }
             };
     }
@@ -284,7 +289,7 @@ class ImageReconstructionTests
     void normalizedLinear_grayscale() throws IOException
     {
         // TODO switch from gamma to sRGB decoding for the cases without ColorChecker values
-        multiTest(potatoViewSet, getProgramCreator("syntheticWithLinearNoise", p->{}),
+        verifyMultiple(potatoViewSet, getProgramCreator("syntheticWithLinearNoise", p->{}),
             factory -> createGroundTruthProgram(factory, p->{}), validationLinear, "normalizedLinear_grayscale");
     }
 
@@ -292,7 +297,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized linear reconstruction error, grayscale tonemapped synthetic data")
     void normalizedLinear_grayscaleTonemapped() throws IOException
     {
-        multiTest(potatoViewSetTonemapped, getProgramCreator("syntheticWithLinearNoise", p->{}),
+        verifyMultiple(potatoViewSetTonemapped, getProgramCreator("syntheticWithLinearNoise", p->{}),
             factory -> createGroundTruthProgram(factory, p->{}), validationLinear, "normalizedLinear_grayscaleTonemapped");
     }
 
@@ -300,7 +305,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized linear reconstruction error, color synthetic data")
     void normalizedLinear_color() throws IOException
     {
-        multiTest(potatoViewSet, getProgramCreator("syntheticWithLinearColorNoise", setupColor),
+        verifyMultiple(potatoViewSet, getProgramCreator("syntheticWithLinearColorNoise", setupColor),
             factory -> createGroundTruthProgram(factory, setupColor), validationLinear, "normalizedLinear_color");
     }
 
@@ -308,7 +313,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized linear reconstruction error, color tonemapped synthetic data")
     void normalizedLinear_colorTonemapped() throws IOException
     {
-        multiTest(potatoViewSetTonemapped, getProgramCreator("syntheticWithLinearColorNoise", setupColor),
+        verifyMultiple(potatoViewSetTonemapped, getProgramCreator("syntheticWithLinearColorNoise", setupColor),
             factory -> createGroundTruthProgram(factory, setupColor), validationLinear, "normalizedLinear_colorTonemapped");
     }
 
@@ -316,7 +321,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized linear reconstruction error, metallic synthetic data")
     void normalizedLinear_metallic() throws IOException
     {
-        multiTest(potatoViewSet, getProgramCreator("syntheticWithLinearColorNoise", setupMetallic),
+        verifyMultiple(potatoViewSet, getProgramCreator("syntheticWithLinearColorNoise", setupMetallic),
             factory -> createGroundTruthProgram(factory, setupMetallic), validationLinear, "normalizedLinear_metallic");
     }
 
@@ -324,7 +329,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized linear reconstruction error, metallic tonemapped synthetic data")
     void normalizedLinear_metallicTonemapped() throws IOException
     {
-        multiTest(potatoViewSetTonemapped, getProgramCreator("syntheticWithLinearColorNoise", setupMetallic),
+        verifyMultiple(potatoViewSetTonemapped, getProgramCreator("syntheticWithLinearColorNoise", setupMetallic),
             factory -> createGroundTruthProgram(factory, setupMetallic), validationLinear, "normalizedLinear_metallicTonemapped");
     }
 
@@ -332,7 +337,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized sRGB reconstruction error, grayscale synthetic data")
     void normalizedSRGB_grayscale() throws IOException
     {
-        multiTest(potatoViewSet, getProgramCreator("syntheticWithSRGBNoise", p->{}),
+        verifyMultiple(potatoViewSet, getProgramCreator("syntheticWithSRGBNoise", p->{}),
             factory -> createGroundTruthProgram(factory, p->{}), validationSRGB, "normalizedSRGB_grayscale");
     }
 
@@ -340,7 +345,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized sRGB reconstruction error, grayscale tonemapped synthetic data")
     void normalizedSRGB_grayscaleTonemapped() throws IOException
     {
-        multiTest(potatoViewSetTonemapped, getProgramCreator("syntheticWithSRGBNoise", p->{}),
+        verifyMultiple(potatoViewSetTonemapped, getProgramCreator("syntheticWithSRGBNoise", p->{}),
             factory -> createGroundTruthProgram(factory, p->{}), validationSRGB, "normalizedSRGB_grayscaleTonemapped");
     }
 
@@ -348,7 +353,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized sRGB reconstruction error, color synthetic data")
     void normalizedSRGB_color() throws IOException
     {
-        multiTest(potatoViewSet, getProgramCreator("syntheticWithSRGBColorNoise", setupColor),
+        verifyMultiple(potatoViewSet, getProgramCreator("syntheticWithSRGBColorNoise", setupColor),
             factory -> createGroundTruthProgram(factory, setupColor), validationSRGB, "normalizedSRGB_color");
     }
 
@@ -356,7 +361,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized sRGB reconstruction error, color tonemapped synthetic data")
     void normalizedSRGB_colorTonemapped() throws IOException
     {
-        multiTest(potatoViewSetTonemapped, getProgramCreator("syntheticWithSRGBColorNoise", setupColor),
+        verifyMultiple(potatoViewSetTonemapped, getProgramCreator("syntheticWithSRGBColorNoise", setupColor),
             factory -> createGroundTruthProgram(factory, setupColor), validationSRGB, "normalizedSRGB_colorTonemapped");
     }
 
@@ -364,7 +369,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized sRGB reconstruction error, metallic synthetic data")
     void normalizedSRGB_metallic() throws IOException
     {
-        multiTest(potatoViewSet, getProgramCreator("syntheticWithSRGBColorNoise", setupMetallic),
+        verifyMultiple(potatoViewSet, getProgramCreator("syntheticWithSRGBColorNoise", setupMetallic),
             factory -> createGroundTruthProgram(factory, setupMetallic), validationSRGB, "normalizedSRGB_metallic");
     }
 
@@ -372,7 +377,7 @@ class ImageReconstructionTests
     @DisplayName("Normalized sRGB reconstruction error, metallic tonemapped synthetic data")
     void normalizedSRGB_metallicTonemapped() throws IOException
     {
-        multiTest(potatoViewSetTonemapped, getProgramCreator("syntheticWithSRGBColorNoise", setupMetallic),
+        verifyMultiple(potatoViewSetTonemapped, getProgramCreator("syntheticWithSRGBColorNoise", setupMetallic),
             factory -> createGroundTruthProgram(factory, setupMetallic), validationSRGB, "normalizedSRGB_metallicTonemapped");
     }
 
@@ -380,7 +385,7 @@ class ImageReconstructionTests
     @DisplayName("Tonemapped and lit reconstruction error, grayscale synthetic data")
     void tonemappedLit_grayscale() throws IOException
     {
-        multiTest(potatoViewSet, getProgramCreator("syntheticWithTonemappedLitNoise", p->{}),
+        verifyMultiple(potatoViewSet, getProgramCreator("syntheticWithTonemappedLitNoise", p->{}),
             factory -> createGroundTruthProgram(factory, p->{}), validationEncoded, "tonemappedLit_grayscale");
     }
 
@@ -388,7 +393,7 @@ class ImageReconstructionTests
     @DisplayName("Tonemapped and lit reconstruction error, grayscale tonemapped synthetic data")
     void tonemappedLit_grayscaleTonemapped() throws IOException
     {
-        multiTest(potatoViewSetTonemapped, getProgramCreator("syntheticWithTonemappedLitNoise", p->{}),
+        verifyMultiple(potatoViewSetTonemapped, getProgramCreator("syntheticWithTonemappedLitNoise", p->{}),
             factory -> createGroundTruthProgram(factory, p->{}), validationEncoded, "tonemappedLit_grayscaleTonemapped");
     }
 
@@ -396,7 +401,7 @@ class ImageReconstructionTests
     @DisplayName("Tonemapped and lit reconstruction error, color synthetic data")
     void tonemappedLit_color() throws IOException
     {
-        multiTest(potatoViewSet, getProgramCreator("syntheticWithTonemappedLitColorNoise", setupColor),
+        verifyMultiple(potatoViewSet, getProgramCreator("syntheticWithTonemappedLitColorNoise", setupColor),
             factory -> createGroundTruthProgram(factory, setupColor), validationEncoded, "tonemappedLit_color");
     }
 
@@ -404,7 +409,7 @@ class ImageReconstructionTests
     @DisplayName("Tonemapped and lit reconstruction error, color tonemapped synthetic data")
     void tonemappedLit_colorTonemapped() throws IOException
     {
-        multiTest(potatoViewSetTonemapped, getProgramCreator("syntheticWithTonemappedLitColorNoise", setupColor),
+        verifyMultiple(potatoViewSetTonemapped, getProgramCreator("syntheticWithTonemappedLitColorNoise", setupColor),
             factory -> createGroundTruthProgram(factory, setupColor), validationEncoded, "tonemappedLit_colorTonemapped");
     }
 
@@ -412,7 +417,7 @@ class ImageReconstructionTests
     @DisplayName("Tonemapped and lit reconstruction error, metallic synthetic data")
     void tonemappedLit_metallic() throws IOException
     {
-        multiTest(potatoViewSet, getProgramCreator("syntheticWithTonemappedLitColorNoise", setupMetallic),
+        verifyMultiple(potatoViewSet, getProgramCreator("syntheticWithTonemappedLitColorNoise", setupMetallic),
             factory -> createGroundTruthProgram(factory, setupMetallic), validationEncoded, "tonemappedLit_metallic");
     }
 
@@ -420,7 +425,7 @@ class ImageReconstructionTests
     @DisplayName("Tonemapped and lit reconstruction error, metallic tonemapped synthetic data")
     void tonemappedLit_metallicTonemapped() throws IOException
     {
-        multiTest(potatoViewSetTonemapped, getProgramCreator("syntheticWithTonemappedLitColorNoise", setupMetallic),
+        verifyMultiple(potatoViewSetTonemapped, getProgramCreator("syntheticWithTonemappedLitColorNoise", setupMetallic),
             factory -> createGroundTruthProgram(factory, setupMetallic), validationEncoded, "tonemappedLit_metallicTonemapped");
     }
 
@@ -807,9 +812,9 @@ class ImageReconstructionTests
             "Rodin/Processed dark 25",
             rmse ->
             {
-                System.out.println("Encoded RMSE: " + rmse.getEncodedGroundTruth());
-                System.out.println("Normalized sRGB RMSE: " + rmse.getNormalizedSRGB());
-                System.out.println("Normalized linear RMSE: " + rmse.getNormalizedLinear());
+                LOG.info("Encoded RMSE: {}", rmse.getEncodedGroundTruth());
+                LOG.info("Normalized sRGB RMSE: {}", rmse.getNormalizedSRGB());
+                LOG.info("Normalized linear RMSE: {}", rmse.getNormalizedLinear());
                 assertTrue (rmse.getEncodedGroundTruth() < 0.1);
                 assertTrue (rmse.getNormalizedSRGB() < 0.1);
                 assertTrue (rmse.getNormalizedLinear() < 0.1);
@@ -830,11 +835,11 @@ class ImageReconstructionTests
         }
         catch (IOException e)
         {
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
         }
     }
 
-    void multiTest(
+    void verifyMultiple(
         ViewSet viewSet,
         Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>> testProgramCreator,
         Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>> groundTruthProgramCreator,
@@ -986,7 +991,7 @@ class ImageReconstructionTests
                             try
                             {
                                 view.getReconstructionFramebuffer().getTextureReaderForColorAttachment(0).saveToFile("PNG",
-                                    new File(outputDirectory, ImageFinder.getInstance().getImageFileNameWithExtension(
+                                    new File(outputDirectory, ImageFinder.getImageFileNameWithExtension(
                                         view.getView().getImageFile().getName(), "png")),
                                     // Luminance encoding expects [0, 1] range, but encodes in [0, 255] range.
                                     // Tonemapper parameter taken by saveToFile assumes both are [0, 255]
@@ -995,7 +1000,7 @@ class ImageReconstructionTests
                             }
                             catch (IOException e)
                             {
-                                throw new RuntimeException(e);
+                                throw new UncheckedIOException(e);
                             }
                         }
 
@@ -1003,9 +1008,13 @@ class ImageReconstructionTests
                     });
             }
         }
-        catch (UserCancellationException | IOException e)
+        catch (UserCancellationException e)
         {
-            throw new RuntimeException(e);
+            fail("Unexpected user cancellation.", e);
+        }
+        catch (IOException e)
+        {
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -1017,9 +1026,9 @@ class ImageReconstructionTests
         imageLoadOptions.setColorImagesRequested(false); // don't generate/load preview images; not needed for this test
 
         ViewSetLoadOptions viewSetLoadOptions = new ViewSetLoadOptions();
-        viewSetLoadOptions.geometryFile = new File(classLoader.getResource(geometry).toURI());
-        viewSetLoadOptions.mainDirectories.fullResImageDirectory = new File(classLoader.getResource(imageDirectory).toURI());
-        viewSetLoadOptions.mainDirectories.fullResImagesNeedUndistort = true;
+        viewSetLoadOptions.setGeometryFile(new File(classLoader.getResource(geometry).toURI()));
+        viewSetLoadOptions.getMainDirectories().setFullResImageDirectory(new File(classLoader.getResource(imageDirectory).toURI()));
+        viewSetLoadOptions.getMainDirectories().setFullResImagesNeedUndistort(true);
 
         try (GraphicsResourcesImageSpace<OpenGLContext> resources = GraphicsResourcesImageSpace.getBuilderForContext(context)
                 .setImageLoadOptions(imageLoadOptions)
@@ -1032,7 +1041,7 @@ class ImageReconstructionTests
         }
     }
 
-    private void testFitVSET(File viewSetFile, Consumer<ReadonlyColorAppearanceRMSE> validation, String testName) throws Exception
+    private void testFitVSET(File viewSetFile, Consumer<ReadonlyColorAppearanceRMSE> validation, String testName) throws MeshImportException
     {
         LoadOptionsModel loadOptions = new SimpleLoadOptionsModel();
         loadOptions.setColorImagesRequested(false); // don't generate/load preview images; not needed for this test
@@ -1045,13 +1054,17 @@ class ImageReconstructionTests
             resources.calibrateLightIntensities();
             testFit(resources, validation, testName);
         }
-        catch (UserCancellationException | IOException e)
+        catch (UserCancellationException e)
         {
-            throw new RuntimeException(e);
+            fail("Unexpected user cancellation.", e);
+        }
+        catch (IOException e)
+        {
+            throw new UncheckedIOException(e);
         }
     }
 
-    private void testFit(ImageBasedGraphicsResources<OpenGLContext> resources, Consumer<ReadonlyColorAppearanceRMSE> validation, String testName)
+    private void testFit(ReadonlyImageBasedGraphicsResources<OpenGLContext> resources, Consumer<ReadonlyColorAppearanceRMSE> validation, String testName)
         throws IOException, UserCancellationException
     {
         // TODO not yet tested
@@ -1077,7 +1090,7 @@ class ImageReconstructionTests
                     try
                     {
                         view.getReconstructionFramebuffer().getTextureReaderForColorAttachment(0).saveToFile("PNG",
-                            new File(outputDirectory, ImageFinder.getInstance().getImageFileNameWithExtension(
+                            new File(outputDirectory, ImageFinder.getImageFileNameWithExtension(
                                 view.getView().getImageFile().getName(), "png")),
                             // Luminance encoding expects [0, 1] range, but encodes in [0, 255] range.
                             // Tonemapper parameter taken by saveToFile assumes both are [0, 255]
@@ -1086,7 +1099,7 @@ class ImageReconstructionTests
                     }
                     catch (IOException e)
                     {
-                        throw new RuntimeException(e);
+                        throw new UncheckedIOException(e);
                     }
                 }
 

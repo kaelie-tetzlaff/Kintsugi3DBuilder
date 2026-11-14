@@ -222,7 +222,7 @@ public class IOModel implements IO
         {
             try
             {
-                viewSetLoadOptions.uuid = getLoadedViewSet() != null ? getLoadedViewSet().getUUID() : null;
+                viewSetLoadOptions.setUUID(getLoadedViewSet() != null ? getLoadedViewSet().getUUID() : null);
                 this.handler.loadFromLooseFiles(projectFile, internalName, xmlFile, viewSetLoadOptions, loadOptionsModel);
             }
             catch (Exception e)
@@ -262,7 +262,7 @@ public class IOModel implements IO
         }
 
         //open the project, update the recent files list & recentDirectory, disable shaders which aren't useful until processing textures
-        RecentProjects.setMostRecentDirectory(projectFile.getParentFile());
+        RecentProjects.getInstance().setMostRecentDirectory(projectFile.getParentFile());
 
         File vsetFile;
 
@@ -299,7 +299,7 @@ public class IOModel implements IO
                     this.projectFile = projectFile;
                     this.viewSetFile = vsetFile;
 
-                    RecentProjects.addToRecentFiles(projectFile.getAbsolutePath());
+                    RecentProjects.getInstance().addToRecentFiles(projectFile.getAbsolutePath());
 
                     if (Objects.equals(projectFile.getParentFile(), vsetFile.getParentFile()))
                     {
@@ -351,7 +351,7 @@ public class IOModel implements IO
         copyMasks();
         copyModelAndTextures();
 
-        RecentProjects.setMostRecentDirectory(projectFile.getParentFile());
+        RecentProjects.getInstance().setMostRecentDirectory(projectFile.getParentFile());
 
         File filesDirectory = getDefaultSupportingFilesDirectory(projectFile);
         filesDirectory.mkdirs();
@@ -386,7 +386,7 @@ public class IOModel implements IO
         this.handler.saveAllMaterialFiles(getLoadedViewSet().getSupportingFilesDirectory(), finishedCallback);
 
         // Add to recent files
-        RecentProjects.addToRecentFiles(projectFile.getAbsolutePath());
+        RecentProjects.getInstance().addToRecentFiles(projectFile.getAbsolutePath());
 
         this.progressMonitor.setStage(1, "Project saved.");
     }
@@ -409,7 +409,7 @@ public class IOModel implements IO
         return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(projectFile);
     }
 
-    private static String getViewSetFilenameFromXMLDocument(Document document) throws IOException, ParserConfigurationException, SAXException
+    private static String getViewSetFilenameFromXMLDocument(Document document) throws IOException
     {
         Node vsetNode = document.getElementsByTagName("ViewSet").item(0);
         if (vsetNode instanceof Element)

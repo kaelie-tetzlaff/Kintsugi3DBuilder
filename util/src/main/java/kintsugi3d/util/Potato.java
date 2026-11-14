@@ -36,9 +36,9 @@ public class Potato
 
     private static class Bump
     {
-        private Vector3 direction;
-        private float size;
-        private float height;
+        Vector3 direction;
+        float size;
+        float height;
     }
 
     private double computeR(Vector3 direction)
@@ -182,12 +182,12 @@ public class Potato
     {
         for (Vector3 pos : positions)
         {
-            out.println("v\t" + pos.x + '\t' + pos.y + '\t' + pos.z);
+            out.printf("v\t%s\t%s\t%s\n", pos.x, pos.y, pos.z);
         }
 
         for (Vector2 tex : texCoords)
         {
-            out.println("vt\t" + tex.x + '\t' + tex.y);
+            out.printf("vt\t%s\t%s\n", tex.x, tex.y);
         }
 
         for (List<IntVector2> f : faces)
@@ -196,7 +196,7 @@ public class Potato
 
             for (IntVector2 v : f)
             {
-                out.print("\t" + (v.x + 1) + '/' + (v.y + 1));
+                out.printf("\t%d/%d", v.x + 1, v.y + 1);
             }
 
             out.println();
@@ -212,6 +212,7 @@ public class Potato
         }
         catch (IOException e)
         {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
     }

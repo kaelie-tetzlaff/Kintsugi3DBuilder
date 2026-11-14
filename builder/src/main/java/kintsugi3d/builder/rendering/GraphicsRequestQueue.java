@@ -17,9 +17,9 @@ public interface GraphicsRequestQueue
 
     void addRequestAddedListener(Runnable listener);
 
-    void addBackgroundGraphicsRequest(ImageBasedGraphicsRequest request);
+    void addBackgroundImageBasedGraphicsRequest(ImageBasedGraphicsRequest request);
 
-    void addGraphicsRequest(ProgressMonitoredImageBasedGraphicsRequest request);
+    void addImageBasedGraphicsRequest(ProgressMonitoredImageBasedGraphicsRequest request);
 
     void addBackgroundGraphicsRequest(GraphicsRequest request);
 

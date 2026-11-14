@@ -38,7 +38,7 @@ public class OrbitAnimationController
         this.directoryChooser.setTitle("Choose an export directory");
         if (exportDirectoryField.getText().isEmpty())
         {
-            this.directoryChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+            this.directoryChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         }
         else
         {
@@ -49,7 +49,7 @@ public class OrbitAnimationController
         if (file != null)
         {
             exportDirectoryField.setText(file.toString());
-            RecentProjects.setMostRecentDirectory(file);
+            RecentProjects.getInstance().setMostRecentDirectory(file);
         }
     }
 
@@ -67,8 +67,8 @@ public class OrbitAnimationController
             return;
         }
 
-        Rendering.getRequestQueue().addGraphicsRequest(
-            new OrbitAnimationRequest.Builder()
+        Rendering.getRequestQueue().addImageBasedGraphicsRequest(
+            OrbitAnimationRequest.getBuilder()
                 .setWidth(Integer.parseInt(widthTextField.getText()))
                 .setHeight(Integer.parseInt(heightTextField.getText()))
                 .setFrameCount(Integer.parseInt(frameCountTextField.getText()))

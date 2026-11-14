@@ -16,12 +16,12 @@ import kintsugi3d.builder.preferences.serialization.JacksonUserPreferencesSerial
 
 import java.nio.file.Path;
 
-public class SimpleDirectoryPreferencesModel implements DirectoryPreferencesModel
+public final class SimpleDirectoryPreferencesModel implements DirectoryPreferencesModel
 {
-    private Path previewImagesDirectory = null;
-    private Path logFileDirectory = null;
-    private Path cacheDirectory = null;
-    private Path extensionDirectory = null;
+    private Path previewImagesDirectory;
+    private Path logFileDirectory;
+    private Path cacheDirectory;
+    private Path extensionDirectory;
 
     private SimpleDirectoryPreferencesModel() {}
 

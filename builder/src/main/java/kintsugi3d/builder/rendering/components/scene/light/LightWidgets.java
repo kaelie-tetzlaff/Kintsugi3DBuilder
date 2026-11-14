@@ -115,43 +115,43 @@ public class LightWidgets<ContextType extends Context<ContextType>> extends Shad
                 {
                     getContext().getState().enableBackFaceCulling();
 
-                    Vector3 arrow1PositionR = Matrix3.rotateAxis(widgetInfo[i].azimuthRotationAxis, widgetInfo[i].azimuthArrowRotation)
-                        .times(widgetInfo[i].widgetPosition.minus(widgetInfo[i].lightCenter))
-                        .plus(widgetInfo[i].lightCenter);
+                    Vector3 arrow1PositionR = Matrix3.rotateAxis(widgetInfo[i].getAzimuthRotationAxis(), widgetInfo[i].getAzimuthArrowRotation())
+                        .times(widgetInfo[i].getWidgetPosition().minus(widgetInfo[i].getLightCenter()))
+                        .plus(widgetInfo[i].getLightCenter());
 
-                    Vector3 arrow1PositionL = Matrix3.rotateAxis(widgetInfo[i].azimuthRotationAxis, -widgetInfo[i].azimuthArrowRotation)
-                        .times(widgetInfo[i].widgetPosition.minus(widgetInfo[i].lightCenter))
-                        .plus(widgetInfo[i].lightCenter);
+                    Vector3 arrow1PositionL = Matrix3.rotateAxis(widgetInfo[i].getAzimuthRotationAxis(), -widgetInfo[i].getAzimuthArrowRotation())
+                        .times(widgetInfo[i].getWidgetPosition().minus(widgetInfo[i].getLightCenter()))
+                        .plus(widgetInfo[i].getLightCenter());
 
-                    Vector3 arrow2PositionR = widgetInfo[i].widgetTransformation.getUpperLeft3x3()
-                        .times(Matrix3.rotateX(-widgetInfo[i].inclinationArrowRotation))
-                        .times(widgetInfo[i].widgetTransformation.quickInverse(0.01f).getUpperLeft3x3())
-                        .times(widgetInfo[i].widgetPosition.minus(widgetInfo[i].lightCenter))
-                        .plus(widgetInfo[i].lightCenter);
+                    Vector3 arrow2PositionR = widgetInfo[i].getTransformation().getUpperLeft3x3()
+                        .times(Matrix3.rotateX(-widgetInfo[i].getInclinationArrowRotation()))
+                        .times(widgetInfo[i].getTransformation().quickInverse(0.01f).getUpperLeft3x3())
+                        .times(widgetInfo[i].getWidgetPosition().minus(widgetInfo[i].getLightCenter()))
+                        .plus(widgetInfo[i].getLightCenter());
 
-                    Vector3 arrow2PositionL = widgetInfo[i].widgetTransformation.getUpperLeft3x3()
-                        .times(Matrix3.rotateX(widgetInfo[i].inclinationArrowRotation))
-                        .times(widgetInfo[i].widgetTransformation.quickInverse(0.01f).getUpperLeft3x3())
-                        .times(widgetInfo[i].widgetPosition.minus(widgetInfo[i].lightCenter))
-                        .plus(widgetInfo[i].lightCenter);
+                    Vector3 arrow2PositionL = widgetInfo[i].getTransformation().getUpperLeft3x3()
+                        .times(Matrix3.rotateX(widgetInfo[i].getInclinationArrowRotation()))
+                        .times(widgetInfo[i].getTransformation().quickInverse(0.01f).getUpperLeft3x3())
+                        .times(widgetInfo[i].getWidgetPosition().minus(widgetInfo[i].getLightCenter()))
+                        .plus(widgetInfo[i].getLightCenter());
 
-                    Vector4 arrow1RDirectionY =  Matrix3.rotateAxis(widgetInfo[i].azimuthRotationAxis, widgetInfo[i].azimuthArrowRotation)
-                        .times(widgetInfo[i].widgetTransformation.getUpperLeft3x3())
+                    Vector4 arrow1RDirectionY =  Matrix3.rotateAxis(widgetInfo[i].getAzimuthRotationAxis(), widgetInfo[i].getAzimuthArrowRotation())
+                        .times(widgetInfo[i].getTransformation().getUpperLeft3x3())
                         .times(new Vector3(1,0,0))
                         .getXY().normalized().asDirection();
 
-                    Vector4 arrow1LDirectionY =  Matrix3.rotateAxis(widgetInfo[i].azimuthRotationAxis, -widgetInfo[i].azimuthArrowRotation)
-                        .times(widgetInfo[i].widgetTransformation.getUpperLeft3x3())
+                    Vector4 arrow1LDirectionY =  Matrix3.rotateAxis(widgetInfo[i].getAzimuthRotationAxis(), -widgetInfo[i].getAzimuthArrowRotation())
+                        .times(widgetInfo[i].getTransformation().getUpperLeft3x3())
                         .times(new Vector3(1,0,0))
                         .getXY().normalized().asDirection();
 
-                    Vector4 arrow2RDirectionY = widgetInfo[i].widgetTransformation.getUpperLeft3x3()
-                        .times(Matrix3.rotateX(-widgetInfo[i].inclinationArrowRotation))
+                    Vector4 arrow2RDirectionY = widgetInfo[i].getTransformation().getUpperLeft3x3()
+                        .times(Matrix3.rotateX(-widgetInfo[i].getInclinationArrowRotation()))
                         .times(new Vector3(0,1,0))
                         .getXY().normalized().asDirection();
 
-                    Vector4 arrow2LDirectionY = widgetInfo[i].widgetTransformation.getUpperLeft3x3()
-                        .times(Matrix3.rotateX(widgetInfo[i].inclinationArrowRotation))
+                    Vector4 arrow2LDirectionY = widgetInfo[i].getTransformation().getUpperLeft3x3()
+                        .times(Matrix3.rotateX(widgetInfo[i].getInclinationArrowRotation()))
                         .times(new Vector3(0,1,0))
                         .getXY().normalized().asDirection();
 
@@ -166,12 +166,12 @@ public class LightWidgets<ContextType extends Context<ContextType>> extends Shad
                     Vector4 arrow2LDirectionX = new Vector4(arrow2LDirectionY.y, -arrow2LDirectionY.x, 0, 0).normalized();
 
 
-                    Vector4 arrow3DirectionY = widgetInfo[i].lightCenter.minus(widgetInfo[i].widgetPosition).getXY().normalized().asDirection();
+                    Vector4 arrow3DirectionY = widgetInfo[i].getLightCenter().minus(widgetInfo[i].getWidgetPosition()).getXY().normalized().asDirection();
                     @SuppressWarnings("SuspiciousNameCombination")
                     Vector4 arrow3DirectionX = new Vector4(arrow3DirectionY.y, -arrow3DirectionY.x, 0, 0).normalized();
 
-                    Vector3 arrow3PositionR = widgetInfo[i].distanceWidgetPosition.minus(widgetInfo[i].widgetDisplacement.times(0.5f));
-                    Vector3 arrow3PositionL = widgetInfo[i].distanceWidgetPosition.plus(widgetInfo[i].widgetDisplacement.times(0.5f));
+                    Vector3 arrow3PositionR = widgetInfo[i].getDistanceWidgetPosition().minus(widgetInfo[i].getWidgetDisplacement().times(0.5f));
+                    Vector3 arrow3PositionL = widgetInfo[i].getDistanceWidgetPosition().plus(widgetInfo[i].getWidgetDisplacement().times(0.5f));
 
 //                            Vector3 arrow1PositionR = widgetTransformation.times(new Vector4(1,0,0,1)).getXYZ();
 //                            Vector3 arrow1PositionL = widgetTransformation.times(new Vector4(-1,0,0,1)).getXYZ();
@@ -185,13 +185,13 @@ public class LightWidgets<ContextType extends Context<ContextType>> extends Shad
                     getDrawable().program().setUniform("color", new Vector4(1));
 
                     if (sceneModel.getLightingModel().getLightWidgetModel(i).isAzimuthWidgetVisible() &&
-                        (Math.abs(widgetInfo[i].lightDisplacementWorld.x) > 0.001f || Math.abs(widgetInfo[i].lightDisplacementWorld.z) > 0.001f))
+                        (Math.abs(widgetInfo[i].getLightDisplacementWorld().x) > 0.001f || Math.abs(widgetInfo[i].getLightDisplacementWorld().z) > 0.001f))
                     {
                         getDrawable().program().setUniform("objectID", sceneViewportModel.lookupSceneObjectID(String.format(AZIMUTH_TAG_FORMAT, i)));
 
                         getDrawable().program().setUniform("model_view",
                             Matrix4.translate(arrow1PositionR)
-                                .times(Matrix4.scale(widgetInfo[i].perspectiveWidgetScale, widgetInfo[i].perspectiveWidgetScale, 1.0f))
+                                .times(Matrix4.scale(widgetInfo[i].getPerspectiveWidgetScale(), widgetInfo[i].getPerspectiveWidgetScale(), 1.0f))
                                 .times(Matrix4.fromColumns(
                                     arrow1RDirectionX,
                                     arrow1RDirectionY,
@@ -202,7 +202,7 @@ public class LightWidgets<ContextType extends Context<ContextType>> extends Shad
 
                         getDrawable().program().setUniform("model_view",
                             Matrix4.translate(arrow1PositionL)
-                                .times(Matrix4.scale(widgetInfo[i].perspectiveWidgetScale, widgetInfo[i].perspectiveWidgetScale, 1.0f))
+                                .times(Matrix4.scale(widgetInfo[i].getPerspectiveWidgetScale(), widgetInfo[i].getPerspectiveWidgetScale(), 1.0f))
                                 .times(Matrix4.fromColumns(
                                     arrow1LDirectionX.negated(),
                                     arrow1LDirectionY.negated(),
@@ -216,11 +216,11 @@ public class LightWidgets<ContextType extends Context<ContextType>> extends Shad
                     {
                         getDrawable().program().setUniform("objectID", sceneViewportModel.lookupSceneObjectID(String.format(INCLINATION_TAG_FORMAT, i)));
 
-                        if (Math.PI / 2 - widgetInfo[i].inclination > 0.01f)
+                        if (Math.PI / 2 - widgetInfo[i].getInclination() > 0.01f)
                         {
                             getDrawable().program().setUniform("model_view",
                                 Matrix4.translate(arrow2PositionR)
-                                    .times(Matrix4.scale(widgetInfo[i].perspectiveWidgetScale, widgetInfo[i].perspectiveWidgetScale, 1.0f))
+                                    .times(Matrix4.scale(widgetInfo[i].getPerspectiveWidgetScale(), widgetInfo[i].getPerspectiveWidgetScale(), 1.0f))
                                     .times(Matrix4.fromColumns(
                                         arrow2RDirectionX,
                                         arrow2RDirectionY,
@@ -229,11 +229,11 @@ public class LightWidgets<ContextType extends Context<ContextType>> extends Shad
                             getDrawable().draw(PrimitiveMode.TRIANGLE_FAN, cameraViewport.ofFramebuffer(framebuffer));
                         }
 
-                        if (Math.PI / 2 + widgetInfo[i].inclination > 0.01f)
+                        if (Math.PI / 2 + widgetInfo[i].getInclination() > 0.01f)
                         {
                             getDrawable().program().setUniform("model_view",
                                 Matrix4.translate(arrow2PositionL)
-                                    .times(Matrix4.scale(widgetInfo[i].perspectiveWidgetScale, widgetInfo[i].perspectiveWidgetScale, 1.0f))
+                                    .times(Matrix4.scale(widgetInfo[i].getPerspectiveWidgetScale(), widgetInfo[i].getPerspectiveWidgetScale(), 1.0f))
                                     .times(Matrix4.fromColumns(
                                         arrow2LDirectionX.negated(),
                                         arrow2LDirectionY.negated(),
@@ -249,7 +249,7 @@ public class LightWidgets<ContextType extends Context<ContextType>> extends Shad
 
                         getDrawable().program().setUniform("model_view",
                             Matrix4.translate(arrow3PositionL)
-                                .times(Matrix4.scale(widgetInfo[i].perspectiveWidgetScale, widgetInfo[i].perspectiveWidgetScale, 1.0f))
+                                .times(Matrix4.scale(widgetInfo[i].getPerspectiveWidgetScale(), widgetInfo[i].getPerspectiveWidgetScale(), 1.0f))
                                 .times(Matrix4.fromColumns(
                                     arrow3DirectionX.negated(),
                                     arrow3DirectionY.negated(),
@@ -258,11 +258,11 @@ public class LightWidgets<ContextType extends Context<ContextType>> extends Shad
 
                         getDrawable().draw(PrimitiveMode.TRIANGLE_FAN, cameraViewport.ofFramebuffer(framebuffer));
 
-                        if (widgetTransformation.getColumn(3).getXYZ().distance(widgetInfo[i].lightCenter) > 0.01f)
+                        if (widgetTransformation.getColumn(3).getXYZ().distance(widgetInfo[i].getLightCenter()) > 0.01f)
                         {
                             getDrawable().program().setUniform("model_view",
                                 Matrix4.translate(arrow3PositionR)
-                                    .times(Matrix4.scale(widgetInfo[i].perspectiveWidgetScale, widgetInfo[i].perspectiveWidgetScale, 1.0f))
+                                    .times(Matrix4.scale(widgetInfo[i].getPerspectiveWidgetScale(), widgetInfo[i].getPerspectiveWidgetScale(), 1.0f))
                                     .times(Matrix4.fromColumns(
                                         arrow3DirectionX,
                                         arrow3DirectionY,

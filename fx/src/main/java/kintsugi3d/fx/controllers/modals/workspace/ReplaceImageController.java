@@ -66,7 +66,7 @@ public class ReplaceImageController extends DataReceiverPageControllerBase<Image
     }
 
     @Override
-    public boolean confirm()
+    public boolean tryConfirm()
     {
         // Texture replacement must happen on graphics thread.
         Rendering.runLater(() ->

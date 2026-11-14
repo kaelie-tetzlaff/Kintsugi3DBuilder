@@ -75,7 +75,7 @@ public class ResampleRequest implements ProgressMonitoredImageBasedGraphicsReque
                 renderable.draw(framebuffer, view.getCameraPose(), view.getProjectionMatrix());
 
                 File exportFile = new File(resampleExportPath,
-                    ImageFinder.getInstance().getImageFileNameWithExtension(view.getImageFile().getName(), "png"));
+                    ImageFinder.getImageFileNameWithExtension(view.getImageFile().getName(), "png"));
 
                 exportFile.getParentFile().mkdirs();
                 framebuffer.getTextureReaderForColorAttachment(0).saveToFile("PNG", exportFile);

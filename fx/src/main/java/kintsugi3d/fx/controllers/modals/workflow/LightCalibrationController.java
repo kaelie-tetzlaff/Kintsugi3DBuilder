@@ -77,7 +77,7 @@ public class LightCalibrationController extends NonDataPageControllerBase
     }
 
     @Override
-    public boolean cancel()
+    public boolean tryCancel()
     {
         if (StaticUtilities.confirmCancel())
         {
@@ -92,7 +92,7 @@ public class LightCalibrationController extends NonDataPageControllerBase
     }
 
     @Override
-    public boolean confirm()
+    public boolean tryConfirm()
     {
         Global.io().applyLightOffsetCalibration();
         settingsModel.set("lightCalibrationMode", false);

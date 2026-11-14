@@ -9,19 +9,32 @@
  * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
-package kintsugi3d.util;
+package kintsugi3d.gl.util;
 
-import kintsugi3d.gl.window.Canvas3D;
-import kintsugi3d.gl.window.listeners.*;
-
-public interface CanvasListener extends CursorPositionListener, MouseButtonPressListener, MouseButtonReleaseListener, ScrollListener, KeyPressListener
+/**
+ * Extends ColorArrayList with explicit width and height
+ */
+public class ColorArrayImage extends ColorArrayList implements ColorImage
 {
-    default void addToCanvas(Canvas3D<? extends kintsugi3d.gl.core.Context<?>> canvas)
+    private final int width;
+    private final int height;
+
+    public ColorArrayImage(float[] colorData, int width, int height)
     {
-        canvas.addCursorPositionListener(this);
-        canvas.addMouseButtonPressListener(this);
-        canvas.addMouseButtonReleaseListener(this);
-        canvas.addScrollListener(this);
-        canvas.addKeyPressListener(this);
+        super(colorData);
+        this.width = width;
+        this.height = height;
+    }
+
+    @Override
+    public int getWidth()
+    {
+        return width;
+    }
+
+    @Override
+    public int getHeight()
+    {
+        return height;
     }
 }

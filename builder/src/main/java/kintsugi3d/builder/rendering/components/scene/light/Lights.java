@@ -94,21 +94,18 @@ public class Lights<ContextType extends Context<ContextType>> extends ShaderComp
             // Draw lights
             for (int i = 0; i < sceneModel.getLightingModel().getLightCount(); i++)
             {
-                if (sceneModel.getLightingModel().isLightVisualizationEnabled(i))
-                {
-                    Matrix4 widgetTransformation = cameraViewport.getView().times(sceneModel.getInverseLightViewMatrix(i));
+                Matrix4 widgetTransformation = cameraViewport.getView().times(sceneModel.getInverseLightViewMatrix(i));
 
-                    getContext().getState().setBlendFunction(new BlendFunction(Weight.ONE, Weight.ONE));
-                    this.getDrawable().program().setUniform("objectID", sceneViewportModel.lookupSceneObjectID(getSceneObjectTag(i)));
-                    this.getDrawable().program().setUniform("color", sceneModel.getLightingModel().getLightPrototype(i).getColor().times((float) Math.PI));
+                getContext().getState().setBlendFunction(new BlendFunction(Weight.ONE, Weight.ONE));
+                this.getDrawable().program().setUniform("objectID", sceneViewportModel.lookupSceneObjectID(getSceneObjectTag(i)));
+                this.getDrawable().program().setUniform("color", sceneModel.getLightingModel().getLightPrototype(i).getColor().times((float) Math.PI));
 
-                    Vector3 lightPosition = widgetTransformation.getColumn(3).getXYZ();
+                Vector3 lightPosition = widgetTransformation.getColumn(3).getXYZ();
 
-                    this.getDrawable().program().setUniform("model_view",
-                        Matrix4.translate(lightPosition)
-                            .times(Matrix4.scale(-lightPosition.z / 32.0f, -lightPosition.z / 32.0f, 1.0f)));
-                    this.getDrawable().draw(PrimitiveMode.TRIANGLE_FAN, cameraViewport.ofFramebuffer(framebuffer));
-                }
+                this.getDrawable().program().setUniform("model_view",
+                    Matrix4.translate(lightPosition)
+                        .times(Matrix4.scale(-lightPosition.z / 32.0f, -lightPosition.z / 32.0f, 1.0f)));
+                this.getDrawable().draw(PrimitiveMode.TRIANGLE_FAN, cameraViewport.ofFramebuffer(framebuffer));
             }
 
             getContext().getState().disableBlending();

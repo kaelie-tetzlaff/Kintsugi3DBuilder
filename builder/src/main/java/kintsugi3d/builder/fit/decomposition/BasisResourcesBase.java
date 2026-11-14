@@ -48,7 +48,7 @@ public abstract class BasisResourcesBase<ContextType extends Context<ContextType
             .setLinearFilteringEnabled(true)
             .setMipmapsEnabled(false)
             .createTexture();
-        basisMaps.setTextureWrap(TextureWrapMode.None, TextureWrapMode.None);
+        basisMaps.setTextureWrap(TextureWrapMode.NONE, TextureWrapMode.NONE);
         return basisMaps;
     }
 

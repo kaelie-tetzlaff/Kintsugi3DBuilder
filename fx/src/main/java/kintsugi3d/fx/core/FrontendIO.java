@@ -29,6 +29,8 @@ import kintsugi3d.gl.interactive.UserCancellationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
 public final class FrontendIO
@@ -83,7 +85,7 @@ public final class FrontendIO
             projectFileChooser = new FileChooser();
         }
 
-        projectFileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+        projectFileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
 
         return projectFileChooser;
     }
@@ -240,34 +242,31 @@ public final class FrontendIO
             fileChooser.setInitialDirectory(vsetFile.getParentFile());
         }
 
-        var fileContainer = new Object()
-        {
-            volatile boolean complete = false;
-            volatile File selectedFile;
-        };
+        AtomicBoolean complete = new AtomicBoolean(false);
+        AtomicReference<File> selectedFile = new AtomicReference<>(null);
 
         if (Platform.isFxApplicationThread())
         {
             // If already on the JavaFX application thread, just open the dialog here to avoid deadlock
-            fileContainer.selectedFile = fileChooser.showSaveDialog(parentWindow);
-            fileContainer.complete = true;
+            selectedFile.set(fileChooser.showSaveDialog(parentWindow));
+            complete.set(true);
         }
         else
         {
             // On MacOS, the save dialog needs to run on JavaFX thread, so use Platform.runLater if not already on that thread.
             Platform.runLater(() ->
             {
-                fileContainer.selectedFile = fileChooser.showSaveDialog(parentWindow);
-                fileContainer.complete = true;
+                selectedFile.set(fileChooser.showSaveDialog(parentWindow));
+                complete.set(true);
             });
 
-            while (!fileContainer.complete)
+            while (!complete.get())
             {
                 Thread.onSpinWait();
             }
         }
 
-        return fileContainer.selectedFile;
+        return selectedFile.get();
     }
 
     /**

@@ -60,7 +60,7 @@ public interface TextureResources<ContextType extends Context<ContextType>>
     @Override
     default Texture2D<ContextType> getTexture(StandardTexture tex)
     {
-        return getTextures().get(tex.details);
+        return getTextures().get(tex.getDetails());
     }
 
     void disableBasisMaterials(Collection<String> materialNames);
@@ -122,12 +122,12 @@ public interface TextureResources<ContextType extends Context<ContextType>>
 
     static String getTextureFilename(StandardTexture tex, String format)
     {
-        return getTextureFilename(tex.details.name, format);
+        return getTextureFilename(tex.getDetails().name, format);
     }
 
     static String getTextureFilename(StandardTexture tex, String format, String filenamePrefix)
     {
-        return getTextureFilename(tex.details.name, format, filenamePrefix);
+        return getTextureFilename(tex.getDetails().name, format, filenamePrefix);
     }
 
     static String getTextureFilename(String texName, String format)
@@ -168,7 +168,7 @@ public interface TextureResources<ContextType extends Context<ContextType>>
 
     static File getTextureFile(StandardTexture t, File directory)
     {
-        return getTextureFile(t.details.name, directory);
+        return getTextureFile(t.getDetails().name, directory);
     }
 
     static File getTextureFile(String texName, File directory)
@@ -198,7 +198,7 @@ public interface TextureResources<ContextType extends Context<ContextType>>
     static <ContextType extends Context<ContextType>>
     Texture2D<ContextType> loadTexture(StandardTexture tex, File directory, ContextType context) throws IOException
     {
-        return loadTexture(tex.details.name, directory, context);
+        return loadTexture(tex.getDetails().name, directory, context);
     }
 
     default Texture2D<ContextType> loadTexture(String texName, File directory) throws IOException
@@ -208,7 +208,7 @@ public interface TextureResources<ContextType extends Context<ContextType>>
 
     default Texture2D<ContextType> loadTexture(StandardTexture tex, File directory) throws IOException
     {
-        return loadTexture(tex.details.name, directory, getContext());
+        return loadTexture(tex.getDetails().name, directory, getContext());
     }
 
     static <ContextType extends Context<ContextType>> TextureResources<ContextType> makeNull(ContextType context)
@@ -249,6 +249,12 @@ public interface TextureResources<ContextType extends Context<ContextType>>
             public BasisWeightResources<ContextType> getBasisWeightResources()
             {
                 return null;
+            }
+
+            @Override
+            public String sanitizeTextureName(CharSequence name)
+            {
+                throw new UnsupportedOperationException();
             }
 
             @Override

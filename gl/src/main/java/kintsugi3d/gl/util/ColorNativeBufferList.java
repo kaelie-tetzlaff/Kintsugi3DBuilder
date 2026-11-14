@@ -20,7 +20,7 @@ import java.util.AbstractList;
 
 public class ColorNativeBufferList extends AbstractList<Vector4> implements ColorList
 {
-    public final FloatBuffer buffer;
+    private final FloatBuffer buffer;
     private int size;
 
     public ColorNativeBufferList(int size)
@@ -87,5 +87,10 @@ public class ColorNativeBufferList extends AbstractList<Vector4> implements Colo
     public void setSize(int size)
     {
         this.size = size;
+    }
+
+    public FloatBuffer getBuffer()
+    {
+        return buffer;
     }
 }

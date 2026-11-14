@@ -29,8 +29,8 @@ import java.util.stream.IntStream;
 
 public class SampledLuminanceEncoding 
 {
-    public final DoubleUnaryOperator decodeFunction;
-    public final DoubleUnaryOperator encodeFunction;
+    private final DoubleUnaryOperator decodeFunction;
+    private final DoubleUnaryOperator encodeFunction;
 
     public SampledLuminanceEncoding()
     {
@@ -227,5 +227,15 @@ public class SampledLuminanceEncoding
     public <ContextType extends Context<ContextType>>LuminanceMapResources<ContextType> createResources(ContextType context)
     {
         return LuminanceMapResources.createFromEncoding(context, this);
+    }
+
+    public DoubleUnaryOperator getDecodeFunction()
+    {
+        return decodeFunction;
+    }
+
+    public DoubleUnaryOperator getEncodeFunction()
+    {
+        return encodeFunction;
     }
 }

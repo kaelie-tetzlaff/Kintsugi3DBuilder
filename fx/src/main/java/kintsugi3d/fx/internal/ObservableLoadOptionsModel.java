@@ -19,39 +19,39 @@ import kintsugi3d.builder.io.LoadOptionsModel;
 
 public class ObservableLoadOptionsModel implements LoadOptionsModel
 {
-    public final BooleanProperty colorImages = new SimpleBooleanProperty(true);
-    public final BooleanProperty mipmaps = new SimpleBooleanProperty(true);
-    public final BooleanProperty compression = new SimpleBooleanProperty(true);
-    public final BooleanProperty alpha = new SimpleBooleanProperty(true);
-    public final BooleanProperty depthImages = new SimpleBooleanProperty(true);
-    public final IntegerProperty depthWidth = new SimpleIntegerProperty(512);
-    public final IntegerProperty depthHeight = new SimpleIntegerProperty(512);
-    public final IntegerProperty previewWidth = new SimpleIntegerProperty(1024);
-    public final IntegerProperty previewHeight = new SimpleIntegerProperty(1024);
-    public final IntegerProperty maxLoadingThreads = new SimpleIntegerProperty(12);
+    private final BooleanProperty colorImagesRequested = new SimpleBooleanProperty(true);
+    private final BooleanProperty mipmapsRequested = new SimpleBooleanProperty(true);
+    private final BooleanProperty compressionRequested = new SimpleBooleanProperty(true);
+    private final BooleanProperty alphaRequested = new SimpleBooleanProperty(true);
+    private final BooleanProperty depthImagesRequested = new SimpleBooleanProperty(true);
+    private final IntegerProperty depthImageWidth = new SimpleIntegerProperty(512);
+    private final IntegerProperty depthImageHeight = new SimpleIntegerProperty(512);
+    private final IntegerProperty previewImageWidth = new SimpleIntegerProperty(1024);
+    private final IntegerProperty previewImageHeight = new SimpleIntegerProperty(1024);
+    private final IntegerProperty maxLoadingThreads = new SimpleIntegerProperty(12);
 
     @Override
     public boolean areColorImagesRequested()
     {
-        return colorImages.get();
+        return colorImagesRequested.get();
     }
 
     @Override
     public boolean areMipmapsRequested()
     {
-        return mipmaps.get();
+        return mipmapsRequested.get();
     }
 
     @Override
     public boolean isCompressionRequested()
     {
-        return compression.get();
+        return compressionRequested.get();
     }
 
     @Override
     public boolean isAlphaRequested()
     {
-        return alpha.get();
+        return alphaRequested.get();
     }
 
     @Override
@@ -63,55 +63,55 @@ public class ObservableLoadOptionsModel implements LoadOptionsModel
     @Override
     public boolean areDepthImagesRequested()
     {
-        return depthImages.get();
+        return depthImagesRequested.get();
     }
 
     @Override
     public int getDepthImageWidth()
     {
-        return depthWidth.get();
+        return depthImageWidth.get();
     }
 
     @Override
     public int getDepthImageHeight()
     {
-        return depthHeight.get();
+        return depthImageHeight.get();
     }
 
     @Override
     public int getPreviewImageWidth()
     {
-        return previewWidth.get();
+        return previewImageWidth.get();
     }
 
     @Override
     public int getPreviewImageHeight()
     {
-        return previewHeight.get();
+        return previewImageHeight.get();
     }
 
     @Override
     public void setColorImagesRequested(boolean colorImagesRequested)
     {
-        colorImages.setValue(colorImagesRequested);
+        this.colorImagesRequested.setValue(colorImagesRequested);
     }
 
     @Override
     public void setMipmapsRequested(boolean mipmapsRequested)
     {
-        mipmaps.setValue(mipmapsRequested);
+        this.mipmapsRequested.setValue(mipmapsRequested);
     }
 
     @Override
     public void setCompressionRequested(boolean compressionRequested)
     {
-        compression.setValue(compressionRequested);
+        this.compressionRequested.setValue(compressionRequested);
     }
 
     @Override
     public void setAlphaRequested(boolean alphaRequested)
     {
-        alpha.setValue(alphaRequested);
+        this.alphaRequested.setValue(alphaRequested);
     }
 
     @Override
@@ -123,30 +123,79 @@ public class ObservableLoadOptionsModel implements LoadOptionsModel
     @Override
     public void setDepthImagesRequested(boolean depthImagesRequested)
     {
-        depthImages.setValue(depthImagesRequested);
+        this.depthImagesRequested.setValue(depthImagesRequested);
     }
 
     @Override
     public void setDepthImageWidth(int depthImageWidth)
     {
-        depthWidth.setValue(depthImageWidth);
+        this.depthImageWidth.setValue(depthImageWidth);
     }
 
     @Override
     public void setDepthImageHeight(int depthImageHeight)
     {
-        depthHeight.setValue(depthImageHeight);
+        this.depthImageHeight.setValue(depthImageHeight);
     }
 
     @Override
     public void setPreviewImageHeight(int previewImageHeight)
     {
-        previewHeight.setValue(previewImageHeight);
+        this.previewImageHeight.setValue(previewImageHeight);
     }
 
     @Override
     public void setPreviewImageWidth(int previewImageWidth)
     {
-        previewWidth.setValue(previewImageWidth);
+        this.previewImageWidth.setValue(previewImageWidth);
+    }
+
+    public BooleanProperty colorImagesRequestedProperty()
+    {
+        return colorImagesRequested;
+    }
+    public BooleanProperty mipmapsRequestedProperty()
+    {
+        return mipmapsRequested;
+    }
+
+    public BooleanProperty compressionRequestedProperty()
+    {
+        return compressionRequested;
+    }
+
+    public BooleanProperty alphaRequestedProperty()
+    {
+        return alphaRequested;
+    }
+
+    public BooleanProperty depthImagesRequestedProperty()
+    {
+        return depthImagesRequested;
+    }
+
+    public IntegerProperty depthImageWidthProperty()
+    {
+        return depthImageWidth;
+    }
+
+    public IntegerProperty depthImageHeightProperty()
+    {
+        return depthImageHeight;
+    }
+
+    public IntegerProperty previewImageWidthProperty()
+    {
+        return previewImageWidth;
+    }
+
+    public IntegerProperty previewImageHeightProperty()
+    {
+        return previewImageHeight;
+    }
+
+    public IntegerProperty maxLoadingThreadsProperty()
+    {
+        return maxLoadingThreads;
     }
 }

@@ -17,12 +17,13 @@ import kintsugi3d.builder.state.scene.ManipulableObjectPoseModel;
 import kintsugi3d.builder.state.scene.ManipulableViewpointModel;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.tools.MultiplierTool.Type;
+import kintsugi3d.gl.core.Context;
+import kintsugi3d.gl.util.CanvasListener;
 import kintsugi3d.gl.window.Canvas3D;
 import kintsugi3d.gl.window.CursorPosition;
 import kintsugi3d.gl.window.Key;
 import kintsugi3d.gl.window.ModifierKeys;
 import kintsugi3d.gl.window.listeners.ScrollListener;
-import kintsugi3d.util.CanvasListener;
 import kintsugi3d.util.KeyPress;
 import kintsugi3d.util.MouseMode;
 import org.slf4j.Logger;
@@ -63,7 +64,7 @@ public final class ToolBox implements CanvasListener
 
     //pass methods to selected tool
     @Override
-    public void scroll(Canvas3D<? extends kintsugi3d.gl.core.Context<?>> canvas, double xOffset, double yOffset)
+    public void scroll(Canvas3D<? extends Context<?>> canvas, double xOffset, double yOffset)
     {
         try
         {
@@ -82,11 +83,12 @@ public final class ToolBox implements CanvasListener
     }
 
     @Override
-    public void cursorMoved(Canvas3D<? extends kintsugi3d.gl.core.Context<?>> canvas, double xPos, double yPos)
+    public void cursorMoved(Canvas3D<? extends Context<?>> canvas, double xPos, double yPos)
     {
         try
         {
-            if (!lightTool.cursorMoved(canvas, xPos, yPos))
+            lightTool.cursorMoved(canvas, xPos, yPos);
+            if (!lightTool.isDragging())
             {
                 DragTool selectedTool = getSelectedDragTool();
                 if (selectedTool != null)
@@ -108,7 +110,7 @@ public final class ToolBox implements CanvasListener
     }
 
     @Override
-    public void keyPressed(Canvas3D<? extends kintsugi3d.gl.core.Context<?>> canvas, Key key, ModifierKeys mods)
+    public void keyPressed(Canvas3D<? extends Context<?>> canvas, Key key, ModifierKeys mods)
     {
         try
         {
@@ -131,13 +133,14 @@ public final class ToolBox implements CanvasListener
     }
 
     @Override
-    public void mouseButtonPressed(Canvas3D<? extends kintsugi3d.gl.core.Context<?>> canvas, int buttonIndex, ModifierKeys mods)
+    public void mouseButtonPressed(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods)
     {
         if (getSelectedDragTool() == null) // Only do something if another drag isn't already in progress.
         {
             try
             {
-                if (!lightTool.mouseButtonPressed(canvas, buttonIndex, mods))
+                lightTool.mouseButtonPressed(canvas, buttonIndex, mods);
+                if (!lightTool.isDragging())
                 {
                     currentMode = new MouseMode(buttonIndex, mods);
                     DragTool selectedTool = getSelectedDragTool();
@@ -161,7 +164,7 @@ public final class ToolBox implements CanvasListener
     }
 
     @Override
-    public void mouseButtonReleased(Canvas3D<? extends kintsugi3d.gl.core.Context<?>> canvas, int buttonIndex, ModifierKeys mods)
+    public void mouseButtonReleased(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods)
     {
         try
         {
@@ -215,18 +218,7 @@ public final class ToolBox implements CanvasListener
         dragToolBuilders.put(DragToolType.LOOK_AT_POINT, LookAtPointTool.getBuilder());
 
         // A little bit weird but using a closure here simultaneously avoids copy-pasting code and boilerplate classes
-        var dependencies = new Object()
-        {
-            <ToolType> ToolBuilder<? extends ToolType> inject(ToolBuilder<ToolType> builder)
-            {
-                return builder
-                    .setCameraModel(cameraModel)
-                    .setLightingEnvironmentModel(lightingModel)
-                    .setObjectModel(objectModel)
-                    .setSettingsModel(settingsModel)
-                    .setSceneViewport(sceneViewport);
-            }
-        };
+        var dependencies = new DependencyContainer(cameraModel, lightingModel, objectModel, settingsModel, sceneViewport);
 
         for (Entry<DragToolType, ToolBuilder<? extends DragTool>> entries : dragToolBuilders.entrySet())
         {
@@ -282,6 +274,11 @@ public final class ToolBox implements CanvasListener
         lightTool = dependencies.inject(LightTool.getBuilder()).create();
     }
 
+    public static Builder getBuilder()
+    {
+        return new Builder();
+    }
+
     public static final class Builder
     {
         private ToolBindingModel toolBindingModel;
@@ -290,11 +287,6 @@ public final class ToolBox implements CanvasListener
         private ManipulableLightingEnvironmentModel lightingModel;
         private ManipulableObjectPoseModel objectModel;
         private SceneViewport sceneViewport;
-
-        public static Builder create()
-        {
-            return new Builder();
-        }
 
         private Builder()
         {
@@ -336,9 +328,39 @@ public final class ToolBox implements CanvasListener
             return this;
         }
 
-        public CanvasListener build()
+        public CanvasListener create()
         {
             return new ToolBox(cameraModel, lightingModel, objectModel, settingsModel, toolBindingModel, sceneViewport);
+        }
+    }
+
+    private static final class DependencyContainer
+    {
+        private final ManipulableViewpointModel cameraModel;
+        private final ManipulableLightingEnvironmentModel lightingModel;
+        private final ManipulableObjectPoseModel objectModel;
+        private final GeneralSettingsModel settingsModel;
+        private final SceneViewport sceneViewport;
+
+        private DependencyContainer(
+            ManipulableViewpointModel cameraModel, ManipulableLightingEnvironmentModel lightingModel,
+            ManipulableObjectPoseModel objectModel, GeneralSettingsModel settingsModel, SceneViewport sceneViewport)
+        {
+            this.cameraModel = cameraModel;
+            this.lightingModel = lightingModel;
+            this.objectModel = objectModel;
+            this.settingsModel = settingsModel;
+            this.sceneViewport = sceneViewport;
+        }
+
+        <ToolType> ToolBuilder<? extends ToolType> inject(ToolBuilder<ToolType> builder)
+        {
+            return builder
+                .setCameraModel(cameraModel)
+                .setLightingEnvironmentModel(lightingModel)
+                .setObjectModel(objectModel)
+                .setSettingsModel(settingsModel)
+                .setSceneViewport(sceneViewport);
         }
     }
 }

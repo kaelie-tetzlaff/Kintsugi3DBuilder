@@ -93,7 +93,7 @@ public final class Matrix3
      * @param s The scale along all axes.
      * @return The specified scale matrix.
      */
-    public static Matrix3 scale(float s)
+    public static Matrix3 scale(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") float s)
     {
         return scale(s, s, s);
     }

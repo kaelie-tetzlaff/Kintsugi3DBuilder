@@ -68,7 +68,7 @@ public abstract class ProjectSettingsControllerBase extends NonDataPageControlle
 
     @Override
     @FXML
-    public boolean cancel()
+    public boolean tryCancel()
     {
         return StaticUtilities.confirmCancel();
     }

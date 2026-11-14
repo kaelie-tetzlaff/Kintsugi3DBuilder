@@ -21,18 +21,27 @@ public class MappedChange<K, V>
         ADDED, REMOVED, MODIFIED
     }
 
-    public final Type changeType;
-    public final Map<K, V> changeMap;
+    private final Type type;
+    private final Map<K, V> map;
 
-    public MappedChange(Type changeType, Map<K, V> changeMap)
+    public MappedChange(Type type, Map<K, V> map)
     {
-        this.changeType = changeType;
-        this.changeMap = Collections.unmodifiableMap(changeMap);
+        this.type = type;
+        this.map = Collections.unmodifiableMap(map);
     }
 
-    public MappedChange(Type changeType, K key, V value)
+    public MappedChange(Type type, K key, V value)
     {
-        this.changeType = changeType;
-        this.changeMap = Map.of(key, value);
+        this.type = type;
+        this.map = Map.of(key, value);
+    }
+    public Type getType()
+    {
+        return type;
+    }
+
+    public Map<K, V> getMap()
+    {
+        return map;
     }
 }

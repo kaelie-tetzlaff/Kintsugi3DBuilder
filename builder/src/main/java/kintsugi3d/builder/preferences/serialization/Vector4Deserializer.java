@@ -9,12 +9,22 @@
  * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
-package kintsugi3d.util;
+package kintsugi3d.builder.preferences.serialization;
 
-import kintsugi3d.gl.util.ColorList;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
+import kintsugi3d.gl.vecmath.Vector4;
 
-public interface ColorImage extends ColorList
+import java.io.IOException;
+
+public class Vector4Deserializer extends JsonDeserializer<Vector4>
 {
-    int getWidth();
-    int getHeight();
+    @Override
+    public Vector4 deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException
+    {
+        JsonNode node = jsonParser.getCodec().readTree(jsonParser);
+        return new Vector4(node.get("x").floatValue(), node.get("y").floatValue(), node.get("z").floatValue(), node.get("w").floatValue());
+    }
 }

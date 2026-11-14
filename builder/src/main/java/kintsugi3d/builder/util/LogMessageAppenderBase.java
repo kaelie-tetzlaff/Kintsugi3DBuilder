@@ -16,6 +16,7 @@ import kintsugi3d.builder.util.logging.LogMessageListener;
 import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
+import org.apache.logging.log4j.core.config.Property;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
@@ -34,7 +35,7 @@ public abstract class LogMessageAppenderBase extends AbstractAppender
 
     protected LogMessageAppenderBase(String name, Filter filter, Layout<? extends Serializable> layout)
     {
-        super(name, filter, layout);
+        super(name, filter, layout, true, Property.EMPTY_ARRAY);
     }
 
     public static boolean isLevelAvailable(Level level)

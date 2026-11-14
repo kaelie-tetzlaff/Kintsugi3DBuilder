@@ -57,10 +57,8 @@
                         <MenuItem mnemonicParsing="false" text="Action 1" />
                     </Menu>
                     <Menu fx:id="cleanRecentProjectsMenu" mnemonicParsing="false" text="Clear Recent Projects">
-                        <MenuItem fx:id="removeSomeRefsCustMenuItem" text="Clear Missing Projects"
-                                  onAction="#removeInvalidReferences"/>
-                        <MenuItem fx:id="removeAllRefsCustMenuItem" text="Clear All Projects"
-                                  onAction="#removeAllReferences"/>
+                        <MenuItem text="Clear Missing Projects" onAction="#removeInvalidReferences"/>
+                        <MenuItem text="Clear All Projects" onAction="#removeAllReferences"/>
                     </Menu>
 
                     <SeparatorMenuItem mnemonicParsing="false" />
@@ -170,8 +168,13 @@
                     <fx:include fx:id="framebufferView" source="FramebufferView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                     <fx:include source="Splitter.fxml" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
                 </StackPane>
-                <HBox fx:id = "carouselContainer" pickOnBounds="false" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0">
+                <!-- Carousel container -->
+                <HBox pickOnBounds="false" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0">
+                    <!-- Need to suppress inspections since the IntelliJ JavaFX inspector misses instances where the
+                         fx:id is mapped to a controller reference -->
+                    <!--suppress JavaFxUnresolvedFxIdReference -->
                     <fx:include fx:id="carousel" source="Carousel.fxml" AnchorPane.bottomAnchor="0.0" HBox.hgrow="ALWAYS"/>
+                    <!--suppress JavaFxUnresolvedFxIdReference -->
                     <fx:include fx:id = "transparentContainer" source = "TransparentContainer.fxml" VBox.vgrow="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
                 </HBox>
                 <AnchorPane fx:id="miniProgressPane" prefHeight="24.0" style="-fx-background-color: #202020;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">

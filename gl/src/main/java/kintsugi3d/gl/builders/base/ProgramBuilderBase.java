@@ -22,13 +22,18 @@ import java.util.*;
 
 public abstract class ProgramBuilderBase<ContextType extends Context<ContextType>> implements ProgramBuilder<ContextType> 
 {
+    public ContextType getContext()
+    {
+        return context;
+    }
+
     @FunctionalInterface
     private interface ShaderSupplier<ContextType extends Context<ContextType>>
     {
         Shader<ContextType> get() throws IOException;
     }
 
-    protected final ContextType context;
+    private final ContextType context;
     private final List<ShaderSupplier<ContextType>> shaderBuilders;
 
     private final Map<String, Object> defines;

@@ -63,7 +63,7 @@ public class DoubleVector4 implements Iterable<Double>
         this.w = w;
     }
 
-    public DoubleVector4 (double value)
+    public DoubleVector4 (@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") double value)
     {
         this(value, value, value, value);
     }
@@ -208,12 +208,7 @@ public class DoubleVector4 implements Iterable<Double>
     @Override
     public String toString()
     {
-        return "DoubleVector4{" +
-            "x=" + x +
-            ", y=" + y +
-            ", z=" + z +
-            ", w=" + w +
-            '}';
+        return String.format("DoubleVector4{x=%s, y=%s, z=%s, w=%s}", x, y, z, w);
     }
 
     @Override

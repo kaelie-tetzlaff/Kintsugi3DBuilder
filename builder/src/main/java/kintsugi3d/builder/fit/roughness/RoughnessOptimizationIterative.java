@@ -76,7 +76,7 @@ public class RoughnessOptimizationIterative<ContextType extends Context<ContextT
             program -> // Just use the rectangle as geometry
             {
                 Drawable<ContextType> drawable = basisResources.getContext().createDrawable(program);
-                drawable.addVertexBuffer("position", rect);
+                drawable.addVertexBuffer("position", getRect());
                 drawable.setDefaultPrimitiveMode(PrimitiveMode.TRIANGLE_FAN);
                 return drawable;
             });

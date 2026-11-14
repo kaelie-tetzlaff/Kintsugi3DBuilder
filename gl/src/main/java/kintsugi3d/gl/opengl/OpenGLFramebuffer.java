@@ -22,7 +22,7 @@ import static org.lwjgl.opengl.GL30.*;
 
 abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
 {
-    protected final OpenGLContext context;
+    private final OpenGLContext context;
 
     OpenGLFramebuffer(OpenGLContext context)
     {
@@ -35,13 +35,13 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
         return this.context;
     }
 
-    abstract class ContentsBase implements FramebufferDrawContents<OpenGLContext>, FramebufferReadContents<OpenGLContext>
+    abstract static class Contents implements FramebufferDrawContents<OpenGLContext>, FramebufferReadContents<OpenGLContext>
     {
-        private final OpenGLContext context;
+        private final OpenGLFramebuffer framebuffer;
 
-        protected ContentsBase()
+        Contents(OpenGLFramebuffer framebuffer)
         {
-            this.context = OpenGLFramebuffer.this.context;
+            this.framebuffer = framebuffer;
         }
 
         abstract int getId();
@@ -49,13 +49,13 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
         @Override
         public OpenGLContext getContext()
         {
-            return context;
+            return framebuffer.context;
         }
 
         @Override
         public FramebufferSize getSize()
         {
-            return OpenGLFramebuffer.this.getSize();
+            return framebuffer.getSize();
         }
 
         private void bindForDrawCommon(int x, int y, int width, int height)
@@ -83,7 +83,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
         @Override
         public void bindForDraw()
         {
-            FramebufferSize size = OpenGLFramebuffer.this.getSize();
+            FramebufferSize size = framebuffer.getSize();
             this.bindViewportForDraw(0, 0, size.width, size.height);
         }
 
@@ -101,7 +101,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
         @Override
         public void bindSingleAttachmentForDraw(int attachmentIndex)
         {
-            FramebufferSize size = OpenGLFramebuffer.this.getSize();
+            FramebufferSize size = framebuffer.getSize();
             this.bindForDrawCommon(0, 0, size.width, size.height);
 
             selectColorDestinationForDraw(attachmentIndex);
@@ -110,7 +110,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
         @Override
         public void bindNonColorAttachmentsForDraw()
         {
-            FramebufferSize size = OpenGLFramebuffer.this.getSize();
+            FramebufferSize size = framebuffer.getSize();
             this.bindForDrawCommon(0, 0, size.width, size.height);
         }
 
@@ -148,7 +148,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
         return getContents();
     }
 
-    protected abstract ContentsBase getContents();
+    protected abstract Contents getContents();
 
     @Override
     public void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a)

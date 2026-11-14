@@ -86,7 +86,7 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
         {
             if (!disabledImageFiles.contains(new File(primaryViewCandidate.name)))
             {
-                File imgFile = ImageFinder.getInstance().tryFindImageFile(new File(fullResSearchDir, primaryViewCandidate.name));
+                File imgFile = ImageFinder.tryFindImageFile(new File(fullResSearchDir, primaryViewCandidate.name));
                 if (imgFile != null && primaryViewCandidate.id != -1)
                 {
                     cameraIdToFullRes.put(primaryViewCandidate.id, imgFile.getPath());
@@ -174,7 +174,7 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
         File finalImgFile;
 
         //return original file
-        finalImgFile = ImageFinder.getInstance().tryFindImageFile(imageFile);
+        finalImgFile = ImageFinder.tryFindImageFile(imageFile);
         if (finalImgFile != null)
         {
             return Optional.of(finalImgFile.getPath());
@@ -183,7 +183,7 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
         //return file by searching canonical path
         try
         {
-            finalImgFile = ImageFinder.getInstance().tryFindImageFile(new File(imageFile.getCanonicalPath()));
+            finalImgFile = ImageFinder.tryFindImageFile(new File(imageFile.getCanonicalPath()));
             if (finalImgFile != null)
             {
                 return Optional.of(finalImgFile.getPath());
@@ -195,7 +195,7 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
         }
 
         //throw a hail mary and see if it sticks
-        finalImgFile = ImageFinder.getInstance().tryFindImageFile(new File(imageFile.getAbsolutePath()
+        finalImgFile = ImageFinder.tryFindImageFile(new File(imageFile.getAbsolutePath()
             .replace("..\\", "")
             .replace("../", "")));
         if (finalImgFile != null)

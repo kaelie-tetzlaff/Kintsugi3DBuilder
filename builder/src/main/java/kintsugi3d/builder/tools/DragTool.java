@@ -16,14 +16,29 @@ import kintsugi3d.gl.window.CursorPosition;
 
 interface DragTool
 {
+    /**
+     * Can be overridden to define behavior when a mouse button is pressed.
+     * @param cursorPosition
+     * @param canvasSize
+     */
     default void mouseButtonPressed(CursorPosition cursorPosition, CanvasSize canvasSize)
     {
     }
 
+    /**
+     * Can be overridden to define behavior when a mouse button is released.
+     * @param cursorPosition
+     * @param canvasSize
+     */
     default void mouseButtonReleased(CursorPosition cursorPosition, CanvasSize canvasSize)
     {
     }
 
+    /**
+     * Can be overridden to define behavior as a mouse button is dragged.
+     * @param cursorPosition
+     * @param canvasSize
+     */
     default void cursorDragged(CursorPosition cursorPosition, CanvasSize canvasSize)
     {
     }

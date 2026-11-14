@@ -20,11 +20,14 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<ContextType>>
     implements ReadonlyTextureResources<ContextType>
 {
     protected static final Logger LOG = LoggerFactory.getLogger(ReadonlyTextureResourcesBase.class);
+
+    private static final Pattern TEXTURE_NAME_PROBLEM_CHARS = Pattern.compile("[^A-Za-z0-9]+");
 
     private static <ContextType extends Context<ContextType>> void useTextureSafe(
         Program<ContextType> program, String textureName, Texture<ContextType> texture)
@@ -40,6 +43,12 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
     }
 
     @Override
+    public String sanitizeTextureName(CharSequence name)
+    {
+        return TEXTURE_NAME_PROBLEM_CHARS.matcher(name).replaceAll("_");
+    }
+
+    @Override
     public void setupShaderProgram(Program<ContextType> program)
     {
         for (var entry : this.getTextures().entrySet())
@@ -47,7 +56,7 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
             useTextureSafe(program,
                 // Sanitize texture names when being used as shader variables:
                 // replace one or more non-alphanumeric characters with underscore.
-                String.format("tex_%s", entry.getKey().name.replaceAll("[^A-Za-z0-9]+", "_")),
+                String.format("tex_%s", sanitizeTextureName(entry.getKey().name)),
                 entry.getValue());
         }
 

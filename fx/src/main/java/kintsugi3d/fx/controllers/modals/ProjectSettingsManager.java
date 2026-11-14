@@ -73,7 +73,7 @@ public class ProjectSettingsManager
         }
 
         // Populate local model with the current project settings.
-        localSettingsModel.copyFrom(this.projectSettingsModel);
+        localSettingsModel.copyAllFrom(this.projectSettingsModel);
     }
 
     /**

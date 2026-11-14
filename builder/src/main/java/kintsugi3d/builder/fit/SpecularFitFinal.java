@@ -74,7 +74,7 @@ public final class SpecularFitFinal<ContextType extends Context<ContextType>>
         managedTextures.putAll(original.getTextures().entrySet().stream()
             .filter(entry ->
                 // Skip specular color and roughness maps that are handled by SpecularFitBase:
-                !StandardTexture.SPECULAR_COLOR.details.equals(entry.getKey()) && !StandardTexture.ROUGHNESS.details.equals(entry.getKey()))
+                !StandardTexture.SPECULAR_COLOR.getDetails().equals(entry.getKey()) && !StandardTexture.ROUGHNESS.getDetails().equals(entry.getKey()))
             .collect(Collectors.toMap(Entry::getKey,
                 entry -> context.getTextureFactory()
                     .build2DColorTexture(textureResolution.width, textureResolution.height)
@@ -139,11 +139,11 @@ public final class SpecularFitFinal<ContextType extends Context<ContextType>>
     private void addStandardTexture(StandardTexture standardTex, File priorSolutionDirectory) throws IOException
     {
         // Load texture file
-        Texture2D<ContextType> texture = loadTexture(standardTex.details.name, priorSolutionDirectory);
+        Texture2D<ContextType> texture = loadTexture(standardTex.getDetails().name, priorSolutionDirectory);
 
         if (texture != null)
         {
-            managedTextures.put(standardTex.details, texture);
+            managedTextures.put(standardTex.getDetails(), texture);
         }
     }
 

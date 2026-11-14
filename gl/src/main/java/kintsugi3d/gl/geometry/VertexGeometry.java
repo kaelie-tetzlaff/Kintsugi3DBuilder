@@ -298,7 +298,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         {
             try
             {
-                Dictionary<String, ImportedMaterial> materialLibrary = ImportedMaterial.loadFromMTLFile(new File(file.getParentFile(), inst.materialFileName));
+                Map<String, ImportedMaterial> materialLibrary = ImportedMaterial.loadFromMTLFile(new File(file.getParentFile(), inst.materialFileName));
                 inst.material = materialLibrary.get(materialName);
             }
             catch(IOException e)
@@ -467,11 +467,13 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         inst.hasTexCoords = hasTexCoords;
 
         // Compute smooth normals if applicable
+        List<Vector3> effectiveNormalList = normalList;
+        List<Integer> effectiveNormalIndexList = normalIndexList;
         if (!inst.hasNormals)
         {
             ComputedNormals norms = computeNormals(vertexList, vertexIndexList);
-            normalList = norms.normals;
-            normalIndexList = norms.indices;
+            effectiveNormalList = norms.normals;
+            effectiveNormalIndexList = norms.indices;
             inst.hasNormals = true;
         }
 
@@ -542,11 +544,11 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
             // Normals buffer
             inst.normals = NativeVectorBufferFactory.getInstance().createEmpty(NativeDataType.FLOAT, 3, vertexCount);
             int i = 0;
-            for (int k : normalIndexList)
+            for (int k : effectiveNormalIndexList)
             {
-                inst.normals.set(i, 0, normalList.get(k).x);
-                inst.normals.set(i, 1, normalList.get(k).y);
-                inst.normals.set(i, 2, normalList.get(k).z);
+                inst.normals.set(i, 0, effectiveNormalList.get(k).x);
+                inst.normals.set(i, 1, effectiveNormalList.get(k).y);
+                inst.normals.set(i, 2, effectiveNormalList.get(k).z);
                 i++;
             }
 
@@ -554,13 +556,13 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
             {
                 // Calculate tangents from normals and texture coordinates
                 Map<NormalTexCoordPair, Vector4> orthoTangentsMap =
-                    computeTangents(vertexList, vertexIndexList, texCoordList, texCoordIndexList, normalList, normalIndexList);
+                    computeTangents(vertexList, vertexIndexList, texCoordList, texCoordIndexList, effectiveNormalList, effectiveNormalIndexList);
 
                 // tangent buffer
                 inst.tangents = NativeVectorBufferFactory.getInstance().createEmpty(NativeDataType.FLOAT, 4, vertexCount);
-                for (i = 0; i < normalIndexList.size(); i++)
+                for (i = 0; i < effectiveNormalIndexList.size(); i++)
                 {
-                    Vector4 tangent = orthoTangentsMap.get(new NormalTexCoordPair(normalIndexList.get(i), texCoordIndexList.get(i)));
+                    Vector4 tangent = orthoTangentsMap.get(new NormalTexCoordPair(effectiveNormalIndexList.get(i), texCoordIndexList.get(i)));
                     if (tangent == null)
                     {
                         // Probably a degenerate face or a vertex not connected to any faces

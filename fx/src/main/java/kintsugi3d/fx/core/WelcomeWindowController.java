@@ -40,10 +40,7 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -57,6 +54,7 @@ public class WelcomeWindowController
 
     static WelcomeWindowController getInstance()
     {
+        //noinspection StaticVariableUsedBeforeInitialization
         return instance;
     }
 
@@ -79,6 +77,7 @@ public class WelcomeWindowController
 
     public void init(Stage injectedStage, JavaFXState state, Runnable injectedUserDocumentationHandler)
     {
+        //noinspection AssignmentToStaticFieldFromInstanceMethod
         instance = this;
 
         this.parentWindow = injectedStage.getOwner();
@@ -157,21 +156,7 @@ public class WelcomeWindowController
     public void runOnceWhenShown(Runnable runnable)
     {
         ReadOnlyBooleanProperty showing = window.showingProperty();
-
-        ChangeListener<Boolean> runOnce = new ChangeListener<>()
-        {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean wasShown, Boolean isShown)
-            {
-                if (isShown)
-                {
-                    runnable.run();
-                    showing.removeListener(this);
-                }
-            }
-        };
-
-        showing.addListener(runOnce);
+        showing.addListener(new OneShotChangeListener(runnable, showing));
     }
 
     private static void handleMenuItemSelection(MenuItem item)
@@ -238,7 +223,7 @@ public class WelcomeWindowController
 
     private void handleButtonSelection(Button item)
     {
-        ArrayList<String> recentFileNames = (ArrayList<String>) RecentProjects.getRecentProjectFilenames();
+        ArrayList<String> recentFileNames = (ArrayList<String>) RecentProjects.getInstance().getRecentProjectFilenames();
         int i = 0;
         for (Button button : recentButtons)
         {
@@ -264,7 +249,7 @@ public class WelcomeWindowController
 
     public void updateRecentProjects()
     {
-        List<String> items = RecentProjects.getRecentProjectFilenames();
+        List<String> items = RecentProjects.getInstance().getRecentProjectFilenames();
         List<MenuItem> recentItems = RecentProjectsHelper.getMenuItems(items);
 
         recentProjectsSplitMenuButton.getItems().clear();
@@ -358,22 +343,12 @@ public class WelcomeWindowController
 
     private static void removeReference(String fileName)
     {
-        List<String> newRecentItems = RecentProjects.getRecentProjectFilenames().stream()
+        List<String> newRecentItems = RecentProjects.getInstance().getRecentProjectFilenames().stream()
             .filter(item -> !item.equals(fileName))
             .collect(Collectors.toList());
 
         // Write the updated content back to the file
-        try (PrintWriter writer = new PrintWriter(new FileWriter(RecentProjects.RECENT_PROJECTS_FILE, StandardCharsets.UTF_8)))
-        {
-            for (String name : newRecentItems)
-            {
-                writer.println(name);
-            }
-        }
-        catch (IOException ioe)
-        {
-            LOG.error("Failed to update recent files list while removing invalid reference.", ioe);
-        }
+        RecentProjects.getInstance().refreshRecentProjectsFile(newRecentItems);
 
         RecentProjectsHelper.updateAllControlStructures();
     }
@@ -437,6 +412,28 @@ public class WelcomeWindowController
         catch (IOException e)
         {
             LOG.warn("Could not find preview image for {}", projFile.getName(), e);
+        }
+    }
+
+    private static final class OneShotChangeListener implements ChangeListener<Boolean>
+    {
+        private final Runnable runnable;
+        private final ObservableValue<Boolean> property;
+
+        private OneShotChangeListener(Runnable runnable, ObservableValue<Boolean> property)
+        {
+            this.runnable = runnable;
+            this.property = property;
+        }
+
+        @Override
+        public void changed(ObservableValue<? extends Boolean> observable, Boolean wasTrue, Boolean isTrue)
+        {
+            if (isTrue)
+            {
+                runnable.run();
+                property.removeListener(this);
+            }
         }
     }
 }

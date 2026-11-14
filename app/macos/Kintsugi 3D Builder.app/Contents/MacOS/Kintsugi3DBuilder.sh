@@ -14,5 +14,5 @@
 #  kintsugi3d.sh
 #
 
-cd "$(dirname "$0")/../Resources"
+cd "$(dirname "$0")/../Resources" || exit
 jre/Home/bin/java -Xdock:icon=Kintsugi3D.icns -jar Kintsugi3DBuilder-shaded.jar "$@"

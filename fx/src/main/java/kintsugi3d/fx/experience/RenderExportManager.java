@@ -21,10 +21,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Scanner;
+import java.util.*;
 
 public class RenderExportManager
 {
@@ -48,7 +45,7 @@ public class RenderExportManager
 
     public List<RenderExport> getList()
     {
-        return renderExportList;
+        return Collections.unmodifiableList(renderExportList);
     }
 
     public void initialize(Window parentWindow, JavaFXState state)

@@ -121,11 +121,11 @@ public class MatrixBuilderSums
 
         for (int b1 = 0; b1 < instanceCount; b1++)
         {
-            double singleWeightedAnalyticSample = sample.analytic * sample.weightByInstance.applyAsDouble(b1) * sample.sampleWeight;
+            double singleWeightedAnalyticSample = sample.analytic * sample.getWeightForInstance(b1) * sample.sampleWeight;
 
             for (int i = 0; i < weightedAnalyticTimesObservedCumulative.length; i++)
             {
-                double weightedAnalyticTimesObservedSample = singleWeightedAnalyticSample * sample.observed[i];
+                double weightedAnalyticTimesObservedSample = singleWeightedAnalyticSample * sample.getObserved(i);
                 addWeightedAnalyticTimesObserved(i, b1, weightedAnalyticTimesObservedSample);
                 addWeightedAnalyticTimesObservedBlended(i, b1, sample.blendingWeight * weightedAnalyticTimesObservedSample);
             }
@@ -133,7 +133,7 @@ public class MatrixBuilderSums
             for (int b2 = 0; b2 < instanceCount; b2++)
             {
                 // Update non-squared totals without blending weight.
-                double weightedAnalyticSample = singleWeightedAnalyticSample * sample.weightByInstance.applyAsDouble(b2);
+                double weightedAnalyticSample = singleWeightedAnalyticSample * sample.getWeightForInstance(b2);
                 addWeightedAnalytic(b1, b2, weightedAnalyticSample);
 
                 // Update non-squared total with blending weight.

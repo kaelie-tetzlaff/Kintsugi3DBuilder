@@ -28,7 +28,7 @@ public abstract class RoughnessOptimizationBase<ContextType extends Context<Cont
     private static final Logger LOG = LoggerFactory.getLogger(RoughnessOptimizationBase.class);
 
     private final ProgramObject<ContextType> specularRoughnessFitProgram;
-    protected final VertexBuffer<ContextType> rect;
+    private final VertexBuffer<ContextType> rect;
     private final Drawable<ContextType> specularRoughnessFitDrawable;
 
     protected RoughnessOptimizationBase(ReadonlyBasisResources<ContextType> basisResources)
@@ -55,6 +55,11 @@ public abstract class RoughnessOptimizationBase<ContextType extends Context<Cont
         specularRoughnessFitProgram.setUniform("fittingGamma", 1.0f);
         basisResources.useWithShaderProgram(specularRoughnessFitProgram);
 
+    }
+
+    VertexBuffer<ContextType> getRect()
+    {
+        return rect;
     }
 
     @Override

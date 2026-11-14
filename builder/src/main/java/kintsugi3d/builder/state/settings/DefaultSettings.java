@@ -15,6 +15,8 @@ import kintsugi3d.builder.io.ExportType;
 import kintsugi3d.builder.util.OperatingSystem;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.util.ShadingParameterMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -23,6 +25,8 @@ import java.nio.file.Path;
 
 public final class DefaultSettings
 {
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultSettings.class);
+
     private DefaultSettings()
     {
     }
@@ -78,16 +82,19 @@ public final class DefaultSettings
                 {
                     Path path = stream.iterator().next();
 
-                    if (!Files.exists(path))
+                    if (Files.exists(path))
                     {
-                        throw new IOException("Could not find Blender.");
+                        settingsModel.createObjectSetting("blenderLocation", path.resolve("blender.exe").toString());
                     }
-
-                    settingsModel.createObjectSetting("blenderLocation", path.resolve("blender.exe").toString());
+                    else
+                    {
+                        setDefaultBlenderLocation(settingsModel);
+                    }
                 }
                 catch (IOException e)
                 {
-                    settingsModel.createObjectSetting("blenderLocation", "");
+                    LOG.info("IO exception while trying to find Blender.", e);
+                    setDefaultBlenderLocation(settingsModel);
                 }
                 break;
 
@@ -96,9 +103,14 @@ public final class DefaultSettings
                 break;
 
             default:
-                settingsModel.createObjectSetting("blenderLocation", "");
+                setDefaultBlenderLocation(settingsModel);
                 break;
         }
+    }
+
+    private static void setDefaultBlenderLocation(GeneralSettingsModel settingsModel)
+    {
+        settingsModel.createObjectSetting("blenderLocation", "");
     }
 
     public static void applyProjectDefaults(GeneralSettingsModel settingsModel)

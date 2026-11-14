@@ -17,7 +17,7 @@ public class MaterialScalarMap extends MaterialTextureMap implements ReadonlyMat
 
     public MaterialScalarMap()
     {
-        channel = MaterialTextureChannel.Unspecified;
+        channel = MaterialTextureChannel.UNSPECIFIED;
     }
 
     @Override

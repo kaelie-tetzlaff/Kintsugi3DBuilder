@@ -41,7 +41,7 @@ public class ObservableLightSettings extends SerializableLightSettings
 
     public ObservableLightSettings(String name, BooleanProperty groupLockedProperty)
     {
-        this.setName(name);
+        this.name.set(name);
         this.groupLocked = groupLockedProperty;
     }
 

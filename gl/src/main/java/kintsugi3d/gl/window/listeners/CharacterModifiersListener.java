@@ -11,11 +11,12 @@
 
 package kintsugi3d.gl.window.listeners;
 
+import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.window.Canvas3D;
 import kintsugi3d.gl.window.ModifierKeys;
 
 @FunctionalInterface
 public interface CharacterModifiersListener
 {
-    void characterTypedWithModifiers(Canvas3D<? extends kintsugi3d.gl.core.Context<?>> canvas, char c, ModifierKeys mods);
+    void characterTypedWithModifiers(Canvas3D<? extends Context<?>> canvas, char c, ModifierKeys mods);
 }

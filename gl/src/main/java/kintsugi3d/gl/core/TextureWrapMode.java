@@ -19,20 +19,20 @@ public enum TextureWrapMode
     /**
      * Do not wrap at all; clamp texture coordinate to the range [0, 1].
      */
-    None,
+    NONE,
 
     /**
      * Mirror the image once and then clamp texture coordinate to the range [0, 2].
      */
-    MirrorOnce,
+    MIRROR_ONCE,
 
     /**
      * Repeat the texture as the texture coordinate increases.
      */
-    Repeat,
+    REPEAT,
 
     /**
      * Repeat the texture but alternate the orientation each time as the texture coordinate increases.
      */
-    MirroredRepeat
+    MIRRORED_REPEAT
 }

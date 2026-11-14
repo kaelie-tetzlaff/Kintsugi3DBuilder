@@ -1,8 +1,8 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
     <option name="myName" value="Project Default" />
+    <inspection_tool class="4784f4c3-8b84-3df6-ab80-0cd6464f2d6b" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AbsoluteAlignmentInUserInterface" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
-    <inspection_tool class="AbstractClassExtendsConcreteClass" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AbstractClassNamingConvention" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="m_minLength" value="3" />
     </inspection_tool>
@@ -98,7 +98,7 @@
       <option name="ignoreBooleanMethods" value="false" />
       <option name="ignoreInAnnotationInterface" value="true" />
       <option name="onlyWarnOnBaseMethods" value="true" />
-      <option name="questionString" value="add,are,can,check,contains,could,endsWith,equals,has,is,matches,must,put,remove,shall,should,startsWith,was,were,will,would,try,does" />
+      <option name="questionString" value="add,are,can,check,contains,could,endsWith,equals,has,is,matches,must,put,remove,shall,should,startsWith,was,were,will,would,try,does,confirm,getBoolean,exists,needs" />
     </inspection_tool>
     <inspection_tool class="BooleanParameter" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
     <inspection_tool class="BooleanVariableAlwaysNegated" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -129,7 +129,7 @@
     </inspection_tool>
     <inspection_tool class="CharUsedInArithmeticContext" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="CharacterComparison" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="CheckTagEmptyBody" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
+    <inspection_tool class="CheckTagEmptyBody" enabled="false" level="WEAK WARNING" enabled_by_default="false" editorAttributes="INFO_ATTRIBUTES" />
     <inspection_tool class="CheckedExceptionClass" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
     <inspection_tool class="ClassComplexity" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="m_limit" value="80" />
@@ -139,7 +139,7 @@
       <option name="m_includeLibraryClasses" value="false" />
       <option name="m_limit" value="15" />
     </inspection_tool>
-    <inspection_tool class="ClassIndependentOfModule" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ClassIndependentOfModule" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
     <inspection_tool class="ClassInheritanceDepth" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="m_limit" value="2" />
     </inspection_tool>
@@ -158,7 +158,7 @@
       <option name="m_limit" value="1" />
     </inspection_tool>
     <inspection_tool class="ClassNewInstance" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="ClassOnlyUsedInOneModule" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ClassOnlyUsedInOneModule" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
     <inspection_tool class="ClassOnlyUsedInOnePackage" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="ClassReferencesSubclass" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
     <inspection_tool class="ClassUnconnectedToPackage" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
@@ -178,7 +178,7 @@
     <inspection_tool class="ClassWithTooManyTransitiveDependents" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="limit" value="35" />
     </inspection_tool>
-    <inspection_tool class="ClassWithoutLogger" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <inspection_tool class="ClassWithoutLogger" enabled="false" level="WEAK WARNING" enabled_by_default="false">
       <option name="loggerNamesString" value="java.util.logging.Logger,org.slf4j.Logger,org.apache.commons.logging.Log,org.apache.log4j.Logger" />
       <option name="ignoreSuperLoggers" value="false" />
     </inspection_tool>
@@ -235,7 +235,30 @@
         </value>
       </option>
     </inspection_tool>
+    <inspection_tool class="CssUnusedSymbol" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="CustomClassloader" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="CustomRegExpInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="myConfigurations">
+        <list>
+          <RegExpInspectionConfiguration>
+            <option name="description" value="Detects use of CRLF or platform-dependent line separator within string literals." />
+            <option name="name" value="Platform-dependent line separator" />
+            <option name="suppressId" value="PlatformDependentLineSeparatorLiteral" />
+            <option name="uuid" value="bc0d2a39-0323-3970-bc8e-1ea63a6fd7af" />
+            <option name="patterns">
+              <list>
+                <InspectionPattern>
+                  <option name="regExp" value="(%n|\\r\\n)" />
+                  <option name="_fileType" value="JAVA" />
+                  <option name="searchContext" value="ANY" />
+                  <option name="replacement" value="\\n" />
+                </InspectionPattern>
+              </list>
+            </option>
+          </RegExpInspectionConfiguration>
+        </list>
+      </option>
+    </inspection_tool>
     <inspection_tool class="CustomSecurityManager" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="CyclicClassDependency" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="CyclicPackageDependency" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
@@ -272,6 +295,17 @@
       <option name="commentsAreContent" value="true" />
     </inspection_tool>
     <inspection_tool class="EmptyDirectory" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="EmptyMethod" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="EXCLUDE_ANNOS">
+        <value>
+          <list size="2">
+            <item index="0" class="java.lang.String" itemvalue="kintsugi3d.builder.io.gltf.CustomTextureExport" />
+            <item index="1" class="java.lang.String" itemvalue="kintsugi3d.builder.io.gltf.StandardTextureExport" />
+          </list>
+        </value>
+      </option>
+      <option name="commentsAreContent" value="true" />
+    </inspection_tool>
     <inspection_tool class="EnumAsName" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="EnumSwitchStatementWhichMissesCases" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoreSwitchStatementsWithDefault" value="true" />
@@ -349,7 +383,6 @@
     <inspection_tool class="HardcodedFileSeparators" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="m_recognizeExampleMediaType" value="false" />
     </inspection_tool>
-    <inspection_tool class="HardcodedLineSeparators" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="HashCodeUsesNonFinalVariable" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="HibernateResource" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="insideTryAllowed" value="false" />
@@ -438,6 +471,8 @@
     </inspection_tool>
     <inspection_tool class="JUnitTestNG" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="Java8ArraySetAll" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="JavaFxDefaultTag" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
+    <inspection_tool class="JavaFxRedundantPropertyValue" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
     <inspection_tool class="JavadocDeclaration" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
     <inspection_tool class="JavadocHtmlLint" enabled="true" level="WARNING" enabled_by_default="true" editorAttributes="WARNING_ATTRIBUTES" />
     <inspection_tool class="KeySetIterationMayUseEntrySet" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -451,7 +486,7 @@
     </inspection_tool>
     <inspection_tool class="LambdaParameterTypeCanBeSpecified" enabled="false" level="INFORMATION" enabled_by_default="false" />
     <inspection_tool class="LambdaUnfriendlyMethodOverload" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="LawOfDemeter" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <inspection_tool class="LawOfDemeter" enabled="false" level="WEAK WARNING" enabled_by_default="false">
       <option name="ignoreLibraryCalls" value="true" />
     </inspection_tool>
     <inspection_tool class="LengthOneStringInIndexOf" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -622,12 +657,12 @@
       <extension name="JUnit4MethodNamingConvention" enabled="true" />
       <extension name="NativeMethodNamingConvention" enabled="true">
         <option name="m_regex" value="[a-z][A-Za-z\d]*" />
-        <option name="m_minLength" value="3" />
+        <option name="m_minLength" value="2" />
         <option name="m_maxLength" value="64" />
       </extension>
       <extension name="StaticMethodNamingConvention" enabled="true">
         <option name="m_regex" value="[a-z][A-Za-z\d]*" />
-        <option name="m_minLength" value="3" />
+        <option name="m_minLength" value="2" />
         <option name="m_maxLength" value="64" />
       </extension>
       <extension name="TestNGMethodNamingConvention" enabled="true" />
@@ -745,7 +780,7 @@
     <inspection_tool class="ProblematicVarargsMethodOverride" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ProblematicWhitespace" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ProtectedField" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="ProtectedInnerClass" enabled="true" level="WARNING" enabled_by_default="true">
+    <inspection_tool class="ProtectedInnerClass" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="ignoreEnums" value="true" />
       <option name="ignoreInterfaces" value="true" />
     </inspection_tool>
@@ -768,13 +803,13 @@
       </option>
       <option name="onlyWarnIfContainingClassImplementsAnInterface" value="false" />
     </inspection_tool>
-    <inspection_tool class="PublicMethodWithoutLogging" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <inspection_tool class="PublicMethodWithoutLogging" enabled="false" level="WEAK WARNING" enabled_by_default="false">
       <option name="loggerClassName" value="" />
     </inspection_tool>
     <inspection_tool class="PublicStaticArrayField" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PublicStaticCollectionField" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="QuestionableName" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="nameString" value="aa,abc,bad,bar,bar2,baz,baz1,baz2,baz3,bb,blah,bogus,bool,cc,dd,defau1t,dummy,dummy2,ee,fa1se,ff,foo,foo1,foo2,foo3,foobar,four,fred,fred1,fred2,gg,hh,hello,hello1,hello2,hello3,ii,nu11,one,silly,silly2,string,two,that,then,three,whi1e,var" />
+      <option name="nameString" value="aa,abc,bad,bar,bar2,baz,baz1,baz2,baz3,bb,blah,bogus,bool,cc,dd,defau1t,dummy,dummy2,ee,fa1se,ff,foo,foo1,foo2,foo3,foobar,four,fred,fred1,fred2,gg,hh,hello,hello1,hello2,hello3,ii,nu11,one,silly,silly2,two,that,three,whi1e,var" />
     </inspection_tool>
     <inspection_tool class="RandomDoubleForRandomInteger" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RawTypeCanBeGeneric" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -809,16 +844,45 @@
       <option name="ignorePrivateMethods" value="true" />
     </inspection_tool>
     <inspection_tool class="ReturnOfDateField" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="ReturnOfInnerClass" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="ReturnSeparatedFromComputation" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ReturnOfInnerClass" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoreNonPublic" value="true" />
+    </inspection_tool>
+    <inspection_tool class="ReturnSeparatedFromComputation" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
     <inspection_tool class="ReturnThis" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="ReuseOfLocalVariable" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RuntimeExec" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RuntimeExecWithNonConstantString" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SSBasedInspection" enabled="true" level="WARNING" enabled_by_default="true">
-      <searchConfiguration name="Curly brace probably on wrong line." text="" recursive="true" caseInsensitive="true" type="JAVA">
-        <constraint name="__context__" nameOfExprType="\)[ \t]*\{" nameOfFormalType="\)[ \t]*\n\s*\{" target="true" within="" contains="" />
-      </searchConfiguration>
+      <replaceConfiguration name="Call to method with platform-dependent line separators" uuid="4784f4c3-8b84-3df6-ab80-0cd6464f2d6b" description="Detects uses of Java API methods that are known to use platform-dependent line separators.  " suppressId="PlatformDependentLineSeparatorMethod" text="$out$.println()" recursive="false" caseInsensitive="false" type="JAVA" pattern_context="default" reformatAccordingToStyle="false" shortenFQN="false" replacement="$out$.print('\n')">
+        <constraint name="__context__" within="" contains="" />
+        <constraint name="out" nameOfExprType="java\.io\.Writer" exprTypeWithinHierarchy="true" within="" contains="" />
+      </replaceConfiguration>
+      <replaceConfiguration name="Call to method with platform-dependent line separators" uuid="4784f4c3-8b84-3df6-ab80-0cd6464f2d6b" text="$out$.println(&quot;&quot;)" recursive="false" caseInsensitive="false" type="JAVA" pattern_context="default" reformatAccordingToStyle="false" shortenFQN="false" replacement="$out$.print('\n')">
+        <constraint name="__context__" within="" contains="" />
+        <constraint name="out" nameOfExprType="java\.io\.Writer" exprTypeWithinHierarchy="true" within="" contains="" />
+      </replaceConfiguration>
+      <replaceConfiguration name="Call to method with platform-dependent line separators" uuid="4784f4c3-8b84-3df6-ab80-0cd6464f2d6b" text="$out$.println('$content$')" recursive="false" caseInsensitive="false" type="JAVA" pattern_context="default" reformatAccordingToStyle="false" shortenFQN="false" replacement="$out$.print(&quot;$content$\n&quot;)">
+        <constraint name="__context__" within="" contains="" />
+        <constraint name="out" nameOfExprType="java\.io\.Writer" exprTypeWithinHierarchy="true" within="" contains="" />
+        <constraint name="content" within="" contains="" />
+      </replaceConfiguration>
+      <replaceConfiguration name="Call to method with platform-dependent line separators" uuid="4784f4c3-8b84-3df6-ab80-0cd6464f2d6b" text="$out$.println(&quot;$content$&quot;)" recursive="false" caseInsensitive="false" type="JAVA" pattern_context="default" reformatAccordingToStyle="false" shortenFQN="false" replacement="$out$.print(&quot;$content$\n&quot;)">
+        <constraint name="__context__" within="" contains="" />
+        <constraint name="out" nameOfExprType="java\.io\.Writer" exprTypeWithinHierarchy="true" within="" contains="" />
+        <constraint name="content" regexp=".+" within="" contains="" />
+      </replaceConfiguration>
+      <replaceConfiguration name="Call to method with platform-dependent line separators" uuid="4784f4c3-8b84-3df6-ab80-0cd6464f2d6b" text="$out$.println($str$)" recursive="false" caseInsensitive="false" type="JAVA" pattern_context="default" reformatAccordingToStyle="false" shortenFQN="false" replacement="$out$.print($str$ + &quot;\n&quot;)">
+        <constraint name="__context__" within="" contains="" />
+        <constraint name="out" nameOfExprType="java\.io\.Writer" exprTypeWithinHierarchy="true" within="" contains="" />
+        <constraint name="str" regexp="^&quot;(\\.|[^&quot;])*&quot;$" negateName="true" within="" contains="" />
+      </replaceConfiguration>
+      <replaceConfiguration name="Call to method with platform-dependent line separators" uuid="4784f4c3-8b84-3df6-ab80-0cd6464f2d6b" text="$out$.newLine()" recursive="false" caseInsensitive="false" type="JAVA" pattern_context="default" reformatAccordingToStyle="false" shortenFQN="false" replacement="$out$.write('\n')">
+        <constraint name="__context__" within="" contains="" />
+        <constraint name="out" within="" contains="" />
+      </replaceConfiguration>
+      <replaceConfiguration name="Call to method with platform-dependent line separators" uuid="4784f4c3-8b84-3df6-ab80-0cd6464f2d6b" text="System.lineSeparator()" recursive="false" caseInsensitive="false" type="JAVA" pattern_context="default" reformatAccordingToStyle="false" shortenFQN="false" replacement="&quot;\n&quot;">
+        <constraint name="__context__" within="" contains="" />
+      </replaceConfiguration>
     </inspection_tool>
     <inspection_tool class="SafeLock" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SameParameterValue" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
@@ -870,7 +934,7 @@
       <option name="m_minLength" value="3" />
       <option name="m_maxLength" value="64" />
     </inspection_tool>
-    <inspection_tool class="StaticMethodOnlyUsedInOneClass" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="StaticMethodOnlyUsedInOneClass" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
     <inspection_tool class="StaticNonFinalField" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="StaticSuite" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="StaticVariableNamingConvention" enabled="true" level="WARNING" enabled_by_default="true">
@@ -947,7 +1011,7 @@
     <inspection_tool class="TestMethodInProductCode" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="TestMethodIsPublicVoidNoArg" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="TestMethodWithoutAssertion" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="assertionMethods" value="org.junit.Assert,assert.*|fail.*,junit.framework.Assert,assert.*|fail.*,org.junit.jupiter.api.Assertions,assert.*|fail.*,org.assertj.core.api.Assertions,assertThat,com.google.common.truth.Truth,assert.*,com.google.common.truth.Truth8,assert.*,org.mockito.Mockito,verify.*,org.mockito.InOrder,verify,org.junit.rules.ExpectedException,expect.*,org.hamcrest.MatcherAssert,assertThat,kintsugi3d.app.test.SmokeTest,assert.*|verify.*" />
+      <option name="assertionMethods" value="org.junit.Assert,assert.*|fail.*,junit.framework.Assert,assert.*|fail.*,org.junit.jupiter.api.Assertions,assert.*|fail.*,org.assertj.core.api.Assertions,assertThat,com.google.common.truth.Truth,assert.*,com.google.common.truth.Truth8,assert.*,org.mockito.Mockito,verify.*,org.mockito.InOrder,verify,org.junit.rules.ExpectedException,expect.*,org.hamcrest.MatcherAssert,assertThat,kintsugi3d.app.test.SmokeTest,assert.*|verify.*,kintsugi3d.app.test.ImageReconstructionTest,assert.*|verify.*" />
     </inspection_tool>
     <inspection_tool class="TestNGMethodNamingConvention" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="TestOnlyProblems" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -1000,7 +1064,7 @@
       <option name="m_minLength" value="1" />
       <option name="m_maxLength" value="64" />
     </inspection_tool>
-    <inspection_tool class="UnclearBinaryExpression" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="UnclearBinaryExpression" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="UnconditionalWait" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UnconstructableTestCase" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UndeclaredTests" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -1024,6 +1088,7 @@
       <option name="m_ignoreJavadoc" value="false" />
       <option name="ignoreInModuleStatements" value="true" />
     </inspection_tool>
+    <inspection_tool class="UnnecessaryModuleDependencyInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="UnnecessaryParentheses" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoreClarifyingParentheses" value="true" />
       <option name="ignoreParenthesesOnConditionals" value="true" />
@@ -1039,13 +1104,12 @@
       <option name="REPORT_POSTFIX_EXPRESSIONS" value="true" />
       <option name="REPORT_REDUNDANT_INITIALIZER" value="false" />
     </inspection_tool>
-    <inspection_tool class="UnusedLibrary" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UnusedReturnValue" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="UpperCaseFieldNameNotConstant" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UseOfAWTPeerClass" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UseOfAnotherObjectsPrivateField" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoreSameClass" value="true" />
-      <option name="ignoreEquals" value="false" />
+      <option name="ignoreEquals" value="true" />
       <option name="ignoreInnerClasses" value="true" />
     </inspection_tool>
     <inspection_tool class="UseOfClone" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -1085,6 +1149,7 @@
       <disabledExtension id="moduleInfo" />
     </inspection_tool>
     <inspection_tool class="ZeroLengthArrayInitialization" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
+    <inspection_tool class="bc0d2a39-0323-3970-bc8e-1ea63a6fd7af" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="unused" enabled="true" level="WARNING" enabled_by_default="true" editorAttributes="WARNING_ATTRIBUTES" field="packageLocal" method="packageLocal" parameter="packageLocal" checkParameterExcludingHierarchy="false">
       <option name="LOCAL_VARIABLE" value="true" />
       <option name="FIELD" value="true" />

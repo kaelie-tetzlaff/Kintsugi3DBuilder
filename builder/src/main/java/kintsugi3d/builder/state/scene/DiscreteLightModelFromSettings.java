@@ -60,6 +60,7 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
         return 0.0f;
     }
 
+    @SuppressWarnings("NoopMethodInAbstractClass")
     @Override
     public void setTwist(float twist)
     {

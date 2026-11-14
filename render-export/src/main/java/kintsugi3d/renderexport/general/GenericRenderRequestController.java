@@ -112,7 +112,7 @@ public class GenericRenderRequestController implements Initializable
         builder.setWidth(Integer.parseInt(this.widthTextField.getText()));
         builder.setHeight(Integer.parseInt(this.heightTextField.getText()));
 
-        Rendering.getRequestQueue().addGraphicsRequest(builder.create());
+        Rendering.getRequestQueue().addImageBasedGraphicsRequest(builder.create());
     }
 
     @FXML
@@ -149,7 +149,7 @@ public class GenericRenderRequestController implements Initializable
         this.fileChooser.getExtensionFilters().add(new ExtensionFilter("View set files", "*.vset"));
         if (targetVSetFileField.getText().isEmpty() || !new File(targetVSetFileField.getText()).exists())
         {
-            this.fileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+            this.fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         }
         else
         {
@@ -161,7 +161,7 @@ public class GenericRenderRequestController implements Initializable
         if (file != null)
         {
             targetVSetFileField.setText(file.toString());
-            RecentProjects.setMostRecentDirectory(file.getParentFile());
+            RecentProjects.getInstance().setMostRecentDirectory(file.getParentFile());
         }
     }
 
@@ -173,7 +173,7 @@ public class GenericRenderRequestController implements Initializable
         this.fileChooser.getExtensionFilters().add(new ExtensionFilter("GLSL vertex shaders", "*.*"));
         if (customVertexShaderField.getText().isEmpty() || !new File(customVertexShaderField.getText()).exists())
         {
-            this.fileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+            this.fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         }
         else
         {
@@ -185,7 +185,7 @@ public class GenericRenderRequestController implements Initializable
         if (file != null)
         {
             customVertexShaderField.setText(file.toString());
-            RecentProjects.setMostRecentDirectory(file.getParentFile());
+            RecentProjects.getInstance().setMostRecentDirectory(file.getParentFile());
         }
     }
 
@@ -197,7 +197,7 @@ public class GenericRenderRequestController implements Initializable
         this.fileChooser.getExtensionFilters().add(new ExtensionFilter("GLSL fragment shaders", "*.*"));
         if (fragmentShaderField.getText().isEmpty() || !new File(fragmentShaderField.getText()).exists())
         {
-            this.fileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+            this.fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         }
         else
         {
@@ -209,7 +209,7 @@ public class GenericRenderRequestController implements Initializable
         if (file != null)
         {
             fragmentShaderField.setText(file.toString());
-            RecentProjects.setMostRecentDirectory(file.getParentFile());
+            RecentProjects.getInstance().setMostRecentDirectory(file.getParentFile());
         }
     }
 
@@ -219,7 +219,7 @@ public class GenericRenderRequestController implements Initializable
         this.directoryChooser.setTitle("Choose an output directory");
         if (exportDirectoryField.getText().isEmpty() || !new File(exportDirectoryField.getText()).exists())
         {
-            this.directoryChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+            this.directoryChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         }
         else
         {
@@ -230,7 +230,7 @@ public class GenericRenderRequestController implements Initializable
         if (file != null)
         {
             exportDirectoryField.setText(file.toString());
-            RecentProjects.setMostRecentDirectory(file.getParentFile());
+            RecentProjects.getInstance().setMostRecentDirectory(file.getParentFile());
         }
     }
 

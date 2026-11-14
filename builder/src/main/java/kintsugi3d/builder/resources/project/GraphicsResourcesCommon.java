@@ -17,6 +17,7 @@ import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.fit.SpecularFitFinal;
 import kintsugi3d.builder.fit.decomposition.BasisMaterialInfo;
 import kintsugi3d.builder.fit.decomposition.ReadonlyBasisWeightResources;
+import kintsugi3d.builder.io.TextureLoadOptions;
 import kintsugi3d.builder.io.events.ProjectProcessedEvent;
 import kintsugi3d.builder.io.events.ProjectProcessedListener;
 import kintsugi3d.builder.rendering.Rendering;
@@ -31,7 +32,10 @@ import kintsugi3d.gl.core.Program;
 import kintsugi3d.gl.core.UniformBuffer;
 import kintsugi3d.gl.geometry.GeometryResources;
 import kintsugi3d.gl.geometry.VertexGeometry;
-import kintsugi3d.gl.material.*;
+import kintsugi3d.gl.material.ImportedMaterial;
+import kintsugi3d.gl.material.MaterialColorMap;
+import kintsugi3d.gl.material.MaterialScalarMap;
+import kintsugi3d.gl.material.MaterialTextureMap;
 import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
 import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
 import kintsugi3d.gl.vecmath.IntVector2;
@@ -568,7 +572,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         for (var entry : textureResources.getTextures().entrySet())
         {
             builder.define(
-                String.format("TEXTURE_%s", entry.getKey().name.toUpperCase(Locale.ROOT).replaceAll("[^A-Z0-9]+", "_")),
+                String.format("TEXTURE_%s", textureResources.sanitizeTextureName(entry.getKey().name.toUpperCase(Locale.ROOT))),
                 entry.getValue() != null);
         }
 

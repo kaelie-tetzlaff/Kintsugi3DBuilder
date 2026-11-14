@@ -117,23 +117,23 @@ public interface ColorTextureReader
      * Only a rectangular subset of the pixels will be read.
      * @param x The column at which to begin reading.
      * @param y The row at which to begin reading.
-     * @param width The number of columns to read.
-     * @param height The number of rows to read.
+     * @param readWidth The number of columns to read.
+     * @param readHeight The number of rows to read.
      * @return An array containing the pixels.
      * Each entry is encoded as a 32-bit integer using 8-bytes each for the alpha, red, green, and blue channels, respectively, from highest order byte to lowest.
      */
-    int[] readARGB(int x, int y, int width, int height);
+    int[] readARGB(int x, int y, int readWidth, int readHeight);
 
     /**
      * Reads the pixels from the texture as floating point numbers.
      * Only a rectangular subset of the pixels will be read.
      * @param x The column at which to begin reading.
      * @param y The row at which to begin reading.
-     * @param width The number of columns to read.
-     * @param height The number of rows to read.
+     * @param readWidth The number of columns to read.
+     * @param readHeight The number of rows to read.
      * @return An array containing the pixels as floating point numbers.
      */
-    float[] readFloatingPointRGBA(int x, int y, int width, int height);
+    float[] readFloatingPointRGBA(int x, int y, int readWidth, int readHeight);
 
     /**
      * Reads the pixels from the texture as floating point numbers.
@@ -150,10 +150,10 @@ public interface ColorTextureReader
      * The entire framebuffer will be read.
      * @return An array containing the pixels as floating point numbers.
      */
-    default ColorList readColorListRGBA(int x, int y, int width, int height)
+    default ColorList readColorListRGBA(int x, int y, int readWidth, int readHeight)
     {
-        ColorNativeBufferList list = new ColorNativeBufferList(width * height);
-        readFloatingPointRGBA(list.buffer, x, y, width, height);
+        ColorNativeBufferList list = new ColorNativeBufferList(readWidth * readHeight);
+        readFloatingPointRGBA(list.getBuffer(), x, y, readWidth, readHeight);
         return list;
     }
 
@@ -165,7 +165,7 @@ public interface ColorTextureReader
     default ColorList readColorListRGBA()
     {
         ColorNativeBufferList list = new ColorNativeBufferList(getWidth() * getHeight());
-        readFloatingPointRGBA(list.buffer);
+        readFloatingPointRGBA(list.getBuffer());
         return list;
     }
 
@@ -174,11 +174,11 @@ public interface ColorTextureReader
      * Only a rectangular subset of the pixels will be read.
      * @param x The column at which to begin reading.
      * @param y The row at which to begin reading.
-     * @param width The number of columns to read.
-     * @param height The number of rows to read.
+     * @param readWidth The number of columns to read.
+     * @param readHeight The number of rows to read.
      * @return An array containing the pixels as floating point numbers.
      */
-    int[] readIntegerRGBA(int x, int y, int width, int height);
+    int[] readIntegerRGBA(int x, int y, int readWidth, int readHeight);
 
     /**
      * Reads the pixels from the texture as 32-bit integers.

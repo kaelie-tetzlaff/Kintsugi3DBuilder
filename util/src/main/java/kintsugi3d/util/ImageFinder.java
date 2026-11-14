@@ -28,19 +28,13 @@ public final class ImageFinder
 {
     private static final Logger LOG = LoggerFactory.getLogger(ImageFinder.class);
 
-    private static final ImageFinder INSTANCE = new ImageFinder();
     private static final Set<String> IMG_FORMATS = Set.of( "png", "PNG", "jpg", "JPG", "jpeg", "JPEG", "tif", "TIF", "tiff", "TIFF");
-
-    public static ImageFinder getInstance()
-    {
-        return INSTANCE;
-    }
 
     private ImageFinder()
     {
     }
 
-    public Set<String> getSupportedImgFormats()
+    public static Set<String> getSupportedImgFormats()
     {
         return IMG_FORMATS;
     }
@@ -56,7 +50,7 @@ public final class ImageFinder
      * @param extension The desired extension
      * @return The image file's name with the requested extension.
      */
-    public String getImageFileNameWithExtension(String imageFileName, String extension)
+    public static String getImageFileNameWithExtension(String imageFileName, String extension)
     {
         if (imageFileName.endsWith(extension))
         {
@@ -87,7 +81,7 @@ public final class ImageFinder
         LOG.debug("Search for '{}'; found: {}", requestedFile.getName(), actualFile);
     }
 
-    public File findImageFile(File requestedFile, String... suffixes) throws FileNotFoundException
+    public static File findImageFile(File requestedFile, String... suffixes) throws FileNotFoundException
     {
         if (requestedFile.exists())
         {
@@ -170,18 +164,13 @@ public final class ImageFinder
         }
     }
 
-    public File findImageFile(File requestedFile) throws FileNotFoundException
-    {
-        return findImageFile(requestedFile, (String[]) null);
-    }
-
     /**
      *
      * @param requestedFile
      * @param suffixes
      * @return The file, or null if not found.
      */
-    public File tryFindImageFile(File requestedFile, String... suffixes)
+    public static File tryFindImageFile(File requestedFile, String... suffixes)
     {
         try
         {
@@ -191,15 +180,5 @@ public final class ImageFinder
         {
             return null;
         }
-    }
-
-    /**
-     *
-     * @param requestedFile
-     * @return The file, or null if not found.
-     */
-    public File tryFindImageFile(File requestedFile)
-    {
-        return tryFindImageFile(requestedFile, (String[]) null);
     }
 }

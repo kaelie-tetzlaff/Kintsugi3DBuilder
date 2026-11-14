@@ -18,13 +18,13 @@ import org.lwjgl.glfw.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-// Other misc. callbacks
-// Keyboard callbacks
-// Mouse callbacks
-// Window event callbacks
-// Internal classes for wrapping GLFW callbacks
-
-@SuppressWarnings("NestedAssignment")
+/**
+ * Other misc. callbacks<br>
+ * Keyboard callbacks<br>
+ * Mouse callbacks<br>
+ * Window event callbacks<br>
+ * Internal classes for wrapping GLFW callbacks
+ */
 class WindowCallback extends WindowListenerManagerInstance
 {
     private final CanvasWindow<?> window;
@@ -33,7 +33,7 @@ class WindowCallback extends WindowListenerManagerInstance
     {
         this.window = window;
 
-        createAnonymousInnerCallbacks();
+        createCallbacks();
     }
 
     // A reference to these callbacks must be maintained to prevent Java from garbage collecting them.
@@ -79,308 +79,337 @@ class WindowCallback extends WindowListenerManagerInstance
     @SuppressWarnings({ "unused", "FieldCanBeLocal" })
     private GLFWScrollCallback scrollCallback;
 
-    @SuppressWarnings({ "unused", "FieldCanBeLocal" })
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private GLFWDropCallback dropCallback;
 
-    private void createAnonymousInnerCallbacks()
+    private void createCallbacks()
     {
-        // Window position callback
-        glfwSetWindowPosCallback(window.getHandle(),
-            windowPosCallback = new GLFWWindowPosCallback()
-            {
-                @Override
-                public void invoke(long windowHandle, int xpos, int ypos)
-                {
-                    if (windowHandle == window.getHandle())
-                    {
-                        for (CanvasPositionListener listener : getCanvasPosListeners())
-                        {
-                            listener.canvasMoved(window, xpos, ypos);
-                        }
-                    }
-                }
-            });
+        windowPosCallback = new WindowPosCallback();
+        glfwSetWindowPosCallback(window.getHandle(), windowPosCallback);
 
+        windowSizeCallback = new WindowSizeCallback();
+        glfwSetWindowSizeCallback(window.getHandle(), windowSizeCallback);
 
-        glfwSetWindowSizeCallback(window.getHandle(),
-            windowSizeCallback = new GLFWWindowSizeCallback()
-            {
-                @Override
-                public void invoke(long windowHandle, int width, int height)
-                {
-                    if (windowHandle == window.getHandle())
-                    {
-                        for (CanvasSizeListener listener : getCanvasSizeListeners())
-                        {
-                            listener.canvasResized(window, width, height);
-                        }
-                    }
-                }
-            });
+        windowCloseCallback = new WindowCloseCallback();
+        glfwSetWindowCloseCallback(window.getHandle(), windowCloseCallback);
 
+        windowRefreshCallback = new WindowRefreshCallback();
+        glfwSetWindowRefreshCallback(window.getHandle(), windowRefreshCallback);
 
-        glfwSetWindowCloseCallback(window.getHandle(),
-            windowCloseCallback = new GLFWWindowCloseCallback()
-            {
-                @Override
-                public void invoke(long windowHandle)
-                {
-                    if (windowHandle == window.getHandle())
-                    {
-                        for (WindowCloseListener listener : getWindowCloseListeners())
-                        {
-                            listener.windowClosing(window);
-                        }
-                    }
-                }
-            });
+        windowFocusCallback = new WindowFocusCallback();
+        glfwSetWindowFocusCallback(window.getHandle(), windowFocusCallback);
 
-        glfwSetWindowRefreshCallback(window.getHandle(),
-            windowRefreshCallback = new GLFWWindowRefreshCallback()
-            {
-                @Override
-                public void invoke(long windowHandle)
-                {
-                    if (windowHandle == window.getHandle())
-                    {
-                        for (CanvasRefreshListener listener : getCanvasRefreshListeners())
-                        {
-                            listener.canvasRefreshed(window);
-                        }
-                    }
-                }
-            });
+        windowIconifyCallback = new WindowIconifyCallback();
+        glfwSetWindowIconifyCallback(window.getHandle(), windowIconifyCallback);
 
-        glfwSetWindowFocusCallback(window.getHandle(),
-            windowFocusCallback = new GLFWWindowFocusCallback()
-            {
-                @Override
-                public void invoke(long windowHandle, boolean focused)
-                {
-                    if (windowHandle == window.getHandle())
-                    {
-                        if (focused)
-                        {
-                            for (WindowFocusGainedListener listener : getWindowFocusGainedListeners())
-                            {
-                                listener.windowFocusGained(window);
-                            }
-                        }
-                        else
-                        {
-                            for (WindowFocusLostListener listener : getWindowFocusLostListeners())
-                            {
-                                listener.windowFocusLost(window);
-                            }
-                        }
-                    }
-                }
-            });
-        glfwSetWindowIconifyCallback(window.getHandle(),
-            windowIconifyCallback = new GLFWWindowIconifyCallback()
-            {
-                @Override
-                public void invoke(long windowHandle, boolean iconified)
-                {
-                    if (windowHandle == window.getHandle())
-                    {
-                        if (iconified)
-                        {
-                            for (WindowIconifiedListener listener : getWindowIconifiedListeners())
-                            {
-                                listener.windowIconified(window);
-                            }
-                        }
-                        else
-                        {
-                            for (WindowRestoredListener listener : getWindowRestoredListeners())
-                            {
-                                listener.windowRestored(window);
-                            }
-                        }
-                    }
-                }
-            });
+        framebufferSizeCallback = new FramebufferSizeCallback();
+        glfwSetFramebufferSizeCallback(window.getHandle(), framebufferSizeCallback);
 
-        glfwSetFramebufferSizeCallback(window.getHandle(),
-            framebufferSizeCallback = new GLFWFramebufferSizeCallback()
-            {
-                @Override
-                public void invoke(long windowHandle, int width, int height)
-                {
-                    if (windowHandle == window.getHandle())
-                    {
-                        for (FramebufferSizeListener listener : getFramebufferSizeListeners())
-                        {
-                            listener.framebufferResized(window, width, height);
-                        }
-                    }
-                }
-            });
+        keyCallback = new KeyCallback();
+        glfwSetKeyCallback(window.getHandle(), keyCallback);
 
-        glfwSetKeyCallback(window.getHandle(),
-            keyCallback = new GLFWKeyCallback()
-            {
-                @Override
-                public void invoke(long windowHandle, int keycode, int scancode, int action, int mods)
-                {
-                    if (windowHandle == window.getHandle())
-                    {
-                        Key key = KeyCodeMaps.codeToKey(keycode);
+        charCallback = new CharCallback();
+        glfwSetCharCallback(window.getHandle(), charCallback);
 
-                        if (action == GLFW_PRESS)
-                        {
-                            for (KeyPressListener listener : getKeyPressListeners())
-                            {
-                                listener.keyPressed(window, key, new ModifierKeys(mods));
-                            }
+        charModsCallback = new CharModsCallback();
+        glfwSetCharModsCallback(window.getHandle(), charModsCallback);
 
-                            for (KeyTypeListener listener : getKeyTypeListeners())
-                            {
-                                listener.keyTyped(window, key, new ModifierKeys(mods));
-                            }
-                        }
-                        else if (action == GLFW_RELEASE)
-                        {
-                            for (KeyReleaseListener listener : getKeyReleaseListeners())
-                            {
-                                listener.keyReleased(window, key, new ModifierKeys(mods));
-                            }
-                        }
-                        else if (action == GLFW_REPEAT)
-                        {
-                            for (KeyTypeListener listener : getKeyTypeListeners())
-                            {
-                                listener.keyTyped(window, key, new ModifierKeys(mods));
-                            }
-                        }
-                    }
-                }
-            });
+        mouseButtonCallback = new MouseButtonCallback();
+        glfwSetMouseButtonCallback(window.getHandle(), mouseButtonCallback);
 
-        glfwSetCharCallback(window.getHandle(),
-            charCallback = new GLFWCharCallback()
-            {
-                @Override
-                public void invoke(long windowHandle, int codepoint)
-                {
-                    if (windowHandle == window.getHandle())
-                    {
-                        for (CharacterListener listener : getCharacterListeners())
-                        {
-                            listener.characterTyped(window, (char)codepoint);
-                        }
-                    }
-                }
-            });
+        cursorPosCallback = new CursorPosCallback();
+        glfwSetCursorPosCallback(window.getHandle(), cursorPosCallback);
 
-        glfwSetCharModsCallback(window.getHandle(),
-            charModsCallback = new GLFWCharModsCallback()
-            {
-                @Override
-                public void invoke(long windowHandle, int codepoint, int mods)
-                {
-                    if (windowHandle == window.getHandle())
-                    {
-                        for (CharacterModifiersListener listener : getCharModsListeners())
-                        {
-                            listener.characterTypedWithModifiers(window, (char)codepoint, new ModifierKeys(mods));
-                        }
-                    }
-                }
-            });
+        cursorEnterCallback = new CursorEnterCallback();
+        glfwSetCursorEnterCallback(window.getHandle(), cursorEnterCallback);
 
-        glfwSetMouseButtonCallback(window.getHandle(),
-            mouseButtonCallback = new GLFWMouseButtonCallback()
-            {
-                @Override
-                public void invoke(long windowHandle, int button, int action, int mods)
-                {
-                    if (windowHandle == window.getHandle())
-                    {
-                        if (action == GLFW_PRESS)
-                        {
-                            for (MouseButtonPressListener listener : getMouseButtonPressListeners())
-                            {
-                                listener.mouseButtonPressed(window, button, new ModifierKeys(mods));
-                            }
-                        }
-                        else if (action == GLFW_RELEASE)
-                        {
-                            for (MouseButtonReleaseListener listener : getMouseButtonReleaseListeners())
-                            {
-                                listener.mouseButtonReleased(window, button, new ModifierKeys(mods));
-                            }
-                        }
-                    }
-                }
-            });
+        scrollCallback = new ScrollCallback();
+        glfwSetScrollCallback(window.getHandle(), scrollCallback);
 
-        glfwSetCursorPosCallback(window.getHandle(),
-            cursorPosCallback = new GLFWCursorPosCallback()
-            {
-                @Override
-                public void invoke(long windowHandle, double xpos, double ypos)
-                {
-                    if (windowHandle == window.getHandle())
-                    {
-                        for (CursorPositionListener listener : getCursorPosListeners())
-                        {
-                            listener.cursorMoved(window, xpos, ypos);
-                        }
-                    }
-                }
-            });
+        dropCallback = new DropCallback();
+        glfwSetDropCallback(window.getHandle(), dropCallback);
+    }
 
-        glfwSetCursorEnterCallback(window.getHandle(),
-            cursorEnterCallback = new GLFWCursorEnterCallback()
-            {
-                @Override
-                public void invoke(long windowHandle, boolean entered)
-                {
-                    if (windowHandle == window.getHandle())
-                    {
-                        if (entered)
-                        {
-                            for (CursorEnteredListener listener : getCursorEnterListeners())
-                            {
-                                listener.cursorEntered(window);
-                            }
-                        }
-                        else
-                        {
-                            for (CursorExitedListener listener : getCursorExitListeners())
-                            {
-                                listener.cursorExited(window);
-                            }
-                        }
-                    }
-                }
-            });
-
-        glfwSetScrollCallback(window.getHandle(),
-            scrollCallback = new GLFWScrollCallback()
-            {
-                @Override
-                public void invoke(long windowHandle, double xoffset, double yoffset)
-                {
-                    if (windowHandle == window.getHandle())
-                    {
-                        for (ScrollListener listener : getScrollListeners())
-                        {
-                            listener.scroll(window, xoffset, yoffset);
-                        }
-                    }
-                }
-            });
-
-        glfwSetDropCallback(window.getHandle(), new GLFWDropCallback()
+    private class WindowPosCallback extends GLFWWindowPosCallback
+    {
+        @Override
+        public void invoke(long windowHandle, int xpos, int ypos)
         {
-            @Override
-            public void invoke(long window, int count, long names)
+            if (windowHandle == window.getHandle())
             {
-                // Not supported
+                for (CanvasPositionListener listener : getCanvasPosListeners())
+                {
+                    listener.canvasMoved(window, xpos, ypos);
+                }
             }
-        });
+        }
+    }
+
+    private class WindowSizeCallback extends GLFWWindowSizeCallback
+    {
+        @Override
+        public void invoke(long windowHandle, int width, int height)
+        {
+            if (windowHandle == window.getHandle())
+            {
+                for (CanvasSizeListener listener : getCanvasSizeListeners())
+                {
+                    listener.canvasResized(window, width, height);
+                }
+            }
+        }
+    }
+
+    private class WindowCloseCallback extends GLFWWindowCloseCallback
+    {
+        @Override
+        public void invoke(long windowHandle)
+        {
+            if (windowHandle == window.getHandle())
+            {
+                for (WindowCloseListener listener : getWindowCloseListeners())
+                {
+                    listener.windowClosing(window);
+                }
+            }
+        }
+    }
+
+    private class WindowRefreshCallback extends GLFWWindowRefreshCallback
+    {
+        @Override
+        public void invoke(long windowHandle)
+        {
+            if (windowHandle == window.getHandle())
+            {
+                for (CanvasRefreshListener listener : getCanvasRefreshListeners())
+                {
+                    listener.canvasRefreshed(window);
+                }
+            }
+        }
+    }
+
+    private class WindowFocusCallback extends GLFWWindowFocusCallback
+    {
+        @Override
+        public void invoke(long windowHandle, boolean focused)
+        {
+            if (windowHandle == window.getHandle())
+            {
+                if (focused)
+                {
+                    for (WindowFocusGainedListener listener : getWindowFocusGainedListeners())
+                    {
+                        listener.windowFocusGained(window);
+                    }
+                }
+                else
+                {
+                    for (WindowFocusLostListener listener : getWindowFocusLostListeners())
+                    {
+                        listener.windowFocusLost(window);
+                    }
+                }
+            }
+        }
+    }
+
+    private class WindowIconifyCallback extends GLFWWindowIconifyCallback
+    {
+        @Override
+        public void invoke(long windowHandle, boolean iconified)
+        {
+            if (windowHandle == window.getHandle())
+            {
+                if (iconified)
+                {
+                    for (WindowIconifiedListener listener : getWindowIconifiedListeners())
+                    {
+                        listener.windowIconified(window);
+                    }
+                }
+                else
+                {
+                    for (WindowRestoredListener listener : getWindowRestoredListeners())
+                    {
+                        listener.windowRestored(window);
+                    }
+                }
+            }
+        }
+    }
+
+    private class FramebufferSizeCallback extends GLFWFramebufferSizeCallback
+    {
+        @Override
+        public void invoke(long windowHandle, int width, int height)
+        {
+            if (windowHandle == window.getHandle())
+            {
+                for (FramebufferSizeListener listener : getFramebufferSizeListeners())
+                {
+                    listener.framebufferResized(window, width, height);
+                }
+            }
+        }
+    }
+
+    private class KeyCallback extends GLFWKeyCallback
+    {
+        @Override
+        public void invoke(long windowHandle, int keycode, int scancode, int action, int mods)
+        {
+            if (windowHandle == window.getHandle())
+            {
+                Key key = KeyCodeMaps.codeToKey(keycode);
+
+                if (action == GLFW_PRESS)
+                {
+                    for (KeyPressListener listener : getKeyPressListeners())
+                    {
+                        listener.keyPressed(window, key, new GLFWModifierKeys(mods));
+                    }
+
+                    for (KeyTypeListener listener : getKeyTypeListeners())
+                    {
+                        listener.keyTyped(window, key, new GLFWModifierKeys(mods));
+                    }
+                }
+                else if (action == GLFW_RELEASE)
+                {
+                    for (KeyReleaseListener listener : getKeyReleaseListeners())
+                    {
+                        listener.keyReleased(window, key, new GLFWModifierKeys(mods));
+                    }
+                }
+                else if (action == GLFW_REPEAT)
+                {
+                    for (KeyTypeListener listener : getKeyTypeListeners())
+                    {
+                        listener.keyTyped(window, key, new GLFWModifierKeys(mods));
+                    }
+                }
+            }
+        }
+    }
+
+    private class CharCallback extends GLFWCharCallback
+    {
+        @Override
+        public void invoke(long windowHandle, int codepoint)
+        {
+            if (windowHandle == window.getHandle())
+            {
+                for (CharacterListener listener : getCharacterListeners())
+                {
+                    listener.characterTyped(window, (char)codepoint);
+                }
+            }
+        }
+    }
+
+    private class CharModsCallback extends GLFWCharModsCallback
+    {
+        @Override
+        public void invoke(long windowHandle, int codepoint, int mods)
+        {
+            if (windowHandle == window.getHandle())
+            {
+                for (CharacterModifiersListener listener : getCharModsListeners())
+                {
+                    listener.characterTypedWithModifiers(window, (char)codepoint, new GLFWModifierKeys(mods));
+                }
+            }
+        }
+    }
+
+    private class MouseButtonCallback extends GLFWMouseButtonCallback
+    {
+        @Override
+        public void invoke(long windowHandle, int button, int action, int mods)
+        {
+            if (windowHandle == window.getHandle())
+            {
+                if (action == GLFW_PRESS)
+                {
+                    for (MouseButtonPressListener listener : getMouseButtonPressListeners())
+                    {
+                        listener.mouseButtonPressed(window, button, new GLFWModifierKeys(mods));
+                    }
+                }
+                else if (action == GLFW_RELEASE)
+                {
+                    for (MouseButtonReleaseListener listener : getMouseButtonReleaseListeners())
+                    {
+                        listener.mouseButtonReleased(window, button, new GLFWModifierKeys(mods));
+                    }
+                }
+            }
+        }
+    }
+
+    private class CursorPosCallback extends GLFWCursorPosCallback
+    {
+        @Override
+        public void invoke(long windowHandle, double xpos, double ypos)
+        {
+            if (windowHandle == window.getHandle())
+            {
+                for (CursorPositionListener listener : getCursorPosListeners())
+                {
+                    listener.cursorMoved(window, xpos, ypos);
+                }
+            }
+        }
+    }
+
+    private class CursorEnterCallback extends GLFWCursorEnterCallback
+    {
+        @Override
+        public void invoke(long windowHandle, boolean entered)
+        {
+            if (windowHandle == window.getHandle())
+            {
+                if (entered)
+                {
+                    for (CursorEnteredListener listener : getCursorEnterListeners())
+                    {
+                        listener.cursorEntered(window);
+                    }
+                }
+                else
+                {
+                    for (CursorExitedListener listener : getCursorExitListeners())
+                    {
+                        listener.cursorExited(window);
+                    }
+                }
+            }
+        }
+    }
+
+    private class ScrollCallback extends GLFWScrollCallback
+    {
+        @Override
+        public void invoke(long windowHandle, double xoffset, double yoffset)
+        {
+            if (windowHandle == window.getHandle())
+            {
+                for (ScrollListener listener : getScrollListeners())
+                {
+                    listener.scroll(window, xoffset, yoffset);
+                }
+            }
+        }
+    }
+
+    private static class DropCallback extends GLFWDropCallback
+    {
+        @Override
+        public void invoke(long windowHandle, int count, long names)
+        {
+            // Not supported
+        }
     }
 }

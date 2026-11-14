@@ -70,7 +70,7 @@ public class MasksImportController
     }
 
     @Override
-    public boolean advance()
+    public boolean tryAdvance()
     {
         if (customMasksDirButton.isSelected())
         {
@@ -86,7 +86,7 @@ public class MasksImportController
     }
 
     @Override
-    public boolean confirm()
+    public boolean tryConfirm()
     {
         return source.confirm();
     }

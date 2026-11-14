@@ -9,11 +9,20 @@
  * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
-package kintsugi3d.builder.rendering.components.snap;
+package kintsugi3d.gl.util;
 
-import kintsugi3d.builder.rendering.RenderedComponent;
 import kintsugi3d.gl.core.Context;
+import kintsugi3d.gl.window.Canvas3D;
+import kintsugi3d.gl.window.listeners.*;
 
-public abstract class ViewSnapContent<ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
+public interface CanvasListener extends CursorPositionListener, MouseButtonPressListener, MouseButtonReleaseListener, ScrollListener, KeyPressListener
 {
+    default void addToCanvas(Canvas3D<? extends Context<?>> canvas)
+    {
+        canvas.addCursorPositionListener(this);
+        canvas.addMouseButtonPressListener(this);
+        canvas.addMouseButtonReleaseListener(this);
+        canvas.addScrollListener(this);
+        canvas.addKeyPressListener(this);
+    }
 }

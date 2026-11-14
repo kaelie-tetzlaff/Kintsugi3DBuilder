@@ -141,7 +141,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
             if (this.isInternalFormatCompressed())
             {
                 return new OpenGLCubemap(
-                        this.context,
+                    this.getContext(),
                         this.textureTarget,
                         this.getInternalCompressionFormat(),
                         this.faceSize,
@@ -150,7 +150,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
             else
             {
                 return new OpenGLCubemap(
-                        this.context,
+                    this.getContext(),
                         this.textureTarget,
                         this.getInternalColorFormat(),
                         this.faceSize,
@@ -181,7 +181,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
             opt.maxAnisotropy = this.getMaxAnisotropy();
 
             return new OpenGLCubemap(
-                    this.context,
+                this.getContext(),
                     this.textureTarget,
                     TextureType.DEPTH,
                     this.getInternalPrecision(),
@@ -212,7 +212,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
             opt.maxAnisotropy = this.getMaxAnisotropy();
 
             return new OpenGLCubemap(
-                    this.context,
+                this.getContext(),
                     this.textureTarget,
                     TextureType.STENCIL,
                     this.getInternalPrecision(),
@@ -243,7 +243,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
             opt.maxAnisotropy = this.getMaxAnisotropy();
 
             return new OpenGLCubemap(
-                    this.context,
+                this.getContext(),
                     this.textureTarget,
                     this.isFloatingPointEnabled() ? TextureType.FLOATING_POINT_DEPTH_STENCIL : TextureType.DEPTH_STENCIL,
                     this.isFloatingPointEnabled() ? 40 : 32,
@@ -289,7 +289,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
         super(context, textureTarget, colorFormat,
             new Parameters(opt.format, opt.useLinearFiltering, opt.useMipmaps, opt.maxMipmapLevel, opt.maxAnisotropy));
         this.faceSize = faceSize;
-        init(OpenGLContext.getOpenGLInternalColorFormat(colorFormat), opt);
+        init(OpenGLContext.getInternalColorFormat(colorFormat), opt);
     }
 
     private OpenGLCubemap(OpenGLContext context, int textureTarget, CompressionFormat compressionFormat, int faceSize, OptionalParameters opt)
@@ -298,7 +298,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
         super(context, textureTarget, compressionFormat,
             new Parameters(opt.format, opt.useLinearFiltering, opt.useMipmaps, opt.maxMipmapLevel, opt.maxAnisotropy));
         this.faceSize = faceSize;
-        init(OpenGLContext.getOpenGLCompressionFormat(compressionFormat), opt);
+        init(OpenGLContext.getCompressionFormat(compressionFormat), opt);
     }
 
     private OpenGLCubemap(OpenGLContext context, int textureTarget, TextureType textureType, int precision, int faceSize, OptionalParameters opt)
@@ -415,7 +415,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
 
         if (opt.maxAnisotropy > 1.0f)
         {
-            glTexParameterf(getOpenGLTextureTarget(), GL_TEXTURE_MAX_ANISOTROPY_EXT, opt.maxAnisotropy);
+            glTexParameterf(getTextureTarget(), GL_TEXTURE_MAX_ANISOTROPY_EXT, opt.maxAnisotropy);
             OpenGLContext.errorCheck();
         }
     }
@@ -442,10 +442,10 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
             this.levelCount = 1;
         }
 
-        glTexParameteri(getOpenGLTextureTarget(), GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         OpenGLContext.errorCheck();
         
-        glTexParameteri(getOpenGLTextureTarget(), GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         OpenGLContext.errorCheck();
         
         glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
@@ -473,13 +473,13 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
 
         if (numericWrapS != 0)
         {
-            glTexParameteri(getOpenGLTextureTarget(), GL_TEXTURE_WRAP_S, numericWrapS);
+            glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_S, numericWrapS);
             OpenGLContext.errorCheck();
         }
 
         if (numericWrapT != 0)
         {
-            glTexParameteri(getOpenGLTextureTarget(), GL_TEXTURE_WRAP_T, numericWrapT);
+            glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_T, numericWrapT);
             OpenGLContext.errorCheck();
         }
     }
@@ -493,37 +493,49 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
 
         switch(face)
         {
-        case POSITIVE_X: layerIndex = 0; break;
-        case NEGATIVE_X: layerIndex = 1; break;
-        case POSITIVE_Y: layerIndex = 2; break;
-        case NEGATIVE_Y: layerIndex = 3; break;
-        case POSITIVE_Z: layerIndex = 4; break;
-        case NEGATIVE_Z: layerIndex = 5; break;
-        default: layerIndex = -1; break; // Should never happen
+            case POSITIVE_X: layerIndex = 0; break;
+            case NEGATIVE_X: layerIndex = 1; break;
+            case POSITIVE_Y: layerIndex = 2; break;
+            case NEGATIVE_Y: layerIndex = 3; break;
+            case POSITIVE_Z: layerIndex = 4; break;
+            case NEGATIVE_Z: layerIndex = 5; break;
+            default: layerIndex = -1; break; // Should never happen
         }
 
-        return new OpenGLFramebufferAttachment()
+        return new CubemapSide(getContext(), textureId, layerIndex);
+    }
+
+    private static class CubemapSide implements OpenGLFramebufferAttachment
+    {
+        private final int textureId;
+        private final int layerIndex;
+        private final OpenGLContext context;
+
+        CubemapSide(OpenGLContext context, int textureId, int layerIndex)
         {
-            @Override
-            public OpenGLContext getContext()
-            {
-                return context;
-            }
+            this.context = context;
+            this.textureId = textureId;
+            this.layerIndex = layerIndex;
+        }
 
-            @Override
-            public void attachToDrawFramebuffer(int attachment, int level)
-            {
-                glFramebufferTextureLayer(GL_DRAW_FRAMEBUFFER, attachment, textureId, level, layerIndex);
-                OpenGLContext.errorCheck();
-            }
+        @Override
+        public OpenGLContext getContext()
+        {
+            return context;
+        }
 
-            @Override
-            public void attachToReadFramebuffer(int attachment, int level)
-            {
-                glFramebufferTextureLayer(GL_READ_FRAMEBUFFER, attachment, textureId, level, layerIndex);
-                OpenGLContext.errorCheck();
-            }
+        @Override
+        public void attachToDrawFramebuffer(int attachment, int level)
+        {
+            glFramebufferTextureLayer(GL_DRAW_FRAMEBUFFER, attachment, textureId, level, layerIndex);
+            OpenGLContext.errorCheck();
+        }
 
-        };
+        @Override
+        public void attachToReadFramebuffer(int attachment, int level)
+        {
+            glFramebufferTextureLayer(GL_READ_FRAMEBUFFER, attachment, textureId, level, layerIndex);
+            OpenGLContext.errorCheck();
+        }
     }
 }

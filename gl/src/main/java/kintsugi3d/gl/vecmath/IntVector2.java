@@ -38,7 +38,7 @@ public class IntVector2 implements Iterable<Integer>
      * Construct a vector in two dimensions with the given values.
      * @param value Value of both dimensions.
      */
-    public IntVector2(int value)
+    public IntVector2(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") int value)
     {
         this(value, value);
     }
@@ -147,10 +147,7 @@ public class IntVector2 implements Iterable<Integer>
     @Override
     public String toString()
     {
-        return "IntVector2{" +
-            "x=" + x +
-            ", y=" + y +
-            '}';
+        return String.format("IntVector2{x=%d, y=%d}", x, y);
     }
 
     @Override

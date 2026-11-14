@@ -48,12 +48,14 @@ public interface ReadonlyTextureResources<ContextType extends Context<ContextTyp
 
     default ReadonlyTexture2D<ContextType> getTexture(StandardTexture tex)
     {
-        return getTextures().get(tex.details);
+        return getTextures().get(tex.getDetails());
     }
 
     ReadonlyBasisResources<ContextType> getBasisResources();
 
     ReadonlyBasisWeightResources<ContextType> getBasisWeightResources();
+
+    String sanitizeTextureName(CharSequence name);
 
     void setupShaderProgram(Program<ContextType> program);
 
@@ -77,7 +79,7 @@ public interface ReadonlyTextureResources<ContextType extends Context<ContextTyp
      */
     default void saveTexture(StandardTexture tex, String format, File outputDirectory, String filenameOverride)
     {
-        saveTexture(tex.details.name, format, outputDirectory, filenameOverride);
+        saveTexture(tex.getDetails().name, format, outputDirectory, filenameOverride);
     }
 
     /**

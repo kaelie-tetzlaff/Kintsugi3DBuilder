@@ -19,7 +19,10 @@ import java.util.Map.Entry;
 
 final class KeyCodeMaps
 {
+    @SuppressWarnings("StaticCollection")
     private static final Map<KeyCode, Key> CODE_TO_KEY;
+
+    @SuppressWarnings("StaticCollection")
     private static final Map<Key, List<KeyCode>> KEY_TO_CODES;
 
     static

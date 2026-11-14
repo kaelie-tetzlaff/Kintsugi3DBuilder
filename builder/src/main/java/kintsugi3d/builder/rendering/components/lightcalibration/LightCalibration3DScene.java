@@ -41,19 +41,19 @@ public class LightCalibration3DScene<ContextType extends Context<ContextType>> e
     protected void addPostLitComponents(LightingResources<ContextType> lightingResources)
     {
         // the representation of the camera
-        CameraVisual<ContextType> cameraVisual = new CameraVisual<>(resources, sceneViewportModel);
+        CameraVisual<ContextType> cameraVisual = new CameraVisual<>(getResources(), getSceneViewportModel());
         cameraVisual.setViewSelection(viewSelection);
-        components.add(cameraVisual);
+        addComponent(cameraVisual);
 
         // the visualization of the camera frustum
-        CameraFrustum<ContextType> cameraFrustum = new CameraFrustum<>(resources, sceneViewportModel);
+        CameraFrustum<ContextType> cameraFrustum = new CameraFrustum<>(getResources(), getSceneViewportModel());
         cameraFrustum.setViewSelection(viewSelection);
-        components.add(cameraFrustum);
+        addComponent(cameraFrustum);
 
         // the on-screen representation of lights
-        LightCalibrationVisual<ContextType> lightVisual = new LightCalibrationVisual<>(context, sceneViewportModel, sceneModel);
+        LightCalibrationVisual<ContextType> lightVisual = new LightCalibrationVisual<>(getContext(), getSceneViewportModel(), getSceneModel());
         lightVisual.setViewSelection(viewSelection);
-        components.add(lightVisual);
+        addComponent(lightVisual);
     }
 
 }

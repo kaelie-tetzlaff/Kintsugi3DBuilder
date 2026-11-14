@@ -20,7 +20,7 @@ public interface PageController<T>
     Page<?, ?> getPage();
 
     PageFrameController getPageFrameController();
-    void setPageFrameController(PageFrameController scroller);
+    void setPageFrameController(PageFrameController pageFrameController);
 
     /**
      * Returns the outer AnchorPane, VBox, GridPane, etc. for the controller's fxml
@@ -61,17 +61,17 @@ public interface PageController<T>
      * Called when advancing from this page.
      * @return false if navigation was cancelled by the controller; true otherwise.
      */
-    boolean advance();
+    boolean tryAdvance();
 
     /**
      * Called after advancing if there are no additional pages and the paged experience is thus complete.
      * @return false if confirmation was cancelled by the controller; true otherwise.
      */
-    boolean confirm();
+    boolean tryConfirm();
 
     /**
      * Called when the window should close.
      * @return false if closing was cancelled by the controller; true otherwise.
      */
-    boolean cancel();
+    boolean tryCancel();
 }

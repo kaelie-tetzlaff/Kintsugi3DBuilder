@@ -19,16 +19,15 @@ import javafx.scene.control.TextField;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchableListView<T> extends SearchableView
+public final class SearchableListView<T> extends SearchableView
 {
     private final ListView<T> listView;
     private List<T> backup;
 
-    public SearchableListView(ListView<T> viewList, TextField searchTxtField, CheckBox regexMode)
+    private SearchableListView(ListView<T> listView, TextField searchTextField, CheckBox regexMode)
     {
-        this.listView = viewList;
-        this.textInput = searchTxtField;
-        this.regexMode = regexMode;
+        super(searchTextField, regexMode);
+        this.listView = listView;
     }
 
     public static <T> SearchableListView<T> createUnboundInstance(ListView<T> viewList, TextField searchTxtField)
@@ -36,7 +35,7 @@ public class SearchableListView<T> extends SearchableView
         return new SearchableListView<>(viewList, searchTxtField, null);
     }
 
-    private static <T> SearchableListView<T> createUnboundInstance(ListView<T> viewList, TextField searchTxtField, CheckBox regexMode)
+    public static <T> SearchableListView<T> createUnboundInstance(ListView<T> viewList, TextField searchTxtField, CheckBox regexMode)
     {
         return new SearchableListView<>(viewList, searchTxtField, regexMode);
     }
@@ -46,11 +45,11 @@ public class SearchableListView<T> extends SearchableView
     {
         backup = new ArrayList<>(listView.getItems());
 
-        textInput.textProperty().addListener((obs, oldText, newText)-> updateView());
+        getSearchTextInput().textProperty().addListener((obs, oldText, newText)-> updateView());
 
-        if(regexMode != null)
+        if(getRegexMode() != null)
         {
-            regexMode.selectedProperty().addListener((obs, oldVal, newVal)-> updateView());
+            getRegexMode().selectedProperty().addListener((obs, oldVal, newVal)-> updateView());
         }
         return this;
     }
@@ -61,7 +60,7 @@ public class SearchableListView<T> extends SearchableView
         listView.getItems().clear();
         listView.getItems().addAll(backup);
 
-        String searchTxt = textInput.getText().trim();
+        String searchTxt = getSearchTextInput().getText().trim();
         if (searchTxt.isBlank())
         {
             return;
@@ -73,7 +72,7 @@ public class SearchableListView<T> extends SearchableView
         {
             String itemName = item.toString();
 
-            if (regexMode != null && regexMode.isSelected())
+            if (getRegexMode() != null && getRegexMode().isSelected())
             {
                 return itemName.matches(String.format(".*%s.*", searchTxt));
             }

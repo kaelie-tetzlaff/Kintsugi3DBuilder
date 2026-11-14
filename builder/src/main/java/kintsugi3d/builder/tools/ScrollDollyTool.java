@@ -16,7 +16,7 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.window.Canvas3D;
 import kintsugi3d.gl.window.listeners.ScrollListener;
 
-public class ScrollDollyTool implements ScrollListener
+public final class ScrollDollyTool implements ScrollListener
 {
     private static final float SENSITIVITY = 0.001f;
 
@@ -33,7 +33,7 @@ public class ScrollDollyTool implements ScrollListener
 
     static ToolBuilder<ScrollDollyTool> getBuilder()
     {
-        return new ScrollDollyTool.Builder();
+        return new Builder();
     }
 
     private ScrollDollyTool(ManipulableViewpointModel cameraModel)

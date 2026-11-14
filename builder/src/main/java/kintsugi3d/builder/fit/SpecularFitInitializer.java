@@ -17,7 +17,7 @@ import kintsugi3d.builder.resources.project.ReadonlyGraphicsResources;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.optimization.KMeansClustering;
-import kintsugi3d.util.ColorArrayList;
+import kintsugi3d.gl.util.ColorArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -19,6 +19,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
 public final class ActionButtonFactory
 {
@@ -37,7 +38,7 @@ public final class ActionButtonFactory
             separator.getStyleClass().add(separatorClass);
             separator.setPadding(new Insets(16.0, 8.0, 16, 8.0)); // Top, Right, Bottom, Left
             buttonBox.getChildren().add(separator);
-            group.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(entry ->
+            group.entrySet().stream().sorted(Entry.comparingByKey()).forEach(entry ->
             {
                 HBox hBox = new HBox();
                 hBox.setAlignment(Pos.TOP_CENTER);

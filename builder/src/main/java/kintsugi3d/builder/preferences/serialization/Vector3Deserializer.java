@@ -9,13 +9,22 @@
  * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
-package kintsugi3d.util;
+package kintsugi3d.builder.preferences.serialization;
 
-import kintsugi3d.gl.vecmath.DoubleVector4;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
+import kintsugi3d.gl.vecmath.Vector3;
 
-public interface AbstractImage
+import java.io.IOException;
+
+public class Vector3Deserializer extends JsonDeserializer<Vector3>
 {
-    int getWidth();
-    int getHeight();
-    DoubleVector4 getRGBA(int x, int y);
+    @Override
+    public Vector3 deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException
+    {
+        JsonNode node = jsonParser.getCodec().readTree(jsonParser);
+        return new Vector3(node.get("x").floatValue(), node.get("y").floatValue(), node.get("z").floatValue());
+    }
 }

@@ -54,7 +54,7 @@ public class Vector3 implements Iterable<Float>
      * Construct a vector in three dimensions with the given values.
      * @param value Value of all three dimensions.
      */
-    public Vector3(float value)
+    public Vector3(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") float value)
     {
         this(value, value, value);
     }
@@ -285,11 +285,7 @@ public class Vector3 implements Iterable<Float>
     @Override
     public String toString()
     {
-        return "Vector3{" +
-                "x=" + x +
-                ", y=" + y +
-                ", z=" + z +
-                '}';
+        return String.format("Vector3{x=%s, y=%s, z=%s}", x, y, z);
     }
 
     @Override

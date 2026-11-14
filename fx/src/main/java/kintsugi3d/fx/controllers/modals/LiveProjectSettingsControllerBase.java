@@ -27,9 +27,9 @@ public abstract class LiveProjectSettingsControllerBase extends ProjectSettingsC
     }
 
     @Override
-    public boolean cancel()
+    public boolean tryCancel()
     {
-        if (super.cancel())
+        if (super.tryCancel())
         {
             projectSettingsManager.cancel();
             return true;

@@ -49,17 +49,17 @@ public class ModifierKeysBuilder
 
     public ModifierKeys end()
     {
-        return new ModifierKeysImplementation(shiftModifier, controlModifier, altModifier, superModifier);
+        return new SimpleModifierKeys(shiftModifier, controlModifier, altModifier, superModifier);
     }
 
-    private static final class ModifierKeysImplementation extends ModifierKeysBase
+    private static final class SimpleModifierKeys extends ModifierKeysBase
     {
         private final boolean shiftModifier;
         private final boolean controlModifier;
         private final boolean altModifier;
         private final boolean superModifier;
 
-        private ModifierKeysImplementation(boolean shiftModifier, boolean controlModifier, boolean altModifier, boolean superModifier)
+        private SimpleModifierKeys(boolean shiftModifier, boolean controlModifier, boolean altModifier, boolean superModifier)
         {
             this.shiftModifier = shiftModifier;
             this.controlModifier = controlModifier;
@@ -68,25 +68,25 @@ public class ModifierKeysBuilder
         }
 
         @Override
-        public boolean getShiftModifier()
+        public boolean isShiftModifierActive()
         {
             return shiftModifier;
         }
 
         @Override
-        public boolean getControlModifier()
+        public boolean isControlModifierActive()
         {
             return controlModifier;
         }
 
         @Override
-        public boolean getAltModifier()
+        public boolean isAltModifierActive()
         {
             return altModifier;
         }
 
         @Override
-        public boolean getSuperModifier()
+        public boolean isSuperModifierActive()
         {
             return superModifier;
         }

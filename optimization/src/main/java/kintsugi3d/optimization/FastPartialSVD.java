@@ -153,7 +153,8 @@ public final class FastPartialSVD
                 }
                 else if (sqError > toleranceSq)
                 {
-                    throw new RuntimeException("Max iterations exceeded. (Squared error: " + sqError + ')');
+                    throw new DecompositionFailureException
+                        (String.format("Max iterations exceeded. (Squared error: %s)", sqError));
                 }
                 else
                 {

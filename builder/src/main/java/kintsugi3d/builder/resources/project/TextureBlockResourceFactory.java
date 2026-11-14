@@ -11,13 +11,12 @@
 
 package kintsugi3d.builder.resources.project;
 
+import kintsugi3d.builder.io.TextureLoadOptions;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.ManagedResource;
 import kintsugi3d.gl.geometry.GeometryTextures;
-import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
-import kintsugi3d.gl.material.TextureLoadOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,39 +42,24 @@ public class TextureBlockResourceFactory<ContextType extends Context<ContextType
 
     public GraphicsResourcesTextureSpace<ContextType> createBlockResources(int i, int j, ProgressMonitor monitor) throws IOException, UserCancellationException
     {
-        TextureLoadOptions loadOptions = new TextureLoadOptions();
-        loadOptions.setLinearFilteringRequested(false);
-        loadOptions.setMipmapsRequested(false);
-        loadOptions.setCompressionRequested(false);
-
-        int x = imageCache.getSettings().getBlockStartX(i);
-        int y = imageCache.getSettings().getBlockStartY(j);
-        int width = imageCache.getSettings().getBlockStartX(i + 1) - x;
-        int height = imageCache.getSettings().getBlockStartY(j + 1) - y;
-
-        try
-        {
-            return new GraphicsResourcesTextureSpace<>(sharedResources,
-                () -> fullGeometryTextures.createViewportCopy(x, y, width, height),
-                imageCache.getBlockDirectory(i, j), loadOptions, width, height, monitor);
-        }
-        catch (IOException e)
-        {
-            LOG.warn("Incomplete cache; will try to rebuild.");
-
-            // Try to reinitialize in case the cache was only partially complete.
-            imageCache.initialize(new DefaultProgressMonitor()
+        return imageCache.createWithRetryAfterCacheRebuild(
+            () ->
             {
-                @Override
-                public void allowUserCancellation() throws UserCancellationException
-                {
-                    monitor.allowUserCancellation();
-                }
-            });
+                TextureLoadOptions loadOptions = new TextureLoadOptions();
+                loadOptions.setLinearFilteringRequested(false);
+                loadOptions.setMipmapsRequested(false);
+                loadOptions.setCompressionRequested(false);
 
-            // If initialize() completed without exceptions, then createSampledResources() should work now.
-            return createBlockResources(i, j, monitor);
-        }
+                int x = imageCache.getSettings().getBlockStartX(i);
+                int y = imageCache.getSettings().getBlockStartY(j);
+                int width = imageCache.getSettings().getBlockStartX(i + 1) - x;
+                int height = imageCache.getSettings().getBlockStartY(j + 1) - y;
+
+                return new GraphicsResourcesTextureSpace<>(sharedResources,
+                    () -> fullGeometryTextures.createViewportCopy(x, y, width, height),
+                    imageCache.getBlockDirectory(i, j), loadOptions, width, height, monitor);
+            },
+            monitor);
     }
 
     @Override

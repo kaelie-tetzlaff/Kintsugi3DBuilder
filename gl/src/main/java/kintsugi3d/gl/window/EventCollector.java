@@ -168,7 +168,7 @@ class EventCollector
                     {
                         event.accept(l);
                     }
-                    catch(Exception e)
+                    catch(RuntimeException e)
                     {
                         LOG.error("An error occurred while polling events", e);
                     }

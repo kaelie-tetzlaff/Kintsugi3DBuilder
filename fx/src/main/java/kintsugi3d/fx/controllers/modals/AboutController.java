@@ -38,7 +38,7 @@ public class AboutController implements Initializable
         {
             //TODO: text appears a little blurry, also needs some beautification
             List<String> lines = Files.readAllLines(new File("kintsugi3d-builder-about.txt").toPath());
-            String contentText = String.join(System.lineSeparator(), lines);
+            String contentText = String.join("\n", lines);
             aboutText.setText(contentText);
         }
         catch (IOException e)

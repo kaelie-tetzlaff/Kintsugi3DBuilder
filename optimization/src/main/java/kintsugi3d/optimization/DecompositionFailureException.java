@@ -9,32 +9,24 @@
  * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
-package kintsugi3d.util;
+package kintsugi3d.optimization;
 
-/**
- * Extends ColorArrayList with explicit width and height
- */
-public class ColorArrayImage extends ColorArrayList implements ColorImage
+public class DecompositionFailureException extends RuntimeException
 {
-    private final int width;
-    private final int height;
+    private static final long serialVersionUID = -6801667382287594753L;
 
-    public ColorArrayImage(float[] colorData, int width, int height)
+    public DecompositionFailureException(String message)
     {
-        super(colorData);
-        this.width = width;
-        this.height = height;
+        super(message);
     }
 
-    @Override
-    public int getWidth()
+    public DecompositionFailureException(String message, Throwable cause)
     {
-        return width;
+        super(message, cause);
     }
 
-    @Override
-    public int getHeight()
+    public DecompositionFailureException(Throwable cause)
     {
-        return height;
+        super(cause);
     }
 }

@@ -21,8 +21,8 @@ class NativeUnsignedIntVectorBuffer implements NativeVectorBuffer
 {
     private final ByteBuffer buffer;
 
-    final int dimensions;
-    final int count;
+    private final int dimensions;
+    private final int count;
 
     NativeUnsignedIntVectorBuffer(int dimensions, int count)
     {
@@ -65,14 +65,14 @@ class NativeUnsignedIntVectorBuffer implements NativeVectorBuffer
         this.buffer = buffer;
     }
 
-    NativeUnsignedIntVectorBuffer(int dimensions, int count, byte... buffer)
+    NativeUnsignedIntVectorBuffer(int dimensions, int count, byte[] buffer)
     {
         this(dimensions, count);
         this.buffer.put(buffer);
         this.buffer.flip();
     }
 
-    NativeUnsignedIntVectorBuffer(int dimensions, int count, int... buffer)
+    NativeUnsignedIntVectorBuffer(int dimensions, int count, int[] buffer)
     {
         this(dimensions, count);
         this.buffer.asIntBuffer().put(buffer);
@@ -112,7 +112,8 @@ class NativeUnsignedIntVectorBuffer implements NativeVectorBuffer
         return 0x00000000FFFFFFFFL & this.buffer.asIntBuffer().get(index * this.dimensions + dimension);
     }
 
-    public void set(int index, int dimension, long value)
+    @Override
+    public void set(int index, int dimension, Number value)
     {
         if (index < 0)
         {
@@ -130,13 +131,7 @@ class NativeUnsignedIntVectorBuffer implements NativeVectorBuffer
         {
             throw new IndexOutOfBoundsException("Dimension (" + dimension + ") is greater than the dimensions of the vertex list (" + this.dimensions + ").");
         }
-        this.buffer.asIntBuffer().put(index * this.dimensions + dimension, (int)value);
-    }
-
-    @Override
-    public void set(int index, int dimension, Number value)
-    {
-        this.set(index, dimension, value.longValue());
+        this.buffer.asIntBuffer().put(index * this.dimensions + dimension, (int) value.longValue());
     }
 
     @Override

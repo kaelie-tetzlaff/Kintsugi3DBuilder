@@ -25,13 +25,13 @@ import java.util.Optional;
 public class ToneCalibrationViewSelectController extends ViewSelectController
 {
     @Override
-    public boolean confirm()
+    public boolean tryConfirm()
     {
         return false;
     }
 
     @Override
-    public boolean advance()
+    public boolean tryAdvance()
     {
         ViewSet viewSet = Global.io().validateRenderable().getLoadedViewSet();
 

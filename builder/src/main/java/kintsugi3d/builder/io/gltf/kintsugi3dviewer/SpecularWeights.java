@@ -22,7 +22,6 @@ public class SpecularWeights
     private int stride = 4;
 
     // Used by glTF exporter, via reflection presumably
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private final Collection<TextureInfo> textures = new ArrayList<>(8);
 
     public Collection<TextureInfo> getTextures()

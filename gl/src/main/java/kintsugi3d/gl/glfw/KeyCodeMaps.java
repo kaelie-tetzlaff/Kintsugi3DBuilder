@@ -20,7 +20,10 @@ import static org.lwjgl.glfw.GLFW.*;
 
 final class KeyCodeMaps
 {
+    @SuppressWarnings("StaticCollection")
     private static final Map<Integer, Key> CODE_TO_KEY;
+
+    @SuppressWarnings("StaticCollection")
     private static final Map<Key, List<Integer>> KEY_TO_CODES;
 
     static

@@ -39,8 +39,8 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
 
     private final LightingResources<ContextType> lightingResources;
 
-    protected final ReadonlyImageBasedGraphicsResources<ContextType> resources;
-    protected final SceneModel sceneModel;
+    private final ReadonlyImageBasedGraphicsResources<ContextType> resources;
+    private final SceneModel sceneModel;
 
     private boolean lightCalibrationMode = false;
 
@@ -336,5 +336,15 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
     public void setExtraFragmentShaderDefinesFactory(Supplier<Map<String, Optional<Object>>> fragmentShaderDefinesFactory)
     {
         this.fragmentShaderDefinesFactory = fragmentShaderDefinesFactory;
+    }
+
+    protected ReadonlyImageBasedGraphicsResources<ContextType> getResources()
+    {
+        return resources;
+    }
+
+    protected SceneModel getSceneModel()
+    {
+        return sceneModel;
     }
 }

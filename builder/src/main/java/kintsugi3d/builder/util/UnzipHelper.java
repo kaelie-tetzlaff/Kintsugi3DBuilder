@@ -126,6 +126,7 @@ public final class UnzipHelper
         byte[] buffer = new byte[1024];
         StringBuilder s = new StringBuilder(1024);
         int read;
+        //noinspection NestedAssignment
         while ((read = stream.read(buffer, 0, 1024)) >= 0)
         {
             s.append(new String(buffer, 0, read, StandardCharsets.UTF_8));
@@ -175,6 +176,7 @@ public final class UnzipHelper
         try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zipFile)))
         {
             ZipEntry entry;
+            //noinspection NestedAssignment
             while ((entry = zipInputStream.getNextEntry()) != null)
             {
                 String entryName = entry.getName();
@@ -221,6 +223,7 @@ public final class UnzipHelper
         try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(imgsDir)))
         {
             ZipEntry entry;
+            //noinspection NestedAssignment
             while ((entry = zipInputStream.getNextEntry()) != null)
             {
                 String entryName = entry.getName();
@@ -300,6 +303,7 @@ public final class UnzipHelper
                 }
                 FileOutputStream fos = new FileOutputStream(new File(destinationDir, zipEntry.getName()));
                 int len;
+                //noinspection NestedAssignment
                 while ((len = zis.read(buffer)) > 0)
                 {
                     fos.write(buffer, 0, len);

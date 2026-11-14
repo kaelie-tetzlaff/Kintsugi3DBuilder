@@ -97,7 +97,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
 
                 try
                 {
-                    thumbnailPath = ImageFinder.getInstance().findImageFile(newTextureImage).toString();
+                    thumbnailPath = ImageFinder.findImageFile(newTextureImage).toString();
                 }
                 catch (FileNotFoundException e)
                 {
@@ -110,12 +110,15 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
 
                 return new ShaderDataCard(texture.name, texture.getVisualizationShader(), thumbnailPath, textureImage.getPath(),
                     new LinkedHashMap<>()
-                    {{
-                        put("File Name", textureImage.getName());
-                        put("Resolution", res);
-                        put("Size", (int) (((double) textureImage.length() / (1024.0 * 1024.0)) * 1000.0) + " KB");
-                        put("Purpose", texture.purpose);
-                    }},
+                    {
+                        private static final long serialVersionUID = -2742394325417777891L;
+                        {
+                            put("File Name", textureImage.getName());
+                            put("Resolution", res);
+                            put("Size", (int) (((double) textureImage.length() / (1024.0 * 1024.0)) * 1000.0) + " KB");
+                            put("Purpose", texture.purpose);
+                        }
+                    },
                     List.of(Map.of(
                         "Refresh Texture", () -> refreshTexture(texture),
                         "Replace Texture...", () -> replaceTexture(texture)

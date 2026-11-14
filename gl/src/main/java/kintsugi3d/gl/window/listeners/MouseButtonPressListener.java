@@ -11,11 +11,12 @@
 
 package kintsugi3d.gl.window.listeners;
 
+import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.window.Canvas3D;
 import kintsugi3d.gl.window.ModifierKeys;
 
 @FunctionalInterface
 public interface MouseButtonPressListener
 {
-    void mouseButtonPressed(Canvas3D<? extends kintsugi3d.gl.core.Context<?>> canvas, int buttonIndex, ModifierKeys mods);
+    void mouseButtonPressed(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods);
 }

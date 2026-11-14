@@ -20,7 +20,7 @@ import kintsugi3d.gl.window.CursorPosition;
 
 final class ObjectRotationTool implements DragTool
 {
-    private static final double ORBIT_SENSITIVITY = 1.0 * Math.PI; //todo: get from gui somehow
+    private static final double ORBIT_SENSITIVITY = Math.PI; //todo: get from gui somehow
     private double orbitSensitivityAdjusted = 1.0;
 
     private Matrix4 oldOrbitMatrix;
@@ -64,6 +64,7 @@ final class ObjectRotationTool implements DragTool
     @Override
     public void cursorDragged(CursorPosition cursorPosition, CanvasSize canvasSize)
     {
+        //noinspection FloatingPointEquality
         if (cursorPosition.y != mouseStart.y || cursorPosition.x != mouseStart.x)
         {
             Vector3 rotationVector = new Vector3(

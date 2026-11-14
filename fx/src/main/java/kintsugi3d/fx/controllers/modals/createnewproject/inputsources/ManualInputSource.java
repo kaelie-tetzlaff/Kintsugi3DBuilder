@@ -76,42 +76,7 @@ public class ManualInputSource extends NonValidatedInputSourceBase
     @Override
     public ValidatedInputSource validate() throws Exception
     {
-        return new ValidatedInputSourceBase(this, loadImageSetInfo())
-        {
-            @Override
-            public boolean confirm()
-            {
-                if (hotSwap)
-                {
-                    Global.io().hotSwapLooseFiles(cameraFile.getPath(), cameraFile, getViewSetLoadOptions());
-                    return true;
-                }
-                else
-                {
-                    return super.confirm();
-                }
-            }
-
-            @Override
-            public void confirm(File projectFileToSave)
-            {
-                Global.io().loadFromLooseFiles(projectFileToSave, cameraFile.getPath(), cameraFile, getViewSetLoadOptions());
-            }
-
-            private ViewSetLoadOptions getViewSetLoadOptions()
-            {
-                ViewSetLoadOptions loadOptions = new ViewSetLoadOptions();
-                loadOptions.mainDirectories.projectRoot = cameraFile.getParentFile();
-                loadOptions.geometryFile = meshFile;
-                loadOptions.masksDirectory = masksDir;
-                loadOptions.mainDirectories.fullResImageDirectory = photosDir;
-                loadOptions.mainDirectories.fullResImagesNeedUndistort = needsUndistort;
-                loadOptions.orientationViewName = getViewSelection();
-                loadOptions.orientationViewRotation = getViewRotation();
-                loadOptions.disabledImages = getDisabledImages();
-                return loadOptions;
-            }
-        };
+        return new ValidatedManualInputSource(this);
     }
 
     private ImageSetInfo loadImageSetInfo() throws Exception
@@ -123,9 +88,9 @@ public class ManualInputSource extends NonValidatedInputSourceBase
         else if (cameraFile.getName().endsWith(".csv")) // RealityCapture
         {
             ViewSetDirectories directories = new ViewSetDirectories();
-            directories.projectRoot = cameraFile.getParentFile();
-            directories.fullResImageDirectory = photosDir;
-            directories.fullResImagesNeedUndistort = needsUndistort;
+            directories.setProjectRoot(cameraFile.getParentFile());
+            directories.setFullResImageDirectory(photosDir);
+            directories.setFullResImagesNeedUndistort(needsUndistort);
 
             ViewSet viewSet = ViewSetReaderFromRealityCaptureCSV.getInstance()
                 .readFromFile(cameraFile, directories)
@@ -187,5 +152,50 @@ public class ManualInputSource extends NonValidatedInputSourceBase
     public void setMasksDirectory(File file)
     {
         masksDir = file;
+    }
+
+    private static class ValidatedManualInputSource extends ValidatedInputSourceBase
+    {
+        ManualInputSource original;
+
+        ValidatedManualInputSource(ManualInputSource original) throws Exception
+        {
+            super(original, original.loadImageSetInfo());
+            this.original = original;
+        }
+
+        @Override
+        public boolean confirm()
+        {
+            if (original.hotSwap)
+            {
+                Global.io().hotSwapLooseFiles(original.cameraFile.getPath(), original.cameraFile, getViewSetLoadOptions());
+                return true;
+            }
+            else
+            {
+                return super.confirm();
+            }
+        }
+
+        @Override
+        public void confirm(File projectFileToSave)
+        {
+            Global.io().loadFromLooseFiles(projectFileToSave, original.cameraFile.getPath(), original.cameraFile, getViewSetLoadOptions());
+        }
+
+        private ViewSetLoadOptions getViewSetLoadOptions()
+        {
+            ViewSetLoadOptions loadOptions = new ViewSetLoadOptions();
+            loadOptions.getMainDirectories().setProjectRoot(original.cameraFile.getParentFile());
+            loadOptions.setGeometryFile(original.meshFile);
+            loadOptions.setMasksDirectory(original.masksDir);
+            loadOptions.getMainDirectories().setFullResImageDirectory(original.photosDir);
+            loadOptions.getMainDirectories().setFullResImagesNeedUndistort(original.needsUndistort);
+            loadOptions.setOrientationViewName(getViewSelection());
+            loadOptions.setOrientationViewRotation(getViewRotation());
+            loadOptions.setDisabledImages(getDisabledImages());
+            return loadOptions;
+        }
     }
 }

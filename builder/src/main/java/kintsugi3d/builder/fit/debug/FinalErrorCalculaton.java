@@ -101,7 +101,7 @@ public final class FinalErrorCalculaton
                 LOG.info("Normal map ground truth RMSE: {}", rmse);
 
                 // Print out RMSE for normal map ground truth
-                rmseOut.printf("Normal map ground truth RMSE: %s%n", rmse);
+                rmseOut.printf("Normal map ground truth RMSE: %s\n", rmse);
             }
             catch (IOException e)
             {
@@ -120,12 +120,12 @@ public final class FinalErrorCalculaton
         {
             // Calculate linear RMSE using basis diffuse
             basisErrorCalculator.update();
-            rmseOut.printf("RMSE using basis diffuse (linear): %s%n", basisErrorCalculator.getReport().getError());
+            rmseOut.printf("RMSE using basis diffuse (linear): %s\n", basisErrorCalculator.getReport().getError());
 
             // Calculate sRGB RMSE using basis diffuse
             basisErrorCalculator.getProgram().setUniform("sRGB", true);
             basisErrorCalculator.update();
-            rmseOut.printf("RMSE using basis diffuse (sRGB): %s%n", basisErrorCalculator.getReport().getError());
+            rmseOut.printf("RMSE using basis diffuse (sRGB): %s\n", basisErrorCalculator.getReport().getError());
 
             // Setup drawable that uses the final diffuse texture (not limited to basis colors)
             specularFit.setupShaderProgram(finalErrorCalcProgram);
@@ -137,11 +137,11 @@ public final class FinalErrorCalculaton
             // getViews makes a copy, so save it for efficiency.
             Collection<View> views = resources.getViewSet().getEnabledViews();
 
-            rmseOut.printf("Final RMSE with final diffuse estimate (linear): %s%n",
+            rmseOut.printf("Final RMSE with final diffuse estimate (linear): %s\n",
                 runFinalErrorCalculation(finalErrorCalcDrawable, scratchFramebuffer, views));
 
             finalErrorCalcProgram.setUniform("sRGB", true);
-            rmseOut.printf("Final RMSE with final diffuse estimate (sRGB): %s%n",
+            rmseOut.printf("Final RMSE with final diffuse estimate (sRGB): %s\n",
                 runFinalErrorCalculation(finalErrorCalcDrawable, scratchFramebuffer, views));
 
             // Calculate error using the GGX fit rather than the basis functions.
@@ -177,11 +177,11 @@ public final class FinalErrorCalculaton
             // getViews makes a copy, so save it for efficiency.
             Collection<View> views = resources.getViewSet().getEnabledViews();
 
-            rmseOut.printf("RMSE for GGX fit (linear): %s%n",
+            rmseOut.printf("RMSE for GGX fit (linear): %s\n",
                 runFinalErrorCalculation(ggxErrorCalcDrawable, scratchFramebuffer, views));
 
             ggxErrorCalcProgram.setUniform("sRGB", true);
-            rmseOut.printf("RMSE for GGX fit (sRGB): %s%n",
+            rmseOut.printf("RMSE for GGX fit (sRGB): %s\n",
                 runFinalErrorCalculation(ggxErrorCalcDrawable, scratchFramebuffer, views));
         }
     }

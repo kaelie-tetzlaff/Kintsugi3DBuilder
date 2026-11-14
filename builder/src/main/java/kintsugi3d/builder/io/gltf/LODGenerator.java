@@ -22,61 +22,50 @@ public final class LODGenerator
 {
     private static final Logger LOG = LoggerFactory.getLogger(LODGenerator.class);
 
-    private static final LODGenerator INSTANCE = new LODGenerator();
-
-    public static LODGenerator getInstance()
-    {
-        return INSTANCE;
-    }
-
     private LODGenerator()
     {
     }
 
-    void generateLODs(int minResolution, File directory, TextureExportSpecification... originalTextureSpecs)
+    static void generateLODs(int minResolution, File directory, TextureExportSpecification... originalTextureSpecs)
     {
         for (TextureExportSpecification t : originalTextureSpecs)
         {
-            generateLODs(t.format, minResolution, directory, t.uri);
+            generateLODs(t.getFormat(), minResolution, directory, t.getURI());
         }
     }
 
-    public void generateLODs(String format, int minResolution, File directory, String... originalImageFilenames)
+    private static void generateLODs(String format, int minResolution, File directory, String... originalImageFilenames)
     {
-        for (String filename : originalImageFilenames)
+        for (String originalImageFilename : originalImageFilenames)
         {
-            generateLODs(format, minResolution, directory, filename);
-        }
-    }
+            File originalImageFile = new File(directory, originalImageFilename);
 
-    public void generateLODs(String format, int minResolution, File directory, String originalImageFilename)
-    {
-        File originalImageFile = new File(directory, originalImageFilename);
-
-        try
-        {
-            if (originalImageFile.exists()) // Among other things, should catch when non-standard textures like constant.png don't exist.
+            try
             {
-                String filename = originalImageFile.getName();
-                String extension = "";
-                int i = filename.lastIndexOf('.'); //Strip file extension
-                if (i > 0)
+                if (originalImageFile.exists()) // Among other things, should catch when non-standard textures like constant.png don't exist.
                 {
-                    extension = filename.substring(i);
-                    filename = filename.substring(0, i);
-                }
+                    String filename = originalImageFile.getName();
+                    String extension = "";
+                    int i = filename.lastIndexOf('.'); //Strip file extension
+                    if (i > 0)
+                    {
+                        extension = filename.substring(i);
+                        filename = filename.substring(0, i);
+                    }
 
-                ImageHelper imageHelper = ImageHelper.read(originalImageFile);
+                    ImageHelper imageHelper = ImageHelper.read(originalImageFile);
 
-                for (int size = imageHelper.getBufferedImage().getHeight() / 2; size >= minResolution; size /= 2)
-                {
-                    imageHelper.saveAtResolution(format, new File(originalImageFile.getParent(), filename + "-" + size + extension), size);
+                    for (int size = imageHelper.getBufferedImage().getHeight() / 2; size >= minResolution; size /= 2)
+                    {
+                        imageHelper.saveAtResolution(format,
+                            new File(originalImageFile.getParent(), String.format("%s-%d%s", filename, size, extension)), size);
+                    }
                 }
             }
-        }
-        catch (IOException e)
-        {
-            LOG.error("Error generating LODs for file '{}':", originalImageFile, e);
+            catch (IOException e)
+            {
+                LOG.error("Error generating LODs for file '{}':", originalImageFile, e);
+            }
         }
     }
 }

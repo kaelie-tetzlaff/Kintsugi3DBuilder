@@ -11,7 +11,6 @@
 
 package kintsugi3d.fx.controllers.modals.createnewproject;
 
-
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,7 +33,7 @@ import kintsugi3d.fx.core.FrontendIO;
 
 import java.io.File;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 public class MetashapeImportController extends ProjectImportController
 {
@@ -65,7 +64,7 @@ public class MetashapeImportController extends ProjectImportController
         psxFileChooser = new FileChooser();
         psxFileChooser.setTitle("Choose .psx file");
         psxFileChooser.getExtensionFilters().add(new ExtensionFilter("Metashape files (*.psx)", "*.psx"));
-        psxFileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+        psxFileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
 
         setCanConfirm(true);
     }
@@ -88,19 +87,19 @@ public class MetashapeImportController extends ProjectImportController
 
             String name = getModelNameFromSelection(selection);
             String id = getModelIDFromSelection(selection);
-            Optional<Integer> optId = id != null ? Optional.of(Integer.parseInt(id)) : Optional.empty();
+            Integer optId = id != null ? Integer.parseInt(id) : null;
 
             for (MetashapeModel model : metashapeDocument.getSelectedChunk().getModels())
             {
                 if (name.equals(model.getLabel()) &&
-                    optId.equals(model.getId()))
+                    Objects.equals(optId, model.getId()))
                 {
                     metashapeDocument.getSelectedChunk().selectModel(model);
                 }
             }
         });
 
-        psxFileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+        psxFileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
     }
 
     @Override
@@ -142,8 +141,8 @@ public class MetashapeImportController extends ProjectImportController
 
         if (file != null)
         {
-            RecentProjects.setMostRecentDirectory(file.getParentFile());
-            psxFileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+            RecentProjects.getInstance().setMostRecentDirectory(file.getParentFile());
+            psxFileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
 
             fileNameTxtField.setText(file.getName());
             updateChoiceBoxes(file);
@@ -169,7 +168,7 @@ public class MetashapeImportController extends ProjectImportController
 
         for (MetashapeModel model : metashapeDocument.getSelectedChunk().getModels())
         {
-            String modelID = model.getId().isPresent() ? String.valueOf(model.getId().get()) : NO_MODEL_ID_MSG;
+            String modelID = model.getId() != null ? String.valueOf(model.getId()) : NO_MODEL_ID_MSG;
             String modelName = model.getLabel().isBlank() ? NO_MODEL_NAME_MSG : model.getLabel();
             modelSelectionChoiceBox.getItems().add(String.format("%s%s%s", modelID, SPACER, modelName));
         }
@@ -187,24 +186,25 @@ public class MetashapeImportController extends ProjectImportController
         modelSelectionChoiceBox.setValue(modelSelectionChoiceBox.getItems().get(0));
         modelSelectionChoiceBox.setDisable(false);
 
-        if (metashapeDocument.getSelectedChunk().getDefaultModelID().isEmpty())
+        Integer defaultModelID = metashapeDocument.getSelectedChunk().getDefaultModelID();
+        if (defaultModelID != null)
         {
-            return;
-        }
-
-        for (int i = 0; i < modelSelectionChoiceBox.getItems().size(); ++i)
-        {
-            String obj = modelSelectionChoiceBox.getItems().get(i);
-            String modelID = getModelIDFromSelection(obj);
-            if (modelID != null)
-            {
-                int id = Integer.parseInt(modelID);
-                if (metashapeDocument.getSelectedChunk().getDefaultModelID().get().equals(id))
+            modelSelectionChoiceBox.getItems().stream()
+                .filter(obj ->
                 {
-                    modelSelectionChoiceBox.setValue(obj);
-                    break;
-                }
-            }
+                    String modelID = getModelIDFromSelection(obj);
+                    if (modelID != null)
+                    {
+                        int id = Integer.parseInt(modelID);
+                        return defaultModelID.equals(id);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                })
+                .findFirst()
+                .ifPresent(modelSelectionChoiceBox::setValue);
         }
     }
 

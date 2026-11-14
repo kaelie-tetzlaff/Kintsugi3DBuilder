@@ -18,7 +18,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.ButtonType;
 import kintsugi3d.builder.util.FXWindowHelper;
@@ -49,9 +50,9 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
     }
 
     @Override
-    public final void setPageFrameController(PageFrameController frameController)
+    public final void setPageFrameController(PageFrameController pageFrameController)
     {
-        this.pageFrameController = frameController;
+        this.pageFrameController = pageFrameController;
     }
 
     protected final JavaFXState getState()
@@ -122,21 +123,21 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
     }
 
     @Override
-    public boolean advance()
+    public boolean tryAdvance()
     {
         // By default, advance without any additional logic other than what page has been assigned as nextPage.
         return true;
     }
 
     @Override
-    public boolean confirm()
+    public boolean tryConfirm()
     {
         // Allow silent exit by default if no confirmation is implemented.
         return true;
     }
 
     @Override
-    public boolean cancel()
+    public boolean tryCancel()
     {
         // Close without any additional logic by default.
         return true;
@@ -160,7 +161,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
             if (getPage().hasFallbackPage())
             {
                 // "Cancel" closes the modal entirely
-                ButtonType cancel = new ButtonType("Cancel", ButtonBar.ButtonData.LEFT);
+                ButtonType cancel = new ButtonType("Cancel", ButtonData.LEFT);
 
                 // "Fallback" buttons navigate to a different page.
                 Collection<ButtonType> fallbackButtons = new ArrayList<>(getPage().getFallbackPages().size());
@@ -178,11 +179,11 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
                 ButtonType continueButton = null;
                 if (allowContinue)
                 {
-                    continueButton = new ButtonType("Continue", ButtonBar.ButtonData.RIGHT);
+                    continueButton = new ButtonType("Continue", ButtonData.RIGHT);
                     allButtons.add(continueButton);
                 }
 
-                Alert alert = new Alert(Alert.AlertType.NONE, message, allButtons.toArray(ButtonType[]::new));
+                Alert alert = new Alert(AlertType.NONE, message, allButtons.toArray(ButtonType[]::new));
 
                 // Force the window back to the correct size in case of race conditions with the OS (esp. on Linux)
                 ChangeListener<? super Number> forceSize =
@@ -216,8 +217,8 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
             }
             else
             {
-                ButtonType ok = new ButtonType("OK", ButtonBar.ButtonData.CANCEL_CLOSE);
-                Alert alert = new Alert(Alert.AlertType.NONE, message, ok);
+                ButtonType ok = new ButtonType("OK", ButtonData.CANCEL_CLOSE);
+                Alert alert = new Alert(AlertType.NONE, message, ok);
                 ((ButtonBase) alert.getDialogPane().lookupButton(ok)).setOnAction(event ->
                 {
                     close();

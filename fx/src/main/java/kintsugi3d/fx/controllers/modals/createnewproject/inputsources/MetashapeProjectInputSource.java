@@ -14,8 +14,10 @@ package kintsugi3d.fx.controllers.modals.createnewproject.inputsources;
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.io.imageset.MetashapeImageSetInfo;
 import kintsugi3d.builder.io.metashape.MetashapeModel;
+import kintsugi3d.builder.resources.project.MissingImagesException;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.function.Supplier;
 
 public class MetashapeProjectInputSource extends NonValidatedInputSourceBase
@@ -73,18 +75,29 @@ public class MetashapeProjectInputSource extends NonValidatedInputSourceBase
     }
 
     @Override
-    public ValidatedInputSource validate() throws Exception
+    public ValidatedInputSource validate() throws FileNotFoundException, MissingImagesException
     {
-        return new ValidatedInputSourceBase(this, new MetashapeImageSetInfo(model, getDisabledImages()))
+        return new ValidatedMetashapeProjectInputSource(this);
+    }
+
+    private static class ValidatedMetashapeProjectInputSource extends ValidatedInputSourceBase
+    {
+        private final MetashapeProjectInputSource original;
+
+        ValidatedMetashapeProjectInputSource(MetashapeProjectInputSource original)
+            throws FileNotFoundException, MissingImagesException
         {
-            @Override
-            public void confirm(File projectFileToSave)
-            {
-                model.getLoadPreferences().setOrientationViewName(getViewSelection());
-                model.getLoadPreferences().setOrientationViewRotateDegrees(getViewRotation());
-                model.getLoadPreferences().setDisabledImageFiles(getDisabledImages());
-                Global.io().loadFromMetashapeModel(projectFileToSave, model);
-            }
-        };
+            super(original, new MetashapeImageSetInfo(original.model, original.getDisabledImages()));
+            this.original = original;
+        }
+
+        @Override
+        public void confirm(File projectFileToSave)
+        {
+            original.model.getLoadPreferences().setOrientationViewName(getViewSelection());
+            original.model.getLoadPreferences().setOrientationViewRotateDegrees(getViewRotation());
+            original.model.getLoadPreferences().setDisabledImageFiles(getDisabledImages());
+            Global.io().loadFromMetashapeModel(projectFileToSave, original.model);
+        }
     }
 }

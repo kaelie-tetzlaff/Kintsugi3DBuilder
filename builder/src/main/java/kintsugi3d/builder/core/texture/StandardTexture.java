@@ -38,7 +38,7 @@ public enum StandardTexture
     ERROR(new NamedTextureInfo("error", "Error map",
         "A texture encoding relative, per-pixel reconstruction error after processing textures.  White pixels have the most error while black pixels have the least error."));
 
-    public final TextureInfo details;
+    private final TextureInfo details;
 
     StandardTexture(TextureInfo details)
     {
@@ -64,5 +64,10 @@ public enum StandardTexture
         }
 
         return Collections.unmodifiableMap(standardTextures);
+    }
+
+    public TextureInfo getDetails()
+    {
+        return details;
     }
 }

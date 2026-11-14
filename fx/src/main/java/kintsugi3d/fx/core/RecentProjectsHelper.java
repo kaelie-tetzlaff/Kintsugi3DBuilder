@@ -34,7 +34,7 @@ public final class RecentProjectsHelper
         //attach tooltips and event handlers
         for (String item : items)
         {
-            String fileName = RecentProjects.getRecentProjectFilenames().get(i);
+            String fileName = RecentProjects.getInstance().getRecentProjectFilenames().get(i);
             String shortPath = RecentProjects.shortenedPath(item);
 
             if (OperatingSystem.getCurrentOS() == OperatingSystem.MACOS)
@@ -73,7 +73,7 @@ public final class RecentProjectsHelper
 
         recentProjsList.getItems().clear();
 
-        List<String> items = RecentProjects.getRecentProjectFilenames();
+        List<String> items = RecentProjects.getInstance().getRecentProjectFilenames();
         List<MenuItem> recentItems = getMenuItems(items);
 
         recentProjsList.getItems().addAll(recentItems);

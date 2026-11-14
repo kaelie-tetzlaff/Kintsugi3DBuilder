@@ -9,41 +9,40 @@
  * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
-package kintsugi3d.gl.material;
+package kintsugi3d.gl.core;
 
-public class TextureLoadOptions
+import java.nio.ShortBuffer;
+
+class DepthTextureReader2D<ContextType extends Context<ContextType>> extends DepthTextureReaderBase
 {
-    private boolean linearFilteringRequested = true;
-    private boolean mipmapsRequested = false;
-    private boolean compressionRequested = false;
+    private final Texture2D<ContextType> texture;
 
-    public boolean isLinearFilteringRequested()
+    DepthTextureReader2D(Texture2D<ContextType> texture)
     {
-        return linearFilteringRequested;
+        this.texture = texture;
     }
 
-    public void setLinearFilteringRequested(boolean linearFilteringRequested)
+    @Override
+    public int getWidth()
     {
-        this.linearFilteringRequested = linearFilteringRequested;
+        return texture.getWidth();
     }
 
-    public boolean areMipmapsRequested()
+    @Override
+    public int getHeight()
     {
-        return mipmapsRequested;
+        return texture.getHeight();
     }
 
-    public void setMipmapsRequested(boolean mipmapsRequested)
+    @Override
+    public void read(ShortBuffer destination, int x, int y, int width, int height)
     {
-        this.mipmapsRequested = mipmapsRequested;
-    }
-
-    public boolean isCompressionRequested()
-    {
-        return compressionRequested;
-    }
-
-    public void setCompressionRequested(boolean compressionRequested)
-    {
-        this.compressionRequested = compressionRequested;
+        try (FramebufferObject<ContextType> fbo = texture.getContext()
+            .buildFramebufferObject(this.getWidth(), this.getHeight())
+            .createFramebufferObject())
+        {
+            fbo.setDepthAttachment(texture);
+            fbo.getTextureReaderForDepthAttachment().read(destination, x, y, width, height);
+        }
     }
 }

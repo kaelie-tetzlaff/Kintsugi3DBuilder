@@ -28,6 +28,7 @@ import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Duration;
 import javafx.util.converter.CharacterStringConverter;
 import kintsugi3d.gl.core.FramebufferSize;
@@ -48,11 +49,12 @@ public final class FramebufferView extends Region
 
     private WritableImage frontImage;
     private WritableImage backImage;
-    private boolean copyThreadRunning = false;
+
+    private volatile boolean copyThreadRunning = false;
     private Thread nextCopyThread;
     private final Object nextCopyThreadLock = new Object();
-    private volatile boolean frontImagePending = false;
 
+    private volatile boolean frontImagePending = false;
     private volatile ByteBuffer frontCopyBuffer;
 
     private ByteBuffer backCopyBuffer;
@@ -77,25 +79,25 @@ public final class FramebufferView extends Region
         }
 
         @Override
-        public boolean getShiftModifier()
+        public boolean isShiftModifierActive()
         {
             return shiftModifier;
         }
 
         @Override
-        public boolean getControlModifier()
+        public boolean isControlModifierActive()
         {
             return controlModifier;
         }
 
         @Override
-        public boolean getAltModifier()
+        public boolean isAltModifierActive()
         {
             return altModifier;
         }
 
         @Override
-        public boolean getSuperModifier()
+        public boolean isSuperModifierActive()
         {
             return superModifier;
         }
@@ -259,7 +261,7 @@ public final class FramebufferView extends Region
             }
         });
 
-        javafx.stage.Window owner = stage.getOwner();
+        Window owner = stage.getOwner();
         Stage primaryStage = owner instanceof Stage ? (Stage) owner : stage;
         primaryStage.iconifiedProperty().addListener((event1, oldValue, newValue) ->
         {

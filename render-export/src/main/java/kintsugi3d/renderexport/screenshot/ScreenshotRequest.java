@@ -21,29 +21,33 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
-public class ScreenshotRequest implements ProgressMonitoredImageBasedGraphicsRequest
+public final class ScreenshotRequest implements ProgressMonitoredImageBasedGraphicsRequest
 {
     private final int width;
     private final int height;
     private final File exportFile;
 
-    protected static class Builder
+    public static final class Builder
     {
         private int width;
         private int height;
         private File exportFile;
 
-        protected int getWidth()
+        private Builder()
+        {
+        }
+
+        public int getWidth()
         {
             return width;
         }
 
-        protected int getHeight()
+        public int getHeight()
         {
             return height;
         }
 
-        protected File getExportFile()
+        public File getExportFile()
         {
             return exportFile;
         }
@@ -72,7 +76,12 @@ public class ScreenshotRequest implements ProgressMonitoredImageBasedGraphicsReq
         }
     }
 
-    protected ScreenshotRequest(int width, int height, File exportFile)
+    public static Builder getBuilder()
+    {
+        return new Builder();
+    }
+
+    private ScreenshotRequest(int width, int height, File exportFile)
     {
         this.width = width;
         this.height = height;

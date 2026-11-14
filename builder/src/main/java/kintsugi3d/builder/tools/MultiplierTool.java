@@ -32,7 +32,7 @@ public final class MultiplierTool implements KeyPressTool
         UP_SMALL(SMALL_FACTOR),
         DOWN_SMALL(1 / SMALL_FACTOR);
 
-        private final float factor;
+        public final float factor;
 
         Type(float factor)
         {
@@ -67,7 +67,7 @@ public final class MultiplierTool implements KeyPressTool
         }
 
         @Override
-        public ToolBuilder<MultiplierTool> setObjectModel(ManipulableObjectPoseModel lightingModel)
+        public ToolBuilder<MultiplierTool> setObjectModel(ManipulableObjectPoseModel objectModel)
         {
             return this;
         }

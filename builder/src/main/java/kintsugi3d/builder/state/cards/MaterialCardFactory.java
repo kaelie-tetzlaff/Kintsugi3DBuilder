@@ -91,7 +91,7 @@ public class MaterialCardFactory extends ProjectDataCardFactoryBase<BasisMateria
         String thumbnailPath;
         try
         {
-            thumbnailPath = ImageFinder.getInstance().findImageFile(
+            thumbnailPath = ImageFinder.findImageFile(
                 new File(getViewSet().getThumbnailImageDirectory(),
                     BasisImageCreator.getBasisImageFilename(name))).toString();
         }

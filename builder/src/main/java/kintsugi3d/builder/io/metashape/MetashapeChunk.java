@@ -41,19 +41,19 @@ public final class MetashapeChunk
     private Document frameXML;
 
     private List<MetashapeModel> models = new ArrayList<>(8);
-    private Optional<Integer> defaultModelID;
-    private MetashapeModel currModel;
+    private Integer defaultModelID;
+    private MetashapeModel currentModel;
     private File thumbnailsDir;
-    private File masksDir = null;
-    private File masksDirOverride = null;
+    private File masksDir;
+    private File masksDirOverride;
 
     public static MetashapeChunk parseFromElement(MetashapeDocument document, Element chunkElement) throws IOException
     {
-        Optional<Integer> chunkID = Optional.empty();
+        Integer chunkID = null;
         String tempChunkID = chunkElement.getAttribute("id");
         if (!tempChunkID.isBlank())
         {
-            chunkID = Optional.of(Integer.parseInt(tempChunkID));
+            chunkID = Integer.parseInt(tempChunkID);
         }
 
         String chunkZipPath = chunkElement.getAttribute("path"); //gives xx/chunk.zip where xx is a number
@@ -65,11 +65,15 @@ public final class MetashapeChunk
         Document fullChunkDocument = UnzipHelper.unzipToDocument(new File(chunkZipPath));
 
         //get default model id if the chunk has one
-        Optional<Integer> defaultModelID = Optional.empty();
+        Integer defaultModelID = null;
+
+        // TODO Figure out why NullPointException would be thrown, change to explicit null check,
+        //  and remove inspection suppression.
+        //noinspection ProhibitedExceptionCaught
         try
         {
             Element modelsElem = (Element) fullChunkDocument.getElementsByTagName("models").item(0);
-            defaultModelID = Optional.of(Integer.parseInt(modelsElem.getAttribute("active_id")));
+            defaultModelID = Integer.parseInt(modelsElem.getAttribute("active_id"));
         }
         catch (NumberFormatException | NullPointerException e)
         {
@@ -151,7 +155,7 @@ public final class MetashapeChunk
                 if (modelElem != null)
                 {
                     MetashapeModel model = MetashapeModel.parseFromElement(returned, modelElem);
-                    returned.currModel = model;
+                    returned.currentModel = model;
                     models.add(model);
                 }
             }
@@ -162,9 +166,9 @@ public final class MetashapeChunk
         {
             Element elem = (Element) modelList.item(i);
             MetashapeModel model = MetashapeModel.parseFromElement(returned, elem);
-            if (model.getId().isPresent() && model.getId().equals(defaultModelID))
+            if (model.getId() != null && model.getId().equals(defaultModelID))
             {
-                returned.currModel = model;
+                returned.currentModel = model;
                 defaultIdNotFound = false;
             }
             models.add(model);
@@ -172,7 +176,7 @@ public final class MetashapeChunk
 
         if (defaultIdNotFound && !models.isEmpty())
         {
-            returned.currModel = models.get(0);
+            returned.currentModel = models.get(0);
         }
 
         returned.models = models;
@@ -197,16 +201,16 @@ public final class MetashapeChunk
 
     public void selectModel(MetashapeModel model)
     {
-        currModel = model;
+        currentModel = model;
     }
 
-    private MetashapeChunk setChunkID(Optional<Integer> chunkID)
+    private MetashapeChunk setChunkID(Integer chunkID)
     {
-        this.id = chunkID.orElse(-1);
+        this.id = Objects.requireNonNullElse(chunkID, -1);
         return this;
     }
 
-    private MetashapeChunk setDefaultModelID(Optional<Integer> defaultModelID)
+    private MetashapeChunk setDefaultModelID(Integer defaultModelID)
     {
         this.defaultModelID = defaultModelID;
         return this;
@@ -265,7 +269,7 @@ public final class MetashapeChunk
 
     public MetashapeModel getSelectedModel()
     {
-        return currModel;
+        return currentModel;
     }
 
     public Map<Integer, Image> loadThumbnailImageList()
@@ -359,7 +363,7 @@ public final class MetashapeChunk
             {
                 String pathAttributeName = new File(pathAttribute).getName();
                 imageFile = new File(fullResSearchDirectory, pathAttributeName);
-                File foundImageFile = ImageFinder.getInstance().tryFindImageFile(imageFile);
+                File foundImageFile = ImageFinder.tryFindImageFile(imageFile);
                 if (foundImageFile != null)
                 {
                     path = foundImageFile.getName();
@@ -368,7 +372,7 @@ public final class MetashapeChunk
             else
             {
                 imageFile = new File(fullResSearchDirectory, pathAttribute);
-                File foundImageFile = ImageFinder.getInstance().tryFindImageFile(imageFile);
+                File foundImageFile = ImageFinder.tryFindImageFile(imageFile);
                 if (foundImageFile != null)
                 {
                     path = rootDirectory.toPath().toAbsolutePath().relativize(foundImageFile.toPath().toAbsolutePath()).toString();
@@ -402,7 +406,7 @@ public final class MetashapeChunk
 
     public String getCurrentModelPath()
     {
-        return currModel.getPath();
+        return currentModel.getPath();
     }
 
     public List<MetashapeModel> getModels()
@@ -415,14 +419,18 @@ public final class MetashapeChunk
         return this.label;
     }
 
-    public Optional<Integer> getDefaultModelID()
+    /**
+     * May be null.
+     * @return
+     */
+    public Integer getDefaultModelID()
     {
         return defaultModelID;
     }
 
-    public int getCurrModelID()
+    public int getCurrentModelID()
     {
-        return currModel.getId().orElse(-1);
+        return Objects.requireNonNullElse(currentModel.getId(), -1);
     }
 
     public File getPsxFile()

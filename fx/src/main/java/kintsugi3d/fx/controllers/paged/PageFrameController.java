@@ -15,6 +15,7 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringBinding;
+import javafx.beans.binding.StringExpression;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -67,7 +68,7 @@ public class PageFrameController
         this.state = state;
     }
 
-    private boolean isConfirmed = false;
+    private boolean isIncomplete = true;
 
     public void init()
     {
@@ -132,7 +133,7 @@ public class PageFrameController
     {
         // If confirmed, do nothing.
         // Otherwise, try to close the current page, but if it's overridden, consume the event to prevent the modal from closing.
-        if (!isConfirmed && !currentPage.get().getController().cancel())
+        if (isIncomplete && !currentPage.get().getController().tryCancel())
         {
             windowEvent.consume();
         }
@@ -170,7 +171,8 @@ public class PageFrameController
         PageController<?> controller = page.getController();
         controller.setPageFrameController(this);
 
-        BooleanBinding advanceLabelOverrideNotNull = controller.getAdvanceLabelOverrideObservable().isNotNull();
+        StringExpression advanceLabelOverride = controller.getAdvanceLabelOverrideObservable();
+        BooleanBinding advanceLabelOverrideNotNull = advanceLabelOverride.isNotNull();
         BooleanBinding shouldConfirm = page.getNextPageObservable().isNull().and(controller.getCanConfirmObservable());
 
         currentPage.addListener(obs ->
@@ -179,26 +181,7 @@ public class PageFrameController
             if (currentPage.get() == page)
             {
                 nextButton.textProperty().unbind();
-                nextButton.textProperty().bind(new ObjectBinding<>()
-                {
-                    {
-                        bind(advanceLabelOverrideNotNull);
-                        bind(shouldConfirm);
-                    }
-
-                    @Override
-                    protected String computeValue()
-                    {
-                        if (advanceLabelOverrideNotNull.get())
-                        {
-                            return controller.getAdvanceLabelOverrideObservable().get();
-                        }
-                        else
-                        {
-                            return shouldConfirm.get() ? "Confirm" : "Next";
-                        }
-                    }
-                });
+                nextButton.textProperty().bind(new NextButtonTextBinding(shouldConfirm, advanceLabelOverride));
 
                 nextButton.disableProperty().unbind();
                 nextButton.disableProperty().bind(
@@ -225,23 +208,23 @@ public class PageFrameController
 
     public NonDataPageBuilder<PageFrameController> buildPage(Runnable callback)
     {
-        return new NonDataSentinelPageBuilder(this,
+        return NonDataSentinelPageBuilder.of(this,
             () ->
             {
-                PageFrameController.this.init();
+                this.init();
                 callback.run();
-                return PageFrameController.this;
+                return this;
             });
     }
 
     public <T> SimplePageBuilder<Object, T, PageFrameController> buildPage(Runnable callback, T data)
     {
-        return new DataSentinelPageBuilder<>(this,
+        return DataSentinelPageBuilder.of(this,
             () ->
             {
-                PageFrameController.this.init();
+                this.init();
                 callback.run();
-                return PageFrameController.this;
+                return this;
             },
             data);
     }
@@ -250,7 +233,7 @@ public class PageFrameController
     {
         if (currentPage.get().hasPrevPage())
         {
-            if (currentPage.get().getController().cancel()) // Cancel the current page, could be overridden.
+            if (currentPage.get().getController().tryCancel()) // Cancel the current page, could be overridden.
             {
                 currentPage.set(currentPage.get().getPrevPage());
                 initControllerAndUpdatePanel();
@@ -266,7 +249,7 @@ public class PageFrameController
     {
         if (currentPage.get().getController().canAdvance())
         {
-            if (currentPage.get().getController().advance()) // Finishes up on the current page
+            if (currentPage.get().getController().tryAdvance()) // Finishes up on the current page
             {
                 if (currentPage.get().hasNextPage()) // next page exists
                 {
@@ -285,9 +268,9 @@ public class PageFrameController
                 }
                 else if (currentPage.get().getController().canConfirm()) // no next page but can submit
                 {
-                    if (currentPage.get().getController().confirm())
+                    if (currentPage.get().getController().tryConfirm())
                     {
-                        isConfirmed = true;
+                        isIncomplete = false;
                         close();
                     }
                 }
@@ -330,5 +313,35 @@ public class PageFrameController
     public void setCurrentPage(Page<?, ?> page)
     {
         currentPage.set(page);
+    }
+
+    private static final class NextButtonTextBinding extends ObjectBinding<String>
+    {
+        private final BooleanBinding shouldConfirm;
+        private final StringExpression advanceLabelOverride;
+        private final BooleanBinding advanceLabelOverrideNotNull;
+
+        private NextButtonTextBinding(BooleanBinding shouldConfirm, StringExpression advanceLabelOverride)
+        {
+            this.shouldConfirm = shouldConfirm;
+            this.advanceLabelOverride = advanceLabelOverride;
+            this.advanceLabelOverrideNotNull = advanceLabelOverride.isNotNull();
+
+            bind(shouldConfirm);
+            bind(advanceLabelOverrideNotNull);
+        }
+
+        @Override
+        protected String computeValue()
+        {
+            if (advanceLabelOverrideNotNull.get())
+            {
+                return advanceLabelOverride.get();
+            }
+            else
+            {
+                return shouldConfirm.get() ? "Confirm" : "Next";
+            }
+        }
     }
 }

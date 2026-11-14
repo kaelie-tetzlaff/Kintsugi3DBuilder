@@ -139,7 +139,7 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
                             .setLinearFilteringEnabled(true)
                             .createTexture();
 
-                        newEnvironmentTexture.setTextureWrap(TextureWrapMode.Repeat, TextureWrapMode.None);
+                        newEnvironmentTexture.setTextureWrap(TextureWrapMode.REPEAT, TextureWrapMode.NONE);
                     }
                 }
 
@@ -284,7 +284,7 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
                     try
                     {
                         // Use Michael Ludwig's code to convert to a cube map (supports either cross or panorama input)
-                        this.newEnvironmentData = EnvironmentMap.createFromHDRFile(environmentFile);
+                        this.newEnvironmentData = EnvironmentMap.loadFromHDRFile(environmentFile);
                         this.currentEnvironmentFile = environmentFile;
                         width = newEnvironmentData.getSide() * 4;
                         height = newEnvironmentData.getSide() * 2;
@@ -371,8 +371,8 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
     @Override
     public void setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
     {
-        this.newLinearLuminanceValues = linearLuminanceValues;
-        this.newEncodedLuminanceValues = encodedLuminanceValues;
+        this.newLinearLuminanceValues = linearLuminanceValues.clone();
+        this.newEncodedLuminanceValues = encodedLuminanceValues.clone();
         this.newLuminanceEncodingDataAvailable = true;
     }
 

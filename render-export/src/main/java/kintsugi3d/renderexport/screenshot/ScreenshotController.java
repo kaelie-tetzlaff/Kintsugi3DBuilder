@@ -19,7 +19,6 @@ import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.io.RecentProjects;
 import kintsugi3d.builder.rendering.Rendering;
 import kintsugi3d.builder.util.FXWindowHelper;
-import kintsugi3d.renderexport.screenshot.ScreenshotRequest.Builder;
 
 import java.io.File;
 
@@ -38,7 +37,7 @@ public class ScreenshotController
         this.fileChooser.setTitle("Choose an export file");
         if (exportFileField.getText().isEmpty())
         {
-            this.fileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+            this.fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         }
         else
         {
@@ -49,7 +48,7 @@ public class ScreenshotController
         if (file != null)
         {
             exportFileField.setText(file.toString());
-            RecentProjects.setMostRecentDirectory(file);
+            RecentProjects.getInstance().setMostRecentDirectory(file);
         }
     }
 
@@ -67,8 +66,8 @@ public class ScreenshotController
             return;
         }
 
-        Rendering.getRequestQueue().addGraphicsRequest(
-            new Builder()
+        Rendering.getRequestQueue().addImageBasedGraphicsRequest(
+            ScreenshotRequest.getBuilder()
                 .setWidth(Integer.parseInt(widthTextField.getText()))
                 .setHeight(Integer.parseInt(heightTextField.getText()))
                 .setExportFile(new File(exportFileField.getText()))

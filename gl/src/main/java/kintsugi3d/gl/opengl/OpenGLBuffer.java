@@ -20,12 +20,12 @@ import static org.lwjgl.opengl.GL30.*;
 
 abstract class OpenGLBuffer implements ContextBound<OpenGLContext>, ManagedResource
 {
-    protected final OpenGLContext context;
+    private final OpenGLContext context;
 
     private final int bufferId;
     private final int usage;
     private boolean hasData = false;
-    private boolean closed = false;
+    private boolean live = true;
 
     OpenGLBuffer(OpenGLContext context, int usage)
     {
@@ -100,11 +100,11 @@ abstract class OpenGLBuffer implements ContextBound<OpenGLContext>, ManagedResou
     @Override
     public void close()
     {
-        if (!closed)
+        if (live)
         {
             glDeleteBuffers(this.bufferId);
             OpenGLContext.errorCheck();
-            closed = true;
+            live = false;
             hasData = false;
         }
     }

@@ -13,11 +13,11 @@ package kintsugi3d.gl.material;
 
 public enum MaterialTextureChannel 
 {
-    Unspecified,
-    Red,
-    Green,
-    Blue,
-    Alpha,
-    Luminance,
-    Depth
+    UNSPECIFIED,
+    RED,
+    GREEN,
+    BLUE,
+    ALPHA,
+    LUMINANCE,
+    DEPTH
 }

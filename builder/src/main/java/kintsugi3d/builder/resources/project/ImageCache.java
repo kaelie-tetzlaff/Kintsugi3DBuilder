@@ -14,14 +14,14 @@ package kintsugi3d.builder.resources.project;
 import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.io.SimpleLoadOptionsModel;
+import kintsugi3d.builder.io.TextureLoadOptions;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.geometry.GeometryFramebuffer;
 import kintsugi3d.gl.geometry.GeometryTextures;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
-import kintsugi3d.gl.interactive.DefaultProgressMonitor;
+import kintsugi3d.gl.interactive.CancellationPassthroughMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
-import kintsugi3d.gl.material.TextureLoadOptions;
 import kintsugi3d.gl.nativebuffer.NativeDataType;
 import kintsugi3d.gl.nativebuffer.NativeVectorBuffer;
 import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
@@ -51,6 +51,7 @@ import java.util.stream.IntStream;
 public class ImageCache<ContextType extends Context<ContextType>>
 {
     private static final Logger LOG = LoggerFactory.getLogger(ImageCache.class);
+
     private final ContextType context;
     private final ImageBasedGraphicsResourcesBase<ContextType> resources;
     private final ReadonlyImageCacheSettings settings;
@@ -336,7 +337,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
                     texSpaceDrawable.draw(fbo);
 
                     // Force PNG format for lossless encoding
-                    String pngFilename = ImageFinder.getInstance().getImageFileNameWithExtension(
+                    String pngFilename = ImageFinder.getImageFileNameWithExtension(
                         view.getImageFile().getName(), "png");
 
                     // "Sampled" image to store randomly selected pixels for preliminary optimization at a lower resolution.
@@ -434,33 +435,57 @@ public class ImageCache<ContextType extends Context<ContextType>>
 
     public GraphicsResourcesTextureSpace<ContextType> createSampledResources(ProgressMonitor monitor) throws IOException, UserCancellationException
     {
-        TextureLoadOptions loadOptions = new TextureLoadOptions();
-        loadOptions.setLinearFilteringRequested(false);
-        loadOptions.setMipmapsRequested(false);
-        loadOptions.setCompressionRequested(false);
+        return createWithRetryAfterCacheRebuild(
+            () ->
+            {
+                TextureLoadOptions loadOptions = new TextureLoadOptions();
+                loadOptions.setLinearFilteringRequested(false);
+                loadOptions.setMipmapsRequested(false);
+                loadOptions.setCompressionRequested(false);
 
+                return new GraphicsResourcesTextureSpace<>(resources.getCommonResources(), this::createSampledGeometryTextures,
+                        sampledDir, loadOptions, settings.getSampledSize(), settings.getSampledSize(), monitor);
+            },
+            monitor);
+    }
+
+    /**
+     * Invokes {@code supplier} up to twice. If the first invocation throws
+     * {@link IOException}, the cache is reinitialized once and the supplier
+     * is invoked again; the second invocation's exceptions propagate uncaught.
+     * @param supplier
+     * @param monitor
+     * @return
+     * @param <T>
+     * @throws UserCancellationException
+     * @throws IOException
+     */
+    public <T> T createWithRetryAfterCacheRebuild(CacheDependentSupplier<T> supplier, ProgressMonitor monitor)
+        throws UserCancellationException, IOException
+    {
         try
         {
-            return new GraphicsResourcesTextureSpace<>(resources.getCommonResources(), this::createSampledGeometryTextures,
-                sampledDir, loadOptions, settings.getSampledSize(), settings.getSampledSize(), monitor);
+            return supplier.get();
         }
         catch (IOException e)
         {
-            LOG.warn("Incomplete cache; will try to rebuild.");
+            LOG.warn("Possibly incomplete cache; will try to rebuild.", e);
 
             // Try to reinitialize in case the cache was only partially complete.
-            this.initialize(new DefaultProgressMonitor()
-            {
-                @Override
-                public void allowUserCancellation() throws UserCancellationException
-                {
-                    monitor.allowUserCancellation();
-                }
-            });
+            this.initialize(new CancellationPassthroughMonitor(monitor));
 
-            // If initialize() completed without exceptions, then createSampledResources() should work now.
-            return createSampledResources(monitor);
+            // If initialize() completed without exceptions, then it should theoretically work now.
+            // If not, it's probably a problem unrelated to the cache.
         }
+
+        // Attempt again without catching any exceptions.
+        return supplier.get();
+    }
+
+    @FunctionalInterface
+    public interface CacheDependentSupplier<T>
+    {
+        T get() throws IOException, UserCancellationException;
     }
 
     /**

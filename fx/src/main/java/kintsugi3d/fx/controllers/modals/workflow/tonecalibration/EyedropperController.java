@@ -70,7 +70,12 @@ public class EyedropperController extends NonDataPageControllerBase
     @FXML private Pane selectionPane;
 
     @FXML private Rectangle selectionRectangle;
-    @FXML private Rectangle finalSelectRect1, finalSelectRect2, finalSelectRect3, finalSelectRect4, finalSelectRect5, finalSelectRect6;
+    @FXML private Rectangle finalSelectRect1;
+    @FXML private Rectangle finalSelectRect2;
+    @FXML private Rectangle finalSelectRect3;
+    @FXML private Rectangle finalSelectRect4;
+    @FXML private Rectangle finalSelectRect5;
+    @FXML private Rectangle finalSelectRect6;
 
     @FXML private CheckBox useCurveCheckbox;
     @FXML private CheckBox distanceCompensationCheckbox; // inverse-square attenuation
@@ -114,7 +119,7 @@ public class EyedropperController extends NonDataPageControllerBase
      * Set to true after the first time the warning about using multiple images for tone calibration has been shown
      * to prevent the warning from appearing every time.
      */
-    private boolean multiImageWarningShown = false;
+    private boolean showMultiImageWarning = true;
 
     private final Map<Button, TextField> textFieldForButton = new HashMap<>(6);
     private final Map<Button, Rectangle> rectangleForButton = new HashMap<>(6);
@@ -272,14 +277,14 @@ public class EyedropperController extends NonDataPageControllerBase
     }
 
     @Override
-    public boolean confirm()
+    public boolean tryConfirm()
     {
         apply();
         return true;
     }
 
     @Override
-    public boolean cancel()
+    public boolean tryCancel()
     {
         if (StaticUtilities.confirmCancel())
         {
@@ -634,7 +639,7 @@ public class EyedropperController extends NonDataPageControllerBase
     private void autoApply()
     {
         // Only apply if all fields contain good data (integers) and model is loaded
-        if (areAllFieldsValid() && hasValidIOModel())
+        if (hasValidIOModel())
         {
             apply();
         }
@@ -648,45 +653,46 @@ public class EyedropperController extends NonDataPageControllerBase
         // light intensities depend on whether inverse-square attenuation is enabled
         ioModel.requestLightIntensityCalibration();
 
-        if (!useCurveCheckbox.selectedProperty().get())
+        if (useCurveCheckbox.selectedProperty().get())
+        {
+            if (hasValidIOModel()) // check to see if all text fields contain valid input, and model is loaded
+            {
+                try
+                {
+                    ioModel.setTonemapping(
+                        LINEAR_LUMINANCE_VALUES,
+                        new byte[]
+                            {
+                                (byte) Integer.parseInt(txtField1.getText()),
+                                (byte) Integer.parseInt(txtField2.getText()),
+                                (byte) Integer.parseInt(txtField3.getText()),
+                                (byte) Integer.parseInt(txtField4.getText()),
+                                (byte) Integer.parseInt(txtField5.getText()),
+                                (byte) Integer.parseInt(txtField6.getText())
+                            });
+                }
+                catch (NumberFormatException e)
+                {
+                    applyFailed();
+                }
+            }
+            else
+            {
+                applyFailed();
+            }
+        }
+        else
         {
             // tone curve is disabled
             ioModel.clearTonemapping();
         }
-        else if (areAllFieldsValid() && hasValidIOModel()) // check to see if all text fields contain valid input, and model is loaded
-        {
-            ioModel.setTonemapping(
-                LINEAR_LUMINANCE_VALUES,
-                new byte[]
-                {
-                    (byte) Integer.parseInt(txtField1.getText()),
-                    (byte) Integer.parseInt(txtField2.getText()),
-                    (byte) Integer.parseInt(txtField3.getText()),
-                    (byte) Integer.parseInt(txtField4.getText()),
-                    (byte) Integer.parseInt(txtField5.getText()),
-                    (byte) Integer.parseInt(txtField6.getText())
-                });
-        }
-        else
-        {
-//            Toolkit.getDefaultToolkit().beep();
-            //TODO: PROBABLY CHANGE THIS VERIFICATION METHOD
-            LOG.error("Please fill all fields and load a model before performing tone calibration.");
-        }
     }
 
-    private boolean areAllFieldsValid()
+    private static void applyFailed()
     {
-        // only return true if all text fields are filled with good info (integers)
-        for (TextField field : colorSelectTxtFields)
-        {   //TODO: CHECK IF VALS ARE 0-255?
-            if (!field.getText().matches("-?\\d+"))
-            {
-                // regex to check if input is integer
-                return false;
-            }
-        }
-        return true;
+        //            Toolkit.getDefaultToolkit().beep();
+        //TODO: PROBABLY CHANGE THIS VERIFICATION METHOD
+        LOG.error("Please fill all fields and load a model before performing tone calibration.");
     }
 
     @FXML
@@ -738,7 +744,7 @@ public class EyedropperController extends NonDataPageControllerBase
     @FXML
     private void selectImage(ActionEvent actionEvent)
     {
-        if (!multiImageWarningShown)
+        if (showMultiImageWarning)
         {
             Alert alert = new Alert(AlertType.WARNING,
                 "Warning: using multiple images for tone calibration can result in inconsistencies in tone interpretation.  To be used for advanced workflows only.",
@@ -753,14 +759,14 @@ public class EyedropperController extends NonDataPageControllerBase
             else
             {
                 // User confirmed; do not show warning again while this controller is active.
-                multiImageWarningShown = true;
+                showMultiImageWarning = false;
             }
         }
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Image File");
         fileChooser.getExtensionFilters().add(new ExtensionFilter("Image Files", VALID_EXTENSIONS));
-        fileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+        fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
 
         ViewSet viewSet = Global.io().getLoadedViewSet();
         if (viewSet == null)
@@ -797,7 +803,7 @@ public class EyedropperController extends NonDataPageControllerBase
     {
         if (file != null)
         {
-            RecentProjects.setMostRecentDirectory(file.getParentFile());
+            RecentProjects.getInstance().setMostRecentDirectory(file.getParentFile());
             selectedFile.set(new Image(file.toURI().toString()));
             imageDetailsController.setImage(file.getPath());
 
@@ -813,7 +819,7 @@ public class EyedropperController extends NonDataPageControllerBase
 
         // Clear tonemapping and reset text fields to a standard curve
         ioModel.clearTonemapping();
-        refreshToneValueTextFields(new SampledLuminanceEncoding().encodeFunction);
+        refreshToneValueTextFields(new SampledLuminanceEncoding().getEncodeFunction());
 
         // Disable curve
         useCurveCheckbox.setSelected(false);

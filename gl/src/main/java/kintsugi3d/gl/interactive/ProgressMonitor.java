@@ -17,7 +17,7 @@ package kintsugi3d.gl.interactive;
  */
 public interface ProgressMonitor
 {
-    String FINISHING_UP = "Finishing up...";
+    String FINISHING_UP_DEFAULT = "Finishing up...";
     String DEFAULT_MESSAGE = "Please wait...";
 
     /**

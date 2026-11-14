@@ -21,9 +21,9 @@ public final class ObservableLightingEnvironmentModel extends LightingEnvironmen
     private ObservableValue<ObservableLightGroupSettings> selectedLightGroupSetting;
     private final ObservableLightGroupSettings sentinel = new ObservableLightGroupSettings("sentinel");
 
-    public ObservableLightingEnvironmentModel(EnvironmentModel envModel)
+    public ObservableLightingEnvironmentModel(EnvironmentModel environmentModel)
     {
-        super(ObservableLightGroupSettings.LIGHT_LIMIT, i -> new ObservableDiscreteLightModel(), envModel);
+        super(ObservableLightGroupSettings.LIGHT_LIMIT, i -> new ObservableDiscreteLightModel(), environmentModel);
         for (int i = 0; i < ObservableLightGroupSettings.LIGHT_LIMIT; i++)
         {
             getLight(i).setLightInstanceSetting(sentinel.lightListProperty().valueAt(i));

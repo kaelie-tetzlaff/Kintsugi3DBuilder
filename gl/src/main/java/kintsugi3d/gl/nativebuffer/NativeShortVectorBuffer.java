@@ -21,8 +21,8 @@ class NativeShortVectorBuffer implements NativeVectorBuffer
 {
     private final ByteBuffer buffer;
 
-    final int dimensions;
-    final int count;
+    private final int dimensions;
+    private final int count;
 
     NativeShortVectorBuffer(int dimensions, int count)
     {
@@ -65,14 +65,14 @@ class NativeShortVectorBuffer implements NativeVectorBuffer
         this.buffer = buffer;
     }
 
-    NativeShortVectorBuffer(int dimensions, int count, byte... buffer)
+    NativeShortVectorBuffer(int dimensions, int count, byte[] buffer)
     {
         this(dimensions, count);
         this.buffer.put(buffer);
         this.buffer.flip();
     }
 
-    NativeShortVectorBuffer(int dimensions, int count, short... buffer)
+    NativeShortVectorBuffer(int dimensions, int count, short[] buffer)
     {
         this(dimensions, count);
         this.buffer.asShortBuffer().put(buffer);
@@ -112,7 +112,7 @@ class NativeShortVectorBuffer implements NativeVectorBuffer
         return this.buffer.asShortBuffer().get(index * this.dimensions + dimension);
     }
 
-    public void set(int index, int dimension, short value)
+    public void setPrimitive(int index, int dimension, short value)
     {
         if (index < 0)
         {
@@ -136,7 +136,7 @@ class NativeShortVectorBuffer implements NativeVectorBuffer
     @Override
     public void set(int index, int dimension, Number value)
     {
-        this.set(index, dimension, value.shortValue());
+        this.setPrimitive(index, dimension, value.shortValue());
     }
 
     @Override

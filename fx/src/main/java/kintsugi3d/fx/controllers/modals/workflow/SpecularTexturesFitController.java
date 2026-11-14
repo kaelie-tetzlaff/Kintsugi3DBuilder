@@ -79,7 +79,7 @@ public class SpecularTexturesFitController extends ProjectSettingsControllerBase
 
     @Override
     @FXML
-    public boolean confirm()
+    public boolean tryConfirm()
     {
         // Apply settings so they're seen by the SpecularFitRequest and also remembered for later.
         applySettings();
@@ -95,7 +95,7 @@ public class SpecularTexturesFitController extends ProjectSettingsControllerBase
         SpecularFitRequest request = shouldOptimizeBasis() ?
             SpecularFitRequest.createBasisAndTexturesOptimizationRequest() :
             SpecularFitRequest.createReoptimizeTexturesRequest();
-        Rendering.getRequestQueue().addGraphicsRequest(request);
+        Rendering.getRequestQueue().addImageBasedGraphicsRequest(request);
 
         return true;
     }

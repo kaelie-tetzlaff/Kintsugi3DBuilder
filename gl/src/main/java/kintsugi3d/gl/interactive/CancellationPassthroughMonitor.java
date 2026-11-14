@@ -14,11 +14,11 @@ package kintsugi3d.gl.interactive;
 /**
  * Allows for cancellation events to be forwarded without otherwise affecting progress presentation.
  */
-public final class CancellationMonitorWrapper implements ProgressMonitor
+public final class CancellationPassthroughMonitor extends DefaultProgressMonitor
 {
     private final ProgressMonitor monitor;
 
-    public CancellationMonitorWrapper(ProgressMonitor monitor)
+    public CancellationPassthroughMonitor(ProgressMonitor monitor)
     {
         this.monitor = monitor;
     }
@@ -29,59 +29,4 @@ public final class CancellationMonitorWrapper implements ProgressMonitor
         monitor.allowUserCancellation();
     }
 
-    @Override
-    public void cancelComplete(UserCancellationException e)
-    {
-    }
-
-    @Override
-    public void start()
-    {
-    }
-
-    @Override
-    public void setProcessName(String processName)
-    {
-    }
-
-    @Override
-    public void setStageCount(int count)
-    {
-    }
-
-    @Override
-    public void setStage(int stage, String message)
-    {
-    }
-
-    @Override
-    public void advanceStage(String message)
-    {
-    }
-
-    @Override
-    public void setMaxProgress(double maxProgress)
-    {
-    }
-
-    @Override
-    public void setProgress(double progress, String message)
-    {
-    }
-
-    @Override
-    public void complete()
-    {
-    }
-
-    @Override
-    public void fail(Throwable e)
-    {
-    }
-
-    @Override
-    public boolean isConflictingProcess()
-    {
-        return false;
-    }
 }

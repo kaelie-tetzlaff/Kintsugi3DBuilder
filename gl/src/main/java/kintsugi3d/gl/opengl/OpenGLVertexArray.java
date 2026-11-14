@@ -19,12 +19,12 @@ import static org.lwjgl.opengl.GL30.*;
 
 class OpenGLVertexArray implements ManagedResource
 {
-    protected final OpenGLContext context;
+    private final OpenGLContext context;
 
     private final boolean usesIndexing = false;
     private final int vaoId;
     private int count = Integer.MAX_VALUE;
-    private boolean closed = false;
+    private boolean live = true;
 
     OpenGLVertexArray(OpenGLContext context)
     {
@@ -89,11 +89,16 @@ class OpenGLVertexArray implements ManagedResource
     @Override
     public void close()
     {
-        if (!closed)
+        if (live)
         {
             glDeleteVertexArrays(this.vaoId);
             OpenGLContext.errorCheck();
-            closed = true;
+            live = false;
         }
+    }
+
+    public OpenGLContext getContext()
+    {
+        return context;
     }
 }

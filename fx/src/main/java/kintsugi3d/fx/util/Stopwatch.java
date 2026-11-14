@@ -26,14 +26,11 @@ public class Stopwatch
     private long initTime;
     private final BooleanProperty running = new SimpleBooleanProperty(false);
 
-    //used to manually set elapsed time for a stopwatch which is stopped and
-    //   has its elapsed time retrieved later
+    /**
+     * used to manually set elapsed time for a stopwatch which is stopped and
+     * has its elapsed time retrieved later
+     */
     private long manualElapsedTime = -1;
-
-
-    public Stopwatch()
-    {
-    }
 
     public long start()
     {
@@ -74,7 +71,7 @@ public class Stopwatch
         return initTime;
     }
 
-    public ReadOnlyBooleanProperty isRunningProperty()
+    public ReadOnlyBooleanProperty runningProperty()
     {
         return running;
     }
@@ -106,13 +103,8 @@ public class Stopwatch
     {
         long recordedTimes = 0;
         int numToDivide = 0;
-        for (int i = 1; i < ARR_SIZE; ++i)
+        for (int i = 1; i < ARR_SIZE && rollingAverageStorage[i] != initTime; ++i)
         {
-            if (rollingAverageStorage[i] == initTime)
-            {
-                break;
-            }
-
             long difference = rollingAverageStorage[i] - rollingAverageStorage[i - 1];
 
             if (difference > 0)

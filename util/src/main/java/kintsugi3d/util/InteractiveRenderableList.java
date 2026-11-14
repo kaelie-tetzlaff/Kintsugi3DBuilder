@@ -219,6 +219,7 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     @Override
     public boolean containsAll(Collection<?> c)
     {
+        //noinspection SlowListContainsAll
         return renderables.containsAll(c);
     }
 

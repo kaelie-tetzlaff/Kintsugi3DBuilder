@@ -34,8 +34,8 @@ import kintsugi3d.gl.interactive.InteractiveApplication;
 import kintsugi3d.gl.interactive.InteractiveGraphics;
 import kintsugi3d.gl.opengl.OpenGLContext;
 import kintsugi3d.gl.opengl.OpenGLContextFactory;
+import kintsugi3d.gl.util.CanvasListener;
 import kintsugi3d.gl.window.*;
-import kintsugi3d.util.CanvasListener;
 import kintsugi3d.util.KeyPress;
 import kintsugi3d.util.MouseMode;
 import org.slf4j.Logger;
@@ -47,6 +47,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public final class RenderingBootstrap
@@ -131,18 +132,19 @@ public final class RenderingBootstrap
             }
             else
             {
-                var framebufferCapture = new Object()
-                {
-                    DoubleFramebufferObject<OpenGLContext> fbo;
-                };
+                var framebufferCapture = new AtomicReference<DoubleFramebufferObject<OpenGLContext>>();
 
                 // Need to still specify a native window to create the context, even though we won't use it.
                 window = OpenGLContextFactory.getInstance().buildWindow("<ignore>", 1, 1)
                     .setDefaultFramebufferCreator(
-                        c -> framebufferCapture.fbo = DoubleFramebufferFactory.create(c, 800, 800))
+                        c ->
+                        {
+                            framebufferCapture.set(DoubleFramebufferFactory.create(c, 800, 800));
+                            return framebufferCapture.get();
+                        })
                     .create();
 
-                FramebufferCanvas<OpenGLContext> canvas = FramebufferCanvas.createUsingExistingFramebuffer(framebufferCapture.fbo);
+                FramebufferCanvas<OpenGLContext> canvas = FramebufferCanvas.createUsingExistingFramebuffer(framebufferCapture.get());
 
                 if (stage != null)
                 {
@@ -225,14 +227,14 @@ public final class RenderingBootstrap
             renderableManager.setSettingsModel(settingsModel);
             ToolBindingModel toolBindingModel = createToolBinding();
 
-            CanvasListener canvasListener = ToolBox.Builder.create()
-            .setCameraModel(cameraModel)
-            .setLightingModel(lightingModel)
-            .setObjectModel(objectModel)
-            .setSettingsModel(settingsModel)
-            .setToolBindingModel(toolBindingModel)
-            .setSceneViewport(renderableManager.getSceneViewport())
-            .build();
+            CanvasListener canvasListener = ToolBox.getBuilder()
+                .setCameraModel(cameraModel)
+                .setLightingModel(lightingModel)
+                .setObjectModel(objectModel)
+                .setSettingsModel(settingsModel)
+                .setToolBindingModel(toolBindingModel)
+                .setSceneViewport(renderableManager.getSceneViewport())
+                .create();
 
             canvasListener.addToCanvas(canvas);
         }
@@ -456,7 +458,7 @@ public final class RenderingBootstrap
                     // Quit after the request finishes
                     // Use ProjectGraphicsRequest (rather than GraphicsRequest) so that it gets queued up after the actual request,
                     // once the project has finished loading
-                    requestQueue.addBackgroundGraphicsRequest(new ImageBasedGraphicsRequest()
+                    requestQueue.addBackgroundImageBasedGraphicsRequest(new ImageBasedGraphicsRequest()
                     {
                         @Override
                         public <ContextType extends Context<ContextType>> void executeRequest(ImageBasedRenderable<ContextType> instance)

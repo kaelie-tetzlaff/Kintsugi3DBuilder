@@ -13,6 +13,7 @@ package kintsugi3d.builder.resources.project;
 
 import kintsugi3d.builder.core.texture.TextureResolution;
 import kintsugi3d.builder.core.viewset.View;
+import kintsugi3d.builder.io.TextureLoadOptions;
 import kintsugi3d.gl.builders.ColorTextureBuilder;
 import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.core.*;
@@ -20,7 +21,6 @@ import kintsugi3d.gl.geometry.GeometryMode;
 import kintsugi3d.gl.geometry.GeometryTextures;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
-import kintsugi3d.gl.material.TextureLoadOptions;
 import kintsugi3d.util.ImageFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,7 +114,7 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
                 }
 
                 textureArray.loadLayer(view.getGPUViewIndex(),
-                    ImageFinder.getInstance().findImageFile(new File(textureDirectory, view.getImageFile().getName())),
+                    ImageFinder.findImageFile(new File(textureDirectory, view.getImageFile().getName())),
                     true);
 
                 progressCount++;

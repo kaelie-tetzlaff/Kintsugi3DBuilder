@@ -16,19 +16,19 @@ import kintsugi3d.gl.vecmath.Vector3;
 
 class ManagedSceneViewport implements SceneViewport
 {
-    private final RenderableManager<?> instanceManager;
+    private final RenderableManager<?> renderableManager;
 
-    ManagedSceneViewport(RenderableManager<?> instanceManager)
+    ManagedSceneViewport(RenderableManager<?> renderableManager)
     {
-        this.instanceManager = instanceManager;
+        this.renderableManager = renderableManager;
     }
 
     @Override
     public Object getObjectAtCoordinates(double x, double y)
     {
-        if (instanceManager.getMainRenderable() != null)
+        if (renderableManager.getMainRenderable() != null)
         {
-            return instanceManager.getMainRenderable().getSceneViewport().getObjectAtCoordinates(x, y);
+            return renderableManager.getMainRenderable().getSceneViewport().getObjectAtCoordinates(x, y);
         }
         else
         {
@@ -39,9 +39,9 @@ class ManagedSceneViewport implements SceneViewport
     @Override
     public Vector3 get3DPositionAtCoordinates(double x, double y)
     {
-        if (instanceManager.getMainRenderable() != null)
+        if (renderableManager.getMainRenderable() != null)
         {
-            return instanceManager.getMainRenderable().getSceneViewport().get3DPositionAtCoordinates(x, y);
+            return renderableManager.getMainRenderable().getSceneViewport().get3DPositionAtCoordinates(x, y);
         }
         else
         {
@@ -52,9 +52,9 @@ class ManagedSceneViewport implements SceneViewport
     @Override
     public Vector3 getViewingDirection(double x, double y)
     {
-        if (instanceManager.getMainRenderable() != null)
+        if (renderableManager.getMainRenderable() != null)
         {
-            return instanceManager.getMainRenderable().getSceneViewport().getViewingDirection(x, y);
+            return renderableManager.getMainRenderable().getSceneViewport().getViewingDirection(x, y);
         }
         else
         {
@@ -65,9 +65,9 @@ class ManagedSceneViewport implements SceneViewport
     @Override
     public Vector3 getViewportCenter()
     {
-        if (instanceManager.getMainRenderable() != null)
+        if (renderableManager.getMainRenderable() != null)
         {
-            return instanceManager.getMainRenderable().getSceneViewport().getViewportCenter();
+            return renderableManager.getMainRenderable().getSceneViewport().getViewportCenter();
         }
         else
         {
@@ -78,9 +78,9 @@ class ManagedSceneViewport implements SceneViewport
     @Override
     public Vector2 projectPoint(Vector3 point)
     {
-        if (instanceManager.getMainRenderable() != null)
+        if (renderableManager.getMainRenderable() != null)
         {
-            return instanceManager.getMainRenderable().getSceneViewport().projectPoint(point);
+            return renderableManager.getMainRenderable().getSceneViewport().projectPoint(point);
         }
         else
         {
@@ -91,9 +91,9 @@ class ManagedSceneViewport implements SceneViewport
     @Override
     public float getLightWidgetScale()
     {
-        if (instanceManager.getMainRenderable() != null)
+        if (renderableManager.getMainRenderable() != null)
         {
-            return instanceManager.getMainRenderable().getSceneViewport().getLightWidgetScale();
+            return renderableManager.getMainRenderable().getSceneViewport().getLightWidgetScale();
         }
         else
         {

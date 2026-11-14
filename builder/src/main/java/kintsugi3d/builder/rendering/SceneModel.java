@@ -99,7 +99,7 @@ public class SceneModel
 
     public void setSettingsModel(ReadonlyGeneralSettingsModel settingsModel)
     {
-        this.settingsModel = SafeSettingsModelWrapperFactory.getInstance().wrapUnsafeModel(settingsModel);
+        this.settingsModel = SafeSettingsModelWrapperFactory.wrapUnsafeModel(settingsModel);
     }
 
     public void setCameraViewListModel(SelectableViewListModel viewListModel)

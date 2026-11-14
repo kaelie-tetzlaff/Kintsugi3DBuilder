@@ -20,10 +20,7 @@ import kintsugi3d.builder.util.ApplicationFolders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -69,10 +66,10 @@ public class BlenderExporter extends MaterialExporter
     protected void postExport()
     {
         File model = new File(outputPath, getFilename());
-        File normal = new File(outputPath, getTextureFilename(StandardTexture.NORMAL_MAP.details.name, getTextureFileFormat()));
-        File diffuse = new File(outputPath, getTextureFilename(StandardTexture.DIFFUSE_COLOR.details.name, getTextureFileFormat()));
-        File specular = new File(outputPath, getTextureFilename(StandardTexture.SPECULAR_COLOR.details.name, getTextureFileFormat()));
-        File roughness = new File(outputPath, getTextureFilename(StandardTexture.ROUGHNESS.details.name, getTextureFileFormat()));
+        File normal = new File(outputPath, getTextureFilename(StandardTexture.NORMAL_MAP.getDetails().name, getTextureFileFormat()));
+        File diffuse = new File(outputPath, getTextureFilename(StandardTexture.DIFFUSE_COLOR.getDetails().name, getTextureFileFormat()));
+        File specular = new File(outputPath, getTextureFilename(StandardTexture.SPECULAR_COLOR.getDetails().name, getTextureFileFormat()));
+        File roughness = new File(outputPath, getTextureFilename(StandardTexture.ROUGHNESS.getDetails().name, getTextureFileFormat()));
 
         // Command list for the ProcessBuilder
         List<String> command = new ArrayList<>(8);
@@ -88,8 +85,8 @@ public class BlenderExporter extends MaterialExporter
             diffuse.delete();
             specular.delete();
             roughness.delete();
-            throw new RuntimeException(
-                String.format("Can't find Blender, check Application Settings.  Expected location: %s", blenderLocation));
+            throw new UncheckedIOException(new IOException(
+                String.format("Can't find Blender, check Application Settings.  Expected location: %s", blenderLocation)));
         }
 
         command.add(blenderLocation.getPath());
@@ -113,7 +110,7 @@ public class BlenderExporter extends MaterialExporter
             command.add("--use-cycles");
         }
 
-        ProcessBuilder pb = new ProcessBuilder(command);
+        @SuppressWarnings("UseOfProcessBuilder") ProcessBuilder pb = new ProcessBuilder(command);
 
         // Change the working directory of the exporter to the output path
         pb.directory(outputPath);
@@ -129,12 +126,12 @@ public class BlenderExporter extends MaterialExporter
             // If the exporter didn't exit with a 0, an error occurred
             if (process.waitFor() != 0)
             {
-                throw new RuntimeException("Passed files don't match requirements.");
+                throw new IllegalStateException("Blender export script failed.");
             }
         }
         catch (IOException e)
         {
-            throw new RuntimeException("Couldn't open Blender.", e);
+            throw new UncheckedIOException("Couldn't open Blender.", e);
         }
         catch (InterruptedException e)
         {

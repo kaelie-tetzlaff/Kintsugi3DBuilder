@@ -9,28 +9,10 @@
  * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
-package kintsugi3d.gl.exceptions;
+package kintsugi3d.gl.util;
 
-public class UncompiledShaderException extends IllegalStateException 
+public interface ColorImage extends ColorList
 {
-    private static final long serialVersionUID = 323471236897721345L;
-
-    public UncompiledShaderException()
-    {
-    }
-
-    public UncompiledShaderException(String message, Throwable cause)
-    {
-        super(message, cause);
-    }
-
-    public UncompiledShaderException(String message)
-    {
-        super(message);
-    }
-
-    public UncompiledShaderException(Throwable cause)
-    {
-        super(cause);
-    }
+    int getWidth();
+    int getHeight();
 }

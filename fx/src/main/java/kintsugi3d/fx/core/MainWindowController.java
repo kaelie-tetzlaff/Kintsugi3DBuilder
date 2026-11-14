@@ -103,9 +103,6 @@ public class MainWindowController
     @FXML private Menu paletteMaterialWeightedMenu;
     @FXML private Menu texturesMenu;
 
-    @FXML private MenuItem removeAllRefsCustMenuItem;
-    @FXML private MenuItem removeSomeRefsCustMenuItem;
-
     //pull this in so we can explicitly set shader to image-based upon load
     //without this, user could select a shader, load a project,
         //and the loaded project's appearance might not match the selected shader
@@ -145,18 +142,17 @@ public class MainWindowController
     private Window window;
     private Runnable userDocumentationHandler;
 
-    public MainWindowController()
-    {
-        instance = this;
-    }
-
     static MainWindowController getInstance()
     {
+        //noinspection StaticVariableUsedBeforeInitialization
         return instance;
     }
 
     public void init(Stage injectedStage, JavaFXState javaFXState, Runnable injectedUserDocumentationHandler)
     {
+        //noinspection AssignmentToStaticFieldFromInstanceMethod
+        instance = this;
+
         this.window = injectedStage;
 
         this.framebufferView.registerKeyAndWindowEventsFromStage(injectedStage);
@@ -370,18 +366,18 @@ public class MainWindowController
             // Remove fallback menu items for MacOS and replace with custom menu items with tooltips.
             cleanRecentProjectsMenu.getItems().clear();
 
-            removeSomeRefsCustMenuItem = new CustomMenuItem(new Label("Clear Missing Projects"));
-            removeSomeRefsCustMenuItem.setOnAction(event -> RecentProjects.removeInvalidReferences());
+            CustomMenuItem removeSomeRefsCustMenuItem = new CustomMenuItem(new Label("Clear Missing Projects"));
+            removeSomeRefsCustMenuItem.setOnAction(event -> RecentProjects.getInstance().removeInvalidReferences());
 
-            Tooltip.install(((CustomMenuItem) removeSomeRefsCustMenuItem).getContent(),
+            Tooltip.install(removeSomeRefsCustMenuItem.getContent(),
                 new Tooltip("Remove references to items not found in file explorer. Will not modify your file system."));
 
             cleanRecentProjectsMenu.getItems().add(removeSomeRefsCustMenuItem);
 
-            removeAllRefsCustMenuItem = new CustomMenuItem(new Label("Clear All Projects"));
-            removeAllRefsCustMenuItem.setOnAction(event -> RecentProjects.removeInvalidReferences());
+            CustomMenuItem removeAllRefsCustMenuItem = new CustomMenuItem(new Label("Clear All Projects"));
+            removeAllRefsCustMenuItem.setOnAction(event -> RecentProjects.getInstance().removeAllReferences());
 
-            Tooltip.install(((CustomMenuItem)removeAllRefsCustMenuItem).getContent(),
+            Tooltip.install(removeAllRefsCustMenuItem.getContent(),
                 new Tooltip("Remove references to all recent projects. Will not modify your file system."));
 
             cleanRecentProjectsMenu.getItems().add(removeAllRefsCustMenuItem);
@@ -668,12 +664,12 @@ public class MainWindowController
 
     @FXML public void removeInvalidReferences()
     {
-        RecentProjects.removeInvalidReferences();
+        RecentProjects.getInstance().removeInvalidReferences();
     }
 
     @FXML public void removeAllReferences()
     {
-        RecentProjects.removeAllReferences();
+        RecentProjects.getInstance().removeAllReferences();
     }
 
     public Menu getRecentProjectsMenu()
