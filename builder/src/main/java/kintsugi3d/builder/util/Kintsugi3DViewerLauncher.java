@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("UseOfProcessBuilder")
 public final class Kintsugi3DViewerLauncher
 {
     private static final Pattern REGISTRY_PATTERN = Pattern.compile("^\\s*Install_Dir\\s+REG_SZ\\s+(.*)$");
@@ -74,7 +75,7 @@ public final class Kintsugi3DViewerLauncher
 
     private static Optional<File> getFromPath()
     {
-        String path = System.getenv("PATH");
+        @SuppressWarnings("CallToSystemGetenv") String path = System.getenv("PATH");
 
         if (path != null)
         {

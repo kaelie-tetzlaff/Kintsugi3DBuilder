@@ -110,7 +110,7 @@ public class BlenderExporter extends MaterialExporter
             command.add("--use-cycles");
         }
 
-        ProcessBuilder pb = new ProcessBuilder(command);
+        @SuppressWarnings("UseOfProcessBuilder") ProcessBuilder pb = new ProcessBuilder(command);
 
         // Change the working directory of the exporter to the output path
         pb.directory(outputPath);

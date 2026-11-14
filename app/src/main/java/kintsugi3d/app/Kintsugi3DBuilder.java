@@ -101,6 +101,7 @@ public final class Kintsugi3DBuilder
                 JavaFXApplication.launchExternal("");
             }
 
+            //noinspection CallToSystemExit
             System.exit(0);
         }
     }

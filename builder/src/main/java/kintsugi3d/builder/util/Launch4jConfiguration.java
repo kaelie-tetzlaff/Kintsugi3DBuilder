@@ -62,6 +62,8 @@ public final class Launch4jConfiguration
 
         String subcommand = String.format("\\\"New-Item '%s' -ItemType File -Force -Value '%s'\\\"",
                 L4J_INI_FILE.toFile().getAbsolutePath(), fileContent);
+
+        @SuppressWarnings("UseOfProcessBuilder")
         ProcessBuilder pb = new ProcessBuilder("powershell.exe", "-Command", "Start-Process", "PowerShell",
                 "-verb", "runas", "-ArgumentList", subcommand);
         pb.start();

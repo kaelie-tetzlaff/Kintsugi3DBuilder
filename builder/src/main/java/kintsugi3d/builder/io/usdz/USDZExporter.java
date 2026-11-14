@@ -114,7 +114,7 @@ public abstract class USDZExporter extends MaterialExporter
         // Add inheritance specified commands
         addCommands(command);
 
-        ProcessBuilder pb = new ProcessBuilder(command);
+        @SuppressWarnings("UseOfProcessBuilder") ProcessBuilder pb = new ProcessBuilder(command);
 
         // Change the working directory of the exporter to the output path
         pb.directory(outputPath);
