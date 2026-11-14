@@ -161,13 +161,12 @@ class OpenGLShader implements Shader<OpenGLContext>
                             sb.append(" )");
                         }
 
-                        sb.append(System.lineSeparator());
+                        sb.append('\n');
                     }
 
                     sb.append("#line ");
                     sb.append(lineCounter);
-                    sb.append(" 0");
-                    sb.append(System.lineSeparator());
+                    sb.append(" 0\n");
 
                     needsDefines = false;
                 }
@@ -197,7 +196,7 @@ class OpenGLShader implements Shader<OpenGLContext>
                 else
                 {
                     sb.append(nextLine);
-                    sb.append(System.lineSeparator());
+                    sb.append('\n');
                 }
 
                 lineCounter++;

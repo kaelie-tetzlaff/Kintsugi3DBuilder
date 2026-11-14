@@ -80,26 +80,26 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
 
         out.println();
         out.println("# ViewSet UUID");
-        out.printf("U %s%n", viewSet.getUUID());
+        out.printf("U %s\n", viewSet.getUUID());
 
         if (viewSet.getGeometryFileName() != null)
         {
             out.println();
             out.println("# Geometry file name (mesh)");
-            out.printf("m %s%n", viewSet.getGeometryFileName());
+            out.printf("m %s\n", viewSet.getGeometryFileName());
         }
 
         out.println();
         out.println("# Full resolution image file path");
-        out.printf("I %s%n", viewSet.getRelativeFullResImagePathName());
+        out.printf("I %s\n", viewSet.getRelativeFullResImagePathName());
 
         out.println();
         out.println("# Preview resolution image file path");
-        out.printf("i %s%n", viewSet.getPreviewImageDirectory().getAbsolutePath());
+        out.printf("i %s\n", viewSet.getPreviewImageDirectory().getAbsolutePath());
 
         out.println();
         out.println("# Supporting files (texture fit results) file path");
-        out.printf("t %s%n", viewSet.getRelativeSupportingFilesPathName());
+        out.printf("t %s\n", viewSet.getRelativeSupportingFilesPathName());
 
         out.println();
         out.println("# Estimated near and far planes");
@@ -150,11 +150,11 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
 
         out.println();
         out.println("# Reference orientation view index");
-        out.printf("O %d%n", correctedOrientationViewIndex);
+        out.printf("O %d\n", correctedOrientationViewIndex);
         out.println();
 
         out.println("# Reference View Pose Rotation (degrees)");
-        out.printf("r %s%n", viewSet.getOrientationViewRotationDegrees());
+        out.printf("r %s\n", viewSet.getOrientationViewRotationDegrees());
         out.println();
 
         Matrix3 orientation = viewSet.getOrientationMatrix();
@@ -213,10 +213,10 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
         {
             out.println();
             out.println("# Masks directory");
-            out.printf("M %s%n", viewSet.getRelativeMaskPathName());
+            out.printf("M %s\n", viewSet.getRelativeMaskPathName());
 
             out.println();
-            out.printf("# %d masks%n", viewsCopy.stream().filter(view -> view.getMaskFile() != null).count());
+            out.printf("# %d masks\n", viewsCopy.stream().filter(view -> view.getMaskFile() != null).count());
             for (int i = 0; i < viewsCopy.size(); i++)
             {
                 File maskFile = viewsCopy.get(i).getMaskFile();
@@ -228,7 +228,7 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
         }
 
         out.println();
-        out.printf("# %d%s%n", viewSet.getCameraProjectionCount(), viewSet.getCameraProjectionCount() == 1 ? " Sensor" : " Sensors");
+        out.printf("# %d%s\n", viewSet.getCameraProjectionCount(), viewSet.getCameraProjectionCount() == 1 ? " Sensor" : " Sensors");
         for (int i = 0; i < viewSet.getCameraProjectionCount(); i++)
         {
             out.println(viewSet.getCameraProjection(i).toVSETString());
@@ -251,7 +251,7 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
         }
 
         out.println();
-        out.printf("# %d%s%n", viewsCopy.size(), viewsCopy.size() == 1 ? " Camera" : " Cameras");
+        out.printf("# %d%s\n", viewsCopy.size(), viewsCopy.size() == 1 ? " Camera" : " Cameras");
 
         // Enabled photos
         for (View view : viewsCopy)
@@ -262,7 +262,7 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
         if (viewSet.getLightCount() > 0)
         {
             out.println();
-            out.printf("# %d%s%n", viewSet.getLightCount(), viewSet.getLightCount() == 1 ? " Light" : " Lights");
+            out.printf("# %d%s\n", viewSet.getLightCount(), viewSet.getLightCount() == 1 ? " Light" : " Lights");
             for (int id = 0; id < viewSet.getLightCount(); id++)
             {
                 Vector3 pos = viewSet.getLightPosition(id);
@@ -273,7 +273,7 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
         }
 
         out.println();
-        out.printf("# %d%s%n", viewsCopy.size(), viewsCopy.size() == 1 ? " View" : " Views");
+        out.printf("# %d%s\n", viewsCopy.size(), viewsCopy.size() == 1 ? " View" : " Views");
 
         if (primaryViewIndex >= 0)
         {

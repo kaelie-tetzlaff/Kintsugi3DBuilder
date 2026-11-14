@@ -182,12 +182,12 @@ public class Potato
     {
         for (Vector3 pos : positions)
         {
-            out.printf("v\t%s\t%s\t%s%n", pos.x, pos.y, pos.z);
+            out.printf("v\t%s\t%s\t%s\n", pos.x, pos.y, pos.z);
         }
 
         for (Vector2 tex : texCoords)
         {
-            out.printf("vt\t%s\t%s%n", tex.x, tex.y);
+            out.printf("vt\t%s\t%s\n", tex.x, tex.y);
         }
 
         for (List<IntVector2> f : faces)

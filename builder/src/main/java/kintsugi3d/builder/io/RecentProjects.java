@@ -115,7 +115,7 @@ public final class RecentProjects
         {
             for (String name : existingFileNames)
             {
-                writer.println(name);
+                writer.printf("%s\n", name);
             }
         }
         catch (IOException e)
