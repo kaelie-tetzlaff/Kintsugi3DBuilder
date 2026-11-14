@@ -51,6 +51,7 @@ import java.util.stream.IntStream;
 public class ImageCache<ContextType extends Context<ContextType>>
 {
     private static final Logger LOG = LoggerFactory.getLogger(ImageCache.class);
+
     private final ContextType context;
     private final ImageBasedGraphicsResourcesBase<ContextType> resources;
     private final ReadonlyImageCacheSettings settings;
@@ -434,26 +435,57 @@ public class ImageCache<ContextType extends Context<ContextType>>
 
     public GraphicsResourcesTextureSpace<ContextType> createSampledResources(ProgressMonitor monitor) throws IOException, UserCancellationException
     {
-        TextureLoadOptions loadOptions = new TextureLoadOptions();
-        loadOptions.setLinearFilteringRequested(false);
-        loadOptions.setMipmapsRequested(false);
-        loadOptions.setCompressionRequested(false);
+        return createWithRetryAfterCacheRebuild(
+            () ->
+            {
+                TextureLoadOptions loadOptions = new TextureLoadOptions();
+                loadOptions.setLinearFilteringRequested(false);
+                loadOptions.setMipmapsRequested(false);
+                loadOptions.setCompressionRequested(false);
 
+                return new GraphicsResourcesTextureSpace<>(resources.getCommonResources(), this::createSampledGeometryTextures,
+                        sampledDir, loadOptions, settings.getSampledSize(), settings.getSampledSize(), monitor);
+            },
+            monitor);
+    }
+
+    /**
+     * Invokes {@code supplier} up to twice. If the first invocation throws
+     * {@link IOException}, the cache is reinitialized once and the supplier
+     * is invoked again; the second invocation's exceptions propagate uncaught.
+     * @param supplier
+     * @param monitor
+     * @return
+     * @param <T>
+     * @throws UserCancellationException
+     * @throws IOException
+     */
+    public <T> T createWithRetryAfterCacheRebuild(CacheDependentSupplier<T> supplier, ProgressMonitor monitor)
+        throws UserCancellationException, IOException
+    {
         try
         {
-            return new GraphicsResourcesTextureSpace<>(resources.getCommonResources(), this::createSampledGeometryTextures,
-                sampledDir, loadOptions, settings.getSampledSize(), settings.getSampledSize(), monitor);
+            return supplier.get();
         }
         catch (IOException e)
         {
-            LOG.warn("Incomplete cache; will try to rebuild.");
+            LOG.warn("Possibly incomplete cache; will try to rebuild.", e);
 
             // Try to reinitialize in case the cache was only partially complete.
             this.initialize(new CancellationPassthroughMonitor(monitor));
 
-            // If initialize() completed without exceptions, then createSampledResources() should work now.
-            return createSampledResources(monitor);
+            // If initialize() completed without exceptions, then it should theoretically work now.
+            // If not, it's probably a problem unrelated to the cache.
         }
+
+        // Attempt again without catching any exceptions.
+        return supplier.get();
+    }
+
+    @FunctionalInterface
+    public interface CacheDependentSupplier<T>
+    {
+        T get() throws IOException, UserCancellationException;
     }
 
     /**

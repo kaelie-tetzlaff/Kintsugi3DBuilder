@@ -84,7 +84,7 @@ public final class SearchableTreeView extends SearchableView
         {
             if (!filteredLeaves.contains(leaf))
             {
-                removeLeaf(treeView, leaf);
+                removeNonRootItem(treeView, leaf.getValue());
             }
         }
 
@@ -94,33 +94,30 @@ public final class SearchableTreeView extends SearchableView
         }
     }
 
-    private static void removeLeaf(TreeView<String> treeView, TreeItem<String> toRemove)
+    private static void removeNonRootItem(TreeView<String> treeView, String toRemove)
     {
-        removeLeafRec(treeView.getRoot().getChildren().iterator(), toRemove);
+        removeNonRootItemRecursive(treeView.getRoot().getChildren().iterator(), toRemove);
     }
 
-    private static void removeLeafRec(Iterator<TreeItem<String>> curr, TreeItem<String> toRemove)
+    private static boolean removeNonRootItemRecursive(Iterator<TreeItem<String>> current, String toRemove)
     {
-        TreeItem<String> currItem = curr.next();
-
-        if (currItem.getValue().equals(toRemove.getValue()))
+        while (current.hasNext()) // Iterate to search sibling nodes if needed
         {
-            curr.remove();
-            return;
+            TreeItem<String> currentItem = current.next();
+
+            if (currentItem.getValue().equals(toRemove))
+            {
+                current.remove();
+                return true;
+            }
+            // Search child nodes with recursion if needed
+            else if (removeNonRootItemRecursive(currentItem.getChildren().iterator(), toRemove))
+            {
+                return true;
+            }
         }
 
-        //search child nodes if needed
-        if (!currItem.getChildren().isEmpty())
-        {
-            Iterator<TreeItem<String>> childrenIter = currItem.getChildren().iterator();
-            removeLeafRec(childrenIter, toRemove);
-        }
-
-        //search sibling nodes if needed
-        if (curr.hasNext())
-        {
-            removeLeafRec(curr, toRemove);
-        }
+        return false;
     }
 
     private static TreeItem<String> deepCopy(TreeItem<String> item)
