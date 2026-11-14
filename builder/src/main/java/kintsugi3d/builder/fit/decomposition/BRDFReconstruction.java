@@ -148,7 +148,7 @@ public class BRDFReconstruction
 
         for (int b = 0; b < settings.getMaterialCount(); b++)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder(settings.getBasisComplexity() * 24);
             sb.append("RHS, red for BRDF #").append(b).append(": ");
 
             sb.append(system.rhs[0].get(b));

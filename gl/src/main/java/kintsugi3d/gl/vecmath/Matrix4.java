@@ -372,7 +372,7 @@ public final class Matrix4
     @Override
     public String toString()
     {
-        StringBuilder s = new StringBuilder();
+        StringBuilder s = new StringBuilder(128);
         for (int i = 0; i < 4; i++)
         {
             s.append(getRow(i)).append('\n');
