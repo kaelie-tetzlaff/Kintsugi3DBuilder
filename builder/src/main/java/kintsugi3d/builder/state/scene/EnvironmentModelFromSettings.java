@@ -29,8 +29,9 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
 
     private long lastEnvironmentMapTime;
     private long lastBackplateTime;
-    private boolean environmentMapLoaded = false;
-    private boolean backplateLoaded = false;
+
+    private volatile boolean environmentMapLoaded = false;
+    private volatile boolean backplateLoaded = false;
 
     protected abstract EnvironmentSettings getEnvironmentSettings();
 
