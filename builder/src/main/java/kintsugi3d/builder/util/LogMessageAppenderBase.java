@@ -38,7 +38,7 @@ public abstract class LogMessageAppenderBase extends AbstractAppender
         super(name, filter, layout, true, Property.EMPTY_ARRAY);
     }
 
-    public static boolean isLevelAvailable(Level level)
+    public boolean isLevelAvailable(Level level)
     {
         return LOG.isEnabledForLevel(level);
     }

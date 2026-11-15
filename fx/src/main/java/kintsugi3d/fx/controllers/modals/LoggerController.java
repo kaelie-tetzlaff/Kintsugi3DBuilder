@@ -53,39 +53,39 @@ public class LoggerController implements Initializable
     @FXML private ListView<LogMessage> messageListView;
     @FXML private Pane cornerPatch;
 
-    private RecentLogMessageAppender logMessages;
+    private FXLogMessageAppender logMessages;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        logMessages = RecentLogMessageAppender.getInstance();
+        logMessages = FXLogMessageAppender.getInstance();
 
         messageListView.setCellFactory(new LogMessageCellFactory());
         messageListView.setItems(logMessages.getMessages().filtered(this::doesLogMessagePassFilter));
         messageListView.scrollTo(messageListView.getItems().size() - 1);
 
         // If the logger cannot log a level, disable a filter button
-        if (! RecentLogMessageAppender.isLevelAvailable(Level.ERROR))
+        if (!logMessages.isLevelAvailable(Level.ERROR))
         {
             toggleButtonError.setSelected(false);
             toggleButtonError.setDisable(true);
         }
-        if (! RecentLogMessageAppender.isLevelAvailable(Level.WARN))
+        if (!logMessages.isLevelAvailable(Level.WARN))
         {
             toggleButtonWarn.setSelected(false);
             toggleButtonWarn.setDisable(true);
         }
-        if (! RecentLogMessageAppender.isLevelAvailable(Level.INFO))
+        if (!logMessages.isLevelAvailable(Level.INFO))
         {
             toggleButtonInfo.setSelected(false);
             toggleButtonInfo.setDisable(true);
         }
-        if (! RecentLogMessageAppender.isLevelAvailable(Level.DEBUG))
+        if (!logMessages.isLevelAvailable(Level.DEBUG))
         {
             toggleButtonDebug.setSelected(false);
             toggleButtonDebug.setDisable(true);
         }
-        if (! RecentLogMessageAppender.isLevelAvailable(Level.TRACE))
+        if (!logMessages.isLevelAvailable(Level.TRACE))
         {
             toggleButtonTrace.setSelected(false);
             toggleButtonTrace.setDisable(true);

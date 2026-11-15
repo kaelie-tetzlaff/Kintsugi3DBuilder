@@ -31,13 +31,13 @@ import java.time.Instant;
     category = Core.CATEGORY_NAME,
     elementType = Appender.ELEMENT_TYPE
 )
-public final class RecentLogMessageAppender extends LogMessageAppenderBase
+public final class FXLogMessageAppender extends LogMessageAppenderBase
 {
-    private static RecentLogMessageAppender instance;
+    private static FXLogMessageAppender instance;
 
     private final ObservableList<LogMessage> messages = FXCollections.observableArrayList();
 
-    private RecentLogMessageAppender(String name, Filter filter, Layout<String> layout)
+    private FXLogMessageAppender(String name, Filter filter, Layout<String> layout)
     {
         super(name, filter, layout);
 
@@ -46,15 +46,15 @@ public final class RecentLogMessageAppender extends LogMessageAppenderBase
     }
 
     @PluginFactory
-    public static RecentLogMessageAppender createAppender(
+    public static FXLogMessageAppender createAppender(
             @PluginAttribute("name") String name,
             @PluginElement("Filter") Filter filter,
             @PluginElement("PatternLayout") PatternLayout layout)
     {
-        return new RecentLogMessageAppender(name, filter, layout);
+        return new FXLogMessageAppender(name, filter, layout);
     }
 
-    public static RecentLogMessageAppender getInstance()
+    public static FXLogMessageAppender getInstance()
     {
         //noinspection StaticVariableUsedBeforeInitialization
         return instance;
