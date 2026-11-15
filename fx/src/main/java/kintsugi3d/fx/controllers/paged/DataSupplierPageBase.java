@@ -24,7 +24,7 @@ class DataSupplierPageBase<InType, OutType, ControllerType extends DataSupplierP
 {
     private OutType data;
 
-    public DataSupplierPageBase(FXMLLoader loader)
+    DataSupplierPageBase(FXMLLoader loader)
     {
         super(loader);
     }
