@@ -38,7 +38,7 @@ public interface DynamicResourceManager
      * @param environmentFile The environment map image file.
      * @throws FileNotFoundException If the environment map image is not found.
      */
-    Optional<EncodableColorImage> loadEnvironmentMap(File environmentFile) throws FileNotFoundException;
+    EncodableColorImage loadEnvironmentMap(File environmentFile) throws FileNotFoundException;
 
     /**
      * Sets the tonemapping curve used to interpret the photographic data.

@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Optional;
 
 public abstract class EnvironmentModelFromSettings implements EnvironmentModel
 {
@@ -112,8 +111,8 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
             try
             {
                 LOG.info("Loading environment map file {}", newFile.getName());
-                Optional<EncodableColorImage> environmentMapImage = Global.io().loadEnvironmentMap(newFile);
-                onEnvironmentMapImageLoaded(environmentMapImage.orElse(null));
+                EncodableColorImage environmentMapImage = Global.io().loadEnvironmentMap(newFile);
+                onEnvironmentMapImageLoaded(environmentMapImage);
             }
             catch (FileNotFoundException e)
             {
