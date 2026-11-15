@@ -15,6 +15,7 @@ import org.lwjgl.BufferUtils;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.text.MessageFormat;
 import java.util.Objects;
 
 class NativeUnsignedByteVectorBuffer implements NativeVectorBuffer
@@ -52,8 +53,9 @@ class NativeUnsignedByteVectorBuffer implements NativeVectorBuffer
         }
         if (buffer.capacity() < dimensions * count)
         {
-            throw new IllegalArgumentException("Insufficient buffer size - a list of " + count + dimensions +
-                    "D vertices requires a buffer with a capacity of at least " + dimensions * count + '.');
+            throw new IllegalArgumentException(MessageFormat.format(
+                "Insufficient buffer size - a list of {0} {1}D vertices requires a buffer with a capacity of at least {2}.",
+                count, dimensions, dimensions * count));
         }
         if (!Objects.equals(buffer.order(), ByteOrder.nativeOrder()))
         {
