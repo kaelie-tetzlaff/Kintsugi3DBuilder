@@ -79,7 +79,7 @@ public class OpenGLContextState implements ContextState
         OpenGLContext.errorCheck();
     }
 
-    private int blendFuncEnumToInt(Weight func)
+    private static int blendFuncEnumToInt(Weight func)
     {
         switch(func)
         {
@@ -113,7 +113,7 @@ public class OpenGLContextState implements ContextState
         OpenGLContext.errorCheck();
     }
 
-    private int getInteger(int queryId)
+    private static int getInteger(int queryId)
     {
         int queryResult = glGetInteger(queryId);
         OpenGLContext.errorCheck();

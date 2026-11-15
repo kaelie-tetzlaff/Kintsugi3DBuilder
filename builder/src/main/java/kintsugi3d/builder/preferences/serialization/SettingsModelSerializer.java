@@ -64,7 +64,7 @@ public class SettingsModelSerializer extends StdSerializer<GeneralSettingsModel>
         jGen.writeEndObject();
     }
 
-    private boolean shouldStandardSerialize(Class<?> type)
+    private static boolean shouldStandardSerialize(Class<?> type)
     {
         return type.isAssignableFrom(Boolean.class) || type.isAssignableFrom(Number.class)
             || type.isAssignableFrom(String.class) || type.isAssignableFrom(Vector2.class)

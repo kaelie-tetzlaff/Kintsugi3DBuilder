@@ -95,7 +95,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
             int index = cubemapFaceToIndex(face);
             faces[index].buffer = data.getBuffer();
             faces[index].dataType = data.getDataType();
-            faces[index].format = OpenGLTexture.getPixelDataFormatFromDimensions(data.getDimensions(), false);
+            faces[index].format = getPixelDataFormatFromDimensions(data.getDimensions(), false);
             return this;
         }
 

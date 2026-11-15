@@ -259,12 +259,12 @@ class ImageReconstructionTest
         context.close();
     }
 
-    private float noiseScaleToRMSE(float noiseScale)
+    private static float noiseScaleToRMSE(float noiseScale)
     {
         return noiseScale / SQRT12;
     }
 
-    private Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>>
+    private static Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>>
         getProgramCreator(String testShaderName, Consumer<Program<OpenGLContext>> setupShader)
     {
         return
