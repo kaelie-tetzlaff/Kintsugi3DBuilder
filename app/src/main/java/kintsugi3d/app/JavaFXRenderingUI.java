@@ -13,6 +13,7 @@ package kintsugi3d.app;
 
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import kintsugi3d.builder.rendering.RenderingUIBase;
 import kintsugi3d.gl.interactive.InteractiveApplication;
 import kintsugi3d.gl.opengl.OpenGLContext;
 import kintsugi3d.gl.window.FramebufferCanvas;

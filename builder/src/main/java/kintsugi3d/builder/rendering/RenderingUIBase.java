@@ -9,10 +9,8 @@
  * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
-package kintsugi3d.app;
+package kintsugi3d.builder.rendering;
 
-import kintsugi3d.builder.rendering.GraphicsRequestQueue;
-import kintsugi3d.builder.rendering.Rendering;
 import kintsugi3d.gl.interactive.EventPollable;
 import kintsugi3d.gl.interactive.InteractiveApplication;
 import org.slf4j.Logger;
