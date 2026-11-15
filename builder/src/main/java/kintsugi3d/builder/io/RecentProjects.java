@@ -174,6 +174,7 @@ public final class RecentProjects
             }
         }
 
+        //noinspection AccessOfSystemProperties
         return new File(System.getProperty("user.home"));
     }
 

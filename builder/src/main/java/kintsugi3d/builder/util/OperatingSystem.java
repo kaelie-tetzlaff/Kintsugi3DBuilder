@@ -18,6 +18,7 @@ public enum OperatingSystem
     MACOS,
     UNIX;
 
+    @SuppressWarnings("AccessOfSystemProperties")
     private static final String OS = System.getProperty("os.name").toLowerCase();
 
     public static OperatingSystem getCurrentOS()

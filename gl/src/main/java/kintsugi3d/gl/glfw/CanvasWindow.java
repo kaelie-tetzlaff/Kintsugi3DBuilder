@@ -74,7 +74,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
             }
         }));
 
-        String os = System.getProperty("os.name").toLowerCase();
+        @SuppressWarnings("AccessOfSystemProperties") String os = System.getProperty("os.name").toLowerCase();
         if (os.contains("nix") || os.contains("nux") || os.contains("aix"))
         {
             // Force X11 on Linux.

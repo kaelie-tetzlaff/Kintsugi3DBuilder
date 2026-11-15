@@ -98,6 +98,7 @@ public class LoggerController implements Initializable
     {
         try
         {
+            @SuppressWarnings("AccessOfSystemProperties")
             File logDir = new File(System.getProperty("Kintsugi3D.logDir"));
             Desktop.getDesktop().open(logDir);
         }
