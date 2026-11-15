@@ -140,11 +140,11 @@ public class MatrixBuilderSums
                 addWeightedAnalyticBlended(b1, b2, sample.blendingWeight * weightedAnalyticSample);
 
                 // Update squared totals without blending weight.
-                double weightedAnalyticSquared = weightedAnalyticSample * sample.analytic;
-                addWeightedAnalyticSquared(b1, b2, weightedAnalyticSquared);
+                double weightedAnalyticSquaredSample = weightedAnalyticSample * sample.analytic;
+                addWeightedAnalyticSquared(b1, b2, weightedAnalyticSquaredSample);
 
                 // Update squared total with blending weight.
-                double weightedAnalyticSquaredBlendedSample = sample.blendingWeight * weightedAnalyticSquared;
+                double weightedAnalyticSquaredBlendedSample = sample.blendingWeight * weightedAnalyticSquaredSample;
                 addWeightedAnalyticSquaredBlended(b1, b2, weightedAnalyticSquaredBlendedSample);
 
                 // Update squared total with blending weight squared.
