@@ -182,18 +182,7 @@ public final class StaticUtilities
 
     private static double clamp(double min, double max, double value)
     {
-        if (value < min)
-        {
-            return min;
-        }
-        else if (value > max)
-        {
-            return max;
-        }
-        else
-        {
-            return value;
-        }
+        return Math.max(min, Math.min(max, value));
     }
 
     public static boolean confirmCancel()
