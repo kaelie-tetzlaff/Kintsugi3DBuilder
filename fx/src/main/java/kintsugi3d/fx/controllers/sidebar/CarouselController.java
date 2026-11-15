@@ -197,24 +197,33 @@ public class CarouselController
             return; //Dont do rest of method
         }
 
-        //Card width
-        double cardWidth = carouselModel.getCarouselCardWidth();
-        //Spacing between cards
-        double spacing = containerHBox.getSpacing();
-        //Left and Right padding
-        double padding = containerHBox.getPadding().getLeft() + containerHBox.getPadding().getRight();
+        // Card width
+        double calculatedWidth = calculateCarouselWidth(count);
 
-        double totalCardWidths = cardWidth * count; //Total Card width
-        //Multiplies spacing by the number of cards minus 1, if the card-1 is -1 it will default to 0
-        double totalSpacing = spacing * Math.max(0, count - 1);
-        //Calculated width of carousel (Leave 10 as extra space; when making it more or less ran into issues)
-        double calculatedWidth = totalCardWidths + totalSpacing + padding + 10.0;
-
-        //Set the width of carousel
+        // Set the width of carousel
         mainBox.setMaxWidth(calculatedWidth);
         mainBox.setPrefWidth(calculatedWidth);
 
-        updateScrollbarVisibility(); //update scrollbar visibility afterwords
+        updateScrollbarVisibility(); // update scrollbar visibility afterwords
+    }
+
+    private double calculateCarouselWidth(int cardCount)
+    {
+        double cardWidth = carouselModel.getCarouselCardWidth();
+
+        // Spacing between cards
+        double spacing = containerHBox.getSpacing();
+
+        // Left and Right padding
+        double padding = containerHBox.getPadding().getLeft() + containerHBox.getPadding().getRight();
+
+        double totalCardWidths = cardWidth * cardCount; // Total Card width
+
+        // Multiplies spacing by the number of cards minus 1, if the card-1 is -1 it will default to 0
+        double totalSpacing = spacing * Math.max(0, cardCount - 1);
+
+        // Calculated width of carousel (Leave 10 as extra space; when making it more or less ran into issues)
+        return totalCardWidths + totalSpacing + padding + 10.0;
     }
 
     /**

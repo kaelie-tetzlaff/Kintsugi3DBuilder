@@ -54,7 +54,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.DoubleUnaryOperator;
 
 public class IOModel implements IO
@@ -603,21 +602,7 @@ public class IOModel implements IO
         }
 
         // Grab reference first just in case for thread synchronization.
-        File masksDestParentDir = viewSet.getSupportingFilesDirectory();
-
-        File masksDestinationDir;
-        if (masksDestParentDir != null)
-        {
-            masksDestinationDir = new File(masksDestParentDir, "masks");
-        }
-        else
-        {
-            masksDestinationDir = new File(
-                ApplicationFolders.getExtensionDirectory().resolve("kintsugi3d.builder.masks").toFile(),
-                viewSet.getUUID().toString());
-        }
-
-        masksDestinationDir.mkdirs();
+        File masksDestinationDir = getMasksDestinationDirectory(viewSet);
 
         // Unzip masks if needed
         if (masksSrcDir.toString().endsWith(".zip"))
@@ -657,6 +642,26 @@ public class IOModel implements IO
             // Use the destination directory as the masks directory to use from now on.
             viewSet.setMasksDirectory(masksDestinationDir);
         }
+    }
+
+    private static File getMasksDestinationDirectory(ViewSet viewSet)
+    {
+        File masksDestParentDir = viewSet.getSupportingFilesDirectory();
+
+        File masksDestinationDir;
+        if (masksDestParentDir != null)
+        {
+            masksDestinationDir = new File(masksDestParentDir, "masks");
+        }
+        else
+        {
+            masksDestinationDir = new File(
+                ApplicationFolders.getExtensionDirectory().resolve("kintsugi3d.builder.masks").toFile(),
+                viewSet.getUUID().toString());
+        }
+
+        masksDestinationDir.mkdirs();
+        return masksDestinationDir;
     }
 
     /**

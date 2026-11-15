@@ -481,26 +481,7 @@ public abstract class CacheModelBase implements CacheModel
 
     private void cleanUpBySizeLimit()
     {
-        Map<String, Collection<File>> cleanableCacheProjects = new HashMap<>(getNumCachedProjects());
-
-        // Build a mapping from project IDs to all cache directories associated with that project.
-        // This is necessary since a project might have one cache for a project but not another,
-        // but all need to be cleaned up when cleaning down to a size limit.
-        for (File directory : getDeleteMethods().keySet())
-        {
-            for (File projectCacheDir : Objects.requireNonNull(directory.listFiles()))
-            {
-                // The project cache directory name should be the same regardless of which cache (i.e. preview or fit) is being cleaned.
-                String projectID = projectCacheDir.getName();
-                // i.e. a list that will contain the fit and preview directories for a given project
-                Collection<File> projectDirList = cleanableCacheProjects.computeIfAbsent(
-                    // Create the ArrayList if not already in the map.
-                    projectID, id -> new ArrayList<>(getCleanableCacheDirectories().size()));
-
-                // Add the current directory to the list
-                projectDirList.add(projectCacheDir);
-            }
-        }
+        Map<String, Collection<File>> cleanableCacheProjects = getCleanableCacheProjects();
 
         List<String> retainedProjectIDs =
             cleanableCacheProjects.entrySet().stream()
@@ -569,6 +550,31 @@ public abstract class CacheModelBase implements CacheModel
                 .filter(cacheDir -> Objects.equals(deleteMethod.getKey(), cacheDir.getParentFile()))
                 .toArray(File[]::new));
         }
+    }
+
+    private static Map<String, Collection<File>> getCleanableCacheProjects()
+    {
+        Map<String, Collection<File>> cleanableCacheProjects = new HashMap<>(getNumCachedProjects());
+
+        // Build a mapping from project IDs to all cache directories associated with that project.
+        // This is necessary since a project might have one cache for a project but not another,
+        // but all need to be cleaned up when cleaning down to a size limit.
+        for (File directory : getDeleteMethods().keySet())
+        {
+            for (File projectCacheDir : Objects.requireNonNull(directory.listFiles()))
+            {
+                // The project cache directory name should be the same regardless of which cache (i.e. preview or fit) is being cleaned.
+                String projectID = projectCacheDir.getName();
+                // i.e. a list that will contain the fit and preview directories for a given project
+                Collection<File> projectDirList = cleanableCacheProjects.computeIfAbsent(
+                    // Create the ArrayList if not already in the map.
+                    projectID, id -> new ArrayList<>(getCleanableCacheDirectories().size()));
+
+                // Add the current directory to the list
+                projectDirList.add(projectCacheDir);
+            }
+        }
+        return cleanableCacheProjects;
     }
 
     private static List<UUID> getRecentUUIDs(int numProjectsToKeep)

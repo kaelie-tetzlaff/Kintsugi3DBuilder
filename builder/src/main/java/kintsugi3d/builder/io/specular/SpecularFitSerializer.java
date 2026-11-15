@@ -173,23 +173,7 @@ public final class SpecularFitSerializer
         if (basisFile.exists())
         {
             // Test to figure out the resolution
-            int numElements; // Technically this is "microfacetDistributionResolution + 1" the way it's defined elsewhere
-            try (Scanner in = new Scanner(basisFile, StandardCharsets.UTF_8))
-            {
-                in.useLocale(Locale.ROOT);
-                String testLine = in.nextLine();
-                String[] elements = CSV_PATTERN.split(testLine);
-                if (elements[elements.length - 1].isBlank()) // detect trailing comma
-                {
-                    // Don't count the blank element after the trailing comma, or the leading identifier on each line.
-                    numElements = elements.length - 2;
-                }
-                else
-                {
-                    // Don't count the leading identifier on each line.
-                    numElements = elements.length - 1;
-                }
-            }
+            int numElements = getNumElements(basisFile);
 
             // Now actually parse the file
             try (Scanner in = new Scanner(basisFile, StandardCharsets.UTF_8))
@@ -334,6 +318,28 @@ public final class SpecularFitSerializer
         {
             return null;
         }
+    }
+
+    private static int getNumElements(File basisFile) throws IOException
+    {
+        int numElements; // Technically this is "microfacetDistributionResolution + 1" the way it's defined elsewhere
+        try (Scanner in = new Scanner(basisFile, StandardCharsets.UTF_8))
+        {
+            in.useLocale(Locale.ROOT);
+            String testLine = in.nextLine();
+            String[] elements = CSV_PATTERN.split(testLine);
+            if (elements[elements.length - 1].isBlank()) // detect trailing comma
+            {
+                // Don't count the blank element after the trailing comma, or the leading identifier on each line.
+                numElements = elements.length - 2;
+            }
+            else
+            {
+                // Don't count the leading identifier on each line.
+                numElements = elements.length - 1;
+            }
+        }
+        return numElements;
     }
 
     private static double[] readBasisLine(Scanner in, int numElements)

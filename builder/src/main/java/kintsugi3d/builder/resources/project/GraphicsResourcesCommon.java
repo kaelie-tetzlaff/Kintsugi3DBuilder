@@ -309,24 +309,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
         // Find the view with the greatest distance from any other view.
         // Directions that are further from any view than distance will be ignored in the view weight calculation.
-        double maxMinDistance = 0.0;
-        for (int i = 0; i < viewDirections.length; i++)
-        {
-            Vector3 viewI = viewDirections[i];
-            if (viewI != null)
-            {
-                double minDistance = Double.MAX_VALUE;
-                for (int j = 0; j < viewDirections.length; j++)
-                {
-                    Vector3 viewJ = viewDirections[j];
-                    if (viewJ != null && i != j)
-                    {
-                        minDistance = Math.min(minDistance, Math.acos(Math.max(-1.0, Math.min(1.0f, viewI.dot(viewJ)))));
-                    }
-                }
-                maxMinDistance = Math.max(maxMinDistance, minDistance);
-            }
-        }
+        double maxMinDistance = findMaxMinDistance(viewDirections);
 
         int actualSampleCount = 0;
 
@@ -385,6 +368,29 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
             1, viewSet.getGPUBufferSize(), this.viewWeights));
 
         return viewWeights;
+    }
+
+    private static double findMaxMinDistance(Vector3[] viewDirections)
+    {
+        double maxMinDistance = 0.0;
+        for (int i = 0; i < viewDirections.length; i++)
+        {
+            Vector3 viewI = viewDirections[i];
+            if (viewI != null)
+            {
+                double minDistance = Double.MAX_VALUE;
+                for (int j = 0; j < viewDirections.length; j++)
+                {
+                    Vector3 viewJ = viewDirections[j];
+                    if (viewJ != null && i != j)
+                    {
+                        minDistance = Math.min(minDistance, Math.acos(Math.max(-1.0, Math.min(1.0f, viewI.dot(viewJ)))));
+                    }
+                }
+                maxMinDistance = Math.max(maxMinDistance, minDistance);
+            }
+        }
+        return maxMinDistance;
     }
 
     public ContextType getContext()

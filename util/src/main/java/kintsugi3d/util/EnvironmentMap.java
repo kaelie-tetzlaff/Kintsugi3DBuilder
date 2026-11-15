@@ -203,23 +203,7 @@ public final class EnvironmentMap
 
     public static void main(String... args) throws IOException
     {
-        JFileChooser fc = new JFileChooser();
-        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fc.setAcceptAllFileFilterUsed(false);
-        fc.setFileFilter(new FileFilter()
-        {
-            @Override
-            public boolean accept(File f)
-            {
-                return f.getName().endsWith(".hdr");
-            }
-
-            @Override
-            public String getDescription()
-            {
-                return "Radiance Environment Maps (.hdr)";
-            }
-        });
+        JFileChooser fc = createFileChooser();
 
         if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
         {
@@ -245,6 +229,28 @@ public final class EnvironmentMap
             File out = new File(in.getParent() + File.separator + baseName + ".env");
             toCache.write(out);
         }
+    }
+
+    private static JFileChooser createFileChooser()
+    {
+        JFileChooser fc = new JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fc.setAcceptAllFileFilterUsed(false);
+        fc.setFileFilter(new FileFilter()
+        {
+            @Override
+            public boolean accept(File f)
+            {
+                return f.getName().endsWith(".hdr");
+            }
+
+            @Override
+            public String getDescription()
+            {
+                return "Radiance Environment Maps (.hdr)";
+            }
+        });
+        return fc;
     }
 
     private static DoubleVector3 sample(float[][] env, int side, DoubleVector3 coord)
