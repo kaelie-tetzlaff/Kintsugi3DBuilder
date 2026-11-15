@@ -696,7 +696,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public Optional<EncodableColorImage> loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException
+    public EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException
     {
         return renderableInstance.getDynamicResourceManager().loadEnvironmentMap(environmentMapFile);
     }

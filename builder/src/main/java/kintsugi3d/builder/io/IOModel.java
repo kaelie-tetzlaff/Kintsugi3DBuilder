@@ -472,7 +472,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public Optional<EncodableColorImage> loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException
+    public EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException
     {
         return this.handler.loadEnvironmentMap(environmentMapFile);
     }

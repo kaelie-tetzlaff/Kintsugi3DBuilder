@@ -24,7 +24,6 @@ import kintsugi3d.util.EncodableColorImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Optional;
 import java.util.function.DoubleUnaryOperator;
 
 public interface IO
@@ -112,7 +111,7 @@ public interface IO
         saveProject(getProjectFile(), null);
     }
 
-    Optional<EncodableColorImage> loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException;
+    EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException;
     void loadBackplate(File backplateFile) throws FileNotFoundException;
 
     DoubleUnaryOperator getLuminanceEncodingFunction();

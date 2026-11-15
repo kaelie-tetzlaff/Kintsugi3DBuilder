@@ -16,86 +16,71 @@ import kintsugi3d.builder.rendering.components.RenderingSubject;
 import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.interactive.ProgressMonitor;
-import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
-import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.gl.vecmath.Vector3;
-import kintsugi3d.util.ArrayBackedColorImage;
 import kintsugi3d.util.EncodableColorImage;
 import kintsugi3d.util.EnvironmentMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
 public class DynamicResourceLoader<ContextType extends Context<ContextType>> implements DynamicResourceManager
 {
-    private static final Logger LOG = LoggerFactory.getLogger(DynamicResourceLoader.class);
     private final ProgressMonitor progressMonitor;
-    private final ContextType context;
     private final ImageBasedGraphicsResources<ContextType> resources;
-    private final LightingResources<ContextType> lightingResources;
     private final RenderingSubject<ContextType> subject;
 
-    private boolean newEnvironmentDataAvailable;
-    private EnvironmentMap newEnvironmentData;
-    private boolean environmentMapUnloadRequested = false;
-    private File currentEnvironmentFile;
-    private long environmentLastModified;
-    private final Object loadEnvironmentLock = new Object();
+    /** Async-loaded resource for environment maps. */
+    private final AsyncLoadedResource<EnvironmentMap, Cubemap<ContextType>> environmentResource;
 
+    /** Async-loaded resource for backplate images. */
+    private final AsyncLoadedResource<BufferedImage, Texture2D<ContextType>> backplateResource;
+
+    /** Flag checked by the render thread in {@link #update()}; set by the JavaFX thread in {@link #requestFragmentShader(File)}. */
     private volatile File desiredShaderFile;
+
+    /** Read by the render thread in {@link #update()}; set by the JavaFX thread in {@link #requestFragmentShader(File)}. */
     private volatile Supplier<Map<String, Optional<Object>>> shaderDefinesFactory;
 
-    private volatile File desiredEnvironmentFile;
+    /** Flag checked by the render thread in {@link #update()}; set by the JavaFX thread in {@link #setTonemapping(double[], byte[])} / {@link #clearTonemapping()}. */
+    private volatile boolean newLuminanceEncodingDataAvailable;
 
-    private boolean newBackplateDataAvailable;
-    private BufferedImage newBackplateData;
-    private boolean backplateUnloadRequested = false;
-    private File currentBackplateFile;
-    private long backplateLastModified;
-    private final Object loadBackplateLock = new Object();
+    /** Array reference replaced atomically; read by the render thread in {@link #update()}; set by the JavaFX thread.
+     * The arrays themselves are never mutated after assignment (cloned on write). */
+    private volatile double[] newLinearLuminanceValues;
 
-    private boolean newLuminanceEncodingDataAvailable;
-    private double[] newLinearLuminanceValues;
-    private byte[] newEncodedLuminanceValues;
+    /** Array reference replaced atomically; read by the render thread in {@link #update()}; set by the JavaFX thread.
+     * The arrays themselves are never mutated after assignment (cloned on write). */
+    private volatile byte[] newEncodedLuminanceValues;
 
-    private boolean newLightCalibrationAvailable;
-    private Vector3 newLightCalibration;
+    /** Flag checked by the render thread in {@link #update()}; set by the JavaFX thread in {@link #setLightCalibration(Vector3)}. */
+    private volatile boolean newLightCalibrationAvailable;
 
-    private volatile File desiredBackplateFile;
-
-    private EncodableColorImage currentEnvironmentMap;
+    /** Read by the render thread in {@link #update()}; set by the JavaFX thread in {@link #setLightCalibration(Vector3)}. */
+    private volatile Vector3 newLightCalibration;
 
     public DynamicResourceLoader(ProgressMonitor progressMonitor, ImageBasedGraphicsResources<ContextType> resources,
         RenderingSubject<ContextType> subject, LightingResources<ContextType> lightingResources)
     {
         this.progressMonitor = progressMonitor;
-        this.context = resources.getContext();
         this.resources = resources;
-        this.lightingResources = lightingResources;
         this.subject = subject;
+
+        ContextType context = resources.getContext();
+        this.environmentResource = new AsyncLoadedResource<>(new LoadableEnvironmentCubemap<>(context, lightingResources));
+        this.backplateResource = new AsyncLoadedResource<>(new LoadableBackplateTexture<>(context, lightingResources));
     }
 
     public void update()
     {
-        if (this.environmentMapUnloadRequested)
-        {
-            lightingResources.takeEnvironmentMap(null);
-            this.environmentMapUnloadRequested = false;
-        }
+        // Delegate environment map consumption to AsyncLoadedResource
+        environmentResource.consume(this.progressMonitor);
 
-        if (this.backplateUnloadRequested)
-        {
-            lightingResources.takeBackplateTexture(null);
-            this.backplateUnloadRequested = false;
-        }
+        // Delegate backplate consumption to AsyncLoadedResource
+        backplateResource.consume(null);
 
         if (this.desiredShaderFile != null)
         {
@@ -104,107 +89,6 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
             this.subject.reloadShaders();
 
             this.desiredShaderFile = null;
-        }
-
-        if (this.newEnvironmentDataAvailable)
-        {
-            try
-            {
-                Cubemap<ContextType> newEnvironmentTexture = null;
-
-                synchronized(loadEnvironmentLock)
-                {
-                    if (this.newEnvironmentData != null)
-                    {
-                        EnvironmentMap environmentData = this.newEnvironmentData;
-                        this.newEnvironmentData = null;
-
-                        float[][] sides = environmentData.getData();
-
-                        newEnvironmentTexture = context.getTextureFactory().buildColorCubemap(environmentData.getSide())
-                            .loadFace(CubemapFace.POSITIVE_X, NativeVectorBufferFactory.getInstance().createFromFloatArray(3,
-                                sides[EnvironmentMap.PX].length / 3, sides[EnvironmentMap.PX]))
-                            .loadFace(CubemapFace.NEGATIVE_X, NativeVectorBufferFactory.getInstance().createFromFloatArray(3,
-                                sides[EnvironmentMap.NX].length / 3, sides[EnvironmentMap.NX]))
-                            .loadFace(CubemapFace.POSITIVE_Y, NativeVectorBufferFactory.getInstance().createFromFloatArray(3,
-                                sides[EnvironmentMap.PY].length / 3, sides[EnvironmentMap.PY]))
-                            .loadFace(CubemapFace.NEGATIVE_Y, NativeVectorBufferFactory.getInstance().createFromFloatArray(3,
-                                sides[EnvironmentMap.NY].length / 3, sides[EnvironmentMap.NY]))
-                            .loadFace(CubemapFace.POSITIVE_Z, NativeVectorBufferFactory.getInstance().createFromFloatArray(3,
-                                sides[EnvironmentMap.PZ].length / 3, sides[EnvironmentMap.PZ]))
-                            .loadFace(CubemapFace.NEGATIVE_Z, NativeVectorBufferFactory.getInstance().createFromFloatArray(3,
-                                sides[EnvironmentMap.NZ].length / 3, sides[EnvironmentMap.NZ]))
-                            .setInternalFormat(ColorFormat.RGB32F)
-                            .setMipmapsEnabled(true)
-                            .setLinearFilteringEnabled(true)
-                            .createTexture();
-
-                        newEnvironmentTexture.setTextureWrap(TextureWrapMode.REPEAT, TextureWrapMode.NONE);
-                    }
-                }
-
-                if (newEnvironmentTexture != null)
-                {
-                    lightingResources.takeEnvironmentMap(newEnvironmentTexture);
-                }
-            }
-            catch (RuntimeException e)
-            {
-                LOG.error("An error has occurred", e);
-            }
-            catch (Error e)
-            {
-                LOG.error("An error has occurred", e);
-                //noinspection ProhibitedExceptionThrown
-                throw e;
-            }
-            finally
-            {
-                this.newEnvironmentDataAvailable = false;
-                this.progressMonitor.complete();
-            }
-        }
-
-        if (this.newBackplateDataAvailable)
-        {
-            try
-            {
-                Texture2D<ContextType> newBackplateTexture = null;
-
-                synchronized(loadBackplateLock)
-                {
-                    if (this.newBackplateData != null)
-                    {
-                        BufferedImage backplateData = this.newBackplateData;
-                        this.newBackplateData = null;
-
-                        newBackplateTexture = context.getTextureFactory().build2DColorTextureFromImage(backplateData, true)
-                            .setInternalFormat(CompressionFormat.RGB_PUNCHTHROUGH_ALPHA1_4BPP)
-                            .setLinearFilteringEnabled(true)
-                            .setMipmapsEnabled(true)
-                            .createTexture();
-                    }
-                }
-
-                if (newBackplateTexture != null)
-                {
-                    lightingResources.takeBackplateTexture(newBackplateTexture);
-                }
-            }
-            catch (RuntimeException e)
-            {
-                LOG.error("An error has occurred", e);
-            }
-            catch (Error e)
-            {
-                LOG.error("An error has occurred", e);
-                //noinspection ProhibitedExceptionThrown
-                throw e;
-            }
-            finally
-            {
-                this.newBackplateDataAvailable = false;
-            }
         }
 
         ViewSet viewSet = this.resources.getViewSet();
@@ -244,128 +128,15 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
     }
 
     @Override
-    public Optional<EncodableColorImage> loadEnvironmentMap(File environmentFile) throws FileNotFoundException
+    public EncodableColorImage loadEnvironmentMap(File environmentFile) throws FileNotFoundException
     {
-        if (environmentFile == null)
-        {
-            if (this.lightingResources.getEnvironmentMap() != null)
-            {
-                this.environmentMapUnloadRequested = true;
-            }
-
-            currentEnvironmentMap = null;
-            return Optional.empty();
-        }
-        else if (environmentFile.exists())
-        {
-            LOG.info("Loading new environment texture.");
-
-            this.desiredEnvironmentFile = environmentFile;
-            long lastModified = environmentFile.lastModified();
-            boolean readCompleted = false;
-
-            int width = 0;
-            int height = 0;
-            float[] pixels = null;
-
-            synchronized(loadEnvironmentLock)
-            {
-                if (Objects.equals(environmentFile, desiredEnvironmentFile) &&
-                        (!Objects.equals(environmentFile, currentEnvironmentFile) || lastModified != environmentLastModified))
-                {
-                    if(this.progressMonitor.isConflictingProcess()){
-                        return Optional.empty();
-                    }
-
-                    this.progressMonitor.start();
-                    this.progressMonitor.setMaxProgress(0.0);
-                    this.progressMonitor.setProcessName("Load Environment Map");
-
-                    try
-                    {
-                        // Use Michael Ludwig's code to convert to a cube map (supports either cross or panorama input)
-                        this.newEnvironmentData = EnvironmentMap.loadFromHDRFile(environmentFile);
-                        this.currentEnvironmentFile = environmentFile;
-                        width = newEnvironmentData.getSide() * 4;
-                        height = newEnvironmentData.getSide() * 2;
-                        pixels = EnvironmentMap.toPanorama(newEnvironmentData.getData(), newEnvironmentData.getSide(), width, height);
-                        readCompleted = true;
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        throw e;
-                    }
-                    catch (IOException e)
-                    {
-                        LOG.error("Error loading environment map:", e);
-                    }
-                }
-            }
-
-            this.newEnvironmentDataAvailable = this.newEnvironmentDataAvailable || readCompleted;
-
-            if (readCompleted)
-            {
-                environmentLastModified = lastModified;
-                currentEnvironmentMap = new ArrayBackedColorImage(width, height, pixels);
-            }
-
-            return Optional.ofNullable(currentEnvironmentMap);
-        }
-        else
-        {
-            throw new FileNotFoundException(environmentFile.getPath());
-        }
+        return this.environmentResource.load(environmentFile, this.progressMonitor);
     }
 
     @Override
     public void loadBackplate(File backplateFile) throws FileNotFoundException
     {
-        if (backplateFile == null && lightingResources.getBackplateTexture() != null)
-        {
-            this.backplateUnloadRequested = true;
-        }
-        else if (backplateFile != null && backplateFile.exists())
-        {
-            LOG.info("Loading new backplate texture.");
-
-            this.desiredBackplateFile = backplateFile;
-            long lastModified = backplateFile.lastModified();
-            boolean readCompleted = false;
-
-            synchronized(loadBackplateLock)
-            {
-                if (Objects.equals(backplateFile, desiredBackplateFile) &&
-                        (!Objects.equals(backplateFile, currentBackplateFile) || lastModified != backplateLastModified))
-                {
-                    try
-                    {
-                        this.newBackplateData = ImageHelper.read(backplateFile).getBufferedImage();
-                        this.currentBackplateFile = backplateFile;
-                        readCompleted = true;
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        throw e;
-                    }
-                    catch (IOException e)
-                    {
-                        LOG.error("Error loading backplate:", e);
-                    }
-                }
-            }
-
-            this.newBackplateDataAvailable = this.newBackplateDataAvailable || readCompleted;
-
-            if (readCompleted)
-            {
-                backplateLastModified = lastModified;
-            }
-        }
-        else if (backplateFile != null)
-        {
-            throw new FileNotFoundException(backplateFile.getPath());
-        }
+        this.backplateResource.load(backplateFile, null);
     }
 
     @Override
