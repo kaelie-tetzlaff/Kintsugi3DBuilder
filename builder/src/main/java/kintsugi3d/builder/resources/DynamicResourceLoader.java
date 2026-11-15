@@ -43,34 +43,72 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
     private final LightingResources<ContextType> lightingResources;
     private final RenderingSubject<ContextType> subject;
 
-    private boolean newEnvironmentDataAvailable;
+    /** Flag checked by the render thread in {@link #update()}; set by a worker thread in {@link #loadEnvironmentMap(File)}. */
+    private volatile boolean newEnvironmentDataAvailable;
+
+    /** Only accessed within {@code synchronized(loadEnvironmentLock)} blocks. */
     private EnvironmentMap newEnvironmentData;
-    private boolean environmentMapUnloadRequested = false;
+
+    /** Flag checked by the render thread in {@link #update()}; set by a worker thread in {@link #loadEnvironmentMap(File)}. */
+    private volatile boolean environmentMapUnloadRequested = false;
+
+    /** Only accessed within {@code synchronized(loadEnvironmentLock)} blocks. */
     private File currentEnvironmentFile;
+
+    /** Only accessed within {@code synchronized(loadEnvironmentLock)} blocks. */
     private long environmentLastModified;
+
+    /** Lock for synchronized access to environment map data. */
     private final Object loadEnvironmentLock = new Object();
 
+    /** Flag checked by the render thread in {@link #update()}; set by the JavaFX thread in {@link #requestFragmentShader(File)}. */
     private volatile File desiredShaderFile;
+
+    /** Read by the render thread in {@link #update()}; set by the JavaFX thread in {@link #requestFragmentShader(File)}. */
     private volatile Supplier<Map<String, Optional<Object>>> shaderDefinesFactory;
 
+    /** Written before acquiring lock in {@link #loadEnvironmentMap(File)}; read inside {@code synchronized(loadEnvironmentLock)}. */
     private volatile File desiredEnvironmentFile;
 
-    private boolean newBackplateDataAvailable;
+    /** Flag checked by the render thread in {@link #update()}; set by a worker thread in {@link #loadBackplate(File)}. */
+    private volatile boolean newBackplateDataAvailable;
+
+    /** Only accessed within {@code synchronized(loadBackplateLock)} blocks. */
     private BufferedImage newBackplateData;
-    private boolean backplateUnloadRequested = false;
+
+    /** Flag checked by the render thread in {@link #update()}; set by a worker thread in {@link #loadBackplate(File)}. */
+    private volatile boolean backplateUnloadRequested = false;
+
+    /** Only accessed within {@code synchronized(loadBackplateLock)} blocks. */
     private File currentBackplateFile;
+
+    /** Only accessed within {@code synchronized(loadBackplateLock)} blocks. */
     private long backplateLastModified;
+
+    /** Lock for synchronized access to backplate data. */
     private final Object loadBackplateLock = new Object();
 
-    private boolean newLuminanceEncodingDataAvailable;
-    private double[] newLinearLuminanceValues;
-    private byte[] newEncodedLuminanceValues;
+    /** Flag checked by the render thread in {@link #update()}; set by the JavaFX thread in {@link #setTonemapping(double[], byte[])} / {@link #clearTonemapping()}. */
+    private volatile boolean newLuminanceEncodingDataAvailable;
 
-    private boolean newLightCalibrationAvailable;
-    private Vector3 newLightCalibration;
+    /** Array reference replaced atomically; read by the render thread in {@link #update()}; set by the JavaFX thread.
+     * The arrays themselves are never mutated after assignment (cloned on write). */
+    private volatile double[] newLinearLuminanceValues;
 
+    /** Array reference replaced atomically; read by the render thread in {@link #update()}; set by the JavaFX thread.
+     * The arrays themselves are never mutated after assignment (cloned on write). */
+    private volatile byte[] newEncodedLuminanceValues;
+
+    /** Flag checked by the render thread in {@link #update()}; set by the JavaFX thread in {@link #setLightCalibration(Vector3)}. */
+    private volatile boolean newLightCalibrationAvailable;
+
+    /** Read by the render thread in {@link #update()}; set by the JavaFX thread in {@link #setLightCalibration(Vector3)}. */
+    private volatile Vector3 newLightCalibration;
+
+    /** Written before acquiring lock in {@link #loadBackplate(File)}; read inside {@code synchronized(loadBackplateLock)}. */
     private volatile File desiredBackplateFile;
 
+    /** Only accessed within {@code synchronized(loadEnvironmentLock)} blocks. */
     private EncodableColorImage currentEnvironmentMap;
 
     public DynamicResourceLoader(ProgressMonitor progressMonitor, ImageBasedGraphicsResources<ContextType> resources,
@@ -253,30 +291,27 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
                 this.environmentMapUnloadRequested = true;
             }
 
-            currentEnvironmentMap = null;
+            synchronized(loadEnvironmentLock)
+            {
+                currentEnvironmentMap = null;
+            }
+
             return Optional.empty();
         }
         else if (environmentFile.exists())
         {
             LOG.info("Loading new environment texture.");
 
+            // Update desired file immediately so concurrent callers can see the latest request
             this.desiredEnvironmentFile = environmentFile;
             long lastModified = environmentFile.lastModified();
-            boolean readCompleted = false;
-
-            int width = 0;
-            int height = 0;
-            float[] pixels = null;
 
             synchronized(loadEnvironmentLock)
             {
+                // Check if this request is still the desired one; if a newer call updated desiredEnvironmentFile, skip loading
                 if (Objects.equals(environmentFile, desiredEnvironmentFile) &&
-                        (!Objects.equals(environmentFile, currentEnvironmentFile) || lastModified != environmentLastModified))
+                    (!Objects.equals(environmentFile, currentEnvironmentFile) || lastModified != environmentLastModified) && !this.progressMonitor.isConflictingProcess())
                 {
-                    if(this.progressMonitor.isConflictingProcess()){
-                        return Optional.empty();
-                    }
-
                     this.progressMonitor.start();
                     this.progressMonitor.setMaxProgress(0.0);
                     this.progressMonitor.setProcessName("Load Environment Map");
@@ -286,10 +321,13 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
                         // Use Michael Ludwig's code to convert to a cube map (supports either cross or panorama input)
                         this.newEnvironmentData = EnvironmentMap.loadFromHDRFile(environmentFile);
                         this.currentEnvironmentFile = environmentFile;
-                        width = newEnvironmentData.getSide() * 4;
-                        height = newEnvironmentData.getSide() * 2;
-                        pixels = EnvironmentMap.toPanorama(newEnvironmentData.getData(), newEnvironmentData.getSide(), width, height);
-                        readCompleted = true;
+                        int width = newEnvironmentData.getSide() * 4;
+                        int height = newEnvironmentData.getSide() * 2;
+                        float[] pixels = EnvironmentMap.toPanorama(newEnvironmentData.getData(), newEnvironmentData.getSide(), width, height);
+
+                        this.newEnvironmentDataAvailable = true;
+                        environmentLastModified = lastModified;
+                        currentEnvironmentMap = new ArrayBackedColorImage(width, height, pixels);
                     }
                     catch (FileNotFoundException e)
                     {
@@ -300,17 +338,10 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
                         LOG.error("Error loading environment map:", e);
                     }
                 }
+
+                // Always return the actual currently loaded map, regardless of code path
+                return Optional.ofNullable(currentEnvironmentMap);
             }
-
-            this.newEnvironmentDataAvailable = this.newEnvironmentDataAvailable || readCompleted;
-
-            if (readCompleted)
-            {
-                environmentLastModified = lastModified;
-                currentEnvironmentMap = new ArrayBackedColorImage(width, height, pixels);
-            }
-
-            return Optional.ofNullable(currentEnvironmentMap);
         }
         else
         {
@@ -329,37 +360,35 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
         {
             LOG.info("Loading new backplate texture.");
 
+            // Update desired file immediately so concurrent callers can see the latest request
             this.desiredBackplateFile = backplateFile;
             long lastModified = backplateFile.lastModified();
-            boolean readCompleted = false;
 
             synchronized(loadBackplateLock)
             {
-                if (Objects.equals(backplateFile, desiredBackplateFile) &&
-                        (!Objects.equals(backplateFile, currentBackplateFile) || lastModified != backplateLastModified))
+                // Check if this request is still the desired one; if a newer call updated desiredBackplateFile, exit early
+                if (Objects.equals(backplateFile, desiredBackplateFile))
                 {
-                    try
+                    if (!Objects.equals(backplateFile, currentBackplateFile) || lastModified != backplateLastModified)
                     {
-                        this.newBackplateData = ImageHelper.read(backplateFile).getBufferedImage();
-                        this.currentBackplateFile = backplateFile;
-                        readCompleted = true;
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        throw e;
-                    }
-                    catch (IOException e)
-                    {
-                        LOG.error("Error loading backplate:", e);
+                        try
+                        {
+                            this.newBackplateData = ImageHelper.read(backplateFile).getBufferedImage();
+                            this.currentBackplateFile = backplateFile;
+
+                            this.newBackplateDataAvailable = true;
+                            backplateLastModified = lastModified;
+                        }
+                        catch (FileNotFoundException e)
+                        {
+                            throw e;
+                        }
+                        catch (IOException e)
+                        {
+                            LOG.error("Error loading backplate:", e);
+                        }
                     }
                 }
-            }
-
-            this.newBackplateDataAvailable = this.newBackplateDataAvailable || readCompleted;
-
-            if (readCompleted)
-            {
-                backplateLastModified = lastModified;
             }
         }
         else if (backplateFile != null)
