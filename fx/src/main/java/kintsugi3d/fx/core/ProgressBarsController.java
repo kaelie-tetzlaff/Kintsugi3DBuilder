@@ -99,6 +99,8 @@ public class ProgressBarsController
      */
     private final StringProperty estimatedRemainingOverride = new SimpleStringProperty(null);
 
+    private final AtomicBoolean cancelRequested = new AtomicBoolean(false);
+
     /**
      * Target expiry instant for the countdown — the moment when the countdown reaches zero.
      * Null means no active countdown.
@@ -160,7 +162,6 @@ public class ProgressBarsController
             event -> MainWindowController.getInstance().showMiniProgressBar());
 
         // Keep track of whether cancellation was requested.
-        AtomicBoolean cancelRequested = new AtomicBoolean(false);
         cancelButton.setOnAction(event ->
         {
             cancelRequested.set(true);
@@ -172,8 +173,7 @@ public class ProgressBarsController
         cancelButton.disableProperty().bind(getProcessingProperty().not());
         doneButton.disableProperty().bind(getProcessingProperty());
 
-        Global.io().addProgressMonitor(
-            new Monitor(cancelRequested, localProgressBar, overallProgressBar, overallTextLabel, localTextLabel, cancelButton));
+        Global.io().addProgressMonitor(new Monitor());
 
         //noinspection AssignmentToStaticFieldFromInstanceMethod
         instance = this;
@@ -386,37 +386,17 @@ public class ProgressBarsController
 
     private class Monitor implements ProgressMonitor
     {
-        private final AtomicBoolean cancelRequested;
-        private final ProgressBar localProgressBar;
-        private final ProgressBar overallProgressBar;
-        private final Label overallTextLabel;
-        private final Label localTextLabel;
-        private final Button cancelButton;
-        private double maximum;
-        private double localProgress;
+        private double maximum = 0.0;
+        private double localProgress = 0.0;
 
         // Updated instantly whereas stageCountProperty is updated asynchronously.
         private int currentStage;
 
-        private final IntegerProperty stageCountProperty;
-        private final IntegerProperty currentStageProperty;
+        private final IntegerProperty stageCountProperty = new SimpleIntegerProperty(0);
+        private final IntegerProperty currentStageProperty = new SimpleIntegerProperty(0);
 
         private String localText; //when process is finishing up, store last msg into here while displaying "Finishing up..."
         private String finishingUpText;
-
-        Monitor(AtomicBoolean cancelRequested, ProgressBar localProgressBar, ProgressBar overallProgressBar, Label overallTextLabel, Label localTextLabel, Button cancelButton)
-        {
-            this.cancelRequested = cancelRequested;
-            this.localProgressBar = localProgressBar;
-            this.overallProgressBar = overallProgressBar;
-            this.overallTextLabel = overallTextLabel;
-            this.localTextLabel = localTextLabel;
-            this.cancelButton = cancelButton;
-            maximum = 0.0;
-            localProgress = 0.0;
-            stageCountProperty = new SimpleIntegerProperty(0);
-            currentStageProperty = new SimpleIntegerProperty(0);
-        }
 
         @Override
         public void allowUserCancellation() throws UserCancellationException
