@@ -73,7 +73,7 @@ public class SplitScreenComponent<ContextType extends Context<ContextType>> impl
                 {
                     // Scale y-axis to adjust aspect ratio to split.
                     Matrix4 leftFullProj =
-                        Matrix4.scale(1.0f, (float) splitPercentage, 1.0f).times(cameraViewport.getFullProjection());
+                        Matrix4.scale(1.0f, splitPercentage, 1.0f).times(cameraViewport.getFullProjection());
 
                     // Viewport crop matrix will be different for each half.
                     int effectiveWidth = Math.min(subdivWidth, splitPixel - x);
@@ -96,7 +96,7 @@ public class SplitScreenComponent<ContextType extends Context<ContextType>> impl
                 {
                     // Scale y-axis to adjust aspect ratio to split.
                     Matrix4 rightFullProj =
-                        Matrix4.scale(1.0f, (float) (1 - splitPercentage), 1.0f).times(cameraViewport.getFullProjection());
+                        Matrix4.scale(1.0f, 1 - splitPercentage, 1.0f).times(cameraViewport.getFullProjection());
 
                     // Viewport crop matrix will be different for each half.
                     effectiveWidth = Math.min(effectiveWidth, x + subdivWidth - splitPixel); // adjust for case when subdiv spans both halves of the split.
@@ -158,6 +158,6 @@ public class SplitScreenComponent<ContextType extends Context<ContextType>> impl
     public void setSplit(float splitPercentage, int fullViewportWidth)
     {
         this.splitPercentage = splitPercentage;
-        this.splitPixel = (int)Math.round(fullViewportWidth * splitPercentage);
+        this.splitPixel = Math.round(fullViewportWidth * splitPercentage);
     }
 }

@@ -75,7 +75,7 @@ public class SampledLuminanceEncoding
         // Fill intermediate values.
         for (int i = 0; i < encoded.length; i++)
         {
-            x[k] = (double)(0xFF & (int)encoded[i]);
+            x[k] = 0xFF & (int)encoded[i];
             y[k] = SRGB.fromLinear(linear[i]);
             k++;
         }
