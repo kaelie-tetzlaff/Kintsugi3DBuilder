@@ -14,7 +14,7 @@ package kintsugi3d.gl.opengl;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.core.ColorFormat.DataType;
 import kintsugi3d.gl.types.AbstractDataType;
-import kintsugi3d.gl.util.RadianceImageLoader.Image;
+import kintsugi3d.gl.util.RadianceImageLoader.HDRImage;
 import org.lwjgl.BufferUtils;
 
 import java.awt.*;
@@ -24,6 +24,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.IntStream;
@@ -40,7 +41,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     private boolean live = true;
     private boolean staleMipmaps = false;
 
-    static final class Parameters
+    static final class TextureParameters
     {
         public final int multisamples;
         public final int format;
@@ -53,12 +54,12 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         /**
          * Default constructor for a null texture
          */
-        Parameters()
+        TextureParameters()
         {
             this(0, false, false, 0, 0.0f, 0, true);
         }
 
-        Parameters(int format, boolean useLinearFiltering, boolean useMipmaps, int maxMipmapLevel, float maxAnisotropy, int multisamples, boolean fixedMultisampleLocations)
+        TextureParameters(int format, boolean useLinearFiltering, boolean useMipmaps, int maxMipmapLevel, float maxAnisotropy, int multisamples, boolean fixedMultisampleLocations)
         {
             this.format = format;
             this.useLinearFiltering = useLinearFiltering;
@@ -69,13 +70,13 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
             this.fixedMultisampleLocations = fixedMultisampleLocations;
         }
 
-        Parameters(int format, boolean useLinearFiltering, boolean useMipmaps, int maxMipmapLevel, float maxAnisotropy)
+        TextureParameters(int format, boolean useLinearFiltering, boolean useMipmaps, int maxMipmapLevel, float maxAnisotropy)
         {
             this(format, useLinearFiltering, useMipmaps, maxMipmapLevel, maxAnisotropy, 1, true);
         }
     }
 
-    public final Parameters parameters;
+    public final TextureParameters parameters;
 
     public final int precision;
     private final ColorFormat colorFormat;
@@ -83,7 +84,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     private final TextureType textureType;
 
     private OpenGLTexture(OpenGLContext context, int textureTarget, ColorFormat colorFormat,
-        CompressionFormat compressionFormat, TextureType textureType, int precision, Parameters parameters)
+        CompressionFormat compressionFormat, TextureType textureType, int precision, TextureParameters parameters)
     {
         this.context = context;
         this.openGLTextureTarget = textureTarget;
@@ -104,17 +105,17 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         }
     }
 
-    OpenGLTexture(OpenGLContext context, int textureTarget, TextureType textureType, int precision, Parameters parameters)
+    OpenGLTexture(OpenGLContext context, int textureTarget, TextureType textureType, int precision, TextureParameters parameters)
     {
         this(context, textureTarget, null, null, textureType, precision, parameters);
     }
 
-    OpenGLTexture(OpenGLContext context, int textureTarget, ColorFormat colorFormat, Parameters parameters)
+    OpenGLTexture(OpenGLContext context, int textureTarget, ColorFormat colorFormat, TextureParameters parameters)
     {
         this(context, textureTarget, colorFormat, null, TextureType.COLOR, 0, parameters);
     }
 
-    OpenGLTexture(OpenGLContext context, int textureTarget, CompressionFormat compressionFormat, Parameters parameters)
+    OpenGLTexture(OpenGLContext context, int textureTarget, CompressionFormat compressionFormat, TextureParameters parameters)
     {
         this(context, textureTarget, null, compressionFormat, TextureType.COLOR, 0, parameters);
     }
@@ -378,6 +379,47 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         }
     }
 
+    static int getPixelDataFormatFromDimensions(int dimensions, boolean integer)
+    {
+        if (integer)
+        {
+            switch (dimensions)
+            {
+                case 1:
+                    return GL_RED_INTEGER;
+                case 2:
+                    return GL_RG_INTEGER;
+                case 3:
+                    return GL_RGB_INTEGER;
+                case 4:
+                    return GL_RGBA_INTEGER;
+                default:
+                    throw new IllegalArgumentException("Data must be a vertex list of no more than 4 dimensions.");
+            }
+        }
+        else
+        {
+            switch (dimensions)
+            {
+                case 1:
+                    return GL_RED;
+                case 2:
+                    return GL_RG;
+                case 3:
+                    return GL_RGB;
+                case 4:
+                    return GL_RGBA;
+                default:
+                    throw new IllegalArgumentException("Data must be a vertex list of no more than 4 dimensions.");
+            }
+        }
+    }
+
+    boolean hasIntegerInternalFormat()
+    {
+        return !this.isInternalFormatCompressed() && this.getInternalUncompressedColorFormat().isInteger();
+    }
+
     private static Stream<Entry<Integer, int[]>> getScanlineStream(BufferedImage colorImg, boolean flipVertical)
     {
         // Use parallel stream to accelerate image decoding / copy,
@@ -436,7 +478,8 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
      *                          This determines how large of a buffer will be allocated.
      * @return
      */
-    static ByteBuffer bufferedImageToNativeBuffer(BufferedImage colorImg, boolean flipVertical,
+    static ByteBuffer bufferedImageToNativeBuffer(
+        BufferedImage colorImg, boolean flipVertical,
         Function<ByteBuffer, BiConsumer<Integer, Color>> bufferWrapperFunction, int mappedColorLength)
     {
         ByteBuffer buffer = BufferUtils.createByteBuffer(colorImg.getWidth() * colorImg.getHeight() * mappedColorLength);
@@ -467,7 +510,8 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
      * @param <MappedType>
      */
     static <MappedType> ByteBuffer bufferedImageToNativeBuffer(
-        BufferedImage colorImg, boolean flipVertical, AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction)
+        BufferedImage colorImg, boolean flipVertical,
+        AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction)
     {
         int mappedColorLength = mappedType.getSizeInBytes();
         Function<ByteBuffer, BiConsumer<Integer, ? super MappedType>> bufferWrapperFunctionPartial = mappedType::wrapIndexedByteBuffer;
@@ -480,56 +524,85 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         return bufferedImageToNativeBuffer(colorImg, flipVertical, bufferWrapperFunctionFull, mappedColorLength);
     }
 
-    static ByteBuffer hdrImageToNativeBuffer(Image colorImg, BufferedImage maskImg)
+    static ByteBuffer hdrImageToNativeBuffer(HDRImage colorImg)
     {
         // Use parallel stream to accelerate image copy
         IntStream scanlineRange = IntStream.range(0, colorImg.height);
 
-        ByteBuffer buffer;
+        ByteBuffer buffer = BufferUtils.createByteBuffer(colorImg.width * colorImg.height * 12);
+        FloatBuffer floatBuffer = buffer.asFloatBuffer();
 
-        if (maskImg == null)
+        scanlineRange.forEach(y ->
         {
-            buffer = BufferUtils.createByteBuffer(colorImg.width * colorImg.height * 12);
-            FloatBuffer floatBuffer = buffer.asFloatBuffer();
-
-            scanlineRange.forEach(y ->
+            int k = y * colorImg.width * 3;
+            for (int x = 0; x < colorImg.width; x++)
             {
-                int k = y * colorImg.width * 3;
-                for (int x = 0; x < colorImg.width; x++)
-                {
-                    floatBuffer.put(colorImg.data[k]);
-                    k++;
-                    floatBuffer.put(colorImg.data[k]);
-                    k++;
-                    floatBuffer.put(colorImg.data[k]);
-                    k++;
-                }
-            });
-        }
-        else
-        {
-            buffer = BufferUtils.createByteBuffer(colorImg.width * colorImg.height * 16);
-            FloatBuffer floatBuffer = buffer.asFloatBuffer();
-
-            scanlineRange.forEach(y ->
-            {
-                int k = y * colorImg.width * 4;
-                for (int x = 0; x < colorImg.width; x++)
-                {
-                    floatBuffer.put(colorImg.data[k]);
-                    k++;
-                    floatBuffer.put(colorImg.data[k]);
-                    k++;
-                    floatBuffer.put(colorImg.data[k]);
-                    k++;
-
-                    // Use green channel of the mask image for alpha
-                    floatBuffer.put((float)((maskImg.getRGB(x, y) & 0x0000ff00) >>> 8) / 255.0f);
-                }
-            });
-        }
+                floatBuffer.put(colorImg.data[k]);
+                k++;
+                floatBuffer.put(colorImg.data[k]);
+                k++;
+                floatBuffer.put(colorImg.data[k]);
+                k++;
+            }
+        });
 
         return buffer;
+    }
+
+    static ByteBuffer hdrImageToNativeBuffer(HDRImage colorImg, BufferedImage maskImg)
+    {
+        // Use parallel stream to accelerate image copy
+        IntStream scanlineRange = IntStream.range(0, colorImg.height);
+
+        ByteBuffer buffer = BufferUtils.createByteBuffer(colorImg.width * colorImg.height * 16);
+        FloatBuffer floatBuffer = buffer.asFloatBuffer();
+
+        scanlineRange.forEach(y ->
+        {
+            int k = y * colorImg.width * 4;
+            for (int x = 0; x < colorImg.width; x++)
+            {
+                floatBuffer.put(colorImg.data[k]);
+                k++;
+                floatBuffer.put(colorImg.data[k]);
+                k++;
+                floatBuffer.put(colorImg.data[k]);
+                k++;
+
+                // Use green channel of the mask image for alpha
+                floatBuffer.put((float)((maskImg.getRGB(x, y) & 0x0000ff00) >>> 8) / 255.0f);
+            }
+        });
+
+        return buffer;
+    }
+
+    static OpenGLTextureData bundleTextureData(int dimensions, boolean integer, int type, ByteBuffer buffer)
+    {
+        return new OpenGLTextureData(getPixelDataFormatFromDimensions(dimensions, integer), type, Objects.requireNonNull(buffer));
+    }
+
+    static OpenGLTextureData bundleTextureData(AbstractDataType<?> type, boolean integer, ByteBuffer buffer)
+    {
+        return new OpenGLTextureData(getPixelDataFormatFromDimensions(type.getComponentCount(), integer),
+            OpenGLContext.getDataTypeConstant(type), Objects.requireNonNull(buffer));
+    }
+
+    static OpenGLTextureData bundleTextureData(BufferedImage image, boolean flipVertical)
+    {
+        return new OpenGLTextureData(GL_BGRA, GL_UNSIGNED_BYTE,
+            bufferedImageToNativeBuffer(Objects.requireNonNull(image), flipVertical));
+    }
+
+    static OpenGLTextureData bundleTextureData(HDRImage colorImg, BufferedImage maskImg)
+    {
+        return new OpenGLTextureData(GL_RGBA, GL_FLOAT,
+            hdrImageToNativeBuffer(Objects.requireNonNull(colorImg), Objects.requireNonNull(maskImg)));
+    }
+
+    static OpenGLTextureData bundleTextureData(HDRImage image)
+    {
+        return new OpenGLTextureData(GL_RGB, GL_FLOAT, hdrImageToNativeBuffer(Objects.requireNonNull(image)));
     }
 
     @Override

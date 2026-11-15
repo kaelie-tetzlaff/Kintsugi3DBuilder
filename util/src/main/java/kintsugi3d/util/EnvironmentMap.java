@@ -11,7 +11,7 @@
 package kintsugi3d.util;
 
 import kintsugi3d.gl.util.RadianceImageLoader;
-import kintsugi3d.gl.util.RadianceImageLoader.Image;
+import kintsugi3d.gl.util.RadianceImageLoader.HDRImage;
 import kintsugi3d.gl.vecmath.DoubleVector3;
 
 import javax.swing.*;
@@ -77,7 +77,7 @@ public final class EnvironmentMap
         File hdrFile/*, boolean computeIrradiance, boolean computeStructuredImportance*/) throws
         IOException
     {
-        Image hdr;
+        HDRImage hdr;
         try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream(hdrFile)))
         {
             hdr = new RadianceImageLoader().read(stream);
@@ -749,7 +749,7 @@ public final class EnvironmentMap
 
     // FIXME avery says I may have mirrored all the x images (so technically still a valid seamless environment
     // but won't be correct if i'm comparing it to the real place)
-    private static void convertCross(int side, float[][] env, Image cross)
+    private static void convertCross(int side, float[][] env, HDRImage cross)
     {
         // px
         for (int y = 0; y < side; y++)
@@ -850,7 +850,7 @@ public final class EnvironmentMap
         }
     }
 
-    private static void convertPanorama(int side, float[][] env, Image pano)
+    private static void convertPanorama(int side, float[][] env, HDRImage pano)
     {
         // assumes equirectangular projection
         DoubleVector3 dir = DoubleVector3.ZERO;

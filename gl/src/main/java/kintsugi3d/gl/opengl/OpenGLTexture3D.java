@@ -17,7 +17,6 @@ import kintsugi3d.gl.builders.base.DepthTextureBuilderBase;
 import kintsugi3d.gl.builders.base.StencilTextureBuilderBase;
 import kintsugi3d.gl.builders.framebuffer.FramebufferObjectBuilder;
 import kintsugi3d.gl.core.*;
-import kintsugi3d.gl.core.ColorFormat.DataType;
 import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
 import kintsugi3d.gl.types.AbstractDataType;
 import kintsugi3d.gl.types.AbstractDataTypeFactory;
@@ -88,8 +87,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
                     this.width,
                     this.height,
                     this.depth,
-                    (this.getInternalColorFormat().dataType == DataType.SIGNED_INTEGER ||
-                        this.getInternalColorFormat().dataType == DataType.UNSIGNED_INTEGER) ? GL_RGBA_INTEGER : GL_RGBA,
+                    this.getInternalColorFormat().isInteger() ? GL_RGBA_INTEGER : GL_RGBA,
                     this.areMultisampleLocationsFixed(),
                     this.isLinearFilteringEnabled(),
                     this.areMipmapsEnabled(),
@@ -216,7 +214,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
     {
         // Create and allocate a 3D texture or 2D texture array
         super(context, textureTarget, colorFormat,
-            new Parameters(format, useLinearFiltering, useMipmaps, maxMipmapLevel, maxAnisotropy, multisamples, fixedSampleLocations));
+            new TextureParameters(format, useLinearFiltering, useMipmaps, maxMipmapLevel, maxAnisotropy, multisamples, fixedSampleLocations));
 
         this.width = width;
         this.height = height;
@@ -232,7 +230,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
     {
         // Create and allocate a 3D texture or 2D texture array
         super(context, textureTarget, compressionFormat,
-            new Parameters(format, useLinearFiltering, useMipmaps, maxMipmapLevel, maxAnisotropy, multisamples, fixedSampleLocations));
+            new TextureParameters(format, useLinearFiltering, useMipmaps, maxMipmapLevel, maxAnisotropy, multisamples, fixedSampleLocations));
 
         this.width = width;
         this.height = height;
@@ -248,7 +246,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
     {
         // Create and allocate a 3D texture or 2D texture array
         super(context, textureTarget, textureType, precision,
-            new Parameters(format, useLinearFiltering, useMipmaps, maxMipmapLevel, maxAnisotropy, multisamples, fixedSampleLocations));
+            new TextureParameters(format, useLinearFiltering, useMipmaps, maxMipmapLevel, maxAnisotropy, multisamples, fixedSampleLocations));
 
         this.width = width;
         this.height = height;
@@ -404,7 +402,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
 
         // Transfer to ByteBuffer and send to GPU.
         ByteBuffer buffer = bufferedImageToNativeBuffer(rescaledImage, flipVertical, mappedType, mappingFunction);
-        loadLayer(layerIndex, mappedType, buffer);
+        loadLayer(layerIndex, bundleTextureData(mappedType, hasIntegerInternalFormat(), buffer));
     }
 
     @Override
@@ -425,7 +423,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
 
         // Transfer to ByteBuffer and send to GPU.
         ByteBuffer buffer = bufferedImageToNativeBuffer(colorImg, flipVertical, mappedType, mappingFunction);
-        loadLayer(layerIndex, mappedType, buffer);
+        loadLayer(layerIndex, bundleTextureData(mappedType, hasIntegerInternalFormat(), buffer));
     }
 
     @Override
@@ -441,27 +439,23 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         AbstractDataTypeFactory adtFactory = AbstractDataTypeFactory.getInstance();
 
         loadLayer(layerIndex,
-            data.getDimensions() > 1 ?
-                adtFactory.getMultiComponentDataType(data.getDataType(), data.getDimensions())
-                : adtFactory.getSingleComponentDataType(data.getDataType()),
-            data.getBuffer());
+            bundleTextureData(
+                data.getDimensions() > 1 ?
+                    adtFactory.getMultiComponentDataType(data.getDataType(), data.getDimensions())
+                    : adtFactory.getSingleComponentDataType(data.getDataType()),
+                hasIntegerInternalFormat(),
+                data.getBuffer()));
     }
 
-    private <MappedType> void loadLayer(int layerIndex, AbstractDataType<? super MappedType> mappedType, ByteBuffer buffer)
+    private void loadLayer(int layerIndex, OpenGLTextureData textureData)
     {
         this.bind();
 
-        int format = OpenGLContext.getPixelDataFormatFromDimensions(
-            mappedType.getComponentCount(),
-            !this.isInternalFormatCompressed() &&
-                (this.getInternalUncompressedColorFormat().dataType == DataType.SIGNED_INTEGER
-                    || this.getInternalUncompressedColorFormat().dataType == DataType.UNSIGNED_INTEGER));
-        int type = OpenGLContext.getDataTypeConstant(mappedType);
-
-        glPixelStorei(GL_UNPACK_ALIGNMENT, getUnpackAlignment(format, type));
+        glPixelStorei(GL_UNPACK_ALIGNMENT, getUnpackAlignment(textureData.getFormat(), textureData.getType()));
         OpenGLContext.errorCheck();
 
-        glTexSubImage3D(this.getTextureTarget(), 0, 0, 0, layerIndex, this.width, this.height, 1, format, type, buffer);
+        glTexSubImage3D(this.getTextureTarget(), 0, 0, 0, layerIndex,
+            this.width, this.height, 1, textureData.getFormat(), textureData.getType(), textureData.getBuffer());
         OpenGLContext.errorCheck();
 
         if (parameters.useMipmaps)

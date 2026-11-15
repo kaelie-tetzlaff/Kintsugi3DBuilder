@@ -100,6 +100,11 @@ public final class ColorFormat
         this.dataType = dataType;
     }
 
+    public boolean isInteger()
+    {
+        return dataType == DataType.UNSIGNED_INTEGER || dataType == DataType.SIGNED_INTEGER;
+    }
+
     /**
      * Creates a custom color format by specifying the target precision (in bits) for each color component
      * @param redBits The desired number of bits to be allocated for the red component.

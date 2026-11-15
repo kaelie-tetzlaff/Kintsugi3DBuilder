@@ -32,13 +32,13 @@ public class RadianceImageLoader
     private static final Pattern COMMON_RES = Pattern.compile("-Y (\\d+) \\+X (\\d+)");
     private static final Pattern ANY_RES = Pattern.compile("[-\\+]Y \\d+ [-\\+]X \\d+");
 
-    public static class Image
+    public static class HDRImage
     {
         public final int width;
         public final int height;
         public final float[] data;
 
-        public Image(int width, int height, float... data)
+        public HDRImage(int width, int height, float... data)
         {
             this.width = width;
             this.height = height;
@@ -46,12 +46,12 @@ public class RadianceImageLoader
         }
     }
 
-    public Image read(BufferedInputStream stream) throws IOException
+    public HDRImage read(BufferedInputStream stream) throws IOException
     {
         return this.read(stream, true, true);
     }
 
-    public Image read(BufferedInputStream stream, boolean topToBottom, boolean leftToRight) throws IOException
+    public HDRImage read(BufferedInputStream stream, boolean topToBottom, boolean leftToRight) throws IOException
     {
         stream.mark(128);
         if (!processMagicNumber(stream))
@@ -70,7 +70,7 @@ public class RadianceImageLoader
         int height = Integer.parseInt(vars.get("HEIGHT"));
         float[] data = readImage(width, height, topToBottom, true, stream);
 
-        return new Image(width, height, data);
+        return new HDRImage(width, height, data);
     }
 
     private float[] readImage(int width, int height, boolean topToBottom, boolean leftToRight, InputStream in)

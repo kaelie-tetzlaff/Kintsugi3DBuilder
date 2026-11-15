@@ -95,7 +95,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
             int index = cubemapFaceToIndex(face);
             faces[index].buffer = data.getBuffer();
             faces[index].dataType = data.getDataType();
-            faces[index].format = OpenGLContext.getPixelDataFormatFromDimensions(data.getDimensions(), false);
+            faces[index].format = OpenGLTexture.getPixelDataFormatFromDimensions(data.getDimensions(), false);
             return this;
         }
 
@@ -287,7 +287,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
     {
         // Create an empty texture to be used as a render target for a framebuffer.
         super(context, textureTarget, colorFormat,
-            new Parameters(opt.format, opt.useLinearFiltering, opt.useMipmaps, opt.maxMipmapLevel, opt.maxAnisotropy));
+            new TextureParameters(opt.format, opt.useLinearFiltering, opt.useMipmaps, opt.maxMipmapLevel, opt.maxAnisotropy));
         this.faceSize = faceSize;
         init(OpenGLContext.getInternalColorFormat(colorFormat), opt);
     }
@@ -296,7 +296,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
     {
         // Create an empty texture to be used as a render target for a framebuffer.
         super(context, textureTarget, compressionFormat,
-            new Parameters(opt.format, opt.useLinearFiltering, opt.useMipmaps, opt.maxMipmapLevel, opt.maxAnisotropy));
+            new TextureParameters(opt.format, opt.useLinearFiltering, opt.useMipmaps, opt.maxMipmapLevel, opt.maxAnisotropy));
         this.faceSize = faceSize;
         init(OpenGLContext.getCompressionFormat(compressionFormat), opt);
     }
@@ -305,7 +305,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
     {
         // Create an empty texture to be used as a render target for a framebuffer.
         super(context, textureTarget, textureType, precision,
-            new Parameters(opt.format, opt.useLinearFiltering, opt.useMipmaps, opt.maxMipmapLevel, opt.maxAnisotropy));
+            new TextureParameters(opt.format, opt.useLinearFiltering, opt.useMipmaps, opt.maxMipmapLevel, opt.maxAnisotropy));
         this.faceSize = faceSize;
         init(getSpecialInternalFormat(textureType, precision), opt);
     }
