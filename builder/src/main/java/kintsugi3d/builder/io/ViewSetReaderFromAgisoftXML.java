@@ -61,8 +61,9 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
      */
     private static class Sensor
     {
+        final String id;
+
         int index;
-        String id;
         float width;
         float height;
         float fx;
