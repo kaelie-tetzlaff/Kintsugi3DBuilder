@@ -47,7 +47,7 @@
 
     <Loggers>
         <Logger name="org.apache.commons.beanutils" level="INFO"/>
-        <Root level="debug">
+        <Root level="${env:KINTSUGI3D_LOG_LEVEL:-info}">
             <AppenderRef ref="console" />
             <AppenderRef ref="fileLogger" />
             <AppenderRef ref="guiConsole" />

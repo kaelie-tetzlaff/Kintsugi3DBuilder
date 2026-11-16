@@ -27,8 +27,6 @@
       <ToggleButton fx:id="toggleButtonError" mnemonicParsing="false" onAction="#buttonChangeLogLevel" selected="true" text="Show Errors" />
       <ToggleButton fx:id="toggleButtonWarn" mnemonicParsing="false" onAction="#buttonChangeLogLevel" selected="true" text="Show Warnings" />
       <ToggleButton fx:id="toggleButtonInfo" mnemonicParsing="false" onAction="#buttonChangeLogLevel" selected="true" text="Show Info" />
-      <ToggleButton fx:id="toggleButtonDebug" mnemonicParsing="false" onAction="#buttonChangeLogLevel" selected="true" text="Show Debug" />
-      <ToggleButton fx:id="toggleButtonTrace" mnemonicParsing="false" onAction="#buttonChangeLogLevel" selected="true" text="Show Trace" />
       <Button mnemonicParsing="false" onAction="#buttonOpenLogDir" text="Open Logs Directory" />
    </HBox>
 </AnchorPane>

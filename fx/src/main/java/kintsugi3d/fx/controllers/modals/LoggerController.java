@@ -46,8 +46,6 @@ public class LoggerController implements Initializable
     @FXML private ToggleButton toggleButtonPause;
     @FXML private ToggleButton toggleButtonError;
     @FXML private ToggleButton toggleButtonInfo;
-    @FXML private ToggleButton toggleButtonDebug;
-    @FXML private ToggleButton toggleButtonTrace;
     @FXML private ToggleButton toggleButtonWarn;
     @FXML private ListView<LogMessage> messageListView;
     @FXML private Pane cornerPatch;
@@ -69,26 +67,19 @@ public class LoggerController implements Initializable
             toggleButtonError.setSelected(false);
             toggleButtonError.setDisable(true);
         }
+
         if (!logMessages.isLevelAvailable(Level.WARN))
         {
             toggleButtonWarn.setSelected(false);
             toggleButtonWarn.setDisable(true);
         }
+
         if (!logMessages.isLevelAvailable(Level.INFO))
         {
             toggleButtonInfo.setSelected(false);
             toggleButtonInfo.setDisable(true);
         }
-        if (!logMessages.isLevelAvailable(Level.DEBUG))
-        {
-            toggleButtonDebug.setSelected(false);
-            toggleButtonDebug.setDisable(true);
-        }
-        if (!logMessages.isLevelAvailable(Level.TRACE))
-        {
-            toggleButtonTrace.setSelected(false);
-            toggleButtonTrace.setDisable(true);
-        }
+
         ScrollBarHelper.scrollbarFix(messageListView);
     }
 
@@ -160,18 +151,9 @@ public class LoggerController implements Initializable
                     return false;
                 }
                 break;
-            case DEBUG:
-                if (! toggleButtonDebug.isSelected())
-                {
-                    return false;
-                }
-                break;
-            case TRACE:
-                if (! toggleButtonTrace.isSelected())
-                {
-                    return false;
-                }
-                break;
+            default:
+                // Suppress debug, trace.
+                return false;
         }
 
         return true;

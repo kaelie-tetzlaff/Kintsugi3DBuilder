@@ -13,12 +13,11 @@ package kintsugi3d.builder.util;
 
 import kintsugi3d.builder.util.logging.LogMessage;
 import kintsugi3d.builder.util.logging.LogMessageListener;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.apache.logging.log4j.core.config.Property;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 
 import java.io.Serializable;
@@ -28,7 +27,6 @@ import java.util.List;
 
 public abstract class LogMessageAppenderBase extends AbstractAppender
 {
-    private static final Logger LOG = LoggerFactory.getLogger(LogMessageAppenderBase.class);
     public static final int MAX_MESSAGES = 2000;
     public static final int MESSAGE_TRUNC_SIZE = 10;
     private final Collection<LogMessageListener> listeners = new ArrayList<>(1);
@@ -38,9 +36,10 @@ public abstract class LogMessageAppenderBase extends AbstractAppender
         super(name, filter, layout, true, Property.EMPTY_ARRAY);
     }
 
+    @SuppressWarnings("MethodMayBeStatic")
     public boolean isLevelAvailable(Level level)
     {
-        return LOG.isEnabledForLevel(level);
+        return LogManager.getRootLogger().isEnabled(org.apache.logging.log4j.Level.toLevel(level.name()));
     }
 
     public abstract List<LogMessage> getMessages();
