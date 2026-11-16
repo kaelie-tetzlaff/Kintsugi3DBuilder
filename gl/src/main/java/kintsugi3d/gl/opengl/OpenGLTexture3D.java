@@ -614,7 +614,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
             try (FramebufferObject<OpenGLContext> sourceFBO = fboBuilder.createFramebufferObject();
                  FramebufferObject<OpenGLContext> destFBO = fboBuilder.createFramebufferObject())
             {
-                int effectiveDepth = Math.min(Math.min(this.getDepth() - destZ, readSource.getDepth() - srcZ), srcDepth);
+                int effectiveDepth = Math.min(Math.min(this.depth - destZ, readSource.getDepth() - srcZ), srcDepth);
 
                 // Use framebuffer blitting on each depth layer requested
                 for (int i = 0; i < effectiveDepth; i++)

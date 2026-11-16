@@ -129,13 +129,13 @@ public abstract class ImageBasedGraphicsResourcesBase<ContextType extends Contex
     @Override
     public IntVector2 getProcessedWeightMapResolution()
     {
-        return getCommonResources().getProcessedWeightMapResolution();
+        return commonResources.getProcessedWeightMapResolution();
     }
 
     @Override
     public EventListeners<ProjectProcessedListener> weightMapsProcessedListeners()
     {
-        return getCommonResources().weightMapsProcessedListeners();
+        return commonResources.weightMapsProcessedListeners();
     }
 
     @Override

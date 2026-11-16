@@ -311,7 +311,7 @@ public final class MetashapeChunk
     public Map<Integer, String> buildCameraPathsMap(boolean useRelativePaths, Collection<File> disabledImageFiles)
         throws FileNotFoundException, MissingImagesException
     {
-        File rootDirectory = new File(getParentDocument().getPsxFilePath()).getParentFile();
+        File rootDirectory = new File(metashapeDocument.getPsxFilePath()).getParentFile();
         if (!rootDirectory.exists())
         {
             throw new FileNotFoundException(MessageFormat.format("Root directory does not exist: {0}", rootDirectory));
@@ -335,7 +335,7 @@ public final class MetashapeChunk
         File defaultFullResSearchDirectory = new File(getFramePath()).getParentFile();
 
         // Override is used in place of defaultFullResSearchDirectory, if present.
-        File fullResOverride = this.getSelectedModel().getLoadPreferences().getFullResOverride();
+        File fullResOverride = this.currentModel.getLoadPreferences().getFullResOverride();
 
         File exceptionFolder = null;
 

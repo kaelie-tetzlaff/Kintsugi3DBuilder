@@ -114,7 +114,7 @@ public abstract class ExperienceBase implements Experience
     protected final PageFrameController createPagedModal() throws IOException
     {
         PageFrameController frameController = createModal("/fxml/PageFrame.fxml");
-        frameController.setState(getState());
+        frameController.setState(state);
 
         frameController.setPageFactory(loader ->
         {

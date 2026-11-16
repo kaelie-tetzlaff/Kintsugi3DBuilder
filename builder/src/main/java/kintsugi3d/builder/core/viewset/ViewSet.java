@@ -1442,7 +1442,7 @@ public final class ViewSet implements ReadonlyViewSet
                     // Search for the name of the photo in the masks directory
                     // Will check both with and without _mask suffix
                     maskFile = ImageFinder.tryFindImageFile(
-                        new File(getMasksDirectory(), view.getFullResImageFile().getName()),
+                        new File(masksDirectory, view.getFullResImageFile().getName()),
                         "_mask");
                 }
 

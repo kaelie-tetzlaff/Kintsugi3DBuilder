@@ -350,7 +350,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
                     // Loop over "columns"
                     for (int i = 0; i < settings.getTextureSubdiv(); i++)
                     {
-                        int xNext = getSettings().getBlockStartX(i + 1);
+                        int xNext = settings.getBlockStartX(i + 1);
 
                         // xRand < round(texture width * (xSample + 1) / sampled width)
                         // xRand <= texture width * (xSample + 1) / sampled width - 0.5;
@@ -370,7 +370,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
                         // Loop over "rows"
                         for (int j = 0; j < settings.getTextureSubdiv(); j++)
                         {
-                            int yNext = getSettings().getBlockStartY(j + 1);
+                            int yNext = settings.getBlockStartY(j + 1);
 
                             int width = xNext - x;
                             int height = yNext - y;

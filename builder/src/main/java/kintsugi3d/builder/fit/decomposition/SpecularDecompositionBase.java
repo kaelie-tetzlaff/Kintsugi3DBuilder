@@ -183,9 +183,9 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
     @Override
     public void saveDiffuseMap(File outputDirectory)
     {
-        BufferedImage diffuseImg = new BufferedImage(getTextureResolution().width, getTextureResolution().height, BufferedImage.TYPE_INT_ARGB);
-        int[] diffuseDataPacked = new int[getTextureResolution().width * getTextureResolution().height];
-        for (int p = 0; p < getTextureResolution().width * getTextureResolution().height; p++)
+        BufferedImage diffuseImg = new BufferedImage(textureResolution.width, textureResolution.height, BufferedImage.TYPE_INT_ARGB);
+        int[] diffuseDataPacked = new int[textureResolution.width * textureResolution.height];
+        for (int p = 0; p < textureResolution.width * textureResolution.height; p++)
         {
             DoubleVector4 diffuseSum = DoubleVector4.ZERO;
 
@@ -203,7 +203,7 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
                 DoubleVector3 diffuseAvgGamma = diffuseSum.getXYZ().dividedBy(diffuseSum.w).applyOperator(x -> Math.min(1.0, SRGB.fromLinear(x)));
 
                 // Flip vertically
-                int dataBufferIndex = p % getTextureResolution().width + getTextureResolution().width * (getTextureResolution().height - p / getTextureResolution().width - 1);
+                int dataBufferIndex = p % textureResolution.width + textureResolution.width * (textureResolution.height - p / textureResolution.width - 1);
                 diffuseDataPacked[dataBufferIndex] = new Color((float) diffuseAvgGamma.x, (float) diffuseAvgGamma.y, (float) diffuseAvgGamma.z).getRGB();
             }
         }

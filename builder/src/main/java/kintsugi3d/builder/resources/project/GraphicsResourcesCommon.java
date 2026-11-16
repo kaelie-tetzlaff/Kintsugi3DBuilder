@@ -476,17 +476,17 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
     private void updateLightData()
     {
         // Store the light positions in a uniform buffer
-        if (lightPositionBuffer != null && getViewSet().getLightPositionData() != null)
+        if (lightPositionBuffer != null && viewSet.getLightPositionData() != null)
         {
             // Create the uniform buffer
-            lightPositionBuffer.setData(getViewSet().getLightPositionData());
+            lightPositionBuffer.setData(viewSet.getLightPositionData());
         }
 
         // Store the light positions in a uniform buffer
-        if (lightIntensityBuffer != null && getViewSet().getLightIntensityData() != null)
+        if (lightIntensityBuffer != null && viewSet.getLightIntensityData() != null)
         {
             // Create the uniform buffer
-            lightIntensityBuffer.setData(getViewSet().getLightIntensityData());
+            lightIntensityBuffer.setData(viewSet.getLightIntensityData());
         }
     }
 
@@ -623,8 +623,8 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
             program.setUniformBuffer("ViewIndices", this.viewIndexBuffer);
         }
 
-        getLuminanceMapResources().setupShaderProgram(program);
-        getTextureResources().setupShaderProgram(program);
+        luminanceMapResources.setupShaderProgram(program);
+        textureResources.setupShaderProgram(program);
     }
 
     public void close()

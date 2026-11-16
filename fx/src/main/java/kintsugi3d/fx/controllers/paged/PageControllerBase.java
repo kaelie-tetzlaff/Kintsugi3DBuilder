@@ -75,7 +75,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
     @Override
     public final boolean canAdvance()
     {
-        return getCanAdvanceObservable().get();
+        return canAdvanceProperty.get();
     }
 
     @Override
@@ -98,7 +98,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
     @Override
     public final String getAdvanceLabelOverride()
     {
-        return getAdvanceLabelOverrideObservable().get();
+        return advanceLabelOverrideProperty.get();
     }
 
     protected final void setAdvanceLabelOverride(String advanceLabelOverride)
@@ -146,7 +146,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
 
     private void close()
     {
-        FXWindowHelper.requestClose(getPageFrameController().getWindow());
+        FXWindowHelper.requestClose(pageFrameController.getWindow());
     }
 
     private void alert(String title, String message, boolean allowContinue)
@@ -159,13 +159,13 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
         alertShown = true;
         Platform.runLater(() ->
         {
-            if (getPage().hasFallbackPage())
+            if (page.hasFallbackPage())
             {
                 // "Cancel" closes the modal entirely
                 ButtonType cancel = new ButtonType("Cancel", ButtonData.LEFT);
 
                 // "Fallback" buttons navigate to a different page.
-                Collection<ButtonType> fallbackButtons = getPage().getFallbackPages().keySet().stream()
+                Collection<ButtonType> fallbackButtons = page.getFallbackPages().keySet().stream()
                     .map(ButtonType::new)
                     .collect(Collectors.toList());
 
@@ -200,7 +200,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
                 {
                     ((ButtonBase) alert.getDialogPane().lookupButton(button)).setOnAction(event ->
                     {
-                        getPageFrameController().fallbackPage(button.getText());
+                        pageFrameController.fallbackPage(button.getText());
                         alertShown = false;
                     });
                 }

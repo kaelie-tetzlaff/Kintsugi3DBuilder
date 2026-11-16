@@ -72,7 +72,7 @@ public final class ScreenshotRequest implements ProgressMonitoredImageBasedGraph
 
         public ScreenshotRequest create()
         {
-            return new ScreenshotRequest(getWidth(), getHeight(), getExportFile());
+            return new ScreenshotRequest(width, height, exportFile);
         }
     }
 

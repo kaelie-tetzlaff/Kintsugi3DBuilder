@@ -292,7 +292,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                 }
 
                 // Notify listeners that project has loaded
-                projectLoaded.notify(new ProjectLoadedEvent(getLoadedGeometry().getBoundingBoxSize()));
+                projectLoaded.notify(new ProjectLoadedEvent(loadedGeometry.getBoundingBoxSize()));
 
                 if (resources.hasProcessedWeightMaps())
                 {

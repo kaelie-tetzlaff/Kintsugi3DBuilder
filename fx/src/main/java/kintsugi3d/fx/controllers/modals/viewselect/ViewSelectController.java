@@ -135,7 +135,7 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
     {
         // Set the initial selection to what is currently being used
         TreeItem<String> selectionItem = NONE_ITEM;
-        String viewName = getData().getViewSelection();
+        String viewName = data.getViewSelection();
         if (viewName != null)
         {
             selectionItem = IntStream.range(0, searchableTreeView.getTreeView().getExpandedItemCount())
@@ -252,10 +252,10 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
                 // Hide orientation controls
                 orientationControls.setVisible(false);
 
-                if (getData().getAdvanceLabelOverride() != null)
+                if (data.getAdvanceLabelOverride() != null)
                 {
                     // Set confirm button text
-                    setAdvanceLabelOverride(getData().getAdvanceLabelOverride());
+                    setAdvanceLabelOverride(data.getAdvanceLabelOverride());
                 }
 
                 imgViewText.setText("Keep model orientation as imported.");
