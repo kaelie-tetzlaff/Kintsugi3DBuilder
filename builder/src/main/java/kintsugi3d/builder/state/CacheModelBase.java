@@ -631,14 +631,7 @@ public abstract class CacheModelBase implements CacheModel
                 }
                 else
                 {
-                    if (projectID == null)
-                    {
-                        length += getDirectorySize(file, newProjectSizes, file.getName());
-                    }
-                    else
-                    {
-                        length += getDirectorySize(file, newProjectSizes, projectID);
-                    }
+                    length += getDirectorySize(file, newProjectSizes, Objects.requireNonNullElse(projectID, file.getName()));
                 }
             }
         }

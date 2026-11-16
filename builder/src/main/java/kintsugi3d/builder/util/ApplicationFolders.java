@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 @SuppressWarnings({"AccessOfSystemProperties", "CallToSystemGetenv"})
 public final class ApplicationFolders
@@ -142,54 +143,30 @@ public final class ApplicationFolders
 
     public static Path getPreviewImagesRootDirectory()
     {
-        Path preferred = GlobalUserPreferencesManager.getInstance().getPreferences().getDirectoryPreferences().getPreviewImagesDirectory();
-        if (preferred != null)
-        {
-            return preferred;
-        }
-        else
-        {
-            return getUserCacheDirectory().resolve("preview");
-        }
+        return Objects.requireNonNullElseGet(
+            GlobalUserPreferencesManager.getInstance().getPreferences().getDirectoryPreferences().getPreviewImagesDirectory(),
+            () -> getUserCacheDirectory().resolve("preview"));
     }
 
     public static Path getFitCacheRootDirectory()
     {
-        Path preferred = GlobalUserPreferencesManager.getInstance().getPreferences().getDirectoryPreferences().getFitCacheDirectory();
-        if (preferred != null)
-        {
-            return preferred;
-        }
-        else
-        {
-            return getUserCacheDirectory().resolve("fit");
-        }
+        return Objects.requireNonNullElseGet(
+            GlobalUserPreferencesManager.getInstance().getPreferences().getDirectoryPreferences().getFitCacheDirectory(),
+            () -> getUserCacheDirectory().resolve("fit"));
     }
 
     public static Path getExtensionDirectory()
     {
-        Path preferred = GlobalUserPreferencesManager.getInstance().getPreferences().getDirectoryPreferences().getExtensionDirectory();
-        if (preferred != null)
-        {
-            return preferred;
-        }
-        else
-        {
-            return getUserCacheDirectory().resolve("ext");
-        }
+        return Objects.requireNonNullElseGet(
+            GlobalUserPreferencesManager.getInstance().getPreferences().getDirectoryPreferences().getExtensionDirectory(),
+            () -> getUserCacheDirectory().resolve("ext"));
     }
 
     public static Path getLogFileDirectory()
     {
-        Path preferred = GlobalUserPreferencesManager.getInstance().getPreferences().getDirectoryPreferences().getLogFileDirectory();
-        if (preferred != null)
-        {
-            return preferred;
-        }
-        else
-        {
-            return getUserAppDirectory().resolve("logs");
-        }
+        return Objects.requireNonNullElseGet(
+            GlobalUserPreferencesManager.getInstance().getPreferences().getDirectoryPreferences().getLogFileDirectory(),
+            () -> getUserAppDirectory().resolve("logs"));
     }
 
     public static void makeLogDirectorySystemProperty()
