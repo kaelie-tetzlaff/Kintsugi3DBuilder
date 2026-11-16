@@ -29,6 +29,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 public abstract class USDZExporter extends MaterialExporter
 {
@@ -146,7 +147,10 @@ public abstract class USDZExporter extends MaterialExporter
         // Cleanup temp files
         try
         {
-            Files.walk(tempPath.toPath()).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+            try (Stream<Path> stream = Files.walk(tempPath.toPath()))
+            {
+                stream.sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+            }
         }
         catch (IOException e)
         {

@@ -1082,7 +1082,11 @@ class ImageReconstructionTest
         // Perform the specular fit
         BasisAndTexturesOptimizationProcess specularFitProcess =
             new BasisAndTexturesOptimizationProcess(specularFitSettings, basisOptimizationSettings, outputDirectory);
-        specularFitProcess.optimizeFitWithCache(resources, progressMonitor);
+
+        try (var ignored = specularFitProcess.optimizeFitWithCache(resources, progressMonitor))
+        {
+            LOG.debug("Texture optimization completed.");
+        }
 
         specularFitProcess.reconstructAll(resources,
             (view, rmse) ->
