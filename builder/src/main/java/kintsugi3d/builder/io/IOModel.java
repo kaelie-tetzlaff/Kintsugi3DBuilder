@@ -12,6 +12,7 @@
 package kintsugi3d.builder.io;
 
 import kintsugi3d.builder.core.Global;
+import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.fit.settings.ExportSettings;
@@ -644,7 +645,7 @@ public class IOModel implements IO
         }
     }
 
-    private static File getMasksDestinationDirectory(ViewSet viewSet)
+    private static File getMasksDestinationDirectory(ReadonlyViewSet viewSet)
     {
         File masksDestParentDir = viewSet.getSupportingFilesDirectory();
 

@@ -21,7 +21,10 @@ class OpenGLVertexArray implements ManagedResource
 {
     private final OpenGLContext context;
 
+    // TODO implement index buffers
+    @SuppressWarnings("FieldMayBeStatic")
     private final boolean usesIndexing = false;
+
     private final int vaoId;
     private int count = Integer.MAX_VALUE;
     private boolean live = true;

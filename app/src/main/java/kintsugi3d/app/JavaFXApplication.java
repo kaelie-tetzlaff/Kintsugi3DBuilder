@@ -62,6 +62,7 @@ public class JavaFXApplication extends Application
 
     private static JavaFXState state;
 
+    @SuppressWarnings("MismatchedReadAndWriteOfArray")
     private static String[] arguments;
 
     private static boolean initialized = false;

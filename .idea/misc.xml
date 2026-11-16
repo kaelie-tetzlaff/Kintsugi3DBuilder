@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="EntryPointsManager">
+    <pattern value="kintsugi3d.builder.rendering.ProgressMonitoredGraphicsRequest" hierarchically="true" method="executeRequest" />
+    <pattern value="kintsugi3d.builder.rendering.GraphicsRequest" hierarchically="true" method="executeRequest" />
+  </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="MavenProjectsManager">
     <option name="originalFiles">
