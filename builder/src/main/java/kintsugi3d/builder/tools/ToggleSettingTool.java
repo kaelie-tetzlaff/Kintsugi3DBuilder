@@ -39,7 +39,7 @@ public class ToggleSettingTool implements KeyPressTool
     private final String settingName;
     private final GeneralSettingsModel settingsModel;
 
-    public ToggleSettingTool(String settingName, GeneralSettingsModel settingsModel)
+    private ToggleSettingTool(String settingName, GeneralSettingsModel settingsModel)
     {
         this.settingName = settingName;
         this.settingsModel = settingsModel;

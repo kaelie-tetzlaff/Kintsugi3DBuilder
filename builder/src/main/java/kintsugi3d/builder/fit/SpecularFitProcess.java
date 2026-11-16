@@ -67,12 +67,12 @@ public abstract class SpecularFitProcess
         this.outputDirectory = outputDirectory;
     }
 
-    public ReadonlySpecularFitSettings getSettings()
+    protected ReadonlySpecularFitSettings getSettings()
     {
         return this.settings;
     }
 
-    public File getOutputDirectory()
+    protected File getOutputDirectory()
     {
         return this.outputDirectory;
     }

@@ -71,7 +71,7 @@ public class PageFrameController
 
     private boolean isIncomplete = true;
 
-    public void init()
+    private void init()
     {
         this.window = outerRoot.getScene().getWindow();
 

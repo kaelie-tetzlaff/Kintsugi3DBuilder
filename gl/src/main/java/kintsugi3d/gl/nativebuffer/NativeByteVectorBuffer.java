@@ -22,8 +22,8 @@ public class NativeByteVectorBuffer implements NativeVectorBuffer
 {
     private final ByteBuffer buffer;
 
-    public final int dimensions;
-    public final int count;
+    private final int dimensions;
+    private final int count;
 
     NativeByteVectorBuffer(int dimensions, int count)
     {

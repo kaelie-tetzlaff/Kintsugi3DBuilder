@@ -42,12 +42,12 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
             this.serialize = serialize;
         }
 
-        public Class<?> getType()
+        Class<?> getType()
         {
             return this.type;
         }
 
-        public boolean shouldSerialize()
+        boolean shouldSerialize()
         {
             return serialize;
         }

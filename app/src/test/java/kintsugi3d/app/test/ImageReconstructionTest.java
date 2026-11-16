@@ -214,10 +214,10 @@ class ImageReconstructionTest
         }
     }
 
-    void saveGroundTruthSyntheticImages(
-            ViewSet viewSet,
-            Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>> groundTruthProgramCreator,
-            String groundTruthName)
+    private void saveGroundTruthSyntheticImages(
+        ViewSet viewSet,
+        Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>> groundTruthProgramCreator,
+        String groundTruthName)
         throws IOException
     {
         GeneralSettingsModel globalSettings = new SimpleGeneralSettingsModel();
@@ -823,7 +823,7 @@ class ImageReconstructionTest
             "Rodin_metashape");
     }
 
-    static ProgramObject<OpenGLContext> createGroundTruthProgram(
+    private static ProgramObject<OpenGLContext> createGroundTruthProgram(
         ShaderProgramFactory<OpenGLContext> programFactory, Consumer<Program<OpenGLContext>> setupShader)
     {
         try
@@ -840,7 +840,7 @@ class ImageReconstructionTest
         }
     }
 
-    void verifyMultiple(
+    private void verifyMultiple(
         ViewSet viewSet,
         Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>> testProgramCreator,
         Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>> groundTruthProgramCreator,

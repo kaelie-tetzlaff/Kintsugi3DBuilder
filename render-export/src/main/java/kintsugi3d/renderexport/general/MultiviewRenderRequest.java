@@ -25,10 +25,10 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.function.Consumer;
 
-class MultiviewRenderRequest extends RenderRequestBase
+final class MultiviewRenderRequest extends RenderRequestBase
 {
-    MultiviewRenderRequest(int width, int height, Consumer<Program<? extends Context<?>>> shaderSetupCallback,
-                           File vertexShader, File fragmentShader, File outputDirectory)
+    private MultiviewRenderRequest(int width, int height, Consumer<Program<? extends Context<?>>> shaderSetupCallback,
+                                   File vertexShader, File fragmentShader, File outputDirectory)
     {
         super(width, height, shaderSetupCallback, vertexShader, fragmentShader, outputDirectory);
     }

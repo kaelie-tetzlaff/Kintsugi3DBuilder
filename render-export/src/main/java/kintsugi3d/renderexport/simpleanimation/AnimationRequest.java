@@ -94,7 +94,7 @@ abstract class AnimationRequest implements ProgressMonitoredImageBasedGraphicsRe
 
     protected abstract Matrix4 getViewMatrix(int frame, Matrix4 baseViewMatrix);
 
-    public int getFrameCount()
+    protected int getFrameCount()
     {
         return frameCount;
     }

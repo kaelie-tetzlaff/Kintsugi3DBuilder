@@ -76,7 +76,7 @@ public class CacheSettingsController implements SystemSettingsControllerBase
         bind(state.getSettingsModel());
     }
 
-    public void bind(ObservableGeneralSettingsModel injectedSettingsModel)
+    private void bind(ObservableGeneralSettingsModel injectedSettingsModel)
     {
         sizeCheck.selectedProperty().bindBidirectional(injectedSettingsModel.getBooleanProperty("sizePromptEnabled"));
         recentCheck.selectedProperty().bindBidirectional(injectedSettingsModel.getBooleanProperty("recentPromptEnabled"));

@@ -22,12 +22,12 @@ public class SimpleProjection implements Projection
     /**
      * The aspect ratio.
      */
-    public final float aspectRatio;
+    private final float aspectRatio;
 
     /**
      * The field of view.
      */
-    public final float verticalFieldOfView;
+    private final float verticalFieldOfView;
 
     /**
      * Creates a new simple perspective projection.

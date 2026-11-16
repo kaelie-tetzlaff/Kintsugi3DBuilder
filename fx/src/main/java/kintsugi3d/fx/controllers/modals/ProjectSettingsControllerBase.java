@@ -74,16 +74,6 @@ public abstract class ProjectSettingsControllerBase extends NonDataPageControlle
     }
 
     /**
-     * Apply settings that have been bound / tracked on this controller to the project.
-     * @return
-     */
-    @FXML
-    public void applySettings()
-    {
-        projectSettingsManager.applySettings();
-    }
-
-    /**
      * Locally reset settings that have been bound / tracked on this controller to their default values.
      * To have these defaults applied to the project, applyBoundSettings() will also need to be called.
      */
@@ -91,6 +81,15 @@ public abstract class ProjectSettingsControllerBase extends NonDataPageControlle
     public void resetSettingsToDefaults()
     {
         projectSettingsManager.resetSettingsToDefaults();
+    }
+
+    /**
+     * Apply settings that have been bound / tracked on this controller to the project.
+     * @return
+     */
+    protected void applySettings()
+    {
+        projectSettingsManager.applySettings();
     }
 
     protected void trackSetting(String settingName)

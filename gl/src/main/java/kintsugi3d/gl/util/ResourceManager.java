@@ -13,12 +13,13 @@ package kintsugi3d.gl.util;
 
 import kintsugi3d.gl.exceptions.NoAvailableTextureUnitsException;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class ResourceManager<ResourceType>
 {
-    public final int length;
-
+    private final int length;
     private final int[] keys;
     private final Object[] resources;
     private int nextSlot;

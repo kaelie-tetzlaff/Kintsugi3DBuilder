@@ -116,7 +116,7 @@ public class MaterialExporter
         this.textureResources = textureResources;
     }
 
-    public final Iterable<String> getSupportedTextures()
+    private Iterable<String> getSupportedTextures()
     {
         Collection<String> supportedTextures = new ArrayList<>(StandardTexture.values().length);
 

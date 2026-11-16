@@ -38,7 +38,7 @@ public final class Kintsugi3DViewerLauncher
      * Searches first in the PATH env variable, then the registry (Windows only), then by relative path
      * @return File to the viewer executable, if found
      */
-    public static Optional<File> getViewerExecutableLocation()
+    private static Optional<File> getViewerExecutableLocation()
     {
         Optional<File> executable = getFromPath();
 

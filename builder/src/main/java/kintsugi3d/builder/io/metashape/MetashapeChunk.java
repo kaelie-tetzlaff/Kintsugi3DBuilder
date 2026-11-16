@@ -277,7 +277,7 @@ public final class MetashapeChunk
         return UnzipHelper.unzipImagesToMap(thumbnailsDir);
     }
 
-    public List<Element> findChunkXmlCameras()
+    private List<Element> findChunkXmlCameras()
     {
         NodeList cams = this.chunkXML.getElementsByTagName("camera");
         List<Element> cameras = new ArrayList<>(cams.getLength());

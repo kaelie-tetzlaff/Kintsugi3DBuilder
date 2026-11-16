@@ -29,7 +29,7 @@ public class SynchronizedValue<T> implements WritableValue<T>
         return new SynchronizedValue<>(getter, setter);
     }
 
-    SynchronizedValue(Supplier<T> getter, Consumer<T> setter)
+    private SynchronizedValue(Supplier<T> getter, Consumer<T> setter)
     {
         this.getter = getter;
         this.setter = setter;

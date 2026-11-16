@@ -148,7 +148,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
         return getContents();
     }
 
-    protected abstract Contents getContents();
+    abstract Contents getContents();
 
     @Override
     public void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a)

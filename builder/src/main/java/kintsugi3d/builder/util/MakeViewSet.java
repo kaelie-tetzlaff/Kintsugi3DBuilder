@@ -28,7 +28,7 @@ public final class MakeViewSet
     {
     }
 
-    static ReadonlyViewSet makeViewSet(int viewCount, float distance, float nearPlane, float aspect, float sensorWidth, float focal)
+    private static ReadonlyViewSet makeViewSet(int viewCount, float distance, float nearPlane, float aspect, float sensorWidth, float focal)
     {
         List<Vector3> viewDirections = new ArrayList<>(viewCount);
 

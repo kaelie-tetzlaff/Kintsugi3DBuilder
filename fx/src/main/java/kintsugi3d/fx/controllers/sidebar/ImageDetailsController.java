@@ -606,7 +606,6 @@ public class ImageDetailsController
      * Sets booleans for crop and pan to false and true for zoom.
      * Sets selectionBox to invisible.
      */
-    @FXML
     private void zoom()
     {
         canCrop = false;
@@ -620,7 +619,6 @@ public class ImageDetailsController
      * Sets booleans for crop and zoom to false and true for pan.
      * Sets selectionBox to invisible.
      */
-    @FXML
     private void pan()
     {
         canCrop = false;
@@ -633,7 +631,6 @@ public class ImageDetailsController
      * Method to handle marquee button.
      * Sets booleans for zoom and pan to false and true for crop.
      */
-    @FXML
     private void marquee()
     {
         canCrop = true;
@@ -647,8 +644,7 @@ public class ImageDetailsController
      * Resets viewport.
      * Sets selectionBox to invisible and currentImage to originalImage.
      */
-    @FXML
-    public void reset()
+    private void reset()
     {
         canCrop = false;
         canPan = false;

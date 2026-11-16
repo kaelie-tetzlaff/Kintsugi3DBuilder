@@ -22,12 +22,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.function.Consumer;
 
-class SingleFrameRenderRequest extends RenderRequestBase
+final class SingleFrameRenderRequest extends RenderRequestBase
 {
     private final String outputImageName;
 
-    SingleFrameRenderRequest(int width, int height, String outputImageName,
-        Consumer<Program<? extends Context<?>>> shaderSetupCallback, File vertexShader, File fragmentShader, File outputDirectory)
+    private SingleFrameRenderRequest(int width, int height, String outputImageName,
+                                     Consumer<Program<? extends Context<?>>> shaderSetupCallback, File vertexShader, File fragmentShader, File outputDirectory)
     {
         super(width, height, shaderSetupCallback, vertexShader, fragmentShader, outputDirectory);
         this.outputImageName = outputImageName;

@@ -103,7 +103,7 @@ public class SampledLuminanceEncoding
         this.encodeFunction = encodeFunction;
     }
 
-    public ReadonlyNativeVectorBuffer sampleDecodeFunction()
+    private ReadonlyNativeVectorBuffer sampleDecodeFunction()
     {
         NativeVectorBuffer sampledDecodeFunction = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 1, 256);
         for (int i = 0; i < 256; i++)
@@ -114,7 +114,7 @@ public class SampledLuminanceEncoding
         return sampledDecodeFunction;
     }
 
-    public ReadonlyNativeVectorBuffer sampleEncodeFunction()
+    private ReadonlyNativeVectorBuffer sampleEncodeFunction()
     {
         NativeVectorBuffer sampledEncodeFunction = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 1, 256);
         for (int i = 0; i < 256; i++)

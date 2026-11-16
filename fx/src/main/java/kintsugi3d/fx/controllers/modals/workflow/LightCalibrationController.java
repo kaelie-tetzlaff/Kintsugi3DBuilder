@@ -100,7 +100,7 @@ public class LightCalibrationController extends NonDataPageControllerBase
         return true;
     }
 
-    public void bind()
+    private void bind()
     {
         // Bind sliders to settings model
         ChangeListener<? super Number> xListener = (observable, oldValue, newValue) ->
@@ -229,7 +229,7 @@ public class LightCalibrationController extends NonDataPageControllerBase
         return Math.round(value / oomScale) * oomScale;
     }
 
-    public void unbind()
+    private void unbind()
     {
         settingsModel.getObjectProperty("currentLightCalibration", Vector2.class).removeListener(settingsListener);
     }

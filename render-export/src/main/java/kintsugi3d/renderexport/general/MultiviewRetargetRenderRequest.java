@@ -27,13 +27,13 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.function.Consumer;
 
-class MultiviewRetargetRenderRequest extends RenderRequestBase
+final class MultiviewRetargetRenderRequest extends RenderRequestBase
 {
     private final File targetViewSetFile;
 
-    MultiviewRetargetRenderRequest(int width, int height,
-        Consumer<Program<? extends Context<?>>> shaderSetupCallback,
-        File targetViewSet, File vertexShader, File fragmentShader, File outputDirectory)
+    private MultiviewRetargetRenderRequest(int width, int height,
+                                           Consumer<Program<? extends Context<?>>> shaderSetupCallback,
+                                           File targetViewSet, File vertexShader, File fragmentShader, File outputDirectory)
     {
         super(width, height, shaderSetupCallback, vertexShader, fragmentShader, outputDirectory);
         this.targetViewSetFile = targetViewSet;

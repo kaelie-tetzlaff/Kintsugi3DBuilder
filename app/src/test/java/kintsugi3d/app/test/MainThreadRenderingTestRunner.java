@@ -100,7 +100,7 @@ public final class MainThreadRenderingTestRunner
     {
         private static final long serialVersionUID = 5747671254750913743L;
 
-        public TestFailureException(String message)
+        TestFailureException(String message)
         {
             super(message);
         }

@@ -56,7 +56,7 @@ public class AdvPhotoViewController implements SystemSettingsControllerBase
         bind(state.getSettingsModel());
     }
 
-    public void bind(ObservableGeneralSettingsModel injectedSettingsModel)
+    private void bind(ObservableGeneralSettingsModel injectedSettingsModel)
     {
         buehlerCheckBox.selectedProperty().bindBidirectional(injectedSettingsModel.getBooleanProperty("buehlerAlgorithm"));
 

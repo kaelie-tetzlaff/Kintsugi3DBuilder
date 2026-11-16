@@ -72,13 +72,8 @@ public class NonNegativeWeightOptimization
         }
     }
 
-    public void optimizeWeights(IntPredicate areWeightsValid, BiConsumer<Integer, SimpleMatrix> weightSolutionConsumer, double toleranceScale)
-    {
-        optimizeWeights(areWeightsValid, weightSolutionConsumer, toleranceScale, matrixBuilder.systemCount);
-    }
-
-    public void optimizeWeights(IntPredicate areWeightsValid, BiConsumer<Integer, SimpleMatrix> weightSolutionConsumer, double toleranceScale,
-        int systemCount)
+    public void optimizeWeights(IntPredicate areWeightsValid, BiConsumer<Integer, SimpleMatrix> weightSolutionConsumer,
+                                double toleranceScale, int systemCount)
     {
         for (int p = 0; p < systemCount; p++)
         {
@@ -103,6 +98,6 @@ public class NonNegativeWeightOptimization
 
     public void optimizeWeights(IntPredicate areWeightsValid, BiConsumer<Integer, SimpleMatrix> weightSolutionConsumer)
     {
-        optimizeWeights(areWeightsValid, weightSolutionConsumer, DEFAULT_TOLERANCE_SCALE);
+        optimizeWeights(areWeightsValid, weightSolutionConsumer, DEFAULT_TOLERANCE_SCALE, matrixBuilder.systemCount);
     }
 }

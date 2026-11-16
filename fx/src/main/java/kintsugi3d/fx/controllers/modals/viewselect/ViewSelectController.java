@@ -325,14 +325,14 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
         return null;
     }
 
+    protected ViewSelectable getData()
+    {
+        return data;
+    }
+
     @Override
     public void receiveData(ViewSelectable dataReceived)
     {
         this.newData = dataReceived;
-    }
-
-    public ViewSelectable getData()
-    {
-        return data;
     }
 }

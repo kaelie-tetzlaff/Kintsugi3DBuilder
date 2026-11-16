@@ -158,7 +158,7 @@ public class MainWindowController
         this.framebufferView.registerKeyAndWindowEventsFromStage(injectedStage);
         WindowSynchronization.getInstance().addListener(framebufferView::closeCanvas);
 
-        ExperienceManager.getInstance().initialize(this.getWindow(), javaFXState);
+        ExperienceManager.getInstance().initialize(window, javaFXState);
 
         // remove camera view list from layout when invisible
         this.cameraViewList.managedProperty().bind(this.cameraViewList.visibleProperty());
@@ -680,11 +680,6 @@ public class MainWindowController
     public Menu getCleanRecentProjectsMenu()
     {
         return cleanRecentProjectsMenu;
-    }
-
-    public Window getWindow() // Useful for creating alerts in back-end classes
-    {
-        return window;
     }
 
     public void handleMiniProgressBar(MouseEvent event)

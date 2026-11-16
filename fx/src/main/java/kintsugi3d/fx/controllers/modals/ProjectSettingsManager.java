@@ -38,7 +38,7 @@ public class ProjectSettingsManager
     private final ObservableGeneralSettingsModel localSettingsModel = getDefaultSettingsModel();
     private final Set<String> trackedSettings = new HashSet<>(8);
 
-    public static ObservableGeneralSettingsModel getDefaultSettingsModel()
+    protected static ObservableGeneralSettingsModel getDefaultSettingsModel()
     {
         ObservableGeneralSettingsModel settingsModel = new ObservableGeneralSettingsModel();
         DefaultSettings.applyProjectDefaults(settingsModel);

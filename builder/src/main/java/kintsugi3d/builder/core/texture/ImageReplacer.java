@@ -38,7 +38,7 @@ public abstract class ImageReplacer
 
     public abstract void replace() throws IOException;
 
-    public final TextureResources<?> getResources()
+    protected final TextureResources<?> getResources()
     {
         return resources;
     }

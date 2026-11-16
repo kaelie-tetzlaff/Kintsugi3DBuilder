@@ -189,7 +189,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
     }
 
     @Override
-    public Contents getContents()
+    Contents getContents()
     {
         if (this.contents == null)
         {

@@ -44,7 +44,7 @@ class OpenGLDefaultFramebuffer extends OpenGLFramebuffer implements DoubleFrameb
     }
 
     @Override
-    protected DefaultFramebufferContents getContents()
+    DefaultFramebufferContents getContents()
     {
         // Lazy initialization
         if (contents == null)

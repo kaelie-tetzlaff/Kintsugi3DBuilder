@@ -24,11 +24,11 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.function.Consumer;
 
-class MultiframeRenderRequest extends RenderRequestBase
+final class MultiframeRenderRequest extends RenderRequestBase
 {
     private final int frameCount;
 
-    MultiframeRenderRequest(int width, int height, int frameCount,
+    private MultiframeRenderRequest(int width, int height, int frameCount,
         Consumer<Program<? extends Context<?>>> shaderSetupCallback, File vertexShader, File fragmentShader, File outputDirectory)
     {
         super(width, height, shaderSetupCallback, vertexShader, fragmentShader, outputDirectory);
