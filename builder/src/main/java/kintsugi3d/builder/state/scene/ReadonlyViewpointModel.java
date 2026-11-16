@@ -26,7 +26,7 @@ public interface ReadonlyViewpointModel
 
     default float getHorizontalFOV()
     {
-        return (float)(360 / Math.PI /* convert and multiply by 2) */ * Math.atan(0.36 /* "35 mm" film (actual 36mm horizontal), 50mm lens */));
+        return (float)(360 / Math.PI /* convert and multiply by 2) */ * StrictMath.atan(0.36 /* "35 mm" film (actual 36mm horizontal), 50mm lens */));
     }
 
     default boolean isOrthographic()

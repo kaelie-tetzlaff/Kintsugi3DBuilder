@@ -214,7 +214,7 @@ public final class ViewSetReaderFromVSET implements ViewSetReader
                         float sensorHeight = sensorWidth / aspect;
 
                         builder.addCameraProjection(new SimpleProjection(
-                            aspect, 2.0f * (float) Math.atan2(sensorHeight, 2 * focalLength)));
+                            aspect, 2.0f * (float) StrictMath.atan2(sensorHeight, 2 * focalLength)));
 
                         // Skip any distortion parameters as they aren't used consistently
                         // and images are probably undistorted from PhotoScan/Metashape

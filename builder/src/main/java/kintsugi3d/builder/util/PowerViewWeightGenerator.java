@@ -46,7 +46,7 @@ public class PowerViewWeightGenerator implements ViewWeightGenerator
                 .getXYZ().normalized();
 
             int viewIndex = view.getGPUViewIndex();
-            viewWeights[viewIndex] = 1.0f / (float) Math.max(0.000001, 1.0 - Math.pow(Math.max(0.0, targetDir.dot(viewDir)), power)) - 1.0f;
+            viewWeights[viewIndex] = 1.0f / (float) Math.max(0.000001, 1.0 - StrictMath.pow(Math.max(0.0, targetDir.dot(viewDir)), power)) - 1.0f;
             viewWeightSum += viewWeights[viewIndex];
         }
 

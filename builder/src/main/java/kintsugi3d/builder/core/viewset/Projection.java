@@ -44,7 +44,7 @@ public interface Projection
     default Vector3 getNormalizedFrustumDimensions()
     {
         float aspectRatio = getAspectRatio();
-        float fy = 1.0f / (float)Math.tan(getVerticalFieldOfView() / 2);
+        float fy = 1.0f / (float) StrictMath.tan(getVerticalFieldOfView() / 2);
         float fx = fy / aspectRatio;
         float cameraPlane = Math.min(fx, fy);
         return new Vector3(Math.min(1.0f, aspectRatio), Math.min(1.0f, 1.0f / aspectRatio), cameraPlane);

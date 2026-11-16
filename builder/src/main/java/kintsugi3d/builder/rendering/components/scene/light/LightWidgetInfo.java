@@ -76,8 +76,8 @@ public final class LightWidgetInfo
         lightDisplacementWorld = cameraViewport.getView().quickInverse(0.01f)
             .times(widgetDisplacement.asDirection()).getXYZ();
 
-        azimuth = Math.atan2(lightDisplacementWorld.x, lightDisplacementWorld.z);
-        inclination = Math.asin(lightDisplacementWorld.normalized().y);
+        azimuth = StrictMath.atan2(lightDisplacementWorld.x, lightDisplacementWorld.z);
+        inclination = StrictMath.asin(lightDisplacementWorld.normalized().y);
 
         float cosineLightToPole = widgetDisplacement.normalized().dot(azimuthRotationAxis);
         azimuthArrowRotation = Math.min(Math.PI / 4,

@@ -191,7 +191,7 @@ public class ObservableObjectPoseSettings extends SerializableObjectPoseSettings
     public DoubleProperty scaleProperty(){return scale;}
 
     @Override
-    public double getScale(){return Math.pow(10, scale.get());}
+    public double getScale(){return StrictMath.pow(10, scale.get());}
         //scale.get() returns the slider value before it has been adjusted to a logarithmic scale
 
     @Override

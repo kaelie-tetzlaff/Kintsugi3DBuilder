@@ -35,19 +35,19 @@ public final class OrbitPolarConverter
         double inclination;
         double twist;
 
-        inclination = Math.asin(orbitMatrix.get(2,1));
+        inclination = StrictMath.asin(orbitMatrix.get(2,1));
 
-        double cosInc = Math.cos(inclination);
+        double cosInc = StrictMath.cos(inclination);
 
         double cosAzimuth = orbitMatrix.get(2,2) / cosInc;
         double sinAzimuth = -orbitMatrix.get(2,0) / cosInc;
 
-        azimuth = Math.atan2(sinAzimuth, cosAzimuth);
+        azimuth = StrictMath.atan2(sinAzimuth, cosAzimuth);
 
         double cosTwist = orbitMatrix.get(1,1) / cosInc;
         double sinTwist = -orbitMatrix.get(0,1) / cosInc;
 
-        twist = Math.atan2(sinTwist, cosTwist);
+        twist = StrictMath.atan2(sinTwist, cosTwist);
 
 
         return new Vector3(

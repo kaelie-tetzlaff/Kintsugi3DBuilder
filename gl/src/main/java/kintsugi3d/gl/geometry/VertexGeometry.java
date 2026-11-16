@@ -630,9 +630,9 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
             // Only update the normals if this faces is not degenerate
             if (e10Length != 0.0f && e02Length != 0.0f && e21Length != 0.0f)
             {
-                float angle0 = (float) Math.acos(Math.max(-1.0f, Math.min(1.0f, -e10Norm.dot(e02Norm))));
-                float angle1 = (float) Math.acos(Math.max(-1.0f, Math.min(1.0f, -e21Norm.dot(e10Norm))));
-                float angle2 = (float) Math.acos(Math.max(-1.0f, Math.min(1.0f, -e02Norm.dot(e21Norm))));
+                float angle0 = (float) StrictMath.acos(Math.max(-1.0f, Math.min(1.0f, -e10Norm.dot(e02Norm))));
+                float angle1 = (float) StrictMath.acos(Math.max(-1.0f, Math.min(1.0f, -e21Norm.dot(e10Norm))));
+                float angle2 = (float) StrictMath.acos(Math.max(-1.0f, Math.min(1.0f, -e02Norm.dot(e21Norm))));
 
                 normals.set(i0, normals.get(i0).plus(facialNorm.times(angle0)));
                 normals.set(i1, normals.get(i1).plus(facialNorm.times(angle1)));
@@ -688,9 +688,9 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
             // Only update the normals if this face is not degenerate
             if (e10Length != 0.0f && e02Length != 0.0f && e21Length != 0.0f)
             {
-                float angle0 = (float) Math.acos(Math.max(-1.0f, Math.min(1.0f, -e10Norm.dot(e02Norm))));
-                float angle1 = (float) Math.acos(Math.max(-1.0f, Math.min(1.0f, -e21Norm.dot(e10Norm))));
-                float angle2 = (float) Math.acos(Math.max(-1.0f, Math.min(1.0f, -e02Norm.dot(e21Norm))));
+                float angle0 = (float) StrictMath.acos(Math.max(-1.0f, Math.min(1.0f, -e10Norm.dot(e02Norm))));
+                float angle1 = (float) StrictMath.acos(Math.max(-1.0f, Math.min(1.0f, -e21Norm.dot(e10Norm))));
+                float angle2 = (float) StrictMath.acos(Math.max(-1.0f, Math.min(1.0f, -e02Norm.dot(e21Norm))));
 
                 tangentMap.put(pair0, tangentMap.getOrDefault(pair0, Vector3.ZERO).plus(tangents[0].times(angle0)));
                 tangentMap.put(pair1, tangentMap.getOrDefault(pair1, Vector3.ZERO).plus(tangents[0].times(angle1)));

@@ -49,14 +49,14 @@ final class FocalLengthTool implements DragTool
     public void mouseButtonPressed(CursorPosition cursorPosition, CanvasSize canvasSize)
     {
         this.mouseStart = cursorPosition;
-        oldLog10FocalLength = Math.log10(cameraModel.getFocalLength());
+        oldLog10FocalLength = StrictMath.log10(cameraModel.getFocalLength());
         focalLengthSensitivityAdjusted = FOCAL_LENGTH_SENSITIVITY / canvasSize.width;
     }
 
     @Override
     public void cursorDragged(CursorPosition cursorPosition, CanvasSize canvasSize)
     {
-        cameraModel.setFocalLength((float)Math.pow(10,
+        cameraModel.setFocalLength((float) StrictMath.pow(10,
             oldLog10FocalLength - (float) Math.toDegrees((cursorPosition.y - this.mouseStart.y) * 0.5 * focalLengthSensitivityAdjusted)));
     }
 }

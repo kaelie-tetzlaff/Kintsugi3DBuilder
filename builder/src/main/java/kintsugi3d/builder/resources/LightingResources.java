@@ -175,13 +175,13 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
 
         if (sceneModel.getLightingModel().isGroundPlaneEnabled())
         {
-            fov = 2.0f * (float)Math.asin(Math.min(0.99, (sceneModel.getScale() + lookAtDist) / lightDist));
+            fov = 2.0f * (float) StrictMath.asin(Math.min(0.99, (sceneModel.getScale() + lookAtDist) / lightDist));
             farPlane = lightDist + 2 * sceneModel.getScale();
             nearPlane = Math.max((lightDist + radius) / 32.0f, lightDist - 2 * radius);
         }
         else
         {
-            fov = 2.0f * (float)Math.asin(Math.min(0.99, (radius + lookAtDist) / lightDist));
+            fov = 2.0f * (float) StrictMath.asin(Math.min(0.99, (radius + lookAtDist) / lightDist));
             farPlane = lightDist + radius;
             nearPlane = Math.max(farPlane / 1024.0f, lightDist - 2 * radius);
         }

@@ -46,9 +46,9 @@ public class Potato
 
         for (Bump b : bumps)
         {
-            double diff = Math.acos(direction.dot(b.direction));
+            double diff = StrictMath.acos(direction.dot(b.direction));
             double sigma = Math.PI * b.size / 12;
-            r += b.height / (6 * Math.PI * sigma * sigma) * Math.exp(-diff * diff / (2 * sigma * sigma));
+            r += b.height / (6 * Math.PI * sigma * sigma) * StrictMath.exp(-diff * diff / (2 * sigma * sigma));
         }
 
         return r;
@@ -65,12 +65,12 @@ public class Potato
             bumps[i].height = bumpHeight;
 
             double phi = Math.random() * 2 * Math.PI;
-            double theta = Math.acos(2 * Math.random() - 1);
-            double sinTheta = Math.sin(theta);
+            double theta = StrictMath.acos(2 * Math.random() - 1);
+            double sinTheta = StrictMath.sin(theta);
             bumps[i].direction = new Vector3(
-                (float) (Math.cos(phi) * sinTheta),
-                (float) (Math.sin(phi) * sinTheta),
-                (float) Math.cos(theta));
+                (float) (StrictMath.cos(phi) * sinTheta),
+                (float) (StrictMath.sin(phi) * sinTheta),
+                (float) StrictMath.cos(theta));
         }
 
         int phiSubdiv = 2 * (int) Math.round(Math.floor(Math.sqrt(0.25 * minTriangles)));
@@ -99,16 +99,16 @@ public class Potato
         for (int i = 1; i < thetaSubdiv; i++)
         {
             double theta = i * Math.PI / thetaSubdiv;
-            double sinTheta = Math.sin(theta);
-            double cosTheta = Math.cos(theta);
+            double sinTheta = StrictMath.sin(theta);
+            double cosTheta = StrictMath.cos(theta);
 
             for (int j = 0; j < phiSubdiv; j++)
             {
                 double phi = j * 2 * Math.PI / phiSubdiv;
 
                 Vector3 direction = new Vector3(
-                    (float) (Math.cos(phi) * sinTheta),
-                    (float) (Math.sin(phi) * sinTheta),
+                    (float) (StrictMath.cos(phi) * sinTheta),
+                    (float) (StrictMath.sin(phi) * sinTheta),
                     (float) cosTheta);
 
                 positions.add(direction.times((float)computeR(direction)));

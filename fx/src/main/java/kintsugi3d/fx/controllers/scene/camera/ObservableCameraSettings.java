@@ -22,10 +22,10 @@ public class ObservableCameraSettings extends SerializableCameraSettings
     private final DoubleProperty zCenter = new SimpleDoubleProperty();
     private final DoubleProperty azimuth = StaticUtilities.wrapAround(-180, 180, new SimpleDoubleProperty());
     private final DoubleProperty inclination = StaticUtilities.clamp(-90, 90, new SimpleDoubleProperty());
-    private final DoubleProperty log10Distance = new SimpleDoubleProperty(Math.log10(25.0 / 18.0));
+    private final DoubleProperty log10Distance = new SimpleDoubleProperty(StrictMath.log10(25.0 / 18.0));
     private final DoubleProperty twist = StaticUtilities.wrapAround(-180.0, 180.0, new SimpleDoubleProperty());
     private final DoubleProperty fov = new SimpleDoubleProperty(
-        360 / Math.PI /* convert and multiply by 2) */ * Math.atan(0.36 /* "35 mm" film (actual 36mm horizontal), 50mm lens */));
+        360 / Math.PI /* convert and multiply by 2) */ * StrictMath.atan(0.36 /* "35 mm" film (actual 36mm horizontal), 50mm lens */));
     private final DoubleProperty focalLength = new SimpleDoubleProperty(50.0);
     private final BooleanProperty locked = new SimpleBooleanProperty();
     private final BooleanProperty orthographic = new SimpleBooleanProperty();

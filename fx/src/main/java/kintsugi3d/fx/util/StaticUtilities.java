@@ -147,8 +147,8 @@ public final class StaticUtilities
 
     public static void bindLogScaleToLinear(DoubleProperty logScaleProperty, DoubleProperty linearScaleProperty)
     {
-        logScaleProperty.addListener((b, o, n) -> linearScaleProperty.set(Math.pow(10, n.doubleValue())));
-        linearScaleProperty.addListener((b, o, n) -> logScaleProperty.set(Math.log10(n.doubleValue())));
+        logScaleProperty.addListener((b, o, n) -> linearScaleProperty.set(StrictMath.pow(10, n.doubleValue())));
+        linearScaleProperty.addListener((b, o, n) -> logScaleProperty.set(StrictMath.log10(n.doubleValue())));
     }
 
     public static void makeSquareResolutionComboBox(ComboBox<SquareResolution> comboBox)

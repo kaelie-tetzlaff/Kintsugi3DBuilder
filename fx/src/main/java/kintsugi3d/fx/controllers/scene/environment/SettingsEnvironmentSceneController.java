@@ -174,7 +174,7 @@ public class SettingsEnvironmentSceneController implements Initializable
         @Override
         public String toString(Double value)
         {
-            return super.toString(Math.pow(10, value));
+            return super.toString(StrictMath.pow(10, value));
         }
     };
 

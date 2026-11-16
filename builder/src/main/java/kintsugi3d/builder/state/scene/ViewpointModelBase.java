@@ -54,12 +54,12 @@ public abstract class ViewpointModelBase implements ManipulableViewpointModel
     @Override
     public float getDistance()
     {
-        return (float) Math.pow(10, getLog10Distance());
+        return (float) StrictMath.pow(10, getLog10Distance());
     }
 
     @Override
     public void setDistance(float distance)
     {
-        setLog10Distance((float)Math.log10(distance));
+        setLog10Distance((float) StrictMath.log10(distance));
     }
 }

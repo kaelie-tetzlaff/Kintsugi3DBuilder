@@ -315,15 +315,15 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
         for (int i = 0; i < sampleRows; i++)
         {
-            double r = Math.sin(Math.PI * (double)i / (double)(sampleRows-1));
+            double r = StrictMath.sin(Math.PI * (double)i / (double)(sampleRows-1));
             int sampleColumns = Math.max(1, (int)Math.ceil(densityFactor * r));
 
             for (int j = 0; j < sampleColumns; j++)
             {
                 Vector3 sampleDirection = new Vector3(
-                        (float)(r * Math.cos(2 * Math.PI * (double)j / (double)sampleColumns)),
-                        (float) Math.cos(Math.PI * (double)i / (double)(sampleRows-1)),
-                        (float)(r * Math.sin(2 * Math.PI * (double)j / (double)sampleColumns)));
+                        (float)(r * StrictMath.cos(2 * Math.PI * (double)j / (double)sampleColumns)),
+                        (float) StrictMath.cos(Math.PI * (double)i / (double)(sampleRows-1)),
+                        (float)(r * StrictMath.sin(2 * Math.PI * (double)j / (double)sampleColumns)));
 
                 double minDistance = maxMinDistance;
                 int minDirectionIndex = -1;
@@ -332,7 +332,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
                     Vector3 viewK = viewDirections[k];
                     if (viewK != null)
                     {
-                        double distance = Math.acos(Math.max(-1.0, Math.min(1.0f, sampleDirection.dot(viewK))));
+                        double distance = StrictMath.acos(Math.max(-1.0, Math.min(1.0f, sampleDirection.dot(viewK))));
                         if (distance < minDistance)
                         {
                             minDistance = distance;
@@ -384,7 +384,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
                     Vector3 viewJ = viewDirections[j];
                     if (viewJ != null && i != j)
                     {
-                        minDistance = Math.min(minDistance, Math.acos(Math.max(-1.0, Math.min(1.0f, viewI.dot(viewJ)))));
+                        minDistance = Math.min(minDistance, StrictMath.acos(Math.max(-1.0, Math.min(1.0f, viewI.dot(viewJ)))));
                     }
                 }
                 maxMinDistance = Math.max(maxMinDistance, minDistance);

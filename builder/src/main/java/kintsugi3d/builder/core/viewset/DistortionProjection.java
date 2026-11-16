@@ -167,7 +167,7 @@ public class DistortionProjection implements Projection
     @Override
     public float getVerticalFieldOfView()
     {
-        return 2.0f*(float)Math.atan2(height, 2*fy);
+        return 2.0f*(float) StrictMath.atan2(height, 2*fy);
     }
     
     @Override

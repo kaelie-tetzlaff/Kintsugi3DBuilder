@@ -59,7 +59,7 @@ public class GroundPlane<ContextType extends Context<ContextType>> extends Stand
             setupShader(cameraViewport, model);
 
             getDrawable().program().setUniform("defaultDiffuseColor",
-                getSceneModel().getLightingModel().getGroundPlaneColor().applyOperator(x -> Math.pow(x, 2.2)));
+                getSceneModel().getLightingModel().getGroundPlaneColor().applyOperator(x -> StrictMath.pow(x, 2.2)));
 
             // Disable back face culling since the plane is one-sided.
             getContext().getState().disableBackFaceCulling();

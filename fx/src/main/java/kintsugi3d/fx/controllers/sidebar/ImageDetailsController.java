@@ -309,7 +309,7 @@ public class ImageDetailsController
             double paneHeight = stackPane.getHeight();
 
             // Determine zoom (1 - normalized pixel size raised to the power of Delta Y)
-            double zoomFactor = Math.pow((paneHeight - 1.0) / paneHeight, event.getDeltaY());
+            double zoomFactor = StrictMath.pow((paneHeight - 1.0) / paneHeight, event.getDeltaY());
 
             // Calculate anticipated new width and height.
             // Ensure that we're not zooming out beyond the full image size

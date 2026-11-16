@@ -278,7 +278,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         program.setUniform(String.format("lightOrientationVirtual[%d]", lightIndex),
                 lightMatrixInverse.times(new Vector4(0.0f, 0.0f, -1.0f, 0.0f)).getXYZ().normalized());
         program.setUniform(String.format("lightSpotSizeVirtual[%d]", lightIndex),
-                (float)Math.sin(sceneModel.getLightingModel().getLightPrototype(lightIndex).getSpotSize()));
+                (float) StrictMath.sin(sceneModel.getLightingModel().getLightPrototype(lightIndex).getSpotSize()));
         program.setUniform(String.format("lightSpotTaperVirtual[%d]", lightIndex), sceneModel.getLightingModel().getLightPrototype(lightIndex).getSpotTaper());
     }
 
@@ -309,9 +309,9 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
                 Math.max(0, Math.min(lightingResources.getEnvironmentMap().getMipmapLevelCount() - 1,
                     this.sceneModel.getLightingModel().getEnvironmentMapFilteringBias()
                         + (float)(0.5 *
-                        Math.log(6 * (double)lightingResources.getEnvironmentMap().getFaceSize() * (double)lightingResources.getEnvironmentMap().getFaceSize()
+                        StrictMath.log(6 * (double)lightingResources.getEnvironmentMap().getFaceSize() * (double)lightingResources.getEnvironmentMap().getFaceSize()
                             / (double) resources.getViewSet().getEnabledViewCount() )
-                        / Math.log(2.0)))));
+                        / StrictMath.log(2.0)))));
             program.setUniform("diffuseEnvironmentMipMapLevel", lightingResources.getEnvironmentMap().getMipmapLevelCount() - 1);
 
             Matrix4 envMapMatrix = sceneModel.getEnvironmentMapMatrix(model);

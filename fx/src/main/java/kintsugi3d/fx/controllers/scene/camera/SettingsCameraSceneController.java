@@ -76,8 +76,8 @@ public class SettingsCameraSceneController implements Initializable
         StaticUtilities.makeNumeric(fovTextField);
         StaticUtilities.makeNumeric(focalLengthTextField);
 
-        fov.addListener(change -> focalLength.setValue(18 / Math.tan(fov.getValue() * Math.PI / 360 /* convert and divide by 2 */)));
-        focalLength.addListener(change -> fov.setValue(360 / Math.PI /* convert and multiply by 2) */ * Math.atan(18 / focalLength.getValue())));
+        fov.addListener(change -> focalLength.setValue(18 / StrictMath.tan(fov.getValue() * Math.PI / 360 /* convert and divide by 2 */)));
+        focalLength.addListener(change -> fov.setValue(360 / Math.PI /* convert and multiply by 2) */ * StrictMath.atan(18 / focalLength.getValue())));
 
         distanceSlider.setLabelFormatter(new StringConverter<>()
         {

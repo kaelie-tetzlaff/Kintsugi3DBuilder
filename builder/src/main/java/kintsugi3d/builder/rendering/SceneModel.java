@@ -209,6 +209,6 @@ public class SceneModel
 
     public float getVerticalFieldOfView(FramebufferSize size)
     {
-        return 2 * (float)Math.atan(Math.tan(cameraModel.getHorizontalFOV() / 2) * size.height / size.width);
+        return 2 * (float) StrictMath.atan(StrictMath.tan(cameraModel.getHorizontalFOV() / 2) * size.height / size.width);
     }
 }

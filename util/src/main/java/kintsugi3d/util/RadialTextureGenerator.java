@@ -58,7 +58,7 @@ public class RadialTextureGenerator<ContextType extends Context<ContextType>>
 
     public ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>> buildBloomTexture(int size)
     {
-        return buildRadialTexture(64, rSq -> (Math.cos(Math.min(Math.sqrt(rSq), 1.0) * Math.PI) + 1.0) * 0.5);
+        return buildRadialTexture(64, rSq -> (StrictMath.cos(Math.min(Math.sqrt(rSq), 1.0) * Math.PI) + 1.0) * 0.5);
     }
 
     public ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>> buildCircleTexture(int size)

@@ -223,8 +223,8 @@ public class LightCalibrationController extends NonDataPageControllerBase
 
     private static double roundToLeadingDecimal(double value)
     {
-        double orderOfMagnitude = Math.floor(Math.log10(value)); // figure out the leading decimal place
-        double oomScale = Math.pow(10, orderOfMagnitude); // put a 1 in the leading decimal place followed by zeros
+        double orderOfMagnitude = Math.floor(StrictMath.log10(value)); // figure out the leading decimal place
+        double oomScale = StrictMath.pow(10, orderOfMagnitude); // put a 1 in the leading decimal place followed by zeros
         // Round to the leading decimal place
         return Math.round(value / oomScale) * oomScale;
     }
