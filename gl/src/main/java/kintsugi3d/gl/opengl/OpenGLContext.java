@@ -343,7 +343,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
                 {
                     return GL_RGBA4;
                 }
-                else if (format.redBits <= 5 && format.greenBits <= 5 && format.blueBits <= 5 && format.alphaBits <= 1)
+                else if (format.redBits <= 5 && format.greenBits <= 5 && format.blueBits <= 5 && format.alphaBits == 1)
                 {
                     return GL_RGB5_A1;
                 }
