@@ -33,7 +33,7 @@ final class ObjectTwistTool implements DragTool
     private static class Builder extends ToolBuilderBase<ObjectTwistTool>
     {
         @Override
-        public ObjectTwistTool create()
+        public final ObjectTwistTool create()
         {
             return new ObjectTwistTool(getCameraModel(), getObjectModel());
         }

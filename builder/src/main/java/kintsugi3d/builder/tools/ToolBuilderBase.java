@@ -30,61 +30,61 @@ abstract class ToolBuilderBase<ToolType> implements ToolBuilder<ToolType>
     }
 
     @Override
-    public ToolBuilder<ToolType> setCameraModel(ManipulableViewpointModel cameraModel)
+    public final ToolBuilder<ToolType> setCameraModel(ManipulableViewpointModel cameraModel)
     {
         this.cameraModel = cameraModel;
         return this;
     }
 
     @Override
-    public ToolBuilder<ToolType> setLightingEnvironmentModel(ManipulableLightingEnvironmentModel lightingModel)
+    public final ToolBuilder<ToolType> setLightingEnvironmentModel(ManipulableLightingEnvironmentModel lightingModel)
     {
         this.lightingEnvironmentModel = lightingModel;
         return this;
     }
 
     @Override
-    public ToolBuilder<ToolType> setObjectModel(ManipulableObjectPoseModel objectModel)
+    public final ToolBuilder<ToolType> setObjectModel(ManipulableObjectPoseModel objectModel)
     {
         this.objectModel = objectModel;
         return this;
     }
 
     @Override
-    public ToolBuilder<ToolType> setSceneViewport(SceneViewport sceneViewport)
+    public final ToolBuilder<ToolType> setSceneViewport(SceneViewport sceneViewport)
     {
         this.sceneViewport = sceneViewport;
         return this;
     }
 
     @Override
-    public ToolBuilder<ToolType> setSettingsModel(GeneralSettingsModel settingsModel)
+    public final ToolBuilder<ToolType> setSettingsModel(GeneralSettingsModel settingsModel)
     {
         this.settingsModel = settingsModel;
         return this;
     }
 
-    ManipulableViewpointModel getCameraModel()
+    final ManipulableViewpointModel getCameraModel()
     {
         return cameraModel;
     }
 
-    ManipulableLightingEnvironmentModel getLightingEnvironmentModel()
+    final ManipulableLightingEnvironmentModel getLightingEnvironmentModel()
     {
         return lightingEnvironmentModel;
     }
 
-    ManipulableObjectPoseModel getObjectModel()
+    final ManipulableObjectPoseModel getObjectModel()
     {
         return objectModel;
     }
 
-    SceneViewport getSceneViewport()
+    final SceneViewport getSceneViewport()
     {
         return sceneViewport;
     }
 
-    GeneralSettingsModel getSettingsModel()
+    final GeneralSettingsModel getSettingsModel()
     {
         return settingsModel;
     }

@@ -113,13 +113,13 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
             this.lightIndex = lightIndex;
         }
 
-        boolean isValid()
+        final boolean isValid()
         {
             return transform != null;
         }
 
         @Override
-        public boolean equals(Object obj)
+        public final boolean equals(Object obj)
         {
             if (obj instanceof Camera)
             {
@@ -133,7 +133,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
         }
 
         @Override
-        public int hashCode()
+        public final int hashCode()
         {
             return Objects.hashCode(id);
         }

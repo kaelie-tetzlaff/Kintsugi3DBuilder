@@ -22,7 +22,7 @@ abstract class NonSupplierPageBase<T, ControllerType extends NonSupplierPageCont
     }
 
     @Override
-    public void initController()
+    public final void initController()
     {
         Page<?, T> test;
         test = this;

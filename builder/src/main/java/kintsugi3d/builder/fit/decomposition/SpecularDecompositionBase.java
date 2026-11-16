@@ -52,62 +52,62 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
     }
 
     @Override
-    public SpecularBasisWeights getWeights()
+    public final SpecularBasisWeights getWeights()
     {
         return new SpecularDecompositionWeights(this);
     }
 
     @Override
-    public TextureResolution getTextureResolution()
+    public final TextureResolution getTextureResolution()
     {
         return textureResolution;
     }
 
     @Override
-    public boolean areWeightsValid(int texelIndex)
+    public final boolean areWeightsValid(int texelIndex)
     {
         return weightsValidity[texelIndex];
     }
 
     @Override
-    public double getWeight(int b, int p)
+    public final double getWeight(int b, int p)
     {
         return weightsByTexel[p].get(b);
     }
 
     @Override
-    public SimpleMatrix getWeights(int texelIndex)
+    public final SimpleMatrix getWeights(int texelIndex)
     {
         return weightsByTexel[texelIndex];
     }
 
     @Override
-    public void setWeights(int texelIndex, SimpleMatrix weights)
+    public final void setWeights(int texelIndex, SimpleMatrix weights)
     {
         weightsByTexel[texelIndex] = weights;
     }
 
     @Override
-    public List<SimpleMatrix> getWeightsList()
+    public final List<SimpleMatrix> getWeightsList()
     {
         return Arrays.asList(weightsByTexel);
     }
 
     @Override
-    public void invalidateWeights()
+    public final void invalidateWeights()
     {
         // Quickly invalidate all the weights
         Arrays.fill(weightsValidity, false);
     }
 
     @Override
-    public void setWeightsValidity(int texelIndex, boolean validity)
+    public final void setWeightsValidity(int texelIndex, boolean validity)
     {
         weightsValidity[texelIndex] = validity;
     }
 
     @Override
-    public void fillHoles()
+    public final void fillHoles()
     {
         // Fill holes
         // TODO Quick hack; should be replaced with something more robust.
@@ -181,7 +181,7 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
     }
 
     @Override
-    public void saveDiffuseMap(File outputDirectory)
+    public final void saveDiffuseMap(File outputDirectory)
     {
         BufferedImage diffuseImg = new BufferedImage(textureResolution.width, textureResolution.height, BufferedImage.TYPE_INT_ARGB);
         int[] diffuseDataPacked = new int[textureResolution.width * textureResolution.height];
@@ -221,13 +221,13 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
     }
 
     @Override
-    public void saveBasisFunctions(File outputDirectory)
+    public final void saveBasisFunctions(File outputDirectory)
     {
         getMaterialBasis().save(outputDirectory, null);
     }
 
     @Override
-    public void saveWeightMaps(File outputDirectory)
+    public final void saveWeightMaps(File outputDirectory)
     {
         getWeights().save(outputDirectory);
     }
@@ -244,25 +244,25 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
         }
 
         @Override
-        public double getWeight(int b, int p)
+        public final double getWeight(int b, int p)
         {
             return specularDecomposition.weightsByTexel[p].get(b);
         }
 
         @Override
-        public boolean areWeightsValid(int p)
+        public final boolean areWeightsValid(int p)
         {
             return specularDecomposition.weightsValidity[p];
         }
 
         @Override
-        public int getCount()
+        public final int getCount()
         {
             return basis.getEnabledMaterialCount();
         }
 
         @Override
-        public void save(File outputDirectory)
+        public final void save(File outputDirectory)
         {
             SpecularFitSerializer.saveWeightImages(
                 basis, specularDecomposition.textureResolution.width, specularDecomposition.textureResolution.height, this, outputDirectory);

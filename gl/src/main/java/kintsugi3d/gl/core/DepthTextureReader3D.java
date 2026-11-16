@@ -25,19 +25,19 @@ class DepthTextureReader3D<ContextType extends Context<ContextType>> extends Dep
     }
 
     @Override
-    public int getWidth()
+    public final int getWidth()
     {
         return texture.getWidth();
     }
 
     @Override
-    public int getHeight()
+    public final int getHeight()
     {
         return texture.getHeight();
     }
 
     @Override
-    public void read(ShortBuffer destination, int x, int y, int width, int height)
+    public final void read(ShortBuffer destination, int x, int y, int width, int height)
     {
         try (FramebufferObject<ContextType> fbo = texture.getContext()
             .buildFramebufferObject(this.getWidth(), this.getHeight()).createFramebufferObject())

@@ -103,20 +103,20 @@ public class RoughnessOptimizationIterative<ContextType extends Context<ContextT
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         roughnessOptimization.close();
 //        errorCalcProgram.close();
     }
 
     @Override
-    protected FramebufferObject<ContextType> getFramebuffer()
+    protected final FramebufferObject<ContextType> getFramebuffer()
     {
         return roughnessOptimization.getFrontFramebuffer();
     }
 
     @Override
-    public void execute()
+    public final void execute()
     {
         // Generate initial estimate
         // Renders directly into "front" framebuffer which is fine for the first pass since then we don't have to swap

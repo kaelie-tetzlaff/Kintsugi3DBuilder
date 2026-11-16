@@ -29,19 +29,19 @@ public class Kintsugi3DViewerExporter extends PBRExporter
     private final Kintsugi3DViewerExtras extras = new Kintsugi3DViewerExtras();
 
     @StandardTextureExport(StandardTexture.DIFFUSE_COLOR)
-    public void diffuseColor(TextureInfo diffuseColor)
+    public final void diffuseColor(TextureInfo diffuseColor)
     {
         extras.setDiffuseTexture(diffuseColor);
     }
 
     @CustomTextureExport("constant")
-    public void diffuseConstant(TextureInfo diffuseConstant)
+    public final void diffuseConstant(TextureInfo diffuseConstant)
     {
         extras.setDiffuseConstantTexture(diffuseConstant);
     }
 
     @StandardTextureExport(StandardTexture.SPECULAR_COLOR)
-    public void specularColor(TextureInfo specularColor)
+    public final void specularColor(TextureInfo specularColor)
     {
         extras.setSpecularTexture(specularColor);
     }
@@ -59,7 +59,7 @@ public class Kintsugi3DViewerExporter extends PBRExporter
     }
 
     @Override
-    public void finishTextures()
+    public final void finishTextures()
     {
         if (getTextureResources().getBasisResources() != null)
         {
@@ -85,7 +85,7 @@ public class Kintsugi3DViewerExporter extends PBRExporter
     }
 
     @Override
-    public void saveTextures(File outputDirectory)
+    public final void saveTextures(File outputDirectory)
     {
         super.saveTextures(outputDirectory);
 
@@ -103,7 +103,7 @@ public class Kintsugi3DViewerExporter extends PBRExporter
     }
 
     @Override
-    public Kintsugi3DViewerExtras getExtras()
+    public final Kintsugi3DViewerExtras getExtras()
     {
         return extras;
     }

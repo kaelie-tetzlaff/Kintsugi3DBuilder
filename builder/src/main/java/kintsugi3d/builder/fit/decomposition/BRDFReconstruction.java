@@ -39,7 +39,7 @@ public class BRDFReconstruction
         matrixSize = this.settings.getMaterialCount() * (this.settings.getBasisComplexity() + 1);
     }
 
-    public void execute(GraphicsStream<ReflectanceData> viewStream, SpecularDecompositionFromScratch solution, ProgressMonitor monitor)
+    public final void execute(GraphicsStream<ReflectanceData> viewStream, SpecularDecompositionFromScratch solution, ProgressMonitor monitor)
     {
         LOG.info("Building reflectance fitting matrix...");
         MatrixSystem system = buildReflectanceMatrix(viewStream, solution, monitor);

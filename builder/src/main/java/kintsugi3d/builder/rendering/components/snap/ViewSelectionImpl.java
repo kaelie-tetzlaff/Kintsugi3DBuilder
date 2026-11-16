@@ -31,7 +31,7 @@ public class ViewSelectionImpl implements ViewSelection
     }
 
     @Override
-    public ReadonlyViewSet getViewSet()
+    public final ReadonlyViewSet getViewSet()
     {
         return viewSet;
     }
@@ -43,7 +43,7 @@ public class ViewSelectionImpl implements ViewSelection
     }
 
     @Override
-    public Matrix4 getMatrixFromView(View view)
+    public final Matrix4 getMatrixFromView(View view)
     {
         if (view == null)
         {
@@ -57,7 +57,7 @@ public class ViewSelectionImpl implements ViewSelection
     }
 
     @Override
-    public Vector3 getFrustumDimensions()
+    public final Vector3 getFrustumDimensions()
     {
         View selectedView = getSelectedView();
 

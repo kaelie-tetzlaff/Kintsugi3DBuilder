@@ -60,14 +60,14 @@ public abstract class AbstractBasisFunctions implements BasisFunctions
     }
 
     @Override
-    public double getMetallicity()
+    public final double getMetallicity()
     {
         return this.metallicity;
     }
 
     @Override
-    public void contributeToFittingSystem(int valueCurrent, int valueNext, int instanceCount,
-                                          MatrixBuilderSums sums, MatrixSystem fittingSystem)
+    public final void contributeToFittingSystem(int valueCurrent, int valueNext, int instanceCount,
+                                                MatrixBuilderSums sums, MatrixSystem fittingSystem)
     {
         int kFirst = getFirstFunctionIndexForDomainValue(valueCurrent);
         int kLast = getLastFunctionIndexForDomainValue(valueCurrent);
@@ -209,7 +209,7 @@ public abstract class AbstractBasisFunctions implements BasisFunctions
     }
 
     @Override
-    public void evaluateSolution(double constantTerm, IntToDoubleFunction nonConstantSolution, ObjIntConsumer<Double> functionConsumer)
+    public final void evaluateSolution(double constantTerm, IntToDoubleFunction nonConstantSolution, ObjIntConsumer<Double> functionConsumer)
     {
         int functionCount = getFunctionCount();
 

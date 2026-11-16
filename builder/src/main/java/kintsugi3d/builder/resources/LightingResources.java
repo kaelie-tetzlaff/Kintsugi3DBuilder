@@ -56,7 +56,7 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
         this.sceneModel = sceneModel;
     }
 
-    public void initialize()
+    public final void initialize()
     {
         shadowMaps = createShadowMaps();
         shadowFramebuffer = context.buildFramebufferObject(2048, 2048)
@@ -81,7 +81,7 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
         }
     }
 
-    public void reloadShadowShader()
+    public final void reloadShadowShader()
     {
         try
         {
@@ -109,7 +109,7 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
         }
     }
 
-    public ReadonlyTexture2D<ContextType> getBackplateTexture()
+    public final ReadonlyTexture2D<ContextType> getBackplateTexture()
     {
         return backplateTexture;
     }
@@ -118,7 +118,7 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
      * Assumes ownership of the backplate texture
      * @param newBackplateTexture
      */
-    public void takeBackplateTexture(Texture2D<ContextType> newBackplateTexture)
+    public final void takeBackplateTexture(Texture2D<ContextType> newBackplateTexture)
     {
         if (this.backplateTexture != null)
         {
@@ -128,7 +128,7 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
         this.backplateTexture = newBackplateTexture;
     }
 
-    public Cubemap<ContextType> getEnvironmentMap()
+    public final Cubemap<ContextType> getEnvironmentMap()
     {
         return this.environmentMap;
     }
@@ -137,7 +137,7 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
      * Assumes ownership of the environment map resource
      * @param newEnvironmentMap
      */
-    public void takeEnvironmentMap(Cubemap<ContextType> newEnvironmentMap)
+    public final void takeEnvironmentMap(Cubemap<ContextType> newEnvironmentMap)
     {
         if (this.environmentMap != null)
         {
@@ -152,13 +152,13 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
      * Does not take ownership of this buffer.
      * @param positionBuffer
      */
-    public void setShadowCastingPositionBuffer(ReadonlyVertexBuffer<ContextType> positionBuffer)
+    public final void setShadowCastingPositionBuffer(ReadonlyVertexBuffer<ContextType> positionBuffer)
     {
         shadowDrawable.addVertexBuffer("position", positionBuffer);
         this.shadowCastingPositionBuffer = positionBuffer;
     }
 
-    public Matrix4 getLightProjection(int lightIndex)
+    public final Matrix4 getLightProjection(int lightIndex)
     {
         Matrix4 lightMatrix = sceneModel.getLightModelViewMatrix(lightIndex);
 
@@ -193,12 +193,12 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
         return Matrix4.perspective(fov, 1.0f, nearPlane, farPlane);
     }
 
-    public ReadonlyTexture3D<ContextType> getShadowMaps()
+    public final ReadonlyTexture3D<ContextType> getShadowMaps()
     {
         return shadowMaps;
     }
 
-    public void refreshShadowMaps()
+    public final void refreshShadowMaps()
     {
         // Too many lights; need to re-allocate shadow maps
         if (shadowMaps.getDepth() < sceneModel.getLightingModel().getLightCount())
@@ -237,12 +237,12 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
         shadowDrawable.draw(PrimitiveMode.TRIANGLES, shadowFramebuffer);
     }
 
-    public ReadonlyTexture2D<ContextType> getScreenSpaceDepthTexture()
+    public final ReadonlyTexture2D<ContextType> getScreenSpaceDepthTexture()
     {
         return screenSpaceDepthFBO.getDepthAttachmentTexture();
     }
 
-    public void refreshScreenSpaceDepthFBO(Matrix4 view, Matrix4 projection)
+    public final void refreshScreenSpaceDepthFBO(Matrix4 view, Matrix4 projection)
     {
         context.getState().disableBackFaceCulling();
 
@@ -259,7 +259,7 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (this.backplateTexture != null)
         {

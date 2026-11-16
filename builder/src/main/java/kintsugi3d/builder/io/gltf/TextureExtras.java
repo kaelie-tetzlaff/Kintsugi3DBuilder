@@ -21,27 +21,27 @@ public class TextureExtras
 
     private final Map<Integer, Integer> lods = new HashMap<>(1);
 
-    public void setLodImageIndex(int resolution, int index)
+    public final void setLodImageIndex(int resolution, int index)
     {
         lods.put(resolution, index);
     }
 
-    public Integer getLodImageIndex(int resolution)
+    public final Integer getLodImageIndex(int resolution)
     {
         return lods.get(resolution);
     }
 
-    public Map<Integer, Integer> getLods()
+    public final Map<Integer, Integer> getLods()
     {
         return Collections.unmodifiableMap(lods);
     }
 
-    public Integer getBaseRes()
+    public final Integer getBaseRes()
     {
         return baseRes;
     }
 
-    public void setBaseRes(Integer baseRes)
+    public final void setBaseRes(Integer baseRes)
     {
         this.baseRes = baseRes;
     }

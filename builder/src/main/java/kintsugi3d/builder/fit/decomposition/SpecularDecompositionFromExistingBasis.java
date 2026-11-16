@@ -24,7 +24,7 @@ public class SpecularDecompositionFromExistingBasis extends SpecularDecompositio
     }
 
     @Override
-    public MaterialBasis getMaterialBasis()
+    public final MaterialBasis getMaterialBasis()
     {
         return materialBasis;
     }

@@ -27,13 +27,13 @@ public class ColorArrayImage extends ColorArrayList implements ColorImage
     }
 
     @Override
-    public int getWidth()
+    public final int getWidth()
     {
         return width;
     }
 
     @Override
-    public int getHeight()
+    public final int getHeight()
     {
         return height;
     }

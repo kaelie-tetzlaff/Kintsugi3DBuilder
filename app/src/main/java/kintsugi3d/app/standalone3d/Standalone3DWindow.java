@@ -66,57 +66,57 @@ public class Standalone3DWindow<ContextType extends Context<ContextType>> implem
     }
 
     @Override
-    public void show()
+    public final void show()
     {
         Platform.runLater(stage::show);
     }
 
     @Override
-    public void hide()
+    public final void hide()
     {
         Platform.runLater(stage::hide);
     }
 
     @Override
-    public void focus()
+    public final void focus()
     {
         Platform.runLater(stage::requestFocus);
     }
 
     @Override
-    public boolean isWindowClosing()
+    public final boolean isWindowClosing()
     {
         return windowClosing;
     }
 
     @Override
-    public void requestWindowClose()
+    public final void requestWindowClose()
     {
         windowClosing = true;
         canvas.requestTerminate();
     }
 
     @Override
-    public void cancelWindowClose()
+    public final void cancelWindowClose()
     {
         windowClosing = false;
         canvas.cancelTerminate();
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         Platform.runLater(stage::close);
     }
 
     @Override
-    public void setWindowTitle(String title)
+    public final void setWindowTitle(String title)
     {
         Platform.runLater(() -> stage.setTitle(title));
     }
 
     @Override
-    public void setSize(int width, int height)
+    public final void setSize(int width, int height)
     {
         Platform.runLater(() ->
         {
@@ -127,7 +127,7 @@ public class Standalone3DWindow<ContextType extends Context<ContextType>> implem
     }
 
     @Override
-    public void setPosition(int x, int y)
+    public final void setPosition(int x, int y)
     {
         Platform.runLater(() ->
         {
@@ -137,13 +137,13 @@ public class Standalone3DWindow<ContextType extends Context<ContextType>> implem
     }
 
     @Override
-    public boolean isFocused()
+    public final boolean isFocused()
     {
         return focused;
     }
 
     @Override
-    public PollableCanvas3D<? extends Context<?>> getCanvas()
+    public final PollableCanvas3D<? extends Context<?>> getCanvas()
     {
         return framebufferView.getCanvas();
     }

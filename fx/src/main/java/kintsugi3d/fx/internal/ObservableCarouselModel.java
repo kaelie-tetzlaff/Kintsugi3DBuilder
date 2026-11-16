@@ -53,37 +53,37 @@ public class ObservableCarouselModel implements CarouselModel
      * @return
      */
     @Override
-    public ObservableList<CarouselItem> getCarouselItems()
+    public final ObservableList<CarouselItem> getCarouselItems()
     {
         return FXCollections.unmodifiableObservableList(carouselItems);
     }
 
-    public double getCarouselHeight()
+    public final double getCarouselHeight()
     {
         return carouselHeight.get();
     }
 
-    public DoubleProperty carouselHeightProperty()
+    public final DoubleProperty carouselHeightProperty()
     {
         return carouselHeight;
     }
 
-    public double getCarouselCardHeight()
+    public final double getCarouselCardHeight()
     {
         return carouselCardHeight.get();
     }
 
-    public DoubleProperty carouselCardHeightProperty()
+    public final DoubleProperty carouselCardHeightProperty()
     {
         return carouselCardHeight;
     }
 
-    public double getCarouselCardWidth()
+    public final double getCarouselCardWidth()
     {
         return carouselCardWidth.get();
     }
 
-    public DoubleBinding carouselCardWidthProperty()
+    public final DoubleBinding carouselCardWidthProperty()
     {
         return carouselCardWidth;
     }
@@ -95,7 +95,7 @@ public class ObservableCarouselModel implements CarouselModel
      * @param shader
      */
     @Override
-    public void addToCarousel(ShaderInfo shader)
+    public final void addToCarousel(ShaderInfo shader)
     {
         // Prevents duplicate shaders in carousel
         // If the shaders don't match then shader is sent to carousel
@@ -130,7 +130,7 @@ public class ObservableCarouselModel implements CarouselModel
      * @param shader
      */
     @Override
-    public void removeFromCarousel(ShaderInfo shader)
+    public final void removeFromCarousel(ShaderInfo shader)
     {
         if (carouselItems.stream().anyMatch(item -> Objects.equals(item.getShader(), shader)))
         {
@@ -145,7 +145,7 @@ public class ObservableCarouselModel implements CarouselModel
      * Clears all the shaders in carouselItems list.
      */
     @Override
-    public void clearCarousel()
+    public final void clearCarousel()
     {
         if (!carouselItems.isEmpty())
         {
@@ -194,7 +194,7 @@ public class ObservableCarouselModel implements CarouselModel
 
     }
 
-    public void moveCardLeft(CarouselCardController card)
+    public final void moveCardLeft(CarouselCardController card)
     {
         CarouselItem moveCard = findCardByShader(card.getShader());
         CarouselController carouselController = card.getCarouselController();
@@ -209,7 +209,7 @@ public class ObservableCarouselModel implements CarouselModel
         }
     }
 
-    public void moveCardRight(CarouselCardController card)
+    public final void moveCardRight(CarouselCardController card)
     {
         CarouselItem moveCard = findCardByShader(card.getShader());
         CarouselController carouselController = card.getCarouselController();

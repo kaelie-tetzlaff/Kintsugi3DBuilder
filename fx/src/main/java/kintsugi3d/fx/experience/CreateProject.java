@@ -26,13 +26,13 @@ public class CreateProject extends ExperienceBase
     private static final String PRIMARY_VIEW_SELECT = "/fxml/modals/createnewproject/ViewSelect.fxml";
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return "Create Project";
     }
 
     @Override
-    protected void open() throws IOException
+    protected final void open() throws IOException
     {
         // selection and Metashape import
         var metashape = buildPagedModal()
@@ -70,7 +70,7 @@ public class CreateProject extends ExperienceBase
             .finish();
     }
 
-    public void tryOpenHotSwap()
+    public final void tryOpenHotSwap()
     {
         if (!getModal().isOpen())
         {

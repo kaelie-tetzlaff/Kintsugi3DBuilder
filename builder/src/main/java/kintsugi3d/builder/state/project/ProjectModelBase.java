@@ -214,7 +214,7 @@ public abstract class ProjectModelBase<
     protected abstract LightGroupType constructLightGroupSetting();
     protected abstract ObjectPoseType constructObjectPoseSetting();
 
-    public EnvironmentType getNoEnvironment()
+    public final EnvironmentType getNoEnvironment()
     {
         return this.noEnvironment;
     }

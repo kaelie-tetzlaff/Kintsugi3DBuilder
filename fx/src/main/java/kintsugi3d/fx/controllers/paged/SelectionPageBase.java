@@ -31,32 +31,32 @@ public abstract class SelectionPageBase<T, ControllerType extends SelectionPageC
     }
 
     @Override
-    public String getPrompt()
+    public final String getPrompt()
     {
         return prompt;
     }
 
     @Override
-    public void setPrompt(String prompt)
+    public final void setPrompt(String prompt)
     {
         this.prompt = prompt;
     }
 
     @Override
-    public void initController()
+    public final void initController()
     {
         this.getController().setPage(this);
         this.getController().initPage();
     }
 
     @Override
-    public Page<? super T, ?> getChoicePage(String choiceLabel)
+    public final Page<? super T, ?> getChoicePage(String choiceLabel)
     {
         return choicePages.get(choiceLabel);
     }
 
     @Override
-    public void addChoice(String choiceLabel, Page<? super T, ?> page)
+    public final void addChoice(String choiceLabel, Page<? super T, ?> page)
     {
         choicePages.put(choiceLabel, page);
 
@@ -68,13 +68,13 @@ public abstract class SelectionPageBase<T, ControllerType extends SelectionPageC
     }
 
     @Override
-    public void selectChoice(String choiceLabel)
+    public final void selectChoice(String choiceLabel)
     {
         setNextPage(getChoicePage(choiceLabel));
     }
 
     @Override
-    public Set<Entry<String, Page<? super T, ?>>> getChoices()
+    public final Set<Entry<String, Page<? super T, ?>>> getChoices()
     {
         return Collections.unmodifiableSet(choicePages.entrySet());
     }

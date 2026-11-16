@@ -63,7 +63,7 @@ public class BlenderExporter extends MaterialExporter
     }
 
     @Override
-    protected void postExport()
+    protected final void postExport()
     {
         File model = new File(outputPath, getFilename());
         File normal = new File(outputPath, getTextureFilename(StandardTexture.NORMAL_MAP.getDetails().name, getTextureFileFormat()));
@@ -141,7 +141,7 @@ public class BlenderExporter extends MaterialExporter
 
     // Grab the output directory after the super call
     @Override
-    public void saveTextures(File outputDirectory)
+    public final void saveTextures(File outputDirectory)
     {
         super.saveTextures(outputDirectory);
 

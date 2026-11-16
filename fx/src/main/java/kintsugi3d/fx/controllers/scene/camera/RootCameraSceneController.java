@@ -44,7 +44,7 @@ public class RootCameraSceneController
 
     private ObservableProjectModel projectModel;
 
-    public void injectDependencies(ObservableCameraModel cameraModel, ObservableProjectModel injectedProjectModel)
+    public final void injectDependencies(ObservableCameraModel cameraModel, ObservableProjectModel injectedProjectModel)
     {
         this.projectModel = injectedProjectModel;
 
@@ -166,7 +166,7 @@ public class RootCameraSceneController
     }
 
     @FXML
-    void moveDOWNButton()
+    final void moveDOWNButton()
     {
         int i = getCameraSelectionModel().getSelectedIndex();
         List<ObservableCameraSettings> cameraList = projectModel.getCameraList();
@@ -178,7 +178,7 @@ public class RootCameraSceneController
     }
 
     @FXML
-    void lockCameraButton()
+    final void lockCameraButton()
     {
         boolean newValue = !getCameraSelectionModel().getSelectedItem().isLocked();
         getCameraSelectionModel().getSelectedItem().setLocked(newValue);
@@ -187,14 +187,14 @@ public class RootCameraSceneController
     }
 
     @FXML
-    void keyframeCameraButton()
+    final void keyframeCameraButton()
     {
         //TODO
         LOG.debug("TODO: keyframe added for {}", getCameraSelectionModel().getSelectedItem());
     }
 
     @FXML
-    void deleteCameraButton()
+    final void deleteCameraButton()
     {
         int selectedIndex = getCameraSelectionModel().getSelectedIndex();
         if (selectedIndex != 0)

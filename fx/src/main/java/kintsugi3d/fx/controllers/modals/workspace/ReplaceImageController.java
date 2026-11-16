@@ -45,10 +45,10 @@ public class ReplaceImageController extends DataReceiverPageControllerBase<Image
     private ImageReplacer data;
 
     @Override
-    public Region getRootNode() { return root; }
+    public final Region getRootNode() { return root; }
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         newFileButton.pseudoClassStateChanged(PseudoClass.getPseudoClass("dark-button"), true);
 
@@ -66,7 +66,7 @@ public class ReplaceImageController extends DataReceiverPageControllerBase<Image
     }
 
     @Override
-    public boolean tryConfirm()
+    public final boolean tryConfirm()
     {
         // Texture replacement must happen on graphics thread.
         Rendering.runLater(() ->
@@ -115,7 +115,7 @@ public class ReplaceImageController extends DataReceiverPageControllerBase<Image
     }
 
     @Override
-    public void receiveData(ImageReplacer newData)
+    public final void receiveData(ImageReplacer newData)
     {
         this.data = newData;
 
@@ -126,7 +126,7 @@ public class ReplaceImageController extends DataReceiverPageControllerBase<Image
     }
 
     @FXML
-    public void openFileBrowser()
+    public final void openFileBrowser()
     {
         data.setNewImage(replacementFileChooser.showOpenDialog(root.getScene().getWindow()));
         updateNewTexture();

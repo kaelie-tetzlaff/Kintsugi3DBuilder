@@ -38,24 +38,24 @@ public abstract class LogMessageAppenderBase extends AbstractAppender
         super(name, filter, layout, true, Property.EMPTY_ARRAY);
     }
 
-    public boolean isLevelAvailable(Level level)
+    public final boolean isLevelAvailable(Level level)
     {
         return LOG.isEnabledForLevel(level);
     }
 
     public abstract List<LogMessage> getMessages();
 
-    public void addListener(LogMessageListener listener)
+    public final void addListener(LogMessageListener listener)
     {
         listeners.add(listener);
     }
 
-    public void removeListener(LogMessageListener listener)
+    public final void removeListener(LogMessageListener listener)
     {
         listeners.remove(listener);
     }
 
-    protected void dispatchEvents(LogMessage message)
+    protected final void dispatchEvents(LogMessage message)
     {
         for (LogMessageListener listener : listeners)
         {

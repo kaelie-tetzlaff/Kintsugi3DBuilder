@@ -14,7 +14,9 @@ package kintsugi3d.builder.resources;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.rendering.components.RenderingSubject;
 import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
-import kintsugi3d.gl.core.*;
+import kintsugi3d.gl.core.Context;
+import kintsugi3d.gl.core.Cubemap;
+import kintsugi3d.gl.core.Texture2D;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.EncodableColorImage;
@@ -74,7 +76,7 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
         this.backplateResource = new AsyncLoadedResource<>(new LoadableBackplateTexture<>(context, lightingResources));
     }
 
-    public void update()
+    public final void update()
     {
         // Delegate environment map consumption to AsyncLoadedResource
         environmentResource.consume(this.progressMonitor);
@@ -115,32 +117,32 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
     }
 
     @Override
-    public void requestFragmentShader(File shaderFile)
+    public final void requestFragmentShader(File shaderFile)
     {
         this.desiredShaderFile = shaderFile;
     }
 
     @Override
-    public void requestFragmentShader(File shaderFile, Supplier<Map<String, Optional<Object>>> extraDefinesFactory)
+    public final void requestFragmentShader(File shaderFile, Supplier<Map<String, Optional<Object>>> extraDefinesFactory)
     {
         this.desiredShaderFile = shaderFile;
         this.shaderDefinesFactory = extraDefinesFactory;
     }
 
     @Override
-    public EncodableColorImage loadEnvironmentMap(File environmentFile) throws FileNotFoundException
+    public final EncodableColorImage loadEnvironmentMap(File environmentFile) throws FileNotFoundException
     {
         return this.environmentResource.load(environmentFile, this.progressMonitor);
     }
 
     @Override
-    public void loadBackplate(File backplateFile) throws FileNotFoundException
+    public final void loadBackplate(File backplateFile) throws FileNotFoundException
     {
         this.backplateResource.load(backplateFile, null);
     }
 
     @Override
-    public void setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
+    public final void setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
     {
         this.newLinearLuminanceValues = linearLuminanceValues.clone();
         this.newEncodedLuminanceValues = encodedLuminanceValues.clone();
@@ -148,7 +150,7 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
     }
 
     @Override
-    public void clearTonemapping()
+    public final void clearTonemapping()
     {
         this.newLinearLuminanceValues = null;
         this.newEncodedLuminanceValues = null;
@@ -156,7 +158,7 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
     }
 
     @Override
-    public void setLightCalibration(Vector3 lightCalibration)
+    public final void setLightCalibration(Vector3 lightCalibration)
     {
         this.newLightCalibration = lightCalibration;
         this.newLightCalibrationAvailable = true;

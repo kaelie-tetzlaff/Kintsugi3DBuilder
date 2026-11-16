@@ -81,19 +81,19 @@ class NativeShortVectorBuffer implements NativeVectorBuffer
     }
 
     @Override
-    public int getDimensions()
+    public final int getDimensions()
     {
         return dimensions;
     }
 
     @Override
-    public int getCount()
+    public final int getCount()
     {
         return count;
     }
 
     @Override
-    public Short get(int index, int dimension)
+    public final Short get(int index, int dimension)
     {
         if (index < 0)
         {
@@ -114,7 +114,7 @@ class NativeShortVectorBuffer implements NativeVectorBuffer
         return this.buffer.asShortBuffer().get(index * this.dimensions + dimension);
     }
 
-    public void setPrimitive(int index, int dimension, short value)
+    public final void setPrimitive(int index, int dimension, short value)
     {
         if (index < 0)
         {
@@ -136,19 +136,19 @@ class NativeShortVectorBuffer implements NativeVectorBuffer
     }
 
     @Override
-    public void set(int index, int dimension, Number value)
+    public final void set(int index, int dimension, Number value)
     {
         this.setPrimitive(index, dimension, value.shortValue());
     }
 
     @Override
-    public ByteBuffer getBuffer()
+    public final ByteBuffer getBuffer()
     {
         return buffer;
     }
 
     @Override
-    public NativeDataType getDataType()
+    public final NativeDataType getDataType()
     {
         return NativeDataType.SHORT;
     }

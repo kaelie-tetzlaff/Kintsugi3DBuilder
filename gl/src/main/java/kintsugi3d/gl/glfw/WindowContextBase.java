@@ -33,7 +33,7 @@ public abstract class WindowContextBase<ContextType extends WindowContextBase<Co
     }
 
     @Override
-    public void makeContextCurrent()
+    public final void makeContextCurrent()
     {
         glfwMakeContextCurrent(handle);
 
@@ -43,12 +43,12 @@ public abstract class WindowContextBase<ContextType extends WindowContextBase<Co
         }
     }
 
-    public void swapDefaultFramebuffer()
+    public final void swapDefaultFramebuffer()
     {
         glfwSwapBuffers(handle);
     }
 
-    public FramebufferSize getDefaultFramebufferSize()
+    public final FramebufferSize getDefaultFramebufferSize()
     {
         IntBuffer widthBuffer = BufferUtils.createByteBuffer(4).asIntBuffer();
         IntBuffer heightBuffer = BufferUtils.createByteBuffer(4).asIntBuffer();
@@ -59,7 +59,7 @@ public abstract class WindowContextBase<ContextType extends WindowContextBase<Co
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         glfwDestroyWindow(handle);
     }

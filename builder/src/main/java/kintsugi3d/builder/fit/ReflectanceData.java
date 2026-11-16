@@ -35,47 +35,47 @@ public class ReflectanceData
         this.halfwayGeomWeightNDotL = halfwayGeomWeightNDotL;
     }
 
-    public float getRed(int p)
+    public final float getRed(int p)
     {
         return colorAndVisibility.get(p, 0);
     }
 
-    public float getGreen(int p)
+    public final float getGreen(int p)
     {
         return colorAndVisibility.get(p, 1);
     }
 
-    public float getBlue(int p)
+    public final float getBlue(int p)
     {
         return colorAndVisibility.get(p, 2);
     }
 
-    public float getVisibility(int p)
+    public final float getVisibility(int p)
     {
         return colorAndVisibility.get(p, 3);
     }
 
-    public float getHalfwayIndex(int p)
+    public final float getHalfwayIndex(int p)
     {
         return halfwayGeomWeightNDotL.get(p, 0);
     }
 
-    public float getGeomRatio(int p)
+    public final float getGeomRatio(int p)
     {
         return halfwayGeomWeightNDotL.get(p, 1);
     }
 
-    public float getAdditionalWeight(int p)
+    public final float getAdditionalWeight(int p)
     {
         return halfwayGeomWeightNDotL.get(p, 2);
     }
 
-    public float getNDotL(int p)
+    public final float getNDotL(int p)
     {
         return halfwayGeomWeightNDotL.get(p, 3);
     }
 
-    public int size()
+    public final int size()
     {
         return colorAndVisibility.size();
     }

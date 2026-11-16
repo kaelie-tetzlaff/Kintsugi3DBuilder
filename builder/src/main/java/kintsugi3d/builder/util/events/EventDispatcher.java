@@ -32,18 +32,18 @@ public class EventDispatcher<ListenerType, EventType> implements EventListeners<
     }
 
     @Override
-    public void register(ListenerType listener)
+    public final void register(ListenerType listener)
     {
         listeners.add(listener);
     }
 
     @Override
-    public void unregister(ListenerType listener)
+    public final void unregister(ListenerType listener)
     {
         listeners.remove(listener);
     }
 
-    public void notify(EventType event)
+    public final void notify(EventType event)
     {
         synchronized(listeners)
         {

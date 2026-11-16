@@ -28,27 +28,27 @@ class ImageSelectionPreview
         this.cache = cache;
     }
 
-    public ImageView getImageView()
+    public final ImageView getImageView()
     {
         return imageView;
     }
 
-    public String getImageViewText()
+    public final String getImageViewText()
     {
         return imageViewText.getText();
     }
 
-    public void setImageViewText(String txt)
+    public final void setImageViewText(String txt)
     {
         imageViewText.setText(txt);
     }
 
-    public Image retrieveFromCache(String imageName)
+    public final Image retrieveFromCache(String imageName)
     {
         return cache.retrieveFromCache(imageName);
     }
 
-    public void addToCache(String imageName, Image image)
+    public final void addToCache(String imageName, Image image)
     {
 
         // If the image is already in the cache, then remove it from the queue

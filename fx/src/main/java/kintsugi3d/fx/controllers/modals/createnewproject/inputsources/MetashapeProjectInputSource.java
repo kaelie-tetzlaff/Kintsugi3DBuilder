@@ -30,13 +30,13 @@ public class MetashapeProjectInputSource extends NonValidatedInputSourceBase
     }
 
     @Override
-    public File getMasksDirectory()
+    public final File getMasksDirectory()
     {
         return model.getChunk().getMasksDirectory();
     }
 
     @Override
-    public File getInitialMasksDirectory()
+    public final File getInitialMasksDirectory()
     {
         File masksDir = model.getChunk().getMasksDirectory();
         //TODO: might change this because it dumps the user deep into metashape project structure
@@ -44,38 +44,38 @@ public class MetashapeProjectInputSource extends NonValidatedInputSourceBase
     }
 
     @Override
-    public boolean hasProjectMasks()
+    public final boolean hasProjectMasks()
     {
         return model.getChunk().getMasksDirectory() != null;
     }
 
     @Override
-    public void setMasksDirectory(File file)
+    public final void setMasksDirectory(File file)
     {
         model.getChunk().setMasksDirectoryOverride(file);
     }
 
-    public MetashapeProjectInputSource setMetashapeModel(MetashapeModel model)
+    public final MetashapeProjectInputSource setMetashapeModel(MetashapeModel model)
     {
         this.model = model;
         return this;
     }
 
     @Override
-    public File getInitialPhotosDirectory()
+    public final File getInitialPhotosDirectory()
     {
         return new File(model.getChunk().getParentDocument().getPsxFilePath()).getParentFile();
     }
 
     @Override
-    public MetashapeProjectInputSource overrideFullResImageDirectory(File directory)
+    public final MetashapeProjectInputSource overrideFullResImageDirectory(File directory)
     {
         model.getLoadPreferences().setFullResOverride(directory);
         return this;
     }
 
     @Override
-    public ValidatedInputSource validate() throws FileNotFoundException, MissingImagesException
+    public final ValidatedInputSource validate() throws FileNotFoundException, MissingImagesException
     {
         return new ValidatedMetashapeProjectInputSource(this);
     }
@@ -92,7 +92,7 @@ public class MetashapeProjectInputSource extends NonValidatedInputSourceBase
         }
 
         @Override
-        public void confirm(File projectFileToSave)
+        public final void confirm(File projectFileToSave)
         {
             original.model.getLoadPreferences().setOrientationViewName(getViewSelection());
             original.model.getLoadPreferences().setOrientationViewRotateDegrees(getViewRotation());

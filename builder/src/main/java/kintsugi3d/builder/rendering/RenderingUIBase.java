@@ -39,7 +39,7 @@ public abstract class RenderingUIBase implements RenderingUI
 
     protected abstract boolean isIconified();
 
-    protected void wakeUp()
+    protected final void wakeUp()
     {
         if (getRequestQueue().isEmpty())
         {
@@ -62,7 +62,7 @@ public abstract class RenderingUIBase implements RenderingUI
          */
         private final Object waitForRenderingWork = new Object();
 
-        void wakeUp()
+        final void wakeUp()
         {
             synchronized (waitForRenderingWork)
             {
@@ -71,7 +71,7 @@ public abstract class RenderingUIBase implements RenderingUI
         }
 
         @Override
-        public void pollEvents()
+        public final void pollEvents()
         {
             synchronized (waitForRenderingWork)
             {
@@ -102,7 +102,7 @@ public abstract class RenderingUIBase implements RenderingUI
         }
 
         @Override
-        public boolean shouldTerminate()
+        public final boolean shouldTerminate()
         {
             return false;
         }

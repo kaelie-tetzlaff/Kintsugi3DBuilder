@@ -31,7 +31,7 @@ public class ObservableEnvironmentModel extends EnvironmentModelFromSettings
     private final Property<EncodableColorImage> loadedEnvironmentMapImage = new SimpleObjectProperty<>();
 
     @Override
-    protected EnvironmentSettings getEnvironmentSettings()
+    protected final EnvironmentSettings getEnvironmentSettings()
     {
         if (selected == null || selected.getValue() == null)
         {
@@ -43,25 +43,25 @@ public class ObservableEnvironmentModel extends EnvironmentModelFromSettings
         }
     }
 
-    public void setSelected(ObservableValue<ObservableEnvironmentSettings> selected)
+    public final void setSelected(ObservableValue<ObservableEnvironmentSettings> selected)
     {
         this.selected = selected;
         this.selected.addListener(settingChange);
     }
 
     @Override
-    public boolean isEnabled()
+    public final boolean isEnabled()
     {
         return selected != null && selected.getValue() != null;
     }
 
     @Override
-    protected void onEnvironmentMapImageLoaded(EncodableColorImage environmentMapImage)
+    protected final void onEnvironmentMapImageLoaded(EncodableColorImage environmentMapImage)
     {
         loadedEnvironmentMapImage.setValue(environmentMapImage);
     }
 
-    public ObservableValue<EncodableColorImage> loadedEnvironmentMapImageProperty()
+    public final ObservableValue<EncodableColorImage> loadedEnvironmentMapImageProperty()
     {
         return loadedEnvironmentMapImage;
     }

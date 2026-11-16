@@ -77,7 +77,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         }
 
         @Override
-        public boolean equals(Object obj)
+        public final boolean equals(Object obj)
         {
             if (obj instanceof NormalTexCoordPair)
             {
@@ -91,7 +91,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         }
 
         @Override
-        public int hashCode()
+        public final int hashCode()
         {
             int result = normalIndex;
             result = 31 * result + texCoordIndex;

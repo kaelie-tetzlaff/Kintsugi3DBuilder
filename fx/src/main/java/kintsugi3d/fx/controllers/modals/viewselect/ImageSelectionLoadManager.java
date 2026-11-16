@@ -33,7 +33,7 @@ class ImageSelectionLoadManager
         this.imageLoaderFactory = imageLoaderFactory;
     }
 
-    void loadImage(String imageName)
+    final void loadImage(String imageName)
     {
         ImageSelectionLoader newImageLoader = imageLoaderFactory.apply(imageName);
 
@@ -85,7 +85,7 @@ class ImageSelectionLoadManager
         }
     }
 
-    void cancelLoad()
+    final void cancelLoad()
     {
         Thread queuedThreadToJoin = null;
 

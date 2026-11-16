@@ -42,18 +42,18 @@ public class NonNegativeWeightOptimization
         this(sampleCount, weightCount, Collections.emptyList(), Collections.emptyList());
     }
 
-    public <S, T> void buildMatrices(GraphicsStream<S> viewStream, LeastSquaresModel<S, T> leastSquaresModel, IntConsumer sampleValidator)
+    public final <S, T> void buildMatrices(GraphicsStream<S> viewStream, LeastSquaresModel<S, T> leastSquaresModel, IntConsumer sampleValidator)
     {
         matrixBuilder.buildMatrices(viewStream, leastSquaresModel, sampleValidator);
     }
 
-    public <S, T> void buildMatrices(GraphicsStream<S> viewStream, LeastSquaresModel<S, T> leastSquaresModel, IntConsumer sampleValidator,
-        int rangeStart, int rangeEnd)
+    public final <S, T> void buildMatrices(GraphicsStream<S> viewStream, LeastSquaresModel<S, T> leastSquaresModel, IntConsumer sampleValidator,
+                                           int rangeStart, int rangeEnd)
     {
         matrixBuilder.buildMatrices(viewStream, leastSquaresModel, sampleValidator, rangeStart, rangeEnd);
     }
 
-    public void dampenWithPreviousSolution(double dampingFactor, IntFunction<IntToDoubleFunction> previousSolution)
+    public final void dampenWithPreviousSolution(double dampingFactor, IntFunction<IntToDoubleFunction> previousSolution)
     {
         if (dampingFactor > 0.0)
         {
@@ -72,8 +72,8 @@ public class NonNegativeWeightOptimization
         }
     }
 
-    public void optimizeWeights(IntPredicate areWeightsValid, BiConsumer<Integer, SimpleMatrix> weightSolutionConsumer,
-                                double toleranceScale, int systemCount)
+    public final void optimizeWeights(IntPredicate areWeightsValid, BiConsumer<Integer, SimpleMatrix> weightSolutionConsumer,
+                                      double toleranceScale, int systemCount)
     {
         for (int p = 0; p < systemCount; p++)
         {
@@ -96,7 +96,7 @@ public class NonNegativeWeightOptimization
         }
     }
 
-    public void optimizeWeights(IntPredicate areWeightsValid, BiConsumer<Integer, SimpleMatrix> weightSolutionConsumer)
+    public final void optimizeWeights(IntPredicate areWeightsValid, BiConsumer<Integer, SimpleMatrix> weightSolutionConsumer)
     {
         optimizeWeights(areWeightsValid, weightSolutionConsumer, DEFAULT_TOLERANCE_SCALE, matrixBuilder.systemCount);
     }

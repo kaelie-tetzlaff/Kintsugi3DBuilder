@@ -64,7 +64,7 @@ public class KNNViewWeightGenerator implements ViewWeightGenerator
     }
 
     @Override
-    public float[] generateWeights(ReadonlyImageBasedGraphicsResources<? extends Context<?>> resources, Iterable<View> activeViewList, Matrix4 targetView)
+    public final float[] generateWeights(ReadonlyImageBasedGraphicsResources<? extends Context<?>> resources, Iterable<View> activeViewList, Matrix4 targetView)
     {
         float[] viewWeights = new float[resources.getViewSet().getGPUBufferSize()];
 

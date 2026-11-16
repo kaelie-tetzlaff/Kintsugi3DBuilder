@@ -52,7 +52,7 @@ public class Lights<ContextType extends Context<ContextType>> extends ShaderComp
     }
 
     @Override
-    public void initialize()
+    public final void initialize()
     {
         super.initialize();
 
@@ -64,7 +64,7 @@ public class Lights<ContextType extends Context<ContextType>> extends ShaderComp
     }
 
     @Override
-    protected ProgramObject<ContextType> createProgram() throws IOException
+    protected final ProgramObject<ContextType> createProgram() throws IOException
     {
         return getContext().getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File(new File(new File("shaders"), "common"), "imgspace.vert"))
@@ -73,13 +73,13 @@ public class Lights<ContextType extends Context<ContextType>> extends ShaderComp
     }
 
     @Override
-    protected Map<String, VertexBuffer<ContextType>> createVertexBuffers()
+    protected final Map<String, VertexBuffer<ContextType>> createVertexBuffers()
     {
         return Map.of("position", getContext().createRectangle());
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         if (this.sceneModel.getSettingsModel().getBoolean("relightingEnabled")
             && this.sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled"))

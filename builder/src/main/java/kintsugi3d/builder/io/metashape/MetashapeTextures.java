@@ -39,7 +39,7 @@ public class MetashapeTextures implements TextureSupplier
     }
 
     @Override
-    public @Nullable Map<String, File> getTextures()
+    public final @Nullable Map<String, File> getTextures()
     {
         try
         {

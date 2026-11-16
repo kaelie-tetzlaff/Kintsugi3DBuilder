@@ -80,77 +80,77 @@ public class TestingProjectModel extends ProjectModelBase<SerializableCameraSett
 
     @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     @Override
-    public List<SerializableCameraSettings> getCameraList()
+    public final List<SerializableCameraSettings> getCameraList()
     {
         return cameraList;
     }
 
     @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     @Override
-    public List<SerializableEnvironmentSettings> getEnvironmentList()
+    public final List<SerializableEnvironmentSettings> getEnvironmentList()
     {
         return environmentList;
     }
 
     @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     @Override
-    public List<SerializableLightGroupSettings<SerializableLightSettings>> getLightGroupList()
+    public final List<SerializableLightGroupSettings<SerializableLightSettings>> getLightGroupList()
     {
         return lightList;
     }
 
     @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     @Override
-    public List<SerializableObjectPoseSettings> getObjectPoseList()
+    public final List<SerializableObjectPoseSettings> getObjectPoseList()
     {
         return objectList;
     }
 
     @Override
-    protected SerializableCameraSettings constructCameraSetting()
+    protected final SerializableCameraSettings constructCameraSetting()
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    protected SerializableEnvironmentSettings constructEnvironmentSetting()
+    protected final SerializableEnvironmentSettings constructEnvironmentSetting()
     {
         return new ObservableEnvironmentSettings();
     }
 
     @Override
-    protected SerializableLightGroupSettings<SerializableLightSettings> constructLightGroupSetting()
+    protected final SerializableLightGroupSettings<SerializableLightSettings> constructLightGroupSetting()
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    protected SerializableObjectPoseSettings constructObjectPoseSetting()
+    protected final SerializableObjectPoseSettings constructObjectPoseSetting()
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public File getColorCheckerFile()
+    public final File getColorCheckerFile()
     {
         return colorCheckerFile;
     }
 
     @Override
-    public void setColorCheckerFile(File colorCheckerFile)
+    public final void setColorCheckerFile(File colorCheckerFile)
     {
         this.colorCheckerFile = colorCheckerFile;
     }
 
     @Override
-    public void error(String message, Throwable e)
+    public final void error(String message, Throwable e)
     {
         errors.add(new ErrorMessage(message, e));
         LOG.error(message, e);
     }
 
     @Override
-    public void warn(String message, Throwable e)
+    public final void warn(String message, Throwable e)
     {
         warnings.add(new ErrorMessage(message, e));
         LOG.warn(message, e);
@@ -162,13 +162,13 @@ public class TestingProjectModel extends ProjectModelBase<SerializableCameraSett
     }
 
     @Override
-    public void confirm(String title, String header, String message, Runnable onConfirm)
+    public final void confirm(String title, String header, String message, Runnable onConfirm)
     {
         new Thread(onConfirm).start();
     }
 
     @Override
-    public void confirmClose(String text, Runnable onClose)
+    public final void confirmClose(String text, Runnable onClose)
     {
         new Thread(onClose).start();
     }
@@ -178,17 +178,17 @@ public class TestingProjectModel extends ProjectModelBase<SerializableCameraSett
     {
     }
 
-    public List<ErrorMessage> getErrors()
+    public final List<ErrorMessage> getErrors()
     {
         return Collections.unmodifiableList(errors);
     }
 
-    public List<ErrorMessage> getWarnings()
+    public final List<ErrorMessage> getWarnings()
     {
         return Collections.unmodifiableList(warnings);
     }
 
-    public void clearErrorsAndWarnings()
+    public final void clearErrorsAndWarnings()
     {
         errors.clear();
         warnings.clear();

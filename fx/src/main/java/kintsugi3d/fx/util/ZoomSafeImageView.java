@@ -175,127 +175,127 @@ public class ZoomSafeImageView
         }
     }
 
-    public Node getImageViewNode()
+    public final Node getImageViewNode()
     {
         return imageView;
     }
 
-    public Image getFullImage()
+    public final Image getFullImage()
     {
         return fullImage.get();
     }
 
-    public ObjectProperty<Image> fullImageProperty()
+    public final ObjectProperty<Image> fullImageProperty()
     {
         return fullImage;
     }
 
-    public void setFullImage(Image fullImage)
+    public final void setFullImage(Image fullImage)
     {
         this.fullImage.set(fullImage);
     }
 
-    public Rectangle2D getLogicalViewport()
+    public final Rectangle2D getLogicalViewport()
     {
         return logicalViewport.get();
     }
 
-    public ObjectProperty<Rectangle2D> logicalViewportProperty()
+    public final ObjectProperty<Rectangle2D> logicalViewportProperty()
     {
         return logicalViewport;
     }
 
-    public void setLogicalViewport(Rectangle2D logicalViewport)
+    public final void setLogicalViewport(Rectangle2D logicalViewport)
     {
         this.logicalViewport.set(logicalViewport);
     }
 
-    public void setX(double value)
+    public final void setX(double value)
     {
         imageView.setX(value);
     }
 
-    public double getX()
+    public final double getX()
     {
         return imageView.getX();
     }
 
-    public DoubleProperty xProperty()
+    public final DoubleProperty xProperty()
     {
         return imageView.xProperty();
     }
 
-    public void setY(double value)
+    public final void setY(double value)
     {
         imageView.setY(value);
     }
 
-    public double getY()
+    public final double getY()
     {
         return imageView.getY();
     }
 
-    public DoubleProperty yProperty()
+    public final DoubleProperty yProperty()
     {
         return imageView.yProperty();
     }
 
-    public void setFitWidth(double value)
+    public final void setFitWidth(double value)
     {
         imageView.setFitWidth(value);
     }
 
-    public double getFitWidth()
+    public final double getFitWidth()
     {
         return imageView.getFitWidth();
     }
 
-    public DoubleProperty fitWidthProperty()
+    public final DoubleProperty fitWidthProperty()
     {
         return imageView.fitWidthProperty();
     }
 
-    public void setFitHeight(double value)
+    public final void setFitHeight(double value)
     {
         imageView.setFitHeight(value);
     }
 
-    public double getFitHeight()
+    public final double getFitHeight()
     {
         return imageView.getFitHeight();
     }
 
-    public DoubleProperty fitHeightProperty()
+    public final DoubleProperty fitHeightProperty()
     {
         return imageView.fitHeightProperty();
     }
 
-    public void setPreserveRatio(boolean value)
+    public final void setPreserveRatio(boolean value)
     {
         imageView.setPreserveRatio(value);
     }
 
-    public boolean isPreserveRatio()
+    public final boolean isPreserveRatio()
     {
         return imageView.isPreserveRatio();
     }
 
-    public BooleanProperty preserveRatioProperty()
+    public final BooleanProperty preserveRatioProperty()
     {
         return imageView.preserveRatioProperty();
     }
 
-    public void setSmooth(boolean value)
+    public final void setSmooth(boolean value)
     {
         imageView.setSmooth(value);
     }
 
-    public boolean isSmooth()
+    public final boolean isSmooth()
     {
         return imageView.isSmooth();
     }
 
-    public BooleanProperty smoothProperty()
+    public final BooleanProperty smoothProperty()
     {
         return imageView.smoothProperty();
     }

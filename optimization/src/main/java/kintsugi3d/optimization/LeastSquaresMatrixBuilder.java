@@ -135,14 +135,14 @@ public class LeastSquaresMatrixBuilder
      *            components.  Alternatively, if it is desired for each dimension to be solved for separately, each one
      *            should be its own system and the definition of a "system index" can be redefined accordingly.
      */
-    public <S, T> void buildMatrices(GraphicsStream<S> viewStream, LeastSquaresModel<S, T> leastSquaresModel,
-                                     IntConsumer sampleValidator)
+    public final <S, T> void buildMatrices(GraphicsStream<S> viewStream, LeastSquaresModel<S, T> leastSquaresModel,
+                                           IntConsumer sampleValidator)
     {
         buildMatrices(viewStream, leastSquaresModel, sampleValidator, 0, systemCount);
     }
 
-    public <S, T> void buildMatrices(GraphicsStream<S> viewStream, LeastSquaresModel<S, T> leastSquaresModel,
-        IntConsumer sampleValidator, int rangeStart, int rangeEnd)
+    public final <S, T> void buildMatrices(GraphicsStream<S> viewStream, LeastSquaresModel<S, T> leastSquaresModel,
+                                           IntConsumer sampleValidator, int rangeStart, int rangeEnd)
     {
         Counter counter = new Counter();
 
@@ -215,7 +215,7 @@ public class LeastSquaresMatrixBuilder
         });
     }
 
-    public int getViewCount()
+    public final int getViewCount()
     {
         return viewCount;
     }

@@ -62,7 +62,7 @@ public class CarouselCardController
      * remove the shader / change it to the default shader.
      */
     @FXML
-    public void selectedChanged()
+    public final void selectedChanged()
     {
         if (selectedCheckbox.isSelected())
         {
@@ -86,7 +86,7 @@ public class CarouselCardController
      * and changes the label to have the name of the shader
      * @param shader
      */
-    public void init(ObservableCarouselModel carouselModel, ShaderInfo shader, CarouselController carousel)
+    public final void init(ObservableCarouselModel carouselModel, ShaderInfo shader, CarouselController carousel)
     {
         this.carouselModel = carouselModel;
         this.carousel = carousel;
@@ -103,7 +103,7 @@ public class CarouselCardController
         updateCheckboxState(Global.state().getUserShaderModel().getActiveShader());
     }
 
-    public void initialize()
+    public final void initialize()
     {
         buttonBox.translateYProperty().bind(carouselCard.heightProperty().divide(2.0).subtract(buttonBox.heightProperty().divide(2.0)));
 
@@ -117,7 +117,7 @@ public class CarouselCardController
         moveRight.setTooltip(rightTip);
     }
 
-    public void setupCanvas(FramebufferCanvas<?> canvas)
+    public final void setupCanvas(FramebufferCanvas<?> canvas)
     {
         framebufferView.setCanvas(canvas);
     }
@@ -136,7 +136,7 @@ public class CarouselCardController
      * removes the element from global carousel list of shaders.
      */
     @FXML
-    public void closeCard()
+    public final void closeCard()
     {
         if (shader != null)
         {
@@ -161,32 +161,32 @@ public class CarouselCardController
         }
     }
 
-    @FXML public void showMoveButtons()
+    @FXML public final void showMoveButtons()
     {
         buttonBox.setVisible(true);
     }
 
-    @FXML public void hideMoveButtons()
+    @FXML public final void hideMoveButtons()
     {
         buttonBox.setVisible(false);
     }
 
-    @FXML public void moveCarouselCardLeft()
+    @FXML public final void moveCarouselCardLeft()
     {
         carouselModel.moveCardLeft(this);
     }
 
-    @FXML public void moveCarouselCardRight()
+    @FXML public final void moveCarouselCardRight()
     {
         carouselModel.moveCardRight(this);
     }
 
-    public ShaderInfo getShader()
+    public final ShaderInfo getShader()
     {
         return shader;
     }
 
-    public CarouselController getCarouselController()
+    public final CarouselController getCarouselController()
     {
         return carousel;
     }

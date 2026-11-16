@@ -21,121 +21,121 @@ import kintsugi3d.gl.vecmath.Vector3;
 public class TestingLightingModel implements ReadonlyLightingEnvironmentModel
 {
     @Override
-    public ReadonlyLightWidgetModel getLightWidgetModel(int index)
+    public final ReadonlyLightWidgetModel getLightWidgetModel(int index)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public int getLightCount()
+    public final int getLightCount()
     {
         return 0;
     }
 
     @Override
-    public int getMaxLightCount()
+    public final int getMaxLightCount()
     {
         return 0;
     }
 
     @Override
-    public boolean isLightWidgetEnabled(int index)
+    public final boolean isLightWidgetEnabled(int index)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean areLightWidgetsEthereal()
+    public final boolean areLightWidgetsEthereal()
     {
         return false;
     }
 
     @Override
-    public float getAmbientLightIntensity()
+    public final float getAmbientLightIntensity()
     {
         return 0;
     }
 
     @Override
-    public Vector3 getAmbientLightColor()
+    public final Vector3 getAmbientLightColor()
     {
         return Vector3.ZERO;
     }
 
     @Override
-    public boolean isEnvironmentMappingEnabled()
+    public final boolean isEnvironmentMappingEnabled()
     {
         return false;
     }
 
     @Override
-    public Matrix4 getEnvironmentMapMatrix()
+    public final Matrix4 getEnvironmentMapMatrix()
     {
         return Matrix4.IDENTITY;
     }
 
     @Override
-    public float getEnvironmentMapFilteringBias()
+    public final float getEnvironmentMapFilteringBias()
     {
         return 0;
     }
 
     @Override
-    public ReadonlyLightPrototypeModel getLightPrototype(int i)
+    public final ReadonlyLightPrototypeModel getLightPrototype(int i)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Matrix4 getLightMatrix(int i)
+    public final Matrix4 getLightMatrix(int i)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Vector3 getLightCenter(int i)
+    public final Vector3 getLightCenter(int i)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public float getBackgroundIntensity()
+    public final float getBackgroundIntensity()
     {
         return 0;
     }
 
     @Override
-    public Vector3 getBackgroundColor()
+    public final Vector3 getBackgroundColor()
     {
         return Vector3.ZERO;
     }
 
     @Override
-    public BackgroundMode getBackgroundMode()
+    public final BackgroundMode getBackgroundMode()
     {
         return BackgroundMode.NONE;
     }
 
     @Override
-    public Vector3 getGroundPlaneColor()
+    public final Vector3 getGroundPlaneColor()
     {
         return Vector3.ZERO;
     }
 
     @Override
-    public boolean isGroundPlaneEnabled()
+    public final boolean isGroundPlaneEnabled()
     {
         return false;
     }
 
     @Override
-    public float getGroundPlaneHeight()
+    public final float getGroundPlaneHeight()
     {
         return 0;
     }
 
     @Override
-    public float getGroundPlaneSize()
+    public final float getGroundPlaneSize()
     {
         return 0;
     }

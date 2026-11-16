@@ -19,17 +19,17 @@ public class Counter
 {
     private int count = 0;
 
-    public int get()
+    public final int get()
     {
         return count;
     }
 
-    public void reset()
+    public final void reset()
     {
         count = 0;
     }
 
-    public void increment()
+    public final void increment()
     {
         count++;
     }

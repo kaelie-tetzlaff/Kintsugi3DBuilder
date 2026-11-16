@@ -81,7 +81,7 @@ public class ImageDetailsController
      * Display Image is always the size of detailBox minus 8 for padding.
      * Adds clip to prevent long crop images.
      */
-    public void initialize()
+    public final void initialize()
     {
         setImage(null); // Sets default state to not shown.
 
@@ -131,7 +131,7 @@ public class ImageDetailsController
      * If filePath is null it will instead hide the detailsBox
      * @param
      */
-    public void setImage(String filePath)
+    public final void setImage(String filePath)
     {
         if (filePath != null) //If there is a file path
         {
@@ -295,7 +295,7 @@ public class ImageDetailsController
      * @param event
      */
     @FXML
-    public void scrollZoom(ScrollEvent event)
+    public final void scrollZoom(ScrollEvent event)
     {
         // Will exit this function if we have no image or if canZoom is false
         if (ScrollEvent.SCROLL.equals(event.getEventType()) && event.getDeltaY() != 0.0 && currentImage != null && canZoom)
@@ -393,7 +393,7 @@ public class ImageDetailsController
      * @param event
      */
     @FXML
-    public void startSelection(MouseEvent event)
+    public final void startSelection(MouseEvent event)
     {
         //Event location
         mousePressedX = event.getX();
@@ -429,7 +429,7 @@ public class ImageDetailsController
      * @param event
      */
     @FXML
-    public void dragSelection(MouseEvent event)
+    public final void dragSelection(MouseEvent event)
     {
         if (currentImage != null) // Safeguard if image is there
         {
@@ -657,7 +657,7 @@ public class ImageDetailsController
      * Returns the imageView display image
      * @return
      */
-    public ZoomSafeImageView getDisplayImage()
+    public final ZoomSafeImageView getDisplayImage()
     {
         return zoomSafeImageView;
     }
@@ -666,7 +666,7 @@ public class ImageDetailsController
      * Takes in a boolean and sets stack panes mouse transparency to the opposite
      * @param enable
      */
-    public void setMouseInteractionEnabled(boolean enable)
+    public final void setMouseInteractionEnabled(boolean enable)
     {
         stackPane.setMouseTransparent(!enable);
     }

@@ -32,12 +32,12 @@ class ImageSelectionCache
         this.imageCacheRemovalQueue = new ArrayDeque<>(MAX_IMAGE_CACHE_QUEUE_SIZE);
     }
 
-    public boolean contains(String imageName)
+    public final boolean contains(String imageName)
     {
         return imageCache.containsKey(imageName);
     }
 
-    public @Nullable Image retrieveFromCache(String imageName)
+    public final @Nullable Image retrieveFromCache(String imageName)
     {
         Image image = imageCache.get(imageName);
         if (image != null)
@@ -55,7 +55,7 @@ class ImageSelectionCache
         }
     }
 
-    public void addToCache(String imageName, Image image)
+    public final void addToCache(String imageName, Image image)
     {
         imageCache.put(imageName, image);
 

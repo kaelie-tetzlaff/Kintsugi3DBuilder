@@ -29,7 +29,7 @@ final class TwistTool implements DragTool
     private static class Builder extends ToolBuilderBase<TwistTool>
     {
         @Override
-        public TwistTool create()
+        public final TwistTool create()
         {
             return new TwistTool(getCameraModel());
         }

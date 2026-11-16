@@ -25,32 +25,32 @@ public abstract class TextureBuilderBase<ContextType extends Context<ContextType
     private boolean linearFilteringEnabled = false;
     private float maxAnisotropy = 1.0f;
 
-    protected int getMultisamples()
+    protected final int getMultisamples()
     {
         return multisamples;
     }
 
-    protected boolean areMultisampleLocationsFixed()
+    protected final boolean areMultisampleLocationsFixed()
     {
         return fixedMultisampleLocations;
     }
 
-    protected boolean areMipmapsEnabled()
+    protected final boolean areMipmapsEnabled()
     {
         return mipmapsEnabled;
     }
 
-    protected int getMaxMipmapLevel()
+    protected final int getMaxMipmapLevel()
     {
         return maxMipmapLevel;
     }
 
-    protected boolean isLinearFilteringEnabled()
+    protected final boolean isLinearFilteringEnabled()
     {
         return linearFilteringEnabled;
     }
 
-    protected float getMaxAnisotropy()
+    protected final float getMaxAnisotropy()
     {
         return maxAnisotropy;
     }
@@ -96,7 +96,7 @@ public abstract class TextureBuilderBase<ContextType extends Context<ContextType
         return this;
     }
 
-    public ContextType getContext()
+    public final ContextType getContext()
     {
         return context;
     }

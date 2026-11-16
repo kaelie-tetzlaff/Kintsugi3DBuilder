@@ -38,7 +38,7 @@ public class LightCalibration3DScene<ContextType extends Context<ContextType>> e
     }
 
     @Override
-    protected void addPostLitComponents(LightingResources<ContextType> lightingResources)
+    protected final void addPostLitComponents(LightingResources<ContextType> lightingResources)
     {
         // the representation of the camera
         CameraVisual<ContextType> cameraVisual = new CameraVisual<>(getResources(), getSceneViewportModel());

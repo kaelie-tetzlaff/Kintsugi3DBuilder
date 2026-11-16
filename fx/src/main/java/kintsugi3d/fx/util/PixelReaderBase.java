@@ -23,7 +23,7 @@ import java.nio.IntBuffer;
 public abstract class PixelReaderBase implements PixelReader
 {
     @Override
-    public PixelFormat<IntBuffer> getPixelFormat()
+    public final PixelFormat<IntBuffer> getPixelFormat()
     {
         return PixelFormat.getIntArgbInstance();
     }
@@ -34,7 +34,7 @@ public abstract class PixelReaderBase implements PixelReader
     }
 
     @Override
-    public int getArgb(int x, int y)
+    public final int getArgb(int x, int y)
     {
         Color color = this.getColor(x, y);
         int a = clampedFixedPoint(color.getOpacity());
@@ -45,7 +45,7 @@ public abstract class PixelReaderBase implements PixelReader
     }
 
     @Override
-    public <T extends Buffer> void getPixels(int x, int y, int w, int h, WritablePixelFormat<T> pixelformat, T buffer, int scanlineStride)
+    public final <T extends Buffer> void getPixels(int x, int y, int w, int h, WritablePixelFormat<T> pixelformat, T buffer, int scanlineStride)
     {
         for (int i = 0; i < w; i++)
         {
@@ -57,13 +57,13 @@ public abstract class PixelReaderBase implements PixelReader
     }
 
     @Override
-    public void getPixels(int x, int y, int w, int h, WritablePixelFormat<ByteBuffer> pixelformat, byte[] buffer, int offset, int scanlineStride)
+    public final void getPixels(int x, int y, int w, int h, WritablePixelFormat<ByteBuffer> pixelformat, byte[] buffer, int offset, int scanlineStride)
     {
         this.getPixels(x, y, w, h, pixelformat, ByteBuffer.wrap(buffer, offset, buffer.length - offset), scanlineStride);
     }
 
     @Override
-    public void getPixels(int x, int y, int w, int h, WritablePixelFormat<IntBuffer> pixelformat, int[] buffer, int offset, int scanlineStride)
+    public final void getPixels(int x, int y, int w, int h, WritablePixelFormat<IntBuffer> pixelformat, int[] buffer, int offset, int scanlineStride)
     {
         this.getPixels(x, y, w, h, pixelformat, IntBuffer.wrap(buffer, offset, buffer.length - offset), scanlineStride);
     }

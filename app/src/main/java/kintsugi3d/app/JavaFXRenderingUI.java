@@ -28,7 +28,7 @@ public class JavaFXRenderingUI extends RenderingUIBase
     }
 
     @Override
-    public void initialize(InteractiveApplication app)
+    public final void initialize(InteractiveApplication app)
     {
         super.initialize(app);
 
@@ -58,19 +58,19 @@ public class JavaFXRenderingUI extends RenderingUIBase
     }
 
     @Override
-    public void setCanvas(FramebufferCanvas<OpenGLContext> canvas)
+    public final void setCanvas(FramebufferCanvas<OpenGLContext> canvas)
     {
         JavaFXApplication.setCanvas(canvas);
     }
 
     @Override
-    protected boolean isUnfocused()
+    protected final boolean isUnfocused()
     {
         return Window.getWindows().filtered(Window::isFocused).isEmpty();
     }
 
     @Override
-    protected boolean isIconified()
+    protected final boolean isIconified()
     {
         return stage.isIconified();
     }

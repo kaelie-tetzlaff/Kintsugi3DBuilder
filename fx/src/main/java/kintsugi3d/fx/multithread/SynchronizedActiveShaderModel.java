@@ -30,19 +30,19 @@ public class SynchronizedActiveShaderModel implements ActiveShaderModel
     }
 
     @Override
-    public ShaderInfo getActiveShader()
+    public final ShaderInfo getActiveShader()
     {
         return activeShader.getValue();
     }
 
     @Override
-    public void registerHandler(Consumer<ShaderInfo> shaderHandler)
+    public final void registerHandler(Consumer<ShaderInfo> shaderHandler)
     {
         Platform.runLater(() -> base.registerHandler(shaderHandler));
     }
 
     @Override
-    public void setActiveShader(ShaderInfo shaderInfo)
+    public final void setActiveShader(ShaderInfo shaderInfo)
     {
         this.activeShader.setValue(shaderInfo);
     }

@@ -25,14 +25,14 @@ public class SafeLogScaleNumberStringConverter extends StringConverter<Number>
     }
 
     @Override
-    public String toString(Number object)
+    public final String toString(Number object)
     {
         Double to10 = StrictMath.pow(10, object.doubleValue());
         return base.toString(to10);
     }
 
     @Override
-    public Number fromString(String string)
+    public final Number fromString(String string)
     {
         Number raw = base.fromString(string);
         if (raw.doubleValue() == 0.0)

@@ -45,7 +45,7 @@ public abstract class ImageBasedGraphicsResourcesBase<ContextType extends Contex
         this.ownerOfCommonResources = ownerOfCommonResources;
     }
 
-    GraphicsResourcesCommon<ContextType> getCommonResources()
+    final GraphicsResourcesCommon<ContextType> getCommonResources()
     {
         return commonResources;
     }
@@ -63,13 +63,13 @@ public abstract class ImageBasedGraphicsResourcesBase<ContextType extends Contex
     }
 
     @Override
-    public float getCameraWeight(int index)
+    public final float getCameraWeight(int index)
     {
         return commonResources.getViewWeight(index);
     }
 
     @Override
-    public List<Float> getCameraWeights()
+    public final List<Float> getCameraWeights()
     {
         return commonResources.getViewWeights();
     }
@@ -100,14 +100,14 @@ public abstract class ImageBasedGraphicsResourcesBase<ContextType extends Contex
      * @return
      * @throws IOException
      */
-    public SingleCalibratedImageResource<ContextType> createSingleImageResource(View view, ReadonlyLoadOptionsModel loadOptions)
+    public final SingleCalibratedImageResource<ContextType> createSingleImageResource(View view, ReadonlyLoadOptionsModel loadOptions)
         throws IOException
     {
         return new SingleCalibratedImageResource<>(getContext(), view, getGeometry(), loadOptions);
     }
 
     @Override
-    public ImageCache<ContextType> cache(ReadonlyImageCacheSettings settings, ProgressMonitor monitor)
+    public final ImageCache<ContextType> cache(ReadonlyImageCacheSettings settings, ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         ImageCache<ContextType> cache = new ImageCache<>(this, settings);
@@ -121,25 +121,25 @@ public abstract class ImageBasedGraphicsResourcesBase<ContextType extends Contex
     }
 
     @Override
-    public boolean hasProcessedWeightMaps()
+    public final boolean hasProcessedWeightMaps()
     {
         return commonResources.hasProcessedWeightMaps();
     }
 
     @Override
-    public IntVector2 getProcessedWeightMapResolution()
+    public final IntVector2 getProcessedWeightMapResolution()
     {
         return commonResources.getProcessedWeightMapResolution();
     }
 
     @Override
-    public EventListeners<ProjectProcessedListener> weightMapsProcessedListeners()
+    public final EventListeners<ProjectProcessedListener> weightMapsProcessedListeners()
     {
         return commonResources.weightMapsProcessedListeners();
     }
 
     @Override
-    public void replaceTextureResources(TextureResources<ContextType> textureResources)
+    public final void replaceTextureResources(TextureResources<ContextType> textureResources)
     {
         commonResources.replaceTextureResources(textureResources);
     }
@@ -153,12 +153,12 @@ public abstract class ImageBasedGraphicsResourcesBase<ContextType extends Contex
         }
     }
 
-    public EventListeners<Observer<MappedChange<String, BasisMaterialInfo>>> basisListeners()
+    public final EventListeners<Observer<MappedChange<String, BasisMaterialInfo>>> basisListeners()
     {
         return commonResources.basisListeners();
     }
 
-    public EventListeners<Observer<MappedChange<String, TextureInfo>>> texturesListeners()
+    public final EventListeners<Observer<MappedChange<String, TextureInfo>>> texturesListeners()
     {
         return commonResources.texturesListeners();
     }

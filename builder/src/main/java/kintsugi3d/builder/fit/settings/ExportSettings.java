@@ -32,84 +32,84 @@ public class ExportSettings implements ReadonlyExportSettings
     private boolean openViewerOnceComplete = false;
 
     @Override
-    public boolean shouldSaveTextures()
+    public final boolean shouldSaveTextures()
     {
         return exportTextures;
     }
 
-    public void setShouldSaveTextures(boolean exportTextures)
+    public final void setShouldSaveTextures(boolean exportTextures)
     {
         this.exportTextures = exportTextures;
     }
 
     @Override
-    public boolean shouldAppendModelNameToTextures()
+    public final boolean shouldAppendModelNameToTextures()
     {
         return appendModelNameToTextures;
     }
 
-    public void setShouldAppendModelNameToTextures(boolean appendModelNameToTextures)
+    public final void setShouldAppendModelNameToTextures(boolean appendModelNameToTextures)
     {
         this.appendModelNameToTextures = appendModelNameToTextures;
     }
 
     @Override
-    public String getTextureFormat()
+    public final String getTextureFormat()
     {
         return textureFormat;
     }
 
-    public void setTextureFormat(String textureFormat)
+    public final void setTextureFormat(String textureFormat)
     {
         this.textureFormat = textureFormat;
     }
 
     @Override
-    public boolean shouldGenerateLowResTextures()
+    public final boolean shouldGenerateLowResTextures()
     {
         return generateLowResTextures;
     }
 
-    public void setShouldGenerateLowResTextures(boolean generateLowResTextures)
+    public final void setShouldGenerateLowResTextures(boolean generateLowResTextures)
     {
         this.generateLowResTextures = generateLowResTextures;
     }
 
     @Override
-    public int getMinimumTextureResolution()
+    public final int getMinimumTextureResolution()
     {
         return minimumTextureResolution;
     }
 
-    public void setMinimumTextureResolution(int minimumTextureResolution)
+    public final void setMinimumTextureResolution(int minimumTextureResolution)
     {
         this.minimumTextureResolution = minimumTextureResolution;
     }
 
     @Override
-    public boolean shouldOpenViewerOnceComplete()
+    public final boolean shouldOpenViewerOnceComplete()
     {
         return openViewerOnceComplete;
     }
 
-    public void setShouldOpenViewerOnceComplete(boolean openViewerOnceComplete)
+    public final void setShouldOpenViewerOnceComplete(boolean openViewerOnceComplete)
     {
         this.openViewerOnceComplete = openViewerOnceComplete;
     }
 
     @Override
-    public MaterialExporterFactory getExporterFactory()
+    public final MaterialExporterFactory getExporterFactory()
     {
         return exporterFactory;
     }
 
-    public void setExporterFactory(MaterialExporterFactory exporterFactory)
+    public final void setExporterFactory(MaterialExporterFactory exporterFactory)
     {
         this.exporterFactory = exporterFactory;
     }
 
     @Override
-    public void applyToExporter(ModelExporter exporter, ReadonlyTextureResources<? extends Context<?>> textureResources, String filename)
+    public final void applyToExporter(ModelExporter exporter, ReadonlyTextureResources<? extends Context<?>> textureResources, String filename)
     {
         MaterialExporter materialExporter = exporterFactory.getExporter(textureResources);
         exporter.setMaterialExporter(materialExporter);

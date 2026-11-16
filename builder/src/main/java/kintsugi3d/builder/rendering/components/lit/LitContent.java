@@ -17,7 +17,7 @@ import kintsugi3d.gl.core.Context;
 
 public abstract class LitContent<ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
-    void initWithLightingResources(LightingResources<ContextType> lightingResources)
+    final void initWithLightingResources(LightingResources<ContextType> lightingResources)
     {
         addLitComponents(lightingResources);
         addPostLitComponents(lightingResources);

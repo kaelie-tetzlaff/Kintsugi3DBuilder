@@ -48,13 +48,13 @@ public class LightWidgetLines<ContextType extends Context<ContextType>> implemen
     {
     }
 
-    public void refreshWidgetInfo(LightWidgetInfo[] widgetInfo)
+    public final void refreshWidgetInfo(LightWidgetInfo[] widgetInfo)
     {
         this.widgetInfo = widgetInfo.clone();
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         if (this.sceneModel.getSettingsModel().getBoolean("relightingEnabled")
             && this.sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled")
@@ -144,7 +144,7 @@ public class LightWidgetLines<ContextType extends Context<ContextType>> implemen
     {
     }
 
-    public void setSolidProgram(Program<ContextType> solidProgram)
+    public final void setSolidProgram(Program<ContextType> solidProgram)
     {
         this.solidProgram = solidProgram;
     }

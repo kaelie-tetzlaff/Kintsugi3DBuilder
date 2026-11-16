@@ -14,7 +14,7 @@ package kintsugi3d.gl.window;
 public abstract class ModifierKeysBase implements ModifierKeys
 {
     @Override
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         if (obj instanceof ModifierKeys)
         {
@@ -31,7 +31,7 @@ public abstract class ModifierKeysBase implements ModifierKeys
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return  (this.isShiftModifierActive()   ? 1 : 0) |
                 (this.isControlModifierActive() ? 2 : 0) |

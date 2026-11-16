@@ -67,13 +67,13 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
 
 
     @Override
-    protected ProgramObject<ContextType> createProgram() throws IOException
+    protected final ProgramObject<ContextType> createProgram() throws IOException
     {
         return loadMainProgram(getPreprocessorDefines());
     }
 
     @Override
-    public void update()
+    public final void update()
     {
         if (getDrawable() != null && getDrawable().program() != null)
         {
@@ -102,7 +102,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         }
     }
 
-    public void useFragmentShader(File fragmentShaderFile)
+    public final void useFragmentShader(File fragmentShaderFile)
     {
         this.fragmentShaderFile = fragmentShaderFile;
         reloadShaders();
@@ -221,12 +221,12 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         return defineMap;
     }
 
-    protected void setupShader(CameraViewport cameraViewport)
+    protected final void setupShader(CameraViewport cameraViewport)
     {
         setupShader(cameraViewport, sceneModel.getFullModelMatrix());
     }
 
-    protected void setupShader(CameraViewport cameraViewport, Matrix4 model)
+    protected final void setupShader(CameraViewport cameraViewport, Matrix4 model)
     {
         setupUnlit(model);
 
@@ -323,27 +323,27 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         program.setUniform("ambientColor", sceneModel.getLightingModel().getAmbientLightColor().applyOperator(SRGB::toLinear));
     }
 
-    public boolean isLightCalibrationMode()
+    public final boolean isLightCalibrationMode()
     {
         return lightCalibrationMode;
     }
 
-    public void setLightCalibrationMode(boolean lightCalibrationMode)
+    public final void setLightCalibrationMode(boolean lightCalibrationMode)
     {
         this.lightCalibrationMode = lightCalibrationMode;
     }
 
-    public void setExtraFragmentShaderDefinesFactory(Supplier<Map<String, Optional<Object>>> fragmentShaderDefinesFactory)
+    public final void setExtraFragmentShaderDefinesFactory(Supplier<Map<String, Optional<Object>>> fragmentShaderDefinesFactory)
     {
         this.fragmentShaderDefinesFactory = fragmentShaderDefinesFactory;
     }
 
-    protected ReadonlyImageBasedGraphicsResources<ContextType> getResources()
+    protected final ReadonlyImageBasedGraphicsResources<ContextType> getResources()
     {
         return resources;
     }
 
-    protected SceneModel getSceneModel()
+    protected final SceneModel getSceneModel()
     {
         return sceneModel;
     }

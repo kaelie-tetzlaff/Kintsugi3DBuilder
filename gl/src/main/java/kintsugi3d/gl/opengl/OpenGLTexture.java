@@ -121,56 +121,56 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     }
 
     @Override
-    public OpenGLContext getContext()
+    public final OpenGLContext getContext()
     {
         return this.context;
     }
 
     @Override
-    public ColorFormat getInternalUncompressedColorFormat()
+    public final ColorFormat getInternalUncompressedColorFormat()
     {
         return this.colorFormat;
     }
 
     @Override
-    public CompressionFormat getInternalCompressedColorFormat()
+    public final CompressionFormat getInternalCompressedColorFormat()
     {
         return this.compressionFormat;
     }
 
     @Override
-    public boolean isInternalFormatCompressed()
+    public final boolean isInternalFormatCompressed()
     {
         return this.compressionFormat != null;
     }
 
     @Override
-    public TextureType getTextureType()
+    public final TextureType getTextureType()
     {
         return textureType;
     }
 
-    protected int getTextureTarget()
+    protected final int getTextureTarget()
     {
         return this.textureTarget;
     }
 
-    void bind()
+    final void bind()
     {
         context.bindTextureToUnit(0, this);
     }
 
-    int getTextureId()
+    final int getTextureId()
     {
         return this.textureId;
     }
 
-    void invalidateMipmaps()
+    final void invalidateMipmaps()
     {
         this.staleMipmaps = true;
     }
 
-    void bindToTextureUnit(int textureUnitIndex)
+    final void bindToTextureUnit(int textureUnitIndex)
     {
         if (textureUnitIndex < 0)
         {
@@ -194,7 +194,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         }
     }
 
-    void initFilteringAndMipmaps(boolean useLinearFiltering, int maxMipmapLevel)
+    final void initFilteringAndMipmaps(boolean useLinearFiltering, int maxMipmapLevel)
     {
         initFilteringAndMipmaps(useLinearFiltering, maxMipmapLevel, true);
     }
@@ -415,7 +415,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         }
     }
 
-    boolean hasIntegerInternalFormat()
+    final boolean hasIntegerInternalFormat()
     {
         return !this.isInternalFormatCompressed() && this.colorFormat.isInteger();
     }
@@ -606,7 +606,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (live)
         {
@@ -617,7 +617,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     }
 
     @Override
-    public void attachToDrawFramebuffer(int attachment, int level)
+    public final void attachToDrawFramebuffer(int attachment, int level)
     {
         if (level < 0)
         {
@@ -632,7 +632,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     }
 
     @Override
-    public void attachToReadFramebuffer(int attachment, int level)
+    public final void attachToReadFramebuffer(int attachment, int level)
     {
         glFramebufferTexture(GL_READ_FRAMEBUFFER, attachment, this.textureId, level);
         OpenGLContext.errorCheck();

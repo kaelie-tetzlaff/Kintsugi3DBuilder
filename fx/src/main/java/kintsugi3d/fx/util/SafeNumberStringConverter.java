@@ -32,13 +32,13 @@ public class SafeNumberStringConverter extends StringConverter<Number>
     }
 
     @Override
-    public String toString(Number object)
+    public final String toString(Number object)
     {
         return base.toString(object);
     }
 
     @Override
-    public Number fromString(String string)
+    public final Number fromString(String string)
     {
         if ("".equals(string))
         {

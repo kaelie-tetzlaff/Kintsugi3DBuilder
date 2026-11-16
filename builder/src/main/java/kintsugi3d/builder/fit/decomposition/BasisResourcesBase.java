@@ -53,25 +53,25 @@ public abstract class BasisResourcesBase<ContextType extends Context<ContextType
     }
 
     @Override
-    public ContextType getContext()
+    public final ContextType getContext()
     {
         return context;
     }
 
     @Override
-    public int getMaterialCount()
+    public final int getMaterialCount()
     {
         return getBasis().getMaterialCount();
     }
 
     @Override
-    public int getActiveMaterialCount()
+    public final int getActiveMaterialCount()
     {
         return getBasis().getEnabledMaterialCount();
     }
 
     @Override
-    public int getBasisResolution()
+    public final int getBasisResolution()
     {
         return basisResolution;
     }
@@ -121,7 +121,7 @@ public abstract class BasisResourcesBase<ContextType extends Context<ContextType
     }
 
     @Override
-    public void save(File outputDirectory, String filenameOverride)
+    public final void save(File outputDirectory, String filenameOverride)
     {
         getBasis().save(outputDirectory,
             filenameOverride != null ? filenameOverride : BasisResources.getBasisFunctionsFilename());
@@ -140,14 +140,14 @@ public abstract class BasisResourcesBase<ContextType extends Context<ContextType
     }
 
     @Override
-    public void useWithShaderProgram(Program<ContextType> program)
+    public final void useWithShaderProgram(Program<ContextType> program)
     {
         program.setTexture("basisFunctions", basisMaps);
         program.setUniformBuffer("DiffuseColors", diffuseUniformBuffer);
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         basisMaps.close();
         diffuseUniformBuffer.close();

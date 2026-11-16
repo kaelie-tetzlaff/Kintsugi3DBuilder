@@ -35,12 +35,12 @@ public class ColorNativeBufferList extends AbstractList<Vector4> implements Colo
         this.size = size;
     }
 
-    @Override public Vector4 get(int index)
+    @Override public final Vector4 get(int index)
     {
         return new Vector4(buffer.get(4 * index), buffer.get(4 * index + 1), buffer.get(4 * index + 2), buffer.get(4 * index + 3));
     }
 
-    public Vector3 getRGB(int index)
+    public final Vector3 getRGB(int index)
     {
         return new Vector3(buffer.get(4 * index), buffer.get(4 * index + 1), buffer.get(4 * index + 2));
     }
@@ -53,43 +53,43 @@ public class ColorNativeBufferList extends AbstractList<Vector4> implements Colo
      * @return
      */
     @Override
-    public float get(int index, int component)
+    public final float get(int index, int component)
     {
         return buffer.get(4 * index + component);
     }
 
     @Override
-    public float getRed(int index)
+    public final float getRed(int index)
     {
         return get(index, 0);
     }
 
     @Override
-    public float getGreen(int index)
+    public final float getGreen(int index)
     {
         return get(index, 1);
     }
 
     @Override
-    public float getBlue(int index)
+    public final float getBlue(int index)
     {
         return get(index, 2);
     }
 
     @Override
-    public float getAlpha(int index)
+    public final float getAlpha(int index)
     {
         return get(index, 3);
     }
 
-    @Override public int size() { return size; }
+    @Override public final int size() { return size; }
 
-    public void setSize(int size)
+    public final void setSize(int size)
     {
         this.size = size;
     }
 
-    public FloatBuffer getBuffer()
+    public final FloatBuffer getBuffer()
     {
         return buffer;
     }

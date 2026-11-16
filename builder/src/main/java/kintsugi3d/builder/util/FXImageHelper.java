@@ -97,7 +97,7 @@ public final class FXImageHelper
          * @return
          */
         @Override
-        public Image getStandardImage()
+        public final Image getStandardImage()
         {
             return new Image(file.toURI().toString());
         }
@@ -109,7 +109,7 @@ public final class FXImageHelper
          * @throws IOException
          */
         @Override
-        public ImageHelper getImageHelper() throws IOException
+        public final ImageHelper getImageHelper() throws IOException
         {
             return ImageHelper.read(file);
         }
@@ -130,7 +130,7 @@ public final class FXImageHelper
          * @return
          */
         @Override
-        public Image getStandardImage()
+        public final Image getStandardImage()
         {
             return new Image(inputStream);
         }
@@ -142,7 +142,7 @@ public final class FXImageHelper
          * @throws IOException
          */
         @Override
-        public ImageHelper getImageHelper() throws IOException
+        public final ImageHelper getImageHelper() throws IOException
         {
             return ImageHelper.read(inputStream);
         }

@@ -66,23 +66,23 @@ public class MutableBasisResources<ContextType extends Context<ContextType>> ext
     }
 
     @Override
-    public MutableMaterialBasis getBasis()
+    public final MutableMaterialBasis getBasis()
     {
         return basis;
     }
 
-    public BasisWeightResources<ContextType> getWeightResources()
+    public final BasisWeightResources<ContextType> getWeightResources()
     {
         return weightResources;
     }
 
-    public void setBasis(MutableMaterialBasis basis)
+    public final void setBasis(MutableMaterialBasis basis)
     {
         this.basis = basis;
         refreshGraphicsResources();
     }
 
-    public BasisMaterialInfo deleteBasisMaterial(String name)
+    public final BasisMaterialInfo deleteBasisMaterial(String name)
     {
         // Delete the basis materials themselves and the corresponding weight maps
         BasisMaterialInfo deleted = basis.deleteMaterial(name);
@@ -104,7 +104,7 @@ public class MutableBasisResources<ContextType extends Context<ContextType>> ext
         return result;
     }
 
-    public BasisMaterialInfo toggleBasisMaterial(String name)
+    public final BasisMaterialInfo toggleBasisMaterial(String name)
     {
         if (basis.isMaterialEnabled(name))
         {
@@ -116,7 +116,7 @@ public class MutableBasisResources<ContextType extends Context<ContextType>> ext
         }
     }
 
-    public Map<String, BasisMaterialInfo> disableBasisMaterials(Collection<String> materialNames)
+    public final Map<String, BasisMaterialInfo> disableBasisMaterials(Collection<String> materialNames)
     {
         Map<String, BasisMaterialInfo> disabled = new HashMap<>(materialNames.size());
 
@@ -132,7 +132,7 @@ public class MutableBasisResources<ContextType extends Context<ContextType>> ext
         return disabled;
     }
 
-    public Map<String, BasisMaterialInfo> enableBasisMaterials(Collection<String> materialNames)
+    public final Map<String, BasisMaterialInfo> enableBasisMaterials(Collection<String> materialNames)
     {
         Map<String, BasisMaterialInfo> enabled = new HashMap<>(materialNames.size());
 

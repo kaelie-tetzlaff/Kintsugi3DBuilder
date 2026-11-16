@@ -27,49 +27,49 @@ public abstract class ColorCubemapBuilderBase <ContextType extends Context<Conte
     }
 
     @Override
-    public ColorCubemapBuilderBase<ContextType, TextureType> setInternalFormat(ColorFormat format)
+    public final ColorCubemapBuilderBase<ContextType, TextureType> setInternalFormat(ColorFormat format)
     {
         super.setInternalFormat(format);
         return this;
     }
 
     @Override
-    public ColorCubemapBuilderBase<ContextType, TextureType> setInternalFormat(CompressionFormat format)
+    public final ColorCubemapBuilderBase<ContextType, TextureType> setInternalFormat(CompressionFormat format)
     {
         super.setInternalFormat(format);
         return this;
     }
 
     @Override
-    public ColorCubemapBuilderBase<ContextType, TextureType> setMultisamples(int samples, boolean fixedSampleLocations)
+    public final ColorCubemapBuilderBase<ContextType, TextureType> setMultisamples(int samples, boolean fixedSampleLocations)
     {
         super.setMultisamples(samples, fixedSampleLocations);
         return this;
     }
 
     @Override
-    public ColorCubemapBuilderBase<ContextType, TextureType> setMipmapsEnabled(boolean enabled)
+    public final ColorCubemapBuilderBase<ContextType, TextureType> setMipmapsEnabled(boolean enabled)
     {
         super.setMipmapsEnabled(enabled);
         return this;
     }
 
     @Override
-    public ColorCubemapBuilderBase<ContextType, TextureType> setMaxMipmapLevel(int maxMipmapLevel)
+    public final ColorCubemapBuilderBase<ContextType, TextureType> setMaxMipmapLevel(int maxMipmapLevel)
     {
         super.setMaxMipmapLevel(maxMipmapLevel);
         return this;
     }
 
     @Override
-    public ColorCubemapBuilderBase<ContextType, TextureType> setLinearFilteringEnabled(boolean enabled)
+    public final ColorCubemapBuilderBase<ContextType, TextureType> setLinearFilteringEnabled(boolean enabled)
     {
         super.setLinearFilteringEnabled(enabled);
         return this;
     }
 
     @Override
-    public ColorCubemapBuilderBase<ContextType, TextureType> setMaxAnisotropy(float maxAnisotropy)
+    public final ColorCubemapBuilderBase<ContextType, TextureType> setMaxAnisotropy(float maxAnisotropy)
     {
         super.setMaxAnisotropy(maxAnisotropy);
         return this;

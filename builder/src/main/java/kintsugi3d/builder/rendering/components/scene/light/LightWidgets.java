@@ -68,7 +68,7 @@ public class LightWidgets<ContextType extends Context<ContextType>> extends Shad
     }
 
     @Override
-    protected ProgramObject<ContextType> createProgram() throws IOException
+    protected final ProgramObject<ContextType> createProgram() throws IOException
     {
         return getContext().getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File(new File(new File("shaders"), "common"), "imgspace.vert"))
@@ -77,7 +77,7 @@ public class LightWidgets<ContextType extends Context<ContextType>> extends Shad
     }
 
     @Override
-    protected Map<String, VertexBuffer<ContextType>> createVertexBuffers()
+    protected final Map<String, VertexBuffer<ContextType>> createVertexBuffers()
     {
         return Map.of("position",
             getContext().createVertexBuffer()
@@ -85,13 +85,13 @@ public class LightWidgets<ContextType extends Context<ContextType>> extends Shad
                     .createFromFloatArray(3, 3, -1, -1, 0, 1, -1, 0, 0, 1, 0)));
     }
 
-    public void refreshWidgetInfo(LightWidgetInfo[] newWidgetInfo)
+    public final void refreshWidgetInfo(LightWidgetInfo[] newWidgetInfo)
     {
         this.widgetInfo = newWidgetInfo.clone();
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         if (this.sceneModel.getSettingsModel().getBoolean("relightingEnabled")
             && this.sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled")

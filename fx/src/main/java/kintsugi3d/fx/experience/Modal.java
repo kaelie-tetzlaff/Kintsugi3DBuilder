@@ -44,17 +44,17 @@ public class Modal
         this.parentWindow = parentWindow;
     }
 
-    public BooleanExpression getOpenProperty()
+    public final BooleanExpression getOpenProperty()
     {
         return openProperty;
     }
 
-    public boolean isOpen()
+    public final boolean isOpen()
     {
         return openProperty.get();
     }
 
-    public Stage getStage()
+    public final Stage getStage()
     {
         return stage;
     }
@@ -68,12 +68,12 @@ public class Modal
      * @param <ControllerType>
      * @throws IOException
      */
-    public <ControllerType> ControllerType create(String title, String urlString) throws IOException
+    public final <ControllerType> ControllerType create(String title, String urlString) throws IOException
     {
         return create(title, getFXMLLoader(urlString));
     }
 
-    public <ControllerType> ControllerType create(String title, FXMLLoader fxmlLoader) throws IOException
+    public final <ControllerType> ControllerType create(String title, FXMLLoader fxmlLoader) throws IOException
     {
         Parent root = fxmlLoader.load();
 
@@ -89,12 +89,12 @@ public class Modal
         return fxmlLoader.getController();
     }
 
-    public void open()
+    public final void open()
     {
         stage.show();
     }
 
-    public void requestClose()
+    public final void requestClose()
     {
         FXWindowHelper.requestClose(stage);
     }

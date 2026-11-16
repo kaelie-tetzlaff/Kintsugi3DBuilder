@@ -26,7 +26,7 @@ public class BasisIndexedShaderInfo extends SimpleShaderInfo
     }
 
     @Override
-    public Map<String, Optional<Object>> getDefines()
+    public final Map<String, Optional<Object>> getDefines()
     {
         Map<String, Optional<Object>> defines = new HashMap<>(super.getDefines());
         defines.put("WEIGHTMAP_INDEX", Optional.of(material.getGPUIndex()));
@@ -34,14 +34,14 @@ public class BasisIndexedShaderInfo extends SimpleShaderInfo
     }
 
     @Override
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         return super.equals(obj) && obj instanceof BasisIndexedShaderInfo
             && ((BasisIndexedShaderInfo) obj).material.getName().equals(material.getName());
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return Objects.hash(super.hashCode(), material.getName());
     }

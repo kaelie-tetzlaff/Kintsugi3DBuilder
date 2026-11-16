@@ -46,7 +46,7 @@ final class MultiframeRenderRequest extends RenderRequestBase
         }
 
         @Override
-        public ProgressMonitoredImageBasedGraphicsRequest create()
+        public final ProgressMonitoredImageBasedGraphicsRequest create()
         {
             return new MultiframeRenderRequest(getWidth(), getHeight(), frameCount, getShaderSetupCallback(),
                 getVertexShader(), getFragmentShader(), getOutputDirectory());

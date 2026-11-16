@@ -133,7 +133,7 @@ class WindowCallback extends WindowListenerManagerInstance
     private class WindowPosCallback extends GLFWWindowPosCallback
     {
         @Override
-        public void invoke(long windowHandle, int xpos, int ypos)
+        public final void invoke(long windowHandle, int xpos, int ypos)
         {
             if (windowHandle == window.getHandle())
             {
@@ -148,7 +148,7 @@ class WindowCallback extends WindowListenerManagerInstance
     private class WindowSizeCallback extends GLFWWindowSizeCallback
     {
         @Override
-        public void invoke(long windowHandle, int width, int height)
+        public final void invoke(long windowHandle, int width, int height)
         {
             if (windowHandle == window.getHandle())
             {
@@ -163,7 +163,7 @@ class WindowCallback extends WindowListenerManagerInstance
     private class WindowCloseCallback extends GLFWWindowCloseCallback
     {
         @Override
-        public void invoke(long windowHandle)
+        public final void invoke(long windowHandle)
         {
             if (windowHandle == window.getHandle())
             {
@@ -178,7 +178,7 @@ class WindowCallback extends WindowListenerManagerInstance
     private class WindowRefreshCallback extends GLFWWindowRefreshCallback
     {
         @Override
-        public void invoke(long windowHandle)
+        public final void invoke(long windowHandle)
         {
             if (windowHandle == window.getHandle())
             {
@@ -193,7 +193,7 @@ class WindowCallback extends WindowListenerManagerInstance
     private class WindowFocusCallback extends GLFWWindowFocusCallback
     {
         @Override
-        public void invoke(long windowHandle, boolean focused)
+        public final void invoke(long windowHandle, boolean focused)
         {
             if (windowHandle == window.getHandle())
             {
@@ -218,7 +218,7 @@ class WindowCallback extends WindowListenerManagerInstance
     private class WindowIconifyCallback extends GLFWWindowIconifyCallback
     {
         @Override
-        public void invoke(long windowHandle, boolean iconified)
+        public final void invoke(long windowHandle, boolean iconified)
         {
             if (windowHandle == window.getHandle())
             {
@@ -243,7 +243,7 @@ class WindowCallback extends WindowListenerManagerInstance
     private class FramebufferSizeCallback extends GLFWFramebufferSizeCallback
     {
         @Override
-        public void invoke(long windowHandle, int width, int height)
+        public final void invoke(long windowHandle, int width, int height)
         {
             if (windowHandle == window.getHandle())
             {
@@ -258,7 +258,7 @@ class WindowCallback extends WindowListenerManagerInstance
     private class KeyCallback extends GLFWKeyCallback
     {
         @Override
-        public void invoke(long windowHandle, int keycode, int scancode, int action, int mods)
+        public final void invoke(long windowHandle, int keycode, int scancode, int action, int mods)
         {
             if (windowHandle == window.getHandle())
             {
@@ -297,7 +297,7 @@ class WindowCallback extends WindowListenerManagerInstance
     private class CharCallback extends GLFWCharCallback
     {
         @Override
-        public void invoke(long windowHandle, int codepoint)
+        public final void invoke(long windowHandle, int codepoint)
         {
             if (windowHandle == window.getHandle())
             {
@@ -312,7 +312,7 @@ class WindowCallback extends WindowListenerManagerInstance
     private class CharModsCallback extends GLFWCharModsCallback
     {
         @Override
-        public void invoke(long windowHandle, int codepoint, int mods)
+        public final void invoke(long windowHandle, int codepoint, int mods)
         {
             if (windowHandle == window.getHandle())
             {
@@ -327,7 +327,7 @@ class WindowCallback extends WindowListenerManagerInstance
     private class MouseButtonCallback extends GLFWMouseButtonCallback
     {
         @Override
-        public void invoke(long windowHandle, int button, int action, int mods)
+        public final void invoke(long windowHandle, int button, int action, int mods)
         {
             if (windowHandle == window.getHandle())
             {
@@ -352,7 +352,7 @@ class WindowCallback extends WindowListenerManagerInstance
     private class CursorPosCallback extends GLFWCursorPosCallback
     {
         @Override
-        public void invoke(long windowHandle, double xpos, double ypos)
+        public final void invoke(long windowHandle, double xpos, double ypos)
         {
             if (windowHandle == window.getHandle())
             {
@@ -367,7 +367,7 @@ class WindowCallback extends WindowListenerManagerInstance
     private class CursorEnterCallback extends GLFWCursorEnterCallback
     {
         @Override
-        public void invoke(long windowHandle, boolean entered)
+        public final void invoke(long windowHandle, boolean entered)
         {
             if (windowHandle == window.getHandle())
             {
@@ -392,7 +392,7 @@ class WindowCallback extends WindowListenerManagerInstance
     private class ScrollCallback extends GLFWScrollCallback
     {
         @Override
-        public void invoke(long windowHandle, double xoffset, double yoffset)
+        public final void invoke(long windowHandle, double xoffset, double yoffset)
         {
             if (windowHandle == window.getHandle())
             {

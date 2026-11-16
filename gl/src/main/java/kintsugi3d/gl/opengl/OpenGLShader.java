@@ -227,7 +227,7 @@ class OpenGLShader implements Shader<OpenGLContext>
     }
 
     @Override
-    public OpenGLContext getContext()
+    public final OpenGLContext getContext()
     {
         return this.context;
     }
@@ -248,13 +248,13 @@ class OpenGLShader implements Shader<OpenGLContext>
         }
     }
 
-    int getShaderId()
+    final int getShaderId()
     {
         return shaderId;
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (live)
         {

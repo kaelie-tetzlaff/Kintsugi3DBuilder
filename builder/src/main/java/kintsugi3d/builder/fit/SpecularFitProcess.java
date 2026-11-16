@@ -67,17 +67,17 @@ public abstract class SpecularFitProcess
         this.outputDirectory = outputDirectory;
     }
 
-    protected ReadonlySpecularFitSettings getSettings()
+    protected final ReadonlySpecularFitSettings getSettings()
     {
         return this.settings;
     }
 
-    protected File getOutputDirectory()
+    protected final File getOutputDirectory()
     {
         return this.outputDirectory;
     }
 
-    public <ContextType extends Context<ContextType>> void reconstructAll(
+    public final <ContextType extends Context<ContextType>> void reconstructAll(
         ReadonlyImageBasedGraphicsResources<ContextType> resources, BiConsumer<ReconstructionView<ContextType>, ReadonlyColorAppearanceRMSE> reconstructionCallback)
         throws IOException
     {
@@ -132,7 +132,7 @@ public abstract class SpecularFitProcess
         }
     }
 
-    protected <ContextType extends Context<ContextType>> SpecularFitFinal<ContextType> optimizeFullResTexturesWithCache(
+    protected final <ContextType extends Context<ContextType>> SpecularFitFinal<ContextType> optimizeFullResTexturesWithCache(
         ImageCache<ContextType> cache, ProgressMonitor monitor, ReadonlyTextureResources<ContextType> original,
         MaterialBasis basis, Temporal start) throws IOException, UserCancellationException
     {
@@ -333,7 +333,7 @@ public abstract class SpecularFitProcess
         }
     }
 
-    protected <ContextType extends Context<ContextType>> void optimizeTexSpaceFit(
+    protected final <ContextType extends Context<ContextType>> void optimizeTexSpaceFit(
         ReadonlyImageBasedGraphicsResources<ContextType> resources,
         TextureResolution resolution,
         OptimizationMethod<ContextType> optimizationMethod,

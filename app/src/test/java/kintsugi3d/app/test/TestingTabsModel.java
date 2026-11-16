@@ -30,19 +30,19 @@ public class TestingTabsModel implements TabsModel
     }
 
     @Override
-    public CardsModel<?> getTab(String label)
+    public final CardsModel<?> getTab(String label)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public <T> CardsModel<T> getTab(String label, Class<T> dataClass)
+    public final <T> CardsModel<T> getTab(String label, Class<T> dataClass)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Map<String, ? extends CardsModel<?>> getTabsMap()
+    public final Map<String, ? extends CardsModel<?>> getTabsMap()
     {
         return Map.of();
     }

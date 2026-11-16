@@ -26,25 +26,25 @@ class OpenGLDefaultFramebuffer extends OpenGLFramebuffer implements DoubleFrameb
     }
 
     @Override
-    public FramebufferSize getSize()
+    public final FramebufferSize getSize()
     {
         return this.getContext().getDefaultFramebufferSize();
     }
 
     @Override
-    public int getColorAttachmentCount()
+    public final int getColorAttachmentCount()
     {
         return 1;
     }
 
     @Override
-    public void swapBuffers()
+    public final void swapBuffers()
     {
         this.getContext().swapDefaultFramebuffer();
     }
 
     @Override
-    DefaultFramebufferContents getContents()
+    final DefaultFramebufferContents getContents()
     {
         // Lazy initialization
         if (contents == null)
@@ -63,13 +63,13 @@ class OpenGLDefaultFramebuffer extends OpenGLFramebuffer implements DoubleFrameb
         }
 
         @Override
-        int getId()
+        final int getId()
         {
             return 0;
         }
 
         @Override
-        void selectColorSourceForRead(int index)
+        final void selectColorSourceForRead(int index)
         {
             if (index == 0)
             {
@@ -83,7 +83,7 @@ class OpenGLDefaultFramebuffer extends OpenGLFramebuffer implements DoubleFrameb
         }
 
         @Override
-        void selectColorDestinationForDraw(int index)
+        final void selectColorDestinationForDraw(int index)
         {
             if (index == 0)
             {
@@ -97,7 +97,7 @@ class OpenGLDefaultFramebuffer extends OpenGLFramebuffer implements DoubleFrameb
         }
 
         @Override
-        void useAllColorDestinationsForDraw()
+        final void useAllColorDestinationsForDraw()
         {
             glDrawBuffer(GL_FRONT);
             OpenGLContext.errorCheck();

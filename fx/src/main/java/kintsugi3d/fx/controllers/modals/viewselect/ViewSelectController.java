@@ -65,12 +65,12 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
     protected abstract boolean canSelectNullView();
 
     @Override
-    public Region getRootNode()
+    public final Region getRootNode()
     {
         return hostPane;
     }
 
-    protected double getPrimaryViewRotation()
+    protected final double getPrimaryViewRotation()
     {
         return primaryImgView.getRotate();
     }
@@ -98,7 +98,7 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
     }
 
     @Override
-    public void refresh()
+    public final void refresh()
     {
         if (newData != null && !newData.equals(data))
         {
@@ -224,7 +224,7 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
     }
 
     @FXML
-    public void selectImageInTreeView()
+    public final void selectImageInTreeView()
     {
         // selectedItem holds the cameraID associated with the image
         TreeItem<String> selectedItem = chunkTreeView.getSelectionModel().getSelectedItem();
@@ -314,7 +314,7 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
         primaryImgView.setRotate(rotation % 360);
     }
 
-    protected @Nullable String getSelectedViewName()
+    protected final @Nullable String getSelectedViewName()
     {
         TreeItem<String> selection = chunkTreeView.getSelectionModel().getSelectedItem();
 
@@ -326,13 +326,13 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
         return null;
     }
 
-    protected ViewSelectable getData()
+    protected final ViewSelectable getData()
     {
         return data;
     }
 
     @Override
-    public void receiveData(ViewSelectable dataReceived)
+    public final void receiveData(ViewSelectable dataReceived)
     {
         this.newData = dataReceived;
     }

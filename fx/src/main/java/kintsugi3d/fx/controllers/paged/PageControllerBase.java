@@ -45,7 +45,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
     private volatile boolean alertShown = false;
 
     @Override
-    public PageFrameController getPageFrameController()
+    public final PageFrameController getPageFrameController()
     {
         return pageFrameController;
     }
@@ -228,12 +228,12 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
         });
     }
 
-    protected void error(String title, String message)
+    protected final void error(String title, String message)
     {
         alert(title, message, false);
     }
 
-    protected void warning(String title, String message)
+    protected final void warning(String title, String message)
     {
         alert(title, message, true);
     }

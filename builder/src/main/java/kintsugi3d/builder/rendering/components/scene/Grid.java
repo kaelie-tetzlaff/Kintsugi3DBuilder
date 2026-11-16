@@ -34,7 +34,7 @@ public class Grid<ContextType extends Context<ContextType>> extends ShaderCompon
     }
 
     @Override
-    protected ProgramObject<ContextType> createProgram() throws IOException
+    protected final ProgramObject<ContextType> createProgram() throws IOException
     {
         return getContext().getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File(new File(new File("shaders"), "common"), "imgspace.vert"))
@@ -43,7 +43,7 @@ public class Grid<ContextType extends Context<ContextType>> extends ShaderCompon
     }
 
     @Override
-    protected Map<String, VertexBuffer<ContextType>> createVertexBuffers()
+    protected final Map<String, VertexBuffer<ContextType>> createVertexBuffers()
     {
         float[] grid = new float[252];
         for (int i = 0; i < 21; i++)
@@ -71,7 +71,7 @@ public class Grid<ContextType extends Context<ContextType>> extends ShaderCompon
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         // Draw grid
         if (sceneModel.getSettingsModel().getBoolean("is3DGridEnabled"))

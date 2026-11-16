@@ -16,13 +16,13 @@ public abstract class DrawableBase<ContextType extends Context<ContextType>> imp
     private PrimitiveMode defaultPrimitiveMode = PrimitiveMode.TRIANGLES;
 
     @Override
-    public PrimitiveMode getDefaultPrimitiveMode()
+    public final PrimitiveMode getDefaultPrimitiveMode()
     {
         return defaultPrimitiveMode;
     }
 
     @Override
-    public void setDefaultPrimitiveMode(PrimitiveMode primitiveMode)
+    public final void setDefaultPrimitiveMode(PrimitiveMode primitiveMode)
     {
         this.defaultPrimitiveMode = primitiveMode;
     }

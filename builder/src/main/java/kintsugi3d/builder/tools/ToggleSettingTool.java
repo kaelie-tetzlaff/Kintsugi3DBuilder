@@ -25,7 +25,7 @@ public final class ToggleSettingTool implements KeyPressTool
         }
 
         @Override
-        public ToggleSettingTool create()
+        public final ToggleSettingTool create()
         {
             return new ToggleSettingTool(settingName, getSettingsModel());
         }

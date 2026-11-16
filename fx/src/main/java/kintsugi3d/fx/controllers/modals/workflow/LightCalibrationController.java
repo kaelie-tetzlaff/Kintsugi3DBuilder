@@ -39,13 +39,13 @@ public class LightCalibrationController extends NonDataPageControllerBase
     private ObservableGeneralSettingsModel settingsModel;
 
     @Override
-    public Region getRootNode()
+    public final Region getRootNode()
     {
         return root;
     }
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         StaticUtilities.makeNumeric(xTextField);
         StaticUtilities.makeNumeric(yTextField);
@@ -57,7 +57,7 @@ public class LightCalibrationController extends NonDataPageControllerBase
     }
 
     @Override
-    public void refresh()
+    public final void refresh()
     {
         // Bind controller to settings model to synchronize with "currentLightCalibration".
         bind();
@@ -77,7 +77,7 @@ public class LightCalibrationController extends NonDataPageControllerBase
     }
 
     @Override
-    public boolean tryCancel()
+    public final boolean tryCancel()
     {
         if (StaticUtilities.confirmCancel())
         {
@@ -92,7 +92,7 @@ public class LightCalibrationController extends NonDataPageControllerBase
     }
 
     @Override
-    public boolean tryConfirm()
+    public final boolean tryConfirm()
     {
         Global.io().applyLightOffsetCalibration();
         settingsModel.set("lightCalibrationMode", false);
@@ -234,7 +234,7 @@ public class LightCalibrationController extends NonDataPageControllerBase
         settingsModel.getObjectProperty("currentLightCalibration", Vector2.class).removeListener(settingsListener);
     }
 
-    public void reset()
+    public final void reset()
     {
         xSlider.setValue(0.0);
         ySlider.setValue(0.0);

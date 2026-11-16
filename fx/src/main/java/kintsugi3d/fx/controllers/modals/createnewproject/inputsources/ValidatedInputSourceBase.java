@@ -29,43 +29,43 @@ public abstract class ValidatedInputSourceBase extends ViewSelectableBase implem
     }
 
     @Override
-    public File getMasksDirectory()
+    public final File getMasksDirectory()
     {
         return original.getMasksDirectory();
     }
 
     @Override
-    public void setMasksDirectory(File file)
+    public final void setMasksDirectory(File file)
     {
         original.setMasksDirectory(file);
     }
 
     @Override
-    public File getInitialMasksDirectory()
+    public final File getInitialMasksDirectory()
     {
         return original.getInitialMasksDirectory();
     }
 
     @Override
-    public boolean hasProjectMasks()
+    public final boolean hasProjectMasks()
     {
         return original.hasProjectMasks();
     }
 
     @Override
-    public File specifyProjectFileToSave()
+    public final File specifyProjectFileToSave()
     {
         return original.specifyProjectFileToSave();
     }
 
     @Override
-    public Collection<File> getDisabledImages()
+    public final Collection<File> getDisabledImages()
     {
         return original.getDisabledImages();
     }
 
     @Override
-    public ImageSetInfo getImageSetInfo()
+    public final ImageSetInfo getImageSetInfo()
     {
         return imageSetInfo;
     }

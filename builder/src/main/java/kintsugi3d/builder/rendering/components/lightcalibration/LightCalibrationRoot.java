@@ -40,32 +40,32 @@ public class LightCalibrationRoot<ContextType extends Context<ContextType>> impl
     }
 
     @Override
-    public void initialize()
+    public final void initialize()
     {
         viewSnapRoot.takeContentRoot(new LightCalibrationContent<>(resources, sceneModel, sceneViewportModel));
         viewSnapRoot.initialize();
     }
 
     @Override
-    public void update()
+    public final void update()
     {
         viewSnapRoot.update();
     }
 
     @Override
-    public void reloadShaders()
+    public final void reloadShaders()
     {
         viewSnapRoot.reloadShaders();
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         viewSnapRoot.draw(framebuffer, cameraViewport);
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (viewSnapRoot != null)
         {

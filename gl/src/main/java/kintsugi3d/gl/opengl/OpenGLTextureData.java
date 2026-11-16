@@ -26,17 +26,17 @@ public class OpenGLTextureData
         this.buffer = buffer;
     }
 
-    public int getFormat()
+    public final int getFormat()
     {
         return format;
     }
 
-    public int getType()
+    public final int getType()
     {
         return type;
     }
 
-    public ByteBuffer getBuffer()
+    public final ByteBuffer getBuffer()
     {
         return buffer;
     }

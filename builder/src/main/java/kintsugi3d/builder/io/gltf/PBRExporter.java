@@ -22,14 +22,14 @@ import kintsugi3d.builder.core.texture.StandardTexture;
 public class PBRExporter extends MaterialExporter
 {
     @StandardTextureExport(StandardTexture.ALBEDO)
-    public void baseColor(TextureInfo baseColor)
+    public final void baseColor(TextureInfo baseColor)
     {
         getAsset().getGltf().getMaterials().forEach(
             material -> material.getPbrMetallicRoughness().setBaseColorTexture(baseColor));
     }
 
     @StandardTextureExport(StandardTexture.ORM)
-    public void orm(TextureInfo orm)
+    public final void orm(TextureInfo orm)
     {
         getAsset().getGltf().getMaterials().forEach(material ->
         {
@@ -41,7 +41,7 @@ public class PBRExporter extends MaterialExporter
     }
 
     @StandardTextureExport(StandardTexture.NORMAL_MAP)
-    public void normalMap(MaterialNormalTextureInfo normal)
+    public final void normalMap(MaterialNormalTextureInfo normal)
     {
         getAsset().getGltf().getMaterials().forEach(material -> material.setNormalTexture(normal));
     }

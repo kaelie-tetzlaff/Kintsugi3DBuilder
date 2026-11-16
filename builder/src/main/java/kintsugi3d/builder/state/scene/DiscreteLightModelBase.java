@@ -24,139 +24,139 @@ public abstract class DiscreteLightModelBase implements DiscreteLightModel
     }
 
     @Override
-    public boolean isLocked()
+    public final boolean isLocked()
     {
         return lightCameraModel.isLocked();
     }
 
     @Override
-    public Matrix4 getLookMatrix()
+    public final Matrix4 getLookMatrix()
     {
         return lightCameraModel.getLookMatrix();
     }
 
     @Override
-    public void setLookMatrix(Matrix4 lookMatrix)
+    public final void setLookMatrix(Matrix4 lookMatrix)
     {
         lightCameraModel.setLookMatrix(lookMatrix);
     }
 
     @Override
-    public Matrix4 getOrbit()
+    public final Matrix4 getOrbit()
     {
         return lightCameraModel.getOrbit();
     }
 
     @Override
-    public void setOrbit(Matrix4 orbit)
+    public final void setOrbit(Matrix4 orbit)
     {
         lightCameraModel.setOrbit(orbit);
     }
 
     @Override
-    public float getDistance()
+    public final float getDistance()
     {
         return lightCameraModel.getDistance();
     }
 
     @Override
-    public void setDistance(float distance)
+    public final void setDistance(float distance)
     {
         lightCameraModel.setDistance(distance);
     }
 
     @Override
-    public Vector3 getTarget()
+    public final Vector3 getTarget()
     {
         return lightCameraModel.getTarget();
     }
 
     @Override
-    public void setTarget(Vector3 target)
+    public final void setTarget(Vector3 target)
     {
         lightCameraModel.setTarget(target);
     }
 
     @Override
-    public float getAzimuth()
+    public final float getAzimuth()
     {
         return lightCameraModel.getAzimuth();
     }
 
     @Override
-    public void setAzimuth(float azimuth)
+    public final void setAzimuth(float azimuth)
     {
         lightCameraModel.setAzimuth(azimuth);
     }
 
     @Override
-    public float getInclination()
+    public final float getInclination()
     {
         return lightCameraModel.getInclination();
     }
 
     @Override
-    public void setInclination(float inclination)
+    public final void setInclination(float inclination)
     {
         lightCameraModel.setInclination(inclination);
     }
 
     @Override
-    public float getLog10Distance()
+    public final float getLog10Distance()
     {
         return lightCameraModel.getLog10Distance();
     }
 
     @Override
-    public void setLog10Distance(float log10Distance)
+    public final void setLog10Distance(float log10Distance)
     {
         lightCameraModel.setLog10Distance(log10Distance);
     }
 
     @Override
-    public float getTwist()
+    public final float getTwist()
     {
         return lightCameraModel.getTwist();
     }
 
     @Override
-    public void setTwist(float twist)
+    public final void setTwist(float twist)
     {
         lightCameraModel.setTwist(twist);
     }
 
     @Override
-    public float getHorizontalFOV()
+    public final float getHorizontalFOV()
     {
         return lightCameraModel.getHorizontalFOV();
     }
 
     @Override
-    public void setHorizontalFOV(float fov)
+    public final void setHorizontalFOV(float fov)
     {
         lightCameraModel.setHorizontalFOV(fov);
     }
 
     @Override
-    public float getFocalLength()
+    public final float getFocalLength()
     {
         return lightCameraModel.getFocalLength();
     }
 
     @Override
-    public void setFocalLength(float focalLength)
+    public final void setFocalLength(float focalLength)
     {
         lightCameraModel.setFocalLength(focalLength);
     }
 
     @Override
-    public boolean isOrthographic()
+    public final boolean isOrthographic()
     {
         return lightCameraModel.isOrthographic();
     }
 
     @Override
-    public void setOrthographic(boolean orthographic)
+    public final void setOrthographic(boolean orthographic)
     {
         lightCameraModel.setOrthographic(orthographic);
     }

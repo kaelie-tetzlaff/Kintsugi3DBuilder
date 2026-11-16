@@ -29,32 +29,32 @@ public class TestingCacheModel extends CacheModelBase
     private final List<DoubleConsumer> cacheSizeChangedCallbacks = new ArrayList<>(1);
 
     @Override
-    public long getCacheSizeBytes()
+    public final long getCacheSizeBytes()
     {
         return cacheSize;
     }
 
     @Override
-    public double getCacheSizeGB()
+    public final double getCacheSizeGB()
     {
         return cacheSize * BYTES_TO_GB;
     }
 
     @Override
-    public Map<String, Long> getProjectSizes()
+    public final Map<String, Long> getProjectSizes()
     {
         //noinspection AssignmentOrReturnOfFieldWithMutableType
         return projectSizes;
     }
 
     @Override
-    public boolean isCacheSizeCalcInProgress()
+    public final boolean isCacheSizeCalcInProgress()
     {
         return cacheSizeCalcInProgress;
     }
 
     @Override
-    protected void updateCacheSize(long newCacheSize, Map<String, Long> newProjectSizes, Runnable onCompleteCallback)
+    protected final void updateCacheSize(long newCacheSize, Map<String, Long> newProjectSizes, Runnable onCompleteCallback)
     {
         try
         {
@@ -98,13 +98,13 @@ public class TestingCacheModel extends CacheModelBase
     }
 
     @Override
-    protected void setCacheSizeCalcInProgress(boolean cacheSizeCalcInProgress)
+    protected final void setCacheSizeCalcInProgress(boolean cacheSizeCalcInProgress)
     {
         this.cacheSizeCalcInProgress = cacheSizeCalcInProgress;
     }
 
     @Override
-    protected void addCacheSizeChangeCallback(DoubleConsumer cacheSizeChangeCallback)
+    protected final void addCacheSizeChangeCallback(DoubleConsumer cacheSizeChangeCallback)
     {
         if (cacheSizeChangeCallback != null)
         {
@@ -116,7 +116,7 @@ public class TestingCacheModel extends CacheModelBase
     }
 
     @Override
-    protected void removeAllCacheSizeChangeCallbacks()
+    protected final void removeAllCacheSizeChangeCallbacks()
     {
         synchronized (cacheSizeChangedCallbacks)
         {

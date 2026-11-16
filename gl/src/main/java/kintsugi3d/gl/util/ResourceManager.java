@@ -36,7 +36,7 @@ public class ResourceManager<ResourceType>
         nextSlot = 0;
     }
 
-    public int assignResourceByKey(int key, ResourceType resource)
+    public final int assignResourceByKey(int key, ResourceType resource)
     {
         // Check if the key has already been assigned a texture
         for (int i = 0; i < length; i++)
@@ -65,12 +65,12 @@ public class ResourceManager<ResourceType>
     }
 
     @SuppressWarnings("unchecked")
-    public ResourceType getResourceByUnit(int index)
+    public final ResourceType getResourceByUnit(int index)
     {
         return (ResourceType)resources[index];
     }
 
-    public List<ResourceType> asReadonlyList()
+    public final List<ResourceType> asReadonlyList()
     {
         //noinspection unchecked
         return Collections.unmodifiableList((List<ResourceType>)Arrays.asList(resources));

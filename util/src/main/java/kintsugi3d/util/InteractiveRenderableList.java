@@ -56,7 +56,7 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public void initialize() throws InitializationException
+    public final void initialize() throws InitializationException
     {
         for (InteractiveRenderableResource<ContextType> r : renderables)
         {
@@ -65,7 +65,7 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public void update()
+    public final void update()
     {
         removedRenderables.forEach(InteractiveRenderableResource::close);
 
@@ -97,7 +97,7 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public void draw(Framebuffer<ContextType> framebuffer)
+    public final void draw(Framebuffer<ContextType> framebuffer)
     {
         InteractiveRenderableResource<ContextType> selected = this.getSelectedItem();
         if (selected != null)
@@ -107,7 +107,7 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         for (InteractiveRenderableResource<ContextType> r : renderables)
         {
@@ -116,13 +116,13 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public int getSelectedIndex()
+    public final int getSelectedIndex()
     {
         return selectedIndex;
     }
 
     @Override
-    public @Nullable RenderableType getSelectedItem()
+    public final @Nullable RenderableType getSelectedItem()
     {
         if (selectedIndex < 0)
         {
@@ -135,13 +135,13 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public void setSelectedIndex(int index)
+    public final void setSelectedIndex(int index)
     {
         this.selectedIndex = index;
     }
 
     @Override
-    public void setSelectedItem(Object item)
+    public final void setSelectedItem(Object item)
     {
         if (item == null)
         {
@@ -154,43 +154,43 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public int size()
+    public final int size()
     {
         return renderables.size();
     }
 
     @Override
-    public boolean isEmpty()
+    public final boolean isEmpty()
     {
         return renderables.isEmpty();
     }
 
     @Override
-    public boolean contains(Object o)
+    public final boolean contains(Object o)
     {
         return renderables.contains(o);
     }
 
     @Override
-    public @NotNull Iterator<RenderableType> iterator()
+    public final @NotNull Iterator<RenderableType> iterator()
     {
         return renderables.iterator();
     }
 
     @Override
-    public Object @NotNull [] toArray()
+    public final Object @NotNull [] toArray()
     {
         return renderables.toArray();
     }
 
     @Override
-    public <U> U @NotNull [] toArray(U @NotNull [] a)
+    public final <U> U @NotNull [] toArray(U @NotNull [] a)
     {
         return renderables.toArray(a);
     }
 
     @Override
-    public boolean add(RenderableType e)
+    public final boolean add(RenderableType e)
     {
         renderables.add(e);
         addedRenderables.add(e);
@@ -199,7 +199,7 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean remove(Object o)
+    public final boolean remove(Object o)
     {
         if (renderables.remove(o))
         {
@@ -213,14 +213,14 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public boolean containsAll(@NotNull Collection<?> c)
+    public final boolean containsAll(@NotNull Collection<?> c)
     {
         //noinspection SlowListContainsAll
         return renderables.containsAll(c);
     }
 
     @Override
-    public boolean addAll(@NotNull Collection<? extends RenderableType> c)
+    public final boolean addAll(@NotNull Collection<? extends RenderableType> c)
     {
         if (renderables.addAll(c))
         {
@@ -234,7 +234,7 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public boolean addAll(int index, @NotNull Collection<? extends RenderableType> c)
+    public final boolean addAll(int index, @NotNull Collection<? extends RenderableType> c)
     {
         if (renderables.addAll(index, c))
         {
@@ -252,32 +252,32 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public boolean removeAll(@NotNull Collection<?> c)
+    public final boolean removeAll(@NotNull Collection<?> c)
     {
         throw new UnsupportedOperationException("removeAll() is not supported by InteractiveRenderableList.");
     }
 
     @Override
-    public boolean retainAll(@NotNull Collection<?> c)
+    public final boolean retainAll(@NotNull Collection<?> c)
     {
         throw new UnsupportedOperationException("retainAll() is not supported by InteractiveRenderableList.");
     }
 
     @Override
-    public void clear()
+    public final void clear()
     {
         this.removedRenderables = this.renderables;
         this.renderables = new ArrayList<>(8);
     }
 
     @Override
-    public RenderableType get(int index)
+    public final RenderableType get(int index)
     {
         return renderables.get(index);
     }
 
     @Override
-    public RenderableType set(int index, RenderableType element)
+    public final RenderableType set(int index, RenderableType element)
     {
         RenderableType removed = renderables.set(index, element);
         if (removed != null)
@@ -292,7 +292,7 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public void add(int index, RenderableType element)
+    public final void add(int index, RenderableType element)
     {
         renderables.add(index, element);
         if (element != null)
@@ -306,7 +306,7 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public RenderableType remove(int index)
+    public final RenderableType remove(int index)
     {
         RenderableType removed = renderables.remove(index);
         if (removed != null)
@@ -321,31 +321,31 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public int indexOf(Object o)
+    public final int indexOf(Object o)
     {
         return renderables.indexOf(o);
     }
 
     @Override
-    public int lastIndexOf(Object o)
+    public final int lastIndexOf(Object o)
     {
         return renderables.lastIndexOf(o);
     }
 
     @Override
-    public @NotNull ListIterator<RenderableType> listIterator()
+    public final @NotNull ListIterator<RenderableType> listIterator()
     {
         return renderables.listIterator();
     }
 
     @Override
-    public @NotNull ListIterator<RenderableType> listIterator(int index)
+    public final @NotNull ListIterator<RenderableType> listIterator(int index)
     {
         return renderables.listIterator(index);
     }
 
     @Override
-    public @NotNull InteractiveRenderableList<ContextType, RenderableType> subList(int fromIndex, int toIndex)
+    public final @NotNull InteractiveRenderableList<ContextType, RenderableType> subList(int fromIndex, int toIndex)
     {
         return new InteractiveRenderableList<>(renderables.subList(fromIndex, toIndex));
     }

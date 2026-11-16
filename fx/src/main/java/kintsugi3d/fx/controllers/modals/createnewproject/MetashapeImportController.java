@@ -54,13 +54,13 @@ public class MetashapeImportController extends ProjectImportController
     @FXML private FileChooser psxFileChooser;
 
     @Override
-    public Region getRootNode()
+    public final Region getRootNode()
     {
         return rootPane;
     }
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         psxFileChooser = new FileChooser();
         psxFileChooser.setTitle("Choose .psx file");
@@ -71,7 +71,7 @@ public class MetashapeImportController extends ProjectImportController
     }
 
     @Override
-    public void refresh()
+    public final void refresh()
     {
         updateLoadedIndicators();
         //need to do Platform.runLater so updateModelSelectionChoiceBox can pull info from chunkSelectionChoiceBox
@@ -104,7 +104,7 @@ public class MetashapeImportController extends ProjectImportController
     }
 
     @Override
-    protected MetashapeProjectInputSource getData()
+    protected final MetashapeProjectInputSource getData()
     {
         return new MetashapeProjectInputSource(() -> FrontendIO.getInstance().showSaveProjectDialog(getPageFrameController().getWindow()))
             .setMetashapeModel(metashapeDocument.getSelectedChunk().getSelectedModel());

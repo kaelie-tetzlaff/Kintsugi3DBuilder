@@ -18,7 +18,7 @@ import kintsugi3d.util.OrbitPolarConverter;
 public abstract class ViewpointModelBase implements ManipulableViewpointModel
 {
     @Override
-    public Matrix4 getLookMatrix()
+    public final Matrix4 getLookMatrix()
     {
         return Matrix4.lookAt(
             new Vector3(0, 0, getDistance()),
@@ -36,14 +36,14 @@ public abstract class ViewpointModelBase implements ManipulableViewpointModel
     }
 
     @Override
-    public Matrix4 getOrbit()
+    public final Matrix4 getOrbit()
     {
         Vector3 polar = new Vector3(getAzimuth(), getInclination(), getTwist());
         return OrbitPolarConverter.convertToOrbitMatrix(polar);
     }
 
     @Override
-    public void setOrbit(Matrix4 orbit)
+    public final void setOrbit(Matrix4 orbit)
     {
         Vector3 polar = OrbitPolarConverter.convertToPolarCoordinates(orbit);
         setAzimuth(polar.x);
@@ -52,13 +52,13 @@ public abstract class ViewpointModelBase implements ManipulableViewpointModel
     }
 
     @Override
-    public float getDistance()
+    public final float getDistance()
     {
         return (float) StrictMath.pow(10, getLog10Distance());
     }
 
     @Override
-    public void setDistance(float distance)
+    public final void setDistance(float distance)
     {
         setLog10Distance((float) StrictMath.log10(distance));
     }

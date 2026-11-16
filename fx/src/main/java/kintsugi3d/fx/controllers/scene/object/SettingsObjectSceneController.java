@@ -58,7 +58,7 @@ public class SettingsObjectSceneController implements Initializable
     private final ObjectOrientationReferenceView referenceViewExperience = new ObjectOrientationReferenceView();
 
     @Override
-    public void initialize(URL location, ResourceBundle resources)
+    public final void initialize(URL location, ResourceBundle resources)
     {
         StaticUtilities.makeWrapAroundNumeric(-180, 180, rotateYTextField);
         StaticUtilities.makeClampedNumeric(-90, 90, rotateXTextField);
@@ -106,17 +106,17 @@ public class SettingsObjectSceneController implements Initializable
         }
     };
 
-    public ChangeListener<ObservableObjectPoseSettings> getChangeListener()
+    public final ChangeListener<ObservableObjectPoseSettings> getChangeListener()
     {
         return changeListener;
     }
 
-    public void setDisabled(Boolean disabled)
+    public final void setDisabled(Boolean disabled)
     {
         root.setDisable(disabled);
     }
 
-    public void bind(ObservableObjectPoseSettings objectPose)
+    public final void bind(ObservableObjectPoseSettings objectPose)
     {
         xCenterTextField.textProperty().bindBidirectional(objectPose.centerXProperty(), converter);
         yCenterTextField.textProperty().bindBidirectional(objectPose.centerYProperty(), converter);
@@ -138,7 +138,7 @@ public class SettingsObjectSceneController implements Initializable
         scaleSlider.valueProperty().bindBidirectional(objectPose.scaleProperty());
     }
 
-    public void unbind(ObservableObjectPoseSettings objectPose)
+    public final void unbind(ObservableObjectPoseSettings objectPose)
     {
 
         xCenterTextField.textProperty().unbindBidirectional(objectPose.centerXProperty());
@@ -158,12 +158,12 @@ public class SettingsObjectSceneController implements Initializable
         scaleSlider.valueProperty().unbindBidirectional(objectPose.scaleProperty());
     }
 
-    public void setOnActionSelectPoint(EventHandler<ActionEvent> actionEventEventHandler)
+    public final void setOnActionSelectPoint(EventHandler<ActionEvent> actionEventEventHandler)
     {
         selectPointButton.setOnAction(actionEventEventHandler);
     }
 
-    public void onUpdateOrientationView()
+    public final void onUpdateOrientationView()
     {
         if (!referenceViewExperience.isInitialized())
         {

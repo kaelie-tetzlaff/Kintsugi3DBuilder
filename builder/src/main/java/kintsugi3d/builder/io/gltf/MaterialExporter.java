@@ -66,22 +66,22 @@ public class MaterialExporter
         this.asset = asset;
     }
 
-    public void setFilename(String filename)
+    public final void setFilename(String filename)
     {
         this.filename = filename;
     }
 
-    public String getFilename()
+    public final String getFilename()
     {
         return this.filename;
     }
 
-    public int getMinLODSize()
+    public final int getMinLODSize()
     {
         return minLODSize;
     }
 
-    public void setMinLODSize(int minLODSize)
+    public final void setMinLODSize(int minLODSize)
     {
         this.minLODSize = minLODSize;
     }
@@ -107,12 +107,12 @@ public class MaterialExporter
         this.textureFileFormat = textureFileFormat;
     }
 
-    public ReadonlyTextureResources<?> getTextureResources()
+    public final ReadonlyTextureResources<?> getTextureResources()
     {
         return textureResources;
     }
 
-    public void setTextureResources(ReadonlyTextureResources<? extends Context<?>> textureResources)
+    public final void setTextureResources(ReadonlyTextureResources<? extends Context<?>> textureResources)
     {
         this.textureResources = textureResources;
     }
@@ -238,7 +238,7 @@ public class MaterialExporter
         textureResources.saveNamedTextures(getSupportedTextures(), textureFileFormat, outputDirectory, textureFilePrefix);
     }
 
-    public void makeLODs(File outputDirectory)
+    public final void makeLODs(File outputDirectory)
     {
         LODGenerator.generateLODs(minLODSize, outputDirectory,
             textures.values().toArray(TextureExportSpecification[]::new));
@@ -274,7 +274,7 @@ public class MaterialExporter
      * @param texName
      * @return
      */
-    protected TextureInfo addTexture(String texName)
+    protected final TextureInfo addTexture(String texName)
     {
         return addTexture(texName, false);
     }
@@ -285,7 +285,7 @@ public class MaterialExporter
      * @param requiresAlpha
      * @return
      */
-    protected TextureInfo addTexture(String texName, boolean requiresAlpha)
+    protected final TextureInfo addTexture(String texName, boolean requiresAlpha)
     {
         String format = determineFileFormat(textureFileFormat, requiresAlpha);
         return createRelativeTexture(getTextureFilename(texName, format), texName, format);
@@ -343,7 +343,7 @@ public class MaterialExporter
         return occlusionInfo;
     }
 
-    protected String getTextureFilename(String name, String format)
+    protected final String getTextureFilename(String name, String format)
     {
         return TextureResources.getTextureFilename(name, format, textureFilePrefix);
     }

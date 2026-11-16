@@ -28,7 +28,7 @@ public class KeyPress
     }
 
     @Override
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         if (obj instanceof KeyPress)
         {
@@ -42,7 +42,7 @@ public class KeyPress
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         StringBuilder builder = new StringBuilder(40);
 
@@ -72,7 +72,7 @@ public class KeyPress
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         int result = key.hashCode();
         result = 31 * result + modifierKeys.hashCode();

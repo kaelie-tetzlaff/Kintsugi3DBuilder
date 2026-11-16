@@ -52,7 +52,7 @@ public class LightVisualsGroup<ContextType extends Context<ContextType>> impleme
     }
 
     @Override
-    public void initialize()
+    public final void initialize()
     {
         this.lights.initialize();
         this.lightCenters.initialize();
@@ -65,7 +65,7 @@ public class LightVisualsGroup<ContextType extends Context<ContextType>> impleme
     }
 
     @Override
-    public void reloadShaders()
+    public final void reloadShaders()
     {
         lights.reloadShaders();
         lightCenters.reloadShaders();
@@ -75,7 +75,7 @@ public class LightVisualsGroup<ContextType extends Context<ContextType>> impleme
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         LightWidgetInfo[] widgetInfo = LightWidgetInfo.calculate(sceneViewportModel, sceneModel, cameraViewport, framebuffer.getSize());
         lightWidgets.refreshWidgetInfo(widgetInfo);
@@ -90,7 +90,7 @@ public class LightVisualsGroup<ContextType extends Context<ContextType>> impleme
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         lights.close();
         lightCenters.close();

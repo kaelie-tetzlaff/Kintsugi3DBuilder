@@ -22,22 +22,22 @@ public class AttachmentSpec
     {
     }
 
-    public int getMultisamples()
+    public final int getMultisamples()
     {
         return multisamples;
     }
 
-    public boolean areMultisampleLocationsFixed()
+    public final boolean areMultisampleLocationsFixed()
     {
         return fixedMultisampleLocations;
     }
 
-    public boolean areMipmapsEnabled()
+    public final boolean areMipmapsEnabled()
     {
         return mipmapsEnabled;
     }
 
-    public boolean isLinearFilteringEnabled()
+    public final boolean isLinearFilteringEnabled()
     {
         return linearFilteringEnabled;
     }

@@ -39,7 +39,7 @@ public class ShaderCardFactory extends ProjectDataCardFactoryBase<ShaderInfo>
     }
 
     @Override
-    public Class<ShaderInfo> getDataClass()
+    public final Class<ShaderInfo> getDataClass()
     {
         return ShaderInfo.class;
     }
@@ -64,7 +64,7 @@ public class ShaderCardFactory extends ProjectDataCardFactoryBase<ShaderInfo>
      * @return ProjectDataCard of the shader (single card).
      */
     @Override
-    public ProjectDataCard createCard(ShaderInfo shader)
+    public final ProjectDataCard createCard(ShaderInfo shader)
     {
         return new ShaderDataCard(shader.getFilename(), shader, AppIcon.PATH, null, Map.of(), List.of(), true);
     }
@@ -76,7 +76,7 @@ public class ShaderCardFactory extends ProjectDataCardFactoryBase<ShaderInfo>
      @return
      */
     @Override
-    public List<ProjectDataCard> createAllCards()
+    public final List<ProjectDataCard> createAllCards()
     {
         // shaderDataCards is an arraylist that will hold all shaders user can use
         List<ProjectDataCard> shaderDataCards = new ArrayList<>(9);

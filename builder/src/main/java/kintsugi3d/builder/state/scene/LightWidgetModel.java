@@ -23,89 +23,89 @@ public class LightWidgetModel implements ReadonlyLightWidgetModel
     private boolean centerWidgetSelected = false;
 
     @Override
-    public boolean isAzimuthWidgetVisible()
+    public final boolean isAzimuthWidgetVisible()
     {
         return azimuthWidgetVisible;
     }
 
     @Override
-    public boolean isAzimuthWidgetSelected()
+    public final boolean isAzimuthWidgetSelected()
     {
         return azimuthWidgetSelected;
     }
 
     @Override
-    public boolean isInclinationWidgetVisible()
+    public final boolean isInclinationWidgetVisible()
     {
         return inclinationWidgetVisible;
     }
 
     @Override
-    public boolean isInclinationWidgetSelected()
+    public final boolean isInclinationWidgetSelected()
     {
         return inclinationWidgetSelected;
     }
 
     @Override
-    public boolean isDistanceWidgetVisible()
+    public final boolean isDistanceWidgetVisible()
     {
         return distanceWidgetVisible;
     }
 
     @Override
-    public boolean isDistanceWidgetSelected()
+    public final boolean isDistanceWidgetSelected()
     {
         return distanceWidgetSelected;
     }
 
     @Override
-    public boolean isCenterWidgetVisible()
+    public final boolean isCenterWidgetVisible()
     {
         return centerWidgetVisible;
     }
 
     @Override
-    public boolean isCenterWidgetSelected()
+    public final boolean isCenterWidgetSelected()
     {
         return centerWidgetSelected;
     }
 
-    public void setAzimuthWidgetVisible(boolean azimuthWidgetVisible)
+    public final void setAzimuthWidgetVisible(boolean azimuthWidgetVisible)
     {
         this.azimuthWidgetVisible = azimuthWidgetVisible;
     }
 
-    public void setAzimuthWidgetSelected(boolean azimuthWidgetSelected)
+    public final void setAzimuthWidgetSelected(boolean azimuthWidgetSelected)
     {
         this.azimuthWidgetSelected = azimuthWidgetSelected;
     }
 
-    public void setInclinationWidgetVisible(boolean inclinationWidgetVisible)
+    public final void setInclinationWidgetVisible(boolean inclinationWidgetVisible)
     {
         this.inclinationWidgetVisible = inclinationWidgetVisible;
     }
 
-    public void setInclinationWidgetSelected(boolean inclinationWidgetSelected)
+    public final void setInclinationWidgetSelected(boolean inclinationWidgetSelected)
     {
         this.inclinationWidgetSelected = inclinationWidgetSelected;
     }
 
-    public void setDistanceWidgetVisible(boolean distanceWidgetVisible)
+    public final void setDistanceWidgetVisible(boolean distanceWidgetVisible)
     {
         this.distanceWidgetVisible = distanceWidgetVisible;
     }
 
-    public void setDistanceWidgetSelected(boolean distanceWidgetSelected)
+    public final void setDistanceWidgetSelected(boolean distanceWidgetSelected)
     {
         this.distanceWidgetSelected = distanceWidgetSelected;
     }
 
-    public void setCenterWidgetVisible(boolean centerWidgetVisible)
+    public final void setCenterWidgetVisible(boolean centerWidgetVisible)
     {
         this.centerWidgetVisible = centerWidgetVisible;
     }
 
-    public void setCenterWidgetSelected(boolean centerWidgetSelected)
+    public final void setCenterWidgetSelected(boolean centerWidgetSelected)
     {
         this.centerWidgetSelected = centerWidgetSelected;
     }

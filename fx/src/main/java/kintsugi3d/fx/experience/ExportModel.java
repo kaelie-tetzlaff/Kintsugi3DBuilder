@@ -18,13 +18,13 @@ import java.io.IOException;
 public class ExportModel extends ExperienceBase
 {
     @Override
-    public String getName()
+    public final String getName()
     {
         return "Export Model";
     }
 
     @Override
-    protected void open() throws IOException
+    protected final void open() throws IOException
     {
         this.<ExportModelController>openPagedModal("/fxml/modals/workflow/ExportModel.fxml");
     }

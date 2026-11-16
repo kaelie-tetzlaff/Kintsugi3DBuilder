@@ -19,7 +19,7 @@ import java.util.List;
 public class RealityCaptureImportController extends ManualImportController
 {
     @Override
-    public List<ExtensionFilter> getCameraExtensionFilters()
+    public final List<ExtensionFilter> getCameraExtensionFilters()
     {
         return Collections.singletonList(new ExtensionFilter("Reality Capture CSV file", "*.csv"));
     }

@@ -33,7 +33,7 @@ public class SplitterController
 
     private double offSet;
 
-    public void initialize()
+    public final void initialize()
     {
         Rectangle clipRect = new Rectangle();
 
@@ -62,7 +62,7 @@ public class SplitterController
     }
 
     @FXML
-    public void mousePressed(MouseEvent event)
+    public final void mousePressed(MouseEvent event)
     {
         double currentX = getSplitterX(event);
         double currentRightAnchor = getRightAnchorValue();
@@ -98,7 +98,7 @@ public class SplitterController
     }
 
     @FXML
-    public void closeSplitter()
+    public final void closeSplitter()
     {
         splitPane.setVisible(false);
         splitPane.setManaged(false);

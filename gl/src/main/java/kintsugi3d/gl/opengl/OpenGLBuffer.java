@@ -36,19 +36,19 @@ abstract class OpenGLBuffer implements ContextBound<OpenGLContext>, ManagedResou
     }
 
     @Override
-    public OpenGLContext getContext()
+    public final OpenGLContext getContext()
     {
         return this.context;
     }
 
-    int getBufferId()
+    final int getBufferId()
     {
         return this.bufferId;
     }
 
     abstract int getBufferTarget();
 
-    boolean hasData()
+    final boolean hasData()
     {
         return hasData;
     }
@@ -69,7 +69,7 @@ abstract class OpenGLBuffer implements ContextBound<OpenGLContext>, ManagedResou
         return this;
     }
 
-    void bind()
+    final void bind()
     {
         if (hasData) // fix for MacOS which segfaults if using a buffer with no data
         {
@@ -98,7 +98,7 @@ abstract class OpenGLBuffer implements ContextBound<OpenGLContext>, ManagedResou
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (live)
         {

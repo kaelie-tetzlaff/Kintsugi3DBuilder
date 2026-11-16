@@ -15,9 +15,9 @@ import kintsugi3d.builder.fit.decomposition.SpecularDecomposition;
 import kintsugi3d.builder.fit.settings.ReadonlyBasisSettings;
 import kintsugi3d.builder.resources.project.ReadonlyGraphicsResources;
 import kintsugi3d.gl.core.*;
+import kintsugi3d.gl.util.ColorArrayList;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.optimization.KMeansClustering;
-import kintsugi3d.gl.util.ColorArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +48,7 @@ public class SpecularFitInitializer<ContextType extends Context<ContextType>>
             new File("shaders/specularfit/average.frag"));
     }
 
-    public void initialize(SpecularDecomposition solution)
+    public final void initialize(SpecularDecomposition solution)
     {
         try (ProgramObject<ContextType> averageProgram = createAverageProgram();
              FramebufferObject<ContextType> framebuffer =
@@ -98,7 +98,7 @@ public class SpecularFitInitializer<ContextType extends Context<ContextType>>
         }
     }
 
-    public void saveDebugImage(SpecularDecomposition solution, File outputDirectory)
+    public final void saveDebugImage(SpecularDecomposition solution, File outputDirectory)
     {
         int width = solution.getTextureResolution().width;
         int height = solution.getTextureResolution().height;

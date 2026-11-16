@@ -121,7 +121,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         this.sceneViewportModel = createSceneViewportModel(this.sceneModel);
     }
 
-    public boolean isLoaded()
+    public final boolean isLoaded()
     {
         return loaded;
     }
@@ -134,35 +134,35 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public String getInternalName()
+    public final String getInternalName()
     {
         return internalName;
     }
 
-    public EventListeners<ProjectLoadedListener> projectLoadedListeners()
+    public final EventListeners<ProjectLoadedListener> projectLoadedListeners()
     {
         return projectLoaded;
     }
 
-    public RenderingSubject<ContextType> getSubject()
+    public final RenderingSubject<ContextType> getSubject()
     {
         return subject;
     }
 
     @Override
-    public GraphicsResourcesImageSpace<ContextType> getResources()
+    public final GraphicsResourcesImageSpace<ContextType> getResources()
     {
         return this.resources;
     }
 
     @Override
-    public DynamicResourceManager getDynamicResourceManager()
+    public final DynamicResourceManager getDynamicResourceManager()
     {
         return this.dynamicResourceLoader;
     }
 
     @Override
-    public void setSafeRegionPadding(int left, int top, int right, int bottom)
+    public final void setSafeRegionPadding(int left, int top, int right, int bottom)
     {
         this.paddingLeft = left;
         this.paddingTop = top;
@@ -171,7 +171,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public void clearSafeRegionPadding()
+    public final void clearSafeRegionPadding()
     {
         this.paddingLeft = 0;
         this.paddingTop = 0;
@@ -180,7 +180,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public void initialize() throws InitializationException
+    public final void initialize() throws InitializationException
     {
         try
         {
@@ -272,7 +272,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public void update()
+    public final void update()
     {
         try
         {
@@ -363,8 +363,8 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public void draw(Framebuffer<ContextType> framebuffer, Matrix4 modelViewOverride, Matrix4 projectionOverride,
-                     int subdivWidth, int subdivHeight)
+    public final void draw(Framebuffer<ContextType> framebuffer, Matrix4 modelViewOverride, Matrix4 projectionOverride,
+                           int subdivWidth, int subdivHeight)
     {
         try
         {
@@ -501,7 +501,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         try
         {
@@ -561,25 +561,25 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public void setProgressMonitor(ProgressMonitor progressMonitor)
+    public final void setProgressMonitor(ProgressMonitor progressMonitor)
     {
         this.progressMonitor = progressMonitor;
     }
 
     @Override
-    public ReadonlyVertexGeometry getGeometry()
+    public final ReadonlyVertexGeometry getGeometry()
     {
         return this.resources.getGeometry();
     }
 
     @Override
-    public ViewSet getViewSet()
+    public final ViewSet getViewSet()
     {
         return this.resources.getViewSet();
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return this.internalName.length() > 32
                 ? String.format("...%s", this.internalName.substring(this.internalName.length() - 31))
@@ -587,7 +587,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public void reloadShaders()
+    public final void reloadShaders()
     {
         try
         {
@@ -604,20 +604,20 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public SceneViewport getSceneViewport()
+    public final SceneViewport getSceneViewport()
     {
         return sceneViewportModel;
     }
 
 
     @Override
-    public SceneModel getSceneModel()
+    public final SceneModel getSceneModel()
     {
         return sceneModel;
     }
 
     @Override
-    public void saveGLTF(File outputDirectory, String filename, ExportSettings settings, Runnable finishedCallback)
+    public final void saveGLTF(File outputDirectory, String filename, ExportSettings settings, Runnable finishedCallback)
     {
         if (outputDirectory != null)
         {

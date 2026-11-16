@@ -29,7 +29,7 @@ public class WeightmapReplacer extends ImageReplacer
     }
 
     @Override
-    public void replace() throws IOException
+    public final void replace() throws IOException
     {
         getResources().replaceWeightMapWithSpecificFile(material, getNewImage());
     }

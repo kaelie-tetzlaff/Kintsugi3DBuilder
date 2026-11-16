@@ -40,14 +40,14 @@ public class RenderingSubject<ContextType extends Context<ContextType>> extends 
     }
 
     @Override
-    protected Map<String, VertexBuffer<ContextType>> createVertexBuffers()
+    protected final Map<String, VertexBuffer<ContextType>> createVertexBuffers()
     {
         // Vertex buffers come from the GraphicsResources and don't need to be created.
         return Collections.emptyMap();
     }
 
     @Override
-    protected Drawable<ContextType> createDrawable(Program<ContextType> program)
+    protected final Drawable<ContextType> createDrawable(Program<ContextType> program)
     {
         // Use GraphicsResources to create a drawable with all the available vertex buffers.
         return getResources().createDrawable(program);
@@ -63,7 +63,7 @@ public class RenderingSubject<ContextType extends Context<ContextType>> extends 
     }
 
     @Override
-    protected void setupModelView(Program<ContextType> p, Matrix4 modelView)
+    protected final void setupModelView(Program<ContextType> p, Matrix4 modelView)
     {
         super.setupModelView(p, modelView);
 
@@ -81,13 +81,13 @@ public class RenderingSubject<ContextType extends Context<ContextType>> extends 
         }
     }
 
-    public void overrideViewIndexBuffer(UniformBuffer<ContextType> viewIndexBufferOverride)
+    public final void overrideViewIndexBuffer(UniformBuffer<ContextType> viewIndexBufferOverride)
     {
         this.viewIndexBufferOverride = viewIndexBufferOverride;
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         getContext().getState().disableBackFaceCulling();
 

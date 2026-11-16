@@ -98,7 +98,7 @@ public class CubicHermiteSpline implements DoubleUnaryOperator
     }
 
     @Override
-    public double applyAsDouble(double value)
+    public final double applyAsDouble(double value)
     {
         int k = 0;
         while (k < x.length-2 && value > x[k+1])

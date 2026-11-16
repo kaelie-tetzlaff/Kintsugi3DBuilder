@@ -18,13 +18,13 @@ import java.io.IOException;
 public class SystemSettings extends ExperienceBase
 {
     @Override
-    public String getName()
+    public final String getName()
     {
         return "System Settings";
     }
 
     @Override
-    protected void open() throws IOException
+    protected final void open() throws IOException
     {
         SystemSettingsController controller = openModal("/fxml/modals/systemsettings/SystemSettings.fxml");
         controller.initializeSettingsPages(getParentWindow(), getState());

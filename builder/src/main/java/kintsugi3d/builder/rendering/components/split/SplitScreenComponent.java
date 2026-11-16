@@ -61,8 +61,8 @@ public class SplitScreenComponent<ContextType extends Context<ContextType>> impl
     }
 
     @Override
-    public void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight,
-                                   CameraViewport cameraViewport)
+    public final void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight,
+                                         CameraViewport cameraViewport)
     {
         for (int x = cameraViewport.getX(); x < cameraViewport.getWidth(); x += subdivWidth)
         {
@@ -119,7 +119,7 @@ public class SplitScreenComponent<ContextType extends Context<ContextType>> impl
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         this.drawInSubdivisions(framebuffer, cameraViewport.getWidth(), cameraViewport.getHeight(), cameraViewport);
     }
@@ -136,7 +136,7 @@ public class SplitScreenComponent<ContextType extends Context<ContextType>> impl
      * Gets the percentage of the full viewport where the split between the left and right content occurs.
      * @return
      */
-    public float getSplitPercentage()
+    public final float getSplitPercentage()
     {
         return splitPercentage;
     }
@@ -145,7 +145,7 @@ public class SplitScreenComponent<ContextType extends Context<ContextType>> impl
      * Gets the pixel x-coordinate where the split between the left and right content occurs.
      * @return
      */
-    public double getSplitPixel()
+    public final double getSplitPixel()
     {
         return splitPixel;
     }
@@ -155,7 +155,7 @@ public class SplitScreenComponent<ContextType extends Context<ContextType>> impl
      * @param splitPercentage
      * @param fullViewportWidth Used to determine the pixel x-coordinate where the split occurs.
      */
-    public void setSplit(float splitPercentage, int fullViewportWidth)
+    public final void setSplit(float splitPercentage, int fullViewportWidth)
     {
         this.splitPercentage = splitPercentage;
         this.splitPixel = Math.round(fullViewportWidth * splitPercentage);

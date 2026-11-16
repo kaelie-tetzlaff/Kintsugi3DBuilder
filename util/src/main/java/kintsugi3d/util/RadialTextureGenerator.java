@@ -30,7 +30,7 @@ public class RadialTextureGenerator<ContextType extends Context<ContextType>>
         this.context = context;
     }
 
-    public ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>> buildRadialTexture(
+    public final ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>> buildRadialTexture(
         int size, DoubleUnaryOperator radialFunction)
     {
         NativeVectorBuffer textureData = NativeVectorBufferFactory
@@ -56,12 +56,12 @@ public class RadialTextureGenerator<ContextType extends Context<ContextType>>
             .setInternalFormat(ColorFormat.R8);
     }
 
-    public ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>> buildBloomTexture(int size)
+    public final ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>> buildBloomTexture(int size)
     {
         return buildRadialTexture(64, rSq -> (StrictMath.cos(Math.min(Math.sqrt(rSq), 1.0) * Math.PI) + 1.0) * 0.5);
     }
 
-    public ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>> buildCircleTexture(int size)
+    public final ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>> buildCircleTexture(int size)
     {
         return buildRadialTexture(64, rSq -> rSq <= 1.0 ? 1.0 : 0.0);
     }

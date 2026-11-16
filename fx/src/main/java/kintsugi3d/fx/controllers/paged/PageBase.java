@@ -90,19 +90,19 @@ abstract class PageBase<InType, OutType, ControllerType extends PageController<?
     }
 
     @Override
-    public Map<String, Page<? super OutType, ?>> getFallbackPages()
+    public final Map<String, Page<? super OutType, ?>> getFallbackPages()
     {
         return Collections.unmodifiableMap(fallbackPages);
     }
 
     @Override
-    public boolean hasFallbackPage()
+    public final boolean hasFallbackPage()
     {
         return !fallbackPages.isEmpty();
     }
 
     @Override
-    public void addFallbackPage(String fallbackName, Page<? super OutType, ?> page)
+    public final void addFallbackPage(String fallbackName, Page<? super OutType, ?> page)
     {
         fallbackPages.put(fallbackName, page);
     }
@@ -120,13 +120,13 @@ abstract class PageBase<InType, OutType, ControllerType extends PageController<?
     }
 
     @Override
-    public void setPrevPage(Page<?, ? extends InType> page)
+    public final void setPrevPage(Page<?, ? extends InType> page)
     {
         this.prevPage = page;
     }
 
     @Override
-    public void linkBackFromNextPage()
+    public final void linkBackFromNextPage()
     {
         this.nextPageProperty.get().setPrevPage(this);
     }

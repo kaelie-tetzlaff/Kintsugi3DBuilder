@@ -34,25 +34,25 @@ public class GLFWModifierKeys extends ModifierKeysBase
     }
 
     @Override
-    public boolean isShiftModifierActive()
+    public final boolean isShiftModifierActive()
     {
         return (glfwCode & GLFW_MOD_SHIFT) != 0;
     }
 
     @Override
-    public boolean isControlModifierActive()
+    public final boolean isControlModifierActive()
     {
         return (glfwCode & GLFW_MOD_CONTROL) != 0;
     }
 
     @Override
-    public boolean isAltModifierActive()
+    public final boolean isAltModifierActive()
     {
         return (glfwCode & GLFW_MOD_ALT) != 0;
     }
 
     @Override
-    public boolean isSuperModifierActive()
+    public final boolean isSuperModifierActive()
     {
         return (glfwCode & GLFW_MOD_SUPER) != 0;
     }

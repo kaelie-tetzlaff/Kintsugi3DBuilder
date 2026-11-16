@@ -79,7 +79,7 @@ public class CardTabController
     private static final double WIDTH_TOLERANCE = 2.0;
     private double lastSidebarWidth = -1;
 
-    public void init(ObservableCardsModel<?> cardsModel)
+    public final void init(ObservableCardsModel<?> cardsModel)
     {
         this.cardsModel = cardsModel;
 
@@ -139,7 +139,7 @@ public class CardTabController
         filePathLabel.maxWidthProperty().bind(tab.widthProperty().multiply(0.50).subtract(locationLabel.widthProperty()).subtract(25));
     }
 
-    public void initialize()
+    public final void initialize()
     {
         // Listener to detect scroll bar
         scrollpane.viewportBoundsProperty().addListener((obs, oldBounds, newBounds) ->
@@ -176,7 +176,7 @@ public class CardTabController
      * change the scroll bar back to as needed during drag
      * @param width
      */
-    public void onSidebarWidthChanged(double width)
+    public final void onSidebarWidthChanged(double width)
     {
         lastSidebarWidth = width; //Assigns last width with param width
 
@@ -202,7 +202,7 @@ public class CardTabController
     /**
      * Assigns is dragging to true
      */
-    public void onDragStarted()
+    public final void onDragStarted()
     {
         isDragging = true;
     }
@@ -211,7 +211,7 @@ public class CardTabController
      * Assigns is dragging to false
      * If scroll bar is locked it will unlock and make scroll bar as needed
      */
-    public void onDragEnded()
+    public final void onDragEnded()
     {
         isDragging = false;
 
@@ -266,7 +266,7 @@ public class CardTabController
         LOG.error("Could not load DataCard.fxml!", e);
     }
 
-    public void setVisible(boolean visibility)
+    public final void setVisible(boolean visibility)
     {
         tab.setVisible(visibility);
         tab.setManaged(visibility);
@@ -275,7 +275,7 @@ public class CardTabController
     /**
      * Does not recreate the listener!!!
      */
-    public void reloadCardList()
+    public final void reloadCardList()
     {
         try
         {
@@ -428,7 +428,7 @@ public class CardTabController
         scrollpane.viewportBoundsProperty().addListener(change -> updateViewportVisibility());
     }
 
-    public void updateViewportVisibility()
+    public final void updateViewportVisibility()
     {
         double viewportHeight = scrollpane.getViewportBounds().getHeight();
         double contentHeight = vbox.getHeight();
@@ -446,7 +446,7 @@ public class CardTabController
      * When Open file path button is called, this method is activated and will open file
      * explorer with the path for that particular tab.
      */
-    public void openFilePath()
+    public final void openFilePath()
     {
         findFilePath();
         try
@@ -475,7 +475,7 @@ public class CardTabController
      * Similar to openFilePath, but instead of opening file explorer it
      * copies path to clipboard
      */
-    public void copyFilePath()
+    public final void copyFilePath()
     {
         findFilePath();
 
@@ -509,7 +509,7 @@ public class CardTabController
      * Calls card.updateCheckBox() on every CardController. The method will set the checkboxes to
      * deselect state.
      */
-    public void updateCardCheckBoxes()
+    public final void updateCardCheckBoxes()
     {
         for (CardController card : cardControllers) // Each card in cardControllers
         {

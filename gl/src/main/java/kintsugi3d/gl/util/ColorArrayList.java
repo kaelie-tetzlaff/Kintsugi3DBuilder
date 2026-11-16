@@ -26,12 +26,12 @@ public class ColorArrayList extends AbstractList<Vector4> implements ColorList
         this.colorData = colorData;
     }
 
-    @Override public Vector4 get(int index)
+    @Override public final Vector4 get(int index)
     {
         return new Vector4(colorData[4 * index], colorData[4 * index + 1], colorData[4 * index + 2], colorData[4 * index + 3]);
     }
 
-    public Vector3 getRGB(int index)
+    public final Vector3 getRGB(int index)
     {
         return new Vector3(colorData[4 * index], colorData[4 * index + 1], colorData[4 * index + 2]);
     }
@@ -44,34 +44,34 @@ public class ColorArrayList extends AbstractList<Vector4> implements ColorList
      * @return
      */
     @Override
-    public float get(int index, int component)
+    public final float get(int index, int component)
     {
         return colorData[4 * index + component];
     }
 
     @Override
-    public float getRed(int index)
+    public final float getRed(int index)
     {
         return get(index, 0);
     }
 
     @Override
-    public float getGreen(int index)
+    public final float getGreen(int index)
     {
         return get(index, 1);
     }
 
     @Override
-    public float getBlue(int index)
+    public final float getBlue(int index)
     {
         return get(index, 2);
     }
 
     @Override
-    public float getAlpha(int index)
+    public final float getAlpha(int index)
     {
         return get(index, 3);
     }
 
-    @Override public int size() { return colorData.length / 4; }
+    @Override public final int size() { return colorData.length / 4; }
 }

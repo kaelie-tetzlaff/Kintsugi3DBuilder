@@ -26,19 +26,19 @@ public abstract class PageBuilder<FinishType>
         this.finisher = finisher;
     }
 
-    public FinishType finish()
+    public final FinishType finish()
     {
         return finisher.get();
     }
 
     public abstract Page<?,?> getPage();
 
-    protected PageFrameController getFrameController()
+    protected final PageFrameController getFrameController()
     {
         return frameController;
     }
 
-    protected Supplier<FinishType> getFinisher()
+    protected final Supplier<FinishType> getFinisher()
     {
         return finisher;
     }

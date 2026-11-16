@@ -20,121 +20,121 @@ public abstract class CanvasBase<ContextType extends Context<ContextType>>
     protected abstract WindowListenerManager getListenerManager();
 
     @Override
-    public void addCanvasPositionListener(CanvasPositionListener listener)
+    public final void addCanvasPositionListener(CanvasPositionListener listener)
     {
         getListenerManager().addCanvasPositionListener(listener);
     }
 
     @Override
-    public void addCanvasSizeListener(CanvasSizeListener listener)
+    public final void addCanvasSizeListener(CanvasSizeListener listener)
     {
         getListenerManager().addCanvasSizeListener(listener);
     }
 
     @Override
-    public void addWindowCloseListener(WindowCloseListener listener)
+    public final void addWindowCloseListener(WindowCloseListener listener)
     {
         getListenerManager().addWindowCloseListener(listener);
     }
 
     @Override
-    public void addCanvasRefreshListener(CanvasRefreshListener listener)
+    public final void addCanvasRefreshListener(CanvasRefreshListener listener)
     {
         getListenerManager().addCanvasRefreshListener(listener);
     }
 
     @Override
-    public void addWindowFocusLostListener(WindowFocusLostListener listener)
+    public final void addWindowFocusLostListener(WindowFocusLostListener listener)
     {
         getListenerManager().addWindowFocusLostListener(listener);
     }
 
     @Override
-    public void addWindowFocusGainedListener(WindowFocusGainedListener listener)
+    public final void addWindowFocusGainedListener(WindowFocusGainedListener listener)
     {
         getListenerManager().addWindowFocusGainedListener(listener);
     }
 
     @Override
-    public void addWindowIconifiedListener(WindowIconifiedListener listener)
+    public final void addWindowIconifiedListener(WindowIconifiedListener listener)
     {
         getListenerManager().addWindowIconifiedListener(listener);
     }
 
     @Override
-    public void addWindowRestoredListener(WindowRestoredListener listener)
+    public final void addWindowRestoredListener(WindowRestoredListener listener)
     {
         getListenerManager().addWindowRestoredListener(listener);
     }
 
     @Override
-    public void addFramebufferSizeListener(FramebufferSizeListener listener)
+    public final void addFramebufferSizeListener(FramebufferSizeListener listener)
     {
         getListenerManager().addFramebufferSizeListener(listener);
     }
 
     @Override
-    public void addKeyPressListener(KeyPressListener listener)
+    public final void addKeyPressListener(KeyPressListener listener)
     {
         getListenerManager().addKeyPressListener(listener);
     }
 
     @Override
-    public void addKeyReleaseListener(KeyReleaseListener listener)
+    public final void addKeyReleaseListener(KeyReleaseListener listener)
     {
         getListenerManager().addKeyReleaseListener(listener);
     }
 
     @Override
-    public void addKeyTypeListener(KeyTypeListener listener)
+    public final void addKeyTypeListener(KeyTypeListener listener)
     {
         getListenerManager().addKeyTypeListener(listener);
     }
 
     @Override
-    public void addCharacterListener(CharacterListener listener)
+    public final void addCharacterListener(CharacterListener listener)
     {
         getListenerManager().addCharacterListener(listener);
     }
 
     @Override
-    public void addCharacterModifiersListener(CharacterModifiersListener listener)
+    public final void addCharacterModifiersListener(CharacterModifiersListener listener)
     {
         getListenerManager().addCharacterModifiersListener(listener);
     }
 
     @Override
-    public void addMouseButtonPressListener(MouseButtonPressListener listener)
+    public final void addMouseButtonPressListener(MouseButtonPressListener listener)
     {
         getListenerManager().addMouseButtonPressListener(listener);
     }
 
     @Override
-    public void addMouseButtonReleaseListener(MouseButtonReleaseListener listener)
+    public final void addMouseButtonReleaseListener(MouseButtonReleaseListener listener)
     {
         getListenerManager().addMouseButtonReleaseListener(listener);
     }
 
     @Override
-    public void addCursorPositionListener(CursorPositionListener listener)
+    public final void addCursorPositionListener(CursorPositionListener listener)
     {
         getListenerManager().addCursorPositionListener(listener);
     }
 
     @Override
-    public void addCursorEnteredListener(CursorEnteredListener listener)
+    public final void addCursorEnteredListener(CursorEnteredListener listener)
     {
         getListenerManager().addCursorEnteredListener(listener);
     }
 
     @Override
-    public void addCursorExitedListener(CursorExitedListener listener)
+    public final void addCursorExitedListener(CursorExitedListener listener)
     {
         getListenerManager().addCursorExitedListener(listener);
     }
 
     @Override
-    public void addScrollListener(ScrollListener listener)
+    public final void addScrollListener(ScrollListener listener)
     {
         getListenerManager().addScrollListener(listener);
     }

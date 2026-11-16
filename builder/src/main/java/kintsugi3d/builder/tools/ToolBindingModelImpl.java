@@ -23,25 +23,25 @@ public class ToolBindingModelImpl implements ToolBindingModel
     private final Map<KeyPress, KeyPressToolType> keyPressTools = new HashMap<>(KeyPressToolType.values().length);
 
     @Override
-    public DragToolType getDragTool(MouseMode mode)
+    public final DragToolType getDragTool(MouseMode mode)
     {
         return this.dragTools.get(mode);
     }
 
     @Override
-    public void setDragTool(MouseMode mode, DragToolType tool)
+    public final void setDragTool(MouseMode mode, DragToolType tool)
     {
         this.dragTools.put(mode, tool);
     }
 
     @Override
-    public KeyPressToolType getKeyPressTool(KeyPress keyPress)
+    public final KeyPressToolType getKeyPressTool(KeyPress keyPress)
     {
         return this.keyPressTools.get(keyPress);
     }
 
     @Override
-    public void setKeyPressTool(KeyPress keyPress, KeyPressToolType tool)
+    public final void setKeyPressTool(KeyPress keyPress, KeyPressToolType tool)
     {
         this.keyPressTools.put(keyPress, tool);
     }

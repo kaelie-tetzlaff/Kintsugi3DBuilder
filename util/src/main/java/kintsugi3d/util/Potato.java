@@ -162,22 +162,22 @@ public class Potato
             new IntVector2((thetaSubdiv - 1) * phiSubdiv + 1, (thetaSubdiv - 1) * (phiSubdiv + 1) + 1)));
     }
 
-    public List<Vector3> getPositions()
+    public final List<Vector3> getPositions()
     {
         return Collections.unmodifiableList(positions);
     }
 
-    public List<Vector2> getTexCoords()
+    public final List<Vector2> getTexCoords()
     {
         return Collections.unmodifiableList(texCoords);
     }
 
-    public List<List<IntVector2>> getFaces()
+    public final List<List<IntVector2>> getFaces()
     {
         return Collections.unmodifiableList(faces);
     }
 
-    public void writeToStream(PrintStream out)
+    public final void writeToStream(PrintStream out)
     {
         for (Vector3 pos : positions)
         {

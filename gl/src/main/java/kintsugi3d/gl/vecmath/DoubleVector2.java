@@ -57,47 +57,47 @@ public class DoubleVector2 implements Iterable<Double>
         this(value, value);
     }
 
-    public DoubleVector3 asVector3()
+    public final DoubleVector3 asVector3()
     {
         return asVector3(0.0f);
     }
 
-    public DoubleVector3 asVector3(double z)
+    public final DoubleVector3 asVector3(double z)
     {
         return new DoubleVector3(this.x, this.y, z);
     }
 
-    public DoubleVector4 asPosition()
+    public final DoubleVector4 asPosition()
     {
         return asVector4(0.0f, 1.0f);
     }
 
-    public DoubleVector4 asDirection()
+    public final DoubleVector4 asDirection()
     {
         return asVector4(0.0f, 0.0f);
     }
 
-    public DoubleVector4 asVector4(double z, double w)
+    public final DoubleVector4 asVector4(double z, double w)
     {
         return new DoubleVector4(this.x, this.y, z, w);
     }
 
-    public IntVector2 rounded()
+    public final IntVector2 rounded()
     {
         return new IntVector2((int)Math.round(this.x), (int)Math.round(this.y));
     }
 
-    public IntVector2 truncated()
+    public final IntVector2 truncated()
     {
         return new IntVector2((int)this.x, (int)this.y);
     }
 
-    public Vector2 asSinglePrecision()
+    public final Vector2 asSinglePrecision()
     {
         return new Vector2((float)x, (float)y);
     }
 
-    public DoubleVector2 plus(DoubleVector2 other)
+    public final DoubleVector2 plus(DoubleVector2 other)
     {
         return new DoubleVector2(
             this.x + other.x,
@@ -105,7 +105,7 @@ public class DoubleVector2 implements Iterable<Double>
         );
     }
 
-    public DoubleVector2 minus(DoubleVector2 other)
+    public final DoubleVector2 minus(DoubleVector2 other)
     {
         return new DoubleVector2(
             this.x - other.x,
@@ -113,47 +113,47 @@ public class DoubleVector2 implements Iterable<Double>
         );
     }
 
-    public DoubleVector2 negated()
+    public final DoubleVector2 negated()
     {
         return new DoubleVector2(-this.x, -this.y);
     }
 
-    public DoubleVector2 times(double s)
+    public final DoubleVector2 times(double s)
     {
         return new DoubleVector2(s*this.x, s*this.y);
     }
 
-    public DoubleVector2 dividedBy(double s)
+    public final DoubleVector2 dividedBy(double s)
     {
         return new DoubleVector2(this.x/s, this.y/s);
     }
 
-    public DoubleVector2 times(DoubleVector2 other)
+    public final DoubleVector2 times(DoubleVector2 other)
     {
         return new DoubleVector2(this.x * other.x, this.y * other.y);
     }
 
-    public DoubleVector2 dividedBy(DoubleVector2 other)
+    public final DoubleVector2 dividedBy(DoubleVector2 other)
     {
         return new DoubleVector2(this.x / other.x, this.y / other.y);
     }
 
-    public double dot(DoubleVector2 other)
+    public final double dot(DoubleVector2 other)
     {
         return this.x * other.x + this.y * other.y;
     }
 
-    public double length()
+    public final double length()
     {
         return Math.sqrt(this.dot(this));
     }
 
-    public double distance(DoubleVector2 other)
+    public final double distance(DoubleVector2 other)
     {
         return this.minus(other).length();
     }
 
-    public DoubleVector2 normalized()
+    public final DoubleVector2 normalized()
     {
         return this.times(1.0 / this.length());
     }
@@ -163,7 +163,7 @@ public class DoubleVector2 implements Iterable<Double>
      * magnitude (a length of 1.0).  If this vector has zero length, it will return itself.
      * @return A new vector equal to this vector divided by it's length except in cases of a zero-length vector.
      */
-    public DoubleVector2 normalizedSafe()
+    public final DoubleVector2 normalizedSafe()
     {
         double l = this.length();
         if (l == 0.0f)
@@ -176,19 +176,19 @@ public class DoubleVector2 implements Iterable<Double>
         }
     }
 
-    public DoubleVector2 applyOperator(DoubleUnaryOperator operator)
+    public final DoubleVector2 applyOperator(DoubleUnaryOperator operator)
     {
         return new DoubleVector2(operator.applyAsDouble(x), operator.applyAsDouble(y));
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return String.format("DoubleVector2{x=%s, y=%s}", x, y);
     }
 
     @Override
-    public @NotNull Iterator<Double> iterator()
+    public final @NotNull Iterator<Double> iterator()
     {
         return Arrays.asList(x, y).iterator();
     }

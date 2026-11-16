@@ -80,7 +80,7 @@ public class View
      * A camera pose defining the transformation from object space to camera space for each view.
      * These are necessary to perform projective texture mapping.
      */
-    public Matrix4 getCameraPose()
+    public final Matrix4 getCameraPose()
     {
         return cameraPose;
     }
@@ -89,7 +89,7 @@ public class View
      * An inverted camera pose defining the transformation from camera space to object space for each view.
      * (Useful for visualizing the cameras on screen).
      */
-    public Matrix4 getCameraPoseInverse()
+    public final Matrix4 getCameraPoseInverse()
     {
         return cameraPoseInverse;
     }
@@ -97,17 +97,17 @@ public class View
     /**
      * An entry which designates the index of the projection transformation that should be used for each view.
      */
-    public int getCameraProjectionIndex()
+    public final int getCameraProjectionIndex()
     {
         return cameraProjectionIndex;
     }
 
-    public Projection getCameraProjection()
+    public final Projection getCameraProjection()
     {
         return containingViewSet.getCameraProjection(cameraProjectionIndex);
     }
 
-    public Matrix4 getProjectionMatrix()
+    public final Matrix4 getProjectionMatrix()
     {
         return getCameraProjection().getProjectionMatrix(
             containingViewSet.getRecommendedNearPlane(), containingViewSet.getRecommendedFarPlane());
@@ -116,17 +116,17 @@ public class View
     /**
      * An entry which designates the index of the light source position and intensity that should be used for each view.
      */
-    public int getLightIndex()
+    public final int getLightIndex()
     {
         return lightIndex;
     }
 
-    public Vector3 getLightPosition()
+    public final Vector3 getLightPosition()
     {
         return containingViewSet.getLightPosition(lightIndex);
     }
 
-    public Vector3 getLightIntensity()
+    public final Vector3 getLightIntensity()
     {
         return containingViewSet.getLightIntensity(lightIndex);
     }
@@ -135,7 +135,7 @@ public class View
      * The relative path of the image file corresponding to this view.
      * The file paths are relative to the fullResImageDirectory
      */
-    public File getImageFile()
+    public final File getImageFile()
     {
         return imageFile;
     }
@@ -143,95 +143,95 @@ public class View
     /**
      * Only intended to be modified by ViewSet.optimizeGPUIndexing, during initialization by ViewSetBuilder.
      */
-    public int getGPUViewIndex()
+    public final int getGPUViewIndex()
     {
         return gpuViewIndex;
     }
 
-    void setGpuViewIndex(int gpuViewIndex)
+    final void setGpuViewIndex(int gpuViewIndex)
     {
         this.gpuViewIndex = gpuViewIndex;
     }
 
-    public ReadonlyViewRMSE getViewErrorMetric()
+    public final ReadonlyViewRMSE getViewErrorMetric()
     {
         return viewErrorMetric;
     }
 
-    public boolean isEnabled()
+    public final boolean isEnabled()
     {
         return isEnabled;
     }
 
-    void setEnabled(boolean enabled)
+    final void setEnabled(boolean enabled)
     {
         isEnabled = enabled;
     }
 
-    public ReadonlyViewSet getContainingViewSet()
+    public final ReadonlyViewSet getContainingViewSet()
     {
         return containingViewSet;
     }
 
-    public File getFullResImageFile()
+    public final File getFullResImageFile()
     {
         return new File(containingViewSet.getFullResImageDirectory(), imageFile.getPath());
     }
 
-    public File findFullResImageFile() throws FileNotFoundException
+    public final File findFullResImageFile() throws FileNotFoundException
     {
         return ImageFinder.findImageFile(getFullResImageFile());
     }
 
-    public File tryFindFullResImageFile()
+    public final File tryFindFullResImageFile()
     {
         return ImageFinder.tryFindImageFile(getFullResImageFile());
     }
 
-    public File getPreviewImageFile(String extension)
+    public final File getPreviewImageFile(String extension)
     {
         return new File(containingViewSet.getPreviewImageDirectory(),
             ImageFinder.getImageFileNameWithExtension(imageFile.getName(), extension));
     }
 
-    public File getPreviewImageFile()
+    public final File getPreviewImageFile()
     {
         // Use PNG for preview images by default (TODO: make this a configurable setting?)
         return getPreviewImageFile("png");
     }
 
-    public File findPreviewImageFile() throws FileNotFoundException
+    public final File findPreviewImageFile() throws FileNotFoundException
     {
         return ImageFinder.findImageFile(getPreviewImageFile());
     }
 
-    public File tryFindPreviewImageFile()
+    public final File tryFindPreviewImageFile()
     {
         return ImageFinder.tryFindImageFile(getPreviewImageFile());
     }
 
-    public File getThumbnailImageFile(String extension)
+    public final File getThumbnailImageFile(String extension)
     {
         return new File(containingViewSet.getThumbnailImageDirectory(),
             ImageFinder.getImageFileNameWithExtension(imageFile.getName(), extension));
     }
 
-    public File getThumbnailImageFile()
+    public final File getThumbnailImageFile()
     {
         return getThumbnailImageFile("png");
     }
 
-    public File findThumbnailImageFile() throws FileNotFoundException
+    public final File findThumbnailImageFile() throws FileNotFoundException
     {
         return ImageFinder.findImageFile(getThumbnailImageFile());
     }
 
-    public File tryFindThumbnailImageFile()
+    public final File tryFindThumbnailImageFile()
     {
         return ImageFinder.tryFindImageFile(getThumbnailImageFile());
     }
 
-    public @Nullable File getMaskFile()
+    public final @Nullable File getMaskFile()
     {
         if (maskFile == null || containingViewSet.getMasksDirectory() == null)
         {
@@ -244,23 +244,23 @@ public class View
         }
     }
 
-    void setMaskFile(File maskFile)
+    final void setMaskFile(File maskFile)
     {
         this.maskFile = maskFile;
     }
 
-    public ImageHelper loadFullResMaskedImage() throws IOException
+    public final ImageHelper loadFullResMaskedImage() throws IOException
     {
         return ImageHelper.read(findFullResImageFile()).withAlphaMask(getMaskFile());
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return imageFile.getName();
     }
 
-    public View copy(ViewSet newContainingViewSet)
+    public final View copy(ViewSet newContainingViewSet)
     {
         // TODO do we need to also do a deep copy of viewErrorMetric?
         return new View(this.cameraPose, this.cameraPoseInverse, this.cameraProjectionIndex, this.lightIndex,
@@ -268,7 +268,7 @@ public class View
     }
 
     @Override
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         // Two views are equal either if they have the same memory address / identity OR
         // if they are distinct objects with the same, non-null image file path.
@@ -276,7 +276,7 @@ public class View
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         // If imageFile is not null, use it as a hash code.
         // This ensures that two objects that are equals() will have the same hashCode()

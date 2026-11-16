@@ -83,7 +83,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
         }
 
         @Override
-        public ColorBuilder loadFace(CubemapFace face, ReadonlyNativeVectorBuffer data)
+        public final ColorBuilder loadFace(CubemapFace face, ReadonlyNativeVectorBuffer data)
         {
             if (data.getCount() != faceSize * faceSize)
             {
@@ -100,7 +100,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
         }
 
         @Override
-        public OpenGLCubemap createTexture()
+        public final OpenGLCubemap createTexture()
         {
             for (int i = 0; i < 6; i++)
             {
@@ -172,7 +172,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
         }
 
         @Override
-        public OpenGLCubemap createTexture()
+        public final OpenGLCubemap createTexture()
         {
             OptionalParameters opt = new OptionalParameters(GL_DEPTH_COMPONENT);
             opt.useLinearFiltering = this.isLinearFilteringEnabled();
@@ -203,7 +203,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
         }
 
         @Override
-        public OpenGLCubemap createTexture()
+        public final OpenGLCubemap createTexture()
         {
             OptionalParameters opt = new OptionalParameters(GL_STENCIL_INDEX);
             opt.useLinearFiltering = this.isLinearFilteringEnabled();
@@ -234,7 +234,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
         }
 
         @Override
-        public OpenGLCubemap createTexture()
+        public final OpenGLCubemap createTexture()
         {
             OptionalParameters opt = new OptionalParameters(GL_DEPTH_STENCIL);
             opt.useLinearFiltering = this.isLinearFilteringEnabled();
@@ -519,20 +519,20 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
         }
 
         @Override
-        public OpenGLContext getContext()
+        public final OpenGLContext getContext()
         {
             return context;
         }
 
         @Override
-        public void attachToDrawFramebuffer(int attachment, int level)
+        public final void attachToDrawFramebuffer(int attachment, int level)
         {
             glFramebufferTextureLayer(GL_DRAW_FRAMEBUFFER, attachment, textureId, level, layerIndex);
             OpenGLContext.errorCheck();
         }
 
         @Override
-        public void attachToReadFramebuffer(int attachment, int level)
+        public final void attachToReadFramebuffer(int attachment, int level)
         {
             glFramebufferTextureLayer(GL_READ_FRAMEBUFFER, attachment, textureId, level, layerIndex);
             OpenGLContext.errorCheck();

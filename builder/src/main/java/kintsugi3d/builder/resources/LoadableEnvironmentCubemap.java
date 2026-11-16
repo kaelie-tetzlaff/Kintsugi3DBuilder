@@ -32,25 +32,25 @@ class LoadableEnvironmentCubemap<ContextType extends Context<ContextType>> imple
     }
 
     @Override
-    public boolean isLoaded()
+    public final boolean isLoaded()
     {
         return this.lightingResources.getEnvironmentMap() != null;
     }
 
     @Override
-    public String getProcessName()
+    public final String getProcessName()
     {
         return "Load Environment Map";
     }
 
     @Override
-    public EnvironmentMap loadCPU(File file) throws IOException
+    public final EnvironmentMap loadCPU(File file) throws IOException
     {
         return EnvironmentMap.loadFromHDRFile(file);
     }
 
     @Override
-    public Cubemap<ContextType> loadGPU(EnvironmentMap data)
+    public final Cubemap<ContextType> loadGPU(EnvironmentMap data)
     {
         Cubemap<ContextType> texture = context.getTextureFactory().buildColorCubemap(data.getSide())
             .loadFace(CubemapFace.POSITIVE_X, NativeVectorBufferFactory.createFromFloatArray(3,
@@ -74,13 +74,13 @@ class LoadableEnvironmentCubemap<ContextType extends Context<ContextType>> imple
     }
 
     @Override
-    public void consume(Cubemap<ContextType> resource)
+    public final void consume(Cubemap<ContextType> resource)
     {
         lightingResources.takeEnvironmentMap(resource);
     }
 
     @Override
-    public EncodableColorImage getPreviewImage(EnvironmentMap data)
+    public final EncodableColorImage getPreviewImage(EnvironmentMap data)
     {
         int width = data.getSide() * 4;
         int height = data.getSide() * 2;

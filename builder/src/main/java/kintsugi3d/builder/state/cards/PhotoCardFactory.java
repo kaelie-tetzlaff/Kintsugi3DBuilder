@@ -37,13 +37,13 @@ public class PhotoCardFactory extends ProjectDataCardFactoryBase<View>
     }
 
     @Override
-    public Class<View> getDataClass()
+    public final Class<View> getDataClass()
     {
         return View.class;
     }
 
     @Override
-    public @Nullable ProjectDataCard createCard(View view)
+    public final @Nullable ProjectDataCard createCard(View view)
     {
         String thumbnailPath;
         try
@@ -93,7 +93,7 @@ public class PhotoCardFactory extends ProjectDataCardFactoryBase<View>
     }
 
     @Override
-    public List<? extends Map<String, Runnable>> getGlobalActions()
+    public final List<? extends Map<String, Runnable>> getGlobalActions()
     {
         return List.of(Map.of(
             "Disable All", () ->
@@ -116,7 +116,7 @@ public class PhotoCardFactory extends ProjectDataCardFactoryBase<View>
     }
 
     @Override
-    public List<ProjectDataCard> createAllCards()
+    public final List<ProjectDataCard> createAllCards()
     {
         List<ProjectDataCard> cardsList = getViewSet().getViews().stream()
             .map(this::createCard)

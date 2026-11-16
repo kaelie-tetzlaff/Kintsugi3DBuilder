@@ -41,7 +41,7 @@ final class MultiviewRenderRequest extends RenderRequestBase
         }
 
         @Override
-        public ProgressMonitoredImageBasedGraphicsRequest create()
+        public final ProgressMonitoredImageBasedGraphicsRequest create()
         {
             return new MultiviewRenderRequest(getWidth(), getHeight(), getShaderSetupCallback(),
                 getVertexShader(), getFragmentShader(), getOutputDirectory());

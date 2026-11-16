@@ -25,13 +25,13 @@ import java.util.Optional;
 public class ToneCalibrationViewSelectController extends ViewSelectController
 {
     @Override
-    public boolean tryConfirm()
+    public final boolean tryConfirm()
     {
         return false;
     }
 
     @Override
-    public boolean tryAdvance()
+    public final boolean tryAdvance()
     {
         ViewSet viewSet = Global.io().validateRenderable().getLoadedViewSet();
 
@@ -60,19 +60,19 @@ public class ToneCalibrationViewSelectController extends ViewSelectController
     }
 
     @Override
-    protected String getHintText()
+    protected final String getHintText()
     {
         return "Select tone calibration view";
     }
 
     @Override
-    protected boolean canRotateView()
+    protected final boolean canRotateView()
     {
         return false;
     }
 
     @Override
-    protected boolean canSelectNullView()
+    protected final boolean canSelectNullView()
     {
         return false;
     }

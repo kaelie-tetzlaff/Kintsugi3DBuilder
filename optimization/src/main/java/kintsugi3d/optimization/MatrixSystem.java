@@ -37,7 +37,7 @@ public class MatrixSystem
         Arrays.setAll(rhs, i -> new SimpleMatrix(matrixSize, 1, matrixType));
     }
 
-    public void addContribution(MatrixSystem contribution)
+    public final void addContribution(MatrixSystem contribution)
     {
         // Add the contribution into the main matrix and vectors.
         CommonOps_DDRM.addEquals(this.lhs.getMatrix(), contribution.lhs.getMatrix());
@@ -47,22 +47,22 @@ public class MatrixSystem
         }
     }
 
-    public void addToLHS(int row, int column, double amount)
+    public final void addToLHS(int row, int column, double amount)
     {
         lhs.set(row, column, lhs.get(row, column) + amount);
     }
 
-    public void addToRHS(int row, int vectorIndex, double amount)
+    public final void addToRHS(int row, int vectorIndex, double amount)
     {
         rhs[vectorIndex].set(row, 0, rhs[vectorIndex].get(row, 0) + amount);
     }
 
-    public SimpleMatrix solve(int rhsIndex)
+    public final SimpleMatrix solve(int rhsIndex)
     {
         return lhs.solve(rhs[rhsIndex]);
     }
 
-    public SimpleMatrix solveNonNegative(int rhsIndex, double toleranceScale)
+    public final SimpleMatrix solveNonNegative(int rhsIndex, double toleranceScale)
     {
         double medianATy = IntStream.range(0, rhs[rhsIndex].getNumElements())
                 .mapToDouble(rhs[rhsIndex]::get)

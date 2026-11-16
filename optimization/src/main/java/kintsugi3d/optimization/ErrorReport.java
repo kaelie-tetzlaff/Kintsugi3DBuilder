@@ -19,13 +19,13 @@ public class ErrorReport extends ReadonlyErrorReport
     }
 
     @Override
-    public void setError(double newError)
+    public final void setError(double newError)
     {
         super.setError(newError);
     }
 
     @Override
-    public void reject()
+    public final void reject()
     {
         super.reject();
     }

@@ -76,31 +76,31 @@ public class GeometryFramebuffer<ContextType extends Context<ContextType>> imple
         }
     }
 
-    public ReadableFramebuffer<ContextType> getFramebuffer()
+    public final ReadableFramebuffer<ContextType> getFramebuffer()
     {
         return fbo;
     }
 
     @Override
-    public Texture2D<ContextType> getPositionTexture()
+    public final Texture2D<ContextType> getPositionTexture()
     {
         return fbo.getColorAttachmentTexture(0);
     }
 
     @Override
-    public Texture2D<ContextType> getNormalTexture()
+    public final Texture2D<ContextType> getNormalTexture()
     {
         return fbo.getColorAttachmentTexture(1);
     }
 
     @Override
-    public Texture2D<ContextType> getTangentTexture()
+    public final Texture2D<ContextType> getTangentTexture()
     {
         return fbo.getColorAttachmentTexture(2);
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (this.fbo != null)
         {
@@ -109,25 +109,25 @@ public class GeometryFramebuffer<ContextType extends Context<ContextType>> imple
     }
 
     @Override
-    public ContextType getContext()
+    public final ContextType getContext()
     {
         return context;
     }
 
     @Override
-    public int getWidth()
+    public final int getWidth()
     {
         return fbo.getSizeForRead().width;
     }
 
     @Override
-    public int getHeight()
+    public final int getHeight()
     {
         return fbo.getSizeForRead().height;
     }
 
     @Override
-    public void setupShaderProgram(Program<ContextType> program)
+    public final void setupShaderProgram(Program<ContextType> program)
     {
         program.setTexture("positionTex", getPositionTexture());
         program.setTexture("normalTex", getNormalTexture());
@@ -135,7 +135,7 @@ public class GeometryFramebuffer<ContextType extends Context<ContextType>> imple
     }
 
     @Override
-    public GeometryTextures<ContextType> createViewportCopy(int x, int y, int viewportWidth, int viewportHeight)
+    public final GeometryTextures<ContextType> createViewportCopy(int x, int y, int viewportWidth, int viewportHeight)
     {
         GeometryFramebuffer<ContextType> viewportFBO = createEmpty(context, viewportWidth, viewportHeight);
 

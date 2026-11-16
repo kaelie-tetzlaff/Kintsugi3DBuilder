@@ -103,19 +103,19 @@ public class JavaFXApplication extends Application
         }
 
         @Override
-        public boolean isFocused()
+        public final boolean isFocused()
         {
             return stage.isFocused();
         }
 
         @Override
-        public void focus()
+        public final void focus()
         {
             stage.toFront();
         }
 
         @Override
-        public void quit()
+        public final void quit()
         {
             // Commit the current user preferences to disk
             try
@@ -136,7 +136,7 @@ public class JavaFXApplication extends Application
         }
 
         @Override
-        public boolean confirmQuit()
+        public final boolean confirmQuit()
         {
             FutureTask<Boolean> confirmationTask = new FutureTask<>(() ->
             {
@@ -172,7 +172,7 @@ public class JavaFXApplication extends Application
     }
 
     @Override
-    public void start(Stage primaryStage) throws IOException
+    public final void start(Stage primaryStage) throws IOException
     {
         //noinspection AssignmentToStaticFieldFromInstanceMethod
         state = JavaFXState.create();

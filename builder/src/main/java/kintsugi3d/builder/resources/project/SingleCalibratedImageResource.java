@@ -144,7 +144,7 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
         return builder;
     }
 
-    public void setupShaderProgram(Program<ContextType> program)
+    public final void setupShaderProgram(Program<ContextType> program)
     {
         view.getContainingViewSet().setupShaderProgram(program);
 
@@ -175,13 +175,13 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
      * @param program The program to use to construct the Drawable.
      * @return A Drawable for rendering this instance using the specified shader program.
      */
-    public Drawable<ContextType> createDrawable(Program<ContextType> program)
+    public final Drawable<ContextType> createDrawable(Program<ContextType> program)
     {
         return geometryResources.createDrawable(program);
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (geometryResources != null && geometryResourcesOwned)
         {

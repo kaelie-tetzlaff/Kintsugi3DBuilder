@@ -28,26 +28,26 @@ public class ArrayBackedColorImage implements EncodableColorImage
     }
 
     @Override
-    public int getWidth()
+    public final int getWidth()
     {
         return width;
     }
 
     @Override
-    public int getHeight()
+    public final int getHeight()
     {
         return height;
     }
 
     @Override
-    public Vector4 getRawRGBA(int x, int y)
+    public final Vector4 getRawRGBA(int x, int y)
     {
         int k = (height - 1 - y) * width + x;
         return new Vector4(pixels[3 * k], pixels[3 * k + 1], pixels[3 * k + 2], 1.0f);
     }
 
     @Override
-    public Vector4 getSRGBEncodedRGBA(int x, int y)
+    public final Vector4 getSRGBEncodedRGBA(int x, int y)
     {
         int k = (height - 1 - y) * width + x;
         return SRGB.fromLinear(new Vector4(pixels[3 * k], pixels[3 * k + 1], pixels[3 * k + 2], 1.0f));

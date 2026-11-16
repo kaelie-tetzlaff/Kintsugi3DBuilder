@@ -52,13 +52,13 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
     }
 
     @Override
-    public List<? extends Map<String, Runnable>> getGlobalActions()
+    public final List<? extends Map<String, Runnable>> getGlobalActions()
     {
         return List.of(Map.of("Refresh All", this::refreshAll));
     }
 
     @Override
-    public Class<TextureInfo> getDataClass()
+    public final Class<TextureInfo> getDataClass()
     {
         return TextureInfo.class;
     }
@@ -71,7 +71,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
      * @return projectDataCard
      */
     @Override
-    public @Nullable ProjectDataCard createCard(TextureInfo texture)
+    public final @Nullable ProjectDataCard createCard(TextureInfo texture)
     {
         // Base Location where the .pngs and thumbnails folder are.
         File baseDirectory = getViewSet().getSupportingFilesDirectory();
@@ -146,7 +146,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
      * @return
      */
     @Override
-    public List<ProjectDataCard> createAllCards()
+    public final List<ProjectDataCard> createAllCards()
     {
         List<ProjectDataCard> textureCards = new ArrayList<>(8);
         ReadonlyImageBasedGraphicsResources<? extends Context<?>> resources = getInstance().getResources();

@@ -27,72 +27,72 @@ public class ViewSetLoadOptions
     private UUID uuid;
     private Collection<File> disabledImages = new ArrayList<>(8);
 
-    public ViewSetDirectories getMainDirectories()
+    public final ViewSetDirectories getMainDirectories()
     {
         return mainDirectories;
     }
 
-    public void setMainDirectories(ViewSetDirectories mainDirectories)
+    public final void setMainDirectories(ViewSetDirectories mainDirectories)
     {
         this.mainDirectories = mainDirectories;
     }
 
-    public File getGeometryFile()
+    public final File getGeometryFile()
     {
         return geometryFile;
     }
 
-    public void setGeometryFile(File geometryFile)
+    public final void setGeometryFile(File geometryFile)
     {
         this.geometryFile = geometryFile;
     }
 
-    public File getMasksDirectory()
+    public final File getMasksDirectory()
     {
         return masksDirectory;
     }
 
-    public void setMasksDirectory(File masksDirectory)
+    public final void setMasksDirectory(File masksDirectory)
     {
         this.masksDirectory = masksDirectory;
     }
 
-    public String getOrientationViewName()
+    public final String getOrientationViewName()
     {
         return orientationViewName;
     }
 
-    public void setOrientationViewName(String orientationViewName)
+    public final void setOrientationViewName(String orientationViewName)
     {
         this.orientationViewName = orientationViewName;
     }
 
-    public double getOrientationViewRotation()
+    public final double getOrientationViewRotation()
     {
         return orientationViewRotation;
     }
 
-    public void setOrientationViewRotation(double orientationViewRotation)
+    public final void setOrientationViewRotation(double orientationViewRotation)
     {
         this.orientationViewRotation = orientationViewRotation;
     }
 
-    public UUID getUUID()
+    public final UUID getUUID()
     {
         return uuid;
     }
 
-    public void setUUID(UUID uuid)
+    public final void setUUID(UUID uuid)
     {
         this.uuid = uuid;
     }
 
-    public Collection<File> getDisabledImages()
+    public final Collection<File> getDisabledImages()
     {
         return Collections.unmodifiableCollection(disabledImages);
     }
 
-    public void setDisabledImages(Collection<File> disabledImages)
+    public final void setDisabledImages(Collection<File> disabledImages)
     {
         this.disabledImages = new ArrayList<>(disabledImages);
     }

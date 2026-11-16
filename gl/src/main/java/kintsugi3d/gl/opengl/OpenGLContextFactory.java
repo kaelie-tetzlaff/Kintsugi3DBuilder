@@ -26,7 +26,7 @@ public class OpenGLContextFactory implements ContextFactory<OpenGLContext>
     }
 
     @Override
-    public OpenGLContext createContext(long glfwHandle)
+    public final OpenGLContext createContext(long glfwHandle)
     {
         OpenGLContext context = new OpenGLContext(glfwHandle);
         context.setDefaultFramebuffer(new OpenGLDefaultFramebuffer(context));
@@ -34,7 +34,7 @@ public class OpenGLContextFactory implements ContextFactory<OpenGLContext>
     }
 
     @Override
-    public OpenGLContext createContext(long glfwHandle, Function<OpenGLContext, DoubleFramebuffer<OpenGLContext>> createDefaultFramebuffer)
+    public final OpenGLContext createContext(long glfwHandle, Function<OpenGLContext, DoubleFramebuffer<OpenGLContext>> createDefaultFramebuffer)
     {
         OpenGLContext context = new OpenGLContext(glfwHandle);
         context.makeContextCurrent();

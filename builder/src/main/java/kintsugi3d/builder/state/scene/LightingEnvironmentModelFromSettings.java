@@ -25,19 +25,19 @@ public abstract class LightingEnvironmentModelFromSettings<LightType extends Dis
     protected abstract LightGroupSettings<?> getLightGroupSetting();
 
     @Override
-    public int getLightCount()
+    public final int getLightCount()
     {
         return getLightGroupSetting().getLightCount();
     }
 
     @Override
-    public int getMaxLightCount()
+    public final int getMaxLightCount()
     {
         return 4;
     }
 
     @Override
-    public boolean isLightWidgetEnabled(int index)
+    public final boolean isLightWidgetEnabled(int index)
     {
         LightGroupSettings<?> activeLightGroup = getLightGroupSetting();
         return !activeLightGroup.isLocked() && !activeLightGroup.getLightList().get(index).isLocked();

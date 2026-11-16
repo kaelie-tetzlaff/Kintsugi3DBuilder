@@ -21,13 +21,13 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     protected abstract LightSettings getLightSettings();
 
     @Override
-    public float getLog10Distance()
+    public final float getLog10Distance()
     {
         return (float) getLightSettings().getLog10Distance();
     }
 
     @Override
-    public void setLog10Distance(float log10Distance)
+    public final void setLog10Distance(float log10Distance)
     {
         if (!this.isLocked())
         {
@@ -36,7 +36,7 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     }
 
     @Override
-    public Vector3 getTarget()
+    public final Vector3 getTarget()
     {
         return new Vector3((float) getLightSettings().getTargetX(),
             (float) getLightSettings().getTargetY(),
@@ -44,7 +44,7 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     }
 
     @Override
-    public void setTarget(Vector3 target)
+    public final void setTarget(Vector3 target)
     {
         if (!this.isLocked())
         {
@@ -55,7 +55,7 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     }
 
     @Override
-    public float getTwist()
+    public final float getTwist()
     {
         return 0.0f;
     }
@@ -67,13 +67,13 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     }
 
     @Override
-    public float getAzimuth()
+    public final float getAzimuth()
     {
         return (float) getLightSettings().getAzimuth();
     }
 
     @Override
-    public void setAzimuth(float azimuth)
+    public final void setAzimuth(float azimuth)
     {
         if (!this.isLocked())
         {
@@ -82,25 +82,25 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     }
 
     @Override
-    public float getInclination()
+    public final float getInclination()
     {
         return (float) getLightSettings().getInclination();
     }
 
     @Override
-    public float getFocalLength()
+    public final float getFocalLength()
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void setFocalLength(float focalLength)
+    public final void setFocalLength(float focalLength)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void setInclination(float inclination)
+    public final void setInclination(float inclination)
     {
         if (!this.isLocked())
         {
@@ -109,25 +109,25 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     }
 
     @Override
-    public float getHorizontalFOV()
+    public final float getHorizontalFOV()
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void setHorizontalFOV(float fov)
+    public final void setHorizontalFOV(float fov)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean isOrthographic()
+    public final boolean isOrthographic()
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void setOrthographic(boolean orthographic)
+    public final void setOrthographic(boolean orthographic)
     {
         throw new UnsupportedOperationException();
     }
@@ -140,13 +140,13 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
      * @return true for locked
      */
     @Override
-    public boolean isLocked()
+    public final boolean isLocked()
     {
         return getLightSettings().isLocked() || getLightSettings().isGroupLocked();
     }
 
     @Override
-    public Vector3 getColor()
+    public final Vector3 getColor()
     {
         Color color = getLightSettings().getColor();
         Vector3 out = new Vector3((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue());
@@ -155,7 +155,7 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     }
 
     @Override
-    public void setColor(Vector3 color)
+    public final void setColor(Vector3 color)
     {
         if (!this.isLocked())
         {
@@ -175,13 +175,13 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     }
 
     @Override
-    public float getSpotSize()
+    public final float getSpotSize()
     {
         return (float) (getLightSettings().getSpotSize() * Math.PI / 180.0);
     }
 
     @Override
-    public void setSpotSize(float spotSize)
+    public final void setSpotSize(float spotSize)
     {
         if (!this.isLocked())
         {
@@ -190,13 +190,13 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     }
 
     @Override
-    public float getSpotTaper()
+    public final float getSpotTaper()
     {
         return (float) getLightSettings().getSpotTaper();
     }
 
     @Override
-    public void setSpotTaper(float spotTaper)
+    public final void setSpotTaper(float spotTaper)
     {
         if (!this.isLocked())
         {
@@ -205,7 +205,7 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     }
 
     @Override
-    public void setLookMatrix(Matrix4 lookMatrix)
+    public final void setLookMatrix(Matrix4 lookMatrix)
     {
         throw new UnsupportedOperationException();
     }

@@ -32,7 +32,7 @@ public class AboutController implements Initializable
     private Label aboutText;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources)
+    public final void initialize(URL location, ResourceBundle resources)
     {
         try
         {

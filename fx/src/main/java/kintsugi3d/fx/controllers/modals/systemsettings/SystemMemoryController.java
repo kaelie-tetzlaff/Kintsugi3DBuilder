@@ -45,7 +45,7 @@ public class SystemMemoryController implements SystemSettingsControllerBase
     private Launch4jConfiguration configuration;
 
     @Override
-    public void initializePage(Window parentWindow, JavaFXState state)
+    public final void initializePage(Window parentWindow, JavaFXState state)
     {
         try
         {
@@ -69,7 +69,7 @@ public class SystemMemoryController implements SystemSettingsControllerBase
         maxMemTextField.textProperty().bindBidirectional(maxMemory, converter);
     }
 
-    public void apply()
+    public final void apply()
     {
         configuration.setEnableMaxMemory(maxMemCheckbox.isSelected());
         configuration.setMaxMemoryMb(maxMemory.get());

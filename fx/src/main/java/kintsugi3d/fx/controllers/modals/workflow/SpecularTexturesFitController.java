@@ -40,7 +40,7 @@ public class SpecularTexturesFitController extends ProjectSettingsControllerBase
     @FXML private CheckBox openViewerOnComplete;
 
     @Override
-    public Region getRootNode()
+    public final Region getRootNode()
     {
         return root;
     }
@@ -79,7 +79,7 @@ public class SpecularTexturesFitController extends ProjectSettingsControllerBase
 
     @Override
     @FXML
-    public boolean tryConfirm()
+    public final boolean tryConfirm()
     {
         // Apply settings so they're seen by the SpecularFitRequest and also remembered for later.
         applySettings();

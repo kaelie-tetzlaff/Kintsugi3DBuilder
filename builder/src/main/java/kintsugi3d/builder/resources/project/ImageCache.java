@@ -111,37 +111,37 @@ public class ImageCache<ContextType extends Context<ContextType>>
         }
     }
 
-    public File getCacheDirectory()
+    public final File getCacheDirectory()
     {
         return cacheDirectory;
     }
 
-    public File getBlockDirectory(int i, int j)
+    public final File getBlockDirectory(int i, int j)
     {
         return new File(cacheDirectory, String.format("%d_%d", i, j));
     }
 
-    public ContextType getContext()
+    public final ContextType getContext()
     {
         return context;
     }
 
-    public ReadonlyViewSet getViewSet()
+    public final ReadonlyViewSet getViewSet()
     {
         return resources.getViewSet();
     }
 
-    public ReadonlyVertexGeometry getGeometry()
+    public final ReadonlyVertexGeometry getGeometry()
     {
         return resources.getGeometry();
     }
 
-    public ReadonlyImageCacheSettings getSettings()
+    public final ReadonlyImageCacheSettings getSettings()
     {
         return settings;
     }
 
-    public boolean isInitialized()
+    public final boolean isInitialized()
     {
         return initialized;
     }
@@ -151,7 +151,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
      * As a side effect of this method, the context's state will have back face culling enabled,
      * @throws IOException
      */
-    public void initialize(ProgressMonitor monitor) throws IOException, UserCancellationException
+    public final void initialize(ProgressMonitor monitor) throws IOException, UserCancellationException
     {
         // Create directories to organize the cache
         sampledDir.mkdirs();
@@ -433,7 +433,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
         }
     }
 
-    public GraphicsResourcesTextureSpace<ContextType> createSampledResources(ProgressMonitor monitor) throws IOException, UserCancellationException
+    public final GraphicsResourcesTextureSpace<ContextType> createSampledResources(ProgressMonitor monitor) throws IOException, UserCancellationException
     {
         return createWithRetryAfterCacheRebuild(
             () ->
@@ -460,7 +460,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
      * @throws UserCancellationException
      * @throws IOException
      */
-    public <T> T createWithRetryAfterCacheRebuild(CacheDependentSupplier<T> supplier, ProgressMonitor monitor)
+    public final <T> T createWithRetryAfterCacheRebuild(CacheDependentSupplier<T> supplier, ProgressMonitor monitor)
         throws UserCancellationException, IOException
     {
         try
@@ -492,7 +492,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
      *
      * @return A resource (that itself needs to be closed with no longer needed) which in turn creates resources for specific blocks
      */
-    public TextureBlockResourceFactory<ContextType> createBlockResourceFactory()
+    public final TextureBlockResourceFactory<ContextType> createBlockResourceFactory()
     {
         return new TextureBlockResourceFactory<>(resources.getCommonResources(), this);
     }

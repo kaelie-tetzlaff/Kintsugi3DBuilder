@@ -44,7 +44,7 @@ final class SingleFrameRenderRequest extends RenderRequestBase
         }
 
         @Override
-        public ProgressMonitoredImageBasedGraphicsRequest create()
+        public final ProgressMonitoredImageBasedGraphicsRequest create()
         {
             return new SingleFrameRenderRequest(getWidth(), getHeight(), outputImageName, getShaderSetupCallback(),
                 getVertexShader(), getFragmentShader(), getOutputDirectory());

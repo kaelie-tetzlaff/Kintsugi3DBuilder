@@ -24,7 +24,7 @@ final class LookAtPointTool implements DragTool
     private static class Builder extends ToolBuilderBase<LookAtPointTool>
     {
         @Override
-        public LookAtPointTool create()
+        public final LookAtPointTool create()
         {
             return new LookAtPointTool(getCameraModel(), getSceneViewport());
         }

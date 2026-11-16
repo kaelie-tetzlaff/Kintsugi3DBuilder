@@ -25,52 +25,52 @@ public class Kintsugi3DViewerExtras
 
     private SpecularWeights specularWeights;
 
-    public TextureInfo getSpecularTexture()
+    public final TextureInfo getSpecularTexture()
     {
         return specularTexture;
     }
 
-    public void setSpecularTexture(TextureInfo specularTexture)
+    public final void setSpecularTexture(TextureInfo specularTexture)
     {
         this.specularTexture = specularTexture;
     }
 
-    public String getBasisFunctionsUri()
+    public final String getBasisFunctionsUri()
     {
         return basisFunctionsUri;
     }
 
-    public void setBasisFunctionsUri(String basisFunctionsUri)
+    public final void setBasisFunctionsUri(String basisFunctionsUri)
     {
         this.basisFunctionsUri = basisFunctionsUri;
     }
 
-    public SpecularWeights getSpecularWeights()
+    public final SpecularWeights getSpecularWeights()
     {
         return specularWeights;
     }
 
-    public void setSpecularWeights(SpecularWeights specularWeights)
+    public final void setSpecularWeights(SpecularWeights specularWeights)
     {
         this.specularWeights = specularWeights;
     }
 
-    public TextureInfo getDiffuseTexture()
+    public final TextureInfo getDiffuseTexture()
     {
         return diffuseTexture;
     }
 
-    public void setDiffuseTexture(TextureInfo diffuseTexture)
+    public final void setDiffuseTexture(TextureInfo diffuseTexture)
     {
         this.diffuseTexture = diffuseTexture;
     }
 
-    public TextureInfo getDiffuseConstantTexture()
+    public final TextureInfo getDiffuseConstantTexture()
     {
         return diffuseConstantTexture;
     }
 
-    public void setDiffuseConstantTexture(TextureInfo diffuseConstantTexture)
+    public final void setDiffuseConstantTexture(TextureInfo diffuseConstantTexture)
     {
         this.diffuseConstantTexture = diffuseConstantTexture;
     }

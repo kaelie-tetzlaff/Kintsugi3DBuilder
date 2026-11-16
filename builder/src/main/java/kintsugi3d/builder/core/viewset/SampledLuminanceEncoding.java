@@ -125,7 +125,7 @@ public class SampledLuminanceEncoding
         return sampledEncodeFunction;
     }
 
-    public DoubleVector3 encode(DoubleVector3 decoded)
+    public final DoubleVector3 encode(DoubleVector3 decoded)
     {
         if (decoded.x <= 0.0 && decoded.y <= 0.0 && decoded.z <= 0.0)
         {
@@ -161,13 +161,13 @@ public class SampledLuminanceEncoding
         }
     }
 
-    public DoubleVector4 encode(DoubleVector4 decoded)
+    public final DoubleVector4 encode(DoubleVector4 decoded)
     {
         // Leave alpha unchanged other than normalization.
         return encode(decoded.getXYZ()).asVector4(decoded.w * 255.0);
     }
 
-    public DoubleVector3 decode(DoubleVector3 encoded)
+    public final DoubleVector3 decode(DoubleVector3 encoded)
     {
         if (encoded.x <= 0.0 && encoded.y <= 0.0 && encoded.z <= 0.0)
         {
@@ -202,13 +202,13 @@ public class SampledLuminanceEncoding
         }
     }
 
-    public DoubleVector4 decode(DoubleVector4 encoded)
+    public final DoubleVector4 decode(DoubleVector4 encoded)
     {
         // Leave alpha unchanged other than normalization.
         return decode(encoded.getXYZ()).asVector4(encoded.w / 255.0);
     }
 
-    public <ContextType extends Context<ContextType>> Texture1D<ContextType> createLuminanceMap(ContextType context)
+    public final <ContextType extends Context<ContextType>> Texture1D<ContextType> createLuminanceMap(ContextType context)
     {
         return context.getTextureFactory().build1DColorTexture(sampleDecodeFunction())
                 .setInternalFormat(ColorFormat.R32F)
@@ -216,7 +216,7 @@ public class SampledLuminanceEncoding
                 .createTexture();
     }
 
-    public <ContextType extends Context<ContextType>> Texture1D<ContextType> createInverseLuminanceMap(ContextType context)
+    public final <ContextType extends Context<ContextType>> Texture1D<ContextType> createInverseLuminanceMap(ContextType context)
     {
         return context.getTextureFactory().build1DColorTexture(sampleEncodeFunction())
                 .setInternalFormat(ColorFormat.R32F)
@@ -224,17 +224,17 @@ public class SampledLuminanceEncoding
                 .createTexture();
     }
 
-    public <ContextType extends Context<ContextType>>LuminanceMapResources<ContextType> createResources(ContextType context)
+    public final <ContextType extends Context<ContextType>>LuminanceMapResources<ContextType> createResources(ContextType context)
     {
         return LuminanceMapResources.createFromEncoding(context, this);
     }
 
-    public DoubleUnaryOperator getDecodeFunction()
+    public final DoubleUnaryOperator getDecodeFunction()
     {
         return decodeFunction;
     }
 
-    public DoubleUnaryOperator getEncodeFunction()
+    public final DoubleUnaryOperator getEncodeFunction()
     {
         return encodeFunction;
     }

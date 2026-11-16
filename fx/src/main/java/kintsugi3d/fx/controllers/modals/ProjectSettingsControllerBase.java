@@ -44,23 +44,23 @@ public abstract class ProjectSettingsControllerBase extends NonDataPageControlle
         this.projectSettingsManager = projectSettingsManager;
     }
 
-    protected ReadonlyObservableGeneralSettingsModel getLocalSettingsModel()
+    protected final ReadonlyObservableGeneralSettingsModel getLocalSettingsModel()
     {
         return projectSettingsManager.getLocalSettingsModel();
     }
 
-    protected GeneralSettingsModel getProjectSettingsModel()
+    protected final GeneralSettingsModel getProjectSettingsModel()
     {
         return projectSettingsManager.getProjectSettingsModel();
     }
 
-    protected Set<String> getTrackedSettings()
+    protected final Set<String> getTrackedSettings()
     {
         return projectSettingsManager.getTrackedSettings();
     }
 
     @Override
-    public void refresh()
+    public final void refresh()
     {
         // Populate local model with the current project settings.
         projectSettingsManager.refresh();
@@ -78,7 +78,7 @@ public abstract class ProjectSettingsControllerBase extends NonDataPageControlle
      * To have these defaults applied to the project, applyBoundSettings() will also need to be called.
      */
     @FXML
-    public void resetSettingsToDefaults()
+    public final void resetSettingsToDefaults()
     {
         projectSettingsManager.resetSettingsToDefaults();
     }
@@ -87,66 +87,66 @@ public abstract class ProjectSettingsControllerBase extends NonDataPageControlle
      * Apply settings that have been bound / tracked on this controller to the project.
      * @return
      */
-    protected void applySettings()
+    protected final void applySettings()
     {
         projectSettingsManager.applySettings();
     }
 
-    protected void trackSetting(String settingName)
+    protected final void trackSetting(String settingName)
     {
         projectSettingsManager.trackSetting(settingName);
     }
 
-    protected void bindFloatSetting(TextField textField, String settingName, float minValue, float maxValue)
+    protected final void bindFloatSetting(TextField textField, String settingName, float minValue, float maxValue)
     {
         projectSettingsManager.bindFloatSetting(textField, settingName, minValue, maxValue);
     }
 
-    protected void bindNormalizedSetting(TextField textField, String settingName)
+    protected final void bindNormalizedSetting(TextField textField, String settingName)
     {
         projectSettingsManager.bindNormalizedSetting(textField, settingName);
     }
 
-    protected void bindIntegerSetting(TextField textField, String settingName, int minValue, int maxValue)
+    protected final void bindIntegerSetting(TextField textField, String settingName, int minValue, int maxValue)
     {
         projectSettingsManager.bindIntegerSetting(textField, settingName, minValue, maxValue);
     }
 
-    protected void bindNumericSetting(Slider slider, String settingName)
+    protected final void bindNumericSetting(Slider slider, String settingName)
     {
         projectSettingsManager.bindNumericSetting(slider, settingName);
     }
 
-    protected void bindBooleanSetting(CheckBox checkBox, String settingName)
+    protected final void bindBooleanSetting(CheckBox checkBox, String settingName)
     {
         projectSettingsManager.bindBooleanSetting(checkBox, settingName);
     }
 
-    protected void bindBooleanSetting(BooleanProperty property, String settingName)
+    protected final void bindBooleanSetting(BooleanProperty property, String settingName)
     {
         projectSettingsManager.bindBooleanSetting(property, settingName);
     }
 
-    protected <T> void bindNumericComboBox(ComboBox<T> comboBox, String settingName,
-        Function<Number, T> choiceConstructor, Function<T, Number> extractNumeric)
+    protected final <T> void bindNumericComboBox(ComboBox<T> comboBox, String settingName,
+                                                 Function<Number, T> choiceConstructor, Function<T, Number> extractNumeric)
     {
         // Manually bind resolution both ways as a combo box.
         projectSettingsManager.bindNumericComboBox(comboBox, settingName, choiceConstructor, extractNumeric);
     }
 
-    protected <T> void bindTextComboBox(ComboBox<T> comboBox, String settingName,
-        Function<String, T> choiceConstructor, Function<T, String> extractText)
+    protected final <T> void bindTextComboBox(ComboBox<T> comboBox, String settingName,
+                                              Function<String, T> choiceConstructor, Function<T, String> extractText)
     {
         // Manually bind resolution both ways as a combo box.
         projectSettingsManager.bindTextComboBox(comboBox, settingName, choiceConstructor, extractText);
     }
 
-    protected void bindTextComboBox(ComboBox<String> comboBox, String settingName)
+    protected final void bindTextComboBox(ComboBox<String> comboBox, String settingName)
     {
         projectSettingsManager.bindTextComboBox(comboBox, settingName);
     }
 
-    protected <T> void bindObjectComboBox(ComboBox<T> comboBox, String settingName, Class<T> objectClass)
+    protected final <T> void bindObjectComboBox(ComboBox<T> comboBox, String settingName, Class<T> objectClass)
     {
         projectSettingsManager.bindObjectComboBox(comboBox, settingName, objectClass);
     }

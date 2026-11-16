@@ -46,107 +46,107 @@ class EventCollector
 
     private final WindowListenerManagerInstance listenerManager = new WindowListenerManagerInstance();
 
-    WindowListenerManager getListenerManager()
+    final WindowListenerManager getListenerManager()
     {
         return listenerManager;
     }
 
-    synchronized void canvasPos(Consumer<CanvasPositionListener> event)
+    final synchronized void canvasPos(Consumer<CanvasPositionListener> event)
     {
         this.canvasPos.add(event);
     }
 
-    synchronized void canvasSize(Consumer<CanvasSizeListener> event)
+    final synchronized void canvasSize(Consumer<CanvasSizeListener> event)
     {
         this.canvasSize.add(event);
     }
 
-    synchronized void windowClose(Consumer<WindowCloseListener> event)
+    final synchronized void windowClose(Consumer<WindowCloseListener> event)
     {
         this.windowClose.add(event);
     }
 
-    synchronized void canvasRefresh(Consumer<CanvasRefreshListener> event)
+    final synchronized void canvasRefresh(Consumer<CanvasRefreshListener> event)
     {
         this.canvasRefresh.add(event);
     }
 
-    synchronized void windowFocusLost(Consumer<WindowFocusLostListener> event)
+    final synchronized void windowFocusLost(Consumer<WindowFocusLostListener> event)
     {
         this.windowFocusLost.add(event);
     }
 
-    synchronized void windowFocusGained(Consumer<WindowFocusGainedListener> event)
+    final synchronized void windowFocusGained(Consumer<WindowFocusGainedListener> event)
     {
         this.windowFocusGained.add(event);
     }
 
-    synchronized void windowIconified(Consumer<WindowIconifiedListener> event)
+    final synchronized void windowIconified(Consumer<WindowIconifiedListener> event)
     {
         this.windowIconified.add(event);
     }
 
-    synchronized void windowRestored(Consumer<WindowRestoredListener> event)
+    final synchronized void windowRestored(Consumer<WindowRestoredListener> event)
     {
         this.windowRestored.add(event);
     }
 
-    synchronized void framebufferSize(Consumer<FramebufferSizeListener> event)
+    final synchronized void framebufferSize(Consumer<FramebufferSizeListener> event)
     {
         this.framebufferSize.add(event);
     }
 
-    synchronized void keyPress(Consumer<KeyPressListener> event)
+    final synchronized void keyPress(Consumer<KeyPressListener> event)
     {
         this.keyPress.add(event);
     }
 
-    synchronized void keyRelease(Consumer<KeyReleaseListener> event)
+    final synchronized void keyRelease(Consumer<KeyReleaseListener> event)
     {
         this.keyRelease.add(event);
     }
 
-    synchronized void keyType(Consumer<KeyTypeListener> event)
+    final synchronized void keyType(Consumer<KeyTypeListener> event)
     {
         this.keyType.add(event);
     }
 
-    synchronized void character(Consumer<CharacterListener> event)
+    final synchronized void character(Consumer<CharacterListener> event)
     {
         this.character.add(event);
     }
 
-    synchronized void charMods(Consumer<CharacterModifiersListener> event)
+    final synchronized void charMods(Consumer<CharacterModifiersListener> event)
     {
         this.charMods.add(event);
     }
 
-    synchronized void mouseButtonPress(Consumer<MouseButtonPressListener> event)
+    final synchronized void mouseButtonPress(Consumer<MouseButtonPressListener> event)
     {
         this.mouseButtonPress.add(event);
     }
 
-    synchronized void mouseButtonRelease(Consumer<MouseButtonReleaseListener> event)
+    final synchronized void mouseButtonRelease(Consumer<MouseButtonReleaseListener> event)
     {
         this.mouseButtonRelease.add(event);
     }
 
-    synchronized void cursorPos(Consumer<CursorPositionListener> event)
+    final synchronized void cursorPos(Consumer<CursorPositionListener> event)
     {
         this.cursorPos.add(event);
     }
 
-    synchronized void cursorEnter(Consumer<CursorEnteredListener> event)
+    final synchronized void cursorEnter(Consumer<CursorEnteredListener> event)
     {
         this.cursorEnter.add(event);
     }
 
-    synchronized void cursorExit(Consumer<CursorExitedListener> event)
+    final synchronized void cursorExit(Consumer<CursorExitedListener> event)
     {
         this.cursorExit.add(event);
     }
 
-    synchronized void scroll(Consumer<ScrollListener> event)
+    final synchronized void scroll(Consumer<ScrollListener> event)
     {
         this.scroll.add(event);
     }
@@ -177,7 +177,7 @@ class EventCollector
         }
     }
 
-    void pollEvents()
+    final void pollEvents()
     {
         pollEvents(canvasPos, listenerManager.getCanvasPosListeners());
         pollEvents(canvasSize, listenerManager.getCanvasSizeListeners());

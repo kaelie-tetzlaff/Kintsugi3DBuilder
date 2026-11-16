@@ -46,7 +46,7 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
         this.basisOptimizationSettings = basisOptimizationSettings;
     }
 
-    public <ContextType extends Context<ContextType>> TextureResources<ContextType> optimizeFitWithCache(
+    public final <ContextType extends Context<ContextType>> TextureResources<ContextType> optimizeFitWithCache(
         ReadonlyImageBasedGraphicsResources<ContextType> resources, ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
@@ -102,7 +102,7 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
         }
     }
 
-    public <ContextType extends Context<ContextType>> SpecularFitOptimizable<ContextType> optimizeFit(
+    public final <ContextType extends Context<ContextType>> SpecularFitOptimizable<ContextType> optimizeFit(
         ReadonlyImageBasedGraphicsResources<ContextType> resources, ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
@@ -170,7 +170,7 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
     }
 
     @Override
-    protected <ContextType extends Context<ContextType>> SpecularFitResourcesWrapper<ContextType> getResourcesWrapper()
+    protected final <ContextType extends Context<ContextType>> SpecularFitResourcesWrapper<ContextType> getResourcesWrapper()
     {
         return new SpecularFitResourcesWrapper<>(getSettings().isSmithMaskingShadowingEnabled(), basisOptimizationSettings);
     }

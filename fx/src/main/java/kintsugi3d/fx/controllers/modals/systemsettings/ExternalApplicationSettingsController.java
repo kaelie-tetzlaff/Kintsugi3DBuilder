@@ -57,7 +57,7 @@ public class ExternalApplicationSettingsController implements SystemSettingsCont
     }
 
     @Override
-    public void initializePage(Window parentWindow, JavaFXState state)
+    public final void initializePage(Window parentWindow, JavaFXState state)
     {
         blenderLocationLabel.textProperty().bindBidirectional(state.getSettingsModel().getObjectProperty("blenderLocation", String.class));
     }

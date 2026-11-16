@@ -39,7 +39,7 @@ public class CameraVisual<ContextType extends Context<ContextType>> extends Shad
     }
 
     @Override
-    protected ProgramObject<ContextType> createProgram() throws IOException
+    protected final ProgramObject<ContextType> createProgram() throws IOException
     {
         return getContext().getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File(new File(new File("shaders"), "common"), "texture_imgspace.vert"))
@@ -48,13 +48,13 @@ public class CameraVisual<ContextType extends Context<ContextType>> extends Shad
     }
 
     @Override
-    protected Map<String, VertexBuffer<ContextType>> createVertexBuffers()
+    protected final Map<String, VertexBuffer<ContextType>> createVertexBuffers()
     {
         return Map.of("position", getContext().createRectangle());
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         if (programFactory instanceof GraphicsResourcesImageSpace)
         {
@@ -83,12 +83,12 @@ public class CameraVisual<ContextType extends Context<ContextType>> extends Shad
         }
     }
 
-    public ViewSelection getViewSelection()
+    public final ViewSelection getViewSelection()
     {
         return viewSelection;
     }
 
-    public void setViewSelection(ViewSelection viewSelection)
+    public final void setViewSelection(ViewSelection viewSelection)
     {
         this.viewSelection = viewSelection;
     }

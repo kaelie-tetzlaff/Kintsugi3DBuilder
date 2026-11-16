@@ -69,7 +69,7 @@ public class MouseMode
             });
     }
 
-    public int getOrdinal()
+    public final int getOrdinal()
     {
         return  (modifierKeys.isShiftModifierActive()   ? 1 : 0) |
                 (modifierKeys.isControlModifierActive() ? 2 : 0) |
@@ -79,7 +79,7 @@ public class MouseMode
     }
 
     @Override
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         if (obj instanceof MouseMode)
         {
@@ -93,13 +93,13 @@ public class MouseMode
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return this.getOrdinal();
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         StringBuilder builder = new StringBuilder(25);
 

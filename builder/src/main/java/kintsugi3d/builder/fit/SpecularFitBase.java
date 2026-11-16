@@ -97,27 +97,27 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public ContextType getContext()
+    public final ContextType getContext()
     {
         return context;
     }
 
     @Override
-    public int getWidth()
+    public final int getWidth()
     {
         return basisWeightResources == null || basisWeightResources.getWeightMaps() == null ?
             0 : basisWeightResources.getWeightMaps().getWidth();
     }
 
     @Override
-    public int getHeight()
+    public final int getHeight()
     {
         return basisWeightResources == null || basisWeightResources.getWeightMaps() == null ?
             0 : basisWeightResources.getWeightMaps().getHeight();
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (basisResources != null)
         {
@@ -130,14 +130,14 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
         }
     }
 
-    protected int getSpecularTextureCount()
+    protected final int getSpecularTextureCount()
     {
         //noinspection VariableNotUsedInsideIf
         return (roughnessOptimization == null) ? 0 : 2;
     }
 
     @Override
-    public Map<StandardTexture, Texture2D<ContextType>> getStandardTextures()
+    public final Map<StandardTexture, Texture2D<ContextType>> getStandardTextures()
     {
         return roughnessOptimization == null ? Map.of() :
             Map.of(StandardTexture.SPECULAR_COLOR, roughnessOptimization.getReflectivityTexture(),
@@ -145,7 +145,7 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public Map<TextureInfo, Texture2D<ContextType>> getTextures()
+    public final Map<TextureInfo, Texture2D<ContextType>> getTextures()
     {
         return StandardTexture.convertEnumMapToObjectMap(getStandardTextures());
     }
@@ -159,7 +159,7 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public ReadonlyBasisResources<ContextType> getBasisResources()
+    public final ReadonlyBasisResources<ContextType> getBasisResources()
     {
         return basisResources;
     }
@@ -168,7 +168,7 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
      * Basis weights (originally calculated on the CPU)
      */
     @Override
-    public BasisWeightResources<ContextType> getBasisWeightResources()
+    public final BasisWeightResources<ContextType> getBasisWeightResources()
     {
         return basisWeightResources;
     }

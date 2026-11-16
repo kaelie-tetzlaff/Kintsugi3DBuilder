@@ -29,19 +29,19 @@ public abstract class NonValidatedInputSourceBase implements NonValidatedInputSo
     }
 
     @Override
-    public File specifyProjectFileToSave()
+    public final File specifyProjectFileToSave()
     {
         return specifyProjectFileToSave.get();
     }
 
     @Override
-    public Collection<File> getDisabledImages()
+    public final Collection<File> getDisabledImages()
     {
         return Collections.unmodifiableCollection(disabledImages);
     }
 
     @Override
-    public void disableImages(Collection<File> imagesToDisable)
+    public final void disableImages(Collection<File> imagesToDisable)
     {
         disabledImages.addAll(imagesToDisable);
     }

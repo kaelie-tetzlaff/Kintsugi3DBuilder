@@ -30,9 +30,9 @@ public class RootSceneController
     @FXML
     private RootObjectSceneController objectPosesController;
 
-    public void injectDependencies(ObservableCameraModel cameraModel, ObservableLightingEnvironmentModel lightingModel,
-                                   ObservableEnvironmentModel environmentMapModel, ObservableObjectPoseModel objectModel,
-                                   ObservableProjectModel projectModel, SceneViewport sceneViewport)
+    public final void injectDependencies(ObservableCameraModel cameraModel, ObservableLightingEnvironmentModel lightingModel,
+                                         ObservableEnvironmentModel environmentMapModel, ObservableObjectPoseModel objectModel,
+                                         ObservableProjectModel projectModel, SceneViewport sceneViewport)
     {
         cameraController.injectDependencies(cameraModel, projectModel);
         lightsController.injectDependencies(lightingModel, projectModel, sceneViewport);

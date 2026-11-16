@@ -18,13 +18,13 @@ import java.io.IOException;
 public class LightCalibration extends ExperienceBase
 {
     @Override
-    public String getName()
+    public final String getName()
     {
         return "Light Calibration";
     }
 
     @Override
-    protected void open() throws IOException
+    protected final void open() throws IOException
     {
         this.<LightCalibrationController>openPagedModal("/fxml/modals/workflow/LightCalibration.fxml");
     }

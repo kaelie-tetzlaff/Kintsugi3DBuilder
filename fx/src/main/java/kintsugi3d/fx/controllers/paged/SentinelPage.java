@@ -28,13 +28,13 @@ public class SentinelPage<T> extends PageBase<Object, T, PageController<? super 
     }
 
     @Override
-    public @Nullable T getOutData()
+    public final @Nullable T getOutData()
     {
         return null;
     }
 
     @Override
-    public void setNextPage(Page<? super T, ?> page)
+    public final void setNextPage(Page<? super T, ?> page)
     {
         super.setNextPage(page);
 

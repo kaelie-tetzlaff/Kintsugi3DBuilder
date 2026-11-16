@@ -41,17 +41,17 @@ public class ProjectDataCard
         this.isEnabled = isEnabled;
     }
 
-    public String getInternalName()
+    public final String getInternalName()
     {
         return internalName;
     }
 
-    public UUID getCardId()
+    public final UUID getCardId()
     {
         return cardId;
     }
 
-    public String getTitle()
+    public final String getTitle()
     {
         if (!isEnabled)
         {
@@ -60,12 +60,12 @@ public class ProjectDataCard
         return title;
     }
 
-    public String getThumbnailPath()
+    public final String getThumbnailPath()
     {
         return thumbnailPath;
     }
 
-    public String getValue(String key)
+    public final String getValue(String key)
     {
         if (!textFields.containsKey(key))
         {
@@ -74,21 +74,21 @@ public class ProjectDataCard
         return textFields.get(key);
     }
 
-    public Map<String, String> getTextContent()
+    public final Map<String, String> getTextContent()
     {
         return textFields;
     }
 
-    public Collection<? extends Map<String, Runnable>> getActions()
+    public final Collection<? extends Map<String, Runnable>> getActions()
     {
         return actionGroups;
     }
 
-    public boolean isEnabled() { return isEnabled; }
+    public final boolean isEnabled() { return isEnabled; }
 
-    public void setIsEnabled(boolean isEnabled) { this.isEnabled = isEnabled; }
+    public final void setIsEnabled(boolean isEnabled) { this.isEnabled = isEnabled; }
 
-    public String getFullResImageFilePath()
+    public final String getFullResImageFilePath()
     {
         return fullResImageFilePath;
     }

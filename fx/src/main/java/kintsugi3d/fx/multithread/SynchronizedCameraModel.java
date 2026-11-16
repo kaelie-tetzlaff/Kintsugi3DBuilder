@@ -42,103 +42,103 @@ public class SynchronizedCameraModel extends ViewpointModelBase
     }
 
     @Override
-    public boolean isLocked()
+    public final boolean isLocked()
     {
         return baseModel.isLocked();
     }
 
     @Override
-    public Vector3 getTarget()
+    public final Vector3 getTarget()
     {
         return this.target.getValue();
     }
 
     @Override
-    public void setTarget(Vector3 target)
+    public final void setTarget(Vector3 target)
     {
         this.target.setValue(target);
     }
 
     @Override
-    public boolean isOrthographic()
+    public final boolean isOrthographic()
     {
         return this.orthographic.getValue();
     }
 
     @Override
-    public void setOrthographic(boolean orthographic)
+    public final void setOrthographic(boolean orthographic)
     {
         this.orthographic.setValue(orthographic);
     }
 
     @Override
-    public float getHorizontalFOV()
+    public final float getHorizontalFOV()
     {
         return this.horizontalFOV.getValue();
     }
 
     @Override
-    public void setHorizontalFOV(float fov)
+    public final void setHorizontalFOV(float fov)
     {
         this.horizontalFOV.setValue(fov);
     }
 
     @Override
-    public float getLog10Distance()
+    public final float getLog10Distance()
     {
         return this.log10Distance.getValue();
     }
 
     @Override
-    public void setLog10Distance(float log10Distance)
+    public final void setLog10Distance(float log10Distance)
     {
         this.log10Distance.setValue(log10Distance);
     }
 
     @Override
-    public float getTwist()
+    public final float getTwist()
     {
         return this.twist.getValue();
     }
 
     @Override
-    public void setTwist(float twist)
+    public final void setTwist(float twist)
     {
         this.twist.setValue(twist);
     }
 
     @Override
-    public float getAzimuth()
+    public final float getAzimuth()
     {
         return this.azimuth.getValue();
     }
 
     @Override
-    public void setAzimuth(float azimuth)
+    public final void setAzimuth(float azimuth)
     {
         this.azimuth.setValue(azimuth);
     }
 
     @Override
-    public float getInclination()
+    public final float getInclination()
     {
         return this.inclination.getValue();
     }
 
     @Override
-    public void setInclination(float inclination)
+    public final void setInclination(float inclination)
     {
         this.inclination.setValue(inclination);
     }
 
     @Override
-    public float getFocalLength()
+    public final float getFocalLength()
     {
         return this.focalLength.getValue();
     }
 
     @Override
-    public void setFocalLength(float focalLength)
+    public final void setFocalLength(float focalLength)
     {
         this.focalLength.setValue(focalLength);
     }

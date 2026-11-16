@@ -38,63 +38,63 @@ public class SynchronizedProjectModel implements ProjectModel
     }
 
     @Override
-    public void parseXMLDocument(Document document) throws IOException, ParserConfigurationException, SAXException
+    public final void parseXMLDocument(Document document) throws IOException, ParserConfigurationException, SAXException
     {
         baseModel.parseXMLDocument(document);
     }
 
     @Override
-    public Document toXMLDocument() throws ParserConfigurationException
+    public final Document toXMLDocument() throws ParserConfigurationException
     {
         return baseModel.toXMLDocument();
     }
 
     @Override
-    public File getColorCheckerFile()
+    public final File getColorCheckerFile()
     {
         return colorCheckerFile.getValue();
     }
 
     @Override
-    public void setColorCheckerFile(File colorCheckerFile)
+    public final void setColorCheckerFile(File colorCheckerFile)
     {
         this.colorCheckerFile.setValue(colorCheckerFile);
     }
 
     @Override
-    public void error(String message, Throwable e)
+    public final void error(String message, Throwable e)
     {
         // error() already runs its JavaFX code within a Platform.runLater, so it should be thread-safe.
         baseModel.error(message, e);
     }
 
     @Override
-    public void warn(String message, Throwable e)
+    public final void warn(String message, Throwable e)
     {
         // warn() already runs its JavaFX code within a Platform.runLater, so it should be thread-safe.
         baseModel.warn(message, e);
     }
 
     @Override
-    public void cancelled(String message)
+    public final void cancelled(String message)
     {
         Platform.runLater(() -> baseModel.cancelled(message));
     }
 
     @Override
-    public void confirm(String title, String header, String message, Runnable onConfirm)
+    public final void confirm(String title, String header, String message, Runnable onConfirm)
     {
         Platform.runLater(() -> baseModel.confirm(title, header, message, onConfirm));
     }
 
     @Override
-    public void confirmClose(String text, Runnable onClose)
+    public final void confirmClose(String text, Runnable onClose)
     {
         Platform.runLater(() -> baseModel.confirmClose(text, onClose));
     }
 
     @Override
-    public void requestUserImageReplacement(ImageReplacer imageReplacer)
+    public final void requestUserImageReplacement(ImageReplacer imageReplacer)
     {
         Platform.runLater(() -> baseModel.requestUserImageReplacement(imageReplacer));
     }

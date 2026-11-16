@@ -20,7 +20,7 @@ public abstract class StencilTextureBuilderBase<ContextType extends Context<Cont
 {
     private int precision = 8;
 
-    protected int getInternalPrecision()
+    protected final int getInternalPrecision()
     {
         return this.precision;
     }
@@ -31,42 +31,42 @@ public abstract class StencilTextureBuilderBase<ContextType extends Context<Cont
     }
 
     @Override
-    public StencilTextureBuilderBase<ContextType, TextureType> setInternalPrecision(int precision)
+    public final StencilTextureBuilderBase<ContextType, TextureType> setInternalPrecision(int precision)
     {
         this.precision = precision;
         return this;
     }
 
     @Override
-    public StencilTextureBuilderBase<ContextType, TextureType> setMultisamples(int samples, boolean fixedSampleLocations)
+    public final StencilTextureBuilderBase<ContextType, TextureType> setMultisamples(int samples, boolean fixedSampleLocations)
     {
         super.setMultisamples(samples, fixedSampleLocations);
         return this;
     }
 
     @Override
-    public StencilTextureBuilderBase<ContextType, TextureType> setMipmapsEnabled(boolean enabled)
+    public final StencilTextureBuilderBase<ContextType, TextureType> setMipmapsEnabled(boolean enabled)
     {
         super.setMipmapsEnabled(enabled);
         return this;
     }
 
     @Override
-    public StencilTextureBuilderBase<ContextType, TextureType> setMaxMipmapLevel(int maxMipmapLevel)
+    public final StencilTextureBuilderBase<ContextType, TextureType> setMaxMipmapLevel(int maxMipmapLevel)
     {
         super.setMaxMipmapLevel(maxMipmapLevel);
         return this;
     }
 
     @Override
-    public StencilTextureBuilderBase<ContextType, TextureType> setLinearFilteringEnabled(boolean enabled)
+    public final StencilTextureBuilderBase<ContextType, TextureType> setLinearFilteringEnabled(boolean enabled)
     {
         super.setLinearFilteringEnabled(enabled);
         return this;
     }
 
     @Override
-    public StencilTextureBuilderBase<ContextType, TextureType> setMaxAnisotropy(float maxAnisotropy)
+    public final StencilTextureBuilderBase<ContextType, TextureType> setMaxAnisotropy(float maxAnisotropy)
     {
         super.setMaxAnisotropy(maxAnisotropy);
         return this;

@@ -20,7 +20,7 @@ public class BasisSettings implements ReadonlyBasisSettings
      * @return The number of basis functions to use for the specular lobe.
      */
     @Override
-    public int getMaterialCount()
+    public final int getMaterialCount()
     {
         return materialCount;
     }
@@ -28,7 +28,7 @@ public class BasisSettings implements ReadonlyBasisSettings
     /**
      * @param materialCount The number of basis functions to use for the specular lobe.
      */
-    public void setMaterialCount(int materialCount)
+    public final void setMaterialCount(int materialCount)
     {
         if (materialCount <= 0)
         {
@@ -44,7 +44,7 @@ public class BasisSettings implements ReadonlyBasisSettings
      * @return The number of discrete values in the definition of the specular lobe.
      */
     @Override
-    public int getBasisResolution()
+    public final int getBasisResolution()
     {
         return basisResolution;
     }
@@ -52,7 +52,7 @@ public class BasisSettings implements ReadonlyBasisSettings
     /**
      * @param basisResolution The number of discrete values in the definition of the specular lobe.
      */
-    public void setBasisResolution(int basisResolution)
+    public final void setBasisResolution(int basisResolution)
     {
         if (basisResolution <= 0)
         {

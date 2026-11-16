@@ -71,7 +71,7 @@ public class ExportTexturesRequest implements ProgressMonitoredImageBasedGraphic
     }
 
     @Override
-    public <ContextType extends Context<ContextType>> void executeRequest(
+    public final <ContextType extends Context<ContextType>> void executeRequest(
         ImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
     {
         // Includes textures is shouldSaveTextures is true

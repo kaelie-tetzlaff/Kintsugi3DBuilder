@@ -35,12 +35,12 @@ public class MissingImagesException extends Exception
         this.imgDirectory = imgDirectory;
     }
 
-    public Collection<File> getMissingImgs()
+    public final Collection<File> getMissingImgs()
     {
         return missingImgs;
     }
 
-    public File getImgDirectory()
+    public final File getImgDirectory()
     {
         return imgDirectory;
     }

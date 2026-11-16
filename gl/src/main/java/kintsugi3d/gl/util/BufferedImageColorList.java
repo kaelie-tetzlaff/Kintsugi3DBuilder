@@ -28,7 +28,7 @@ public class BufferedImageColorList extends AbstractList<Vector4> implements Col
         this.img = img;
     }
 
-    @Override public Vector4 get(int index)
+    @Override public final Vector4 get(int index)
     {
         // flip vertical
         int rgb = img.getRGB(index % img.getWidth(), img.getHeight() - 1 - index / img.getWidth());
@@ -39,7 +39,7 @@ public class BufferedImageColorList extends AbstractList<Vector4> implements Col
     }
 
     @Override
-    public float get(int index, int component)
+    public final float get(int index, int component)
     {
         switch (component)
         {
@@ -52,39 +52,39 @@ public class BufferedImageColorList extends AbstractList<Vector4> implements Col
     }
 
     @Override
-    public float getRed(int index)
+    public final float getRed(int index)
     {
         return get(index).x;
     }
 
     @Override
-    public float getGreen(int index)
+    public final float getGreen(int index)
     {
         return get(index).y;
     }
 
     @Override
-    public float getBlue(int index)
+    public final float getBlue(int index)
     {
         return get(index).z;
     }
 
     @Override
-    public float getAlpha(int index)
+    public final float getAlpha(int index)
     {
         return get(index).w;
     }
 
-    @Override public int size() { return img.getWidth() * img.getHeight(); }
+    @Override public final int size() { return img.getWidth() * img.getHeight(); }
 
     @Override
-    public int getWidth()
+    public final int getWidth()
     {
         return img.getWidth();
     }
 
     @Override
-    public int getHeight()
+    public final int getHeight()
     {
         return img.getHeight();
     }

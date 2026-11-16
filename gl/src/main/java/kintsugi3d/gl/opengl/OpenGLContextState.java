@@ -24,56 +24,56 @@ public class OpenGLContextState implements ContextState
     }
 
     @Override
-    public void enableDepthTest()
+    public final void enableDepthTest()
     {
         glEnable(GL_DEPTH_TEST);
         OpenGLContext.errorCheck();
     }
 
     @Override
-    public void disableDepthTest()
+    public final void disableDepthTest()
     {
         glDisable(GL_DEPTH_TEST);
         OpenGLContext.errorCheck();
     }
 
     @Override
-    public void enableDepthWrite()
+    public final void enableDepthWrite()
     {
         glDepthMask(true);
         OpenGLContext.errorCheck();
     }
 
     @Override
-    public void disableDepthWrite()
+    public final void disableDepthWrite()
     {
         glDepthMask(false);
         OpenGLContext.errorCheck();
     }
 
     @Override
-    public void enableMultisampling()
+    public final void enableMultisampling()
     {
         glEnable(GL_MULTISAMPLE);
         OpenGLContext.errorCheck();
     }
 
     @Override
-    public void disableMultisampling()
+    public final void disableMultisampling()
     {
         glDisable(GL_MULTISAMPLE);
         OpenGLContext.errorCheck();
     }
 
     @Override
-    public void enableBackFaceCulling()
+    public final void enableBackFaceCulling()
     {
         glEnable(GL_CULL_FACE);
         OpenGLContext.errorCheck();
     }
 
     @Override
-    public void disableBackFaceCulling()
+    public final void disableBackFaceCulling()
     {
         glDisable(GL_CULL_FACE);
         OpenGLContext.errorCheck();
@@ -98,7 +98,7 @@ public class OpenGLContextState implements ContextState
     }
 
     @Override
-    public void setBlendFunction(BlendFunction func)
+    public final void setBlendFunction(BlendFunction func)
     {
         glEnable(GL_BLEND);
         OpenGLContext.errorCheck();
@@ -107,7 +107,7 @@ public class OpenGLContextState implements ContextState
     }
 
     @Override
-    public void disableBlending()
+    public final void disableBlending()
     {
         glDisable(GL_BLEND);
         OpenGLContext.errorCheck();
@@ -121,49 +121,49 @@ public class OpenGLContextState implements ContextState
     }
 
     @Override
-    public int getMaxCombinedVertexUniformComponents()
+    public final int getMaxCombinedVertexUniformComponents()
     {
         return getInteger(GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS);
     }
 
     @Override
-    public int getMaxCombinedFragmentUniformComponents()
+    public final int getMaxCombinedFragmentUniformComponents()
     {
         return getInteger(GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS);
     }
 
     @Override
-    public int getMaxUniformBlockSize()
+    public final int getMaxUniformBlockSize()
     {
         return getInteger(GL_MAX_UNIFORM_BLOCK_SIZE);
     }
 
     @Override
-    public int getMaxVertexUniformComponents()
+    public final int getMaxVertexUniformComponents()
     {
         return getInteger(GL_MAX_VERTEX_UNIFORM_COMPONENTS);
     }
 
     @Override
-    public int getMaxFragmentUniformComponents()
+    public final int getMaxFragmentUniformComponents()
     {
         return getInteger(GL_MAX_FRAGMENT_UNIFORM_COMPONENTS);
     }
 
     @Override
-    public int getMaxArrayTextureLayers()
+    public final int getMaxArrayTextureLayers()
     {
         return getInteger(GL_MAX_ARRAY_TEXTURE_LAYERS);
     }
 
     @Override
-    public int getMaxCombinedTextureImageUnits()
+    public final int getMaxCombinedTextureImageUnits()
     {
         return getInteger(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS);
     }
 
     @Override
-    public int getMaxCombinedUniformBlocks()
+    public final int getMaxCombinedUniformBlocks()
     {
         return getInteger(GL_MAX_COMBINED_UNIFORM_BLOCKS);
     }

@@ -19,13 +19,13 @@ import java.io.IOException;
 public class Log extends ExperienceBase
 {
     @Override
-    public String getName()
+    public final String getName()
     {
         return "Log";
     }
 
     @Override
-    protected void open() throws IOException
+    protected final void open() throws IOException
     {
         createModal("/fxml/modals/Logger.fxml");
 

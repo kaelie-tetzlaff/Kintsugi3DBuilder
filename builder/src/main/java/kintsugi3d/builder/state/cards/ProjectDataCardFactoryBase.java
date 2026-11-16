@@ -30,18 +30,18 @@ public abstract class ProjectDataCardFactoryBase<T> implements ProjectDataCardFa
         this.instance = instance;
     }
 
-    protected ImageBasedRenderable<?> getInstance()
+    protected final ImageBasedRenderable<?> getInstance()
     {
         return instance;
     }
 
-    protected ViewSet getViewSet()
+    protected final ViewSet getViewSet()
     {
         return instance.getViewSet();
     }
 
     @Override
-    public void refreshCards(List<ProjectDataCard> mutableCardList, RefreshFunction<T> refreshedData)
+    public final void refreshCards(List<ProjectDataCard> mutableCardList, RefreshFunction<T> refreshedData)
     {
         // Generate cards in parallel for efficiency
         List<Entry<Integer, ProjectDataCard>> entryList = IntStream.range(0, mutableCardList.size())

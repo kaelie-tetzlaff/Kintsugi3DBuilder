@@ -55,31 +55,31 @@ public class CurrentProjectViewSelectable extends ViewSelectableBase
         this(getInitialSelection, null);
     }
 
-    public View getInitialView()
+    public final View getInitialView()
     {
         return initialView;
     }
 
-    public double getInitialViewRotationDegrees()
+    public final double getInitialViewRotationDegrees()
     {
         return initialViewRotationDegrees;
     }
 
     @Override
-    public @Nullable String getAdvanceLabelOverride()
+    public final @Nullable String getAdvanceLabelOverride()
     {
         // No override
         return null;
     }
 
     @Override
-    public ImageSetInfo getImageSetInfo()
+    public final ImageSetInfo getImageSetInfo()
     {
         return imageSetInfo;
     }
 
     @Override
-    public boolean confirm()
+    public final boolean confirm()
     {
         // Will be handled by the controller itself if a project is already loaded.
         return true;

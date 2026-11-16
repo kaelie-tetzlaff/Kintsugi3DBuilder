@@ -212,7 +212,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
         glfwWindowHint(GLFW_SAMPLES, windowSpec.getMultisamples());
     }
 
-    public void closeAllWindows()
+    public final void closeAllWindows()
     {
         LOG.debug("Destroying window...");
         glfwDestroyWindow(this.handle);
@@ -222,37 +222,37 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
         LOG.debug("GLFW terminated.");
     }
 
-    long getHandle()
+    final long getHandle()
     {
         return handle;
     }
 
     @Override
-    public ContextType getContext()
+    public final ContextType getContext()
     {
         return this.context;
     }
 
     @Override
-    public PollableCanvas3D<ContextType> getCanvas()
+    public final PollableCanvas3D<ContextType> getCanvas()
     {
         return this;
     }
 
     @Override
-    protected WindowListenerManager getListenerManager()
+    protected final WindowListenerManager getListenerManager()
     {
         return listenerManager;
     }
 
     @Override
-    public void show()
+    public final void show()
     {
         glfwShowWindow(handle);
     }
 
     @Override
-    public void hide()
+    public final void hide()
     {
         glfwHideWindow(handle);
     }
@@ -264,20 +264,20 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public void pollEvents()
+    public final void pollEvents()
     {
         glfwMakeContextCurrent(handle);
         glfwPollEvents();
     }
 
     @Override
-    public boolean shouldTerminate()
+    public final boolean shouldTerminate()
     {
         return this.isWindowClosing();
     }
 
     @Override
-    public boolean isHighDPI()
+    public final boolean isHighDPI()
     {
         CanvasSize winSize = getSize();
         FramebufferSize fbSize = context.getDefaultFramebufferSize();
@@ -285,31 +285,31 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public boolean isWindowClosing()
+    public final boolean isWindowClosing()
     {
         return glfwWindowShouldClose(handle);
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         glfwDestroyWindow(handle);
     }
 
     @Override
-    public void requestWindowClose()
+    public final void requestWindowClose()
     {
         glfwSetWindowShouldClose(handle, true);
     }
 
     @Override
-    public void cancelWindowClose()
+    public final void cancelWindowClose()
     {
         glfwSetWindowShouldClose(handle, false);
     }
 
     @Override
-    public CanvasSize getSize()
+    public final CanvasSize getSize()
     {
         IntBuffer widthBuffer = BufferUtils.createIntBuffer(1);
         IntBuffer heightBuffer = BufferUtils.createIntBuffer(1);
@@ -320,13 +320,13 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public CanvasSize getSizeForDisplay()
+    public final CanvasSize getSizeForDisplay()
     {
         return getSize();
     }
 
     @Override
-    public CanvasPosition getPosition()
+    public final CanvasPosition getPosition()
     {
         IntBuffer xBuffer = BufferUtils.createIntBuffer(1);
         IntBuffer yBuffer = BufferUtils.createIntBuffer(1);
@@ -337,25 +337,25 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public void setSize(int width, int height)
+    public final void setSize(int width, int height)
     {
         glfwSetWindowSize(handle, width, height);
     }
 
     @Override
-    public void setPosition(int x, int y)
+    public final void setPosition(int x, int y)
     {
         glfwSetWindowPos(handle, x, y);
     }
 
     @Override
-    public void setWindowTitle(String title)
+    public final void setWindowTitle(String title)
     {
         glfwSetWindowTitle(handle, title);
     }
 
     @Override
-    public MouseButtonState getMouseButtonState(int buttonIndex)
+    public final MouseButtonState getMouseButtonState(int buttonIndex)
     {
         switch (glfwGetMouseButton(handle, buttonIndex))
         {
@@ -376,7 +376,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public KeyState getKeyState(Key key)
+    public final KeyState getKeyState(Key key)
     {
         for (int code : KeyCodeMaps.keyToCodes(key))
         {
@@ -390,7 +390,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public CursorPosition getCursorPosition()
+    public final CursorPosition getCursorPosition()
     {
         DoubleBuffer xBuffer = BufferUtils.createDoubleBuffer(1);
         DoubleBuffer yBuffer = BufferUtils.createDoubleBuffer(1);
@@ -401,7 +401,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public ModifierKeys getModifierKeys()
+    public final ModifierKeys getModifierKeys()
     {
         return new GLFWModifierKeys(
             getKeyState(GLFW_KEY_LEFT_SHIFT) == KeyState.PRESSED || getKeyState(GLFW_KEY_RIGHT_SHIFT) == KeyState.PRESSED,
@@ -412,7 +412,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public boolean isFocused()
+    public final boolean isFocused()
     {
         return glfwGetWindowAttrib(handle, GLFW_FOCUSED) == GLFW_TRUE;
     }

@@ -31,70 +31,70 @@ public abstract class WindowBuilderBase<WindowType extends PollableWindow> imple
     }
 
     @Override
-    public String getTitle()
+    public final String getTitle()
     {
         return title;
     }
 
     @Override
-    public int getWidth()
+    public final int getWidth()
     {
         return width;
     }
 
     @Override
-    public int getHeight()
+    public final int getHeight()
     {
         return height;
     }
 
     @Override
-    public int getX()
+    public final int getX()
     {
         return x;
     }
 
     @Override
-    public int getY()
+    public final int getY()
     {
         return y;
     }
 
     @Override
-    public boolean isResizable()
+    public final boolean isResizable()
     {
         return resizable;
     }
 
     @Override
-    public int getMultisamples()
+    public final int getMultisamples()
     {
         return multisamples;
     }
 
     @Override
-    public WindowBuilderBase<WindowType> setX(int x)
+    public final WindowBuilderBase<WindowType> setX(int x)
     {
         this.x = x;
         return this;
     }
 
     @Override
-    public WindowBuilderBase<WindowType> setY(int y)
+    public final WindowBuilderBase<WindowType> setY(int y)
     {
         this.y = y;
         return this;
     }
 
     @Override
-    public WindowBuilderBase<WindowType> setResizable(boolean resizable)
+    public final WindowBuilderBase<WindowType> setResizable(boolean resizable)
     {
         this.resizable = resizable;
         return this;
     }
 
     @Override
-    public WindowBuilderBase<WindowType> setMultisamples(int multisamples)
+    public final WindowBuilderBase<WindowType> setMultisamples(int multisamples)
     {
         this.multisamples = multisamples;
         return this;

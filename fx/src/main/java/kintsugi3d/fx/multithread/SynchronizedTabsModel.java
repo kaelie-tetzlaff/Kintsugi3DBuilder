@@ -29,31 +29,31 @@ public class SynchronizedTabsModel implements TabsModel
     }
 
     @Override
-    public <T> void addTab(String tabName, ProjectDataCardFactory<T> cardFactory, String path)
+    public final <T> void addTab(String tabName, ProjectDataCardFactory<T> cardFactory, String path)
     {
         Platform.runLater(() -> base.addTab(tabName, cardFactory, path));
     }
 
     @Override
-    public void clearTabs()
+    public final void clearTabs()
     {
         Platform.runLater(base::clearTabs);
     }
 
     @Override
-    public CardsModel<?> getTab(String label)
+    public final CardsModel<?> getTab(String label)
     {
         return new SynchronizedCardsModel<>(base.getTab(label));
     }
 
     @Override
-    public <T> CardsModel<T> getTab(String label, Class<T> dataClass)
+    public final <T> CardsModel<T> getTab(String label, Class<T> dataClass)
     {
         return new SynchronizedCardsModel<>(base.getTab(label, dataClass));
     }
 
     @Override
-    public Map<String, CardsModel<?>> getTabsMap()
+    public final Map<String, CardsModel<?>> getTabsMap()
     {
         Map<String, CardsModel<?>> wrapped = new LinkedHashMap<>(4);
 

@@ -96,13 +96,13 @@ public class RoughnessOptimizationSimple<ContextType extends Context<ContextType
     }
 
     @Override
-    protected FramebufferObject<ContextType> getFramebuffer()
+    protected final FramebufferObject<ContextType> getFramebuffer()
     {
         return specularTexFramebuffer;
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         super.close();
         specularTexFramebuffer.close();

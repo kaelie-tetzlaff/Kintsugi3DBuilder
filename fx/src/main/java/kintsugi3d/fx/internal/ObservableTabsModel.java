@@ -68,7 +68,7 @@ public class ObservableTabsModel implements TabsModel
     }
 
     @Override
-    public <T> void addTab(String tabName, ProjectDataCardFactory<T> cardFactory, String path)
+    public final <T> void addTab(String tabName, ProjectDataCardFactory<T> cardFactory, String path)
     {
         ObservableCardsModel<?> newTab = new ObservableCardsModel<>(tabName, path, cardFactory, carouselModel);
         newTab.initialize();
@@ -77,7 +77,7 @@ public class ObservableTabsModel implements TabsModel
     }
 
     @Override
-    public void clearTabs()
+    public final void clearTabs()
     {
         tabs.clear();
 
@@ -89,13 +89,13 @@ public class ObservableTabsModel implements TabsModel
     }
 
     @Override
-    public ObservableCardsModel<?> getTab(String label)
+    public final ObservableCardsModel<?> getTab(String label)
     {
         return tabs.get(label);
     }
 
     @Override
-    public <T> @Nullable ObservableCardsModel<T> getTab(String label, Class<T> dataClass)
+    public final <T> @Nullable ObservableCardsModel<T> getTab(String label, Class<T> dataClass)
     {
         ObservableCardsModel<?> observableCardsModel = tabs.get(label);
 
@@ -111,43 +111,43 @@ public class ObservableTabsModel implements TabsModel
     }
 
     @Override
-    public Map<String, ObservableCardsModel<?>> getTabsMap()
+    public final Map<String, ObservableCardsModel<?>> getTabsMap()
     {
         return Collections.unmodifiableMap(tabs);
     }
 
-    public Collection<ObservableCardsModel<?>> getAllTabs()
+    public final Collection<ObservableCardsModel<?>> getAllTabs()
     {
         return Collections.unmodifiableCollection(tabs.values());
     }
 
-    public ObservableMap<String, ObservableCardsModel<?>> getObservableTabsMap()
+    public final ObservableMap<String, ObservableCardsModel<?>> getObservableTabsMap()
     {
         //noinspection AssignmentOrReturnOfFieldWithMutableType
         return unmodifiableTabs;
     }
 
-    public ObjectProperty<ObservableCardsModel<?>> activeTabProperty()
+    public final ObjectProperty<ObservableCardsModel<?>> activeTabProperty()
     {
         return activeTab;
     }
 
-    public ObservableCardsModel<?> getActiveTab()
+    public final ObservableCardsModel<?> getActiveTab()
     {
         return activeTab.get();
     }
 
-    public void setActiveTab(ObservableCardsModel<?> activeTab)
+    public final void setActiveTab(ObservableCardsModel<?> activeTab)
     {
         this.activeTab.set(activeTab);
     }
 
-    public ObjectExpression<ProjectDataCard> lastSelectedCardProperty()
+    public final ObjectExpression<ProjectDataCard> lastSelectedCardProperty()
     {
         return lastSelectedCard;
     }
 
-    public ProjectDataCard getLastSelectedCard()
+    public final ProjectDataCard getLastSelectedCard()
     {
         return lastSelectedCard.get();
     }
@@ -156,7 +156,7 @@ public class ObservableTabsModel implements TabsModel
      * Returns the observable list of selected cards across all tabs
      * @return
      */
-    public Collection<ProjectDataCard> getSelectedCards()
+    public final Collection<ProjectDataCard> getSelectedCards()
     {
         return tabs.values().stream()
             .flatMap(tab -> tab.getSelectedCards().stream())

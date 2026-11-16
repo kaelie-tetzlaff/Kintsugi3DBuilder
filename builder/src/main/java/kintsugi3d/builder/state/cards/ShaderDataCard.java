@@ -97,7 +97,7 @@ public class ShaderDataCard extends ProjectDataCard
             actionGroups, isEnabled);
     }
 
-    public ShaderInfo getShader()
+    public final ShaderInfo getShader()
     {
         return shader;
     }

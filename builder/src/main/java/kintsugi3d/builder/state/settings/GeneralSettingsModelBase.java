@@ -20,7 +20,7 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
     protected abstract void setUnchecked(String name, Object value);
 
     @Override
-    public Object getObject(String name)
+    public final Object getObject(String name)
     {
         if (this.exists(name))
         {
@@ -34,7 +34,7 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T get(String name, Class<T> settingType)
+    public final <T> T get(String name, Class<T> settingType)
     {
         if (this.exists(name))
         {
@@ -49,7 +49,7 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
     }
 
     @Override
-    public void set(String name, Object value)
+    public final void set(String name, Object value)
     {
         if (this.exists(name))
         {
@@ -69,7 +69,7 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
     }
 
     @Override
-    public void copyAllFrom(ReadonlyGeneralSettingsModel other)
+    public final void copyAllFrom(ReadonlyGeneralSettingsModel other)
     {
         for (Setting s : other)
         {
@@ -81,7 +81,7 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
     }
 
     @Override
-    public void copyFrom(ReadonlyGeneralSettingsModel other, Collection<String> settingNames)
+    public final void copyFrom(ReadonlyGeneralSettingsModel other, Collection<String> settingNames)
     {
         for (String name : settingNames)
         {
@@ -93,7 +93,7 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
     }
 
     @Override
-    public void copyFrom(ReadonlyGeneralSettingsModel other, String... settingNames)
+    public final void copyFrom(ReadonlyGeneralSettingsModel other, String... settingNames)
     {
         for (String name : settingNames)
         {

@@ -58,7 +58,7 @@ public abstract class RoughnessOptimizationBase<ContextType extends Context<Cont
 
     }
 
-    VertexBuffer<ContextType> getRect()
+    final VertexBuffer<ContextType> getRect()
     {
         return rect;
     }
@@ -73,7 +73,7 @@ public abstract class RoughnessOptimizationBase<ContextType extends Context<Cont
     }
 
     @Override
-    public void clear()
+    public final void clear()
     {
         // Set initial assumption for reflectivity / roughness
         getFramebuffer().clearColorBuffer(0, 0.0f, 0.0f, 0.0f, 1.0f);
@@ -83,13 +83,13 @@ public abstract class RoughnessOptimizationBase<ContextType extends Context<Cont
     protected abstract FramebufferObject<ContextType> getFramebuffer();
 
     @Override
-    public @Nullable Texture2D<ContextType> getReflectivityTexture()
+    public final @Nullable Texture2D<ContextType> getReflectivityTexture()
     {
         return getFramebuffer() == null ? null : getFramebuffer().getColorAttachmentTexture(0);
     }
 
     @Override
-    public @Nullable Texture2D<ContextType> getRoughnessTexture()
+    public final @Nullable Texture2D<ContextType> getRoughnessTexture()
     {
         return getFramebuffer() == null ? null : getFramebuffer().getColorAttachmentTexture(1);
     }
@@ -104,7 +104,7 @@ public abstract class RoughnessOptimizationBase<ContextType extends Context<Cont
     }
 
     @Override
-    public void saveTextures(File outputDirectory)
+    public final void saveTextures(File outputDirectory)
     {
         try
         {

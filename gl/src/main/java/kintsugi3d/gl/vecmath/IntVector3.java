@@ -47,38 +47,38 @@ public class IntVector3 implements Iterable<Integer>
         this(value, value, value);
     }
 
-    public IntVector4 asVector4(int w)
+    public final IntVector4 asVector4(int w)
     {
         return new IntVector4(this.x, this.y, this.z, w);
     }
 
-    public Vector3 asFloatingPoint()
+    public final Vector3 asFloatingPoint()
     {
         return new Vector3(x, y, z);
     }
 
-    public Vector3 asFloatingPointNormalized()
+    public final Vector3 asFloatingPointNormalized()
     {
         return new Vector3(x / 255.0f, y / 255.0f, z / 255.0f);
     }
 
-    public DoubleVector3 asDoubleFloatingPoint()
+    public final DoubleVector3 asDoubleFloatingPoint()
     {
         return new DoubleVector3(x, y, z);
     }
 
-    public DoubleVector3 asDoubleFloatingPointNormalized()
+    public final DoubleVector3 asDoubleFloatingPointNormalized()
     {
         return new DoubleVector3(x / 255.0, y / 255.0, z / 255.0);
     }
 
-    public IntVector2 getXY()
+    public final IntVector2 getXY()
     {
         return new IntVector2(this.x, this.y);
     }
 
     @Override
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         if (obj instanceof IntVector3)
         {
@@ -92,12 +92,12 @@ public class IntVector3 implements Iterable<Integer>
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return 31 * (31 * (31 + x) + y) + z;
     }
 
-    public IntVector3 plus(IntVector3 other)
+    public final IntVector3 plus(IntVector3 other)
     {
         return new IntVector3(
             this.x + other.x,
@@ -106,7 +106,7 @@ public class IntVector3 implements Iterable<Integer>
         );
     }
 
-    public IntVector3 minus(IntVector3 other)
+    public final IntVector3 minus(IntVector3 other)
     {
         return new IntVector3(
             this.x - other.x,
@@ -115,27 +115,27 @@ public class IntVector3 implements Iterable<Integer>
         );
     }
 
-    public IntVector3 negated()
+    public final IntVector3 negated()
     {
         return new IntVector3(-this.x, -this.y, -this.z);
     }
 
-    public IntVector3 times(int s)
+    public final IntVector3 times(int s)
     {
         return new IntVector3(s*this.x, s*this.y, s*this.z);
     }
 
-    public IntVector3 dividedBy(int s)
+    public final IntVector3 dividedBy(int s)
     {
         return new IntVector3(this.x/s, this.y/s, this.z/s);
     }
 
-    public int dot(IntVector3 other)
+    public final int dot(IntVector3 other)
     {
         return this.x * other.x + this.y * other.y + this.z * other.z;
     }
 
-    public IntVector3 cross(IntVector3 other)
+    public final IntVector3 cross(IntVector3 other)
     {
         return new IntVector3(
             this.y * other.z - this.z * other.y,
@@ -144,29 +144,29 @@ public class IntVector3 implements Iterable<Integer>
         );
     }
 
-    public double length()
+    public final double length()
     {
         return Math.sqrt(this.dot(this));
     }
 
-    public double distance(IntVector3 other)
+    public final double distance(IntVector3 other)
     {
         return this.minus(other).length();
     }
 
-    public IntVector3 applyOperator(IntUnaryOperator operator)
+    public final IntVector3 applyOperator(IntUnaryOperator operator)
     {
         return new IntVector3(operator.applyAsInt(x), operator.applyAsInt(y), operator.applyAsInt(z));
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return String.format("IntVector3{x=%d, y=%d, z=%d}", x, y, z);
     }
 
     @Override
-    public @NotNull Iterator<Integer> iterator()
+    public final @NotNull Iterator<Integer> iterator()
     {
         return Arrays.asList(x, y, z).iterator();
     }

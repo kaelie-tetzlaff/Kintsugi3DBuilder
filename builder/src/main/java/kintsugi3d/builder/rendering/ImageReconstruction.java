@@ -305,14 +305,14 @@ public class ImageReconstruction<ContextType extends Context<ContextType>> imple
     }
 
     @Override
-    public @NotNull ReconstructionIterator iterator()
+    public final @NotNull ReconstructionIterator iterator()
     {
         //noinspection ReturnOfInnerClass
         return new ReconstructionIterator(viewSet.getEnabledViews().iterator());
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         incidentRadianceProgram.close();
         incidentRadianceDrawable.close();

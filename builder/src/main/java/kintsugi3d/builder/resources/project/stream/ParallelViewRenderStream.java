@@ -67,19 +67,19 @@ public class ParallelViewRenderStream<ContextType extends Context<ContextType>> 
     }
 
     @Override
-    public GraphicsStream<ColorList[]> sequential()
+    public final GraphicsStream<ColorList[]> sequential()
     {
         return new SequentialViewRenderStream<>(views, drawable, framebuffer, attachmentCount);
     }
 
     @Override
-    public GraphicsStream<ColorList[]> parallel()
+    public final GraphicsStream<ColorList[]> parallel()
     {
         return this;
     }
 
     @Override
-    public GraphicsStream<ColorList[]> parallel(int maxRunningThreads)
+    public final GraphicsStream<ColorList[]> parallel(int maxRunningThreads)
     {
         if (maxRunningThreads == this.maxRunningThreads)
         {
@@ -92,13 +92,13 @@ public class ParallelViewRenderStream<ContextType extends Context<ContextType>> 
     }
 
     @Override
-    public int getCount()
+    public final int getCount()
     {
         return views.size();
     }
 
     @Override
-    public void forEach(Consumer<? super ColorList[]> action)
+    public final void forEach(Consumer<? super ColorList[]> action)
     {
         for (View view : views)
         {

@@ -83,102 +83,102 @@ public class IOModel implements IO
         progressMonitor.addSubMonitor(cancellationMonitor);
     }
 
-    public ProgressMonitor getProgressMonitor()
+    public final ProgressMonitor getProgressMonitor()
     {
         return progressMonitor;
     }
 
-    public void setLoadingHandler(IOHandler handler)
+    public final void setLoadingHandler(IOHandler handler)
     {
         this.handler = handler;
         this.handler.setProgressMonitor(progressMonitor);
     }
 
     @Override
-    public void addProgressMonitor(ProgressMonitor monitor)
+    public final void addProgressMonitor(ProgressMonitor monitor)
     {
         this.progressMonitor.addSubMonitor(monitor);
     }
 
     @Override
-    public ReadonlyLoadOptionsModel getLoadOptionsModel()
+    public final ReadonlyLoadOptionsModel getLoadOptionsModel()
     {
         return this.loadOptionsModel;
     }
 
-    public void setLoadOptionsModel(ReadonlyLoadOptionsModel loadOptionsModel)
+    public final void setLoadOptionsModel(ReadonlyLoadOptionsModel loadOptionsModel)
     {
         this.loadOptionsModel = loadOptionsModel;
     }
 
     @Override
-    public EventListeners<ProjectOpenedListener> projectOpenedListeners()
+    public final EventListeners<ProjectOpenedListener> projectOpenedListeners()
     {
         return projectOpened;
     }
 
     @Override
-    public EventListeners<ProjectSavedListener> projectSavedListeners()
+    public final EventListeners<ProjectSavedListener> projectSavedListeners()
     {
         return projectSaved;
     }
 
     @Override
-    public EventListeners<ProjectLoadedListener> projectLoadedListeners()
+    public final EventListeners<ProjectLoadedListener> projectLoadedListeners()
     {
         return handler.projectLoadedListeners();
     }
 
     @Override
-    public EventListeners<ProjectProcessedListener> projectProcessedListeners()
+    public final EventListeners<ProjectProcessedListener> projectProcessedListeners()
     {
         return handler.projectProcessedListeners();
     }
 
     @Override
-    public EventListeners<ProjectClosedListener> projectClosedListeners()
+    public final EventListeners<ProjectClosedListener> projectClosedListeners()
     {
         return projectClosed;
     }
 
     @Override
-    public ImageBasedRenderable<?> getRenderableForShader(ShaderInfo shader)
+    public final ImageBasedRenderable<?> getRenderableForShader(ShaderInfo shader)
     {
         return this.handler.getRenderableForShader(shader);
     }
 
     @Override
-    public ViewSet getLoadedViewSet()
+    public final ViewSet getLoadedViewSet()
     {
         return this.handler.getLoadedViewSet();
     }
 
     @Override
-    public ReadonlyVertexGeometry getLoadedGeometry()
+    public final ReadonlyVertexGeometry getLoadedGeometry()
     {
         return this.handler.getLoadedGeometry();
     }
 
     @Override
-    public ImageBasedRenderable<?> getMainRenderable()
+    public final ImageBasedRenderable<?> getMainRenderable()
     {
         return this.handler.getMainRenderable();
     }
 
     @Override
-    public File getViewSetFile()
+    public final File getViewSetFile()
     {
         return viewSetFile;
     }
 
     @Override
-    public File getProjectFile()
+    public final File getProjectFile()
     {
         return projectFile;
     }
 
     @Override
-    public boolean isProjectOpen()
+    public final boolean isProjectOpen()
     {
         return projectFile != null;
     }
@@ -198,7 +198,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public void loadFromLooseFiles(File newProjectFile, String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions)
+    public final void loadFromLooseFiles(File newProjectFile, String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions)
     {
         load(() ->
         {
@@ -216,7 +216,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public void hotSwapLooseFiles(String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions)
+    public final void hotSwapLooseFiles(String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions)
     {
         load(() ->
         {
@@ -235,7 +235,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public void loadFromMetashapeModel(File newProjectFile, MetashapeModel model)
+    public final void loadFromMetashapeModel(File newProjectFile, MetashapeModel model)
     {
         load(() ->
         {
@@ -253,7 +253,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public void loadExistingProject(File projectFile)
+    public final void loadExistingProject(File projectFile)
     {
         //need to check for conflicting process early so crucial info isn't unloaded
         if (progressMonitor.isConflictingProcess())
@@ -340,7 +340,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public void saveProject(File projectFile, Runnable finishedCallback) throws IOException
+    public final void saveProject(File projectFile, Runnable finishedCallback) throws IOException
     {
         ViewSet viewSet = getLoadedViewSet();
         setViewsetDirectories(projectFile, viewSet);
@@ -392,7 +392,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public File getViewSetFileForProject(File projectFile) throws IOException
+    public final File getViewSetFileForProject(File projectFile) throws IOException
     {
         try
         {
@@ -472,13 +472,13 @@ public class IOModel implements IO
     }
 
     @Override
-    public EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException
+    public final EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException
     {
         return this.handler.loadEnvironmentMap(environmentMapFile);
     }
 
     @Override
-    public void loadBackplate(File backplateFile) throws FileNotFoundException
+    public final void loadBackplate(File backplateFile) throws FileNotFoundException
     {
         this.handler.loadBackplate(backplateFile);
     }
@@ -489,43 +489,43 @@ public class IOModel implements IO
     }
 
     @Override
-    public DoubleUnaryOperator getLuminanceEncodingFunction()
+    public final DoubleUnaryOperator getLuminanceEncodingFunction()
     {
         return this.handler.getLuminanceEncodingFunction();
     }
 
     @Override
-    public void setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
+    public final void setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
     {
         this.handler.setTonemapping(linearLuminanceValues, encodedLuminanceValues);
     }
 
     @Override
-    public void clearTonemapping()
+    public final void clearTonemapping()
     {
         this.handler.clearTonemapping();
     }
 
     @Override
-    public void requestLightIntensityCalibration()
+    public final void requestLightIntensityCalibration()
     {
         this.handler.requestLightIntensityCalibration();
     }
 
     @Override
-    public void applyLightOffsetCalibration()
+    public final void applyLightOffsetCalibration()
     {
         this.handler.applyLightCalibration();
     }
 
     @Override
-    public void closeProject()
+    public final void closeProject()
     {
         this.closeProject(() -> {});
     }
 
     @Override
-    public void closeProject(Runnable onCloseComplete)
+    public final void closeProject(Runnable onCloseComplete)
     {
         Rendering.clearQueue();
         cancellationMonitor.requestCancellation(() ->
@@ -543,19 +543,19 @@ public class IOModel implements IO
     }
 
     @Override
-    public boolean hasLoadedRenderable()
+    public final boolean hasLoadedRenderable()
     {
         return this.handler != null && this.handler.isRenderableLoaded();
     }
 
     @Override
-    public boolean hasValidHandler()
+    public final boolean hasValidHandler()
     {
         return this.handler != null;
     }
 
     @Override
-    public IOModel validateRenderable()
+    public final IOModel validateRenderable()
     {
         if (!hasLoadedRenderable())
         {

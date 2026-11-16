@@ -63,12 +63,12 @@ public class RightBarController
     private boolean minimized = false;
     private boolean isLoaded = false;
 
-    public Node getRootNode()
+    public final Node getRootNode()
     {
         return mainBox;
     }
 
-    public void init(ObservableTabsModel tabsModel, ObservableActiveShaderModel shaderModel)
+    public final void init(ObservableTabsModel tabsModel, ObservableActiveShaderModel shaderModel)
     {
         //Listener for any changes to selectedCards in tabModels
         tabsModel.lastSelectedCardProperty().addListener(
@@ -155,7 +155,7 @@ public class RightBarController
      * minimize button has a "+" it will set the mainBox size to 400 and will call
      * maximize
      */
-    public void toggleSideBar()
+    public final void toggleSideBar()
     {
         if (minimized)
         {
@@ -174,7 +174,7 @@ public class RightBarController
      * If it is, cursor is set to resize cursor. Otherwise, default cursor.
      * @param event
      */
-    public void mouseMoved(MouseEvent event)
+    public final void mouseMoved(MouseEvent event)
     {
         if (event.getX() <= RESIZE_WIDTH)
         {
@@ -195,7 +195,7 @@ public class RightBarController
      * @param event
      */
     @FXML
-    public void mouseDragged(MouseEvent event)
+    public final void mouseDragged(MouseEvent event)
     {
         double newWidth = mainBox.getWidth()-event.getX();
 
@@ -252,7 +252,7 @@ public class RightBarController
      * @param event
      */
     @FXML
-    public void mouseReleased(MouseEvent event)
+    public final void mouseReleased(MouseEvent event)
     {
         if (minimized)
         {
@@ -336,5 +336,5 @@ public class RightBarController
         mainBox.setMaxWidth(width);
         Platform.runLater(()->detailsBox.requestLayout());
     }
-    public double getTabWidth(){ return mainBox.getWidth(); }
+    public final double getTabWidth(){ return mainBox.getWidth(); }
 }

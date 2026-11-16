@@ -27,13 +27,13 @@ public class NamedTextureReplacer extends ImageReplacer
         setCurrentImage(currentImage);
     }
 
-    public TextureInfo getTexture()
+    public final TextureInfo getTexture()
     {
         return texture;
     }
 
     @Override
-    public void replace() throws IOException
+    public final void replace() throws IOException
     {
         getResources().replaceTextureWithSpecificFile(texture, getNewImage());
     }

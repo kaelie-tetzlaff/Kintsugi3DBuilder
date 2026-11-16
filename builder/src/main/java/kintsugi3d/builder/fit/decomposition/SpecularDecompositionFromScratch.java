@@ -50,27 +50,27 @@ public class SpecularDecompositionFromScratch extends SpecularDecompositionBase
     }
 
     @Override
-    public MaterialBasis getMaterialBasis()
+    public final MaterialBasis getMaterialBasis()
     {
         return new OptimizableMaterialBasis(this);
     }
 
-    public void setDiffuseAlbedo(int basisIndex, DoubleVector3 diffuseAlbedo)
+    public final void setDiffuseAlbedo(int basisIndex, DoubleVector3 diffuseAlbedo)
     {
         diffuseAlbedos[basisIndex] = diffuseAlbedo;
     }
 
-    public SimpleMatrix getSpecularRed()
+    public final SimpleMatrix getSpecularRed()
     {
         return specularRed;
     }
 
-    public SimpleMatrix getSpecularGreen()
+    public final SimpleMatrix getSpecularGreen()
     {
         return specularGreen;
     }
 
-    public SimpleMatrix getSpecularBlue()
+    public final SimpleMatrix getSpecularBlue()
     {
         return specularBlue;
     }
@@ -85,13 +85,13 @@ public class SpecularDecompositionFromScratch extends SpecularDecompositionBase
         }
 
         @Override
-        public Collection<BasisMaterialInfo> getMaterials()
+        public final Collection<BasisMaterialInfo> getMaterials()
         {
             return getIndexableMaterialList();
         }
 
         @Override
-        public List<BasisMaterialInfo> getIndexableMaterialList()
+        public final List<BasisMaterialInfo> getIndexableMaterialList()
         {
             return IntStream.range(0, this.getEnabledMaterialCount())
                 .mapToObj(b ->
@@ -155,7 +155,7 @@ public class SpecularDecompositionFromScratch extends SpecularDecompositionBase
         }
 
         @Override
-        public @Nullable BasisMaterialInfo getMaterial(String materialName)
+        public final @Nullable BasisMaterialInfo getMaterial(String materialName)
         {
             try
             {
@@ -176,51 +176,51 @@ public class SpecularDecompositionFromScratch extends SpecularDecompositionBase
         }
 
         @Override
-        public int getMaterialCount()
+        public final int getMaterialCount()
         {
             return specularDecomposition.materialCount;
         }
 
         @Override
-        public int getEnabledMaterialCount()
+        public final int getEnabledMaterialCount()
         {
             return specularDecomposition.materialCount;
         }
 
         @Override
-        public int getSpecularResolution()
+        public final int getSpecularResolution()
         {
             return specularDecomposition.basisResolution;
         }
 
-        DoubleVector3 getDiffuseColor(int b)
+        final DoubleVector3 getDiffuseColor(int b)
         {
             return specularDecomposition.diffuseAlbedos[b];
         }
 
-        double evaluateSpecularRed(int b, int m)
+        final double evaluateSpecularRed(int b, int m)
         {
             return specularDecomposition.specularRed.get(m, b);
         }
 
-        double evaluateSpecularGreen(int b, int m)
+        final double evaluateSpecularGreen(int b, int m)
         {
             return specularDecomposition.specularGreen.get(m, b);
         }
 
-        double evaluateSpecularBlue(int b, int m)
+        final double evaluateSpecularBlue(int b, int m)
         {
             return specularDecomposition.specularBlue.get(m, b);
         }
 
         @Override
-        public void save(File outputDirectory, String filenameOverride)
+        public final void save(File outputDirectory, String filenameOverride)
         {
             SpecularFitSerializer.serializeBasisFunctions(specularDecomposition.basisResolution, this, outputDirectory, filenameOverride);
         }
 
         @Override
-        public MutableMaterialBasis copy()
+        public final MutableMaterialBasis copy()
         {
             List<double[]> redBasis = IntStream.range(0, specularDecomposition.materialCount)
                 .mapToObj(b ->

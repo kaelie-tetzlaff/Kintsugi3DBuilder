@@ -32,7 +32,7 @@ public class Stopwatch
      */
     private long manualElapsedTime = -1;
 
-    public long start()
+    public final long start()
     {
         if (running.getValue())
         {
@@ -50,7 +50,7 @@ public class Stopwatch
         return initTime;
     }
 
-    public long click()
+    public final long click()
     {
         rollingAverageStorage[trackingIdx] = System.nanoTime();
 
@@ -66,17 +66,17 @@ public class Stopwatch
         return difference;
     }
 
-    public long getInitTime()
+    public final long getInitTime()
     {
         return initTime;
     }
 
-    public ReadOnlyBooleanProperty runningProperty()
+    public final ReadOnlyBooleanProperty runningProperty()
     {
         return running;
     }
 
-    public long getElapsedTime()
+    public final long getElapsedTime()
     {
         if (running.getValue())
         {
@@ -87,7 +87,7 @@ public class Stopwatch
         return manualElapsedTime;
     }
 
-    public long stop()
+    public final long stop()
     {
         if (!running.getValue())
         {
@@ -99,7 +99,7 @@ public class Stopwatch
         return manualElapsedTime;
     }
 
-    public long getAvgDifference()
+    public final long getAvgDifference()
     {
         long recordedTimes = 0;
         int numToDivide = 0;

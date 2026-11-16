@@ -47,12 +47,12 @@ public class CameraViewport
      * @param newView
      * @return
      */
-    public CameraViewport copyForView(Matrix4 newView)
+    public final CameraViewport copyForView(Matrix4 newView)
     {
         return new CameraViewport(newView, fullProjection, viewportCrop, x, y, width, height);
     }
 
-    public Matrix4 getView()
+    public final Matrix4 getView()
     {
         return view;
     }
@@ -61,7 +61,7 @@ public class CameraViewport
      * The full projection matrix that would fill the entire window
      * @return
      */
-    public Matrix4 getFullProjection()
+    public final Matrix4 getFullProjection()
     {
         return fullProjection;
     }
@@ -70,7 +70,7 @@ public class CameraViewport
      * The matrix which crops the full clip space into the viewport being rendered.
      * @return
      */
-    public Matrix4 getViewportCrop()
+    public final Matrix4 getViewportCrop()
     {
         return viewportCrop;
     }
@@ -80,32 +80,32 @@ public class CameraViewport
      * Will be equal to viewportCrop * fullProjection.
      * @return
      */
-    public Matrix4 getViewportProjection()
+    public final Matrix4 getViewportProjection()
     {
         return viewportProjection;
     }
 
-    public int getX()
+    public final int getX()
     {
         return x;
     }
 
-    public int getY()
+    public final int getY()
     {
         return y;
     }
 
-    public int getWidth()
+    public final int getWidth()
     {
         return width;
     }
 
-    public int getHeight()
+    public final int getHeight()
     {
         return height;
     }
 
-    public <ContextType extends Context<ContextType>> FramebufferViewport<ContextType> ofFramebuffer(Framebuffer<ContextType> framebuffer)
+    public final <ContextType extends Context<ContextType>> FramebufferViewport<ContextType> ofFramebuffer(Framebuffer<ContextType> framebuffer)
     {
         return framebuffer.getViewport(x, y, width, height);
     }

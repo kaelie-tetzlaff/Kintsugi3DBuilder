@@ -40,7 +40,7 @@ public class TabsManager
         factories.add(new TabInfo(SHADERS, new ShaderCardFactory(instance), null));
     }
 
-    public void rebuildTabs()
+    public final void rebuildTabs()
     {
         TabsModel tabsModel = Global.state().getTabModels();
         tabsModel.clearTabs();
@@ -51,7 +51,7 @@ public class TabsManager
         }
     }
 
-    public void refreshAllTabs()
+    public final void refreshAllTabs()
     {
         TabsModel tabsModel = Global.state().getTabModels();
         int index = 0;
@@ -70,7 +70,7 @@ public class TabsManager
         }
     }
 
-    public void refreshTab(String tabName)
+    public final void refreshTab(String tabName)
     {
         TabsModel tabsModel = Global.state().getTabModels();
 

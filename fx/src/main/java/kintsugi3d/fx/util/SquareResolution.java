@@ -35,35 +35,35 @@ public class SquareResolution
         this.size.set(size.intValue());
     }
 
-    public int getSize()
+    public final int getSize()
     {
         return size.get();
     }
 
-    public void setSize(int size)
+    public final void setSize(int size)
     {
         this.size.set(size);
     }
 
-    public IntegerProperty sizeProperty()
+    public final IntegerProperty sizeProperty()
     {
         return size;
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return Integer.hashCode(getSize());
     }
 
     @Override
-    public boolean equals(Object other)
+    public final boolean equals(Object other)
     {
         return other instanceof SquareResolution && this.getSize() == ((SquareResolution)other).getSize();
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return String.format("%dx%d", getSize(), getSize());
     }

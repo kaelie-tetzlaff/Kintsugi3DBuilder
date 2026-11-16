@@ -38,19 +38,19 @@ public abstract class TextureInfo implements Comparable<TextureInfo>
     }
 
     @Override
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         return obj instanceof TextureInfo && Objects.equals(this.name, ((TextureInfo) obj).name);
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return this.name.hashCode();
     }
 
     @Override
-    public int compareTo(TextureInfo o)
+    public final int compareTo(TextureInfo o)
     {
         return this.name.compareTo(o.name);
     }

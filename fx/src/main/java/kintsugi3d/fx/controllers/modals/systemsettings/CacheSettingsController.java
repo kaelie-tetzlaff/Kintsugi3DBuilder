@@ -51,7 +51,7 @@ public class CacheSettingsController implements SystemSettingsControllerBase
     private ObservableCacheModel cacheModel;
 
     @Override
-    public void initializePage(Window parentWindow, JavaFXState state)
+    public final void initializePage(Window parentWindow, JavaFXState state)
     {
         previewImageCacheLabel.setText(ApplicationFolders.getPreviewImagesRootDirectory().toString());
         specularFitCacheLabel.setText(ApplicationFolders.getFitCacheRootDirectory().toString());

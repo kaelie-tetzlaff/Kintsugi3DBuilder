@@ -20,15 +20,15 @@ public class ReplaceImage extends ExperienceBase
     private ImageReplacer currentData;
 
     @Override
-    public String getName() { return "Replace Texture"; }
+    public final String getName() { return "Replace Texture"; }
 
     @Override
-    protected void open() throws IOException
+    protected final void open() throws IOException
     {
         this.buildPagedModal(currentData).then("/fxml/modals/workflow/ReplaceImage.fxml").finish();
     }
 
-    public void setData(ImageReplacer data)
+    public final void setData(ImageReplacer data)
     {
         this.currentData = data;
     }

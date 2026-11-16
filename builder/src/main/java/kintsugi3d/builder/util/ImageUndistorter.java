@@ -44,7 +44,7 @@ public class ImageUndistorter<ContextType extends Context<ContextType>> implemen
         drawable.setDefaultPrimitiveMode(PrimitiveMode.TRIANGLE_FAN);
     }
 
-    public Texture2D<ContextType> undistort(ReadonlyTexture2D<ContextType> inputImage, DistortionProjection distortion)
+    public final Texture2D<ContextType> undistort(ReadonlyTexture2D<ContextType> inputImage, DistortionProjection distortion)
     {
         drawable.program().setTexture("inputImage", inputImage);
         drawable.program().setUniform("viewportSize", new Vector2(distortion.width, distortion.height));
@@ -71,7 +71,7 @@ public class ImageUndistorter<ContextType extends Context<ContextType>> implemen
         }
     }
 
-    public BufferedImage undistort(BufferedImage inputImage, DistortionProjection distortion)
+    public final BufferedImage undistort(BufferedImage inputImage, DistortionProjection distortion)
     {
         try(Texture2D<ContextType> inTex = context.getTextureFactory()
             .build2DColorTextureFromImage(inputImage, true)
@@ -86,7 +86,7 @@ public class ImageUndistorter<ContextType extends Context<ContextType>> implemen
         }
     }
 
-    public BufferedImage undistort(BufferedImage inputImage, DistortionProjection distortion, boolean mipmapsEnabled)
+    public final BufferedImage undistort(BufferedImage inputImage, DistortionProjection distortion, boolean mipmapsEnabled)
     {
         try(Texture2D<ContextType> inTex = context.getTextureFactory()
             .build2DColorTextureFromImage(inputImage, true)
@@ -103,7 +103,7 @@ public class ImageUndistorter<ContextType extends Context<ContextType>> implemen
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         program.close();
         drawable.close();

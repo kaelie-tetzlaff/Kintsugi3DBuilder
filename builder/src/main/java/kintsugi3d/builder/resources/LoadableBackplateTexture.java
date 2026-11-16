@@ -32,19 +32,19 @@ class LoadableBackplateTexture<ContextType extends Context<ContextType>> impleme
     }
 
     @Override
-    public String getProcessName()
+    public final String getProcessName()
     {
         return "Load Backplate";
     }
 
     @Override
-    public BufferedImage loadCPU(File file) throws IOException
+    public final BufferedImage loadCPU(File file) throws IOException
     {
         return ImageHelper.read(file).getBufferedImage();
     }
 
     @Override
-    public Texture2D<ContextType> loadGPU(BufferedImage data)
+    public final Texture2D<ContextType> loadGPU(BufferedImage data)
     {
         return context.getTextureFactory().build2DColorTextureFromImage(data, true)
             .setInternalFormat(CompressionFormat.RGB_PUNCHTHROUGH_ALPHA1_4BPP)
@@ -54,13 +54,13 @@ class LoadableBackplateTexture<ContextType extends Context<ContextType>> impleme
     }
 
     @Override
-    public void consume(Texture2D<ContextType> resource)
+    public final void consume(Texture2D<ContextType> resource)
     {
         lightingResources.takeBackplateTexture(resource);
     }
 
     @Override
-    public boolean isLoaded()
+    public final boolean isLoaded()
     {
         return this.lightingResources.getBackplateTexture() != null;
     }

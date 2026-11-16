@@ -25,19 +25,19 @@ class ColorTextureReader2D<ContextType extends Context<ContextType>> extends Col
     }
 
     @Override
-    public int getWidth()
+    public final int getWidth()
     {
         return texture.getWidth();
     }
 
     @Override
-    public int getHeight()
+    public final int getHeight()
     {
         return texture.getHeight();
     }
 
     @Override
-    public void readARGB(ByteBuffer destination, int x, int y, int readWidth, int readHeight)
+    public final void readARGB(ByteBuffer destination, int x, int y, int readWidth, int readHeight)
     {
         try (FramebufferObject<ContextType> fbo = texture.getContext()
             .buildFramebufferObject(this.getWidth(), this.getHeight())
@@ -50,7 +50,7 @@ class ColorTextureReader2D<ContextType extends Context<ContextType>> extends Col
     }
 
     @Override
-    public void readFloatingPointRGBA(FloatBuffer destination, int x, int y, int readWidth, int readHeight)
+    public final void readFloatingPointRGBA(FloatBuffer destination, int x, int y, int readWidth, int readHeight)
     {
         try (FramebufferObject<ContextType> fbo = texture.getContext()
             .buildFramebufferObject(this.getWidth(), this.getHeight())
@@ -63,7 +63,7 @@ class ColorTextureReader2D<ContextType extends Context<ContextType>> extends Col
     }
 
     @Override
-    public void readIntegerRGBA(IntBuffer destination, int x, int y, int readWidth, int readHeight)
+    public final void readIntegerRGBA(IntBuffer destination, int x, int y, int readWidth, int readHeight)
     {
         try (FramebufferObject<ContextType> fbo = texture.getContext()
             .buildFramebufferObject(this.getWidth(), this.getHeight())

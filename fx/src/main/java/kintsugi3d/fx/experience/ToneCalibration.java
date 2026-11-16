@@ -29,13 +29,13 @@ public class ToneCalibration extends ExperienceBase
     public static final String EYEDROPPER = "/fxml/modals/workflow/EyedropperColorChecker.fxml";
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return "Tone Calibration";
     }
 
     @Override
-    protected void open() throws IOException
+    protected final void open() throws IOException
     {
         this.buildPagedModal(new CurrentProjectViewSelectable(ViewSet::getPrimaryView))
             .then(PRIMARY_VIEW_SELECT,

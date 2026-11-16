@@ -23,31 +23,31 @@ public class ModifierKeysBuilder
         return new ModifierKeysBuilder();
     }
 
-    public ModifierKeysBuilder shift()
+    public final ModifierKeysBuilder shift()
     {
         this.shiftModifier = true;
         return this;
     }
 
-    public ModifierKeysBuilder control()
+    public final ModifierKeysBuilder control()
     {
         this.controlModifier = true;
         return this;
     }
 
-    public ModifierKeysBuilder alt()
+    public final ModifierKeysBuilder alt()
     {
         this.altModifier = true;
         return this;
     }
 
-    public ModifierKeysBuilder superKey()
+    public final ModifierKeysBuilder superKey()
     {
         this.superModifier = true;
         return this;
     }
 
-    public ModifierKeys end()
+    public final ModifierKeys end()
     {
         return new SimpleModifierKeys(shiftModifier, controlModifier, altModifier, superModifier);
     }

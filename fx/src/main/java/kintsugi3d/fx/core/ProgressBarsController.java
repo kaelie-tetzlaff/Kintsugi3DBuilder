@@ -118,7 +118,7 @@ public class ProgressBarsController
         return instance;
     }
 
-    public void init(Stage stage)
+    public final void init(Stage stage)
     {
         this.stage = stage;
         defaultOverallText = overallTextLabel.getText();
@@ -179,7 +179,7 @@ public class ProgressBarsController
         instance = this;
     }
 
-    public Stage getStage()
+    public final Stage getStage()
     {
         return stage;
     }
@@ -199,7 +199,7 @@ public class ProgressBarsController
         stage.setTitle(defaultTitle);
     }
 
-    public void showStage()
+    public final void showStage()
     {
         stage.show();
     }
@@ -362,18 +362,18 @@ public class ProgressBarsController
         localProgressBar.getStyleClass().add("progress-bar");
     }
 
-    public void stopAndClose()
+    public final void stopAndClose()
     {
         endStopwatches();
         hideStage();
     }
 
-    public boolean isProcessing()
+    public final boolean isProcessing()
     {
         return processingProperty.getValue();
     }
 
-    public ReadOnlyBooleanProperty getProcessingProperty()
+    public final ReadOnlyBooleanProperty getProcessingProperty()
     {
         return processingProperty;
     }
@@ -399,7 +399,7 @@ public class ProgressBarsController
         private String finishingUpText;
 
         @Override
-        public void allowUserCancellation() throws UserCancellationException
+        public final void allowUserCancellation() throws UserCancellationException
         {
             if (cancelRequested.get())
             {
@@ -416,14 +416,14 @@ public class ProgressBarsController
         }
 
         @Override
-        public void cancelComplete(UserCancellationException e)
+        public final void cancelComplete(UserCancellationException e)
         {
             complete();
             hideAllProgress();
         }
 
         @Override
-        public void start()
+        public final void start()
         {
             cancelRequested.set(false);
 
@@ -469,13 +469,13 @@ public class ProgressBarsController
         }
 
         @Override
-        public void setProcessName(String processName)
+        public final void setProcessName(String processName)
         {
             Platform.runLater(() ->  ((Stage) overallProgressBar.getScene().getWindow()).setTitle(processName));
         }
 
         @Override
-        public void setStageCount(int count)
+        public final void setStageCount(int count)
         {
             Platform.runLater(() ->
             {
@@ -485,7 +485,7 @@ public class ProgressBarsController
         }
 
         @Override
-        public void setStage(int stage, String message)
+        public final void setStage(int stage, String message)
         {
             this.localProgress = 0.0;
             currentStage = stage + 1; //index from 1, copy so we can update currentStageProperty w/ Platform.runLater to avoid threading issue
@@ -521,13 +521,13 @@ public class ProgressBarsController
         }
 
         @Override
-        public void advanceStage(String message)
+        public final void advanceStage(String message)
         {
             setStage(currentStage + 1, message);
         }
 
         @Override
-        public void setFinishingUpText(String finishingUpText)
+        public final void setFinishingUpText(String finishingUpText)
         {
             this.finishingUpText = finishingUpText;
             Platform.runLater(this::refreshLocalText);
@@ -554,14 +554,14 @@ public class ProgressBarsController
         }
 
         @Override
-        public void setMaxProgress(double maxProgress)
+        public final void setMaxProgress(double maxProgress)
         {
             this.maximum = maxProgress;
             Platform.runLater(this::refreshLocalProgress);
         }
 
         @Override
-        public void setProgress(double progress, String message)
+        public final void setProgress(double progress, String message)
         {
             this.localProgress = progress;
 
@@ -593,7 +593,7 @@ public class ProgressBarsController
         }
 
         @Override
-        public void complete()
+        public final void complete()
         {
             this.maximum = 0.0;
             endStopwatches();
@@ -632,13 +632,13 @@ public class ProgressBarsController
         }
 
         @Override
-        public void fail(Throwable e)
+        public final void fail(Throwable e)
         {
             complete();
         }
 
         @Override
-        public boolean isConflictingProcess()
+        public final boolean isConflictingProcess()
         {
             if (!isProcessing())
             {

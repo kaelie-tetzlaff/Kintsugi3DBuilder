@@ -41,25 +41,25 @@ public class SimpleProjection implements Projection
     }
 
     @Override
-    public float getVerticalFieldOfView()
+    public final float getVerticalFieldOfView()
     {
         return verticalFieldOfView;
     }
 
     @Override
-    public float getAspectRatio()
+    public final float getAspectRatio()
     {
         return aspectRatio;
     }
 
     @Override
-    public Matrix4 getProjectionMatrix(float nearPlane, float farPlane)
+    public final Matrix4 getProjectionMatrix(float nearPlane, float farPlane)
     {
         return Matrix4.perspective(this.verticalFieldOfView, this.aspectRatio, nearPlane, farPlane);
     }
 
     @Override
-    public String toVSETString()
+    public final String toVSETString()
     {
         return String.format("f\t0\t0\t%.8f\t%.8f", aspectRatio, verticalFieldOfView * 180.0 / Math.PI);
     }

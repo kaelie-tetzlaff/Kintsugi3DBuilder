@@ -50,13 +50,13 @@ public class ExportModelController extends ProjectSettingsControllerBase
     private final FileChooser objFileChooser = new FileChooser();
 
     @Override
-    public Region getRootNode()
+    public final Region getRootNode()
     {
         return root;
     }
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         StaticUtilities.makeSquareResolutionComboBox(minimumTextureResolutionComboBox);
 
@@ -106,7 +106,7 @@ public class ExportModelController extends ProjectSettingsControllerBase
     }
 
     @Override
-    public boolean tryConfirm()
+    public final boolean tryConfirm()
     {
         applySettings();
 
@@ -165,13 +165,13 @@ public class ExportModelController extends ProjectSettingsControllerBase
     private static class ExportTypeStringConverter extends StringConverter<ExportType>
     {
         @Override
-        public String toString(ExportType type)
+        public final String toString(ExportType type)
         {
             return (type != null) ? type.toString() : "";
         }
 
         @Override
-        public @Nullable ExportType fromString(String string)
+        public final @Nullable ExportType fromString(String string)
         {
             // Not strictly needed unless the ComboBox is editable
             return null;

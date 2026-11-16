@@ -63,7 +63,7 @@ public class SettingsCameraSceneController implements Initializable
     private final SafeLogScaleNumberStringConverter n10 = new SafeLogScaleNumberStringConverter(1);
 
     @Override
-    public void initialize(URL location, ResourceBundle resources)
+    public final void initialize(URL location, ResourceBundle resources)
     {
         StaticUtilities.makeWrapAroundNumeric(-180, 180, azimuthTextField);
         StaticUtilities.makeClampedNumeric(-90, 90, inclinationTextField);
@@ -122,12 +122,12 @@ public class SettingsCameraSceneController implements Initializable
         }
     };
 
-    public ChangeListener<ObservableCameraSettings> getChangeListener()
+    public final ChangeListener<ObservableCameraSettings> getChangeListener()
     {
         return changeListener;
     }
 
-    public void setDisabled(Boolean disabled)
+    public final void setDisabled(Boolean disabled)
     {
         root.setDisable(disabled);
     }

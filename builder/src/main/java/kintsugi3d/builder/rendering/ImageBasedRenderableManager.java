@@ -123,36 +123,36 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public EventListeners<ProjectLoadedListener> projectLoadedListeners()
+    public final EventListeners<ProjectLoadedListener> projectLoadedListeners()
     {
         return projectLoaded;
     }
 
     @Override
-    public EventListeners<ProjectProcessedListener> projectProcessedListeners()
+    public final EventListeners<ProjectProcessedListener> projectProcessedListeners()
     {
         return projectProcessed;
     }
 
     @Override
-    public boolean isRenderableLoaded()
+    public final boolean isRenderableLoaded()
     {
         return renderableInstance != null;
     }
 
     @Override
-    public ViewSet getLoadedViewSet()
+    public final ViewSet getLoadedViewSet()
     {
         return loadedViewSet;
     }
 
     @Override
-    public VertexGeometry getLoadedGeometry()
+    public final VertexGeometry getLoadedGeometry()
     {
         return loadedGeometry;
     }
 
-    public SceneViewport getSceneViewport()
+    public final SceneViewport getSceneViewport()
     {
         return sceneViewport;
     }
@@ -164,7 +164,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
      * @param callback to add
      */
     @Override
-    public void addMainRenderableLoadCallback(Consumer<ImageBasedRenderable<?>> callback)
+    public final void addMainRenderableLoadCallback(Consumer<ImageBasedRenderable<?>> callback)
     {
         synchronized (instanceLoadCallbacks)
         {
@@ -371,7 +371,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void loadFromVSETFile(
+    public final void loadFromVSETFile(
         String internalName, File vsetFile, File supportingFilesDirectory, ReadonlyLoadOptionsModel loadOptions)
         throws UserCancellationException, MeshImportException, IOException
     {
@@ -414,7 +414,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void loadFromMetashapeModel(File newProjectFile, MetashapeModel model, ReadonlyLoadOptionsModel loadOptionsModel)
+    public final void loadFromMetashapeModel(File newProjectFile, MetashapeModel model, ReadonlyLoadOptionsModel loadOptionsModel)
         throws UserCancellationException, MissingImagesException, MeshImportException, IOException, XMLStreamException
     {
 
@@ -463,8 +463,8 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void loadFromLooseFiles(File newProjectFile, String internalName, File xmlFile,
-                                   ViewSetLoadOptions viewSetLoadOptions, ReadonlyLoadOptionsModel imageLoadOptions)
+    public final void loadFromLooseFiles(File newProjectFile, String internalName, File xmlFile,
+                                         ViewSetLoadOptions viewSetLoadOptions, ReadonlyLoadOptionsModel imageLoadOptions)
         throws Exception
     {
         if (this.progressMonitor.isConflictingProcess())
@@ -502,15 +502,15 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
     }
 
-    public RefreshableCollection<RenderRefreshable<ContextType, ImageBasedRenderingEngine<ContextType>>> getRenderViews()
+    public final RefreshableCollection<RenderRefreshable<ContextType, ImageBasedRenderingEngine<ContextType>>> getRenderViews()
     {
         return renderViews;
     }
 
     @Override
-    public void addRenderView(ShaderInfo shader, FramebufferSize viewSize,
-                              int safeLeftPadding, int safeTopPadding, int safeRightPadding, int safeBottomPadding,
-                              Consumer<FramebufferCanvas<?>> framebufferCallback)
+    public final void addRenderView(ShaderInfo shader, FramebufferSize viewSize,
+                                    int safeLeftPadding, int safeTopPadding, int safeRightPadding, int safeBottomPadding,
+                                    Consumer<FramebufferCanvas<?>> framebufferCallback)
     {
         // Create a new rendering engine instance that references the same resources as the main rendering engine.
         // This can run on any thread, but initialization needs to run on the graphics thread.
@@ -557,13 +557,13 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public ImageBasedRenderingEngine<ContextType> getRenderableForShader(ShaderInfo shader)
+    public final ImageBasedRenderingEngine<ContextType> getRenderableForShader(ShaderInfo shader)
     {
         return renderViewMap.get(shader).getRenderable();
     }
 
     @Override
-    public void removeRenderView(ShaderInfo shader)
+    public final void removeRenderView(ShaderInfo shader)
     {
         var renderViewToRemove = renderViewMap.get(shader);
 
@@ -583,19 +583,19 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public ImageBasedRenderable<ContextType> getMainRenderable()
+    public final ImageBasedRenderable<ContextType> getMainRenderable()
     {
         return renderableInstance;
     }
 
     @Override
-    public void setProgressMonitor(ProgressMonitor progressMonitor)
+    public final void setProgressMonitor(ProgressMonitor progressMonitor)
     {
         this.progressMonitor = progressMonitor;
     }
 
     @Override
-    public DoubleUnaryOperator getLuminanceEncodingFunction()
+    public final DoubleUnaryOperator getLuminanceEncodingFunction()
     {
         if (renderableInstance != null)
         {
@@ -609,7 +609,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
+    public final void setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
     {
         if (renderableInstance != null)
         {
@@ -618,7 +618,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void clearTonemapping()
+    public final void clearTonemapping()
     {
         if (renderableInstance != null)
         {
@@ -627,7 +627,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void requestLightIntensityCalibration()
+    public final void requestLightIntensityCalibration()
     {
         if (renderableInstance != null)
         {
@@ -636,7 +636,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void applyLightCalibration()
+    public final void applyLightCalibration()
     {
         if (renderableInstance != null)
         {
@@ -645,7 +645,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
     }
 
-    public void setCameraViewListModel(SelectableViewListModel viewListModel)
+    public final void setCameraViewListModel(SelectableViewListModel viewListModel)
     {
         this.viewListModel = viewListModel;
         if (renderableInstance != null)
@@ -654,7 +654,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
     }
 
-    public void setObjectModel(ReadonlyObjectPoseModel objectModel)
+    public final void setObjectModel(ReadonlyObjectPoseModel objectModel)
     {
         this.objectModel = objectModel;
         if (renderableInstance != null)
@@ -663,7 +663,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
     }
 
-    public void setCameraModel(ReadonlyViewpointModel cameraModel)
+    public final void setCameraModel(ReadonlyViewpointModel cameraModel)
     {
         this.cameraModel = cameraModel;
         if (renderableInstance != null)
@@ -672,7 +672,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
     }
 
-    public void setLightingModel(ReadonlyLightingEnvironmentModel lightingModel)
+    public final void setLightingModel(ReadonlyLightingEnvironmentModel lightingModel)
     {
         this.lightingModel = lightingModel;
         if (renderableInstance != null)
@@ -681,12 +681,12 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
     }
 
-    public void setUserShaderModel(ReadonlyActiveShaderModel userShaderModel)
+    public final void setUserShaderModel(ReadonlyActiveShaderModel userShaderModel)
     {
         userShaderModel.registerHandler(this::requestFragmentShader);
     }
 
-    public void setSettingsModel(ReadonlyGeneralSettingsModel settingsModel)
+    public final void setSettingsModel(ReadonlyGeneralSettingsModel settingsModel)
     {
         this.settingsModel = settingsModel;
         if (renderableInstance != null)
@@ -696,25 +696,25 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException
+    public final EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException
     {
         return renderableInstance.getDynamicResourceManager().loadEnvironmentMap(environmentMapFile);
     }
 
     @Override
-    public void loadBackplate(File backplateFile) throws FileNotFoundException
+    public final void loadBackplate(File backplateFile) throws FileNotFoundException
     {
         renderableInstance.getDynamicResourceManager().loadBackplate(backplateFile);
     }
 
     @Override
-    public void saveToVSETFile(File vsetFile) throws IOException
+    public final void saveToVSETFile(File vsetFile) throws IOException
     {
         ViewSetWriterToVSET.getInstance().writeToFile(loadedViewSet, vsetFile);
     }
 
     @Override
-    public void saveAllMaterialFiles(File materialDirectory, Runnable finishedCallback)
+    public final void saveAllMaterialFiles(File materialDirectory, Runnable finishedCallback)
     {
         if (renderableInstance == null || renderableInstance.getResources() == null
             || renderableInstance.getResources().getTextureResources() == null)
@@ -739,7 +739,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void saveGLTF(File outputDirectory, ExportSettings settings)
+    public final void saveGLTF(File outputDirectory, ExportSettings settings)
     {
         if (renderableInstance != null)
         {
@@ -748,7 +748,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void unload(Runnable onUnloadComplete)
+    public final void unload(Runnable onUnloadComplete)
     {
         // Use the runLater system so that the rendering loop knows that an operation that might take longer is queued.
         Rendering.runLater(() ->
@@ -774,7 +774,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void initialize() throws InitializationException
+    public final void initialize() throws InitializationException
     {
         if (renderableInstance != null)
         {
@@ -783,7 +783,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void update()
+    public final void update()
     {
         if (renderableInstance != null)
         {
@@ -792,7 +792,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void draw(Framebuffer<ContextType> framebuffer)
+    public final void draw(Framebuffer<ContextType> framebuffer)
     {
         if (renderableInstance != null)
         {
@@ -801,7 +801,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (renderableInstance != null)
         {
@@ -812,7 +812,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     /**
      * Work around for use in testing only
      */
-    public void setLoadedViewSet(ViewSet viewSet)
+    public final void setLoadedViewSet(ViewSet viewSet)
     {
         this.loadedViewSet = viewSet;
     }

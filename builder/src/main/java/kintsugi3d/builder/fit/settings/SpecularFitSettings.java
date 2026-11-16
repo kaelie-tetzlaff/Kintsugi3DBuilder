@@ -50,37 +50,37 @@ public class SpecularFitSettings implements ReadonlySpecularFitSettings
     }
 
     @Override
-    public TextureResolution getTextureResolution()
+    public final TextureResolution getTextureResolution()
     {
         return textureResolution;
     }
 
     @Override
-    public NormalOptimizationSettings getNormalOptimizationSettings()
+    public final NormalOptimizationSettings getNormalOptimizationSettings()
     {
         return normalOptimizationSettings;
     }
 
     @Override
-    public ImageCacheSettings getImageCacheSettings()
+    public final ImageCacheSettings getImageCacheSettings()
     {
         return imageCacheSettings;
     }
 
     @Override
-    public ReconstructionSettings getReconstructionSettings()
+    public final ReconstructionSettings getReconstructionSettings()
     {
         return reconstructionSettings;
     }
 
     @Override
-    public ExportSettings getExportSettings()
+    public final ExportSettings getExportSettings()
     {
         return exportSettings;
     }
 
     @Override
-    public double getConvergenceTolerance()
+    public final double getConvergenceTolerance()
     {
         return this.convergenceTolerance;
     }
@@ -90,7 +90,7 @@ public class SpecularFitSettings implements ReadonlySpecularFitSettings
      * the normal map has converged.
      * @param convergenceTolerance
      */
-    public void setConvergenceTolerance(double convergenceTolerance)
+    public final void setConvergenceTolerance(double convergenceTolerance)
     {
         if (convergenceTolerance < 0)
         {
@@ -101,7 +101,7 @@ public class SpecularFitSettings implements ReadonlySpecularFitSettings
     }
 
     @Override
-    public double getPreliminaryConvergenceTolerance()
+    public final double getPreliminaryConvergenceTolerance()
     {
         return this.preliminaryConvergenceTolerance;
     }
@@ -111,7 +111,7 @@ public class SpecularFitSettings implements ReadonlySpecularFitSettings
      * the normal map has converged.
      * @param preliminaryConvergenceTolerance
      */
-    public void setPreliminaryConvergenceTolerance(double preliminaryConvergenceTolerance)
+    public final void setPreliminaryConvergenceTolerance(double preliminaryConvergenceTolerance)
     {
         if (preliminaryConvergenceTolerance < 0)
         {
@@ -122,7 +122,7 @@ public class SpecularFitSettings implements ReadonlySpecularFitSettings
     }
 
     @Override
-    public boolean isSmithMaskingShadowingEnabled()
+    public final boolean isSmithMaskingShadowingEnabled()
     {
         return smithMaskingShadowingEnabled;
     }
@@ -131,24 +131,24 @@ public class SpecularFitSettings implements ReadonlySpecularFitSettings
      * Whether or not to use height-correlated Smith for masking / shadowing.  Default is true.
      * @param smithMaskingShadowingEnabled
      */
-    public void setSmithMaskingShadowingEnabled(boolean smithMaskingShadowingEnabled)
+    public final void setSmithMaskingShadowingEnabled(boolean smithMaskingShadowingEnabled)
     {
         this.smithMaskingShadowingEnabled = smithMaskingShadowingEnabled;
     }
 
     @Override
-    public boolean shouldIncludeConstantTerm()
+    public final boolean shouldIncludeConstantTerm()
     {
         return shouldIncludeConstantTerm;
     }
 
-    public void setShouldIncludeConstantTerm(boolean shouldIncludeConstantTerm)
+    public final void setShouldIncludeConstantTerm(boolean shouldIncludeConstantTerm)
     {
         this.shouldIncludeConstantTerm = shouldIncludeConstantTerm;
     }
 
     @Override
-    public File getPriorSolutionDirectory()
+    public final File getPriorSolutionDirectory()
     {
         return priorSolutionDirectory;
     }
@@ -157,7 +157,7 @@ public class SpecularFitSettings implements ReadonlySpecularFitSettings
      * Sets the directory from which to load a prior solution
      * @param priorSolutionDirectory
      */
-    public void setPriorSolutionDirectory(File priorSolutionDirectory)
+    public final void setPriorSolutionDirectory(File priorSolutionDirectory)
     {
         this.priorSolutionDirectory = priorSolutionDirectory;
     }

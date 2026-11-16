@@ -144,44 +144,44 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
         }
 
         @Override
-        public String getName()
+        public final String getName()
         {
             return nextEntry.getKey();
         }
 
         @Override
-        public Class<?> getType()
+        public final Class<?> getType()
         {
             return nextEntry.getValue().getType();
         }
 
         @Override
-        public Object getValue()
+        public final Object getValue()
         {
             return nextEntry.getValue().getValue();
         }
 
         @Override
-        public boolean shouldSerialize()
+        public final boolean shouldSerialize()
         {
             return nextEntry.getValue().shouldSerialize();
         }
     }
 
     @Override
-    protected Object getUnchecked(String name)
+    protected final Object getUnchecked(String name)
     {
         return settingsMap.get(name).getValue();
     }
 
     @Override
-    protected void setUnchecked(String name, Object value)
+    protected final void setUnchecked(String name, Object value)
     {
         settingsMap.get(name).setValue(value);
     }
 
     @Override
-    public Class<?> getType(String name)
+    public final Class<?> getType(String name)
     {
         if (this.exists(name))
         {
@@ -194,13 +194,13 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
     }
 
     @Override
-    public boolean exists(String name)
+    public final boolean exists(String name)
     {
         return settingsMap.containsKey(name);
     }
 
     @Override
-    public boolean shouldSerialize(String name)
+    public final boolean shouldSerialize(String name)
     {
         if (exists(name))
         {
@@ -211,32 +211,32 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
     }
 
     @Override
-    public @NotNull Iterator<Setting> iterator()
+    public final @NotNull Iterator<Setting> iterator()
     {
         return new SettingsIterator(settingsMap.entrySet().iterator());
     }
 
     @Override
-    public Observable getObservable(String name)
+    public final Observable getObservable(String name)
     {
         return getObjectProperty(name, Object.class);
     }
 
     @Override
-    public Property<Boolean> getBooleanProperty(String name)
+    public final Property<Boolean> getBooleanProperty(String name)
     {
         return getObjectProperty(name, Boolean.class);
     }
 
     @Override
-    public Property<Number> getNumericProperty(String name)
+    public final Property<Number> getNumericProperty(String name)
     {
         return getObjectProperty(name, Number.class);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> Property<T> getObjectProperty(String name, Class<T> settingType)
+    public final <T> Property<T> getObjectProperty(String name, Class<T> settingType)
     {
         if (settingsMap.containsKey(name))
         {
@@ -251,7 +251,7 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
     }
 
     @Override
-    public void createSetting(String name, Class<?> type, Object initialValue, boolean serialize)
+    public final void createSetting(String name, Class<?> type, Object initialValue, boolean serialize)
     {
         if(settingsMap.containsKey(name))
         {
@@ -279,13 +279,13 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
         }
 
         @Override
-        public boolean hasNext()
+        public final boolean hasNext()
         {
             return innerIterator.hasNext();
         }
 
         @Override
-        public Setting next()
+        public final Setting next()
         {
             Entry<String, TypedProperty> nextEntry = innerIterator.next();
 

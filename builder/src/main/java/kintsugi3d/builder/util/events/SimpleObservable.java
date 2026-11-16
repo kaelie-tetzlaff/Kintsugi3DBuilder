@@ -17,19 +17,19 @@ public class SimpleObservable<K, V> implements Observable<MappedChange<K, V>>
         = new EventDispatcher<>(Observer::update);
 
     @Override
-    public void register(Observer<MappedChange<K, V>> observer)
+    public final void register(Observer<MappedChange<K, V>> observer)
     {
         eventDispatcher.register(observer);
     }
 
     @Override
-    public void unregister(Observer<MappedChange<K, V>> observer)
+    public final void unregister(Observer<MappedChange<K, V>> observer)
     {
         eventDispatcher.unregister(observer);
     }
 
     @Override
-    public void notify(MappedChange<K, V> change)
+    public final void notify(MappedChange<K, V> change)
     {
         eventDispatcher.notify(change);
     }

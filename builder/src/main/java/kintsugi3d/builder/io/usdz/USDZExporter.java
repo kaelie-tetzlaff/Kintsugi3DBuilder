@@ -59,7 +59,7 @@ public abstract class USDZExporter extends MaterialExporter
     protected abstract void addCommands(List<String> commandList);
 
     @Override
-    protected void postExport()
+    protected final void postExport()
     {
         // Command list for the ProcessBuilder
         List<String> command = new ArrayList<>(8);
@@ -160,7 +160,7 @@ public abstract class USDZExporter extends MaterialExporter
 
     // Grab the output directory and redirect the save to a temporary directory
     @Override
-    public void saveTextures(File outputDirectory)
+    public final void saveTextures(File outputDirectory)
     {
         outputPath = outputDirectory;
         tempPath = new File(Global.io().getLoadedViewSet().getSupportingFilesDirectory(), "temp");

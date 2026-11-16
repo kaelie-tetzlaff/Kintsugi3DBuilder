@@ -62,12 +62,12 @@ public class SideBarController
     private boolean minimized = false;
     private boolean resizingSidebar = false;
 
-    public Node getRootNode()
+    public final Node getRootNode()
     {
         return mainBox;
     }
 
-    public void init(ObservableTabsModel tabModels)
+    public final void init(ObservableTabsModel tabModels)
     {
         this.tabModels = tabModels;
 
@@ -215,7 +215,7 @@ public class SideBarController
         return newTab;
     }
 
-    public void setVisibility(boolean visible)
+    public final void setVisibility(boolean visible)
     {
         mainBox.setVisible(visible);
         mainBox.setManaged(visible);
@@ -230,7 +230,7 @@ public class SideBarController
      * minimize button has a "+" it will set the mainBox size to 400 and will call
      * maximize
      */
-    public void toggleSideBar()
+    public final void toggleSideBar()
     {
         if (minimized)
         {
@@ -249,7 +249,7 @@ public class SideBarController
      * If it is, cursor is set to resize cursor. Otherwise, default cursor.
      * @param event
      */
-    public void mouseMoved(MouseEvent event)
+    public final void mouseMoved(MouseEvent event)
     {
         if (event.getX() > (mainBox.getWidth() - RESIZE_WIDTH))
         {
@@ -267,7 +267,7 @@ public class SideBarController
      * @param event
      */
     @FXML
-    public void mousePressed(MouseEvent event)
+    public final void mousePressed(MouseEvent event)
     {
         if (Objects.equals(mainBox.getCursor(), Cursor.E_RESIZE))
         {
@@ -285,7 +285,7 @@ public class SideBarController
      * @param event
      */
     @FXML
-    public void mouseDragged(MouseEvent event)
+    public final void mouseDragged(MouseEvent event)
     {
         double newWidth = event.getX();
 
@@ -340,7 +340,7 @@ public class SideBarController
      * @param event
      */
     @FXML
-    public void mouseReleased(MouseEvent event)
+    public final void mouseReleased(MouseEvent event)
     {
         resizingSidebar = false;
 
@@ -451,9 +451,9 @@ public class SideBarController
         }
     }
 
-    public void refreshTabs()
+    public final void refreshTabs()
     {
         tabControllers.forEach(CardTabController::reloadCardList);
     }
-    public double getTabWidth() {return mainBox.getWidth();}
+    public final double getTabWidth() {return mainBox.getWidth();}
 }

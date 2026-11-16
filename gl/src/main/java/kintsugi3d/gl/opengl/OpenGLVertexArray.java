@@ -36,13 +36,13 @@ class OpenGLVertexArray implements ManagedResource
         OpenGLContext.errorCheck();
     }
 
-    void bind()
+    final void bind()
     {
         glBindVertexArray(this.vaoId);
         OpenGLContext.errorCheck();
     }
 
-    void addVertexBuffer(int attributeIndex, ReadonlyVertexBuffer<OpenGLContext> buffer)
+    final void addVertexBuffer(int attributeIndex, ReadonlyVertexBuffer<OpenGLContext> buffer)
     {
         if (buffer instanceof OpenGLVertexBuffer)
         {
@@ -66,7 +66,7 @@ class OpenGLVertexArray implements ManagedResource
         }
     }
 
-    void draw(int primitiveMode)
+    final void draw(int primitiveMode)
     {
         if (count == Integer.MAX_VALUE)
         {
@@ -90,7 +90,7 @@ class OpenGLVertexArray implements ManagedResource
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (live)
         {
@@ -100,7 +100,7 @@ class OpenGLVertexArray implements ManagedResource
         }
     }
 
-    public OpenGLContext getContext()
+    public final OpenGLContext getContext()
     {
         return context;
     }
