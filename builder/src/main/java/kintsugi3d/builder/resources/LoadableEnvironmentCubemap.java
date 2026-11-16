@@ -53,17 +53,17 @@ class LoadableEnvironmentCubemap<ContextType extends Context<ContextType>> imple
     public Cubemap<ContextType> loadGPU(EnvironmentMap data)
     {
         Cubemap<ContextType> texture = context.getTextureFactory().buildColorCubemap(data.getSide())
-            .loadFace(CubemapFace.POSITIVE_X, NativeVectorBufferFactory.getInstance().createFromFloatArray(3,
+            .loadFace(CubemapFace.POSITIVE_X, NativeVectorBufferFactory.createFromFloatArray(3,
                 data.getData()[EnvironmentMap.PX].length / 3, data.getData()[EnvironmentMap.PX]))
-            .loadFace(CubemapFace.NEGATIVE_X, NativeVectorBufferFactory.getInstance().createFromFloatArray(3,
+            .loadFace(CubemapFace.NEGATIVE_X, NativeVectorBufferFactory.createFromFloatArray(3,
                 data.getData()[EnvironmentMap.NX].length / 3, data.getData()[EnvironmentMap.NX]))
-            .loadFace(CubemapFace.POSITIVE_Y, NativeVectorBufferFactory.getInstance().createFromFloatArray(3,
+            .loadFace(CubemapFace.POSITIVE_Y, NativeVectorBufferFactory.createFromFloatArray(3,
                 data.getData()[EnvironmentMap.PY].length / 3, data.getData()[EnvironmentMap.PY]))
-            .loadFace(CubemapFace.NEGATIVE_Y, NativeVectorBufferFactory.getInstance().createFromFloatArray(3,
+            .loadFace(CubemapFace.NEGATIVE_Y, NativeVectorBufferFactory.createFromFloatArray(3,
                 data.getData()[EnvironmentMap.NY].length / 3, data.getData()[EnvironmentMap.NY]))
-            .loadFace(CubemapFace.POSITIVE_Z, NativeVectorBufferFactory.getInstance().createFromFloatArray(3,
+            .loadFace(CubemapFace.POSITIVE_Z, NativeVectorBufferFactory.createFromFloatArray(3,
                 data.getData()[EnvironmentMap.PZ].length / 3, data.getData()[EnvironmentMap.PZ]))
-            .loadFace(CubemapFace.NEGATIVE_Z, NativeVectorBufferFactory.getInstance().createFromFloatArray(3,
+            .loadFace(CubemapFace.NEGATIVE_Z, NativeVectorBufferFactory.createFromFloatArray(3,
                 data.getData()[EnvironmentMap.NZ].length / 3, data.getData()[EnvironmentMap.NZ]))
             .setInternalFormat(ColorFormat.RGB32F)
             .setMipmapsEnabled(true)

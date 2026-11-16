@@ -85,7 +85,7 @@ public class LightWidgetLines<ContextType extends Context<ContextType>> implemen
                             (
                                 VertexBuffer<ContextType> line =
                                     context.createVertexBuffer()
-                                        .setData(NativeVectorBufferFactory.getInstance()
+                                        .setData(NativeVectorBufferFactory
                                             .createFromFloatArray(3, 2,
                                                 lineEndpoint.x, lineEndpoint.y, lineEndpoint.z,
                                                 widgetInfo[i].getLightCenter().x, widgetInfo[i].getLightCenter().y, widgetInfo[i].getLightCenter().z));
@@ -115,7 +115,7 @@ public class LightWidgetLines<ContextType extends Context<ContextType>> implemen
                             (
                                 VertexBuffer<ContextType> line =
                                     context.createVertexBuffer()
-                                        .setData(NativeVectorBufferFactory.getInstance()
+                                        .setData(NativeVectorBufferFactory
                                             .createFromFloatArray(3, 2, lineEndpoint1.x, lineEndpoint1.y, lineEndpoint1.z, lineEndpoint2.x, lineEndpoint2.y, lineEndpoint2.z));
                                 Drawable<ContextType> lineRenderable = context.createDrawable(solidProgram)
                             )

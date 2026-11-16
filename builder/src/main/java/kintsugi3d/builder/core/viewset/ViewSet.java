@@ -287,7 +287,7 @@ public final class ViewSet implements ReadonlyViewSet
             else
             {
                 // Flatten the camera pose matrices into 16-component vectors and store them in the vertex list data structure.
-                NativeVectorBuffer cameraPoseData = NativeVectorBufferFactory.getInstance().createEmpty(
+                NativeVectorBuffer cameraPoseData = NativeVectorBufferFactory.createEmpty(
                     NativeDataType.FLOAT, 16, gpuBufferSize);
 
                 for (View view : views.values())
@@ -321,7 +321,7 @@ public final class ViewSet implements ReadonlyViewSet
             else
             {
                 // Flatten the camera projection matrices into 16-component vectors and store them in the vertex list data structure.
-                NativeVectorBuffer cameraProjectionData = NativeVectorBufferFactory.getInstance().createEmpty(NativeDataType.FLOAT, 16, cameraProjectionList.size());
+                NativeVectorBuffer cameraProjectionData = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 16, cameraProjectionList.size());
 
                 for (int k = 0; k < cameraProjectionList.size(); k++)
                 {
@@ -358,7 +358,7 @@ public final class ViewSet implements ReadonlyViewSet
                 {
                     indexArray[view.getGPUViewIndex()] = view.getCameraProjectionIndex();
                 }
-                return NativeVectorBufferFactory.getInstance().createFromIntArray(false, 1, gpuBufferSize, indexArray);
+                return NativeVectorBufferFactory.createFromIntArray(false, 1, gpuBufferSize, indexArray);
             }
         }
     }
@@ -375,7 +375,7 @@ public final class ViewSet implements ReadonlyViewSet
             }
             else
             {
-                NativeVectorBuffer lightPositionData = NativeVectorBufferFactory.getInstance().createEmpty(NativeDataType.FLOAT, 4, lightPositionList.size());
+                NativeVectorBuffer lightPositionData = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 4, lightPositionList.size());
                 for (int k = 0; k < lightPositionList.size(); k++)
                 {
                     lightPositionData.set(k, 0, lightPositionList.get(k).x);
@@ -401,7 +401,7 @@ public final class ViewSet implements ReadonlyViewSet
             }
             else
             {
-                NativeVectorBuffer lightIntensityData = NativeVectorBufferFactory.getInstance().createEmpty(NativeDataType.FLOAT, 4, lightIntensityList.size());
+                NativeVectorBuffer lightIntensityData = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 4, lightIntensityList.size());
                 for (int k = 0; k < lightIntensityList.size(); k++)
                 {
                     lightIntensityData.set(k, 0, lightIntensityList.get(k).x);
@@ -431,7 +431,7 @@ public final class ViewSet implements ReadonlyViewSet
                 {
                     indexArray[view.getGPUViewIndex()] = view.getLightIndex();
                 }
-                return NativeVectorBufferFactory.getInstance().createFromIntArray(false, 1, gpuBufferSize, indexArray);
+                return NativeVectorBufferFactory.createFromIntArray(false, 1, gpuBufferSize, indexArray);
             }
         }
     }
@@ -453,7 +453,7 @@ public final class ViewSet implements ReadonlyViewSet
             }
             else
             {
-                return NativeVectorBufferFactory.getInstance().createFromIntArray(false, 1, indexArray.length, indexArray);
+                return NativeVectorBufferFactory.createFromIntArray(false, 1, indexArray.length, indexArray);
             }
         }
     }

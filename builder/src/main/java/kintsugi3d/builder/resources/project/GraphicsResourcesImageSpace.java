@@ -583,7 +583,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
                 )
             {
                 // Flatten the camera pose matrices into 16-component vectors and store them in the vertex list data structure.
-                NativeVectorBuffer flattenedShadowMatrices = NativeVectorBufferFactory.getInstance().createEmpty(
+                NativeVectorBuffer flattenedShadowMatrices = NativeVectorBufferFactory.createEmpty(
                     NativeDataType.FLOAT, 16, this.getViewSet().getGPUBufferSize());
 
                 // Render each depth texture

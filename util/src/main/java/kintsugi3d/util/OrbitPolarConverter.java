@@ -14,16 +14,13 @@ package kintsugi3d.util;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 
-public class OrbitPolarConverter 
+public final class OrbitPolarConverter
 {
-    private static final OrbitPolarConverter INSTANCE = new OrbitPolarConverter();
-    
-    public static OrbitPolarConverter getInstance()
+    private OrbitPolarConverter()
     {
-        return INSTANCE;
     }
 
-    public Matrix4 convertToOrbitMatrix(Vector3 polarCoordinatesDegrees)
+    public static Matrix4 convertToOrbitMatrix(Vector3 polarCoordinatesDegrees)
     {
         Vector3 polarCoordinatesRadians = polarCoordinatesDegrees.applyOperator(Math::toRadians);
 
@@ -32,33 +29,31 @@ public class OrbitPolarConverter
                 .times(Matrix4.rotateY(polarCoordinatesRadians.x)));
     }
     
-    public Vector3 convertToPolarCoordinates(Matrix4 orbitMatrix) 
+    public static Vector3 convertToPolarCoordinates(Matrix4 orbitMatrix)
     {
-            double azimuth;//all in radians until very end
-            double inclination;
-            double twist;
+        double azimuth;//all in radians until very end
+        double inclination;
+        double twist;
 
-            inclination = Math.asin(orbitMatrix.get(2,1));
+        inclination = Math.asin(orbitMatrix.get(2,1));
 
-            double cosInc = Math.cos(inclination);
+        double cosInc = Math.cos(inclination);
 
-            double cosAzimuth = orbitMatrix.get(2,2) / cosInc;
-            double sinAzimuth = -orbitMatrix.get(2,0) / cosInc;
+        double cosAzimuth = orbitMatrix.get(2,2) / cosInc;
+        double sinAzimuth = -orbitMatrix.get(2,0) / cosInc;
 
-            azimuth = Math.atan2(sinAzimuth, cosAzimuth);
+        azimuth = Math.atan2(sinAzimuth, cosAzimuth);
 
-            double cosTwist = orbitMatrix.get(1,1) / cosInc;
-            double sinTwist = -orbitMatrix.get(0,1) / cosInc;
+        double cosTwist = orbitMatrix.get(1,1) / cosInc;
+        double sinTwist = -orbitMatrix.get(0,1) / cosInc;
 
-            twist = Math.atan2(sinTwist, cosTwist);
-
-
-            return new Vector3(
-                (float) Math.toDegrees(azimuth),
-                (float) Math.toDegrees(inclination),
-                (float) Math.toDegrees(twist)
-            );
+        twist = Math.atan2(sinTwist, cosTwist);
 
 
+        return new Vector3(
+            (float) Math.toDegrees(azimuth),
+            (float) Math.toDegrees(inclination),
+            (float) Math.toDegrees(twist)
+        );
     }
 }

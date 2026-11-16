@@ -33,7 +33,7 @@ public class RadialTextureGenerator<ContextType extends Context<ContextType>>
     public ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>> buildRadialTexture(
         int size, DoubleUnaryOperator radialFunction)
     {
-        NativeVectorBuffer textureData = NativeVectorBufferFactory.getInstance()
+        NativeVectorBuffer textureData = NativeVectorBufferFactory
             .createEmpty(NativeDataType.FLOAT, 1, size * size);
 
         int k = 0;

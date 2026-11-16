@@ -79,11 +79,10 @@ public abstract class BasisResourcesBase<ContextType extends Context<ContextType
     @Override
     public final void refreshGraphicsResources()
     {
-        NativeVectorBufferFactory factory = NativeVectorBufferFactory.getInstance();
-        NativeVectorBuffer basisMapBuffer = factory.createEmpty(NativeDataType.FLOAT, 3,
-            getMaterialCount() * (basisResolution + 1));
+        NativeVectorBuffer basisMapBuffer = NativeVectorBufferFactory.createEmpty(
+            NativeDataType.FLOAT, 3, getMaterialCount() * (basisResolution + 1));
         NativeVectorBuffer diffuseNativeBuffer =
-            factory.createEmpty(NativeDataType.FLOAT, 4, getMaterialCount());
+            NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 4, getMaterialCount());
 
         // Assumes that GPU indices have already been assigned.
         // Include disabled materials for visualization shaders.

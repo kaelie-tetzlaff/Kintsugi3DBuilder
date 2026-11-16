@@ -39,13 +39,13 @@ public abstract class ViewpointModelBase implements ManipulableViewpointModel
     public Matrix4 getOrbit()
     {
         Vector3 polar = new Vector3(getAzimuth(), getInclination(), getTwist());
-        return OrbitPolarConverter.getInstance().convertToOrbitMatrix(polar);
+        return OrbitPolarConverter.convertToOrbitMatrix(polar);
     }
 
     @Override
     public void setOrbit(Matrix4 orbit)
     {
-        Vector3 polar = OrbitPolarConverter.getInstance().convertToPolarCoordinates(orbit);
+        Vector3 polar = OrbitPolarConverter.convertToPolarCoordinates(orbit);
         setAzimuth(polar.x);
         setInclination(polar.y);
         setTwist(polar.z);

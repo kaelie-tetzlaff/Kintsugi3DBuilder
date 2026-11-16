@@ -67,8 +67,7 @@ public class Grid<ContextType extends Context<ContextType>> extends ShaderCompon
 
         return Map.of("position",
             getContext().createVertexBuffer()
-                .setData(NativeVectorBufferFactory.getInstance()
-                    .createFromFloatArray(3, 84, grid)));
+                .setData(NativeVectorBufferFactory.createFromFloatArray(3, 84, grid)));
     }
 
     @Override

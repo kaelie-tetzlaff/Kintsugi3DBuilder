@@ -436,13 +436,11 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
                     width * height, width, height, data.getCount()));
         }
 
-        AbstractDataTypeFactory adtFactory = AbstractDataTypeFactory.getInstance();
-
         loadLayer(layerIndex,
             bundleTextureData(
                 data.getDimensions() > 1 ?
-                    adtFactory.getMultiComponentDataType(data.getDataType(), data.getDimensions())
-                    : adtFactory.getSingleComponentDataType(data.getDataType()),
+                    AbstractDataTypeFactory.getMultiComponentDataType(data.getDataType(), data.getDimensions())
+                    : AbstractDataTypeFactory.getSingleComponentDataType(data.getDataType()),
                 hasIntegerInternalFormat(),
                 data.getBuffer()));
     }

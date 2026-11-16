@@ -130,9 +130,8 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
     {
         weightMapLocations.clear();
 
-        NativeVectorBufferFactory factory = NativeVectorBufferFactory.getInstance();
-        NativeVectorBuffer buffer = factory.createEmpty(NativeDataType.FLOAT, 1,
-            width * height);
+        NativeVectorBuffer buffer =
+            NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 1, width * height);
 
         // Load weight mask first.
         for (int p = 0; p < width * height; p++)
@@ -234,7 +233,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
         BasisWeightResources<ContextType> resources = new BasisWeightResources<>(context, width, height, basis);
 
         // Fill trivial weight mask.
-        NativeVectorBuffer weightMaskBuffer = NativeVectorBufferFactory.getInstance().createEmpty(NativeDataType.FLOAT, 1,
+        NativeVectorBuffer weightMaskBuffer = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 1,
             width * height);
         for (int p = 0; p < width * height; p++)
         {

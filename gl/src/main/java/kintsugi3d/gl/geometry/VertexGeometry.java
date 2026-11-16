@@ -489,7 +489,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
 
         // Copy the vertex position data into a data structure that OpenGL can use.
         int vertexCount = vertexIndexList.size();
-        inst.vertices = NativeVectorBufferFactory.getInstance().createEmpty(NativeDataType.FLOAT, 3, vertexCount);
+        inst.vertices = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 3, vertexCount);
 
         // Centroid, bounding box, and populate vertex position buffer
         int index = 0;
@@ -529,7 +529,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         // Texture coordinate buffer
         if (inst.hasTexCoords)
         {
-            inst.texCoords = NativeVectorBufferFactory.getInstance().createEmpty(NativeDataType.FLOAT, 2, vertexCount);
+            inst.texCoords = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 2, vertexCount);
             int i = 0;
             for (int k : texCoordIndexList)
             {
@@ -542,7 +542,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         if (inst.hasNormals)
         {
             // Normals buffer
-            inst.normals = NativeVectorBufferFactory.getInstance().createEmpty(NativeDataType.FLOAT, 3, vertexCount);
+            inst.normals = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 3, vertexCount);
             int i = 0;
             for (int k : effectiveNormalIndexList)
             {
@@ -559,7 +559,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
                     computeTangents(vertexList, vertexIndexList, texCoordList, texCoordIndexList, effectiveNormalList, effectiveNormalIndexList);
 
                 // tangent buffer
-                inst.tangents = NativeVectorBufferFactory.getInstance().createEmpty(NativeDataType.FLOAT, 4, vertexCount);
+                inst.tangents = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 4, vertexCount);
                 for (i = 0; i < effectiveNormalIndexList.size(); i++)
                 {
                     Vector4 tangent = orthoTangentsMap.get(new NormalTexCoordPair(effectiveNormalIndexList.get(i), texCoordIndexList.get(i)));

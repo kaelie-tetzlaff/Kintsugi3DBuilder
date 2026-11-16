@@ -59,7 +59,7 @@ public class RenderingSubject<ContextType extends Context<ContextType>> extends 
             new KNNViewWeightGenerator(4)
                 .generateWeights(getResources(), getResources().getViewSet().getEnabledViews(), targetView);
 
-        return NativeVectorBufferFactory.getInstance().createFromFloatArray(1, viewWeights.length, viewWeights);
+        return NativeVectorBufferFactory.createFromFloatArray(1, viewWeights.length, viewWeights);
     }
 
     @Override

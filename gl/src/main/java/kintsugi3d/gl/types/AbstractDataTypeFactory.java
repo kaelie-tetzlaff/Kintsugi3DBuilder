@@ -23,17 +23,6 @@ import java.util.function.Consumer;
  */
 public final class AbstractDataTypeFactory
 {
-    private static final AbstractDataTypeFactory INSTANCE = new AbstractDataTypeFactory();
-
-    /**
-     * Gets the singleton instance.
-     * @return The singleton instance.
-     */
-    public static AbstractDataTypeFactory getInstance()
-    {
-        return INSTANCE;
-    }
-
     private AbstractDataTypeFactory()
     {
     }
@@ -219,7 +208,7 @@ public final class AbstractDataTypeFactory
      * @param nativeType The internal type of each element.
      * @return An AbstractDataType representing a single component of the specified internal type.
      */
-    public AbstractDataType<Number> getSingleComponentDataType(NativeDataType nativeType)
+    public static AbstractDataType<Number> getSingleComponentDataType(NativeDataType nativeType)
     {
         return new SingleComponentDataType(nativeType);
     }
@@ -230,7 +219,7 @@ public final class AbstractDataTypeFactory
      * @param componentCount The number of components.
      * @return An AbstractDataType representing a vector with the specified number of components of the specified internal type.
      */
-    public AbstractDataType<Iterable<? extends Number>> getMultiComponentDataType(NativeDataType nativeType, int componentCount)
+    public static AbstractDataType<Iterable<? extends Number>> getMultiComponentDataType(NativeDataType nativeType, int componentCount)
     {
         return new MultiComponentDataType(nativeType, componentCount);
     }

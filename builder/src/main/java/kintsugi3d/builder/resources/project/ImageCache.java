@@ -506,7 +506,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
 
     private ReadonlyNativeVectorBuffer sampleHighResBuffer(ReadonlyNativeVectorBuffer highResBuffer)
     {
-        NativeVectorBuffer sampledBuffer = NativeVectorBufferFactory.getInstance()
+        NativeVectorBuffer sampledBuffer = NativeVectorBufferFactory
             .createEmpty(NativeDataType.FLOAT, 3, settings.getSampledSize() * settings.getSampledSize());
         for (int i = 0; i < sampledBuffer.getCount(); i++)
         {
@@ -530,21 +530,21 @@ public class ImageCache<ContextType extends Context<ContextType>>
             // Sample position buffer
             ReadableFramebuffer<ContextType> contextTypeFramebuffer2 = geomTexturesFullRes.getFramebuffer();
             sampledGeometryTextures.getPositionTexture().load(
-                sampleHighResBuffer(NativeVectorBufferFactory.getInstance()
+                sampleHighResBuffer(NativeVectorBufferFactory
                     .createFromFloatArray(4, settings.getTextureWidth() * settings.getTextureHeight(),
                         contextTypeFramebuffer2.getTextureReaderForColorAttachment(0).readFloatingPointRGBA())));
 
             // Sample normal buffer
             ReadableFramebuffer<ContextType> contextTypeFramebuffer1 = geomTexturesFullRes.getFramebuffer();
             sampledGeometryTextures.getNormalTexture().load(
-                sampleHighResBuffer(NativeVectorBufferFactory.getInstance()
+                sampleHighResBuffer(NativeVectorBufferFactory
                     .createFromFloatArray(4, settings.getTextureWidth() * settings.getTextureHeight(),
                         contextTypeFramebuffer1.getTextureReaderForColorAttachment(1).readFloatingPointRGBA())));
 
             // Sample tangent buffer
             ReadableFramebuffer<ContextType> contextTypeFramebuffer = geomTexturesFullRes.getFramebuffer();
             sampledGeometryTextures.getTangentTexture().load(
-                sampleHighResBuffer(NativeVectorBufferFactory.getInstance()
+                sampleHighResBuffer(NativeVectorBufferFactory
                     .createFromFloatArray(4, settings.getTextureWidth() * settings.getTextureHeight(),
                         contextTypeFramebuffer.getTextureReaderForColorAttachment(2).readFloatingPointRGBA())));
 

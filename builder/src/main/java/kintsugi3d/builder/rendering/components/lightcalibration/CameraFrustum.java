@@ -65,8 +65,7 @@ public class CameraFrustum<ContextType extends Context<ContextType>> extends Sha
 
         return Map.of("position",
             getContext().createVertexBuffer()
-                .setData(NativeVectorBufferFactory.getInstance()
-                    .createFromFloatArray(3, 16, frustum)));
+                .setData(NativeVectorBufferFactory.createFromFloatArray(3, 16, frustum)));
     }
 
     @Override

@@ -81,7 +81,7 @@ public class LightWidgets<ContextType extends Context<ContextType>> extends Shad
     {
         return Map.of("position",
             getContext().createVertexBuffer()
-                .setData(NativeVectorBufferFactory.getInstance()
+                .setData(NativeVectorBufferFactory
                     .createFromFloatArray(3, 3, -1, -1, 0, 1, -1, 0, 0, 1, 0)));
     }
 

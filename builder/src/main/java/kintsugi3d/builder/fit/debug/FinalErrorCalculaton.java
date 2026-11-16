@@ -39,12 +39,6 @@ import java.util.stream.IntStream;
 public final class FinalErrorCalculaton
 {
     private static final Logger LOG = LoggerFactory.getLogger(FinalErrorCalculaton.class);
-    private static final FinalErrorCalculaton INSTANCE = new FinalErrorCalculaton();
-
-    public static FinalErrorCalculaton getInstance()
-    {
-        return INSTANCE;
-    }
 
     private static final boolean CALCULATE_NORMAL_RMSE = true;
 
@@ -59,7 +53,7 @@ public final class FinalErrorCalculaton
      * @param rmseOut Text file containing error information
      * @param <ContextType>
      */
-    public <ContextType extends Context<ContextType>> void validateNormalMap(
+    public static <ContextType extends Context<ContextType>> void validateNormalMap(
         ReadonlyImageBasedGraphicsResources<ContextType> resources, ReadonlyTextureResources<ContextType> specularFit, PrintStream rmseOut)
     {
         ReadonlyTexture2D<ContextType> priorNormalMap = resources.getTextureResources().getTexture(StandardTexture.NORMAL_MAP);
@@ -110,7 +104,7 @@ public final class FinalErrorCalculaton
         }
     }
 
-    public <ContextType extends Context<ContextType>> void calculateFinalErrorMetrics(
+    public static <ContextType extends Context<ContextType>> void calculateFinalErrorMetrics(
         ReadonlyImageBasedGraphicsResources<ContextType> resources, ShaderProgramFactory<ContextType> programFactory,
         ReadonlyTextureResources<ContextType> specularFit, ShaderBasedErrorCalculator<ContextType> basisErrorCalculator,
         PrintStream rmseOut)
@@ -163,7 +157,7 @@ public final class FinalErrorCalculaton
      * @param <ContextType>
      * @throws FileNotFoundException
      */
-    private <ContextType extends Context<ContextType>> void calculateGGXRMSE(
+    private static <ContextType extends Context<ContextType>> void calculateGGXRMSE(
         ReadonlyImageBasedGraphicsResources<ContextType> resources, ShaderProgramFactory<ContextType> programFactory,
         ReadonlyTextureResources<ContextType> specularFit, ReadableFramebuffer<ContextType> scratchFramebuffer, PrintStream rmseOut)
         throws IOException

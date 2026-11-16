@@ -35,14 +35,14 @@ public abstract class ObjectPoseModelBase implements ManipulableObjectPoseModel
     {
         // Intentionally swapping y and x components
         Vector3 polar = new Vector3(getRotationY(), getRotationX(), getRotationZ());
-        return OrbitPolarConverter.getInstance().convertToOrbitMatrix(polar);
+        return OrbitPolarConverter.convertToOrbitMatrix(polar);
     }
 
     @SuppressWarnings("SuspiciousNameCombination")
     @Override
     public void setOrbit(Matrix4 orbit)
     {
-        Vector3 polar = OrbitPolarConverter.getInstance().convertToPolarCoordinates(orbit);
+        Vector3 polar = OrbitPolarConverter.convertToPolarCoordinates(orbit);
 
         // Intentionally swapping y and x components
         setRotationY(polar.x);

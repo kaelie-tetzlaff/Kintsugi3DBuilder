@@ -364,7 +364,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
             }
         }
 
-        this.viewWeightBuffer.setData(NativeVectorBufferFactory.getInstance().createFromFloatArray(
+        this.viewWeightBuffer.setData(NativeVectorBufferFactory.createFromFloatArray(
             1, viewSet.getGPUBufferSize(), this.viewWeights));
 
         return viewWeights;
