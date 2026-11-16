@@ -187,16 +187,11 @@ public class ObservableCarouselModel implements CarouselModel
 
     private CarouselItem findCardByShader(ShaderInfo shader)
     {
-        for(CarouselItem item : carouselItems)
-        {
-            // Check if the current item's shader matches this card.
-            if (shader.equals(item.getShader()))
-            {
-                return item;
-            }
-        }
+        // Check if the current item's shader matches this card.
+        return carouselItems.stream()
+            .filter(item -> shader.equals(item.getShader()))
+            .findFirst().orElse(null);
 
-        return null;
     }
 
     public void moveCardLeft(CarouselCardController card)

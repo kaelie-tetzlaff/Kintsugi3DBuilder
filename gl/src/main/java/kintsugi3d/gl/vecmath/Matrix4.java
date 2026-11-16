@@ -14,6 +14,8 @@ package kintsugi3d.gl.vecmath;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public final class Matrix4
 {
@@ -372,11 +374,6 @@ public final class Matrix4
     @Override
     public String toString()
     {
-        StringBuilder s = new StringBuilder(128);
-        for (int i = 0; i < 4; i++)
-        {
-            s.append(getRow(i)).append('\n');
-        }
-        return s.toString();
+        return IntStream.range(0, 4).mapToObj(i -> String.format("%s\n", getRow(i))).collect(Collectors.joining());
     }
 }

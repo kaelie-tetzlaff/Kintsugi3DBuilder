@@ -16,12 +16,12 @@ import kintsugi3d.util.Counter;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.simple.SimpleMatrix;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.IntConsumer;
 import java.util.function.IntFunction;
 import java.util.function.IntToDoubleFunction;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -182,13 +182,11 @@ public class LeastSquaresMatrixBuilder
                     // Evaluate the "basisCalculator" to get another function that can provide the actual basis function values.
                     IntFunction<T> basisFunctions = leastSquaresModel.getBasisFunctions(reflectanceData, p);
 
-                    ArrayList<T> basisEval = new ArrayList<>(weightCount);
+                    List<T> basisEval = IntStream.range(0, weightCount)
+                        .mapToObj(basisFunctions)
+                        .collect(Collectors.toList());
 
-                    for (int b = 0; b < weightCount; b++)
-                    {
-                        // Evaluate the basis function.
-                        basisEval.add(basisFunctions.apply(b));
-                    }
+                    // Evaluate the basis function.
 
                     for (int b1 = 0; b1 < weightCount; b1++)
                     {

@@ -200,14 +200,7 @@ public final class UnzipHelper
 
     private static boolean isValidImageType(String path)
     {
-        for (String extension : VALID_EXTENSIONS)
-        {
-            if (path.matches('.' + extension))
-            {
-                return true;
-            }
-        }
-        return false;
+        return Arrays.stream(VALID_EXTENSIONS).anyMatch(extension -> path.matches('.' + extension));
     }
 
     public static Map<Integer, Image> unzipImagesToMap(File imgsDir)

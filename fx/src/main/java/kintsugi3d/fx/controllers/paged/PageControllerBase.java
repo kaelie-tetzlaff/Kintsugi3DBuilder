@@ -27,6 +27,7 @@ import kintsugi3d.fx.core.JavaFXState;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * Internal base class that is extended for the public-facing classes
@@ -164,12 +165,9 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
                 ButtonType cancel = new ButtonType("Cancel", ButtonData.LEFT);
 
                 // "Fallback" buttons navigate to a different page.
-                Collection<ButtonType> fallbackButtons = new ArrayList<>(getPage().getFallbackPages().size());
-                for (var fallback : getPage().getFallbackPages().entrySet())
-                {
-                    String fallbackName = fallback.getKey();
-                    fallbackButtons.add(new ButtonType(fallbackName));
-                }
+                Collection<ButtonType> fallbackButtons = getPage().getFallbackPages().keySet().stream()
+                    .map(ButtonType::new)
+                    .collect(Collectors.toList());
 
                 Collection<ButtonType> allButtons = new ArrayList<>(fallbackButtons.size() + 2);
                 allButtons.add(cancel);

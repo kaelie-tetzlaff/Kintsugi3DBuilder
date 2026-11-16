@@ -27,6 +27,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 public final class MetashapeChunk
@@ -280,16 +282,11 @@ public final class MetashapeChunk
     private List<Element> findChunkXmlCameras()
     {
         NodeList cams = this.chunkXML.getElementsByTagName("camera");
-        List<Element> cameras = new ArrayList<>(cams.getLength());
-        for (int i = 0; i < cams.getLength(); ++i)
-        {
-            Node camera = cams.item(i);
-            if (camera.getNodeType() == Node.ELEMENT_NODE)
-            {
-                cameras.add((Element) camera);
-            }
-        }
-        return cameras;
+        return IntStream.range(0, cams.getLength())
+            .mapToObj(cams::item)
+            .filter(camera -> camera.getNodeType() == Node.ELEMENT_NODE)
+            .map(camera -> (Element) camera)
+            .collect(Collectors.toList());
     }
 
     public List<Element> findEnabledCameras()

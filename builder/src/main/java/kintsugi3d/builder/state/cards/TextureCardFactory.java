@@ -156,14 +156,11 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
             var textures = texResources.getTextures();
             if (textures != null)
             {
-                for (var entry : textures.entrySet().stream().sorted(Comparator.comparing(Entry::getKey)).collect(Collectors.toList()))
-                {
-                    ProjectDataCard card = createCard(entry.getKey());
-                    if (card != null)
-                    {
-                        textureCards.add(card);
-                    }
-                }
+                textureCards = textures.entrySet().stream()
+                    .sorted(Comparator.comparing(Entry::getKey))
+                    .map(entry -> createCard(entry.getKey()))
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
             }
 
             ReadonlyBasisResources<? extends Context<?>> basisResources = texResources.getBasisResources();

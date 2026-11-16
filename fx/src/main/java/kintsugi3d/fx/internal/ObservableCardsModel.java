@@ -210,28 +210,12 @@ public class ObservableCardsModel<T> implements CardsModel<T>
 
     public int getEnabledCardCount()
     {
-        int totalEnabled = 0;
-        for (ProjectDataCard card : cardsList)
-        {
-            if (card.isEnabled())
-            {
-                ++totalEnabled;
-            }
-        }
-        return totalEnabled;
+        return (int) cardsList.stream().filter(ProjectDataCard::isEnabled).count();
     }
 
     public int getDisabledCardCount()
     {
-        int totalEnabled = 0;
-        for (ProjectDataCard card : cardsList)
-        {
-            if (!card.isEnabled())
-            {
-                ++totalEnabled;
-            }
-        }
-        return totalEnabled;
+        return (int) cardsList.stream().filter(card -> !card.isEnabled()).count();
     }
 
     @Override
