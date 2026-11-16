@@ -11,7 +11,6 @@
 
 package kintsugi3d.fx.controllers.modals;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -122,16 +121,18 @@ public class LoggerController implements Initializable
     {
         ObservableList<LogMessage> items;
 
+        ObservableList<LogMessage> messages = logMessages.getMessages();
+
         if (toggleButtonPause.isSelected())
         {
             synchronized (logMessages.getMessages())
             {
-                items = FXCollections.observableArrayList(logMessages.getMessages());
+                items = FXCollections.observableArrayList(messages);
             }
         }
         else
         {
-            items = logMessages.getMessages();
+            items = messages;
         }
 
         messageListView.setItems(items.filtered(this::doesLogMessagePassFilter));
@@ -212,62 +213,60 @@ public class LoggerController implements Initializable
             @Override
             public void updateItem(LogMessage message, boolean empty)
             {
-                Platform.runLater(() ->
+                super.updateItem(message, empty);
+                if (empty || message == null)
                 {
-                    super.updateItem(message, empty);
-                    if (empty || message == null)
+                    setText(null);
+                    setGraphic(null);
+                    setStyle(null);
+                }
+                else
+                {
+                    setText(null);
+
+                    Label levelLabel = new Label(message.getLogLevel().toString());
+                    levelLabel.setPrefWidth(40);
+
+                    StringBuilder labelText = new StringBuilder(message.getMessage());
+
+                    if (message.getThrown() != null)
                     {
-                        setText(null);
-                        setGraphic(null);
-                        setStyle(null);
-                    } else
-                    {
-                        setText(null);
-
-                        Label levelLabel = new Label(message.getLogLevel().toString());
-                        levelLabel.setPrefWidth(40);
-
-                        StringBuilder labelText = new StringBuilder(message.getMessage());
-
-                        if (message.getThrown() != null)
+                        if (isSelected())
                         {
-                            if (this.isSelected())
-                            {
-                                labelText.append('\n');
-                                labelText.append(strStackTrace(message.getThrown()));
-                            }
-                            else
-                            {
-                                labelText.append("... (Click for more)");
-                            }
-                        }
-
-                        Label messageLabel = new Label(labelText.toString());
-
-                        HBox box = new HBox(levelLabel, messageLabel);
-
-                        box.setSpacing(10);
-
-                        Tooltip.install(box, new Tooltip(formatTooltip(message)));
-
-                        if (message.getLogLevel() == Level.ERROR)
-                        {
-                            setStyle("-fx-background-color: #fa6d6d");
-                            //TODO: MAKE TEXT BLACK
-                        }
-                        else if (message.getLogLevel() == Level.WARN)
-                        {
-                            setStyle("-fx-background-color: #fab66d");
-                            //TODO: MAKE TEXT BLACK
+                            labelText.append('\n');
+                            labelText.append(strStackTrace(message.getThrown()));
                         }
                         else
                         {
-                            setStyle(null);
+                            labelText.append("... (Click for more)");
                         }
-
-                        setGraphic(box);
                     }
-                });
+
+                    Label messageLabel = new Label(labelText.toString());
+
+                    HBox box = new HBox(levelLabel, messageLabel);
+
+                    box.setSpacing(10);
+
+                    Tooltip.install(box, new Tooltip(formatTooltip(message)));
+
+                    if (message.getLogLevel() == Level.ERROR)
+                    {
+                        setStyle("-fx-background-color: #fa6d6d");
+                        //TODO: MAKE TEXT BLACK
+                    }
+                    else if (message.getLogLevel() == Level.WARN)
+                    {
+                        setStyle("-fx-background-color: #fab66d");
+                        //TODO: MAKE TEXT BLACK
+                    }
+                    else
+                    {
+                        setStyle(null);
+                    }
+
+                    setGraphic(box);
+                }
             }
         }
     }
