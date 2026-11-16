@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -86,16 +85,16 @@ public class Potato
 
         for (int j = 0; j < phiSubdiv - 1; j++)
         {
-            faces.add(Collections.unmodifiableList(Arrays.asList(
+            faces.add(List.of(
                 new IntVector2(0, 0),
                 new IntVector2(j + 1, j + 1),
-                new IntVector2(j + 2, j + 2))));
+                new IntVector2(j + 2, j + 2)));
         }
 
-        faces.add(Collections.unmodifiableList(Arrays.asList(
+        faces.add(List.of(
             new IntVector2(0, 0),
             new IntVector2(phiSubdiv, phiSubdiv),
-            new IntVector2(1, phiSubdiv + 1))));
+            new IntVector2(1, phiSubdiv + 1)));
 
         for (int i = 1; i < thetaSubdiv; i++)
         {
@@ -118,15 +117,15 @@ public class Potato
 
                 if (i < thetaSubdiv - 1 && j < phiSubdiv - 1)
                 {
-                    faces.add(Collections.unmodifiableList(Arrays.asList(
+                    faces.add(List.of(
                         new IntVector2(j + (i - 1) * phiSubdiv + 1, j + (i - 1) * (phiSubdiv + 1) + 1),
                         new IntVector2(j + i * phiSubdiv + 1, j + i * (phiSubdiv + 1) + 1),
-                        new IntVector2(j + i * phiSubdiv + 2, j + i * (phiSubdiv + 1) + 2))));
+                        new IntVector2(j + i * phiSubdiv + 2, j + i * (phiSubdiv + 1) + 2)));
 
-                    faces.add(Collections.unmodifiableList(Arrays.asList(
+                    faces.add(List.of(
                         new IntVector2(j + (i - 1) * phiSubdiv + 2, j + (i - 1) * (phiSubdiv + 1) + 2),
                         new IntVector2(j + (i - 1) * phiSubdiv + 1, j + (i - 1) * (phiSubdiv + 1) + 1),
-                        new IntVector2(j + i * phiSubdiv + 2, j + i * (phiSubdiv + 1) + 2))));
+                        new IntVector2(j + i * phiSubdiv + 2, j + i * (phiSubdiv + 1) + 2)));
                 }
             }
 
@@ -134,15 +133,15 @@ public class Potato
 
             if (i < thetaSubdiv - 1)
             {
-                faces.add(Collections.unmodifiableList(Arrays.asList(
-                    new IntVector2(i * phiSubdiv, i * (phiSubdiv + 1) - 1),
+                faces.add(List.of(new IntVector2(
+                    i * phiSubdiv, i * (phiSubdiv + 1) - 1),
                     new IntVector2((i + 1) * phiSubdiv, (i + 1) * (phiSubdiv + 1) - 1),
-                    new IntVector2(i * phiSubdiv + 1, (i + 1) * (phiSubdiv + 1)))));
+                    new IntVector2(i * phiSubdiv + 1, (i + 1) * (phiSubdiv + 1))));
 
-                faces.add(Collections.unmodifiableList(Arrays.asList(
+                faces.add(List.of(
                     new IntVector2((i - 1) * phiSubdiv + 1, i * (phiSubdiv + 1)),
                     new IntVector2(i * phiSubdiv, i * (phiSubdiv + 1) - 1),
-                    new IntVector2(i * phiSubdiv + 1, (i + 1) * (phiSubdiv + 1)))));
+                    new IntVector2(i * phiSubdiv + 1, (i + 1) * (phiSubdiv + 1))));
             }
         }
 
@@ -151,16 +150,16 @@ public class Potato
 
         for (int j = 0; j < phiSubdiv - 1; j++)
         {
-            faces.add(Collections.unmodifiableList(Arrays.asList(
+            faces.add(List.of(
                 new IntVector2(j + (thetaSubdiv - 2) * phiSubdiv + 2, j + (thetaSubdiv - 2) * (phiSubdiv + 1) + 2),
                 new IntVector2(j + (thetaSubdiv - 2) * phiSubdiv + 1, j + (thetaSubdiv - 2) * (phiSubdiv + 1) + 1),
-                new IntVector2((thetaSubdiv - 1) * phiSubdiv + 1, (thetaSubdiv - 1) * (phiSubdiv + 1) + 1))));
+                new IntVector2((thetaSubdiv - 1) * phiSubdiv + 1, (thetaSubdiv - 1) * (phiSubdiv + 1) + 1)));
         }
 
-        faces.add(Collections.unmodifiableList(Arrays.asList(
+        faces.add(List.of(
             new IntVector2((thetaSubdiv - 2) * phiSubdiv + 1, (thetaSubdiv - 1) * (phiSubdiv + 1)),
             new IntVector2((thetaSubdiv - 1) * phiSubdiv, (thetaSubdiv - 1) * (phiSubdiv + 1) - 1),
-            new IntVector2((thetaSubdiv - 1) * phiSubdiv + 1, (thetaSubdiv - 1) * (phiSubdiv + 1) + 1))));
+            new IntVector2((thetaSubdiv - 1) * phiSubdiv + 1, (thetaSubdiv - 1) * (phiSubdiv + 1) + 1)));
     }
 
     public List<Vector3> getPositions()
