@@ -30,6 +30,7 @@ import kintsugi3d.builder.io.metashape.MetashapeDocument;
 import kintsugi3d.builder.io.metashape.MetashapeModel;
 import kintsugi3d.fx.controllers.modals.createnewproject.inputsources.MetashapeProjectInputSource;
 import kintsugi3d.fx.core.FrontendIO;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.List;
@@ -109,7 +110,7 @@ public class MetashapeImportController extends ProjectImportController
             .setMetashapeModel(metashapeDocument.getSelectedChunk().getSelectedModel());
     }
 
-    private static String getModelIDFromSelection(String selectionAsString)
+    private static @Nullable String getModelIDFromSelection(String selectionAsString)
     {
         //TODO: need to revisit this when formatting of model selection choice box changes
         if (selectionAsString == null || selectionAsString.startsWith(NO_MODEL_ID_MSG))

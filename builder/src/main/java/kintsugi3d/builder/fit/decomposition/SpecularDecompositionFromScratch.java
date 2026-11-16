@@ -16,6 +16,7 @@ import kintsugi3d.builder.io.specular.SpecularFitSerializer;
 import kintsugi3d.gl.vecmath.DoubleVector3;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.simple.SimpleMatrix;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.Arrays;
@@ -154,7 +155,7 @@ public class SpecularDecompositionFromScratch extends SpecularDecompositionBase
         }
 
         @Override
-        public BasisMaterialInfo getMaterial(String materialName)
+        public @Nullable BasisMaterialInfo getMaterial(String materialName)
         {
             try
             {

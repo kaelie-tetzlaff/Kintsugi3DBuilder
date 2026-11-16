@@ -11,6 +11,8 @@
 
 package kintsugi3d.builder.state.settings;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
 public class SimpleGeneralSettingsModel extends GeneralSettingsModelBase
@@ -46,7 +48,7 @@ public class SimpleGeneralSettingsModel extends GeneralSettingsModelBase
     }
 
     @Override
-    public Iterator<Setting> iterator()
+    public @NotNull Iterator<Setting> iterator()
     {
         return settingMap.values().iterator();
     }

@@ -16,6 +16,8 @@ import kintsugi3d.gl.core.Framebuffer;
 import kintsugi3d.gl.interactive.InitializationException;
 import kintsugi3d.gl.interactive.InteractiveRenderableBase;
 import kintsugi3d.gl.interactive.InteractiveRenderableResource;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -120,7 +122,7 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public RenderableType getSelectedItem()
+    public @Nullable RenderableType getSelectedItem()
     {
         if (selectedIndex < 0)
         {
@@ -170,19 +172,19 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public Iterator<RenderableType> iterator()
+    public @NotNull Iterator<RenderableType> iterator()
     {
         return renderables.iterator();
     }
 
     @Override
-    public Object[] toArray()
+    public Object @NotNull [] toArray()
     {
         return renderables.toArray();
     }
 
     @Override
-    public <U> U[] toArray(U[] a)
+    public <U> U @NotNull [] toArray(U @NotNull [] a)
     {
         return renderables.toArray(a);
     }
@@ -211,14 +213,14 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public boolean containsAll(Collection<?> c)
+    public boolean containsAll(@NotNull Collection<?> c)
     {
         //noinspection SlowListContainsAll
         return renderables.containsAll(c);
     }
 
     @Override
-    public boolean addAll(Collection<? extends RenderableType> c)
+    public boolean addAll(@NotNull Collection<? extends RenderableType> c)
     {
         if (renderables.addAll(c))
         {
@@ -232,7 +234,7 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends RenderableType> c)
+    public boolean addAll(int index, @NotNull Collection<? extends RenderableType> c)
     {
         if (renderables.addAll(index, c))
         {
@@ -250,13 +252,13 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public boolean removeAll(Collection<?> c)
+    public boolean removeAll(@NotNull Collection<?> c)
     {
         throw new UnsupportedOperationException("removeAll() is not supported by InteractiveRenderableList.");
     }
 
     @Override
-    public boolean retainAll(Collection<?> c)
+    public boolean retainAll(@NotNull Collection<?> c)
     {
         throw new UnsupportedOperationException("retainAll() is not supported by InteractiveRenderableList.");
     }
@@ -331,19 +333,19 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public ListIterator<RenderableType> listIterator()
+    public @NotNull ListIterator<RenderableType> listIterator()
     {
         return renderables.listIterator();
     }
 
     @Override
-    public ListIterator<RenderableType> listIterator(int index)
+    public @NotNull ListIterator<RenderableType> listIterator(int index)
     {
         return renderables.listIterator(index);
     }
 
     @Override
-    public InteractiveRenderableList<ContextType, RenderableType> subList(int fromIndex, int toIndex)
+    public @NotNull InteractiveRenderableList<ContextType, RenderableType> subList(int fromIndex, int toIndex)
     {
         return new InteractiveRenderableList<>(renderables.subList(fromIndex, toIndex));
     }

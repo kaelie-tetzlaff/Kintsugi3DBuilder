@@ -11,6 +11,8 @@
 
 package kintsugi3d.gl.vecmath;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.IntUnaryOperator;
@@ -164,7 +166,7 @@ public class IntVector3 implements Iterable<Integer>
     }
 
     @Override
-    public Iterator<Integer> iterator()
+    public @NotNull Iterator<Integer> iterator()
     {
         return Arrays.asList(x, y, z).iterator();
     }

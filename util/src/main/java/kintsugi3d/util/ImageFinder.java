@@ -11,6 +11,7 @@
 
 package kintsugi3d.util;
 
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -170,7 +171,7 @@ public final class ImageFinder
      * @param suffixes
      * @return The file, or null if not found.
      */
-    public static File tryFindImageFile(File requestedFile, String... suffixes)
+    public static @Nullable File tryFindImageFile(File requestedFile, String... suffixes)
     {
         try
         {

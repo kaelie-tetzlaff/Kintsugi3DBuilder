@@ -17,6 +17,7 @@ import kintsugi3d.builder.core.texture.StandardTexture;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -211,7 +212,7 @@ public class MaterialExporter
      * To be overridden by subclass
      * @return
      */
-    protected Object getExtras()
+    protected @Nullable Object getExtras()
     {
         return null;
     }
@@ -243,7 +244,7 @@ public class MaterialExporter
             textures.values().toArray(TextureExportSpecification[]::new));
     }
 
-    private TextureInfo processTextureParam(String texName, Method method, Class<?> paramType, boolean requiresAlpha)
+    private @Nullable TextureInfo processTextureParam(String texName, Method method, Class<?> paramType, boolean requiresAlpha)
     {
         String format = determineFileFormat(textureFileFormat, requiresAlpha);
         TextureInfo tex = createRelativeTexture(getTextureFilename(texName, format), texName, format);

@@ -13,7 +13,6 @@ package kintsugi3d.builder.state.cards;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 public interface CardsModel<T>
@@ -23,7 +22,7 @@ public interface CardsModel<T>
     List<ProjectDataCard> getCardList();
     void setCardList(List<ProjectDataCard> cards);
 
-    void refreshCards(Function<ProjectDataCard, T> refreshedData);
+    void refreshCards(RefreshFunction<T> refreshedData);
 
     default void refreshCard(Predicate<ProjectDataCard> cardEquals, T refreshedData)
     {
@@ -31,4 +30,5 @@ public interface CardsModel<T>
     }
 
     void deleteCards(Predicate<ProjectDataCard> filter);
+
 }

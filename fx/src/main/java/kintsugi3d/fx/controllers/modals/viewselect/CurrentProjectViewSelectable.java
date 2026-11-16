@@ -16,6 +16,7 @@ import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.io.imageset.GenericImageSetInfo;
 import kintsugi3d.builder.io.imageset.ImageSetInfo;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
@@ -65,7 +66,7 @@ public class CurrentProjectViewSelectable extends ViewSelectableBase
     }
 
     @Override
-    public String getAdvanceLabelOverride()
+    public @Nullable String getAdvanceLabelOverride()
     {
         // No override
         return null;

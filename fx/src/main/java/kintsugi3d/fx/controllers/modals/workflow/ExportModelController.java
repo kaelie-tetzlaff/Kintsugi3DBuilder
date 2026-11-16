@@ -27,6 +27,7 @@ import kintsugi3d.builder.rendering.Rendering;
 import kintsugi3d.fx.controllers.modals.ProjectSettingsControllerBase;
 import kintsugi3d.fx.util.SquareResolution;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -170,7 +171,7 @@ public class ExportModelController extends ProjectSettingsControllerBase
         }
 
         @Override
-        public ExportType fromString(String string)
+        public @Nullable ExportType fromString(String string)
         {
             // Not strictly needed unless the ComboBox is editable
             return null;

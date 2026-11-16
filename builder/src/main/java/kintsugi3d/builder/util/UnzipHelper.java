@@ -13,6 +13,7 @@ package kintsugi3d.builder.util;
 
 import javafx.scene.image.Image;
 import kintsugi3d.gl.interactive.ProgressMonitor;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -134,7 +135,7 @@ public final class UnzipHelper
         return s.toString();
     }
 
-    private static Document convertStringToDocument(String xmlStr)
+    private static @Nullable Document convertStringToDocument(String xmlStr)
     {
         //Taken from https://www.digitalocean.com/community/tutorials/java-convert-string-to-xml-document-and-xml-document-to-string
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -150,7 +151,7 @@ public final class UnzipHelper
         return null;
     }
 
-    private static String convertDocumentToString(Document doc)
+    private static @Nullable String convertDocumentToString(Document doc)
     {
         //Taken from https://www.digitalocean.com/community/tutorials/java-convert-string-to-xml-document-and-xml-document-to-string
         TransformerFactory tf = TransformerFactory.newInstance();

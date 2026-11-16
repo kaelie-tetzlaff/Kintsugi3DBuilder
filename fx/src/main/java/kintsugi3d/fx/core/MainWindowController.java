@@ -53,6 +53,7 @@ import kintsugi3d.fx.gl.FramebufferView;
 import kintsugi3d.fx.internal.ObservableActiveShaderModel;
 import kintsugi3d.fx.internal.ObservableCardsModel;
 import kintsugi3d.fx.internal.ObservableProjectModel;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -538,7 +539,7 @@ public class MainWindowController
         Global.state().getUserShaderModel().setActiveShader(getUserShaderFromToggle(renderGroup.getSelectedToggle()));
     }
 
-    private static ShaderInfo getUserShaderFromToggle(Toggle newValue)
+    private static @Nullable ShaderInfo getUserShaderFromToggle(Toggle newValue)
     {
         if (newValue instanceof MenuItem && newValue.getUserData() instanceof String)
         {

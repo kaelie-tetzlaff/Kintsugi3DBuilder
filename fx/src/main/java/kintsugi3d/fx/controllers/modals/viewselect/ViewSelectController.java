@@ -24,6 +24,7 @@ import kintsugi3d.builder.io.imageset.ImageSetInfo;
 import kintsugi3d.fx.controllers.paged.DataReceiverPageControllerBase;
 import kintsugi3d.fx.controllers.sidebar.SearchableTreeView;
 import kintsugi3d.fx.util.ScrollBarHelper;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.List;
@@ -313,7 +314,7 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
         primaryImgView.setRotate(rotation % 360);
     }
 
-    protected String getSelectedViewName()
+    protected @Nullable String getSelectedViewName()
     {
         TreeItem<String> selection = chunkTreeView.getSelectionModel().getSelectedItem();
 

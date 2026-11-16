@@ -12,6 +12,7 @@
 package kintsugi3d.fx.controllers.modals.viewselect;
 
 import javafx.scene.image.Image;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
@@ -36,7 +37,7 @@ class ImageSelectionCache
         return imageCache.containsKey(imageName);
     }
 
-    public Image retrieveFromCache(String imageName)
+    public @Nullable Image retrieveFromCache(String imageName)
     {
         Image image = imageCache.get(imageName);
         if (image != null)

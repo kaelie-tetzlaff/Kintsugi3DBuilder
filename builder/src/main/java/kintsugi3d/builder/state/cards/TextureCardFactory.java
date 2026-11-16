@@ -26,6 +26,7 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.gl.vecmath.IntVector2;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +71,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
      * @return projectDataCard
      */
     @Override
-    public ProjectDataCard createCard(TextureInfo texture)
+    public @Nullable ProjectDataCard createCard(TextureInfo texture)
     {
         // Base Location where the .pngs and thumbnails folder are.
         File baseDirectory = getViewSet().getSupportingFilesDirectory();

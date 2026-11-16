@@ -13,6 +13,7 @@ package kintsugi3d.builder.rendering;
 
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.Nullable;
 
 class ManagedSceneViewport implements SceneViewport
 {
@@ -24,7 +25,7 @@ class ManagedSceneViewport implements SceneViewport
     }
 
     @Override
-    public Object getObjectAtCoordinates(double x, double y)
+    public @Nullable Object getObjectAtCoordinates(double x, double y)
     {
         if (renderableManager.getMainRenderable() != null)
         {

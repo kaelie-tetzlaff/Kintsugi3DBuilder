@@ -16,6 +16,7 @@ import kintsugi3d.builder.fit.decomposition.ReadonlyBasisResources;
 import kintsugi3d.builder.fit.decomposition.ReadonlyBasisWeightResources;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,13 +83,13 @@ public abstract class RoughnessOptimizationBase<ContextType extends Context<Cont
     protected abstract FramebufferObject<ContextType> getFramebuffer();
 
     @Override
-    public Texture2D<ContextType> getReflectivityTexture()
+    public @Nullable Texture2D<ContextType> getReflectivityTexture()
     {
         return getFramebuffer() == null ? null : getFramebuffer().getColorAttachmentTexture(0);
     }
 
     @Override
-    public Texture2D<ContextType> getRoughnessTexture()
+    public @Nullable Texture2D<ContextType> getRoughnessTexture()
     {
         return getFramebuffer() == null ? null : getFramebuffer().getColorAttachmentTexture(1);
     }

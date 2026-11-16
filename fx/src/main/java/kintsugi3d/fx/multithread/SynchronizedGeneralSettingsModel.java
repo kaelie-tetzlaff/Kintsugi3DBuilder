@@ -15,6 +15,7 @@ import javafx.beans.value.WritableValue;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.state.settings.GeneralSettingsModelBase;
 import kintsugi3d.builder.state.settings.Setting;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -93,7 +94,7 @@ public class SynchronizedGeneralSettingsModel extends GeneralSettingsModelBase
     }
 
     @Override
-    public Iterator<Setting> iterator()
+    public @NotNull Iterator<Setting> iterator()
     {
         // Before creating iterator, init all settings in the base model
         for (Setting setting : baseModel)

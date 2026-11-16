@@ -14,13 +14,14 @@ package kintsugi3d.app;
 import kintsugi3d.builder.rendering.SceneViewport;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.Nullable;
 
 class SceneViewportSafeWrapper implements SceneViewport
 {
     private static final SceneViewport SENTINEL = new SceneViewport()
     {
         @Override
-        public Object getObjectAtCoordinates(double x, double y)
+        public @Nullable Object getObjectAtCoordinates(double x, double y)
         {
             return null;
         }

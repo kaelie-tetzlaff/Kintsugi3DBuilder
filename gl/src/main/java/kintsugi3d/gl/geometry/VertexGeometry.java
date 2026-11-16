@@ -22,6 +22,7 @@ import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
 import org.jengineering.sjmply.PLY;
 import org.jengineering.sjmply.PLYElementList;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,19 +104,26 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
      * @param geometryFile
      * @throws IOException
      */
-    public static VertexGeometry createFromGeometryFile(File geometryFile) throws IOException
+    public static @Nullable VertexGeometry createFromGeometryFile(File geometryFile) throws IOException
     {
         String fileName = geometryFile.getName();
         String fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
 
-        if ("zip".equalsIgnoreCase(fileExtension)){
+        if ("zip".equalsIgnoreCase(fileExtension))
+        {
             //TODO: set VertexGeometry.geometryFile to unzipped file?
             return createFromZippedPLYFile(geometryFile, "mesh.ply");
-        } else if("obj".equalsIgnoreCase(fileExtension)) {
+        }
+        else if("obj".equalsIgnoreCase(fileExtension))
+        {
              return createFromOBJFile(geometryFile);
-        }else if("ply".equalsIgnoreCase(fileExtension)){
+        }
+        else if("ply".equalsIgnoreCase(fileExtension))
+        {
             return createFromPLYFile(geometryFile);
-        }else{
+        }
+        else
+        {
             return null;
         }
     }

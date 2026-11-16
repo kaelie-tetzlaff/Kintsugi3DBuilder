@@ -11,6 +11,8 @@
 
 package kintsugi3d.fx.controllers.paged;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Objects;
 
 public class SentinelPage<T> extends PageBase<Object, T, PageController<? super Object>>
@@ -26,7 +28,7 @@ public class SentinelPage<T> extends PageBase<Object, T, PageController<? super 
     }
 
     @Override
-    public T getOutData()
+    public @Nullable T getOutData()
     {
         return null;
     }

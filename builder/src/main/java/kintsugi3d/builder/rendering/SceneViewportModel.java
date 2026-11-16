@@ -18,6 +18,7 @@ import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 
 import java.nio.IntBuffer;
@@ -89,7 +90,7 @@ public class SceneViewportModel implements SceneViewport
     }
 
     @Override
-    public Object getObjectAtCoordinates(double x, double y)
+    public @Nullable Object getObjectAtCoordinates(double x, double y)
     {
         if (pixelObjectIDBuffer != null)
         {
@@ -124,7 +125,7 @@ public class SceneViewportModel implements SceneViewport
     }
 
     @Override
-    public Vector3 get3DPositionAtCoordinates(double x, double y)
+    public @Nullable Vector3 get3DPositionAtCoordinates(double x, double y)
     {
         if (pixelDepthBuffer != null)
         {

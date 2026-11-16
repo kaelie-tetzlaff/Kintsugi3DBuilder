@@ -11,6 +11,8 @@
 
 package kintsugi3d.gl.vecmath;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.DoubleUnaryOperator;
@@ -206,7 +208,7 @@ public class DoubleVector3 implements Iterable<Double>
     }
 
     @Override
-    public Iterator<Double> iterator()
+    public @NotNull Iterator<Double> iterator()
     {
         return Arrays.asList(x, y, z).iterator();
     }

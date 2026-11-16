@@ -21,6 +21,7 @@ import kintsugi3d.gl.exceptions.ProgramLinkFailureException;
 import kintsugi3d.gl.exceptions.UnlinkedProgramException;
 import kintsugi3d.gl.util.ResourceManager;
 import kintsugi3d.gl.vecmath.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.*;
@@ -164,7 +165,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
         }
 
         @Override
-        public OpenGLTexture get(int index)
+        public @Nullable OpenGLTexture get(int index)
         {
             return index == 0 ? null : baseTextureList.get(index - 1);
         }

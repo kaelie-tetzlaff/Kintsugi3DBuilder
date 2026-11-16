@@ -19,6 +19,7 @@ import kintsugi3d.builder.resources.project.ImportedMaterialResources;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.ReadonlyTexture2D;
 import kintsugi3d.gl.core.Texture2D;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -77,13 +78,13 @@ public final class ImportedMaterialResourcesWrapper<ContextType extends Context<
     }
 
     @Override
-    public MutableBasisResources<ContextType> getMutableBasisResources()
+    public @Nullable MutableBasisResources<ContextType> getMutableBasisResources()
     {
         return null;
     }
 
     @Override
-    public BasisWeightResources<ContextType> getMutableBasisWeightResources()
+    public @Nullable BasisWeightResources<ContextType> getMutableBasisWeightResources()
     {
         return null;
     }

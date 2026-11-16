@@ -11,6 +11,8 @@
 
 package kintsugi3d.gl.vecmath;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.DoubleUnaryOperator;
@@ -281,7 +283,7 @@ public class Vector4 implements Iterable<Float>
     }
 
     @Override
-    public Iterator<Float> iterator()
+    public @NotNull Iterator<Float> iterator()
     {
         return Arrays.asList(x, y, z, w).iterator();
     }

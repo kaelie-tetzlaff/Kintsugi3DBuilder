@@ -17,6 +17,7 @@ import kintsugi3d.builder.rendering.ImageBasedRenderable;
 import kintsugi3d.builder.util.AppIcon;
 import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.gl.vecmath.IntVector2;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +43,7 @@ public class PhotoCardFactory extends ProjectDataCardFactoryBase<View>
     }
 
     @Override
-    public ProjectDataCard createCard(View view)
+    public @Nullable ProjectDataCard createCard(View view)
     {
         String thumbnailPath;
         try

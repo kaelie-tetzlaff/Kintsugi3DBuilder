@@ -16,6 +16,7 @@ import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -230,7 +231,7 @@ public class View
         return ImageFinder.tryFindImageFile(getThumbnailImageFile());
     }
 
-    public File getMaskFile()
+    public @Nullable File getMaskFile()
     {
         if (maskFile == null || containingViewSet.getMasksDirectory() == null)
         {

@@ -14,6 +14,7 @@ package kintsugi3d.builder.fit.decomposition;
 import kintsugi3d.builder.core.texture.TextureResolution;
 import kintsugi3d.builder.io.specular.SpecularFitSerializer;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -163,7 +164,7 @@ public class MutableBasisResources<ContextType extends Context<ContextType>> ext
      * @param priorSolutionDirectory The directory from which to load a prior solution.
      * @throws IOException If a part of the solution cannot be loaded form file.
      */
-    public static <ContextType extends Context<ContextType>> MutableBasisResources<ContextType> loadFromPriorSolution(
+    public static <ContextType extends Context<ContextType>> @Nullable MutableBasisResources<ContextType> loadFromPriorSolution(
         ContextType context, File priorSolutionDirectory)
     {
         try

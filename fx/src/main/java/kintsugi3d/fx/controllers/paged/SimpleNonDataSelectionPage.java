@@ -12,6 +12,7 @@
 package kintsugi3d.fx.controllers.paged;
 
 import javafx.fxml.FXMLLoader;
+import org.jetbrains.annotations.Nullable;
 
 public final class SimpleNonDataSelectionPage<ControllerType extends SelectionPageController<Object>>
     extends SelectionPageBase<Object, ControllerType>
@@ -36,7 +37,7 @@ public final class SimpleNonDataSelectionPage<ControllerType extends SelectionPa
      * @return null
      */
     @Override
-    public Object getOutData()
+    public @Nullable Object getOutData()
     {
         return null;
     }

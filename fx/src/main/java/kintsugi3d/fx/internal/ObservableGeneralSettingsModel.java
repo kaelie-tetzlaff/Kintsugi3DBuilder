@@ -20,6 +20,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import kintsugi3d.builder.state.settings.GeneralSettingsModelBase;
 import kintsugi3d.builder.state.settings.Setting;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -210,7 +211,7 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
     }
 
     @Override
-    public Iterator<Setting> iterator()
+    public @NotNull Iterator<Setting> iterator()
     {
         return new SettingsIterator(settingsMap.entrySet().iterator());
     }

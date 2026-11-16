@@ -27,6 +27,7 @@ import kintsugi3d.builder.state.CarouselItem;
 import kintsugi3d.builder.state.shader.ShaderInfo;
 import kintsugi3d.fx.core.MainWindowController;
 import kintsugi3d.fx.internal.ObservableCarouselModel;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -285,7 +286,7 @@ public class CarouselController
      * to detect when mainBox size changes and changes the cards height accordingly
      * @param shader
      */
-    private CarouselCardController loadCarouselCard(ShaderInfo shader)
+    private @Nullable CarouselCardController loadCarouselCard(ShaderInfo shader)
     {
         try
         {

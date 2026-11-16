@@ -23,9 +23,9 @@ import kintsugi3d.builder.state.CarouselModel;
 import kintsugi3d.builder.state.cards.CardsModel;
 import kintsugi3d.builder.state.cards.ProjectDataCard;
 import kintsugi3d.builder.state.cards.ProjectDataCardFactory;
+import kintsugi3d.builder.state.cards.RefreshFunction;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -219,7 +219,7 @@ public class ObservableCardsModel<T> implements CardsModel<T>
     }
 
     @Override
-    public void refreshCards(Function<ProjectDataCard, T> refreshedData)
+    public void refreshCards(RefreshFunction<T> refreshedData)
     {
         cardFactory.refreshCards(cardsList, refreshedData);
     }

@@ -19,6 +19,7 @@ import kintsugi3d.builder.fit.decomposition.MutableBasisResources;
 import kintsugi3d.builder.util.events.MappedChange;
 import kintsugi3d.builder.util.events.Observable;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -145,7 +146,7 @@ public interface TextureResources<ContextType extends Context<ContextType>>
     }
 
     static <ContextType extends Context<ContextType>>
-    Texture2D<ContextType> loadTexture(String texName, File directory, ContextType context) throws IOException
+    @Nullable Texture2D<ContextType> loadTexture(String texName, File directory, ContextType context) throws IOException
     {
         // Load texture file
         File textureFile = getTextureFile(texName, directory);
@@ -208,13 +209,13 @@ public interface TextureResources<ContextType extends Context<ContextType>>
             }
 
             @Override
-            public MutableBasisResources<ContextType> getBasisResources()
+            public @Nullable MutableBasisResources<ContextType> getBasisResources()
             {
                 return null;
             }
 
             @Override
-            public BasisWeightResources<ContextType> getBasisWeightResources()
+            public @Nullable BasisWeightResources<ContextType> getBasisWeightResources()
             {
                 return null;
             }

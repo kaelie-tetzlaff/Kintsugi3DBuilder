@@ -13,13 +13,14 @@ package kintsugi3d.app.test;
 
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.state.SelectableViewListModel;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class TestingViewListModel implements SelectableViewListModel
 {
     @Override
-    public View getSelectedView()
+    public @Nullable View getSelectedView()
     {
         return null;
     }

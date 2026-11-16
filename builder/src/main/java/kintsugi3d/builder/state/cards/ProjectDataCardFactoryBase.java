@@ -17,7 +17,6 @@ import kintsugi3d.builder.rendering.ImageBasedRenderable;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -42,7 +41,7 @@ public abstract class ProjectDataCardFactoryBase<T> implements ProjectDataCardFa
     }
 
     @Override
-    public void refreshCards(List<ProjectDataCard> mutableCardList, Function<ProjectDataCard, T> refreshedData)
+    public void refreshCards(List<ProjectDataCard> mutableCardList, RefreshFunction<T> refreshedData)
     {
         // Generate cards in parallel for efficiency
         List<Entry<Integer, ProjectDataCard>> entryList = IntStream.range(0, mutableCardList.size())

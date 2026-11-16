@@ -19,6 +19,7 @@ import javafx.collections.ObservableMap;
 import kintsugi3d.builder.state.cards.ProjectDataCard;
 import kintsugi3d.builder.state.cards.ProjectDataCardFactory;
 import kintsugi3d.builder.state.cards.TabsModel;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -94,7 +95,7 @@ public class ObservableTabsModel implements TabsModel
     }
 
     @Override
-    public <T> ObservableCardsModel<T> getTab(String label, Class<T> dataClass)
+    public <T> @Nullable ObservableCardsModel<T> getTab(String label, Class<T> dataClass)
     {
         ObservableCardsModel<?> observableCardsModel = tabs.get(label);
 

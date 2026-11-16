@@ -37,6 +37,7 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public final class SpecularFitRequest implements ProgressMonitoredImageBasedGraphicsRequest
 {
@@ -255,7 +256,8 @@ public final class SpecularFitRequest implements ProgressMonitoredImageBasedGrap
                     DEBUG_IMAGES ? outputDirectory : null,
                     DEBUG_IMAGES ? new File(outputDirectory, "ground-truth") : null);
 
-                double reconstructionRMSE = rmseList.stream().mapToDouble(map ->
+                double reconstructionRMSE = Objects.requireNonNull(rmseList).stream()
+                    .mapToDouble(map ->
                     {
                         double rmse = map.get("basis").getEncodedGroundTruth();
                         return rmse * rmse; // mean of mean-squared errors

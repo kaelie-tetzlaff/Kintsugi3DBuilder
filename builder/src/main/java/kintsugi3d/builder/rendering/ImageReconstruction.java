@@ -19,11 +19,12 @@ import kintsugi3d.builder.resources.project.ReadonlyGraphicsResources;
 import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.builders.framebuffer.FramebufferObjectBuilder;
 import kintsugi3d.gl.core.*;
-import kintsugi3d.gl.util.ImageHelper;
-import kintsugi3d.gl.vecmath.DoubleVector3;
 import kintsugi3d.gl.util.BufferedImageColorList;
 import kintsugi3d.gl.util.ColorImage;
+import kintsugi3d.gl.util.ImageHelper;
+import kintsugi3d.gl.vecmath.DoubleVector3;
 import kintsugi3d.util.SRGB;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.BufferUtils;
 
 import java.awt.image.BufferedImage;
@@ -304,7 +305,7 @@ public class ImageReconstruction<ContextType extends Context<ContextType>> imple
     }
 
     @Override
-    public ReconstructionIterator iterator()
+    public @NotNull ReconstructionIterator iterator()
     {
         //noinspection ReturnOfInnerClass
         return new ReconstructionIterator(viewSet.getEnabledViews().iterator());

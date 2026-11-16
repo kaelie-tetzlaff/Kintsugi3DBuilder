@@ -11,11 +11,13 @@
 
 package kintsugi3d.builder.state.settings;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Objects;
 
 public class DefaultGlobalSettingsModel implements SafeReadonlyGlobalSettingsModel
 {
-    public static Object getDefault(Class<?> settingType)
+    public static @Nullable Object getDefault(Class<?> settingType)
     {
         if (Objects.equals(settingType, Boolean.class))
         {

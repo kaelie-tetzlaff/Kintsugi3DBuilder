@@ -11,6 +11,8 @@
 
 package kintsugi3d.gl.core;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
 public class ManagedResourceMap<K, V extends ManagedResource> implements ManagedResource, Map<K, V>
@@ -77,7 +79,7 @@ public class ManagedResourceMap<K, V extends ManagedResource> implements Managed
     }
 
     @Override
-    public void putAll(Map<? extends K, ? extends V> m)
+    public void putAll(@NotNull Map<? extends K, ? extends V> m)
     {
         base.putAll(m);
     }
@@ -95,20 +97,20 @@ public class ManagedResourceMap<K, V extends ManagedResource> implements Managed
     }
 
     @Override
-    public Set<K> keySet()
+    public @NotNull Set<K> keySet()
     {
         return base.keySet();
     }
 
     @Override
-    public Collection<V> values()
+    public @NotNull Collection<V> values()
     {
         // add / remove via values() or entrySet() not allowed to simplify resource management
         return Collections.unmodifiableCollection(base.values());
     }
 
     @Override
-    public Set<Entry<K, V>> entrySet()
+    public @NotNull Set<Entry<K, V>> entrySet()
     {
         // add / remove via values() or entrySet() not allowed to simplify resource management
         return Collections.unmodifiableSet(base.entrySet());

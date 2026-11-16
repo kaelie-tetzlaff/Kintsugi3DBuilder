@@ -24,6 +24,7 @@ import javafx.util.StringConverter;
 import kintsugi3d.fx.util.SafeLogScaleNumberStringConverter;
 import kintsugi3d.fx.util.SafeNumberStringConverter;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -47,7 +48,7 @@ public class SettingsLightSceneController implements Initializable
             }
 
             @Override
-            public Double fromString(String string) {
+            public @Nullable Double fromString(String string) {
                 return null;
             }
         };
