@@ -11,7 +11,6 @@
 
 package kintsugi3d.builder.resources.project.texture;
 
-import kintsugi3d.builder.core.texture.NamedTextureInfo;
 import kintsugi3d.builder.core.texture.StandardTexture;
 import kintsugi3d.builder.core.texture.TextureInfo;
 import kintsugi3d.builder.fit.decomposition.BasisMaterialInfo;
@@ -28,40 +27,9 @@ import java.util.Locale;
 import java.util.Map;
 
 public interface TextureResources<ContextType extends Context<ContextType>>
-    extends Blittable<ReadonlyTextureResources<ContextType>>, ReadonlyTextureResources<ContextType>, ManagedResource
+    extends Blittable<ReadonlyTextureResources<ContextType>>, ReadonlyTextureResources<ContextType>, TextureSet<ContextType>, ManagedResource
 {
     int WEIGHTS_PER_CHANNEL_PACKED_IMAGE = 4;
-
-    @Override
-    Map<TextureInfo, ? extends Texture2D<ContextType>> getTextures();
-
-    /**
-     * Returns a map containing only the standard textures
-     * @return
-     */
-    @Override
-    default Map<StandardTexture, ? extends Texture2D<ContextType>> getStandardTextures()
-    {
-        return StandardTexture.convertObjectMapToEnumMap(getTextures());
-    }
-
-    @Override
-    default Texture2D<ContextType> getTexture(String texName)
-    {
-        return getTextures().get(new NamedTextureInfo(texName));
-    }
-
-    @Override
-    default Texture2D<ContextType> getTexture(TextureInfo tex)
-    {
-        return getTextures().get(tex);
-    }
-
-    @Override
-    default Texture2D<ContextType> getTexture(StandardTexture tex)
-    {
-        return getTextures().get(tex.getDetails());
-    }
 
     void disableBasisMaterials(Collection<String> materialNames);
 

@@ -16,6 +16,7 @@ import kintsugi3d.builder.core.texture.TextureInfo;
 import kintsugi3d.builder.core.texture.TextureResolution;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
+import kintsugi3d.builder.resources.project.texture.TextureSet;
 import kintsugi3d.gl.builders.framebuffer.ColorAttachmentSpec;
 import kintsugi3d.gl.core.*;
 
@@ -25,7 +26,7 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 
-public final class AlbedoORMOptimization<ContextType extends Context<ContextType>> implements AutoCloseable
+public final class AlbedoORMOptimization<ContextType extends Context<ContextType>> implements AutoCloseable, TextureSet<ContextType>
 {
     // Estimation program
     private ProgramObject<ContextType> estimationProgram;
@@ -215,6 +216,7 @@ public final class AlbedoORMOptimization<ContextType extends Context<ContextType
         return getStandardTextures().size();
     }
 
+    @Override
     public Map<StandardTexture, Texture2D<ContextType>> getStandardTextures()
     {
         Map<StandardTexture, Texture2D<ContextType>> textures = new EnumMap<>(StandardTexture.class);
@@ -241,6 +243,7 @@ public final class AlbedoORMOptimization<ContextType extends Context<ContextType
         return Collections.unmodifiableMap(textures);
     }
 
+    @Override
     public Map<TextureInfo, Texture2D<ContextType>> getTextures()
     {
         return StandardTexture.convertEnumMapToObjectMap(getStandardTextures());

@@ -11,46 +11,20 @@
 
 package kintsugi3d.builder.resources.project.texture;
 
-import kintsugi3d.builder.core.texture.NamedTextureInfo;
 import kintsugi3d.builder.core.texture.StandardTexture;
-import kintsugi3d.builder.core.texture.TextureInfo;
 import kintsugi3d.builder.fit.decomposition.ReadonlyBasisResources;
 import kintsugi3d.builder.fit.decomposition.ReadonlyBasisWeightResources;
-import kintsugi3d.gl.core.*;
+import kintsugi3d.gl.core.Context;
+import kintsugi3d.gl.core.ContextBound;
+import kintsugi3d.gl.core.Program;
+import kintsugi3d.gl.core.TwoDimensional;
 
 import java.io.File;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public interface ReadonlyTextureResources<ContextType extends Context<ContextType>>
-    extends ContextBound<ContextType>, TwoDimensional
+    extends ContextBound<ContextType>, TwoDimensional, ReadonlyTextureSet<ContextType>
 {
-    Map<TextureInfo, ? extends ReadonlyTexture2D<ContextType>> getTextures();
-
-    /**
-     * Returns a map containing only the standard textures
-     * @return
-     */
-    default Map<StandardTexture, ? extends ReadonlyTexture2D<ContextType>> getStandardTextures()
-    {
-        return StandardTexture.convertObjectMapToEnumMap(getTextures());
-    }
-
-    default ReadonlyTexture2D<ContextType> getTexture(String texName)
-    {
-        return getTextures().get(new NamedTextureInfo(texName));
-    }
-
-    default ReadonlyTexture2D<ContextType> getTexture(TextureInfo tex)
-    {
-        return getTextures().get(tex);
-    }
-
-    default ReadonlyTexture2D<ContextType> getTexture(StandardTexture tex)
-    {
-        return getTextures().get(tex.getDetails());
-    }
-
     ReadonlyBasisResources<ContextType> getBasisResources();
 
     ReadonlyBasisWeightResources<ContextType> getBasisWeightResources();
