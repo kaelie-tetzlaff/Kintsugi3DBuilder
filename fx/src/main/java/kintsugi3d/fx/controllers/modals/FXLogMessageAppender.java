@@ -71,39 +71,34 @@ public final class FXLogMessageAppender extends LogMessageAppenderBase
                 event.getThrown()
         );
 
-        synchronized(messages)
+        // All mutations to the ObservableList must happen on the JavaFX thread to avoid
+        // races between concurrent adds (from logging threads) and truncation removes,
+        // and to ensure FilteredList/ListView listeners see consistent state.
+        try
         {
-            // Appending seems to work OK on a non-JavaFX thread.
-            // (JavaFX may not know that the new message is there right away, but it doesn't invalidate any stale information JavaFX may be working with
-            // as all the previously valid messages / indices are still there and valid).
-            messages.add(message);
-
-            if (messages.size() >= MAX_MESSAGES)
+            Platform.runLater(() ->
             {
-                // Removing from the ObservableList needs to happen on the JavaFX thread.
-                try
+                synchronized (messages)
                 {
-                    Platform.runLater(() ->
-                    {
-                        synchronized (messages)
-                        {
-                            // Make sure there is still something to remove.
-                            // (If multiple messages came in between JavaFX frames they may have all triggered this
-                            // but there might not be that many messages to remove.)
-                            if (messages.size() >= MAX_MESSAGES)
-                            {
-                                messages.remove(0, MESSAGE_TRUNC_SIZE);
-                            }
-                        }
-                    });
-                }
-                // TODO: Duktape fix to get around hardcoded JavaFX
-                catch (IllegalStateException e)
-                {
+                    messages.add(message);
+
                     if (messages.size() >= MAX_MESSAGES)
                     {
                         messages.remove(0, MESSAGE_TRUNC_SIZE);
                     }
+                }
+            });
+        }
+        // TODO: Duktape fix to get around hardcoded JavaFX
+        catch (IllegalStateException e)
+        {
+            synchronized (messages)
+            {
+                messages.add(message);
+
+                if (messages.size() >= MAX_MESSAGES)
+                {
+                    messages.remove(0, MESSAGE_TRUNC_SIZE);
                 }
             }
         }
