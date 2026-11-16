@@ -22,6 +22,8 @@ import java.util.function.Consumer;
 class EventCollector
 {
     private static final Logger LOG = LoggerFactory.getLogger(EventCollector.class);
+    
+    private final Object lock = new Object();
 
     private final Queue<Consumer<CanvasPositionListener>> canvasPos = new LinkedList<>();
     private final Queue<Consumer<CanvasSizeListener>> canvasSize = new LinkedList<>();
@@ -51,126 +53,189 @@ class EventCollector
         return listenerManager;
     }
 
-    final synchronized void canvasPos(Consumer<CanvasPositionListener> event)
+    final void canvasPos(Consumer<CanvasPositionListener> event)
     {
-        this.canvasPos.add(event);
-    }
-
-    final synchronized void canvasSize(Consumer<CanvasSizeListener> event)
-    {
-        this.canvasSize.add(event);
-    }
-
-    final synchronized void windowClose(Consumer<WindowCloseListener> event)
-    {
-        this.windowClose.add(event);
-    }
-
-    final synchronized void canvasRefresh(Consumer<CanvasRefreshListener> event)
-    {
-        this.canvasRefresh.add(event);
-    }
-
-    final synchronized void windowFocusLost(Consumer<WindowFocusLostListener> event)
-    {
-        this.windowFocusLost.add(event);
-    }
-
-    final synchronized void windowFocusGained(Consumer<WindowFocusGainedListener> event)
-    {
-        this.windowFocusGained.add(event);
-    }
-
-    final synchronized void windowIconified(Consumer<WindowIconifiedListener> event)
-    {
-        this.windowIconified.add(event);
-    }
-
-    final synchronized void windowRestored(Consumer<WindowRestoredListener> event)
-    {
-        this.windowRestored.add(event);
-    }
-
-    final synchronized void framebufferSize(Consumer<FramebufferSizeListener> event)
-    {
-        this.framebufferSize.add(event);
-    }
-
-    final synchronized void keyPress(Consumer<KeyPressListener> event)
-    {
-        this.keyPress.add(event);
-    }
-
-    final synchronized void keyRelease(Consumer<KeyReleaseListener> event)
-    {
-        this.keyRelease.add(event);
-    }
-
-    final synchronized void keyType(Consumer<KeyTypeListener> event)
-    {
-        this.keyType.add(event);
-    }
-
-    final synchronized void character(Consumer<CharacterListener> event)
-    {
-        this.character.add(event);
-    }
-
-    final synchronized void charMods(Consumer<CharacterModifiersListener> event)
-    {
-        this.charMods.add(event);
-    }
-
-    final synchronized void mouseButtonPress(Consumer<MouseButtonPressListener> event)
-    {
-        this.mouseButtonPress.add(event);
-    }
-
-    final synchronized void mouseButtonRelease(Consumer<MouseButtonReleaseListener> event)
-    {
-        this.mouseButtonRelease.add(event);
-    }
-
-    final synchronized void cursorPos(Consumer<CursorPositionListener> event)
-    {
-        this.cursorPos.add(event);
-    }
-
-    final synchronized void cursorEnter(Consumer<CursorEnteredListener> event)
-    {
-        this.cursorEnter.add(event);
-    }
-
-    final synchronized void cursorExit(Consumer<CursorExitedListener> event)
-    {
-        this.cursorExit.add(event);
-    }
-
-    final synchronized void scroll(Consumer<ScrollListener> event)
-    {
-        this.scroll.add(event);
-    }
-
-    private synchronized <L> void pollEvents(Queue<Consumer<L>> eventQueue, Iterable<L> listeners)
-    {
-        while(!eventQueue.isEmpty())
+        synchronized (lock)
         {
-            Consumer<L> event = eventQueue.poll();
-            for (L l : listeners)
+            this.canvasPos.add(event);
+        }
+    }
+
+    final void canvasSize(Consumer<CanvasSizeListener> event)
+    {
+        synchronized (lock)
+        {
+            this.canvasSize.add(event);
+        }
+    }
+
+    final void windowClose(Consumer<WindowCloseListener> event)
+    {
+        synchronized (lock)
+        {
+            this.windowClose.add(event);
+        }
+    }
+
+    final void canvasRefresh(Consumer<CanvasRefreshListener> event)
+    {
+        synchronized (lock)
+        {
+            this.canvasRefresh.add(event);
+        }
+    }
+
+    final void windowFocusLost(Consumer<WindowFocusLostListener> event)
+    {
+        synchronized (lock)
+        {
+            this.windowFocusLost.add(event);
+        }
+    }
+
+    final void windowFocusGained(Consumer<WindowFocusGainedListener> event)
+    {
+        synchronized (lock)
+        {
+            this.windowFocusGained.add(event);
+        }
+    }
+
+    final void windowIconified(Consumer<WindowIconifiedListener> event)
+    {
+        synchronized (lock)
+        {
+            this.windowIconified.add(event);
+        }
+    }
+
+    final void windowRestored(Consumer<WindowRestoredListener> event)
+    {
+        synchronized (lock)
+        {
+            this.windowRestored.add(event);
+        }
+    }
+
+    final void framebufferSize(Consumer<FramebufferSizeListener> event)
+    {
+        synchronized (lock)
+        {
+            this.framebufferSize.add(event);
+        }
+    }
+
+    final void keyPress(Consumer<KeyPressListener> event)
+    {
+        synchronized (lock)
+        {
+            this.keyPress.add(event);
+        }
+    }
+
+    final void keyRelease(Consumer<KeyReleaseListener> event)
+    {
+        synchronized (lock)
+        {
+            this.keyRelease.add(event);
+        }
+    }
+
+    final void keyType(Consumer<KeyTypeListener> event)
+    {
+        synchronized (lock)
+        {
+            this.keyType.add(event);
+        }
+    }
+
+    final void character(Consumer<CharacterListener> event)
+    {
+        synchronized (lock)
+        {
+            this.character.add(event);
+        }
+    }
+
+    final void charMods(Consumer<CharacterModifiersListener> event)
+    {
+        synchronized (lock)
+        {
+            this.charMods.add(event);
+        }
+    }
+
+    final void mouseButtonPress(Consumer<MouseButtonPressListener> event)
+    {
+        synchronized (lock)
+        {
+            this.mouseButtonPress.add(event);
+        }
+    }
+
+    final void mouseButtonRelease(Consumer<MouseButtonReleaseListener> event)
+    {
+        synchronized (lock)
+        {
+            this.mouseButtonRelease.add(event);
+        }
+    }
+
+    final void cursorPos(Consumer<CursorPositionListener> event)
+    {
+        synchronized (lock)
+        {
+            this.cursorPos.add(event);
+        }
+    }
+
+    final void cursorEnter(Consumer<CursorEnteredListener> event)
+    {
+        synchronized (lock)
+        {
+            this.cursorEnter.add(event);
+        }
+    }
+
+    final void cursorExit(Consumer<CursorExitedListener> event)
+    {
+        synchronized (lock)
+        {
+            this.cursorExit.add(event);
+        }
+    }
+
+    final void scroll(Consumer<ScrollListener> event)
+    {
+        synchronized (lock)
+        {
+            this.scroll.add(event);
+        }
+    }
+
+    private <L> void pollEvents(Queue<Consumer<L>> eventQueue, Iterable<L> listeners)
+    {
+        synchronized (lock)
+        {
+            while (!eventQueue.isEmpty())
             {
-                if (event == null)
+                Consumer<L> event = eventQueue.poll();
+                for (L l : listeners)
                 {
-                    LOG.warn("Event was null", new Throwable());
-                }
-                else
-                {
-                    try
+                    if (event == null)
                     {
-                        event.accept(l);
+                        LOG.warn("Event was null", new Throwable());
                     }
-                    catch(RuntimeException e)
+                    else
                     {
-                        LOG.error("An error occurred while polling events", e);
+                        try
+                        {
+                            event.accept(l);
+                        }
+                        catch (RuntimeException e)
+                        {
+                            LOG.error("An error occurred while polling events", e);
+                        }
                     }
                 }
             }
