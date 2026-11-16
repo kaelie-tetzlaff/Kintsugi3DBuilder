@@ -46,7 +46,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         }
 
         @Override
-        public FramebufferObject<OpenGLContext> createFramebufferObject()
+        public final FramebufferObject<OpenGLContext> createFramebufferObject()
         {
             if (this.getColorAttachmentCount() > GL_MAX_COLOR_ATTACHMENTS)
             {
@@ -98,27 +98,27 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         }
 
         @Override
-        int getId()
+        final int getId()
         {
             return fbo.id;
         }
 
         @Override
-        void selectColorSourceForRead(int index)
+        final void selectColorSourceForRead(int index)
         {
             glReadBuffer(GL_COLOR_ATTACHMENT0 + index);
             OpenGLContext.errorCheck();
         }
 
         @Override
-        void selectColorDestinationForDraw(int index)
+        final void selectColorDestinationForDraw(int index)
         {
             glDrawBuffer(GL_COLOR_ATTACHMENT0 + index);
             OpenGLContext.errorCheck();
         }
 
         @Override
-        void useAllColorDestinationsForDraw()
+        final void useAllColorDestinationsForDraw()
         {
             if (fbo.colorAttachments.length > 0)
             {
@@ -189,7 +189,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
     }
 
     @Override
-    public Contents getContents()
+    Contents getContents()
     {
         if (this.contents == null)
         {
@@ -439,19 +439,19 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         }
 
         @Override
-        public int getWidth()
+        public final int getWidth()
         {
             return fbo.getSizeForRead().width;
         }
 
         @Override
-        public int getHeight()
+        public final int getHeight()
         {
             return fbo.getSizeForRead().height;
         }
 
         @Override
-        public void readARGB(ByteBuffer destination, int x, int y, int readWidth, int readHeight)
+        public final void readARGB(ByteBuffer destination, int x, int y, int readWidth, int readHeight)
         {
             if (destination.remaining() < readWidth * readHeight * 4)
             {
@@ -474,7 +474,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         }
 
         @Override
-        public void readFloatingPointRGBA(FloatBuffer destination, int x, int y, int readWidth, int readHeight)
+        public final void readFloatingPointRGBA(FloatBuffer destination, int x, int y, int readWidth, int readHeight)
         {
             if (destination.remaining() < readWidth * readHeight * 4)
             {
@@ -496,7 +496,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         }
 
         @Override
-        public void readIntegerRGBA(IntBuffer destination, int x, int y, int readWidth, int readHeight)
+        public final void readIntegerRGBA(IntBuffer destination, int x, int y, int readWidth, int readHeight)
         {
             if (destination.remaining() < readWidth * readHeight * 4)
             {
@@ -528,19 +528,19 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         }
 
         @Override
-        public int getWidth()
+        public final int getWidth()
         {
             return fbo.getSizeForRead().width;
         }
 
         @Override
-        public int getHeight()
+        public final int getHeight()
         {
             return fbo.getSizeForRead().height;
         }
 
         @Override
-        public void read(ShortBuffer destination, int x, int y, int width, int height)
+        public final void read(ShortBuffer destination, int x, int y, int width, int height)
         {
             if (destination.remaining() < width * height)
             {

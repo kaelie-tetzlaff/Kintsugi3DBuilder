@@ -12,6 +12,7 @@
 package kintsugi3d.builder.io.metashape;
 
 import kintsugi3d.builder.io.TextureSupplier;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -38,7 +39,7 @@ public class MetashapeTextures implements TextureSupplier
     }
 
     @Override
-    public Map<String, File> getTextures()
+    public final @Nullable Map<String, File> getTextures()
     {
         try
         {

@@ -66,49 +66,49 @@ public class ObservableCacheModel extends CacheModelBase
     private Map<String, Long> projectSizes = Map.of();
 
     @Override
-    public long getCacheSizeBytes()
+    public final long getCacheSizeBytes()
     {
         return cacheSize.get();
     }
 
     @Override
-    public Map<String, Long> getProjectSizes()
+    public final Map<String, Long> getProjectSizes()
     {
         // Should already be unmodifiable.
         //noinspection AssignmentOrReturnOfFieldWithMutableType
         return projectSizes;
     }
 
-    public DoubleBinding getCacheSizeGBProperty()
+    public final DoubleBinding getCacheSizeGBProperty()
     {
         return cacheSizeGB;
     }
 
     @Override
-    public double getCacheSizeGB()
+    public final double getCacheSizeGB()
     {
         return cacheSizeGB.get();
     }
 
-    public BooleanProperty getCacheSizeCalcInProgressProperty()
+    public final BooleanProperty getCacheSizeCalcInProgressProperty()
     {
         return cacheSizeCalcInProgress;
     }
 
     @Override
-    public boolean isCacheSizeCalcInProgress()
+    public final boolean isCacheSizeCalcInProgress()
     {
         return cacheSizeCalcInProgress.get();
     }
 
     @Override
-    protected void setCacheSizeCalcInProgress(boolean cacheSizeCalcInProgress)
+    protected final void setCacheSizeCalcInProgress(boolean cacheSizeCalcInProgress)
     {
         Platform.runLater(() -> this.cacheSizeCalcInProgress.set(cacheSizeCalcInProgress));
     }
 
     @Override
-    protected void updateCacheSize(long newCacheSize, Map<String, Long> newProjectSizes, Runnable onCompleteCallback)
+    protected final void updateCacheSize(long newCacheSize, Map<String, Long> newProjectSizes, Runnable onCompleteCallback)
     {
         Platform.runLater(() ->
         {
@@ -134,7 +134,7 @@ public class ObservableCacheModel extends CacheModelBase
     }
 
     @Override
-    protected void addCacheSizeChangeCallback(DoubleConsumer cacheSizeChangeCallback)
+    protected final void addCacheSizeChangeCallback(DoubleConsumer cacheSizeChangeCallback)
     {
         // Add one-shot listener with the specified callback before checking whether calculation is in progress.
         // Because cacheSize should only be modified in one place (within a Platform.runLater fired by the worker thread),
@@ -168,13 +168,13 @@ public class ObservableCacheModel extends CacheModelBase
     }
 
     @Override
-    public void removeAllCacheSizeChangeCallbacks()
+    public final void removeAllCacheSizeChangeCallbacks()
     {
         pendingCacheSizeCallbacks.forEach(cacheSizeGB::removeListener);
         pendingCacheSizeCallbacks.clear();
     }
 
-    public void clearCachePrompt()
+    public final void clearCachePrompt()
     {
         Map<File, Consumer<File[]>> deleteMethods = getDeleteMethods();
 
@@ -193,7 +193,7 @@ public class ObservableCacheModel extends CacheModelBase
         });
     }
 
-    public void checkForCleanUpCachePrompt()
+    public final void checkForCleanUpCachePrompt()
     {
         GeneralSettingsModel settingsModel = Global.state().getSettingsModel();
         if (settingsModel.getBoolean("recentPromptEnabled") || settingsModel.getBoolean("fileAgePromptEnabled")
@@ -233,7 +233,7 @@ public class ObservableCacheModel extends CacheModelBase
      * Otherwise, the conditions will be checked immediately.
      * @param promptWithCacheSizeGB The callback, which takes as input the current cache size in GB.
      */
-    public void requestPromptForCacheCleanup(
+    public final void requestPromptForCacheCleanup(
         Consumer<Double> promptWithCacheSizeGB, Consumer<Double> noCleanupNeededWithCacheSizeGB)
     {
         if (getCacheSizeBytes() < 0)

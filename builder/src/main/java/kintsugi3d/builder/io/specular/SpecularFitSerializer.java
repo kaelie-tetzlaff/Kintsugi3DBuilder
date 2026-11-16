@@ -13,6 +13,7 @@ package kintsugi3d.builder.io.specular;
 
 import kintsugi3d.builder.fit.decomposition.*;
 import kintsugi3d.gl.vecmath.DoubleVector3;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -165,7 +166,7 @@ public final class SpecularFitSerializer
      * @param priorSolutionDirectory
      * @return An object containing the red, green, and blue basis functions.
      */
-    public static MutableMaterialBasis deserializeBasisFunctions(File priorSolutionDirectory)
+    public static @Nullable MutableMaterialBasis deserializeBasisFunctions(File priorSolutionDirectory)
         throws IOException
     {
         File basisFile = new File(priorSolutionDirectory, BasisResources.getBasisFunctionsFilename());

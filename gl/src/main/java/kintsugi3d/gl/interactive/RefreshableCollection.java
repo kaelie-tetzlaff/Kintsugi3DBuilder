@@ -27,17 +27,17 @@ public class RefreshableCollection<RefreshableType extends Refreshable> implemen
 
     private boolean initialized = false;
 
-    public void add(RefreshableType refreshable)
+    public final void add(RefreshableType refreshable)
     {
         initializeQueue.add(refreshable);
     }
 
-    public void remove(RefreshableType refreshable)
+    public final void remove(RefreshableType refreshable)
     {
         terminateQueue.add(refreshable);
     }
 
-    public void clear()
+    public final void clear()
     {
         terminateQueue.addAll(refreshables);
     }
@@ -93,13 +93,13 @@ public class RefreshableCollection<RefreshableType extends Refreshable> implemen
     }
 
     @Override
-    public boolean isInitialized()
+    public final boolean isInitialized()
     {
         return this.initialized;
     }
 
     @Override
-    public void initialize()
+    public final void initialize()
     {
         // Edge case for if refreshable was added and removed prior to initialize()
         initializeQueue.removeAll(terminateQueue);
@@ -112,7 +112,7 @@ public class RefreshableCollection<RefreshableType extends Refreshable> implemen
     }
 
     @Override
-    public void refresh()
+    public final void refresh()
     {
         // Process initialize and terminate queues.
         processInitializeQueue();
@@ -125,7 +125,7 @@ public class RefreshableCollection<RefreshableType extends Refreshable> implemen
     }
 
     @Override
-    public void terminate()
+    public final void terminate()
     {
         processTerminateQueue();
 

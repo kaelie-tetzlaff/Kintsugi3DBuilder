@@ -27,7 +27,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void allowUserCancellation() throws UserCancellationException
+    public final void allowUserCancellation() throws UserCancellationException
     {
         if (base != null)
         {
@@ -36,7 +36,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void cancelComplete(UserCancellationException e)
+    public final void cancelComplete(UserCancellationException e)
     {
         if (base != null)
         {
@@ -45,7 +45,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void start()
+    public final void start()
     {
         if (base != null)
         {
@@ -54,7 +54,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void setProcessName(String processName)
+    public final void setProcessName(String processName)
     {
         if (base != null)
         {
@@ -63,7 +63,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void setStageCount(int count)
+    public final void setStageCount(int count)
     {
         if (base != null)
         {
@@ -73,7 +73,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void setStage(int stage, String message)
+    public final void setStage(int stage, String message)
     {
         if (base != null)
         {
@@ -83,7 +83,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void advanceStage(String message)
+    public final void advanceStage(String message)
     {
         if (base != null)
         {
@@ -93,7 +93,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void setMaxProgress(double maxProgress)
+    public final void setMaxProgress(double maxProgress)
     {
         if (base != null)
         {
@@ -102,7 +102,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void setProgress(double progress, String message)
+    public final void setProgress(double progress, String message)
     {
         if (base != null)
         {
@@ -111,7 +111,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void complete()
+    public final void complete()
     {
         // Zero vector signals that the light requires calibration.
         // TODO support multiple light sources.
@@ -134,7 +134,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void fail(Throwable e)
+    public final void fail(Throwable e)
     {
         if (base != null)
         {
@@ -143,7 +143,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void warn(Throwable e)
+    public final void warn(Throwable e)
     {
         if (base != null)
         {
@@ -152,7 +152,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public boolean isConflictingProcess()
+    public final boolean isConflictingProcess()
     {
         if (base == null)
         {

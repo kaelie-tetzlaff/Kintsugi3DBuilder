@@ -24,17 +24,17 @@ public class TabInfo
         this.path = path;
     }
 
-    public String getLabel()
+    public final String getLabel()
     {
         return label;
     }
 
-    public ProjectDataCardFactory<?> getFactory()
+    public final ProjectDataCardFactory<?> getFactory()
     {
         return factory;
     }
 
-    public String getPath()
+    public final String getPath()
     {
         return path;
     }

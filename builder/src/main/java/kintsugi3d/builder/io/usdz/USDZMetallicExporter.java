@@ -36,7 +36,7 @@ public class USDZMetallicExporter extends USDZExporter
     }
 
     @Override
-    protected void addCommands(List<String> commandList)
+    protected final void addCommands(List<String> commandList)
     {
         commandList.add("--use-metallic");
         commandList.add("--albedo");

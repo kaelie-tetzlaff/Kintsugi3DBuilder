@@ -119,8 +119,8 @@ public final class DoubleMatrix3
      */
     public static DoubleMatrix3 rotateX(double radians)
     {
-        double sinTheta = Math.sin(radians);
-        double cosTheta = Math.cos(radians);
+        double sinTheta = StrictMath.sin(radians);
+        double cosTheta = StrictMath.cos(radians);
         return new DoubleMatrix3(
             1.0,    0.0,         0.0,
             0.0,    cosTheta,    -sinTheta,
@@ -135,8 +135,8 @@ public final class DoubleMatrix3
      */
     public static DoubleMatrix3 rotateY(double radians)
     {
-        double sinTheta = Math.sin(radians);
-        double cosTheta = Math.cos(radians);
+        double sinTheta = StrictMath.sin(radians);
+        double cosTheta = StrictMath.cos(radians);
         return new DoubleMatrix3(
             cosTheta,    0.0,     sinTheta,
             0.0,        1.0,    0.0,
@@ -151,8 +151,8 @@ public final class DoubleMatrix3
      */
     public static DoubleMatrix3 rotateZ(double radians)
     {
-        double sinTheta = Math.sin(radians);
-        double cosTheta = Math.cos(radians);
+        double sinTheta = StrictMath.sin(radians);
+        double cosTheta = StrictMath.cos(radians);
         return new DoubleMatrix3(
             cosTheta,    -sinTheta,    0.0,
             sinTheta,    cosTheta,    0.0,
@@ -168,8 +168,8 @@ public final class DoubleMatrix3
      */
     public static DoubleMatrix3 rotateAxis(DoubleVector3 axis, double radians)
     {
-        double sinTheta = Math.sin(radians);
-        double cosTheta = Math.cos(radians);
+        double sinTheta = StrictMath.sin(radians);
+        double cosTheta = StrictMath.cos(radians);
         double oneMinusCosTheta = 1.0 - cosTheta;
         return new DoubleMatrix3(
 

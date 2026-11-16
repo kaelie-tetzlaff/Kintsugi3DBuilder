@@ -102,25 +102,25 @@ public class GeometryResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public ContextType getContext()
+    public final ContextType getContext()
     {
         return context;
     }
 
     @Override
-    public ReadonlyVertexGeometry getGeometry()
+    public final ReadonlyVertexGeometry getGeometry()
     {
         return geometry;
     }
 
     @Override
-    public ReadonlyVertexBuffer<ContextType> getPositionBuffer()
+    public final ReadonlyVertexBuffer<ContextType> getPositionBuffer()
     {
         return positionBuffer;
     }
 
     @Override
-    public Drawable<ContextType> createDrawable(Program<ContextType> program)
+    public final Drawable<ContextType> createDrawable(Program<ContextType> program)
     {
         Drawable<ContextType> drawable = program.getContext().createDrawable(program);
         drawable.addVertexBuffer("position", positionBuffer);
@@ -131,7 +131,7 @@ public class GeometryResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public GeometryFramebuffer<ContextType> createGeometryFramebuffer(int width, int height)
+    public final GeometryFramebuffer<ContextType> createGeometryFramebuffer(int width, int height)
     {
         try
         {
@@ -145,13 +145,13 @@ public class GeometryResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public boolean isNull()
+    public final boolean isNull()
     {
         return this.positionBuffer == null;
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (this.positionBuffer != null)
         {

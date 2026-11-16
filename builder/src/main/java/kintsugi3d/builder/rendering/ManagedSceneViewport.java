@@ -13,6 +13,7 @@ package kintsugi3d.builder.rendering;
 
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.Nullable;
 
 class ManagedSceneViewport implements SceneViewport
 {
@@ -24,7 +25,7 @@ class ManagedSceneViewport implements SceneViewport
     }
 
     @Override
-    public Object getObjectAtCoordinates(double x, double y)
+    public final @Nullable Object getObjectAtCoordinates(double x, double y)
     {
         if (renderableManager.getMainRenderable() != null)
         {
@@ -37,7 +38,7 @@ class ManagedSceneViewport implements SceneViewport
     }
 
     @Override
-    public Vector3 get3DPositionAtCoordinates(double x, double y)
+    public final Vector3 get3DPositionAtCoordinates(double x, double y)
     {
         if (renderableManager.getMainRenderable() != null)
         {
@@ -50,7 +51,7 @@ class ManagedSceneViewport implements SceneViewport
     }
 
     @Override
-    public Vector3 getViewingDirection(double x, double y)
+    public final Vector3 getViewingDirection(double x, double y)
     {
         if (renderableManager.getMainRenderable() != null)
         {
@@ -63,7 +64,7 @@ class ManagedSceneViewport implements SceneViewport
     }
 
     @Override
-    public Vector3 getViewportCenter()
+    public final Vector3 getViewportCenter()
     {
         if (renderableManager.getMainRenderable() != null)
         {
@@ -76,7 +77,7 @@ class ManagedSceneViewport implements SceneViewport
     }
 
     @Override
-    public Vector2 projectPoint(Vector3 point)
+    public final Vector2 projectPoint(Vector3 point)
     {
         if (renderableManager.getMainRenderable() != null)
         {
@@ -89,7 +90,7 @@ class ManagedSceneViewport implements SceneViewport
     }
 
     @Override
-    public float getLightWidgetScale()
+    public final float getLightWidgetScale()
     {
         if (renderableManager.getMainRenderable() != null)
         {

@@ -23,17 +23,17 @@ public abstract class ColorTextureBuilderBase<ContextType extends Context<Contex
     private ColorFormat internalColorFormat = ColorFormat.RGBA8;
     private CompressionFormat internalCompressionFormat;
 
-    protected ColorFormat getInternalColorFormat()
+    protected final ColorFormat getInternalColorFormat()
     {
         return internalColorFormat;
     }
 
-    protected CompressionFormat getInternalCompressionFormat()
+    protected final CompressionFormat getInternalCompressionFormat()
     {
         return internalCompressionFormat;
     }
 
-    protected boolean isInternalFormatCompressed()
+    protected final boolean isInternalFormatCompressed()
     {
         return internalCompressionFormat != null;
     }

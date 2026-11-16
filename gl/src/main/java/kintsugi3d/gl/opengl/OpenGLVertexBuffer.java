@@ -35,19 +35,19 @@ class OpenGLVertexBuffer extends OpenGLBuffer implements VertexBuffer<OpenGLCont
     }
 
     @Override
-    protected int getBufferTarget()
+    protected final int getBufferTarget()
     {
         return GL_ARRAY_BUFFER;
     }
 
     @Override
-    public int count()
+    public final int count()
     {
         return this.count;
     }
 
     @Override
-    public OpenGLVertexBuffer setData(ReadonlyNativeVectorBuffer data, boolean normalize)
+    public final OpenGLVertexBuffer setData(ReadonlyNativeVectorBuffer data, boolean normalize)
     {
         super.setData(data.getBuffer());
         this.count = data.getCount();
@@ -57,7 +57,7 @@ class OpenGLVertexBuffer extends OpenGLBuffer implements VertexBuffer<OpenGLCont
         return this;
     }
 
-    void useAsVertexAttribute(int attribIndex)
+    final void useAsVertexAttribute(int attribIndex)
     {
         this.bind();
         glEnableVertexAttribArray(attribIndex);

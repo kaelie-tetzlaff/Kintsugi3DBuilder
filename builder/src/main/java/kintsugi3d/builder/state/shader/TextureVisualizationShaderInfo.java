@@ -29,7 +29,7 @@ public class TextureVisualizationShaderInfo extends SimpleShaderInfo
     }
 
     @Override
-    public Map<String, Optional<Object>> getDefines()
+    public final Map<String, Optional<Object>> getDefines()
     {
         Map<String, Optional<Object>> defines = new HashMap<>(super.getDefines());
         defines.put("VIEW_TEX", Optional.of(String.format("tex_%s", texture.name)));
@@ -37,14 +37,14 @@ public class TextureVisualizationShaderInfo extends SimpleShaderInfo
     }
 
     @Override
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         return super.equals(obj) && obj instanceof TextureVisualizationShaderInfo &&
             ((TextureVisualizationShaderInfo)obj).texture.name.equals(texture.name);
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return Objects.hash(super.hashCode(), texture.name);
     }

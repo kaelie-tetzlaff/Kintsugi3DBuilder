@@ -32,103 +32,103 @@ public class SynchronizedEnvironmentModel implements EnvironmentModel
     }
 
     @Override
-    public boolean isEnabled()
+    public final boolean isEnabled()
     {
         return baseModel.isEnabled();
     }
 
     @Override
-    public boolean isEnvironmentMappingEnabled()
+    public final boolean isEnvironmentMappingEnabled()
     {
         return baseModel.isEnvironmentMappingEnabled();
     }
 
     @Override
-    public Vector3 getEnvironmentColor()
+    public final Vector3 getEnvironmentColor()
     {
         return baseModel.getEnvironmentColor();
     }
 
     @Override
-    public Matrix4 getEnvironmentMapMatrix()
+    public final Matrix4 getEnvironmentMapMatrix()
     {
         return baseModel.getEnvironmentMapMatrix();
     }
 
     @Override
-    public float getEnvironmentMapFilteringBias()
+    public final float getEnvironmentMapFilteringBias()
     {
         return baseModel.getEnvironmentMapFilteringBias();
     }
 
     @Override
-    public BackgroundMode getBackgroundMode()
+    public final BackgroundMode getBackgroundMode()
     {
         return baseModel.getBackgroundMode();
     }
 
     @Override
-    public Vector3 getBackgroundColor()
+    public final Vector3 getBackgroundColor()
     {
         return baseModel.getBackgroundColor();
     }
 
     @Override
-    public float getEnvironmentRotation()
+    public final float getEnvironmentRotation()
     {
         return this.environmentRotation.getValue();
     }
 
     @Override
-    public float getEnvironmentIntensity()
+    public final float getEnvironmentIntensity()
     {
         return this.environmentIntensity.getValue();
     }
 
     @Override
-    public float getBackgroundIntensity()
+    public final float getBackgroundIntensity()
     {
         return this.backgroundIntensity.getValue();
     }
 
     @Override
-    public void setEnvironmentRotation(float environmentRotation)
+    public final void setEnvironmentRotation(float environmentRotation)
     {
         this.environmentRotation.setValue(environmentRotation);
     }
 
     @Override
-    public void setEnvironmentIntensity(float environmentIntensity)
+    public final void setEnvironmentIntensity(float environmentIntensity)
     {
         this.environmentIntensity.setValue(environmentIntensity);
     }
 
     @Override
-    public void setBackgroundIntensity(float backgroundIntensity)
+    public final void setBackgroundIntensity(float backgroundIntensity)
     {
         this.backgroundIntensity.setValue(backgroundIntensity);
     }
 
     @Override
-    public boolean isGroundPlaneEnabled()
+    public final boolean isGroundPlaneEnabled()
     {
         return baseModel.isGroundPlaneEnabled();
     }
 
     @Override
-    public Vector3 getGroundPlaneColor()
+    public final Vector3 getGroundPlaneColor()
     {
         return baseModel.getGroundPlaneColor();
     }
 
     @Override
-    public float getGroundPlaneHeight()
+    public final float getGroundPlaneHeight()
     {
         return baseModel.getGroundPlaneHeight();
     }
 
     @Override
-    public float getGroundPlaneSize()
+    public final float getGroundPlaneSize()
     {
         return baseModel.getGroundPlaneSize();
     }

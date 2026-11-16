@@ -22,7 +22,7 @@ import java.util.*;
 
 public abstract class ProgramBuilderBase<ContextType extends Context<ContextType>> implements ProgramBuilder<ContextType> 
 {
-    public ContextType getContext()
+    public final ContextType getContext()
     {
         return context;
     }
@@ -45,7 +45,7 @@ public abstract class ProgramBuilderBase<ContextType extends Context<ContextType
         this.defines = new HashMap<>(16);
     }
 
-    protected Iterable<Shader<ContextType>> compileShaders() throws IOException
+    protected final Iterable<Shader<ContextType>> compileShaders() throws IOException
     {
         Collection<Shader<ContextType>> shaders = new ArrayList<>(shaderBuilders.size());
         for (ShaderSupplier<ContextType> shaderBuilder : shaderBuilders)
@@ -56,21 +56,21 @@ public abstract class ProgramBuilderBase<ContextType extends Context<ContextType
     }
 
     @Override
-    public ProgramBuilder<ContextType> define(String key, Object value)
+    public final ProgramBuilder<ContextType> define(String key, Object value)
     {
         defines.put(key, value);
         return this;
     }
 
     @Override
-    public ProgramBuilder<ContextType> addShader(Shader<ContextType> shader)
+    public final ProgramBuilder<ContextType> addShader(Shader<ContextType> shader)
     {
         shaderBuilders.add(() -> shader);
         return this;
     }
 
     @Override
-    public ProgramBuilder<ContextType> addShader(ShaderType type, File shaderFile)
+    public final ProgramBuilder<ContextType> addShader(ShaderType type, File shaderFile)
     {
         shaderBuilders.add(() -> context.createShader(type, shaderFile, new HashMap<>(defines)) );
 
@@ -78,14 +78,14 @@ public abstract class ProgramBuilderBase<ContextType extends Context<ContextType
     }
 
     @Override
-    public ProgramBuilder<ContextType> addShader(ShaderType type, String shaderSource)
+    public final ProgramBuilder<ContextType> addShader(ShaderType type, String shaderSource)
     {
         shaderBuilders.add(() -> context.createShader(type, shaderSource));
         return this;
     }
 
     @Override
-    public Map<String, Object> getDefines()
+    public final Map<String, Object> getDefines()
     {
         return Collections.unmodifiableMap(defines);
     }

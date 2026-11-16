@@ -31,14 +31,14 @@ public class JacksonUserPreferencesSerializer implements UserPreferencesSerializ
     private final List<Exception> startupExceptions = new ArrayList<>(1);
 
     @Override
-    public void writeUserPreferences(ReadOnlyUserPreferencesModel preferencesModel) throws IOException
+    public final void writeUserPreferences(ReadOnlyUserPreferencesModel preferencesModel) throws IOException
     {
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(getPreferencesFile(), preferencesModel);
     }
 
     @Override
-    public UserPreferencesModel readUserPreferences() throws IOException
+    public final UserPreferencesModel readUserPreferences() throws IOException
     {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -56,7 +56,7 @@ public class JacksonUserPreferencesSerializer implements UserPreferencesSerializ
     }
 
     @Override
-    public UserPreferencesModel readOrDefault()
+    public final UserPreferencesModel readOrDefault()
     {
         try
         {
@@ -70,7 +70,7 @@ public class JacksonUserPreferencesSerializer implements UserPreferencesSerializ
     }
 
     @Override
-    public List<Exception> getStartupExceptions()
+    public final List<Exception> getStartupExceptions()
     {
         return Collections.unmodifiableList(startupExceptions);
     }

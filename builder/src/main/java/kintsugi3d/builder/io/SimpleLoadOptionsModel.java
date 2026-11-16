@@ -25,163 +25,163 @@ public class SimpleLoadOptionsModel implements LoadOptionsModel
     private int maxLoadingThreads = 12;
 
     @Override
-    public boolean areColorImagesRequested()
+    public final boolean areColorImagesRequested()
     {
         return this.colorImagesRequested;
     }
 
     @Override
-    public int getPreviewImageWidth()
+    public final int getPreviewImageWidth()
     {
         return previewImageWidth;
     }
 
     @Override
-    public void setPreviewImageWidth(int previewImageWidth)
+    public final void setPreviewImageWidth(int previewImageWidth)
     {
         this.previewImageWidth = previewImageWidth;
     }
 
     @Override
-    public int getPreviewImageHeight()
+    public final int getPreviewImageHeight()
     {
         return previewImageHeight;
     }
 
     @Override
-    public void setColorImagesRequested(boolean colorImagesRequested)
+    public final void setColorImagesRequested(boolean colorImagesRequested)
     {
         this.colorImagesRequested = colorImagesRequested;
     }
 
     @Override
-    public void setMipmapsRequested(boolean mipmapsRequested)
+    public final void setMipmapsRequested(boolean mipmapsRequested)
     {
         this.mipmapsRequested = mipmapsRequested;
     }
 
     @Override
-    public void setCompressionRequested(boolean compressionRequested)
+    public final void setCompressionRequested(boolean compressionRequested)
     {
         this.compressionRequested = compressionRequested;
     }
 
     @Override
-    public void setAlphaRequested(boolean alphaRequested)
+    public final void setAlphaRequested(boolean alphaRequested)
     {
         this.alphaRequested = alphaRequested;
     }
 
     @Override
-    public void setDepthImagesRequested(boolean depthImagesRequested)
+    public final void setDepthImagesRequested(boolean depthImagesRequested)
     {
         this.depthImagesRequested = depthImagesRequested;
     }
 
     @Override
-    public void setDepthImageWidth(int depthImageWidth)
+    public final void setDepthImageWidth(int depthImageWidth)
     {
         this.depthImageWidth = depthImageWidth;
     }
 
     @Override
-    public void setDepthImageHeight(int depthImageHeight)
+    public final void setDepthImageHeight(int depthImageHeight)
     {
         this.depthImageHeight = depthImageHeight;
     }
 
     @Override
-    public void setPreviewImageHeight(int previewImageHeight)
+    public final void setPreviewImageHeight(int previewImageHeight)
     {
         this.previewImageHeight = previewImageHeight;
     }
 
-    public SimpleLoadOptionsModel requestColorImages(boolean colorImagesRequested)
+    public final SimpleLoadOptionsModel requestColorImages(boolean colorImagesRequested)
     {
         this.colorImagesRequested = colorImagesRequested;
         return this;
     }
 
     @Override
-    public boolean areMipmapsRequested()
+    public final boolean areMipmapsRequested()
     {
         return this.mipmapsRequested;
     }
 
-    public SimpleLoadOptionsModel requstMipmaps(boolean mipmapsRequested)
+    public final SimpleLoadOptionsModel requstMipmaps(boolean mipmapsRequested)
     {
         this.mipmapsRequested = mipmapsRequested;
         return this;
     }
 
     @Override
-    public boolean isCompressionRequested()
+    public final boolean isCompressionRequested()
     {
         return this.compressionRequested;
     }
 
     @Override
-    public boolean isAlphaRequested()
+    public final boolean isAlphaRequested()
     {
         return this.alphaRequested;
     }
 
-    public SimpleLoadOptionsModel requestAlpha(boolean alphaRequested)
+    public final SimpleLoadOptionsModel requestAlpha(boolean alphaRequested)
     {
         this.alphaRequested = alphaRequested;
         return this;
     }
 
-    public SimpleLoadOptionsModel requestCompression(boolean compressionRequested)
+    public final SimpleLoadOptionsModel requestCompression(boolean compressionRequested)
     {
         this.compressionRequested = compressionRequested;
         return this;
     }
 
     @Override
-    public boolean areDepthImagesRequested()
+    public final boolean areDepthImagesRequested()
     {
         return this.depthImagesRequested;
     }
 
-    public SimpleLoadOptionsModel requestDepthImages(boolean depthImagesRequested)
+    public final SimpleLoadOptionsModel requestDepthImages(boolean depthImagesRequested)
     {
         this.depthImagesRequested = depthImagesRequested;
         return this;
     }
 
     @Override
-    public int getDepthImageWidth()
+    public final int getDepthImageWidth()
     {
         return this.depthImageWidth;
     }
 
-    public SimpleLoadOptionsModel requestDepthImageWidth(int depthImageWidth)
+    public final SimpleLoadOptionsModel requestDepthImageWidth(int depthImageWidth)
     {
         this.depthImageWidth = depthImageWidth;
         return this;
     }
 
     @Override
-    public int getDepthImageHeight()
+    public final int getDepthImageHeight()
     {
         return this.depthImageHeight;
     }
 
-    public SimpleLoadOptionsModel requestDepthImageHeight(int depthImageHeight)
+    public final SimpleLoadOptionsModel requestDepthImageHeight(int depthImageHeight)
     {
         this.depthImageHeight = depthImageHeight;
         return this;
     }
 
     @Override
-    public int getMaxLoadingThreads()
+    public final int getMaxLoadingThreads()
     {
         return maxLoadingThreads;
     }
 
     @Override
-    public void setMaxLoadingThreads(int maxLoadingThreads)
+    public final void setMaxLoadingThreads(int maxLoadingThreads)
     {
         this.maxLoadingThreads = maxLoadingThreads;
     }

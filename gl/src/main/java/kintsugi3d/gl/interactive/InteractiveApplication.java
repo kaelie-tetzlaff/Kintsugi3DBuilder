@@ -41,7 +41,7 @@ public class InteractiveApplication
      * Must be called before run().
      * @param pollable
      */
-    public void addPollable(EventPollable pollable)
+    public final void addPollable(EventPollable pollable)
     {
         this.pollables.add(pollable);
     }
@@ -50,12 +50,12 @@ public class InteractiveApplication
      * Must be called before run().
      * @param refreshable
      */
-    public void addRefreshable(Refreshable refreshable)
+    public final void addRefreshable(Refreshable refreshable)
     {
         this.refreshables.add(refreshable);
     }
 
-    public void run() throws InitializationException
+    public final void run() throws InitializationException
     {
         for (Refreshable refreshable : this.refreshables)
         {
@@ -278,12 +278,12 @@ public class InteractiveApplication
         }
     }
 
-    public double getFPSCap()
+    public final double getFPSCap()
     {
         return fpsCap;
     }
 
-    public void setFPSCap(double fpsCap)
+    public final void setFPSCap(double fpsCap)
     {
         this.fpsCap = fpsCap;
     }

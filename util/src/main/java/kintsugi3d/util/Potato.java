@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -47,9 +46,9 @@ public class Potato
 
         for (Bump b : bumps)
         {
-            double diff = Math.acos(direction.dot(b.direction));
+            double diff = StrictMath.acos(direction.dot(b.direction));
             double sigma = Math.PI * b.size / 12;
-            r += b.height / (6 * Math.PI * sigma * sigma) * Math.exp(-diff * diff / (2 * sigma * sigma));
+            r += b.height / (6 * Math.PI * sigma * sigma) * StrictMath.exp(-diff * diff / (2 * sigma * sigma));
         }
 
         return r;
@@ -66,12 +65,12 @@ public class Potato
             bumps[i].height = bumpHeight;
 
             double phi = Math.random() * 2 * Math.PI;
-            double theta = Math.acos(2 * Math.random() - 1);
-            double sinTheta = Math.sin(theta);
+            double theta = StrictMath.acos(2 * Math.random() - 1);
+            double sinTheta = StrictMath.sin(theta);
             bumps[i].direction = new Vector3(
-                (float) (Math.cos(phi) * sinTheta),
-                (float) (Math.sin(phi) * sinTheta),
-                (float) Math.cos(theta));
+                (float) (StrictMath.cos(phi) * sinTheta),
+                (float) (StrictMath.sin(phi) * sinTheta),
+                (float) StrictMath.cos(theta));
         }
 
         int phiSubdiv = 2 * (int) Math.round(Math.floor(Math.sqrt(0.25 * minTriangles)));
@@ -86,30 +85,30 @@ public class Potato
 
         for (int j = 0; j < phiSubdiv - 1; j++)
         {
-            faces.add(Collections.unmodifiableList(Arrays.asList(
+            faces.add(List.of(
                 new IntVector2(0, 0),
                 new IntVector2(j + 1, j + 1),
-                new IntVector2(j + 2, j + 2))));
+                new IntVector2(j + 2, j + 2)));
         }
 
-        faces.add(Collections.unmodifiableList(Arrays.asList(
+        faces.add(List.of(
             new IntVector2(0, 0),
             new IntVector2(phiSubdiv, phiSubdiv),
-            new IntVector2(1, phiSubdiv + 1))));
+            new IntVector2(1, phiSubdiv + 1)));
 
         for (int i = 1; i < thetaSubdiv; i++)
         {
             double theta = i * Math.PI / thetaSubdiv;
-            double sinTheta = Math.sin(theta);
-            double cosTheta = Math.cos(theta);
+            double sinTheta = StrictMath.sin(theta);
+            double cosTheta = StrictMath.cos(theta);
 
             for (int j = 0; j < phiSubdiv; j++)
             {
                 double phi = j * 2 * Math.PI / phiSubdiv;
 
                 Vector3 direction = new Vector3(
-                    (float) (Math.cos(phi) * sinTheta),
-                    (float) (Math.sin(phi) * sinTheta),
+                    (float) (StrictMath.cos(phi) * sinTheta),
+                    (float) (StrictMath.sin(phi) * sinTheta),
                     (float) cosTheta);
 
                 positions.add(direction.times((float)computeR(direction)));
@@ -118,15 +117,15 @@ public class Potato
 
                 if (i < thetaSubdiv - 1 && j < phiSubdiv - 1)
                 {
-                    faces.add(Collections.unmodifiableList(Arrays.asList(
+                    faces.add(List.of(
                         new IntVector2(j + (i - 1) * phiSubdiv + 1, j + (i - 1) * (phiSubdiv + 1) + 1),
                         new IntVector2(j + i * phiSubdiv + 1, j + i * (phiSubdiv + 1) + 1),
-                        new IntVector2(j + i * phiSubdiv + 2, j + i * (phiSubdiv + 1) + 2))));
+                        new IntVector2(j + i * phiSubdiv + 2, j + i * (phiSubdiv + 1) + 2)));
 
-                    faces.add(Collections.unmodifiableList(Arrays.asList(
+                    faces.add(List.of(
                         new IntVector2(j + (i - 1) * phiSubdiv + 2, j + (i - 1) * (phiSubdiv + 1) + 2),
                         new IntVector2(j + (i - 1) * phiSubdiv + 1, j + (i - 1) * (phiSubdiv + 1) + 1),
-                        new IntVector2(j + i * phiSubdiv + 2, j + i * (phiSubdiv + 1) + 2))));
+                        new IntVector2(j + i * phiSubdiv + 2, j + i * (phiSubdiv + 1) + 2)));
                 }
             }
 
@@ -134,15 +133,15 @@ public class Potato
 
             if (i < thetaSubdiv - 1)
             {
-                faces.add(Collections.unmodifiableList(Arrays.asList(
-                    new IntVector2(i * phiSubdiv, i * (phiSubdiv + 1) - 1),
+                faces.add(List.of(new IntVector2(
+                    i * phiSubdiv, i * (phiSubdiv + 1) - 1),
                     new IntVector2((i + 1) * phiSubdiv, (i + 1) * (phiSubdiv + 1) - 1),
-                    new IntVector2(i * phiSubdiv + 1, (i + 1) * (phiSubdiv + 1)))));
+                    new IntVector2(i * phiSubdiv + 1, (i + 1) * (phiSubdiv + 1))));
 
-                faces.add(Collections.unmodifiableList(Arrays.asList(
+                faces.add(List.of(
                     new IntVector2((i - 1) * phiSubdiv + 1, i * (phiSubdiv + 1)),
                     new IntVector2(i * phiSubdiv, i * (phiSubdiv + 1) - 1),
-                    new IntVector2(i * phiSubdiv + 1, (i + 1) * (phiSubdiv + 1)))));
+                    new IntVector2(i * phiSubdiv + 1, (i + 1) * (phiSubdiv + 1))));
             }
         }
 
@@ -151,34 +150,34 @@ public class Potato
 
         for (int j = 0; j < phiSubdiv - 1; j++)
         {
-            faces.add(Collections.unmodifiableList(Arrays.asList(
+            faces.add(List.of(
                 new IntVector2(j + (thetaSubdiv - 2) * phiSubdiv + 2, j + (thetaSubdiv - 2) * (phiSubdiv + 1) + 2),
                 new IntVector2(j + (thetaSubdiv - 2) * phiSubdiv + 1, j + (thetaSubdiv - 2) * (phiSubdiv + 1) + 1),
-                new IntVector2((thetaSubdiv - 1) * phiSubdiv + 1, (thetaSubdiv - 1) * (phiSubdiv + 1) + 1))));
+                new IntVector2((thetaSubdiv - 1) * phiSubdiv + 1, (thetaSubdiv - 1) * (phiSubdiv + 1) + 1)));
         }
 
-        faces.add(Collections.unmodifiableList(Arrays.asList(
+        faces.add(List.of(
             new IntVector2((thetaSubdiv - 2) * phiSubdiv + 1, (thetaSubdiv - 1) * (phiSubdiv + 1)),
             new IntVector2((thetaSubdiv - 1) * phiSubdiv, (thetaSubdiv - 1) * (phiSubdiv + 1) - 1),
-            new IntVector2((thetaSubdiv - 1) * phiSubdiv + 1, (thetaSubdiv - 1) * (phiSubdiv + 1) + 1))));
+            new IntVector2((thetaSubdiv - 1) * phiSubdiv + 1, (thetaSubdiv - 1) * (phiSubdiv + 1) + 1)));
     }
 
-    public List<Vector3> getPositions()
+    public final List<Vector3> getPositions()
     {
         return Collections.unmodifiableList(positions);
     }
 
-    public List<Vector2> getTexCoords()
+    public final List<Vector2> getTexCoords()
     {
         return Collections.unmodifiableList(texCoords);
     }
 
-    public List<List<IntVector2>> getFaces()
+    public final List<List<IntVector2>> getFaces()
     {
         return Collections.unmodifiableList(faces);
     }
 
-    public void writeToStream(PrintStream out)
+    public final void writeToStream(PrintStream out)
     {
         for (Vector3 pos : positions)
         {

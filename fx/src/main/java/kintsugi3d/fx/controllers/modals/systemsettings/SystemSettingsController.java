@@ -52,7 +52,7 @@ public class SystemSettingsController
             )
             .collect(Collectors.toMap(Entry::getKey, Entry::getValue, (u, v) -> u, LinkedHashMap::new)));
 
-    public void initializeSettingsPages(Window parentWindow, JavaFXState state)
+    public final void initializeSettingsPages(Window parentWindow, JavaFXState state)
     {
         populateFileList();
         //initialize listeners for cell items

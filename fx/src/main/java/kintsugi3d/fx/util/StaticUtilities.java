@@ -16,7 +16,9 @@ import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TextFormatter.Change;
 import kintsugi3d.builder.core.Global;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -99,30 +101,32 @@ public final class StaticUtilities
 
     public static void makeNumeric(TextField textField)
     {
-        textField.setTextFormatter(new TextFormatter<Double>(change ->
+        textField.setTextFormatter(new TextFormatter<Double>(StaticUtilities::validateNumericChange));
+    }
+
+    private static @Nullable Change validateNumericChange(Change change)
+    {
+        if (change.isDeleted() && !change.isReplaced())
         {
-            if (change.isDeleted() && !change.isReplaced())
+            return change;
+        }
+        String text = change.getControlNewText();
+        if (text.isEmpty() || Objects.equals("-", text))
+        {
+            return change;
+        }
+        else
+        {
+            try
             {
+                Double.parseDouble(text);
                 return change;
             }
-            String text = change.getControlNewText();
-            if (text.isEmpty() || Objects.equals("-", text))
+            catch (NumberFormatException e)
             {
-                return change;
+                return null;
             }
-            else
-            {
-                try
-                {
-                    Double.parseDouble(text);
-                    return change;
-                }
-                catch (NumberFormatException e)
-                {
-                    return null;
-                }
-            }
-        }));
+        }
     }
 
     public static void makeClampedInteger(double min, double max, TextField textField)
@@ -147,8 +151,8 @@ public final class StaticUtilities
 
     public static void bindLogScaleToLinear(DoubleProperty logScaleProperty, DoubleProperty linearScaleProperty)
     {
-        logScaleProperty.addListener((b, o, n) -> linearScaleProperty.set(Math.pow(10, n.doubleValue())));
-        linearScaleProperty.addListener((b, o, n) -> logScaleProperty.set(Math.log10(n.doubleValue())));
+        logScaleProperty.addListener((b, o, n) -> linearScaleProperty.set(StrictMath.pow(10, n.doubleValue())));
+        linearScaleProperty.addListener((b, o, n) -> logScaleProperty.set(StrictMath.log10(n.doubleValue())));
     }
 
     public static void makeSquareResolutionComboBox(ComboBox<SquareResolution> comboBox)

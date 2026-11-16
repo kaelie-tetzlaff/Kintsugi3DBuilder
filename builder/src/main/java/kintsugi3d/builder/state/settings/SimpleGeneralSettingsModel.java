@@ -11,6 +11,8 @@
 
 package kintsugi3d.builder.state.settings;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
 public class SimpleGeneralSettingsModel extends GeneralSettingsModelBase
@@ -18,7 +20,7 @@ public class SimpleGeneralSettingsModel extends GeneralSettingsModelBase
     private final Map<String, Setting> settingMap = new HashMap<>(32);
 
     @Override
-    public Class<?> getType(String name)
+    public final Class<?> getType(String name)
     {
         if (exists(name))
         {
@@ -29,13 +31,13 @@ public class SimpleGeneralSettingsModel extends GeneralSettingsModelBase
     }
 
     @Override
-    public boolean exists(String name)
+    public final boolean exists(String name)
     {
         return settingMap.containsKey(name);
     }
 
     @Override
-    public boolean shouldSerialize(String name)
+    public final boolean shouldSerialize(String name)
     {
         if (exists(name))
         {
@@ -46,26 +48,26 @@ public class SimpleGeneralSettingsModel extends GeneralSettingsModelBase
     }
 
     @Override
-    public Iterator<Setting> iterator()
+    public final @NotNull Iterator<Setting> iterator()
     {
         return settingMap.values().iterator();
     }
 
     @Override
-    protected Object getUnchecked(String name)
+    protected final Object getUnchecked(String name)
     {
         return settingMap.get(name).getValue();
     }
 
     @Override
-    protected void setUnchecked(String name, Object value)
+    protected final void setUnchecked(String name, Object value)
     {
         settingMap.compute(name, (n, old) ->
             new GeneralSetting(name, Objects.requireNonNull(old).getType(), value, old.shouldSerialize()));
     }
 
     @Override
-    public void createSetting(String name, Class<?> type, Object initialValue, boolean serialize)
+    public final void createSetting(String name, Class<?> type, Object initialValue, boolean serialize)
     {
         settingMap.put(name, new GeneralSetting(name, type, initialValue, serialize));
     }

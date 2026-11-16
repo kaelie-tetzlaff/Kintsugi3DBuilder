@@ -21,6 +21,7 @@ import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,10 +43,10 @@ public class FinalReconstruction<ContextType extends Context<ContextType>>
         this.reconstructionSettings = reconstructionSettings;
     }
 
-    public List<Map<String, ReadonlyColorAppearanceRMSE>> reconstruct(ReadonlyTextureResources<ContextType> specularFit,
-                                                                      Map<String, ProgramBuilder<ContextType>> reconstructionProgramBuilders,
-                                                                      ProgramBuilder<ContextType> incidentRadianceProgramBuilder,
-                                                                      File debugDirectory, File groundTruthDirectory)
+    public final @Nullable List<Map<String, ReadonlyColorAppearanceRMSE>> reconstruct(ReadonlyTextureResources<ContextType> specularFit,
+                                                                                      Map<String, ProgramBuilder<ContextType>> reconstructionProgramBuilders,
+                                                                                      ProgramBuilder<ContextType> incidentRadianceProgramBuilder,
+                                                                                      File debugDirectory, File groundTruthDirectory)
     {
         if (debugDirectory != null)
         {

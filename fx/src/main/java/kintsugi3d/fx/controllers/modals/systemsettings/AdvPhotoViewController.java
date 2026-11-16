@@ -39,7 +39,7 @@ public class AdvPhotoViewController implements SystemSettingsControllerBase
     private ObservableGeneralSettingsModel settingsModel;
 
     @Override
-    public void initializePage(Window parentWindow, JavaFXState state)
+    public final void initializePage(Window parentWindow, JavaFXState state)
     {
         // Weight exponent and isotropy factor only matter when Buehler algorithm is not being used.
         weightExponentSlider.disableProperty().bind(buehlerCheckBox.selectedProperty());
@@ -56,7 +56,7 @@ public class AdvPhotoViewController implements SystemSettingsControllerBase
         bind(state.getSettingsModel());
     }
 
-    public void bind(ObservableGeneralSettingsModel injectedSettingsModel)
+    private void bind(ObservableGeneralSettingsModel injectedSettingsModel)
     {
         buehlerCheckBox.selectedProperty().bindBidirectional(injectedSettingsModel.getBooleanProperty("buehlerAlgorithm"));
 
@@ -97,13 +97,13 @@ public class AdvPhotoViewController implements SystemSettingsControllerBase
     private static class WeightModeStringConverter extends StringConverter<ShadingParameterMode>
     {
         @Override
-        public String toString(ShadingParameterMode object)
+        public final String toString(ShadingParameterMode object)
         {
             return object.name();
         }
 
         @Override
-        public ShadingParameterMode fromString(String string)
+        public final ShadingParameterMode fromString(String string)
         {
             return ShadingParameterMode.valueOf(string);
         }

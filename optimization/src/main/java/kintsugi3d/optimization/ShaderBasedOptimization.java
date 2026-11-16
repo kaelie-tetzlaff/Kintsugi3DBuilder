@@ -69,7 +69,7 @@ public class ShaderBasedOptimization<ContextType extends Context<ContextType>> i
     /**
      * Indicate that optimization is complete; this allows some GPU resources (the back framebuffer & shader program) to be de-allocated.
      */
-    public void finish()
+    public final void finish()
     {
         if (!finished)
         {
@@ -83,7 +83,7 @@ public class ShaderBasedOptimization<ContextType extends Context<ContextType>> i
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (!finished) // program will be already closed if finished
         {
@@ -103,22 +103,22 @@ public class ShaderBasedOptimization<ContextType extends Context<ContextType>> i
         }
     }
 
-    public void addSetupCallback(BiConsumer<Program<ContextType>, FramebufferObject<ContextType>> callback)
+    public final void addSetupCallback(BiConsumer<Program<ContextType>, FramebufferObject<ContextType>> callback)
     {
         setupCallbacks.add(callback);
     }
 
-    public void addPostUpdateCallback(Consumer<FramebufferObject<ContextType>> callback)
+    public final void addPostUpdateCallback(Consumer<FramebufferObject<ContextType>> callback)
     {
         postUpdateCallbacks.add(callback);
     }
 
-    public FramebufferObject<ContextType> getFrontFramebuffer()
+    public final FramebufferObject<ContextType> getFrontFramebuffer()
     {
         return frontFramebuffer;
     }
 
-    public FramebufferObject<ContextType> getBackFramebuffer()
+    public final FramebufferObject<ContextType> getBackFramebuffer()
     {
         return backFramebuffer;
     }
@@ -126,7 +126,7 @@ public class ShaderBasedOptimization<ContextType extends Context<ContextType>> i
     /**
      * Runs once and swap framebuffers
      */
-    public void runOnce()
+    public final void runOnce()
     {
         if (finished)
         {
@@ -159,7 +159,7 @@ public class ShaderBasedOptimization<ContextType extends Context<ContextType>> i
      * @param errorCalculator
      * @return
      */
-    public ReadonlyErrorReport runOnce(Function<FramebufferObject<ContextType>, ReadonlyErrorReport> errorCalculator)
+    public final ReadonlyErrorReport runOnce(Function<FramebufferObject<ContextType>, ReadonlyErrorReport> errorCalculator)
     {
         runOnce();
 
@@ -176,8 +176,8 @@ public class ShaderBasedOptimization<ContextType extends Context<ContextType>> i
         return report;
     }
 
-    public void runUntilConvergence(Function<FramebufferObject<ContextType>, ReadonlyErrorReport> errorCalculator,
-        double convergenceTolerance, int unsuccessfulIterationsAllowed)
+    public final void runUntilConvergence(Function<FramebufferObject<ContextType>, ReadonlyErrorReport> errorCalculator,
+                                          double convergenceTolerance, int unsuccessfulIterationsAllowed)
     {
         int unsuccessfulIterations = 0;
 

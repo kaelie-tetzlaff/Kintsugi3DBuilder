@@ -17,7 +17,7 @@ import javafx.beans.value.WritableValue;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class SynchronizedValue<T> implements WritableValue<T>
+public final class SynchronizedValue<T> implements WritableValue<T>
 {
     private T override;
     private final Supplier<T> getter;
@@ -29,7 +29,7 @@ public class SynchronizedValue<T> implements WritableValue<T>
         return new SynchronizedValue<>(getter, setter);
     }
 
-    SynchronizedValue(Supplier<T> getter, Consumer<T> setter)
+    private SynchronizedValue(Supplier<T> getter, Consumer<T> setter)
     {
         this.getter = getter;
         this.setter = setter;

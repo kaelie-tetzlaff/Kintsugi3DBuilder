@@ -22,7 +22,7 @@ public class ProjectLoadedEvent
         this.modelSize = modelSize;
     }
 
-    public Vector3 getModelSize()
+    public final Vector3 getModelSize()
     {
         return modelSize;
     }

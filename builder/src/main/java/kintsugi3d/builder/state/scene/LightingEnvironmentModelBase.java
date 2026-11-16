@@ -39,13 +39,13 @@ public abstract class LightingEnvironmentModelBase<DiscreteLightType extends Dis
     }
 
     @Override
-    public float getBackgroundIntensity()
+    public final float getBackgroundIntensity()
     {
         return environmentModel.getBackgroundIntensity();
     }
 
     @Override
-    public void setBackgroundIntensity(float backgroundIntensity)
+    public final void setBackgroundIntensity(float backgroundIntensity)
     {
         environmentModel.setBackgroundIntensity(backgroundIntensity);
     }
@@ -57,43 +57,43 @@ public abstract class LightingEnvironmentModelBase<DiscreteLightType extends Dis
     }
 
     @Override
-    public BackgroundMode getBackgroundMode()
+    public final BackgroundMode getBackgroundMode()
     {
         return environmentModel.getBackgroundMode();
     }
 
     @Override
-    public Vector3 getGroundPlaneColor()
+    public final Vector3 getGroundPlaneColor()
     {
         return environmentModel.getGroundPlaneColor();
     }
 
     @Override
-    public boolean isGroundPlaneEnabled()
+    public final boolean isGroundPlaneEnabled()
     {
         return environmentModel.isGroundPlaneEnabled();
     }
 
     @Override
-    public float getGroundPlaneHeight()
+    public final float getGroundPlaneHeight()
     {
         return environmentModel.getGroundPlaneHeight();
     }
 
     @Override
-    public float getGroundPlaneSize()
+    public final float getGroundPlaneSize()
     {
         return environmentModel.getGroundPlaneSize();
     }
 
     @Override
-    public float getAmbientLightIntensity()
+    public final float getAmbientLightIntensity()
     {
         return environmentModel.getEnvironmentIntensity();
     }
 
     @Override
-    public void setAmbientLightIntensity(float environmentIntensity)
+    public final void setAmbientLightIntensity(float environmentIntensity)
     {
         environmentModel.setEnvironmentIntensity(environmentIntensity);
     }
@@ -105,68 +105,68 @@ public abstract class LightingEnvironmentModelBase<DiscreteLightType extends Dis
     }
 
     @Override
-    public boolean isEnvironmentMappingEnabled()
+    public final boolean isEnvironmentMappingEnabled()
     {
         return environmentModel.isEnvironmentMappingEnabled();
     }
 
     @Override
-    public Matrix4 getEnvironmentMapMatrix() 
+    public final Matrix4 getEnvironmentMapMatrix()
     {
         return environmentModel.getEnvironmentMapMatrix();
     }
 
     @Override
-    public float getEnvironmentMapFilteringBias()
+    public final float getEnvironmentMapFilteringBias()
     {
         return environmentModel.getEnvironmentMapFilteringBias();
     }
 
     @Override
-    public boolean areLightWidgetsEthereal()
+    public final boolean areLightWidgetsEthereal()
     {
         return this.lightWidgetsEthereal;
     }
 
     @Override
-    public void setLightWidgetsEthereal(boolean lightWidgetsEthereal)
+    public final void setLightWidgetsEthereal(boolean lightWidgetsEthereal)
     {
         this.lightWidgetsEthereal = lightWidgetsEthereal;
     }
 
     @Override
-    public LightWidgetModel getLightWidgetModel(int index)
+    public final LightWidgetModel getLightWidgetModel(int index)
     {
         return this.lightWidgetModels[index];
     }
 
     @Override
-    public LightPrototypeModel getLightPrototype(int i)
+    public final LightPrototypeModel getLightPrototype(int i)
     {
         return lightInstanceModels.get(i);
     }
 
     @Override
-    public Matrix4 getLightMatrix(int i)
+    public final Matrix4 getLightMatrix(int i)
     {
         return lightInstanceModels.get(i).getLookMatrix();
     }
 
     @Override
-    public Vector3 getLightCenter(int i)
+    public final Vector3 getLightCenter(int i)
     {
         return lightInstanceModels.get(i).getTarget();
     }
 
 
     @Override
-    public DiscreteLightType getLight(int index)
+    public final DiscreteLightType getLight(int index)
     {
         return this.lightInstanceModels.get(index);
     }
 
     @Override
-    public void setLightMatrix(int i, Matrix4 lightMatrix)
+    public final void setLightMatrix(int i, Matrix4 lightMatrix)
     {
         if (this.isLightWidgetEnabled(i))
         {
@@ -175,7 +175,7 @@ public abstract class LightingEnvironmentModelBase<DiscreteLightType extends Dis
     }
 
     @Override
-    public void setLightCenter(int i, Vector3 lightCenter)
+    public final void setLightCenter(int i, Vector3 lightCenter)
     {
         if (this.isLightWidgetEnabled(i))
         {
@@ -184,7 +184,7 @@ public abstract class LightingEnvironmentModelBase<DiscreteLightType extends Dis
     }
 
     @Override
-    public EnvironmentModel getEnvironmentModel()
+    public final EnvironmentModel getEnvironmentModel()
     {
         return this.environmentModel;
     }

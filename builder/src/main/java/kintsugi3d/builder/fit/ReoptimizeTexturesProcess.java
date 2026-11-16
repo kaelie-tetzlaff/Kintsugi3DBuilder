@@ -33,7 +33,7 @@ public class ReoptimizeTexturesProcess extends SpecularFitProcess
         super(settings, outputDirectory);
     }
 
-    public <ContextType extends Context<ContextType>> TextureResources<ContextType> reoptimizeTexturesWithCache(
+    public final <ContextType extends Context<ContextType>> TextureResources<ContextType> reoptimizeTexturesWithCache(
         ReadonlyImageBasedGraphicsResources<ContextType> resources, ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
@@ -67,7 +67,7 @@ public class ReoptimizeTexturesProcess extends SpecularFitProcess
     }
 
     @Override
-    protected <ContextType extends Context<ContextType>> SpecularFitResourcesWrapper<ContextType> getResourcesWrapper()
+    protected final <ContextType extends Context<ContextType>> SpecularFitResourcesWrapper<ContextType> getResourcesWrapper()
     {
         return new SpecularFitResourcesWrapper<>(getSettings().isSmithMaskingShadowingEnabled());
     }

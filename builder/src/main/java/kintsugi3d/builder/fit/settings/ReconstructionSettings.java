@@ -19,7 +19,7 @@ public class ReconstructionSettings implements ReadonlyReconstructionSettings
     private boolean reconstructAll = false;
 
     @Override
-    public boolean shouldReconstructAll()
+    public final boolean shouldReconstructAll()
     {
         return reconstructAll;
     }
@@ -30,13 +30,13 @@ public class ReconstructionSettings implements ReadonlyReconstructionSettings
      *
      * @param reconstructAll true if all views should be reconstructed; false if only one view should be reconstructed.
      */
-    public void setReconstructAll(boolean reconstructAll)
+    public final void setReconstructAll(boolean reconstructAll)
     {
         this.reconstructAll = reconstructAll;
     }
 
     @Override
-    public ReadonlyViewSet getReconstructionViewSet()
+    public final ReadonlyViewSet getReconstructionViewSet()
     {
         return reconstructionViewSet;
     }
@@ -46,7 +46,7 @@ public class ReconstructionSettings implements ReadonlyReconstructionSettings
      *
      * @return
      */
-    public void setReconstructionViewSet(ReadonlyViewSet reconstructionViewSet)
+    public final void setReconstructionViewSet(ReadonlyViewSet reconstructionViewSet)
     {
         this.reconstructionViewSet = reconstructionViewSet;
     }

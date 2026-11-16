@@ -26,17 +26,17 @@ class TextureExportSpecification
         this.format = format;
     }
 
-    public TextureInfo getInfo()
+    public final TextureInfo getInfo()
     {
         return info;
     }
 
-    public String getURI()
+    public final String getURI()
     {
         return uri;
     }
 
-    public String getFormat()
+    public final String getFormat()
     {
         return format;
     }

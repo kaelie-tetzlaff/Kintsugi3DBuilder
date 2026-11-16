@@ -20,13 +20,13 @@ import java.io.IOException;
 public class ObjectOrientation extends ExperienceBase
 {
     @Override
-    public String getName()
+    public final String getName()
     {
         return "Object Orientation";
     }
 
     @Override
-    protected void open() throws IOException
+    protected final void open() throws IOException
     {
         SettingsObjectSceneController objectOrientationController = openModal("/fxml/scene/object/SettingsObjectScene.fxml");
 

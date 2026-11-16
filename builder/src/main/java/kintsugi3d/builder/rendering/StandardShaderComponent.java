@@ -67,13 +67,13 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
 
 
     @Override
-    protected ProgramObject<ContextType> createProgram() throws IOException
+    protected final ProgramObject<ContextType> createProgram() throws IOException
     {
         return loadMainProgram(getPreprocessorDefines());
     }
 
     @Override
-    public void update()
+    public final void update()
     {
         if (getDrawable() != null && getDrawable().program() != null)
         {
@@ -102,7 +102,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         }
     }
 
-    public void useFragmentShader(File fragmentShaderFile)
+    public final void useFragmentShader(File fragmentShaderFile)
     {
         this.fragmentShaderFile = fragmentShaderFile;
         reloadShaders();
@@ -221,12 +221,12 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         return defineMap;
     }
 
-    protected void setupShader(CameraViewport cameraViewport)
+    protected final void setupShader(CameraViewport cameraViewport)
     {
         setupShader(cameraViewport, sceneModel.getFullModelMatrix());
     }
 
-    protected void setupShader(CameraViewport cameraViewport, Matrix4 model)
+    protected final void setupShader(CameraViewport cameraViewport, Matrix4 model)
     {
         setupUnlit(model);
 
@@ -278,7 +278,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         program.setUniform(String.format("lightOrientationVirtual[%d]", lightIndex),
                 lightMatrixInverse.times(new Vector4(0.0f, 0.0f, -1.0f, 0.0f)).getXYZ().normalized());
         program.setUniform(String.format("lightSpotSizeVirtual[%d]", lightIndex),
-                (float)Math.sin(sceneModel.getLightingModel().getLightPrototype(lightIndex).getSpotSize()));
+                (float) StrictMath.sin(sceneModel.getLightingModel().getLightPrototype(lightIndex).getSpotSize()));
         program.setUniform(String.format("lightSpotTaperVirtual[%d]", lightIndex), sceneModel.getLightingModel().getLightPrototype(lightIndex).getSpotTaper());
     }
 
@@ -309,9 +309,9 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
                 Math.max(0, Math.min(lightingResources.getEnvironmentMap().getMipmapLevelCount() - 1,
                     this.sceneModel.getLightingModel().getEnvironmentMapFilteringBias()
                         + (float)(0.5 *
-                        Math.log(6 * (double)lightingResources.getEnvironmentMap().getFaceSize() * (double)lightingResources.getEnvironmentMap().getFaceSize()
+                        StrictMath.log(6 * (double)lightingResources.getEnvironmentMap().getFaceSize() * (double)lightingResources.getEnvironmentMap().getFaceSize()
                             / (double) resources.getViewSet().getEnabledViewCount() )
-                        / Math.log(2.0)))));
+                        / StrictMath.log(2.0)))));
             program.setUniform("diffuseEnvironmentMipMapLevel", lightingResources.getEnvironmentMap().getMipmapLevelCount() - 1);
 
             Matrix4 envMapMatrix = sceneModel.getEnvironmentMapMatrix(model);
@@ -323,27 +323,27 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         program.setUniform("ambientColor", sceneModel.getLightingModel().getAmbientLightColor().applyOperator(SRGB::toLinear));
     }
 
-    public boolean isLightCalibrationMode()
+    public final boolean isLightCalibrationMode()
     {
         return lightCalibrationMode;
     }
 
-    public void setLightCalibrationMode(boolean lightCalibrationMode)
+    public final void setLightCalibrationMode(boolean lightCalibrationMode)
     {
         this.lightCalibrationMode = lightCalibrationMode;
     }
 
-    public void setExtraFragmentShaderDefinesFactory(Supplier<Map<String, Optional<Object>>> fragmentShaderDefinesFactory)
+    public final void setExtraFragmentShaderDefinesFactory(Supplier<Map<String, Optional<Object>>> fragmentShaderDefinesFactory)
     {
         this.fragmentShaderDefinesFactory = fragmentShaderDefinesFactory;
     }
 
-    protected ReadonlyImageBasedGraphicsResources<ContextType> getResources()
+    protected final ReadonlyImageBasedGraphicsResources<ContextType> getResources()
     {
         return resources;
     }
 
-    protected SceneModel getSceneModel()
+    protected final SceneModel getSceneModel()
     {
         return sceneModel;
     }

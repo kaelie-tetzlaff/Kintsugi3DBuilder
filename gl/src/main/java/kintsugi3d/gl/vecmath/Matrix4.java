@@ -14,6 +14,8 @@ package kintsugi3d.gl.vecmath;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public final class Matrix4
 {
@@ -172,7 +174,7 @@ public final class Matrix4
 
     public static Matrix4 perspective(float fovy, float aspect, float near, float far)
     {
-        float f = 1.0f / (float)Math.tan(fovy / 2);
+        float f = 1.0f / (float) StrictMath.tan(fovy / 2);
         return new Matrix4(
             f / aspect,  0.0f,  0.0f,                         0.0f,
             0.0f,        f,     0.0f,                         0.0f,
@@ -317,7 +319,7 @@ public final class Matrix4
     public Matrix4 quickInverse(float tolerance)
     {
         Matrix3 rotationScale = this.getUpperLeft3x3();
-        float scaleSquared = (float)Math.pow(rotationScale.determinant(), 2.0 / 3.0);
+        float scaleSquared = (float) StrictMath.pow(rotationScale.determinant(), 2.0 / 3.0);
 
         Matrix4 invCandidate = rotationScale.transpose().times(1.0f / scaleSquared).asMatrix4()
                 .times(translate(this.getColumn(3).getXYZ().negated()));
@@ -372,11 +374,6 @@ public final class Matrix4
     @Override
     public String toString()
     {
-        StringBuilder s = new StringBuilder(128);
-        for (int i = 0; i < 4; i++)
-        {
-            s.append(getRow(i)).append('\n');
-        }
-        return s.toString();
+        return IntStream.range(0, 4).mapToObj(i -> String.format("%s\n", getRow(i))).collect(Collectors.joining());
     }
 }

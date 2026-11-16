@@ -42,14 +42,14 @@ public class ShaderHoleFill<ContextType extends Context<ContextType>> implements
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         program.close();
         drawable.close();
         rect.close();
     }
 
-    public FramebufferObject<ContextType> execute(
+    public final FramebufferObject<ContextType> execute(
         FramebufferObject<ContextType> initFrontFramebuffer, FramebufferObject<ContextType> initBackFramebuffer)
     {
         FramebufferObject<ContextType> frontFramebuffer = initFrontFramebuffer;

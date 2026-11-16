@@ -87,7 +87,7 @@ public class GeneralizedSmoothStepBasis extends AbstractBasisFunctions
     }
 
     @Override
-    protected int getFirstFunctionIndexForDomainValue(int value)
+    protected final int getFirstFunctionIndexForDomainValue(int value)
     {
 //        return 0;
         // ^^ would be a more conservative implementation if there are issues
@@ -99,7 +99,7 @@ public class GeneralizedSmoothStepBasis extends AbstractBasisFunctions
     }
 
     @Override
-    protected int getLastFunctionIndexForDomainValue(int value)
+    protected final int getLastFunctionIndexForDomainValue(int value)
     {
         return functionCount - 1;
 
@@ -120,7 +120,7 @@ public class GeneralizedSmoothStepBasis extends AbstractBasisFunctions
     }
 
     @Override
-    public double evaluate(int functionIndex, int value)
+    public final double evaluate(int functionIndex, int value)
     {
         // at functionIndex = 0, should be the same with or without remapping
         // at functionIndex = functionCount - 1, should be as if at resolution - minSmoothstepWidth without remapping
@@ -162,13 +162,13 @@ public class GeneralizedSmoothStepBasis extends AbstractBasisFunctions
     }
 
     @Override
-    public int getFunctionCount()
+    public final int getFunctionCount()
     {
         return functionCount;
     }
 
     @Override
-    public int getOptimizedDomainSize()
+    public final int getOptimizedDomainSize()
     {
         return resolution;
     }

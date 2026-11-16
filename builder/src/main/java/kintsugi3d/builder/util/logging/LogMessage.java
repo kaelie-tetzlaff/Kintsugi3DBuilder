@@ -42,27 +42,27 @@ public class LogMessage
         this.thrown = thrown;
     }
 
-    public Instant getTimestamp()
+    public final Instant getTimestamp()
     {
         return timestamp;
     }
 
-    public Level getLogLevel()
+    public final Level getLogLevel()
     {
         return logLevel;
     }
 
-    public String getSourceClassName()
+    public final String getSourceClassName()
     {
         return sourceClassName;
     }
 
-    public String getMessage()
+    public final String getMessage()
     {
         return message;
     }
 
-    public Throwable getThrown()
+    public final Throwable getThrown()
     {
         return thrown;
     }

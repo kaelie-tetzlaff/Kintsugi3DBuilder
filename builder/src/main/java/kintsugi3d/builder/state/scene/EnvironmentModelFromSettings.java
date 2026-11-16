@@ -38,7 +38,7 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     protected abstract void onEnvironmentMapImageLoaded(EncodableColorImage environmentMapImage);
 
     @Override
-    public Vector3 getEnvironmentColor()
+    public final Vector3 getEnvironmentColor()
     {
         if (isEnabled())
         {
@@ -65,7 +65,7 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     }
 
     @Override
-    public Vector3 getBackgroundColor()
+    public final Vector3 getBackgroundColor()
     {
         if (isEnabled())
         {
@@ -102,7 +102,7 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
         }
     }
 
-    public void loadEnvironmentMap(File newFile)
+    public final void loadEnvironmentMap(File newFile)
     {
         environmentMapLoaded = false;
         long lastModified = newFile.lastModified();
@@ -131,7 +131,7 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
         }).start();
     }
 
-    public void loadBackplate(File newFile)
+    public final void loadBackplate(File newFile)
     {
         backplateLoaded = false;
         lastBackplateTime = newFile.lastModified();
@@ -158,7 +158,7 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     }
 
     @Override
-    public BackgroundMode getBackgroundMode()
+    public final BackgroundMode getBackgroundMode()
     {
         EnvironmentSettings selectedEnvironment = getEnvironmentSettings();
         if (this.backplateLoaded && isEnabled() && selectedEnvironment.isBackplateImageEnabled())
@@ -180,13 +180,13 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     }
 
     @Override
-    public boolean isEnvironmentMappingEnabled()
+    public final boolean isEnvironmentMappingEnabled()
     {
         return this.environmentMapLoaded && isEnabled() && getEnvironmentSettings().isEnvironmentImageEnabled();
     }
 
     @Override
-    public Matrix4 getEnvironmentMapMatrix()
+    public final Matrix4 getEnvironmentMapMatrix()
     {
         if (isEnabled())
         {
@@ -200,19 +200,19 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     }
 
     @Override
-    public float getEnvironmentMapFilteringBias()
+    public final float getEnvironmentMapFilteringBias()
     {
         return isEnabled() ? (float)getEnvironmentSettings().getEnvironmentFilteringBias() : 0;
     }
 
     @Override
-    public float getEnvironmentRotation()
+    public final float getEnvironmentRotation()
     {
         return isEnabled() ? (float)(getEnvironmentSettings().getEnvironmentRotation() * Math.PI / 180) : 0.0f;
     }
 
     @Override
-    public void setEnvironmentRotation(float environmentRotation)
+    public final void setEnvironmentRotation(float environmentRotation)
     {
         if (isEnabled() && !getEnvironmentSettings().isLocked())
         {
@@ -221,13 +221,13 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     }
 
     @Override
-    public float getEnvironmentIntensity()
+    public final float getEnvironmentIntensity()
     {
         return isEnabled() ? (float)getEnvironmentSettings().getEnvironmentColorIntensity() : 0.0f;
     }
 
     @Override
-    public void setEnvironmentIntensity(float environmentIntensity)
+    public final void setEnvironmentIntensity(float environmentIntensity)
     {
         if (isEnabled() && !getEnvironmentSettings().isLocked())
         {
@@ -236,13 +236,13 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     }
 
     @Override
-    public float getBackgroundIntensity()
+    public final float getBackgroundIntensity()
     {
         return isEnabled() ? (float)getEnvironmentSettings().getBackgroundIntensity() : 0.0f;
     }
 
     @Override
-    public void setBackgroundIntensity(float backgroundIntensity)
+    public final void setBackgroundIntensity(float backgroundIntensity)
     {
         if (isEnabled() && !getEnvironmentSettings().isLocked())
         {
@@ -251,13 +251,13 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     }
 
     @Override
-    public boolean isGroundPlaneEnabled()
+    public final boolean isGroundPlaneEnabled()
     {
         return isEnabled() && getEnvironmentSettings().isGroundPlaneEnabled();
     }
 
     @Override
-    public Vector3 getGroundPlaneColor()
+    public final Vector3 getGroundPlaneColor()
     {
         if (isEnabled())
         {
@@ -272,33 +272,33 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     }
 
     @Override
-    public float getGroundPlaneHeight()
+    public final float getGroundPlaneHeight()
     {
         return isEnabled() ? (float)getEnvironmentSettings().getGroundPlaneHeight() : 0.0f;
     }
 
     @Override
-    public float getGroundPlaneSize()
+    public final float getGroundPlaneSize()
     {
         return isEnabled() ? (float)getEnvironmentSettings().getGroundPlaneSize() : 1.0f;
     }
 
-    protected long getLastEnvironmentMapTime()
+    protected final long getLastEnvironmentMapTime()
     {
         return lastEnvironmentMapTime;
     }
 
-    protected void setLastEnvironmentMapTime(long lastEnvironmentMapTime)
+    protected final void setLastEnvironmentMapTime(long lastEnvironmentMapTime)
     {
         this.lastEnvironmentMapTime = lastEnvironmentMapTime;
     }
 
-    protected long getLastBackplateTime()
+    protected final long getLastBackplateTime()
     {
         return lastBackplateTime;
     }
 
-    protected void setLastBackplateTime(long lastBackplateTime)
+    protected final void setLastBackplateTime(long lastBackplateTime)
     {
         this.lastBackplateTime = lastBackplateTime;
     }

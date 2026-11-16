@@ -45,8 +45,7 @@ public final class ViewSetReaderFromRealityCaptureCSV implements ViewSetReader
     {
     }
 
-    @SuppressWarnings("PackageVisibleField")
-    public static final class Camera
+    private static final class Camera
     {
         @CsvBindByName(column = "#name", required = true) String name;
 
@@ -66,7 +65,7 @@ public final class ViewSetReaderFromRealityCaptureCSV implements ViewSetReader
         @CsvBindByName float t1;
         @CsvBindByName float t2;
 
-        public Matrix4 getPose()
+        Matrix4 getPose()
         {
             // Expecting a world-to-camera space transformation, so we need to invert.
             return Matrix4.fromDoublePrecision(
@@ -76,7 +75,7 @@ public final class ViewSetReaderFromRealityCaptureCSV implements ViewSetReader
                     .times(DoubleMatrix4.translate(-x, -y, -alt)));
         }
 
-        public DistortionProjection getDistortionProjection(File imageRootDirectory) throws IOException
+        DistortionProjection getDistortionProjection(File imageRootDirectory) throws IOException
         {
             File imageFile = ImageFinder.findImageFile(new File(imageRootDirectory, name));
 

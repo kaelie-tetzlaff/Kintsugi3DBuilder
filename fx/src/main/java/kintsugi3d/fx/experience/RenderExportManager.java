@@ -33,22 +33,22 @@ public class RenderExportManager
 
     private BooleanExpression anyModalOpen;
 
-    public boolean isAnyModalOpen()
+    public final boolean isAnyModalOpen()
     {
         return anyModalOpen.get();
     }
 
-    public BooleanExpression getAnyModalOpenProperty()
+    public final BooleanExpression getAnyModalOpenProperty()
     {
         return anyModalOpen;
     }
 
-    public List<RenderExport> getList()
+    public final List<RenderExport> getList()
     {
         return Collections.unmodifiableList(renderExportList);
     }
 
-    public void initialize(Window parentWindow, JavaFXState state)
+    public final void initialize(Window parentWindow, JavaFXState state)
     {
         if (RENDER_EXPORT_CLASS_DEFINITION_FILE.exists())
         {

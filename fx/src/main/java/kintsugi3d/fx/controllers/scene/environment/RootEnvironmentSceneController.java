@@ -47,7 +47,7 @@ public class RootEnvironmentSceneController
 
     private ObservableProjectModel projectModel;
 
-    public void injectDependencies(ObservableEnvironmentModel environmentMapModel, ObservableProjectModel injectedProjectModel)
+    public final void injectDependencies(ObservableEnvironmentModel environmentMapModel, ObservableProjectModel injectedProjectModel)
     {
         this.projectModel = injectedProjectModel;
 
@@ -180,7 +180,7 @@ public class RootEnvironmentSceneController
     }
 
     @FXML
-    void moveDOWNButton()
+    final void moveDOWNButton()
     {
         int selectedIndex = environmentListView.getSelectionModel().getSelectedIndex();
         if (selectedIndex != 0)
@@ -195,7 +195,7 @@ public class RootEnvironmentSceneController
     }
 
     @FXML
-    void lockEnvButton()
+    final void lockEnvButton()
     {
         ObservableEnvironmentSettings selectedEnvironment = environmentListView.getSelectionModel().getSelectedItem();
         if (!Objects.equals(selectedEnvironment, projectModel.getNoEnvironment()))
@@ -208,7 +208,7 @@ public class RootEnvironmentSceneController
     }
 
     @FXML
-    void deleteEnvButton()
+    final void deleteEnvButton()
     {
         MultipleSelectionModel<ObservableEnvironmentSettings> selectionModel = environmentListView.getSelectionModel();
         ObservableEnvironmentSettings selectedEnvironment = selectionModel.getSelectedItem();

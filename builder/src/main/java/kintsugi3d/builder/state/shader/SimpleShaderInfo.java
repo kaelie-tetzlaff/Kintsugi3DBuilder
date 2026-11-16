@@ -30,25 +30,25 @@ public class SimpleShaderInfo implements ShaderInfo
     }
 
     @Override
-    public String getFriendlyName()
+    public final String getFriendlyName()
     {
         return friendlyName;
     }
 
     @Override
-    public String getFullName()
+    public final String getFullName()
     {
         return friendlyName;
     }
 
     @Override
-    public String getFilename()
+    public final String getFilename()
     {
         return filename;
     }
 
     @Override
-    public File getFile()
+    public final File getFile()
     {
         return new File(SHADER_DIR, filename);
     }

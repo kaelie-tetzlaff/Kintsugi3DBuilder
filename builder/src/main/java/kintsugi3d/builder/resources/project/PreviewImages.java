@@ -88,22 +88,22 @@ class PreviewImages
         }
     }
 
-    boolean doesFullResImageExist()
+    final boolean doesFullResImageExist()
     {
         return fullResImage != null;
     }
 
-    boolean hasMissingFiles()
+    final boolean hasMissingFiles()
     {
         return missingPreview || missingThumbnail;
     }
 
-    boolean needsUndistortion()
+    final boolean needsUndistortion()
     {
         return view.getCameraProjection() instanceof DistortionProjection;
     }
 
-    <ContextType extends Context<ContextType>> void tryGenerateUndistortedPreviewImage(ContextType context)
+    final <ContextType extends Context<ContextType>> void tryGenerateUndistortedPreviewImage(ContextType context)
     {
         try
         {
@@ -136,7 +136,7 @@ class PreviewImages
     /**
      * Uses graphics context to undistort if necessary, and resizes and saves as necessary.
      */
-    <ContextType extends Context<ContextType>> void tryCreateMissingFiles(ContextType context)
+    final <ContextType extends Context<ContextType>> void tryCreateMissingFiles(ContextType context)
     {
         if (needsUndistortion() && missingPreview && undistortedPreviewImage == null)
         {
@@ -149,7 +149,7 @@ class PreviewImages
     /**
      * Resizes and saves as necessary, but cannot undistort without graphics context
      */
-    void tryCreateMissingFiles()
+    final void tryCreateMissingFiles()
     {
         try
         {
@@ -227,7 +227,7 @@ class PreviewImages
         return new Resolution(thumbnailWidth, thumbnailHeight);
     }
 
-    void tryCreateMissingFilesNoUndistortion()
+    final void tryCreateMissingFilesNoUndistortion()
     {
         try
         {

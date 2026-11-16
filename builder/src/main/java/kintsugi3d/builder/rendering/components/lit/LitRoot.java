@@ -31,13 +31,13 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
         this.lightingResources = new LightingResources<>(context, sceneModel);
     }
 
-    public LightingResources<ContextType> getLightingResources()
+    public final LightingResources<ContextType> getLightingResources()
     {
         return lightingResources;
     }
 
     @Override
-    public void initialize()
+    public final void initialize()
     {
         // i.e. shadow map, environment map, etc.
         lightingResources.initialize();
@@ -45,28 +45,28 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
     }
 
     @Override
-    public void reloadShaders()
+    public final void reloadShaders()
     {
         lightingResources.reloadShadowShader();
         litContentRoot.reloadShaders();
     }
 
     @Override
-    public void update()
+    public final void update()
     {
         litContentRoot.update();
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         setupForDraw(cameraViewport);
         litContentRoot.draw(framebuffer, cameraViewport);
     }
 
     @Override
-    public void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight,
-                                   CameraViewport cameraViewport)
+    public final void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight,
+                                         CameraViewport cameraViewport)
     {
         setupForDraw(cameraViewport);
         litContentRoot.drawInSubdivisions(framebuffer, subdivWidth, subdivHeight, cameraViewport);
@@ -83,7 +83,7 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (lightingResources != null)
         {
@@ -98,7 +98,7 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
         }
     }
 
-    public RenderedComponent<ContextType> getLitContentRoot()
+    public final RenderedComponent<ContextType> getLitContentRoot()
     {
         return litContentRoot;
     }
@@ -108,7 +108,7 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
      * Must be called before initialize
      * @param litContentRoot
      */
-    public void takeLitContentRoot(LitContent<ContextType> litContentRoot)
+    public final void takeLitContentRoot(LitContent<ContextType> litContentRoot)
     {
         this.litContentRoot = litContentRoot;
         litContentRoot.initWithLightingResources(this.lightingResources);
@@ -118,7 +118,7 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
      * Must be called after initialize
      * @param shadowCaster
      */
-    public void setShadowCaster(ReadonlyVertexBuffer<ContextType> shadowCaster)
+    public final void setShadowCaster(ReadonlyVertexBuffer<ContextType> shadowCaster)
     {
         lightingResources.setShadowCastingPositionBuffer(shadowCaster);
     }

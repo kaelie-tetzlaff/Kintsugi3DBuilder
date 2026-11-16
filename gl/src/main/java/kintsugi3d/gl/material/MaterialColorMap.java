@@ -21,12 +21,12 @@ public class MaterialColorMap extends MaterialTextureMap implements ReadonlyMate
     }
 
     @Override
-    public boolean isSRGBDecodingRequired()
+    public final boolean isSRGBDecodingRequired()
     {
         return sRGBDecodingRequired;
     }
 
-    public void setSRGBDecodingRequired(boolean sRGBDecodingRequired)
+    public final void setSRGBDecodingRequired(boolean sRGBDecodingRequired)
     {
         this.sRGBDecodingRequired = sRGBDecodingRequired;
     }

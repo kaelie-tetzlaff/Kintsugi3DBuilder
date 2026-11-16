@@ -22,6 +22,7 @@ import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
 import org.jengineering.sjmply.PLY;
 import org.jengineering.sjmply.PLYElementList;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +77,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         }
 
         @Override
-        public boolean equals(Object obj)
+        public final boolean equals(Object obj)
         {
             if (obj instanceof NormalTexCoordPair)
             {
@@ -90,7 +91,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         }
 
         @Override
-        public int hashCode()
+        public final int hashCode()
         {
             int result = normalIndex;
             result = 31 * result + texCoordIndex;
@@ -103,19 +104,26 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
      * @param geometryFile
      * @throws IOException
      */
-    public static VertexGeometry createFromGeometryFile(File geometryFile) throws IOException
+    public static @Nullable VertexGeometry createFromGeometryFile(File geometryFile) throws IOException
     {
         String fileName = geometryFile.getName();
         String fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
 
-        if ("zip".equalsIgnoreCase(fileExtension)){
+        if ("zip".equalsIgnoreCase(fileExtension))
+        {
             //TODO: set VertexGeometry.geometryFile to unzipped file?
             return createFromZippedPLYFile(geometryFile, "mesh.ply");
-        } else if("obj".equalsIgnoreCase(fileExtension)) {
+        }
+        else if("obj".equalsIgnoreCase(fileExtension))
+        {
              return createFromOBJFile(geometryFile);
-        }else if("ply".equalsIgnoreCase(fileExtension)){
+        }
+        else if("ply".equalsIgnoreCase(fileExtension))
+        {
             return createFromPLYFile(geometryFile);
-        }else{
+        }
+        else
+        {
             return null;
         }
     }
@@ -630,9 +638,9 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
             // Only update the normals if this faces is not degenerate
             if (e10Length != 0.0f && e02Length != 0.0f && e21Length != 0.0f)
             {
-                float angle0 = (float) Math.acos(Math.max(-1.0f, Math.min(1.0f, -e10Norm.dot(e02Norm))));
-                float angle1 = (float) Math.acos(Math.max(-1.0f, Math.min(1.0f, -e21Norm.dot(e10Norm))));
-                float angle2 = (float) Math.acos(Math.max(-1.0f, Math.min(1.0f, -e02Norm.dot(e21Norm))));
+                float angle0 = (float) StrictMath.acos(Math.max(-1.0f, Math.min(1.0f, -e10Norm.dot(e02Norm))));
+                float angle1 = (float) StrictMath.acos(Math.max(-1.0f, Math.min(1.0f, -e21Norm.dot(e10Norm))));
+                float angle2 = (float) StrictMath.acos(Math.max(-1.0f, Math.min(1.0f, -e02Norm.dot(e21Norm))));
 
                 normals.set(i0, normals.get(i0).plus(facialNorm.times(angle0)));
                 normals.set(i1, normals.get(i1).plus(facialNorm.times(angle1)));
@@ -688,9 +696,9 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
             // Only update the normals if this face is not degenerate
             if (e10Length != 0.0f && e02Length != 0.0f && e21Length != 0.0f)
             {
-                float angle0 = (float) Math.acos(Math.max(-1.0f, Math.min(1.0f, -e10Norm.dot(e02Norm))));
-                float angle1 = (float) Math.acos(Math.max(-1.0f, Math.min(1.0f, -e21Norm.dot(e10Norm))));
-                float angle2 = (float) Math.acos(Math.max(-1.0f, Math.min(1.0f, -e02Norm.dot(e21Norm))));
+                float angle0 = (float) StrictMath.acos(Math.max(-1.0f, Math.min(1.0f, -e10Norm.dot(e02Norm))));
+                float angle1 = (float) StrictMath.acos(Math.max(-1.0f, Math.min(1.0f, -e21Norm.dot(e10Norm))));
+                float angle2 = (float) StrictMath.acos(Math.max(-1.0f, Math.min(1.0f, -e02Norm.dot(e21Norm))));
 
                 tangentMap.put(pair0, tangentMap.getOrDefault(pair0, Vector3.ZERO).plus(tangents[0].times(angle0)));
                 tangentMap.put(pair1, tangentMap.getOrDefault(pair1, Vector3.ZERO).plus(tangents[0].times(angle1)));

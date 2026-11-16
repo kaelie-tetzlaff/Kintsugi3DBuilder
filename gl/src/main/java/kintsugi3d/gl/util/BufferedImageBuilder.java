@@ -34,7 +34,7 @@ public class BufferedImageBuilder
     }
 
     @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
-    public BufferedImageBuilder setDataFromArray(int[] data, int width, int height)
+    public final BufferedImageBuilder setDataFromArray(int[] data, int width, int height)
     {
         this.data = data;
         this.width = width;
@@ -42,7 +42,7 @@ public class BufferedImageBuilder
         return this;
     }
 
-    public BufferedImageBuilder loadDataFromFile(File file) throws IOException
+    public final BufferedImageBuilder loadDataFromFile(File file) throws IOException
     {
         BufferedImage img = ImageHelper.read(file).getBufferedImage();
         this.width = img.getWidth();
@@ -51,7 +51,7 @@ public class BufferedImageBuilder
         return this;
     }
 
-    public BufferedImageBuilder flipVertical()
+    public final BufferedImageBuilder flipVertical()
     {
         for (int y = 0; y < height / 2; y++)
         {
@@ -66,18 +66,18 @@ public class BufferedImageBuilder
         return this;
     }
 
-    public BufferedImageBuilder setBufferedImageType(int bufferedImageType)
+    public final BufferedImageBuilder setBufferedImageType(int bufferedImageType)
     {
         this.bufferedImageType = bufferedImageType;
         return this;
     }
 
-    public BufferedImageBuilder tonemap(Function<IntVector4, IntVector4> mapper)
+    public final BufferedImageBuilder tonemap(Function<IntVector4, IntVector4> mapper)
     {
         return tonemap((color, index) -> mapper.apply(color));
     }
 
-    public BufferedImageBuilder tonemap(BiFunction<IntVector4, Integer, IntVector4> mapper)
+    public final BufferedImageBuilder tonemap(BiFunction<IntVector4, Integer, IntVector4> mapper)
     {
         RenderedImage test = new BufferedImage(1, 1, bufferedImageType); // need a BufferedImage to convert imageType to ColorModel.
         ColorModel colorModel = test.getColorModel();
@@ -96,7 +96,7 @@ public class BufferedImageBuilder
         return this;
     }
 
-    public BufferedImage create()
+    public final BufferedImage create()
     {
         BufferedImage img = new BufferedImage(width, height, bufferedImageType);
         img.setRGB(0, 0, width, height, data, 0, width);

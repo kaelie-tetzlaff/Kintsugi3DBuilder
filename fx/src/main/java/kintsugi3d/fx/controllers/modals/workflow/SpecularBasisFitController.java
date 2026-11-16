@@ -26,7 +26,7 @@ public class SpecularBasisFitController extends SpecularTexturesFitController
     @FXML private CheckBox translucencyCheckBox;
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         super.initPage();
 
@@ -40,7 +40,7 @@ public class SpecularBasisFitController extends SpecularTexturesFitController
     }
 
     @Override
-    protected boolean shouldOptimizeBasis()
+    protected final boolean shouldOptimizeBasis()
     {
         return true;
     }

@@ -38,7 +38,7 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
     {
     }
 
-    public static void writePoseMatrix(View view, PrintStream out)
+    private static void writePoseMatrix(View view, PrintStream out)
     {
         Matrix4 pose = view.getCameraPose();
 

@@ -14,10 +14,12 @@ package kintsugi3d.builder.fit.finalize;
 import kintsugi3d.builder.core.texture.StandardTexture;
 import kintsugi3d.builder.core.texture.TextureInfo;
 import kintsugi3d.builder.core.texture.TextureResolution;
-import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
+import kintsugi3d.builder.resources.project.texture.ReadonlyTextureSet;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
+import kintsugi3d.builder.resources.project.texture.TextureSet;
 import kintsugi3d.gl.builders.framebuffer.ColorAttachmentSpec;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +27,7 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 
-public final class AlbedoORMOptimization<ContextType extends Context<ContextType>> implements AutoCloseable
+public final class AlbedoORMOptimization<ContextType extends Context<ContextType>> implements AutoCloseable, TextureSet<ContextType>
 {
     // Estimation program
     private ProgramObject<ContextType> estimationProgram;
@@ -144,7 +146,7 @@ public final class AlbedoORMOptimization<ContextType extends Context<ContextType
         }
     }
 
-    public void execute(ReadonlyTextureResources<ContextType> specularFit)
+    public void execute(ReadonlyTextureSet<ContextType> specularFit)
     {
         // Set up shader program
         estimationProgram.setTexture("diffuseEstimate", specularFit.getTexture(StandardTexture.DIFFUSE_COLOR));
@@ -200,12 +202,12 @@ public final class AlbedoORMOptimization<ContextType extends Context<ContextType
         }
     }
 
-    public Texture2D<ContextType> getAlbedoMap()
+    public @Nullable Texture2D<ContextType> getAlbedoMap()
     {
         return framebuffer == null ? null : framebuffer.getColorAttachmentTexture(0);
     }
 
-    public Texture2D<ContextType> getORMMap()
+    public @Nullable Texture2D<ContextType> getORMMap()
     {
         return framebuffer == null ? null : framebuffer.getColorAttachmentTexture(1);
     }
@@ -215,6 +217,7 @@ public final class AlbedoORMOptimization<ContextType extends Context<ContextType
         return getStandardTextures().size();
     }
 
+    @Override
     public Map<StandardTexture, Texture2D<ContextType>> getStandardTextures()
     {
         Map<StandardTexture, Texture2D<ContextType>> textures = new EnumMap<>(StandardTexture.class);
@@ -241,6 +244,7 @@ public final class AlbedoORMOptimization<ContextType extends Context<ContextType
         return Collections.unmodifiableMap(textures);
     }
 
+    @Override
     public Map<TextureInfo, Texture2D<ContextType>> getTextures()
     {
         return StandardTexture.convertEnumMapToObjectMap(getStandardTextures());

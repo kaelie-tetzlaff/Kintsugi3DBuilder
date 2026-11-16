@@ -27,28 +27,28 @@ public abstract class SimplePageBuilder<InType, OutType, FinishType> extends Pag
     }
 
     @Override
-    public Page<? super InType, OutType> getPage()
+    public final Page<? super InType, OutType> getPage()
     {
         return this.page;
     }
 
-    public <PageType extends Page<? super OutType, NextOutType>, NextOutType>
+    public final <PageType extends Page<? super OutType, NextOutType>, NextOutType>
     FinishType join(PageType joinPage)
     {
         this.page.setNextPage(joinPage);
         return getFinisher().get();
     }
 
-    public <PageType extends Page<? super OutType, NextOutType>, NextOutType, ControllerType extends PageController<?>>
+    public final <PageType extends Page<? super OutType, NextOutType>, NextOutType, ControllerType extends PageController<?>>
     SimplePageBuilder<OutType, NextOutType, FinishType> then(String fxmlPath, Function<FXMLLoader, PageType> pageConstructor,
-        Supplier<ControllerType> controllerConstructorOverride)
+                                                             Supplier<ControllerType> controllerConstructorOverride)
     {
         PageType nextPage = getFrameController().createPage(fxmlPath, pageConstructor, controllerConstructorOverride);
         this.page.setNextPage(nextPage);
         return new DataPageBuilder<>(nextPage, getFrameController(), getFinisher());
     }
 
-    public <PageType extends Page<? super OutType, NextOutType>, NextOutType>
+    public final <PageType extends Page<? super OutType, NextOutType>, NextOutType>
     SimplePageBuilder<OutType, NextOutType, FinishType> then(String fxmlPath, Function<FXMLLoader, PageType> pageConstructor)
     {
         return then(fxmlPath, pageConstructor, null);
@@ -60,7 +60,7 @@ public abstract class SimplePageBuilder<InType, OutType, FinishType> extends Pag
     public abstract <ControllerType extends NonSupplierPageController<? super OutType>>
     SimplePageBuilder<OutType, OutType, FinishType> then(String fxmlPath);
 
-    public <ControllerType extends NonSupplierPageController<? super Object>>
+    public final <ControllerType extends NonSupplierPageController<? super Object>>
     NonDataPageBuilder<FinishType> thenNonData(String fxmlPath, Supplier<ControllerType> controllerConstructorOverride)
     {
         SimpleNonDataPage<ControllerType> nextPage =
@@ -69,13 +69,13 @@ public abstract class SimplePageBuilder<InType, OutType, FinishType> extends Pag
         return new NonDataPageBuilder<>(nextPage, getFrameController(), getFinisher());
     }
 
-    public <ControllerType extends NonSupplierPageController<? super Object>>
+    public final <ControllerType extends NonSupplierPageController<? super Object>>
     NonDataPageBuilder<FinishType> thenNonData(String fxmlPath)
     {
         return this.<ControllerType>thenNonData(fxmlPath, null);
     }
 
-    public <PageType extends SelectionPage<OutType>, ControllerType extends PageController<OutType>>
+    public final <PageType extends SelectionPage<OutType>, ControllerType extends PageController<OutType>>
     SelectionPageBuilder<? super OutType, FinishType> thenSelect(String prompt, Function<FXMLLoader, PageType> pageConstructor, Supplier<ControllerType> controllerConstructorOverride)
     {
         PageType nextPage = getFrameController().createPage(SELECTION_PAGE_FXML, pageConstructor, controllerConstructorOverride);
@@ -84,7 +84,7 @@ public abstract class SimplePageBuilder<InType, OutType, FinishType> extends Pag
         return new SelectionPageBuilder<>(nextPage, getFrameController(), getFinisher());
     }
 
-    public <PageType extends SelectionPage<OutType>, ControllerType extends PageController<OutType>>
+    public final <PageType extends SelectionPage<OutType>, ControllerType extends PageController<OutType>>
     SelectionPageBuilder<? super OutType, FinishType> thenSelect(String prompt, Function<FXMLLoader, PageType> pageConstructor)
     {
         return this.<PageType, ControllerType>thenSelect(prompt, pageConstructor, null);
@@ -102,7 +102,7 @@ public abstract class SimplePageBuilder<InType, OutType, FinishType> extends Pag
         return thenSelect(prompt, SimpleSelectionPage<OutType, ControllerType>::new, null);
     }
 
-    protected <ControllerType extends SelectionPageController<Object>>
+    protected final <ControllerType extends SelectionPageController<Object>>
     NonDataSelectionPageBuilder<FinishType> thenSelectNonData(String prompt, Supplier<ControllerType> controllerConstructorOverride)
     {
         SimpleNonDataSelectionPage<ControllerType> nextPage = getFrameController().createPage(
@@ -112,29 +112,29 @@ public abstract class SimplePageBuilder<InType, OutType, FinishType> extends Pag
         return new NonDataSelectionPageBuilder<>(nextPage, getFrameController(), getFinisher());
     }
 
-    protected NonDataSelectionPageBuilder<FinishType> thenSelectNonData(String prompt)
+    protected final NonDataSelectionPageBuilder<FinishType> thenSelectNonData(String prompt)
     {
         return this.thenSelectNonData(prompt, null);
     }
 
-    public <PageType extends Page<? super Object, NextOutType>, NextOutType, ControllerType extends PageController<?>>
+    public final <PageType extends Page<? super Object, NextOutType>, NextOutType, ControllerType extends PageController<?>>
     SimplePageBuilder<Object, NextOutType, SimplePageBuilder<InType, OutType, FinishType>>
     buildFallback(String label, String fxmlPath, Function<FXMLLoader, PageType> pageConstructor,
-        Supplier<ControllerType> controllerConstructorOverride)
+                  Supplier<ControllerType> controllerConstructorOverride)
     {
         PageType fallbackPage = getFrameController().createPage(fxmlPath, pageConstructor, controllerConstructorOverride);
         this.page.addFallbackPage(label, fallbackPage);
         return new DataPageBuilder<>(fallbackPage, getFrameController(), () -> this);
     }
 
-    public <PageType extends Page<? super Object, NextOutType>, NextOutType>
+    public final <PageType extends Page<? super Object, NextOutType>, NextOutType>
     SimplePageBuilder<Object, NextOutType, SimplePageBuilder<InType, OutType, FinishType>>
     buildFallback(String label, String fxmlPath, Function<FXMLLoader, PageType> pageConstructor)
     {
         return buildFallback(label, fxmlPath, pageConstructor, null);
     }
 
-    public <ControllerType extends NonSupplierPageController<? super Object>>
+    public final <ControllerType extends NonSupplierPageController<? super Object>>
     NonDataPageBuilder<SimplePageBuilder<InType, OutType, FinishType>>
     buildFallback(String label, String fxmlPath, Supplier<ControllerType> controllerConstructorOverride)
     {
@@ -144,13 +144,13 @@ public abstract class SimplePageBuilder<InType, OutType, FinishType> extends Pag
         return new NonDataPageBuilder<>(fallbackPage, getFrameController(), () -> this);
     }
 
-    public <ControllerType extends NonSupplierPageController<? super Object>>
+    public final <ControllerType extends NonSupplierPageController<? super Object>>
     NonDataPageBuilder<SimplePageBuilder<InType, OutType, FinishType>> buildFallback(String label, String fxmlPath)
     {
         return this.<ControllerType>buildFallback(label, fxmlPath, null);
     }
 
-    public <PageType extends Page<? super Object, NextOutType>, NextOutType>
+    public final <PageType extends Page<? super Object, NextOutType>, NextOutType>
     SimplePageBuilder<InType, OutType, FinishType> joinFallback(String label, PageType joinPage)
     {
         this.page.addFallbackPage(label, joinPage);

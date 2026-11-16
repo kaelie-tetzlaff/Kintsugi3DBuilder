@@ -11,6 +11,8 @@
 
 package kintsugi3d.gl.vecmath;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.DoubleUnaryOperator;
@@ -59,44 +61,44 @@ public class Vector3 implements Iterable<Float>
         this(value, value, value);
     }
 
-    public Vector4 asVector4(float w)
+    public final Vector4 asVector4(float w)
     {
         return new Vector4(this.x, this.y, this.z, w);
     }
 
-    public Vector4 asDirection()
+    public final Vector4 asDirection()
     {
         return new Vector4(this.x, this.y, this.z, 0.0f);
     }
 
-    public Vector4 asPosition()
+    public final Vector4 asPosition()
     {
         return new Vector4(this.x, this.y, this.z, 1.0f);
     }
 
-    public Vector2 getXY()
+    public final Vector2 getXY()
     {
         return new Vector2(this.x, this.y);
     }
 
-    public IntVector3 rounded()
+    public final IntVector3 rounded()
     {
         return new IntVector3(Math.round(this.x), Math.round(this.y), Math.round(this.z));
     }
 
-    public IntVector3 truncated()
+    public final IntVector3 truncated()
     {
         return new IntVector3((int)this.x, (int)this.y, (int)this.z);
     }
 
-    public DoubleVector3 asDoublePrecision()
+    public final DoubleVector3 asDoublePrecision()
     {
         return new DoubleVector3(x, y, z);
     }
 
     @Override
     @SuppressWarnings("FloatingPointEquality")
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         if (obj instanceof Vector3)
         {
@@ -110,7 +112,7 @@ public class Vector3 implements Iterable<Float>
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         if (this.equals(ZERO))
         {
@@ -129,7 +131,7 @@ public class Vector3 implements Iterable<Float>
      * @param other The vector to add.
      * @return A new vector that is the mathematical (componentwise) sum of this and 'other'.
      */
-    public Vector3 plus(Vector3 other)
+    public final Vector3 plus(Vector3 other)
     {
         return new Vector3(
             this.x + other.x,
@@ -143,7 +145,7 @@ public class Vector3 implements Iterable<Float>
      * @param other The vector to add.
      * @return A new vector that is the mathematical (componentwise) subtraction of 'other' from this.
      */
-    public Vector3 minus(Vector3 other)
+    public final Vector3 minus(Vector3 other)
     {
         return new Vector3(
             this.x - other.x,
@@ -156,7 +158,7 @@ public class Vector3 implements Iterable<Float>
      * Construct a new vector that is the negation of this.
      * @return A new vector with the values (-x, -y, -z)
      */
-    public Vector3 negated()
+    public final Vector3 negated()
     {
         return new Vector3(-this.x, -this.y, -this.z);
     }
@@ -166,7 +168,7 @@ public class Vector3 implements Iterable<Float>
      * @param s The scaler to multiply by.
      * @return A new vector equal to (s*x, s*y, s*z)
      */
-    public Vector3 times(float s)
+    public final Vector3 times(float s)
     {
         return new Vector3(s*this.x, s*this.y, s*this.z);
     }
@@ -176,17 +178,17 @@ public class Vector3 implements Iterable<Float>
      * @param s The scaler to divide by.
      * @return A new vector equal to (x/s, y/s, z/s)
      */
-    public Vector3 dividedBy(float s)
+    public final Vector3 dividedBy(float s)
     {
         return new Vector3(this.x/s, this.y/s, this.z/s);
     }
 
-    public Vector3 times(Vector3 other)
+    public final Vector3 times(Vector3 other)
     {
         return new Vector3(this.x * other.x, this.y * other.y, this.z * other.z);
     }
 
-    public Vector3 dividedBy(Vector3 other)
+    public final Vector3 dividedBy(Vector3 other)
     {
         return new Vector3(this.x / other.x, this.y / other.y, this.z / other.z);
     }
@@ -196,7 +198,7 @@ public class Vector3 implements Iterable<Float>
      * @param other The vector to use when computing the dot product.
      * @return A scalar value equal to the sum of x1*x2, y1*y2 and z1*z2.
      */
-    public float dot(Vector3 other)
+    public final float dot(Vector3 other)
     {
         return this.x * other.x + this.y * other.y + this.z * other.z;
     }
@@ -206,7 +208,7 @@ public class Vector3 implements Iterable<Float>
      * @param other The vector to use when computing the outer product.
      * @return The matrix that is the outer product of the vectors.
      */
-    public Matrix3 outerProduct(Vector3 other)
+    public final Matrix3 outerProduct(Vector3 other)
     {
         return Matrix3.fromColumns(
             new Vector3(this.x * other.x, this.y * other.x, this.z * other.x),
@@ -220,7 +222,7 @@ public class Vector3 implements Iterable<Float>
      * @param other The vector to use when computing the dot product.
      * @return A new 3d vector with the values (y1*z2-z1*y2, z1*x2-x1*z2, x1*y2-y1*x2)
      */
-    public Vector3 cross(Vector3 other)
+    public final Vector3 cross(Vector3 other)
     {
         return new Vector3(
             this.y * other.z - this.z * other.y,
@@ -233,7 +235,7 @@ public class Vector3 implements Iterable<Float>
      * Compute a scaler value representing the length/magnitude of this vector.
      * @return A scaler value equal to square root of the sum of squares of the components.
      */
-    public float length()
+    public final float length()
     {
         return (float)Math.sqrt(this.dot(this));
     }
@@ -243,7 +245,7 @@ public class Vector3 implements Iterable<Float>
      * @param other The vector to compute the distance between.
      * @return A scaler value equal to the length of the different vector.
      */
-    public float distance(Vector3 other)
+    public final float distance(Vector3 other)
     {
         return this.minus(other).length();
     }
@@ -254,7 +256,7 @@ public class Vector3 implements Iterable<Float>
      * Do not attempt to normalize a zero-length vector.
      * @return A new vector equal to this vector divided by it's length.
      */
-    public Vector3 normalized()
+    public final Vector3 normalized()
     {
         return this.times(1.0f / this.length());
     }
@@ -264,7 +266,7 @@ public class Vector3 implements Iterable<Float>
      * magnitude (a length of 1.0).  If this vector has zero length, it will return itself.
      * @return A new vector equal to this vector divided by it's length except in cases of a zero-length vector.
      */
-    public Vector3 normalizedSafe()
+    public final Vector3 normalizedSafe()
     {
         float l = this.length();
         if (l == 0.0f)
@@ -277,19 +279,19 @@ public class Vector3 implements Iterable<Float>
         }
     }
 
-    public Vector3 applyOperator(DoubleUnaryOperator operator)
+    public final Vector3 applyOperator(DoubleUnaryOperator operator)
     {
         return new Vector3((float)operator.applyAsDouble(x), (float)operator.applyAsDouble(y), (float)operator.applyAsDouble(z));
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return String.format("Vector3{x=%s, y=%s, z=%s}", x, y, z);
     }
 
     @Override
-    public Iterator<Float> iterator()
+    public final @NotNull Iterator<Float> iterator()
     {
         return Arrays.asList(x, y, z).iterator();
     }

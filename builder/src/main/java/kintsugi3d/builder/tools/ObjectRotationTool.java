@@ -34,7 +34,7 @@ final class ObjectRotationTool implements DragTool
     private static class Builder extends ToolBuilderBase<ObjectRotationTool>
     {
         @Override
-        public ObjectRotationTool create()
+        public final ObjectRotationTool create()
         {
             return new ObjectRotationTool(getCameraModel(), getObjectModel());
         }

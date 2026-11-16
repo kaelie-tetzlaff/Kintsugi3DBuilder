@@ -106,24 +106,24 @@ public class NormalOptimization<ContextType extends Context<ContextType>> implem
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         estimateNormals.close();
         smoothNormals.close();
     }
 
-    public void finish()
+    public final void finish()
     {
         estimateNormals.close();
         smoothNormals.finish();
     }
 
-    public boolean isNormalRefinementEnabled()
+    public final boolean isNormalRefinementEnabled()
     {
         return normalOptimizationSettings.isNormalRefinementEnabled();
     }
 
-    public void execute(Function<Texture<ContextType>, ReadonlyErrorReport> errorCalculator, double convergenceTolerance)
+    public final void execute(Function<Texture<ContextType>, ReadonlyErrorReport> errorCalculator, double convergenceTolerance)
     {
         if (normalOptimizationSettings.isLevenbergMarquardtEnabled())
         {
@@ -168,12 +168,12 @@ public class NormalOptimization<ContextType extends Context<ContextType>> implem
     }
 
 
-    public Texture2D<ContextType> getNormalMap()
+    public final Texture2D<ContextType> getNormalMap()
     {
         return getNormalMapFBO().getColorAttachmentTexture(0);
     }
 
-    public void saveNormalMapEstimate(File outputDirectory)
+    public final void saveNormalMapEstimate(File outputDirectory)
     {
         try
         {

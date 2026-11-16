@@ -66,221 +66,221 @@ public class WindowListenerManagerInstance implements WindowListenerManager
     }
 
     @Override
-    public void addCanvasPositionListener(CanvasPositionListener listener)
+    public final void addCanvasPositionListener(CanvasPositionListener listener)
     {
         canvasPosListeners.add(listener);
     }
 
     @Override
-    public void addCanvasSizeListener(CanvasSizeListener listener)
+    public final void addCanvasSizeListener(CanvasSizeListener listener)
     {
         canvasSizeListeners.add(listener);
     }
 
     @Override
-    public void addWindowCloseListener(WindowCloseListener listener)
+    public final void addWindowCloseListener(WindowCloseListener listener)
     {
         windowCloseListeners.add(listener);
     }
 
     @Override
-    public void addCanvasRefreshListener(CanvasRefreshListener listener)
+    public final void addCanvasRefreshListener(CanvasRefreshListener listener)
     {
         canvasRefreshListeners.add(listener);
     }
 
     @Override
-    public void addWindowFocusLostListener(WindowFocusLostListener listener)
+    public final void addWindowFocusLostListener(WindowFocusLostListener listener)
     {
         windowFocusLostListeners.add(listener);
     }
 
     @Override
-    public void addWindowFocusGainedListener(WindowFocusGainedListener listener)
+    public final void addWindowFocusGainedListener(WindowFocusGainedListener listener)
     {
         windowFocusGainedListeners.add(listener);
     }
 
     @Override
-    public void addWindowIconifiedListener(WindowIconifiedListener listener)
+    public final void addWindowIconifiedListener(WindowIconifiedListener listener)
     {
         windowIconifiedListeners.add(listener);
     }
 
     @Override
-    public void addWindowRestoredListener(WindowRestoredListener listener)
+    public final void addWindowRestoredListener(WindowRestoredListener listener)
     {
         windowRestoredListeners.add(listener);
     }
 
     @Override
-    public void addFramebufferSizeListener(FramebufferSizeListener listener)
+    public final void addFramebufferSizeListener(FramebufferSizeListener listener)
     {
         framebufferSizeListeners.add(listener);
     }
 
     @Override
-    public void addKeyPressListener(KeyPressListener listener)
+    public final void addKeyPressListener(KeyPressListener listener)
     {
         keyPressListeners.add(listener);
     }
 
     @Override
-    public void addKeyReleaseListener(KeyReleaseListener listener)
+    public final void addKeyReleaseListener(KeyReleaseListener listener)
     {
         keyReleaseListeners.add(listener);
     }
 
     @Override
-    public void addKeyTypeListener(KeyTypeListener listener)
+    public final void addKeyTypeListener(KeyTypeListener listener)
     {
         keyTypeListeners.add(listener);
     }
 
     @Override
-    public void addCharacterListener(CharacterListener listener)
+    public final void addCharacterListener(CharacterListener listener)
     {
         characterListeners.add(listener);
     }
 
     @Override
-    public void addCharacterModifiersListener(CharacterModifiersListener listener)
+    public final void addCharacterModifiersListener(CharacterModifiersListener listener)
     {
         charModsListeners.add(listener);
     }
 
     @Override
-    public void addMouseButtonPressListener(MouseButtonPressListener listener)
+    public final void addMouseButtonPressListener(MouseButtonPressListener listener)
     {
         mouseButtonPressListeners.add(listener);
     }
 
     @Override
-    public void addMouseButtonReleaseListener(MouseButtonReleaseListener listener)
+    public final void addMouseButtonReleaseListener(MouseButtonReleaseListener listener)
     {
         mouseButtonReleaseListeners.add(listener);
     }
 
     @Override
-    public void addCursorPositionListener(CursorPositionListener listener)
+    public final void addCursorPositionListener(CursorPositionListener listener)
     {
         cursorPosListeners.add(listener);
     }
 
     @Override
-    public void addCursorEnteredListener(CursorEnteredListener listener)
+    public final void addCursorEnteredListener(CursorEnteredListener listener)
     {
         cursorEnterListeners.add(listener);
     }
 
     @Override
-    public void addCursorExitedListener(CursorExitedListener listener)
+    public final void addCursorExitedListener(CursorExitedListener listener)
     {
         cursorExitListeners.add(listener);
     }
 
     @Override
-    public void addScrollListener(ScrollListener listener)
+    public final void addScrollListener(ScrollListener listener)
     {
         scrollListeners.add(listener);
     }
 
-    public Collection<CanvasPositionListener> getCanvasPosListeners()
+    public final Collection<CanvasPositionListener> getCanvasPosListeners()
     {
         return Collections.unmodifiableCollection(canvasPosListeners);
     }
 
-    public Collection<CanvasSizeListener> getCanvasSizeListeners()
+    public final Collection<CanvasSizeListener> getCanvasSizeListeners()
     {
         return Collections.unmodifiableCollection(canvasSizeListeners);
     }
 
-    public Collection<WindowCloseListener> getWindowCloseListeners()
+    public final Collection<WindowCloseListener> getWindowCloseListeners()
     {
         return Collections.unmodifiableCollection(windowCloseListeners);
     }
 
-    public Collection<CanvasRefreshListener> getCanvasRefreshListeners()
+    public final Collection<CanvasRefreshListener> getCanvasRefreshListeners()
     {
         return Collections.unmodifiableCollection(canvasRefreshListeners);
     }
 
-    public Collection<WindowFocusLostListener> getWindowFocusLostListeners()
+    public final Collection<WindowFocusLostListener> getWindowFocusLostListeners()
     {
         return Collections.unmodifiableCollection(windowFocusLostListeners);
     }
 
-    public Collection<WindowFocusGainedListener> getWindowFocusGainedListeners()
+    public final Collection<WindowFocusGainedListener> getWindowFocusGainedListeners()
     {
         return Collections.unmodifiableCollection(windowFocusGainedListeners);
     }
 
-    public Collection<WindowIconifiedListener> getWindowIconifiedListeners()
+    public final Collection<WindowIconifiedListener> getWindowIconifiedListeners()
     {
         return Collections.unmodifiableCollection(windowIconifiedListeners);
     }
 
-    public Collection<WindowRestoredListener> getWindowRestoredListeners()
+    public final Collection<WindowRestoredListener> getWindowRestoredListeners()
     {
         return Collections.unmodifiableCollection(windowRestoredListeners);
     }
 
-    public Collection<FramebufferSizeListener> getFramebufferSizeListeners()
+    public final Collection<FramebufferSizeListener> getFramebufferSizeListeners()
     {
         return Collections.unmodifiableCollection(framebufferSizeListeners);
     }
 
-    public Collection<KeyPressListener> getKeyPressListeners()
+    public final Collection<KeyPressListener> getKeyPressListeners()
     {
         return Collections.unmodifiableCollection(keyPressListeners);
     }
 
-    public Collection<KeyReleaseListener> getKeyReleaseListeners()
+    public final Collection<KeyReleaseListener> getKeyReleaseListeners()
     {
         return Collections.unmodifiableCollection(keyReleaseListeners);
     }
 
-    public Collection<KeyTypeListener> getKeyTypeListeners()
+    public final Collection<KeyTypeListener> getKeyTypeListeners()
     {
         return Collections.unmodifiableCollection(keyTypeListeners);
     }
 
-    public Collection<CharacterListener> getCharacterListeners()
+    public final Collection<CharacterListener> getCharacterListeners()
     {
         return Collections.unmodifiableCollection(characterListeners);
     }
 
-    public Collection<CharacterModifiersListener> getCharModsListeners()
+    public final Collection<CharacterModifiersListener> getCharModsListeners()
     {
         return Collections.unmodifiableCollection(charModsListeners);
     }
 
-    public Collection<MouseButtonPressListener> getMouseButtonPressListeners()
+    public final Collection<MouseButtonPressListener> getMouseButtonPressListeners()
     {
         return Collections.unmodifiableCollection(mouseButtonPressListeners);
     }
 
-    public Collection<MouseButtonReleaseListener> getMouseButtonReleaseListeners()
+    public final Collection<MouseButtonReleaseListener> getMouseButtonReleaseListeners()
     {
         return Collections.unmodifiableCollection(mouseButtonReleaseListeners);
     }
 
-    public Collection<CursorPositionListener> getCursorPosListeners()
+    public final Collection<CursorPositionListener> getCursorPosListeners()
     {
         return Collections.unmodifiableCollection(cursorPosListeners);
     }
 
-    public Collection<CursorEnteredListener> getCursorEnterListeners()
+    public final Collection<CursorEnteredListener> getCursorEnterListeners()
     {
         return Collections.unmodifiableCollection(cursorEnterListeners);
     }
 
-    public Collection<CursorExitedListener> getCursorExitListeners()
+    public final Collection<CursorExitedListener> getCursorExitListeners()
     {
         return Collections.unmodifiableCollection(cursorExitListeners);
     }
 
-    public Collection<ScrollListener> getScrollListeners()
+    public final Collection<ScrollListener> getScrollListeners()
     {
         return Collections.unmodifiableCollection(scrollListeners);
     }

@@ -63,7 +63,7 @@ public class CardController
     private File currentPreviewImageFile;
     private File loadedPreviewImageFile;
 
-    public void init(ObservableCardsModel<?> cardsModel, ProjectDataCard dataCard)
+    public final void init(ObservableCardsModel<?> cardsModel, ProjectDataCard dataCard)
     {
         this.cardsModel = cardsModel;
 
@@ -100,7 +100,7 @@ public class CardController
         }
     }
 
-    public void refresh(ProjectDataCard refreshedDataCard)
+    public final void refresh(ProjectDataCard refreshedDataCard)
     {
         this.cardId = refreshedDataCard.getCardId();
 
@@ -179,18 +179,18 @@ public class CardController
         createBindings(cardIcon, hoverRectangle);//easy method to bind Rectangle to ImageView
     }
 
-    public void setCardVisibility(boolean visibility)
+    public final void setCardVisibility(boolean visibility)
     {
         dataCardPane.setVisible(visibility);
     }
 
-    public boolean doesTitleContainString(String str)
+    public final boolean doesTitleContainString(String str)
     {
         return cardTitle.getText().toLowerCase(Locale.ROOT).contains(str.toLowerCase(Locale.ROOT));
     }
 
     @FXML
-    public void cardClicked()
+    public final void cardClicked()
     {
         if (cardsModel.isExpanded(cardId))
         {
@@ -203,13 +203,13 @@ public class CardController
     }
 
     @FXML
-    public void expansionToggleClicked(MouseEvent e)
+    public final void expansionToggleClicked(MouseEvent e)
     {
         cardClicked();
         e.consume();
     }
 
-    public VBox getCard()
+    public final VBox getCard()
     {
         return dataCardPane;
     }
@@ -219,7 +219,7 @@ public class CardController
      * This method does addSelected to global tab models.
      */
     @FXML
-    public void select()
+    public final void select()
     {
         if (cardsModel.isSelected(cardId))
         {
@@ -293,7 +293,7 @@ public class CardController
      * These methods don't activate if selectionBox is hidden/disbled (filePath == null)
      */
     @FXML
-    public void hoverStart()
+    public final void hoverStart()
     {
         hoverRectangle.setVisible(true);
     }
@@ -303,7 +303,7 @@ public class CardController
      * of hoverRectangle to false (which makes the icon go back to normal)
      */
     @FXML
-    public void hoverEnd()
+    public final void hoverEnd()
     {
         hoverRectangle.setVisible(false);
     }
@@ -311,7 +311,7 @@ public class CardController
     /**
      * Sets the selectionBox state to false
      */
-    public void updateCheckBox()
+    public final void updateCheckBox()
     {
         selectionBox.setSelected(false);
     }

@@ -26,13 +26,13 @@ public class ObservableCameraModel extends CameraModelFromSettings
         sentinel.setLocked(true);
     }
 
-    public void setSelectedCameraSetting(ObservableValue<ObservableCameraSettings> selectedCameraSetting)
+    public final void setSelectedCameraSetting(ObservableValue<ObservableCameraSettings> selectedCameraSetting)
     {
         this.selectedCameraSetting = selectedCameraSetting;
     }
 
     @Override
-    protected SerializableCameraSettings getCameraSettings()
+    protected final SerializableCameraSettings getCameraSettings()
     {
         if (selectedCameraSetting == null || selectedCameraSetting.getValue() == null)
         {

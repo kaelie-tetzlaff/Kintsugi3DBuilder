@@ -24,22 +24,22 @@ public class SpecularWeights
     // Used by glTF exporter, via reflection presumably
     private final Collection<TextureInfo> textures = new ArrayList<>(8);
 
-    public Collection<TextureInfo> getTextures()
+    public final Collection<TextureInfo> getTextures()
     {
         return Collections.unmodifiableCollection(textures);
     }
 
-    public void addTexture(TextureInfo texture)
+    public final void addTexture(TextureInfo texture)
     {
         textures.add(texture);
     }
 
-    public int getStride()
+    public final int getStride()
     {
         return stride;
     }
 
-    public void setStride(int stride)
+    public final void setStride(int stride)
     {
         this.stride = stride;
     }

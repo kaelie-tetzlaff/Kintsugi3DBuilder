@@ -33,6 +33,7 @@ import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -275,7 +276,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public ReadonlyNativeVectorBuffer getCameraPoseData()
+    public @Nullable ReadonlyNativeVectorBuffer getCameraPoseData()
     {
         synchronized (views)
         {
@@ -309,7 +310,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public ReadonlyNativeVectorBuffer getCameraProjectionData()
+    public @Nullable ReadonlyNativeVectorBuffer getCameraProjectionData()
     {
         synchronized (cameraProjectionList)
         {
@@ -342,7 +343,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public ReadonlyNativeVectorBuffer getCameraProjectionIndexData()
+    public @Nullable ReadonlyNativeVectorBuffer getCameraProjectionIndexData()
     {
         synchronized (views)
         {
@@ -364,7 +365,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public ReadonlyNativeVectorBuffer getLightPositionData()
+    public @Nullable ReadonlyNativeVectorBuffer getLightPositionData()
     {
         synchronized (lightPositionList)
         {
@@ -390,7 +391,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public ReadonlyNativeVectorBuffer getLightIntensityData()
+    public @Nullable ReadonlyNativeVectorBuffer getLightIntensityData()
     {
         synchronized (lightIntensityList)
         {
@@ -415,7 +416,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public ReadonlyNativeVectorBuffer getLightIndexData()
+    public @Nullable ReadonlyNativeVectorBuffer getLightIndexData()
     {
         synchronized (views)
         {
@@ -436,7 +437,7 @@ public final class ViewSet implements ReadonlyViewSet
         }
     }
 
-    public ReadonlyNativeVectorBuffer getViewIndexData()
+    public @Nullable ReadonlyNativeVectorBuffer getViewIndexData()
     {
         synchronized (views)
         {
@@ -588,7 +589,7 @@ public final class ViewSet implements ReadonlyViewSet
     {
         View view = findViewByName(image.getName());
 
-        if (view.isEnabled()) // Currently enabled, so disable camera
+        if (Objects.requireNonNull(view).isEnabled()) // Currently enabled, so disable camera
         {
             view.setEnabled(isEnabled);
             if (!isEnabled)
@@ -616,7 +617,7 @@ public final class ViewSet implements ReadonlyViewSet
             for (File image : images)
             {
                 View view = findViewByName(image.getName());
-                view.setEnabled(isEnabled);
+                Objects.requireNonNull(view).setEnabled(isEnabled);
                 imageFilesModified.put(view.getImageFile(), view);
             }
         }
@@ -651,7 +652,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public String getRelativeSupportingFilesPathName()
+    public @Nullable String getRelativeSupportingFilesPathName()
     {
         File effectiveSupportingFilesDirectory = this.getSupportingFilesDirectory();
         try
@@ -698,7 +699,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public String getRelativeFullResImagePathName()
+    public @Nullable String getRelativeFullResImagePathName()
     {
         File effectiveFullResImageDirectory = getFullResImageDirectory();
 
@@ -751,7 +752,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public String getRelativePreviewImagePathName()
+    public @Nullable String getRelativePreviewImagePathName()
     {
         File effectivePreviewImageDirectory = this.getPreviewImageDirectory();
 
@@ -933,7 +934,7 @@ public final class ViewSet implements ReadonlyViewSet
         }
     }
 
-    public View findViewByName(String viewName)
+    public @Nullable View findViewByName(String viewName)
     {
         // Treat null as "not found" or "not present"
         // Important for allowing for orientation pose to remain unset.
@@ -1395,7 +1396,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public String getRelativeMaskPathName()
+    public @Nullable String getRelativeMaskPathName()
     {
         File masksDirectoryRef = masksDirectory;
 
@@ -1442,7 +1443,7 @@ public final class ViewSet implements ReadonlyViewSet
                     // Search for the name of the photo in the masks directory
                     // Will check both with and without _mask suffix
                     maskFile = ImageFinder.tryFindImageFile(
-                        new File(getMasksDirectory(), view.getFullResImageFile().getName()),
+                        new File(masksDirectory, view.getFullResImageFile().getName()),
                         "_mask");
                 }
 
@@ -1453,7 +1454,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public String getGeometryFileName()
+    public @Nullable String getGeometryFileName()
     {
         // Grab reference for thread synchronization, just in case.
         File geometryFileRef = this.geometryFile;

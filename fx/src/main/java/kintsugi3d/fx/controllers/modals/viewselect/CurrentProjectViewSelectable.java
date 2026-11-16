@@ -16,6 +16,7 @@ import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.io.imageset.GenericImageSetInfo;
 import kintsugi3d.builder.io.imageset.ImageSetInfo;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
@@ -54,31 +55,31 @@ public class CurrentProjectViewSelectable extends ViewSelectableBase
         this(getInitialSelection, null);
     }
 
-    public View getInitialView()
+    public final View getInitialView()
     {
         return initialView;
     }
 
-    public double getInitialViewRotationDegrees()
+    public final double getInitialViewRotationDegrees()
     {
         return initialViewRotationDegrees;
     }
 
     @Override
-    public String getAdvanceLabelOverride()
+    public final @Nullable String getAdvanceLabelOverride()
     {
         // No override
         return null;
     }
 
     @Override
-    public ImageSetInfo getImageSetInfo()
+    public final ImageSetInfo getImageSetInfo()
     {
         return imageSetInfo;
     }
 
     @Override
-    public boolean confirm()
+    public final boolean confirm()
     {
         // Will be handled by the controller itself if a project is already loaded.
         return true;

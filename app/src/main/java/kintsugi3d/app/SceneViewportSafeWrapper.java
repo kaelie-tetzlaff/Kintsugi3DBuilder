@@ -14,13 +14,14 @@ package kintsugi3d.app;
 import kintsugi3d.builder.rendering.SceneViewport;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.Nullable;
 
 class SceneViewportSafeWrapper implements SceneViewport
 {
     private static final SceneViewport SENTINEL = new SceneViewport()
     {
         @Override
-        public Object getObjectAtCoordinates(double x, double y)
+        public @Nullable Object getObjectAtCoordinates(double x, double y)
         {
             return null;
         }
@@ -58,48 +59,48 @@ class SceneViewportSafeWrapper implements SceneViewport
 
     private SceneViewport sceneViewport = SENTINEL;
 
-    SceneViewport getSceneViewport()
+    final SceneViewport getSceneViewport()
     {
         return sceneViewport;
     }
 
-    void setSceneViewport(SceneViewport sceneViewport)
+    final void setSceneViewport(SceneViewport sceneViewport)
     {
         this.sceneViewport = sceneViewport;
     }
 
     @Override
-    public Object getObjectAtCoordinates(double x, double y)
+    public final Object getObjectAtCoordinates(double x, double y)
     {
         return sceneViewport.getObjectAtCoordinates(x, y);
     }
 
     @Override
-    public Vector3 get3DPositionAtCoordinates(double x, double y)
+    public final Vector3 get3DPositionAtCoordinates(double x, double y)
     {
         return sceneViewport.get3DPositionAtCoordinates(x, y);
     }
 
     @Override
-    public Vector3 getViewingDirection(double x, double y)
+    public final Vector3 getViewingDirection(double x, double y)
     {
         return sceneViewport.getViewingDirection(x, y);
     }
 
     @Override
-    public Vector3 getViewportCenter()
+    public final Vector3 getViewportCenter()
     {
         return sceneViewport.getViewportCenter();
     }
 
     @Override
-    public Vector2 projectPoint(Vector3 point)
+    public final Vector2 projectPoint(Vector3 point)
     {
         return sceneViewport.projectPoint(point);
     }
 
     @Override
-    public float getLightWidgetScale()
+    public final float getLightWidgetScale()
     {
         return sceneViewport.getLightWidgetScale();
     }

@@ -36,39 +36,39 @@ public class SynchronizedViewListModel implements SelectableViewListModel
      * @return
      */
     @Override
-    public View getSelectedView()
+    public final View getSelectedView()
     {
         // Not synchronized; should be fine -- worst case scenario it's just out-of-sync with the view index and/or view list model.
         return baseModel.getSelectedView();
     }
 
     @Override
-    public void setSelectedView(View cameraView)
+    public final void setSelectedView(View cameraView)
     {
         this.selectedCameraView.setValue(cameraView);
     }
 
     @Override
-    public List<View> getViewList()
+    public final List<View> getViewList()
     {
         return cameraViewList.getValue();
     }
 
     @Override
-    public void setViewList(List<View> cameraViewList)
+    public final void setViewList(List<View> cameraViewList)
     {
         // Need to run on JavaFX thread as this will completely change the backend model for the list view.
         this.cameraViewList.setValue(cameraViewList);
     }
 
     @Override
-    public boolean isViewSnapEnabled()
+    public final boolean isViewSnapEnabled()
     {
         return cameraViewSnapEnabled.getValue();
     }
 
     @Override
-    public void setViewSnapEnabled(boolean cameraViewSnapEnabled)
+    public final void setViewSnapEnabled(boolean cameraViewSnapEnabled)
     {
         this.cameraViewSnapEnabled.setValue(cameraViewSnapEnabled);
     }

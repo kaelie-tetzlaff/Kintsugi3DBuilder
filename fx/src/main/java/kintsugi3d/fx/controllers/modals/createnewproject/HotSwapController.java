@@ -16,7 +16,7 @@ import kintsugi3d.fx.controllers.modals.createnewproject.inputsources.ManualInpu
 public class HotSwapController extends ManualImportController
 {
     @Override
-    public ManualInputSource getData()
+    public final ManualInputSource getData()
     {
         return super.getData().setHotSwap(true);
     }

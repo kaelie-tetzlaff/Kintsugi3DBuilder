@@ -76,7 +76,7 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
     }
 
     @Override
-    public void reloadShaders()
+    public final void reloadShaders()
     {
         try
         {
@@ -117,7 +117,7 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (program != null)
         {
@@ -142,17 +142,17 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
         }
     }
 
-    public ContextType getContext()
+    public final ContextType getContext()
     {
         return context;
     }
 
-    public Drawable<ContextType> getDrawable()
+    public final Drawable<ContextType> getDrawable()
     {
         return drawable;
     }
 
-    public Program<ContextType> getProgram()
+    public final Program<ContextType> getProgram()
     {
         return drawable.program();
     }
@@ -179,7 +179,7 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
         return context.createDrawable(drawableProgram);
     }
 
-    protected <ResourceType extends ManagedResource> ResourceType resource(ResourceType resource)
+    protected final <ResourceType extends ManagedResource> ResourceType resource(ResourceType resource)
     {
         this.otherManagedResources.add(resource);
         return resource;

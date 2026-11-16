@@ -75,79 +75,79 @@ public class ObservableProjectModel extends ProjectModelBase<
 
     @Override
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
-    public ObservableList<ObservableCameraSettings> getCameraList()
+    public final ObservableList<ObservableCameraSettings> getCameraList()
     {
         return this.cameraList;
     }
 
     @Override
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
-    public ObservableList<ObservableEnvironmentSettings> getEnvironmentList()
+    public final ObservableList<ObservableEnvironmentSettings> getEnvironmentList()
     {
         return this.environmentList;
     }
 
     @Override
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
-    public ObservableList<ObservableLightGroupSettings> getLightGroupList()
+    public final ObservableList<ObservableLightGroupSettings> getLightGroupList()
     {
         return this.lightGroupList;
     }
 
     @Override
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
-    public ObservableList<ObservableObjectPoseSettings> getObjectPoseList()
+    public final ObservableList<ObservableObjectPoseSettings> getObjectPoseList()
     {
         return this.objectPoseList;
     }
 
     @Override
-    protected ObservableCameraSettings constructCameraSetting()
+    protected final ObservableCameraSettings constructCameraSetting()
     {
         return new ObservableCameraSettings();
     }
 
     @Override
-    protected ObservableEnvironmentSettings constructEnvironmentSetting()
+    protected final ObservableEnvironmentSettings constructEnvironmentSetting()
     {
         return new ObservableEnvironmentSettings();
     }
 
     @Override
-    protected ObservableLightGroupSettings constructLightGroupSetting()
+    protected final ObservableLightGroupSettings constructLightGroupSetting()
     {
         return new ObservableLightGroupSettings();
     }
 
     @Override
-    protected ObservableObjectPoseSettings constructObjectPoseSetting()
+    protected final ObservableObjectPoseSettings constructObjectPoseSetting()
     {
         return new ObservableObjectPoseSettings();
     }
 
-    public EventHandler<ProcessingCompleteEvent> getOnProcessingComplete()
+    public final EventHandler<ProcessingCompleteEvent> getOnProcessingComplete()
     {
         return onProcessingComplete.get();
     }
 
-    public void setOnProcessingComplete(EventHandler<ProcessingCompleteEvent> onProcessingComplete)
+    public final void setOnProcessingComplete(EventHandler<ProcessingCompleteEvent> onProcessingComplete)
     {
         this.onProcessingComplete.set(onProcessingComplete);
     }
 
     @Override
-    public File getColorCheckerFile()
+    public final File getColorCheckerFile()
     {
         return this.colorCheckerFile.get();
     }
 
     @Override
-    public void setColorCheckerFile(File colorCheckerFile)
+    public final void setColorCheckerFile(File colorCheckerFile)
     {
         this.colorCheckerFile.set(colorCheckerFile);
     }
 
-    public boolean isProjectOpen()
+    public final boolean isProjectOpen()
     {
         return projectOpen.get();
     }
@@ -157,12 +157,12 @@ public class ObservableProjectModel extends ProjectModelBase<
         this.projectOpen.set(projectOpen);
     }
 
-    public BooleanExpression getProjectOpenProperty()
+    public final BooleanExpression getProjectOpenProperty()
     {
         return projectOpen;
     }
 
-    public String getProjectName()
+    public final String getProjectName()
     {
         return projectName.get();
     }
@@ -172,12 +172,12 @@ public class ObservableProjectModel extends ProjectModelBase<
         this.projectName.set(projectName);
     }
 
-    public StringExpression getProjectNameProperty()
+    public final StringExpression getProjectNameProperty()
     {
         return projectName;
     }
 
-    public boolean isProjectLoaded()
+    public final boolean isProjectLoaded()
     {
         return projectLoaded.get();
     }
@@ -187,12 +187,12 @@ public class ObservableProjectModel extends ProjectModelBase<
         this.projectLoaded.set(projectLoaded);
     }
 
-    public BooleanExpression getProjectLoadedProperty()
+    public final BooleanExpression getProjectLoadedProperty()
     {
         return projectLoaded;
     }
 
-    public boolean isProjectProcessed()
+    public final boolean isProjectProcessed()
     {
         return projectProcessed.get();
     }
@@ -202,17 +202,17 @@ public class ObservableProjectModel extends ProjectModelBase<
         this.projectProcessed.set(projectProcessed);
     }
 
-    public BooleanExpression getProjectProcessedProperty()
+    public final BooleanExpression getProjectProcessedProperty()
     {
         return projectProcessed;
     }
 
-    public int getProcessedTextureWidth()
+    public final int getProcessedTextureWidth()
     {
         return processedTextureWidth.get();
     }
 
-    public int getProcessedTextureHeight()
+    public final int getProcessedTextureHeight()
     {
         return processedTextureHeight.get();
     }
@@ -227,17 +227,17 @@ public class ObservableProjectModel extends ProjectModelBase<
         this.processedTextureHeight.set(processedTextureHeight);
     }
 
-    public IntegerExpression getProcessedTextureWidthProperty()
+    public final IntegerExpression getProcessedTextureWidthProperty()
     {
         return processedTextureWidth;
     }
 
-    public IntegerExpression getProcessedTextureHeightProperty()
+    public final IntegerExpression getProcessedTextureHeightProperty()
     {
         return processedTextureHeight;
     }
 
-    public Vector3 getModelSize()
+    public final Vector3 getModelSize()
     {
         return modelSize.get();
     }
@@ -247,7 +247,7 @@ public class ObservableProjectModel extends ProjectModelBase<
         this.modelSize.set(modelSize);
     }
 
-    public ObjectProperty<Vector3> getModelSizeProperty()
+    public final ObjectProperty<Vector3> getModelSizeProperty()
     {
         return modelSize;
     }
@@ -258,19 +258,19 @@ public class ObservableProjectModel extends ProjectModelBase<
     }
 
     @Override
-    public void error(String message, Throwable e)
+    public final void error(String message, Throwable e)
     {
         ExceptionHandling.error(message, e);
     }
 
     @Override
-    public void warn(String message, Throwable e)
+    public final void warn(String message, Throwable e)
     {
         ExceptionHandling.warn(message, e);
     }
 
     @Override
-    public void cancelled(String message)
+    public final void cancelled(String message)
     {
         Alert alert = new Alert(AlertType.INFORMATION, message);
         alert.setTitle("Cancelled");
@@ -279,7 +279,7 @@ public class ObservableProjectModel extends ProjectModelBase<
     }
 
     @Override
-    public void confirm(String title, String header, String message, Runnable onConfirm)
+    public final void confirm(String title, String header, String message, Runnable onConfirm)
     {
         // Temp solution -- will eventually create a custom modal.
         Alert alert = new Alert(AlertType.CONFIRMATION, message);
@@ -294,7 +294,7 @@ public class ObservableProjectModel extends ProjectModelBase<
     }
 
     @Override
-    public void confirmClose(String text, Runnable onClose)
+    public final void confirmClose(String text, Runnable onClose)
     {
         if (FrontendIO.confirmClose(text))
         {
@@ -303,7 +303,7 @@ public class ObservableProjectModel extends ProjectModelBase<
     }
 
     @Override
-    public void requestUserImageReplacement(ImageReplacer imageReplacer)
+    public final void requestUserImageReplacement(ImageReplacer imageReplacer)
     {
         ReplaceImage replaceImage = ExperienceManager.getInstance().getExperience(
             ExperienceManager.REPLACE_IMAGE, ReplaceImage.class);
@@ -318,7 +318,7 @@ public class ObservableProjectModel extends ProjectModelBase<
         }
     }
 
-    public void registerIOListeners()
+    public final void registerIOListeners()
     {
         IOModel ioModel = Global.io();
 

@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 public abstract class SerializableCameraSettings implements DOMConvertable, CameraSettings
 {
     @Override
-    public Element toDOMElement(Document document)
+    public final Element toDOMElement(Document document)
     {
         Element element = document.createElement("Camera");
         element.setAttribute("lookAtX", Double.toString(getXCenter()));

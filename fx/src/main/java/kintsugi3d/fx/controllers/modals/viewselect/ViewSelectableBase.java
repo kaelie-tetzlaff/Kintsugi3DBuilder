@@ -23,7 +23,7 @@ public abstract class ViewSelectableBase implements ViewSelectable
     }
 
     @Override
-    public String getViewSelection()
+    public final String getViewSelection()
     {
         return primaryView;
     }
@@ -36,7 +36,7 @@ public abstract class ViewSelectableBase implements ViewSelectable
     }
 
     @Override
-    public double getViewRotation()
+    public final double getViewRotation()
     {
         return primaryViewRotation;
     }

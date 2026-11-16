@@ -31,12 +31,12 @@ public class LightCalibrationChangedEvent
         this.lightIntensityList = lightIntensityList == null ? null : new ArrayList<>(lightIntensityList);
     }
 
-    public boolean wereLightPositionsChanged()
+    public final boolean wereLightPositionsChanged()
     {
         return lightPositionList != null;
     }
 
-    public boolean wereLightIntensitiesChanged()
+    public final boolean wereLightIntensitiesChanged()
     {
         return lightIntensityList != null;
     }
@@ -48,7 +48,7 @@ public class LightCalibrationChangedEvent
      * This array may be added to but should never be removed from as indices are expected to be persistent.
      * @return null if light positions were not modified.
      */
-    public List<Vector3> getLightPositionList()
+    public final List<Vector3> getLightPositionList()
     {
         return Collections.unmodifiableList(lightPositionList);
     }
@@ -59,7 +59,7 @@ public class LightCalibrationChangedEvent
      * This array may be added to but should never be removed from as indices are expected to be persistent.
      * @return null if light intensities were not modified.
      */
-    public List<Vector3> getLightIntensityList()
+    public final List<Vector3> getLightIntensityList()
     {
         return Collections.unmodifiableList(lightIntensityList);
     }

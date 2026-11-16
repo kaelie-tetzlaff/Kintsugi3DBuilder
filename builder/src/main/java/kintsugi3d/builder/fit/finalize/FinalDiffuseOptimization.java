@@ -83,7 +83,7 @@ public class FinalDiffuseOptimization<ContextType extends Context<ContextType>> 
         return builder.createFramebufferObject();
     }
 
-    public void execute(ReadonlyTextureResources<ContextType> specularFit)
+    public final void execute(ReadonlyTextureResources<ContextType> specularFit)
     {
         // Set up diffuse estimation shader program
         specularFit.getBasisResources().useWithShaderProgram(estimationProgram);
@@ -137,19 +137,19 @@ public class FinalDiffuseOptimization<ContextType extends Context<ContextType>> 
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         estimationProgram.close();
         drawable.close();
         framebuffer.close();
     }
 
-    public Texture2D<ContextType> getDiffuseMap()
+    public final Texture2D<ContextType> getDiffuseMap()
     {
         return framebuffer.getColorAttachmentTexture(0);
     }
 
-    public Map<TextureInfo, Texture2D<ContextType>> getNonStandardTextures()
+    public final Map<TextureInfo, Texture2D<ContextType>> getNonStandardTextures()
     {
         return includeConstant ? Map.of(CONSTANT_TRANSLUCENCY_MAP, framebuffer.getColorAttachmentTexture(1)) : Map.of();
     }

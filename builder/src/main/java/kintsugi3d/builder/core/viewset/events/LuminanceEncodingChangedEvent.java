@@ -47,12 +47,12 @@ public class LuminanceEncodingChangedEvent
         }
     }
 
-    public double[] getLinearLuminanceValues()
+    public final double[] getLinearLuminanceValues()
     {
         return linearLuminanceValues.clone();
     }
 
-    public byte[] getEncodedLuminanceValues()
+    public final byte[] getEncodedLuminanceValues()
     {
         return encodedLuminanceValues.clone();
     }

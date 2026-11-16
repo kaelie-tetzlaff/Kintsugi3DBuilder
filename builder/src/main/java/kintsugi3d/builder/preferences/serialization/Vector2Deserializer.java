@@ -22,7 +22,7 @@ import java.io.IOException;
 public class Vector2Deserializer extends JsonDeserializer<Vector2>
 {
     @Override
-    public Vector2 deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException
+    public final Vector2 deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException
     {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         return new Vector2(node.get("x").floatValue(), node.get("y").floatValue());

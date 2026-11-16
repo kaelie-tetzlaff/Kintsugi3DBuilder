@@ -13,6 +13,7 @@ package kintsugi3d.builder.state.settings;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import kintsugi3d.builder.preferences.serialization.SettingsModelSerializer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
@@ -26,6 +27,7 @@ public interface ReadonlyGeneralSettingsModel extends Iterable<Setting>
     boolean shouldSerialize(String name);
 
     @Override
+    @NotNull
     Iterator<Setting> iterator();
 
     default boolean existsForGet(String name, Class<?> settingType)

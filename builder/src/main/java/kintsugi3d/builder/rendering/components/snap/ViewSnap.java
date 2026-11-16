@@ -44,7 +44,7 @@ public class ViewSnap<ContextType extends Context<ContextType>> implements Rende
         this.viewSelection = viewSelection;
     }
 
-    public RenderedComponent<ContextType> getContentRoot()
+    public final RenderedComponent<ContextType> getContentRoot()
     {
         return contentRoot;
     }
@@ -54,19 +54,19 @@ public class ViewSnap<ContextType extends Context<ContextType>> implements Rende
      * Must be called before initialize
      * @param contentRoot
      */
-    public void takeContentRoot(RenderedComponent<ContextType> contentRoot)
+    public final void takeContentRoot(RenderedComponent<ContextType> contentRoot)
     {
         this.contentRoot = contentRoot;
     }
 
     @Override
-    public void initialize()
+    public final void initialize()
     {
         contentRoot.initialize();
     }
 
     @Override
-    public void reloadShaders()
+    public final void reloadShaders()
     {
         contentRoot.reloadShaders();
     }
@@ -128,14 +128,14 @@ public class ViewSnap<ContextType extends Context<ContextType>> implements Rende
     }
 
     @Override
-    public void update()
+    public final void update()
     {
         viewSnap = snapToView(sceneModel.getCurrentViewMatrix());
         contentRoot.update();
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         View selectedView = viewSelection.getSelectedView();
         if (selectedView != null)
@@ -173,13 +173,13 @@ public class ViewSnap<ContextType extends Context<ContextType>> implements Rende
     }
 
     @Override
-    public void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight, CameraViewport cameraViewport)
+    public final void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight, CameraViewport cameraViewport)
     {
         contentRoot.drawInSubdivisions(framebuffer, subdivWidth, subdivHeight, cameraViewport.copyForView(viewSnap));
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         contentRoot.close();
     }

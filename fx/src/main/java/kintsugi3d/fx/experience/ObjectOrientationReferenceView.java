@@ -20,20 +20,20 @@ import java.io.IOException;
 
 public class ObjectOrientationReferenceView extends ExperienceBase
 {
-    public void initialize(Window parentWindow)
+    public final void initialize(Window parentWindow)
     {
         // State isn't used so we can initialize with just the parentWindow.
         initialize(parentWindow, getState());
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return "Select Orientation Reference View";
     }
 
     @Override
-    protected void open() throws IOException
+    protected final void open() throws IOException
     {
         buildPagedModal(new CurrentProjectViewSelectable(ViewSet::getOrientationView, ViewSet::getOrientationViewRotationDegrees))
             .<OrientationViewSelectController>then("/fxml/modals/createnewproject/ViewSelect.fxml")

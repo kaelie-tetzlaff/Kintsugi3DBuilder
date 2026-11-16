@@ -163,7 +163,7 @@ public final class DoubleMatrix4
 
     public static DoubleMatrix4 perspective(double fovy, double aspect, double near, double far)
     {
-        double f = 1.0f / Math.tan(fovy / 2);
+        double f = 1.0f / StrictMath.tan(fovy / 2);
         return new DoubleMatrix4(
             f / aspect,    0.0f,    0.0f,                            0.0f,
             0.0f,        f,        0.0f,                            0.0f,
@@ -317,7 +317,7 @@ public final class DoubleMatrix4
     public DoubleMatrix4 quickInverse(double tolerance)
     {
         DoubleMatrix3 rotationScale = this.getUpperLeft3x3();
-        double scaleSquared = Math.pow(rotationScale.determinant(), 2.0 / 3.0);
+        double scaleSquared = StrictMath.pow(rotationScale.determinant(), 2.0 / 3.0);
 
         DoubleMatrix4 invCandidate = rotationScale.transpose().times(1.0 / scaleSquared).asMatrix4()
                 .times(translate(this.getColumn(3).getXYZ().negated()));

@@ -42,20 +42,20 @@ public class WeightmapTextureInfo extends TextureInfo
     }
 
     @Override
-    public ShaderInfo getVisualizationShader()
+    public final ShaderInfo getVisualizationShader()
     {
         return new BasisIndexedShaderInfo(friendlyName, "rendermodes/viewTextureWeights.frag", material);
     }
 
     @Override
-    public void refresh(ImageBasedRenderable<?> instance) throws IOException
+    public final void refresh(ImageBasedRenderable<?> instance) throws IOException
     {
         TextureResources<? extends Context<?>> resources = instance.getResources().getTextureResources();
         resources.replaceWeightMapWithDefaultFile(material, instance.getViewSet().getSupportingFilesDirectory());
     }
 
     @Override
-    public ImageReplacer getReplaceData(ImageBasedRenderable<?> instance)
+    public final ImageReplacer getReplaceData(ImageBasedRenderable<?> instance)
     {
         File supportingFilesDirectory = Global.io().validateRenderable().getLoadedViewSet().getSupportingFilesDirectory();
         try

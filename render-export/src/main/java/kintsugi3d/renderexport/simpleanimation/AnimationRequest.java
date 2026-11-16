@@ -37,45 +37,45 @@ abstract class AnimationRequest implements ProgressMonitoredImageBasedGraphicsRe
         private int frameCount;
         private File exportPath;
 
-        protected int getWidth()
+        protected final int getWidth()
         {
             return width;
         }
 
-        protected int getHeight()
+        protected final int getHeight()
         {
             return height;
         }
 
-        protected int getFrameCount()
+        protected final int getFrameCount()
         {
             return frameCount;
         }
 
-        protected File getExportPath()
+        protected final File getExportPath()
         {
             return exportPath;
         }
 
-        public BuilderBase setWidth(int width)
+        public final BuilderBase setWidth(int width)
         {
             this.width = width;
             return this;
         }
 
-        public BuilderBase setHeight(int height)
+        public final BuilderBase setHeight(int height)
         {
             this.height = height;
             return this;
         }
 
-        public BuilderBase setFrameCount(int frameCount)
+        public final BuilderBase setFrameCount(int frameCount)
         {
             this.frameCount = frameCount;
             return this;
         }
 
-        public BuilderBase setExportPath(File exportPath)
+        public final BuilderBase setExportPath(File exportPath)
         {
             this.exportPath = exportPath;
             return this;
@@ -94,13 +94,13 @@ abstract class AnimationRequest implements ProgressMonitoredImageBasedGraphicsRe
 
     protected abstract Matrix4 getViewMatrix(int frame, Matrix4 baseViewMatrix);
 
-    public int getFrameCount()
+    protected final int getFrameCount()
     {
         return frameCount;
     }
 
     @Override
-    public <ContextType extends Context<ContextType>> void executeRequest(ImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
+    public final <ContextType extends Context<ContextType>> void executeRequest(ImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         try

@@ -17,6 +17,7 @@ import kintsugi3d.builder.core.texture.StandardTexture;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,22 +66,22 @@ public class MaterialExporter
         this.asset = asset;
     }
 
-    public void setFilename(String filename)
+    public final void setFilename(String filename)
     {
         this.filename = filename;
     }
 
-    public String getFilename()
+    public final String getFilename()
     {
         return this.filename;
     }
 
-    public int getMinLODSize()
+    public final int getMinLODSize()
     {
         return minLODSize;
     }
 
-    public void setMinLODSize(int minLODSize)
+    public final void setMinLODSize(int minLODSize)
     {
         this.minLODSize = minLODSize;
     }
@@ -106,17 +107,17 @@ public class MaterialExporter
         this.textureFileFormat = textureFileFormat;
     }
 
-    public ReadonlyTextureResources<?> getTextureResources()
+    public final ReadonlyTextureResources<?> getTextureResources()
     {
         return textureResources;
     }
 
-    public void setTextureResources(ReadonlyTextureResources<? extends Context<?>> textureResources)
+    public final void setTextureResources(ReadonlyTextureResources<? extends Context<?>> textureResources)
     {
         this.textureResources = textureResources;
     }
 
-    public final Iterable<String> getSupportedTextures()
+    private Iterable<String> getSupportedTextures()
     {
         Collection<String> supportedTextures = new ArrayList<>(StandardTexture.values().length);
 
@@ -211,7 +212,7 @@ public class MaterialExporter
      * To be overridden by subclass
      * @return
      */
-    protected Object getExtras()
+    protected @Nullable Object getExtras()
     {
         return null;
     }
@@ -237,13 +238,13 @@ public class MaterialExporter
         textureResources.saveNamedTextures(getSupportedTextures(), textureFileFormat, outputDirectory, textureFilePrefix);
     }
 
-    public void makeLODs(File outputDirectory)
+    public final void makeLODs(File outputDirectory)
     {
         LODGenerator.generateLODs(minLODSize, outputDirectory,
             textures.values().toArray(TextureExportSpecification[]::new));
     }
 
-    private TextureInfo processTextureParam(String texName, Method method, Class<?> paramType, boolean requiresAlpha)
+    private @Nullable TextureInfo processTextureParam(String texName, Method method, Class<?> paramType, boolean requiresAlpha)
     {
         String format = determineFileFormat(textureFileFormat, requiresAlpha);
         TextureInfo tex = createRelativeTexture(getTextureFilename(texName, format), texName, format);
@@ -273,7 +274,7 @@ public class MaterialExporter
      * @param texName
      * @return
      */
-    protected TextureInfo addTexture(String texName)
+    protected final TextureInfo addTexture(String texName)
     {
         return addTexture(texName, false);
     }
@@ -284,7 +285,7 @@ public class MaterialExporter
      * @param requiresAlpha
      * @return
      */
-    protected TextureInfo addTexture(String texName, boolean requiresAlpha)
+    protected final TextureInfo addTexture(String texName, boolean requiresAlpha)
     {
         String format = determineFileFormat(textureFileFormat, requiresAlpha);
         return createRelativeTexture(getTextureFilename(texName, format), texName, format);
@@ -342,7 +343,7 @@ public class MaterialExporter
         return occlusionInfo;
     }
 
-    protected String getTextureFilename(String name, String format)
+    protected final String getTextureFilename(String name, String format)
     {
         return TextureResources.getTextureFilename(name, format, textureFilePrefix);
     }

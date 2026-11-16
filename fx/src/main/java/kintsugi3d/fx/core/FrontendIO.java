@@ -47,7 +47,7 @@ public final class FrontendIO
     public static void initialize()
     {
         // Try to initialize file chooser in advance of when it will be needed.
-        Platform.runLater(getInstance()::getProjectFileChooserSafe);
+        Platform.runLater(INSTANCE::getProjectFileChooserSafe);
 
         // Register progress monitor.
         Global.io().addProgressMonitor(new DefaultProgressMonitor()

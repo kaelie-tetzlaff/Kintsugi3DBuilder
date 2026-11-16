@@ -122,12 +122,10 @@ public final class ImageHelper
         int width = image.getWidth();
         int height = image.getHeight();
 
-        BufferedImage source = mask.getBufferedImage();
-        BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
         int[] imagePixels = image.getRGB(0, 0, width, height, null, 0, width);
-        int[] maskPixels = source.getRGB(0, 0, width, height, null, 0, width);
+        int[] maskPixels = mask.image.getRGB(0, 0, width, height, null, 0, width);
 
+        BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         int[] resultPixels = result.getRGB(0, 0, width, height, null, 0, width);
 
         for (int i = 0; i < imagePixels.length; i++)

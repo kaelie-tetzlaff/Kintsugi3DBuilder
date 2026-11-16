@@ -19,7 +19,7 @@ public abstract class ObjectPoseModelFromSettings extends ObjectPoseModelBase
     protected abstract ObjectPoseSettings getObjectPoseSettings();
 
     @Override
-    public Vector3 getCenter()
+    public final Vector3 getCenter()
     {
         return new Vector3((float) getObjectPoseSettings().getCenterX(),
             (float) getObjectPoseSettings().getCenterY(),
@@ -27,7 +27,7 @@ public abstract class ObjectPoseModelFromSettings extends ObjectPoseModelBase
     }
 
     @Override
-    public void setCenter(Vector3 center)
+    public final void setCenter(Vector3 center)
     {
         if (!getObjectPoseSettings().isLocked())
         {
@@ -38,13 +38,13 @@ public abstract class ObjectPoseModelFromSettings extends ObjectPoseModelBase
     }
 
     @Override
-    public float getRotationZ()
+    public final float getRotationZ()
     {
         return (float) getObjectPoseSettings().getRotateZ();
     }
 
     @Override
-    public void setRotationZ(float rotationZ)
+    public final void setRotationZ(float rotationZ)
     {
         if (!getObjectPoseSettings().isLocked())
         {
@@ -53,13 +53,13 @@ public abstract class ObjectPoseModelFromSettings extends ObjectPoseModelBase
     }
 
     @Override
-    public float getRotationY()
+    public final float getRotationY()
     {
         return (float) getObjectPoseSettings().getRotateY();
     }
 
     @Override
-    public void setRotationY(float rotationY)
+    public final void setRotationY(float rotationY)
     {
         if (!getObjectPoseSettings().isLocked())
         {
@@ -68,13 +68,13 @@ public abstract class ObjectPoseModelFromSettings extends ObjectPoseModelBase
     }
 
     @Override
-    public float getRotationX()
+    public final float getRotationX()
     {
         return (float) getObjectPoseSettings().getRotateX();
     }
 
     @Override
-    public void setRotationX(float rotationX)
+    public final void setRotationX(float rotationX)
     {
         if (!getObjectPoseSettings().isLocked())
         {
@@ -83,13 +83,13 @@ public abstract class ObjectPoseModelFromSettings extends ObjectPoseModelBase
     }
 
     @Override
-    public float getScale()
+    public final float getScale()
     {
         return (float) getObjectPoseSettings().getScale();
     }
 
     @Override
-    public void setScale(float scale)
+    public final void setScale(float scale)
     {
         if (!getObjectPoseSettings().isLocked())
         {
@@ -105,7 +105,7 @@ public abstract class ObjectPoseModelFromSettings extends ObjectPoseModelBase
      * @return true for locked
      */
     @Override
-    public boolean isLocked()
+    public final boolean isLocked()
     {
         return getObjectPoseSettings().isLocked();
     }

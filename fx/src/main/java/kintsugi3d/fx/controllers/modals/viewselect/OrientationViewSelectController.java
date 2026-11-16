@@ -21,21 +21,21 @@ import kintsugi3d.fx.util.StaticUtilities;
 public class OrientationViewSelectController extends ViewSelectController
 {
     @Override
-    public void initPage()
+    public final void initPage()
     {
         super.initPage();
         setCanConfirm(true);
     }
 
     @Override
-    public boolean tryAdvance()
+    public final boolean tryAdvance()
     {
         getData().selectView(getSelectedViewName(), getPrimaryViewRotation());
         return true;
     }
 
     @Override
-    public boolean tryConfirm()
+    public final boolean tryConfirm()
     {
         // If a view set was already loaded, apply changes.
         ViewSet currentViewSet = Global.io().getLoadedViewSet();
@@ -58,25 +58,25 @@ public class OrientationViewSelectController extends ViewSelectController
     }
 
     @Override
-    public boolean tryCancel()
+    public final boolean tryCancel()
     {
         return StaticUtilities.confirmCancel();
     }
 
     @Override
-    protected String getHintText()
+    protected final String getHintText()
     {
         return "Select a photo to use to orient the object:";
     }
 
     @Override
-    protected boolean canRotateView()
+    protected final boolean canRotateView()
     {
         return true;
     }
 
     @Override
-    protected boolean canSelectNullView()
+    protected final boolean canSelectNullView()
     {
         return true;
     }

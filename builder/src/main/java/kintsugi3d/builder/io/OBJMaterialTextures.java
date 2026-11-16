@@ -31,7 +31,7 @@ public class OBJMaterialTextures implements TextureSupplier
     }
 
     @Override
-    public Map<String, File> getTextures()
+    public final Map<String, File> getTextures()
     {
         Map<String, File> textures = new HashMap<>(8);
 

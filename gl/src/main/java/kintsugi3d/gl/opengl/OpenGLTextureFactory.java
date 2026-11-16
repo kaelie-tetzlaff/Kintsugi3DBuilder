@@ -45,35 +45,35 @@ class OpenGLTextureFactory implements TextureFactory<OpenGLContext>
     }
 
     @Override
-    public ColorTextureBuilder<OpenGLContext, ? extends Texture1D<OpenGLContext>> build1DColorTexture(ReadonlyNativeVectorBuffer data)
+    public final ColorTextureBuilder<OpenGLContext, ? extends Texture1D<OpenGLContext>> build1DColorTexture(ReadonlyNativeVectorBuffer data)
     {
         return new OpenGLTexture1DFromBufferBuilder(context, GL_TEXTURE_1D, data.getCount(), data.getDimensions(),
             OpenGLContext.getDataTypeConstant(data.getDataType()), data.getBuffer());
     }
 
     @Override
-    public ColorTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DColorTextureFromBuffer(int width, int height, ReadonlyNativeVectorBuffer data)
+    public final ColorTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DColorTextureFromBuffer(int width, int height, ReadonlyNativeVectorBuffer data)
     {
         return new OpenGLTexture2DFromBufferBuilder(context, GL_TEXTURE_2D, width, height, data.getDimensions(),
             OpenGLContext.getDataTypeConstant(data.getDataType()), data.getBuffer());
     }
 
     @Override
-    public ColorTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DColorTextureFromImageWithMask(
+    public final ColorTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DColorTextureFromImageWithMask(
         BufferedImage colorImage, BufferedImage maskImage, boolean flipVertical)
     {
         return new OpenGLTexture2DFromFileBuilder(context, GL_TEXTURE_2D, colorImage, maskImage, flipVertical);
     }
 
     @Override
-    public ColorTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DColorTextureFromStreamWithMask(
+    public final ColorTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DColorTextureFromStreamWithMask(
         InputStream imageStream, InputStream maskStream, boolean flipVertical) throws IOException
     {
         return new OpenGLTexture2DFromFileBuilder(context, GL_TEXTURE_2D, imageStream, maskStream, flipVertical);
     }
 
     @Override
-    public <MappedType> ColorTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DColorTextureFromImageWithMask(
+    public final <MappedType> ColorTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DColorTextureFromImageWithMask(
         BufferedImage colorImage, BufferedImage maskImage, boolean flipVertical,
         AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction)
     {
@@ -81,7 +81,7 @@ class OpenGLTextureFactory implements TextureFactory<OpenGLContext>
     }
 
     @Override
-    public <MappedType> ColorTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DColorTextureFromStreamWithMask(
+    public final <MappedType> ColorTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DColorTextureFromStreamWithMask(
         InputStream imageStream, InputStream maskStream, boolean flipVertical,
         AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction) throws IOException
     {
@@ -89,38 +89,38 @@ class OpenGLTextureFactory implements TextureFactory<OpenGLContext>
     }
 
     @Override
-    public ColorTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DColorHDRTextureFromStreamWithMask(
+    public final ColorTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DColorHDRTextureFromStreamWithMask(
         BufferedInputStream imageStream, InputStream maskStream, boolean flipVertical) throws IOException
     {
         return new OpenGLTexture2DFromHDRFileBuilder(context, GL_TEXTURE_2D, imageStream, maskStream, flipVertical);
     }
 
     @Override
-    public ColorTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DColorTexture(int width, int height)
+    public final ColorTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DColorTexture(int width, int height)
     {
         return new OpenGLTexture2DColorBuilder(context, GL_TEXTURE_2D, width, height);
     }
 
     @Override
-    public ColorTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build1DColorTextureArray(int width, int height)
+    public final ColorTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build1DColorTextureArray(int width, int height)
     {
         return new OpenGLTexture2DColorBuilder(context, GL_TEXTURE_1D_ARRAY, width, height);
     }
 
     @Override
-    public DepthTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DDepthTexture(int width, int height)
+    public final DepthTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DDepthTexture(int width, int height)
     {
         return new OpenGLTexture2DDepthBuilder(context, GL_TEXTURE_2D, width, height);
     }
 
     @Override
-    public StencilTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DStencilTexture(int width, int height)
+    public final StencilTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DStencilTexture(int width, int height)
     {
         return new OpenGLTexture2DStencilBuilder(context, GL_TEXTURE_2D, width, height);
     }
 
     @Override
-    public DepthStencilTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DDepthStencilTexture(int width, int height)
+    public final DepthStencilTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DDepthStencilTexture(int width, int height)
     {
         return new OpenGLTexture2DDepthStencilBuilder(context, GL_TEXTURE_2D, width, height);
     }
@@ -152,7 +152,7 @@ class OpenGLTextureFactory implements TextureFactory<OpenGLContext>
         {1,0,-1},{-1,0,-1},{0,-1,1},{0,1,1}}; // 4 more to make 16
 
     @Override
-    public ColorTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> buildPerlinNoiseTexture()
+    public final ColorTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> buildPerlinNoiseTexture()
     {
         ByteBuffer pixels = ByteBuffer.allocateDirect(256*256*4);
         for(int i = 0; i<256; i++)
@@ -174,55 +174,55 @@ class OpenGLTextureFactory implements TextureFactory<OpenGLContext>
 
 
     @Override
-    public ColorTextureBuilder<OpenGLContext, ? extends Texture3D<OpenGLContext>> build2DColorTextureArray(int width, int height, int length)
+    public final ColorTextureBuilder<OpenGLContext, ? extends Texture3D<OpenGLContext>> build2DColorTextureArray(int width, int height, int length)
     {
         return new ColorBuilder(context, GL_TEXTURE_2D_ARRAY, width, height, length);
     }
 
     @Override
-    public DepthTextureBuilder<OpenGLContext, ? extends Texture3D<OpenGLContext>> build2DDepthTextureArray(int width, int height, int length)
+    public final DepthTextureBuilder<OpenGLContext, ? extends Texture3D<OpenGLContext>> build2DDepthTextureArray(int width, int height, int length)
     {
         return new DepthBuilder(context, GL_TEXTURE_2D_ARRAY, width, height, length);
     }
 
     @Override
-    public StencilTextureBuilder<OpenGLContext, ? extends Texture3D<OpenGLContext>> build2DStencilTextureArray(int width, int height, int length)
+    public final StencilTextureBuilder<OpenGLContext, ? extends Texture3D<OpenGLContext>> build2DStencilTextureArray(int width, int height, int length)
     {
         return new StencilBuilder(context, GL_TEXTURE_2D_ARRAY, width, height, length);
     }
 
     @Override
-    public DepthStencilTextureBuilder<OpenGLContext, ? extends Texture3D<OpenGLContext>> build2DDepthStencilTextureArray(int width, int height, int length)
+    public final DepthStencilTextureBuilder<OpenGLContext, ? extends Texture3D<OpenGLContext>> build2DDepthStencilTextureArray(int width, int height, int length)
     {
         return new DepthStencilBuilder(context, GL_TEXTURE_2D_ARRAY, width, height, length);
     }
 
     @Override
-    public ColorCubemapBuilder<OpenGLContext, ? extends Cubemap<OpenGLContext>> buildColorCubemap(int faceSize)
+    public final ColorCubemapBuilder<OpenGLContext, ? extends Cubemap<OpenGLContext>> buildColorCubemap(int faceSize)
     {
         return new OpenGLCubemap.ColorBuilder(context, GL_TEXTURE_CUBE_MAP, faceSize);
     }
 
     @Override
-    public DepthTextureBuilder<OpenGLContext, ? extends Cubemap<OpenGLContext>> buildDepthCubemap(int faceSize)
+    public final DepthTextureBuilder<OpenGLContext, ? extends Cubemap<OpenGLContext>> buildDepthCubemap(int faceSize)
     {
         return new OpenGLCubemap.DepthBuilder(context, GL_TEXTURE_CUBE_MAP, faceSize);
     }
 
     @Override
-    public StencilTextureBuilder<OpenGLContext, ? extends Cubemap<OpenGLContext>> buildStencilCubemap(int faceSize)
+    public final StencilTextureBuilder<OpenGLContext, ? extends Cubemap<OpenGLContext>> buildStencilCubemap(int faceSize)
     {
         return new OpenGLCubemap.StencilBuilder(context, GL_TEXTURE_CUBE_MAP, faceSize);
     }
 
     @Override
-    public DepthStencilTextureBuilder<OpenGLContext, ? extends Cubemap<OpenGLContext>> buildDepthStencilCubemap(int faceSize)
+    public final DepthStencilTextureBuilder<OpenGLContext, ? extends Cubemap<OpenGLContext>> buildDepthStencilCubemap(int faceSize)
     {
         return new OpenGLCubemap.DepthStencilBuilder(context, GL_TEXTURE_CUBE_MAP, faceSize);
     }
 
     @Override
-    public Texture<OpenGLContext> getNullTexture(SamplerType samplerType)
+    public final Texture<OpenGLContext> getNullTexture(SamplerType samplerType)
     {
         if (nullTextures.containsKey(samplerType))
         {

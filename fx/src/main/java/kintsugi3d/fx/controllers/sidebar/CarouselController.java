@@ -27,6 +27,7 @@ import kintsugi3d.builder.state.CarouselItem;
 import kintsugi3d.builder.state.shader.ShaderInfo;
 import kintsugi3d.fx.core.MainWindowController;
 import kintsugi3d.fx.internal.ObservableCarouselModel;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +66,7 @@ public class CarouselController
     private ObservableCarouselModel carouselModel;
     private MainWindowController mainWindowBox;
 
-    public void init(ObservableCarouselModel carouselModel, MainWindowController mainWindowBox)
+    public final void init(ObservableCarouselModel carouselModel, MainWindowController mainWindowBox)
     {
         this.carouselModel = carouselModel;
         this.mainWindowBox = mainWindowBox;
@@ -285,7 +286,7 @@ public class CarouselController
      * to detect when mainBox size changes and changes the cards height accordingly
      * @param shader
      */
-    private CarouselCardController loadCarouselCard(ShaderInfo shader)
+    private @Nullable CarouselCardController loadCarouselCard(ShaderInfo shader)
     {
         try
         {
@@ -319,7 +320,7 @@ public class CarouselController
      * @param event
      */
     @FXML
-    public void mousePressed(MouseEvent event)
+    public final void mousePressed(MouseEvent event)
     {
         dragStartY = event.getSceneY();
         initialHeight = mainBox.getHeight();
@@ -334,7 +335,7 @@ public class CarouselController
      * @param event
      */
     @FXML
-    public void mouseDragged(MouseEvent event)
+    public final void mouseDragged(MouseEvent event)
     {
         sizeLocked = false;
 
@@ -384,7 +385,7 @@ public class CarouselController
      * @param event
      */
     @FXML
-    public void mouseReleased(MouseEvent event)
+    public final void mouseReleased(MouseEvent event)
     {
         if (minimized)
         {
@@ -456,7 +457,7 @@ public class CarouselController
      * When button is pressed toggleTopBar is triggered. For now button is only available when
      * minimized. It will update cardHeight to DEFAULT_HEIGHT and calls maximize().
      */
-    public void toggleTopBar()
+    public final void toggleTopBar()
     {
         if (minimized)
         {
@@ -471,11 +472,11 @@ public class CarouselController
     /**
      * Minimize carousel button logic.
      */
-    public void minimizeCarousel()
+    public final void minimizeCarousel()
     {
         minimize();
     }
 
-    public double getHBarValue(){ return carouselScrollPane.getHvalue();}
-    public void setHBarPosition(double pos){ carouselScrollPane.setHvalue(pos);}
+    public final double getHBarValue(){ return carouselScrollPane.getHvalue();}
+    public final void setHBarPosition(double pos){ carouselScrollPane.setHvalue(pos);}
 }

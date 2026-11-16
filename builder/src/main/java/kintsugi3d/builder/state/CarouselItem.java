@@ -25,12 +25,12 @@ public class CarouselItem
         this.canvas = canvas;
     }
 
-    public ShaderInfo getShader()
+    public final ShaderInfo getShader()
     {
         return shader;
     }
 
-    public FramebufferCanvas<?> getCanvas()
+    public final FramebufferCanvas<?> getCanvas()
     {
         return canvas;
     }

@@ -92,7 +92,7 @@ public class MatrixBuilder
      * Gets the number of "instances" being optimized in the fitting system.
      * @return The number of instances being optimized.
      */
-    public int getInstanceCount()
+    public final int getInstanceCount()
     {
         return instanceCount;
     }
@@ -101,7 +101,7 @@ public class MatrixBuilder
      * Gets the number of RHS observations per sample, i.e. the number of channels (like R,G,B for color).
      * @return The number of observations per sample.
      */
-    public int getObservationCount()
+    public final int getObservationCount()
     {
         return observationCount;
     }
@@ -110,7 +110,7 @@ public class MatrixBuilder
      * Gets the underlying basis of "library" functions used to construct the actual functions being optimized.
      * @return The basis function library.
      */
-    public BasisFunctions getBasisLibrary()
+    public final BasisFunctions getBasisLibrary()
     {
         return basisLibrary;
     }
@@ -122,7 +122,7 @@ public class MatrixBuilder
      * A function that is 0% metallicy uses no analytic factor for the constant term (just a simple constant).
      * @return The metallicity being assumed.
      */
-    public double getMetallicity()
+    public final double getMetallicity()
     {
         return metallicity;
     }
@@ -143,7 +143,7 @@ public class MatrixBuilder
      * This function should only be called once per instance of this class.
      * @param samples The stream of samples to process.
      */
-    public void build(Stream<MatrixBuilderSample> samples)
+    public final void build(Stream<MatrixBuilderSample> samples)
     {
         // Sort samples so that we avoid repeating the same additions over and over again
         // Should sort ascending to visit low values first

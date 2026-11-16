@@ -39,13 +39,13 @@ public class LightCalibrationController extends NonDataPageControllerBase
     private ObservableGeneralSettingsModel settingsModel;
 
     @Override
-    public Region getRootNode()
+    public final Region getRootNode()
     {
         return root;
     }
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         StaticUtilities.makeNumeric(xTextField);
         StaticUtilities.makeNumeric(yTextField);
@@ -57,7 +57,7 @@ public class LightCalibrationController extends NonDataPageControllerBase
     }
 
     @Override
-    public void refresh()
+    public final void refresh()
     {
         // Bind controller to settings model to synchronize with "currentLightCalibration".
         bind();
@@ -77,7 +77,7 @@ public class LightCalibrationController extends NonDataPageControllerBase
     }
 
     @Override
-    public boolean tryCancel()
+    public final boolean tryCancel()
     {
         if (StaticUtilities.confirmCancel())
         {
@@ -92,7 +92,7 @@ public class LightCalibrationController extends NonDataPageControllerBase
     }
 
     @Override
-    public boolean tryConfirm()
+    public final boolean tryConfirm()
     {
         Global.io().applyLightOffsetCalibration();
         settingsModel.set("lightCalibrationMode", false);
@@ -100,7 +100,7 @@ public class LightCalibrationController extends NonDataPageControllerBase
         return true;
     }
 
-    public void bind()
+    private void bind()
     {
         // Bind sliders to settings model
         ChangeListener<? super Number> xListener = (observable, oldValue, newValue) ->
@@ -223,18 +223,18 @@ public class LightCalibrationController extends NonDataPageControllerBase
 
     private static double roundToLeadingDecimal(double value)
     {
-        double orderOfMagnitude = Math.floor(Math.log10(value)); // figure out the leading decimal place
-        double oomScale = Math.pow(10, orderOfMagnitude); // put a 1 in the leading decimal place followed by zeros
+        double orderOfMagnitude = Math.floor(StrictMath.log10(value)); // figure out the leading decimal place
+        double oomScale = StrictMath.pow(10, orderOfMagnitude); // put a 1 in the leading decimal place followed by zeros
         // Round to the leading decimal place
         return Math.round(value / oomScale) * oomScale;
     }
 
-    public void unbind()
+    private void unbind()
     {
         settingsModel.getObjectProperty("currentLightCalibration", Vector2.class).removeListener(settingsListener);
     }
 
-    public void reset()
+    public final void reset()
     {
         xSlider.setValue(0.0);
         ySlider.setValue(0.0);

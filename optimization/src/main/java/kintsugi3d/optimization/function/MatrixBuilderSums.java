@@ -115,7 +115,7 @@ public class MatrixBuilderSums
         Arrays.setAll(weightedAnalyticTimesObservedBlended, i -> new SimpleMatrix(instanceCount, 1, DMatrixRMaj.class));
     }
 
-    public void accept(MatrixBuilderSample sample)
+    public final void accept(MatrixBuilderSample sample)
     {
         int instanceCount = weightedAnalyticCumulative.numRows();
 
@@ -158,7 +158,7 @@ public class MatrixBuilderSums
      * This should be done whenever the interpolation endpoints change and all the non-cumulative sums are used to
      * update the fitting matrix being built, whereas the cumulative sums continue to accumulate after that occurs.
      */
-    public void clearNonCumulativeSums()
+    public final void clearNonCumulativeSums()
     {
         weightedAnalytic.zero();
         weightedAnalyticBlended.zero();
@@ -175,52 +175,52 @@ public class MatrixBuilderSums
         }
     }
 
-    public double getWeightedAnalyticCumulative(int row, int column)
+    public final double getWeightedAnalyticCumulative(int row, int column)
     {
         return weightedAnalyticCumulative.get(row, column);
     }
 
-    public double getWeightedAnalytic(int row, int column)
+    public final double getWeightedAnalytic(int row, int column)
     {
         return weightedAnalytic.get(row, column);
     }
 
-    public double getWeightedAnalyticBlended(int row, int column)
+    public final double getWeightedAnalyticBlended(int row, int column)
     {
         return weightedAnalyticBlended.get(row, column);
     }
 
-    public double getWeightedAnalyticSquaredCumulative(int row, int column)
+    public final double getWeightedAnalyticSquaredCumulative(int row, int column)
     {
         return weightedAnalyticSquaredCumulative.get(row, column);
     }
 
-    public double getWeightedAnalyticSquared(int row, int column)
+    public final double getWeightedAnalyticSquared(int row, int column)
     {
         return weightedAnalyticSquared.get(row, column);
     }
 
-    public double getWeightedAnalyticSquaredBlended(int row, int column)
+    public final double getWeightedAnalyticSquaredBlended(int row, int column)
     {
         return weightedAnalyticSquaredBlended.get(row, column);
     }
 
-    public double getWeightedAnalyticSquaredBlendedSquared(int row, int column)
+    public final double getWeightedAnalyticSquaredBlendedSquared(int row, int column)
     {
         return weightedAnalyticSquaredBlendedSquared.get(row, column);
     }
 
-    public double getWeightedAnalyticTimesObservedCumulative(int observationIndex, int instanceIndex)
+    public final double getWeightedAnalyticTimesObservedCumulative(int observationIndex, int instanceIndex)
     {
         return weightedAnalyticTimesObservedCumulative[observationIndex].get(instanceIndex, 0);
     }
 
-    public double getWeightedAnalyticTimesObserved(int observationIndex, int instanceIndex)
+    public final double getWeightedAnalyticTimesObserved(int observationIndex, int instanceIndex)
     {
         return weightedAnalyticTimesObserved[observationIndex].get(instanceIndex, 0);
     }
 
-    public double getWeightedAnalyticTimesObservedBlended(int observationIndex, int instanceIndex)
+    public final double getWeightedAnalyticTimesObservedBlended(int observationIndex, int instanceIndex)
     {
         return weightedAnalyticTimesObservedBlended[observationIndex].get(instanceIndex, 0);
     }
@@ -270,7 +270,7 @@ public class MatrixBuilderSums
      * @param instanceIndex
      * @param amount
      */
-    public void addWeightedAnalyticTimesObserved(int observationIndex, int instanceIndex, double amount)
+    public final void addWeightedAnalyticTimesObserved(int observationIndex, int instanceIndex, double amount)
     {
         weightedAnalyticTimesObserved[observationIndex].set(instanceIndex, 0,
             weightedAnalyticTimesObserved[observationIndex].get(instanceIndex, 0) + amount);
@@ -278,7 +278,7 @@ public class MatrixBuilderSums
             weightedAnalyticTimesObservedCumulative[observationIndex].get(instanceIndex, 0) + amount);
     }
 
-    public void addWeightedAnalyticTimesObservedBlended(int observationIndex, int instanceIndex, double amount)
+    public final void addWeightedAnalyticTimesObservedBlended(int observationIndex, int instanceIndex, double amount)
     {
         weightedAnalyticTimesObservedBlended[observationIndex].set(instanceIndex, 0,
             weightedAnalyticTimesObservedBlended[observationIndex].get(instanceIndex, 0) + amount);

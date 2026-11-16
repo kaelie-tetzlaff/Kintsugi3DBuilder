@@ -14,6 +14,7 @@ package kintsugi3d.fx.core;
 import javafx.beans.binding.BooleanExpression;
 import javafx.stage.Window;
 import kintsugi3d.fx.experience.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -92,7 +93,7 @@ public final class ExperienceManager
         return experiences.get(name);
     }
 
-    public <ExperienceType extends Experience> ExperienceType getExperience(String name, Class<ExperienceType> experienceClass)
+    public <ExperienceType extends Experience> @Nullable ExperienceType getExperience(String name, Class<ExperienceType> experienceClass)
     {
         Experience experience = experiences.get(name);
         if (Objects.equals(experience.getClass(), experienceClass))

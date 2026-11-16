@@ -56,21 +56,21 @@ public class CameraWidgetGroup<ContextType extends Context<ContextType>> impleme
     }
 
     @Override
-    public void initialize()
+    public final void initialize()
     {
         cameraVisual.initialize();
         cameraFrustum.initialize();
     }
 
     @Override
-    public void reloadShaders()
+    public final void reloadShaders()
     {
         cameraVisual.reloadShaders();
         cameraFrustum.reloadShaders();
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         if (sceneModel.getSettingsModel().getBoolean("isCameraVisualEnabled"))
         {
@@ -89,7 +89,7 @@ public class CameraWidgetGroup<ContextType extends Context<ContextType>> impleme
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         cameraVisual.close();
         cameraFrustum.close();

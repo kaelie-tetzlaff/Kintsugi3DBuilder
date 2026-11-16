@@ -21,12 +21,12 @@ public class MaterialScalarMap extends MaterialTextureMap implements ReadonlyMat
     }
 
     @Override
-    public MaterialTextureChannel getChannel()
+    public final MaterialTextureChannel getChannel()
     {
         return channel;
     }
 
-    public void setChannel(MaterialTextureChannel channel)
+    public final void setChannel(MaterialTextureChannel channel)
     {
         this.channel = channel;
     }

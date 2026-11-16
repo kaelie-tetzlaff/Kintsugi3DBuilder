@@ -159,39 +159,39 @@ public class DistortionProjection implements Projection
     }
     
     @Override
-    public float getAspectRatio()
+    public final float getAspectRatio()
     {
         return width / height;
     }
     
     @Override
-    public float getVerticalFieldOfView()
+    public final float getVerticalFieldOfView()
     {
-        return 2.0f*(float)Math.atan2(height, 2*fy);
+        return 2.0f*(float) StrictMath.atan2(height, 2*fy);
     }
     
     @Override
-    public Matrix4 getProjectionMatrix(float nearPlane, float farPlane)
+    public final Matrix4 getProjectionMatrix(float nearPlane, float farPlane)
     {
         return Matrix4.translate(getCenter().asVector3())
             .times(Matrix4.perspective(this.getVerticalFieldOfView(), this.getAspectRatio(), nearPlane, farPlane));
     }
 
     @Override
-    public Vector2 getCenter()
+    public final Vector2 getCenter()
     {
         return new Vector2(2.0f * cx / width - 1.0f, 1.0f - 2.0f * cy / height); // Vertical axis is flipped in Metashape coordinates
     }
     
     @Override
-    public String toVSETString()
+    public final String toVSETString()
     {
         return String.format("s\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f",
                                 cx, cy, width/height, fy, width, k1, k2, k3, k4, p1, p2, fx - fy, skew);
     }
 
     @Override
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         if (obj instanceof DistortionProjection)
         {
@@ -207,12 +207,12 @@ public class DistortionProjection implements Projection
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return Objects.hash(width, height, fx, fy, cx, cy, k1, k2, k3, k4, p1, p2, skew);
     }
 
-    public DistortionProjection scaledTo(int newWidth, int newHeight)
+    public final DistortionProjection scaledTo(int newWidth, int newHeight)
     {
         float ratioX = newWidth / width;
         float ratioY = newHeight / height;

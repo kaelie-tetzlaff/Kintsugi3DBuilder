@@ -115,8 +115,8 @@ public final class Matrix3
      */
     public static Matrix3 rotateX(double radians)
     {
-        float sinTheta = (float)Math.sin(radians);
-        float cosTheta = (float)Math.cos(radians);
+        float sinTheta = (float) StrictMath.sin(radians);
+        float cosTheta = (float) StrictMath.cos(radians);
         return new Matrix3(
             1.0f,    0.0f,         0.0f,
             0.0f,    cosTheta,    -sinTheta,
@@ -131,8 +131,8 @@ public final class Matrix3
      */
     public static Matrix3 rotateY(double radians)
     {
-        float sinTheta = (float)Math.sin(radians);
-        float cosTheta = (float)Math.cos(radians);
+        float sinTheta = (float) StrictMath.sin(radians);
+        float cosTheta = (float) StrictMath.cos(radians);
         return new Matrix3(
             cosTheta,    0.0f,     sinTheta,
             0.0f,        1.0f,    0.0f,
@@ -147,8 +147,8 @@ public final class Matrix3
      */
     public static Matrix3 rotateZ(double radians)
     {
-        float sinTheta = (float)Math.sin(radians);
-        float cosTheta = (float)Math.cos(radians);
+        float sinTheta = (float) StrictMath.sin(radians);
+        float cosTheta = (float) StrictMath.cos(radians);
         return new Matrix3(
             cosTheta,    -sinTheta,    0.0f,
             sinTheta,    cosTheta,    0.0f,
@@ -164,8 +164,8 @@ public final class Matrix3
      */
     public static Matrix3 rotateAxis(Vector3 axis, double radians)
     {
-        float sinTheta = (float)Math.sin(radians);
-        float cosTheta = (float)Math.cos(radians);
+        float sinTheta = (float) StrictMath.sin(radians);
+        float cosTheta = (float) StrictMath.cos(radians);
         float oneMinusCosTheta = 1.0f - cosTheta;
         return new Matrix3(
 

@@ -22,8 +22,8 @@ public class NativeByteVectorBuffer implements NativeVectorBuffer
 {
     private final ByteBuffer buffer;
 
-    public final int dimensions;
-    public final int count;
+    private final int dimensions;
+    private final int count;
 
     NativeByteVectorBuffer(int dimensions, int count)
     {
@@ -75,19 +75,19 @@ public class NativeByteVectorBuffer implements NativeVectorBuffer
     }
 
     @Override
-    public int getDimensions()
+    public final int getDimensions()
     {
         return dimensions;
     }
 
     @Override
-    public int getCount()
+    public final int getCount()
     {
         return count;
     }
 
     @Override
-    public Byte get(int index, int dimension)
+    public final Byte get(int index, int dimension)
     {
         if (index < 0)
         {
@@ -109,7 +109,7 @@ public class NativeByteVectorBuffer implements NativeVectorBuffer
     }
 
     @Override
-    public void set(int index, int dimension, Number value)
+    public final void set(int index, int dimension, Number value)
     {
         if (index < 0)
         {
@@ -131,13 +131,13 @@ public class NativeByteVectorBuffer implements NativeVectorBuffer
     }
 
     @Override
-    public ByteBuffer getBuffer()
+    public final ByteBuffer getBuffer()
     {
         return buffer;
     }
 
     @Override
-    public NativeDataType getDataType()
+    public final NativeDataType getDataType()
     {
         return NativeDataType.BYTE;
     }

@@ -27,7 +27,7 @@ public class StandardScene<ContextType extends Context<ContextType>> extends Bas
     }
 
     @Override
-    protected void addPostLitComponents(LightingResources<ContextType> lightingResources)
+    protected final void addPostLitComponents(LightingResources<ContextType> lightingResources)
     {
         // the on-screen representation of lights
         addComponent(new LightVisualsGroup<>(getContext(), getSceneModel(), getSceneViewportModel()));

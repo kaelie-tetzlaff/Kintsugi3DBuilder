@@ -22,7 +22,7 @@ public class OpenGLNullTexture extends OpenGLTexture
     }
 
     @Override
-    public int getMipmapLevelCount()
+    public final int getMipmapLevelCount()
     {
         return 0;
     }

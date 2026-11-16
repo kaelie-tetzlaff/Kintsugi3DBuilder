@@ -32,7 +32,7 @@ public class SpecularFitResourcesWrapper<ContextType extends Context<ContextType
         this.basisSettings = null;
     }
 
-    public ReadonlyGraphicsResources<ContextType> wrap(ReadonlyGraphicsResources<ContextType> base)
+    public final ReadonlyGraphicsResources<ContextType> wrap(ReadonlyGraphicsResources<ContextType> base)
     {
         return new SpecularFitResources<>(base, smithMaskingShadowing, basisSettings);
     }

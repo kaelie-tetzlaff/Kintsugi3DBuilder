@@ -39,7 +39,7 @@ public class FramebufferSize
     }
 
     @Override
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         if (obj instanceof FramebufferSize)
         {
@@ -53,7 +53,7 @@ public class FramebufferSize
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         int result = width;
         result = 31 * result + height;

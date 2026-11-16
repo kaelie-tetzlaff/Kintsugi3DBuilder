@@ -114,7 +114,7 @@ public abstract class ExperienceBase implements Experience
     protected final PageFrameController createPagedModal() throws IOException
     {
         PageFrameController frameController = createModal("/fxml/PageFrame.fxml");
-        frameController.setState(getState());
+        frameController.setState(state);
 
         frameController.setPageFactory(loader ->
         {
@@ -185,25 +185,25 @@ public abstract class ExperienceBase implements Experience
      * Handles errors that occur opening this experience (logging them and popping up a dialog window indicating that an error occurred).
      * @param e The exception that occurred.
      */
-    protected void handleError(Exception e)
+    protected final void handleError(Exception e)
     {
         ExceptionHandling.error(MessageFormat.format("An error occurred opening window:\n{0}", getName()), e);
     }
 
     @Override
-    public boolean isInitialized()
+    public final boolean isInitialized()
     {
         return parentWindow != null;
     }
 
     @Override
-    public Window getParentWindow()
+    public final Window getParentWindow()
     {
         return parentWindow;
     }
 
     @Override
-    public Modal getModal()
+    public final Modal getModal()
     {
         return modal;
     }
@@ -212,7 +212,7 @@ public abstract class ExperienceBase implements Experience
      * Gets the state-related data that the experience has access to
      * @return The state object.
      */
-    protected JavaFXState getState()
+    protected final JavaFXState getState()
     {
         return state;
     }

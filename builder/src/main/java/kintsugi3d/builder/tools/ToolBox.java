@@ -26,6 +26,7 @@ import kintsugi3d.gl.window.ModifierKeys;
 import kintsugi3d.gl.window.listeners.ScrollListener;
 import kintsugi3d.util.KeyPress;
 import kintsugi3d.util.MouseMode;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +47,7 @@ public final class ToolBox implements CanvasListener
 
     private final ScrollListener scrollTool;
 
-    private DragTool getSelectedDragTool()
+    private @Nullable DragTool getSelectedDragTool()
     {
         if (currentMode == null)
         {

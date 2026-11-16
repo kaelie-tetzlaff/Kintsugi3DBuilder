@@ -24,19 +24,19 @@ public class RenderExport extends ExperienceBase
         this.shortName = shortName;
     }
 
-    public String getShortName()
+    public final String getShortName()
     {
         return this.shortName;
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return String.format("Export: %s", shortName);
     }
 
     @Override
-    protected void open() throws IOException
+    protected final void open() throws IOException
     {
         openModal(fxmlURLString);
     }

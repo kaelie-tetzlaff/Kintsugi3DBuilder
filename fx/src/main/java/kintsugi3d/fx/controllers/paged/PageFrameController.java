@@ -54,24 +54,24 @@ public class PageFrameController
     private Window window;
     private JavaFXState state;
 
-    public Window getWindow()
+    public final Window getWindow()
     {
         return window;
     }
 
-    public JavaFXState getState()
+    public final JavaFXState getState()
     {
         return state;
     }
 
-    public void setState(JavaFXState state)
+    public final void setState(JavaFXState state)
     {
         this.state = state;
     }
 
     private boolean isIncomplete = true;
 
-    public void init()
+    private void init()
     {
         this.window = outerRoot.getScene().getWindow();
 
@@ -103,13 +103,13 @@ public class PageFrameController
         setButtonShortcuts(currentPage.get().getController());
     }
 
-    public PageFrameController setMinContentWidth(double width)
+    public final PageFrameController setMinContentWidth(double width)
     {
         hostPane.setMinWidth(width);
         return this;
     }
 
-    public PageFrameController setMinContentHeight(double height)
+    public final PageFrameController setMinContentHeight(double height)
     {
         hostPane.setMinHeight(height);
         return this;
@@ -140,7 +140,7 @@ public class PageFrameController
         }
     }
 
-    public void setPageFactory(Function<FXMLLoader, FXMLLoader> pageFactory)
+    public final void setPageFactory(Function<FXMLLoader, FXMLLoader> pageFactory)
     {
         this.pageFactory = pageFactory;
     }
@@ -155,9 +155,9 @@ public class PageFrameController
      * @param <PageType>
      * @param <ControllerType>
      */
-    <PageType extends Page<?, ?>, ControllerType extends PageController<?>>
+    final <PageType extends Page<?, ?>, ControllerType extends PageController<?>>
     PageType createPage(String fxmlPath, Function<FXMLLoader, PageType> pageConstructor,
-        Supplier<ControllerType> controllerConstructorOverride)
+                        Supplier<ControllerType> controllerConstructorOverride)
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
 
@@ -207,7 +207,7 @@ public class PageFrameController
         return page;
     }
 
-    public NonDataPageBuilder<PageFrameController> buildPage(Runnable callback)
+    public final NonDataPageBuilder<PageFrameController> buildPage(Runnable callback)
     {
         return NonDataSentinelPageBuilder.of(this,
             () ->
@@ -218,7 +218,7 @@ public class PageFrameController
             });
     }
 
-    public <T> SimplePageBuilder<Object, T, PageFrameController> buildPage(Runnable callback, T data)
+    public final <T> SimplePageBuilder<Object, T, PageFrameController> buildPage(Runnable callback, T data)
     {
         return DataSentinelPageBuilder.of(this,
             () ->
@@ -230,7 +230,7 @@ public class PageFrameController
             data);
     }
 
-    public void prevPage()
+    public final void prevPage()
     {
         if (currentPage.get().hasPrevPage())
         {
@@ -246,7 +246,7 @@ public class PageFrameController
         }
     }
 
-    public void advancePage()
+    public final void advancePage()
     {
         if (currentPage.get().getController().canAdvance())
         {
@@ -279,7 +279,7 @@ public class PageFrameController
         }
     }
 
-    public void fallbackPage(String pageName)
+    public final void fallbackPage(String pageName)
     {
         Page<?,?> fallbackPage = currentPage.get().getFallbackPages().get(pageName);
         if (fallbackPage != null)
@@ -306,12 +306,12 @@ public class PageFrameController
         outerRoot.getScene().getWindow().sizeToScene();
     }
 
-    public Page<?,?> getCurrentPage()
+    public final Page<?,?> getCurrentPage()
     {
         return currentPage.get();
     }
 
-    public void setCurrentPage(Page<?, ?> page)
+    public final void setCurrentPage(Page<?, ?> page)
     {
         currentPage.set(page);
     }

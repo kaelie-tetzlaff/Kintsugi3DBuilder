@@ -26,25 +26,25 @@ public class ObservableActiveShaderModel implements ActiveShaderModel
 
     private final Collection<Consumer<ShaderInfo>> shaderHandlers = new ArrayList<>(1);
 
-    public ObjectProperty<ShaderInfo> getUserShaderProperty()
+    public final ObjectProperty<ShaderInfo> getUserShaderProperty()
     {
         return userShader;
     }
 
     @Override
-    public ShaderInfo getActiveShader()
+    public final ShaderInfo getActiveShader()
     {
         return userShader.get();
     }
 
     @Override
-    public void registerHandler(Consumer<ShaderInfo> shaderHandler)
+    public final void registerHandler(Consumer<ShaderInfo> shaderHandler)
     {
         shaderHandlers.add(shaderHandler);
     }
 
     @Override
-    public void setActiveShader(ShaderInfo shaderInfo)
+    public final void setActiveShader(ShaderInfo shaderInfo)
     {
         this.userShader.set(shaderInfo);
 

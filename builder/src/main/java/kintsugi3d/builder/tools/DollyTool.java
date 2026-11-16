@@ -29,7 +29,7 @@ final class DollyTool implements DragTool
     private static class Builder extends ToolBuilderBase<DollyTool>
     {
         @Override
-        public DollyTool create()
+        public final DollyTool create()
         {
             return new DollyTool(getCameraModel());
         }

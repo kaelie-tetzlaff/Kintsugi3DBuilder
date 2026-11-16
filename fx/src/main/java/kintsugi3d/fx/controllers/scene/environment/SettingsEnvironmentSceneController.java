@@ -104,7 +104,7 @@ public class SettingsEnvironmentSceneController implements Initializable
         }
     };
 
-    public void setDisabled(boolean value)
+    public final void setDisabled(boolean value)
     {
         root.setDisable(value);
     }
@@ -174,12 +174,12 @@ public class SettingsEnvironmentSceneController implements Initializable
         @Override
         public String toString(Double value)
         {
-            return super.toString(Math.pow(10, value));
+            return super.toString(StrictMath.pow(10, value));
         }
     };
 
     @Override
-    public void initialize(URL location, ResourceBundle resources)
+    public final void initialize(URL location, ResourceBundle resources)
     {
         StaticUtilities.makeWrapAroundNumeric(-180, 180, envRotationTextField);
         StaticUtilities.makeClampedNumeric(0, Double.MAX_VALUE, envIntensityTextField);
@@ -241,7 +241,7 @@ public class SettingsEnvironmentSceneController implements Initializable
         setDisabled(true);
     }
 
-    void updateEnvironmentMapImage(EncodableColorImage environmentMapImage)
+    final void updateEnvironmentMapImage(EncodableColorImage environmentMapImage)
     {
         if (environmentMapImage == null)
         {
@@ -298,12 +298,12 @@ public class SettingsEnvironmentSceneController implements Initializable
         bpImageView.setImage(new Image(localBPImageFile.getValue().toURI().toString()));
     }
 
-    public void setEnvironmentMapModel(ObservableEnvironmentModel environmentMapModel)
+    public final void setEnvironmentMapModel(ObservableEnvironmentModel environmentMapModel)
     {
         this.environmentMapModel = environmentMapModel;
     }
 
-    public ChangeListener<ObservableEnvironmentSettings> getChangeListener()
+    public final ChangeListener<ObservableEnvironmentSettings> getChangeListener()
     {
         return changeListener;
     }

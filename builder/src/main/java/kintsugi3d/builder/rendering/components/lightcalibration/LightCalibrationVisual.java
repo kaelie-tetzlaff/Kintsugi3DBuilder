@@ -46,7 +46,7 @@ public class LightCalibrationVisual<ContextType extends Context<ContextType>> ex
     }
 
     @Override
-    public void initialize()
+    public final void initialize()
     {
         super.initialize();
 
@@ -58,7 +58,7 @@ public class LightCalibrationVisual<ContextType extends Context<ContextType>> ex
     }
 
     @Override
-    protected ProgramObject<ContextType> createProgram() throws IOException
+    protected final ProgramObject<ContextType> createProgram() throws IOException
     {
         return getContext().getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File(new File(new File("shaders"), "common"), "imgspace.vert"))
@@ -67,13 +67,13 @@ public class LightCalibrationVisual<ContextType extends Context<ContextType>> ex
     }
 
     @Override
-    protected Map<String, VertexBuffer<ContextType>> createVertexBuffers()
+    protected final Map<String, VertexBuffer<ContextType>> createVertexBuffers()
     {
         return Map.of("position", getContext().createRectangle());
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         FramebufferSize size = framebuffer.getSize();
 
@@ -106,12 +106,12 @@ public class LightCalibrationVisual<ContextType extends Context<ContextType>> ex
         this.getContext().getState().enableDepthTest();
     }
 
-    public ViewSelection getViewSelection()
+    public final ViewSelection getViewSelection()
     {
         return viewSelection;
     }
 
-    public void setViewSelection(ViewSelection viewSelection)
+    public final void setViewSelection(ViewSelection viewSelection)
     {
         this.viewSelection = viewSelection;
     }

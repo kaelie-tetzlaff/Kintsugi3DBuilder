@@ -145,7 +145,7 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
     }
 
     @Override
-    public ProgramBuilder<ContextType> getShaderProgramBuilder()
+    public final ProgramBuilder<ContextType> getShaderProgramBuilder()
     {
         // Determine shader defines here that do not typically change
         // and should apply globally as defaults, but only for texture-space source photos.
@@ -158,7 +158,7 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
     }
 
     @Override
-    public void setupShaderProgram(Program<ContextType> program)
+    public final void setupShaderProgram(Program<ContextType> program)
     {
         getCommonResources().setupShaderProgram(program);
         geometryTextures.setupShaderProgram(program);
@@ -166,7 +166,7 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
     }
 
     @Override
-    public Drawable<ContextType> createDrawable(Program<ContextType> program)
+    public final Drawable<ContextType> createDrawable(Program<ContextType> program)
     {
         Drawable<ContextType> drawable = getCommonResources().getContext().createDrawable(program);
         drawable.addVertexBuffer("position", rectangle);
@@ -174,13 +174,13 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
         return drawable;
     }
 
-    public TextureResolution getTextureResolution()
+    public final TextureResolution getTextureResolution()
     {
         return new TextureResolution(texWidth, texHeight);
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         super.close();
 

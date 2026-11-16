@@ -34,6 +34,7 @@ import kintsugi3d.gl.util.ColorList;
 import kintsugi3d.optimization.ReadonlyErrorReport;
 import kintsugi3d.optimization.ShaderBasedErrorCalculator;
 import kintsugi3d.optimization.function.GeneralizedSmoothStepBasis;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -190,7 +191,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
     }
 
     private static <ContextType extends Context<ContextType>>
-    ProgramObject<ContextType> createErrorCalcProgram(ShaderProgramFactory<ContextType> programFactory)
+    @Nullable ProgramObject<ContextType> createErrorCalcProgram(ShaderProgramFactory<ContextType> programFactory)
     {
         try
         {

@@ -33,43 +33,43 @@ public class SynchronizedDiscreteLightModel extends DiscreteLightModelBase
     }
 
     @Override
-    public boolean isEnabled()
+    public final boolean isEnabled()
     {
         return this.baseModel.isEnabled();
     }
 
     @Override
-    public Vector3 getColor()
+    public final Vector3 getColor()
     {
         return color.getValue();
     }
 
     @Override
-    public float getSpotSize()
+    public final float getSpotSize()
     {
         return spotSize.getValue();
     }
 
     @Override
-    public float getSpotTaper()
+    public final float getSpotTaper()
     {
         return spotTaper.getValue();
     }
 
     @Override
-    public void setColor(Vector3 color)
+    public final void setColor(Vector3 color)
     {
         this.color.setValue(color);
     }
 
     @Override
-    public void setSpotSize(float spotSize)
+    public final void setSpotSize(float spotSize)
     {
         this.spotSize.setValue(spotSize);
     }
 
     @Override
-    public void setSpotTaper(float spotTaper)
+    public final void setSpotTaper(float spotTaper)
     {
         this.spotTaper.setValue(spotTaper);
     }

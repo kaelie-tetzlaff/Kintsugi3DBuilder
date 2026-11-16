@@ -25,13 +25,13 @@ public class SafeFloatStringConverter extends StringConverter<Number>
     }
 
     @Override
-    public String toString(Number object)
+    public final String toString(Number object)
     {
         return base.toString(object.floatValue());
     }
 
     @Override
-    public Float fromString(String string)
+    public final Float fromString(String string)
     {
         if ("".equals(string))
         {

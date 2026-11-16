@@ -16,13 +16,13 @@ import java.io.IOException;
 public class SpecularTextureFit extends ExperienceBase
 {
     @Override
-    public String getName()
+    public final String getName()
     {
         return "Reoptimize Textures";
     }
 
     @Override
-    protected void open() throws IOException
+    protected final void open() throws IOException
     {
         openPagedModal("/fxml/modals/workflow/SpecularTexturesFit.fxml");
     }

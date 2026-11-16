@@ -29,6 +29,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 public abstract class USDZExporter extends MaterialExporter
 {
@@ -58,7 +59,7 @@ public abstract class USDZExporter extends MaterialExporter
     protected abstract void addCommands(List<String> commandList);
 
     @Override
-    protected void postExport()
+    protected final void postExport()
     {
         // Command list for the ProcessBuilder
         List<String> command = new ArrayList<>(8);
@@ -146,7 +147,10 @@ public abstract class USDZExporter extends MaterialExporter
         // Cleanup temp files
         try
         {
-            Files.walk(tempPath.toPath()).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+            try (Stream<Path> stream = Files.walk(tempPath.toPath()))
+            {
+                stream.sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+            }
         }
         catch (IOException e)
         {
@@ -156,7 +160,7 @@ public abstract class USDZExporter extends MaterialExporter
 
     // Grab the output directory and redirect the save to a temporary directory
     @Override
-    public void saveTextures(File outputDirectory)
+    public final void saveTextures(File outputDirectory)
     {
         outputPath = outputDirectory;
         tempPath = new File(Global.io().getLoadedViewSet().getSupportingFilesDirectory(), "temp");

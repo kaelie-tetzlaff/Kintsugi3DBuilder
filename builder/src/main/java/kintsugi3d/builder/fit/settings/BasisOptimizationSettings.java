@@ -19,7 +19,7 @@ public class BasisOptimizationSettings extends BasisSettings implements Readonly
     private double metallicity = 0.0;
 
     @Override
-    public int getSpecularMinWidth()
+    public final int getSpecularMinWidth()
     {
         return specularMinWidth;
     }
@@ -29,13 +29,13 @@ public class BasisOptimizationSettings extends BasisSettings implements Readonly
      * This setting is measured in discrete (integer) units and should be less than the basis resolution and the max width.
      * @param specularMinWidth
      */
-    public void setSpecularMinWidth(int specularMinWidth)
+    public final void setSpecularMinWidth(int specularMinWidth)
     {
         this.specularMinWidth = specularMinWidth;
     }
 
     @Override
-    public int getSpecularMaxWidth()
+    public final int getSpecularMaxWidth()
     {
         return specularMaxWidth;
     }
@@ -45,7 +45,7 @@ public class BasisOptimizationSettings extends BasisSettings implements Readonly
      * This setting is measured in discrete (integer) units and should be less than the basis resolution.
      * @param specularMaxWidth
      */
-    public void setSpecularMaxWidth(int specularMaxWidth)
+    public final void setSpecularMaxWidth(int specularMaxWidth)
     {
         if (specularMaxWidth < 0)
         {
@@ -56,7 +56,7 @@ public class BasisOptimizationSettings extends BasisSettings implements Readonly
     }
 
     @Override
-    public int getBasisComplexity()
+    public final int getBasisComplexity()
     {
         return basisComplexity;
     }
@@ -65,13 +65,13 @@ public class BasisOptimizationSettings extends BasisSettings implements Readonly
      * Sets the number of representative functions that are used to optimize each basis function.
      * @param basisComplexity
      */
-    public void setBasisComplexity(int basisComplexity)
+    public final void setBasisComplexity(int basisComplexity)
     {
         this.basisComplexity = basisComplexity;
     }
 
     @Override
-    public double getMetallicity()
+    public final double getMetallicity()
     {
         return this.metallicity;
     }
@@ -81,7 +81,7 @@ public class BasisOptimizationSettings extends BasisSettings implements Readonly
      * like the Fresnel effect and is scattered by first-surface microfacet geometry, not subsurface scattering)
      * @return
      */
-    public void setMetallicity(double metallicity)
+    public final void setMetallicity(double metallicity)
     {
         if (metallicity < 0 || metallicity > 1)
         {

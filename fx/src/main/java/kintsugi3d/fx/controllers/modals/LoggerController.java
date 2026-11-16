@@ -53,7 +53,7 @@ public class LoggerController implements Initializable
     private FXLogMessageAppender logMessages;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources)
+    public final void initialize(URL location, ResourceBundle resources)
     {
         logMessages = FXLogMessageAppender.getInstance();
 
@@ -84,7 +84,7 @@ public class LoggerController implements Initializable
     }
 
     @FXML
-    public void buttonOpenLogDir(ActionEvent actionEvent)
+    public final void buttonOpenLogDir(ActionEvent actionEvent)
     {
         try
         {
@@ -99,7 +99,7 @@ public class LoggerController implements Initializable
     }
 
     @FXML
-    public void buttonChangeLogLevel(ActionEvent actionEvent)
+    public final void buttonChangeLogLevel(ActionEvent actionEvent)
     {
         FilteredList<LogMessage> filteredList = (FilteredList<LogMessage>) messageListView.getItems();
         if (filteredList != null)
@@ -108,7 +108,7 @@ public class LoggerController implements Initializable
         }
     }
 
-    public void buttonUpdatePaused(ActionEvent event)
+    public final void buttonUpdatePaused(ActionEvent event)
     {
         ObservableList<LogMessage> items;
 
@@ -162,7 +162,7 @@ public class LoggerController implements Initializable
     private static class LogMessageCellFactory implements Callback<ListView<LogMessage>, ListCell<LogMessage>>
     {
         @Override
-        public ListCell<LogMessage> call(ListView<LogMessage> logMessageListView)
+        public final ListCell<LogMessage> call(ListView<LogMessage> logMessageListView)
         {
             return new LogMessageCell();
         }
@@ -193,7 +193,7 @@ public class LoggerController implements Initializable
         private static class LogMessageCell extends ListCell<LogMessage>
         {
             @Override
-            public void updateItem(LogMessage message, boolean empty)
+            public final void updateItem(LogMessage message, boolean empty)
             {
                 super.updateItem(message, empty);
                 if (empty || message == null)

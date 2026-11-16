@@ -34,13 +34,13 @@ public class GroundPlane<ContextType extends Context<ContextType>> extends Stand
     }
 
     @Override
-    protected Map<String, VertexBuffer<ContextType>> createVertexBuffers()
+    protected final Map<String, VertexBuffer<ContextType>> createVertexBuffers()
     {
         return Map.of("position", getContext().createRectangle());
     }
 
     @Override
-    protected Drawable<ContextType> createDrawable(Program<ContextType> drawableProgram)
+    protected final Drawable<ContextType> createDrawable(Program<ContextType> drawableProgram)
     {
         Drawable<ContextType> drawable = super.createDrawable(drawableProgram);
         drawable.setVertexAttrib("normal", new Vector3(0, 0, 1));
@@ -48,7 +48,7 @@ public class GroundPlane<ContextType extends Context<ContextType>> extends Stand
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         if (getSceneModel().getLightingModel().isGroundPlaneEnabled())
         {
@@ -59,7 +59,7 @@ public class GroundPlane<ContextType extends Context<ContextType>> extends Stand
             setupShader(cameraViewport, model);
 
             getDrawable().program().setUniform("defaultDiffuseColor",
-                getSceneModel().getLightingModel().getGroundPlaneColor().applyOperator(x -> Math.pow(x, 2.2)));
+                getSceneModel().getLightingModel().getGroundPlaneColor().applyOperator(x -> StrictMath.pow(x, 2.2)));
 
             // Disable back face culling since the plane is one-sided.
             getContext().getState().disableBackFaceCulling();

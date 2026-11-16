@@ -54,13 +54,13 @@ public class GenericRenderRequestController implements Initializable
     private final DirectoryChooser directoryChooser = new DirectoryChooser();
 
     @Override
-    public void initialize(URL location, ResourceBundle resources)
+    public final void initialize(URL location, ResourceBundle resources)
     {
         loopModeComboBoxAction();
         vertexShaderModeComboBoxAction();
     }
 
-    public void run()
+    public final void run()
     {
         if (Global.io().getProgressMonitor().isConflictingProcess())
         {

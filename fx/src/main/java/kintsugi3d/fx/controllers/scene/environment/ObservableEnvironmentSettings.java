@@ -56,7 +56,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         if (!this.isNoEnvironment() && locked.getValue())
         {
@@ -68,7 +68,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         }
     }
 
-    public ObservableEnvironmentSettings duplicate()
+    public final ObservableEnvironmentSettings duplicate()
     {
         ObservableEnvironmentSettings newEnvironment = new ObservableEnvironmentSettings();
         newEnvironment.envUseImage.setValue(envUseImage.getValue());
@@ -96,358 +96,358 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
     }
 
     @Override
-    public boolean isEnvironmentImageEnabled()
+    public final boolean isEnvironmentImageEnabled()
     {
         return envUseImage.get();
     }
 
-    public BooleanProperty envUseImageProperty()
+    public final BooleanProperty envUseImageProperty()
     {
         return envUseImage;
     }
 
     @Override
-    public void setEnvironmentImageEnabled(boolean envUseImage)
+    public final void setEnvironmentImageEnabled(boolean envUseImage)
     {
         this.envUseImage.set(envUseImage);
     }
 
     @Override
-    public boolean isEnvironmentColorEnabled()
+    public final boolean isEnvironmentColorEnabled()
     {
         return envUseColor.get();
     }
 
-    public BooleanProperty envUseColorProperty()
+    public final BooleanProperty envUseColorProperty()
     {
         return envUseColor;
     }
 
     @Override
-    public void setEnvironmentColorEnabled(boolean envUseColor)
+    public final void setEnvironmentColorEnabled(boolean envUseColor)
     {
         this.envUseColor.set(envUseColor);
     }
 
     @Override
-    public boolean isBackplateImageEnabled()
+    public final boolean isBackplateImageEnabled()
     {
         return bpUseImage.get();
     }
 
-    public BooleanProperty bpUseImageProperty()
+    public final BooleanProperty bpUseImageProperty()
     {
         return bpUseImage;
     }
 
     @Override
-    public void setBackplateImageEnabled(boolean bpUseImage)
+    public final void setBackplateImageEnabled(boolean bpUseImage)
     {
         this.bpUseImage.set(bpUseImage);
     }
 
     @Override
-    public boolean isBackplateColorEnabled()
+    public final boolean isBackplateColorEnabled()
     {
         return bpUseColor.get();
     }
 
-    public BooleanProperty bpUseColorProperty()
+    public final BooleanProperty bpUseColorProperty()
     {
         return bpUseColor;
     }
 
     @Override
-    public void setBackplateColorEnabled(boolean bpUseColor)
+    public final void setBackplateColorEnabled(boolean bpUseColor)
     {
         this.bpUseColor.set(bpUseColor);
     }
 
     @Override
-    public boolean areImagePathsRelative()
+    public final boolean areImagePathsRelative()
     {
         return imagePathsRelative.get();
     }
 
-    public BooleanProperty imagePathsRelativeProperty()
+    public final BooleanProperty imagePathsRelativeProperty()
     {
         return imagePathsRelative;
     }
 
     @Override
-    public void setImagePathsRelative(boolean imagePathsRelative)
+    public final void setImagePathsRelative(boolean imagePathsRelative)
     {
         this.imagePathsRelative.set(imagePathsRelative);
     }
 
     @Override
-    public File getEnvironmentImageFile()
+    public final File getEnvironmentImageFile()
     {
         return envImageFile.getValue();
     }
 
-    public Property<File> envImageFileProperty()
+    public final Property<File> envImageFileProperty()
     {
         return envImageFile;
     }
 
     @Override
-    public void setEnvironmentImageFile(File envImageFile)
+    public final void setEnvironmentImageFile(File envImageFile)
     {
         this.envImageFile.setValue(envImageFile);
     }
 
     @Override
-    public File getBackplateImageFile()
+    public final File getBackplateImageFile()
     {
         return bpImageFile.getValue();
     }
 
-    public Property<File> bpImageFileProperty()
+    public final Property<File> bpImageFileProperty()
     {
         return bpImageFile;
     }
 
     @Override
-    public void setBackplateImageFile(File bpImageFile)
+    public final void setBackplateImageFile(File bpImageFile)
     {
         this.bpImageFile.setValue(bpImageFile);
     }
 
     @Override
-    public double getBackgroundIntensity()
+    public final double getBackgroundIntensity()
     {
         return backgroundIntensity.get();
     }
 
-    public DoubleProperty backgroundIntensityProperty()
+    public final DoubleProperty backgroundIntensityProperty()
     {
         return backgroundIntensity;
     }
 
     @Override
-    public void setBackgroundIntensity(double backgroundIntensity)
+    public final void setBackgroundIntensity(double backgroundIntensity)
     {
         this.backgroundIntensity.set(backgroundIntensity);
     }
 
     @Override
-    public double getEnvironmentColorIntensity()
+    public final double getEnvironmentColorIntensity()
     {
         return envColorIntensity.get();
     }
 
-    public DoubleProperty envColorIntensityProperty()
+    public final DoubleProperty envColorIntensityProperty()
     {
         return envColorIntensity;
     }
 
     @Override
-    public void setEnvironmentIntensity(double envColorIntensity)
+    public final void setEnvironmentIntensity(double envColorIntensity)
     {
         this.envColorIntensity.set(envColorIntensity);
     }
 
     @Override
-    public double getEnvironmentRotation()
+    public final double getEnvironmentRotation()
     {
         return envRotation.get();
     }
 
-    public DoubleProperty envRotationProperty()
+    public final DoubleProperty envRotationProperty()
     {
         return envRotation;
     }
 
     @Override
-    public void setEnvironmentRotation(double envRotation)
+    public final void setEnvironmentRotation(double envRotation)
     {
         this.envRotation.set(envRotation);
     }
 
-    public DoubleProperty envFilteringBiasProperty()
+    public final DoubleProperty envFilteringBiasProperty()
     {
         return envFilteringBias;
     }
 
     @Override
-    public double getEnvironmentFilteringBias()
+    public final double getEnvironmentFilteringBias()
     {
         return envFilteringBias.get();
     }
 
     @Override
-    public void setEnvironmentFilteringBias(double envFilteringBias)
+    public final void setEnvironmentFilteringBias(double envFilteringBias)
     {
         this.envFilteringBias.set(envFilteringBias);
     }
 
     @Override
-    public Color getEnvironmentColor()
+    public final Color getEnvironmentColor()
     {
         return envColor.getValue();
     }
 
-    public Property<Color> envColorProperty()
+    public final Property<Color> envColorProperty()
     {
         return envColor;
     }
 
     @Override
-    public void setEnvironmentColor(Color envColor)
+    public final void setEnvironmentColor(Color envColor)
     {
         this.envColor.setValue(envColor);
     }
 
     @Override
-    public Color getBackplateColor()
+    public final Color getBackplateColor()
     {
         return bpColor.getValue();
     }
 
-    public Property<Color> bpColorProperty()
+    public final Property<Color> bpColorProperty()
     {
         return bpColor;
     }
 
     @Override
-    public void setBackplateColor(Color bpColor)
+    public final void setBackplateColor(Color bpColor)
     {
         this.bpColor.setValue(bpColor);
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return name.get();
     }
 
-    public StringProperty nameProperty()
+    public final StringProperty nameProperty()
     {
         return name;
     }
 
     @Override
-    public void setName(String name)
+    public final void setName(String name)
     {
         this.name.set(name);
     }
 
     @Override
-    public boolean isLocked()
+    public final boolean isLocked()
     {
         return locked.get();
     }
 
-    public BooleanProperty lockedProperty()
+    public final BooleanProperty lockedProperty()
     {
         return locked;
     }
 
     @Override
-    public void setLocked(boolean locked)
+    public final void setLocked(boolean locked)
     {
         this.locked.set(locked);
     }
 
     @Override
-    public boolean isEnvironmentLoaded()
+    public final boolean isEnvironmentLoaded()
     {
         return envLoaded.get();
     }
 
-    public BooleanProperty envLoadedProperty()
+    public final BooleanProperty envLoadedProperty()
     {
         return envLoaded;
     }
 
     @Override
-    public void setEnvironmentLoaded(boolean envLoaded)
+    public final void setEnvironmentLoaded(boolean envLoaded)
     {
         this.envLoaded.set(envLoaded);
     }
 
     @Override
-    public boolean isBackplateLoaded()
+    public final boolean isBackplateLoaded()
     {
         return bpLoaded.get();
     }
 
-    public BooleanProperty bpLoadedProperty()
+    public final BooleanProperty bpLoadedProperty()
     {
         return bpLoaded;
     }
 
     @Override
-    public void setBackplateLoaded(boolean bpLoaded)
+    public final void setBackplateLoaded(boolean bpLoaded)
     {
         this.bpLoaded.set(bpLoaded);
     }
 
     @Override
-    public boolean isGroundPlaneEnabled()
+    public final boolean isGroundPlaneEnabled()
     {
         return gpEnabled.get();
     }
 
-    public BooleanProperty gpEnabledProperty()
+    public final BooleanProperty gpEnabledProperty()
     {
         return gpEnabled;
     }
 
     @Override
-    public void setGroundPlaneEnabled(boolean gpEnabled)
+    public final void setGroundPlaneEnabled(boolean gpEnabled)
     {
         this.gpEnabled.set(gpEnabled);
     }
 
     @Override
-    public Color getGroundPlaneCrolor()
+    public final Color getGroundPlaneCrolor()
     {
         return gpColor.getValue();
     }
 
-    public Property<Color> gpColorProperty()
+    public final Property<Color> gpColorProperty()
     {
         return gpColor;
     }
 
     @Override
-    public void setGroundPlaneColor(Color gpColor)
+    public final void setGroundPlaneColor(Color gpColor)
     {
         this.gpColor.setValue(gpColor);
     }
 
     @Override
-    public double getGroundPlaneHeight()
+    public final double getGroundPlaneHeight()
     {
         return gpHeight.getValue();
     }
 
-    public DoubleProperty gpHeightProperty()
+    public final DoubleProperty gpHeightProperty()
     {
         return gpHeight;
     }
 
     @Override
-    public void setGroundPlaneHeight(double gpHeight)
+    public final void setGroundPlaneHeight(double gpHeight)
     {
         this.gpHeight.setValue(gpHeight);
     }
 
     @Override
-    public double getGroundPlaneSize()
+    public final double getGroundPlaneSize()
     {
         return gpSize.getValue();
     }
 
-    public DoubleProperty gpSizeProperty()
+    public final DoubleProperty gpSizeProperty()
     {
         return gpSize;
     }
 
     @Override
-    public void setGroundPlaneSize(double gpSize)
+    public final void setGroundPlaneSize(double gpSize)
     {
         this.gpSize.setValue(gpSize);
     }

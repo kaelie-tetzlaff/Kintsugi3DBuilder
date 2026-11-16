@@ -64,7 +64,7 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
         }
 
         @Override
-        public OpenGLTexture2D createTexture()
+        public final OpenGLTexture2D createTexture()
         {
             int width = colorImg.getWidth();
             int height = colorImg.getHeight();
@@ -139,7 +139,7 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
         }
 
         @Override
-        public OpenGLTexture2D createTexture()
+        public final OpenGLTexture2D createTexture()
         {
             int width = colorImg.getWidth();
             int height = colorImg.getHeight();
@@ -194,7 +194,7 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
         }
 
         @Override
-        public OpenGLTexture2D createTexture()
+        public final OpenGLTexture2D createTexture()
         {
             int width = colorImg.width;
             int height = colorImg.height;
@@ -254,7 +254,7 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
         }
 
         @Override
-        public OpenGLTexture2D createTexture()
+        public final OpenGLTexture2D createTexture()
         {
             if (this.isInternalFormatCompressed())
             {
@@ -303,7 +303,7 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
         }
 
         @Override
-        public OpenGLTexture2D createTexture()
+        public final OpenGLTexture2D createTexture()
         {
             if (this.isInternalFormatCompressed())
             {
@@ -355,7 +355,7 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
         }
 
         @Override
-        public OpenGLTexture2D createTexture()
+        public final OpenGLTexture2D createTexture()
         {
             return new OpenGLTexture2D(
                 this.getContext(),
@@ -389,7 +389,7 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
         }
 
         @Override
-        public OpenGLTexture2D createTexture()
+        public final OpenGLTexture2D createTexture()
         {
             return new OpenGLTexture2D(
                 this.getContext(),
@@ -423,7 +423,7 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
         }
 
         @Override
-        public OpenGLTexture2D createTexture()
+        public final OpenGLTexture2D createTexture()
         {
             return new OpenGLTexture2D(
                 this.getContext(),

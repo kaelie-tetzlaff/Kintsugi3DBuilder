@@ -29,12 +29,12 @@ public abstract class SearchableView
 
     protected abstract void updateView();
 
-    TextInputControl getSearchTextInput()
+    final TextInputControl getSearchTextInput()
     {
         return searchTextInput;
     }
 
-    CheckBox getRegexMode()
+    final CheckBox getRegexMode()
     {
         return regexMode;
     }

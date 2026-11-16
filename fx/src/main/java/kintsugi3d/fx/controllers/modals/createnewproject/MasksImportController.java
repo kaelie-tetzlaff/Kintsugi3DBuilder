@@ -40,13 +40,13 @@ public class MasksImportController
     private File fileChooserMasksDir; //represents the file chosen through file chooser, which may or may not be the final masks selection
 
     @Override
-    public Region getRootNode()
+    public final Region getRootNode()
     {
         return rootPane;
     }
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         masksDirectoryChooser = new DirectoryChooser();
 
@@ -63,14 +63,14 @@ public class MasksImportController
     }
 
     @Override
-    public void refresh()
+    public final void refresh()
     {
         masksDirectoryChooser.setInitialDirectory(source.getInitialMasksDirectory());
         useProjectMasksButton.setDisable(!source.hasProjectMasks());
     }
 
     @Override
-    public boolean tryAdvance()
+    public final boolean tryAdvance()
     {
         if (customMasksDirButton.isSelected())
         {
@@ -86,7 +86,7 @@ public class MasksImportController
     }
 
     @Override
-    public boolean tryConfirm()
+    public final boolean tryConfirm()
     {
         return source.confirm();
     }
@@ -110,7 +110,7 @@ public class MasksImportController
     }
 
     @Override
-    public void receiveData(ValidatedInputSource source)
+    public final void receiveData(ValidatedInputSource source)
     {
         this.source = source;
     }

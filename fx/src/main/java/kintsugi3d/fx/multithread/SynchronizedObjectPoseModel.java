@@ -36,62 +36,62 @@ public class SynchronizedObjectPoseModel extends ObjectPoseModelBase
     }
 
     @Override
-    public boolean isLocked()
+    public final boolean isLocked()
     {
         return baseModel.isLocked();
     }
 
     @Override
-    public Vector3 getCenter()
+    public final Vector3 getCenter()
     {
         return this.center.getValue();
     }
 
     @Override
-    public float getRotationZ()
+    public final float getRotationZ()
     {
         return this.rotationZ.getValue();
     }
 
     @Override
-    public float getRotationY()
+    public final float getRotationY()
     {
         return this.rotationY.getValue();
     }
 
     @Override
-    public float getRotationX()
+    public final float getRotationX()
     {
         return this.rotationX.getValue();
     }
 
     @Override
-    public float getScale(){return this.scale.getValue();}
+    public final float getScale(){return this.scale.getValue();}
 
     @Override
-    public void setCenter(Vector3 center)
+    public final void setCenter(Vector3 center)
     {
         this.center.setValue(center);
     }
 
     @Override
-    public void setRotationZ(float rotationZ)
+    public final void setRotationZ(float rotationZ)
     {
         this.rotationZ.setValue(rotationZ);
     }
 
     @Override
-    public void setRotationY(float rotationY)
+    public final void setRotationY(float rotationY)
     {
         this.rotationY.setValue(rotationY);
     }
 
     @Override
-    public void setRotationX(float rotationX)
+    public final void setRotationX(float rotationX)
     {
         this.rotationX.setValue(rotationX);
     }
 
     @Override
-    public void setScale(float scale){this.scale.setValue(scale);}
+    public final void setScale(float scale){this.scale.setValue(scale);}
 }

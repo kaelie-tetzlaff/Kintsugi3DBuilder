@@ -34,7 +34,7 @@ final class ObjectCenterTool implements DragTool
     private static class Builder extends ToolBuilderBase<ObjectCenterTool>
     {
         @Override
-        public ObjectCenterTool create()
+        public final ObjectCenterTool create()
         {
             return new ObjectCenterTool(getCameraModel(), getObjectModel());
         }

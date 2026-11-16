@@ -48,7 +48,7 @@ final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLCon
         }
 
         @Override
-        public OpenGLTexture1D createTexture()
+        public final OpenGLTexture1D createTexture()
         {
             if (this.isInternalFormatCompressed())
             {

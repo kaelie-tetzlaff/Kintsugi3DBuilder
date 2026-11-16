@@ -35,7 +35,7 @@ public final class SRGB
         }
         else
         {
-            return Math.pow((encoded + 0.055) / 1.055, 2.4);
+            return StrictMath.pow((encoded + 0.055) / 1.055, 2.4);
         }
     }
 
@@ -72,7 +72,7 @@ public final class SRGB
         }
         else
         {
-            return 1.055 * Math.pow(linear, 1.0/2.4) - 0.055;
+            return 1.055 * StrictMath.pow(linear, 1.0/2.4) - 0.055;
         }
     }
 

@@ -30,6 +30,7 @@ import kintsugi3d.builder.io.metashape.MetashapeDocument;
 import kintsugi3d.builder.io.metashape.MetashapeModel;
 import kintsugi3d.fx.controllers.modals.createnewproject.inputsources.MetashapeProjectInputSource;
 import kintsugi3d.fx.core.FrontendIO;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.List;
@@ -53,13 +54,13 @@ public class MetashapeImportController extends ProjectImportController
     @FXML private FileChooser psxFileChooser;
 
     @Override
-    public Region getRootNode()
+    public final Region getRootNode()
     {
         return rootPane;
     }
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         psxFileChooser = new FileChooser();
         psxFileChooser.setTitle("Choose .psx file");
@@ -70,7 +71,7 @@ public class MetashapeImportController extends ProjectImportController
     }
 
     @Override
-    public void refresh()
+    public final void refresh()
     {
         updateLoadedIndicators();
         //need to do Platform.runLater so updateModelSelectionChoiceBox can pull info from chunkSelectionChoiceBox
@@ -103,13 +104,13 @@ public class MetashapeImportController extends ProjectImportController
     }
 
     @Override
-    protected MetashapeProjectInputSource getData()
+    protected final MetashapeProjectInputSource getData()
     {
         return new MetashapeProjectInputSource(() -> FrontendIO.getInstance().showSaveProjectDialog(getPageFrameController().getWindow()))
             .setMetashapeModel(metashapeDocument.getSelectedChunk().getSelectedModel());
     }
 
-    private static String getModelIDFromSelection(String selectionAsString)
+    private static @Nullable String getModelIDFromSelection(String selectionAsString)
     {
         //TODO: need to revisit this when formatting of model selection choice box changes
         if (selectionAsString == null || selectionAsString.startsWith(NO_MODEL_ID_MSG))

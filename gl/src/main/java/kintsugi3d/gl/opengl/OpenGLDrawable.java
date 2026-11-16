@@ -46,19 +46,19 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     }
 
     @Override
-    public OpenGLContext getContext()
+    public final OpenGLContext getContext()
     {
         return this.context;
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         vao.close();
     }
 
     @Override
-    public OpenGLProgramObject program()
+    public final OpenGLProgramObject program()
     {
         return this.program;
     }
@@ -83,7 +83,7 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     }
 
     @Override
-    public void draw(PrimitiveMode primitiveMode, Framebuffer<OpenGLContext> framebuffer)
+    public final void draw(PrimitiveMode primitiveMode, Framebuffer<OpenGLContext> framebuffer)
     {
         framebuffer.getDrawContents().bindForDraw();
         program.use(vao);
@@ -95,7 +95,7 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     }
 
     @Override
-    public void draw(PrimitiveMode primitiveMode, Framebuffer<OpenGLContext> framebuffer, int x, int y, int width, int height)
+    public final void draw(PrimitiveMode primitiveMode, Framebuffer<OpenGLContext> framebuffer, int x, int y, int width, int height)
     {
         framebuffer.getDrawContents().bindViewportForDraw(x, y, width, height);
         program.use(vao);
@@ -107,19 +107,19 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     }
 
     @Override
-    public void draw(PrimitiveMode primitiveMode, Framebuffer<OpenGLContext> framebuffer, int width, int height)
+    public final void draw(PrimitiveMode primitiveMode, Framebuffer<OpenGLContext> framebuffer, int width, int height)
     {
         this.draw(primitiveMode, framebuffer, 0, 0, width, height);
     }
 
     @Override
-    public void draw(PrimitiveMode primitiveMode)
+    public final void draw(PrimitiveMode primitiveMode)
     {
         this.draw(primitiveMode, context.getDefaultFramebuffer());
     }
 
     @Override
-    public void addVertexBuffer(int location, ReadonlyVertexBuffer<OpenGLContext> buffer)
+    public final void addVertexBuffer(int location, ReadonlyVertexBuffer<OpenGLContext> buffer)
     {
         if (buffer instanceof OpenGLVertexBuffer)
         {
@@ -135,13 +135,13 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     }
 
     @Override
-    public void addVertexBuffer(String name, ReadonlyVertexBuffer<OpenGLContext> buffer)
+    public final void addVertexBuffer(String name, ReadonlyVertexBuffer<OpenGLContext> buffer)
     {
         this.addVertexBuffer(program.getVertexAttribLocation(name), buffer);
     }
 
     @Override
-    public void setVertexAttrib(int location, int value)
+    public final void setVertexAttrib(int location, int value)
     {
         if (location >= 0)
         {
@@ -154,7 +154,7 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     }
 
     @Override
-    public void setVertexAttrib(int location, IntVector2 value)
+    public final void setVertexAttrib(int location, IntVector2 value)
     {
         if (location >= 0)
         {
@@ -167,7 +167,7 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     }
 
     @Override
-    public void setVertexAttrib(int location, IntVector3 value)
+    public final void setVertexAttrib(int location, IntVector3 value)
     {
         if (location >= 0)
         {
@@ -180,7 +180,7 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     }
 
     @Override
-    public void setVertexAttrib(int location, IntVector4 value)
+    public final void setVertexAttrib(int location, IntVector4 value)
     {
         if (location >= 0)
         {
@@ -193,7 +193,7 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     }
 
     @Override
-    public void setVertexAttrib(int location, float value)
+    public final void setVertexAttrib(int location, float value)
     {
         if (location >= 0)
         {
@@ -206,7 +206,7 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     }
 
     @Override
-    public void setVertexAttrib(int location, Vector2 value)
+    public final void setVertexAttrib(int location, Vector2 value)
     {
         if (location >= 0)
         {
@@ -219,7 +219,7 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     }
 
     @Override
-    public void setVertexAttrib(int location, Vector3 value)
+    public final void setVertexAttrib(int location, Vector3 value)
     {
         if (location >= 0)
         {
@@ -232,7 +232,7 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     }
 
     @Override
-    public void setVertexAttrib(int location, Vector4 value)
+    public final void setVertexAttrib(int location, Vector4 value)
     {
         if (location >= 0)
         {
@@ -245,7 +245,7 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     }
 
     @Override
-    public void setVertexAttrib(int location, double value)
+    public final void setVertexAttrib(int location, double value)
     {
         if (location >= 0)
         {
@@ -258,7 +258,7 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     }
 
     @Override
-    public void setVertexAttrib(int location, DoubleVector2 value)
+    public final void setVertexAttrib(int location, DoubleVector2 value)
     {
         if (location >= 0)
         {
@@ -271,7 +271,7 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     }
 
     @Override
-    public void setVertexAttrib(int location, DoubleVector3 value)
+    public final void setVertexAttrib(int location, DoubleVector3 value)
     {
         if (location >= 0)
         {
@@ -284,7 +284,7 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     }
 
     @Override
-    public void setVertexAttrib(int location, DoubleVector4 value)
+    public final void setVertexAttrib(int location, DoubleVector4 value)
     {
         if (location >= 0)
         {
@@ -297,84 +297,84 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     }
 
     @Override
-    public void setVertexAttrib(String name, int value)
+    public final void setVertexAttrib(String name, int value)
     {
         int location = program.getVertexAttribLocation(name);
         this.setVertexAttrib(location, value);
     }
 
     @Override
-    public void setVertexAttrib(String name, IntVector2 value)
+    public final void setVertexAttrib(String name, IntVector2 value)
     {
         int location = program.getVertexAttribLocation(name);
         this.setVertexAttrib(location, value);
     }
 
     @Override
-    public void setVertexAttrib(String name, IntVector3 value)
+    public final void setVertexAttrib(String name, IntVector3 value)
     {
         int location = program.getVertexAttribLocation(name);
         this.setVertexAttrib(location, value);
     }
 
     @Override
-    public void setVertexAttrib(String name, IntVector4 value)
+    public final void setVertexAttrib(String name, IntVector4 value)
     {
         int location = program.getVertexAttribLocation(name);
         this.setVertexAttrib(location, value);
     }
 
     @Override
-    public void setVertexAttrib(String name, float value)
+    public final void setVertexAttrib(String name, float value)
     {
         int location = program.getVertexAttribLocation(name);
         this.setVertexAttrib(location, value);
     }
 
     @Override
-    public void setVertexAttrib(String name, Vector2 value)
+    public final void setVertexAttrib(String name, Vector2 value)
     {
         int location = program.getVertexAttribLocation(name);
         this.setVertexAttrib(location, value);
     }
 
     @Override
-    public void setVertexAttrib(String name, Vector3 value)
+    public final void setVertexAttrib(String name, Vector3 value)
     {
         int location = program.getVertexAttribLocation(name);
         this.setVertexAttrib(location, value);
     }
 
     @Override
-    public void setVertexAttrib(String name, Vector4 value)
+    public final void setVertexAttrib(String name, Vector4 value)
     {
         int location = program.getVertexAttribLocation(name);
         this.setVertexAttrib(location, value);
     }
 
     @Override
-    public void setVertexAttrib(String name, double value)
+    public final void setVertexAttrib(String name, double value)
     {
         int location = program.getVertexAttribLocation(name);
         this.setVertexAttrib(location, value);
     }
 
     @Override
-    public void setVertexAttrib(String name, DoubleVector2 value)
+    public final void setVertexAttrib(String name, DoubleVector2 value)
     {
         int location = program.getVertexAttribLocation(name);
         this.setVertexAttrib(location, value);
     }
 
     @Override
-    public void setVertexAttrib(String name, DoubleVector3 value)
+    public final void setVertexAttrib(String name, DoubleVector3 value)
     {
         int location = program.getVertexAttribLocation(name);
         this.setVertexAttrib(location, value);
     }
 
     @Override
-    public void setVertexAttrib(String name, DoubleVector4 value)
+    public final void setVertexAttrib(String name, DoubleVector4 value)
     {
         int location = program.getVertexAttribLocation(name);
         this.setVertexAttrib(location, value);

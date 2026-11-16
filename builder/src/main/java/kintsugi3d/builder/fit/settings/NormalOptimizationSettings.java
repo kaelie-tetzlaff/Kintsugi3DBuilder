@@ -20,7 +20,7 @@ public class NormalOptimizationSettings implements ReadonlyNormalOptimizationSet
     private int unsuccessfulLMIterationsAllowed = 0;
 
     @Override
-    public boolean isNormalRefinementEnabled()
+    public final boolean isNormalRefinementEnabled()
     {
         return normalRefinementEnabled;
     }
@@ -30,13 +30,13 @@ public class NormalOptimizationSettings implements ReadonlyNormalOptimizationSet
      *
      * @param normalRefinementEnabled
      */
-    public void setNormalRefinementEnabled(boolean normalRefinementEnabled)
+    public final void setNormalRefinementEnabled(boolean normalRefinementEnabled)
     {
         this.normalRefinementEnabled = normalRefinementEnabled;
     }
 
     @Override
-    public double getMinNormalDamping()
+    public final double getMinNormalDamping()
     {
         return minNormalDamping;
     }
@@ -48,14 +48,14 @@ public class NormalOptimizationSettings implements ReadonlyNormalOptimizationSet
      *
      * @param minNormalDamping
      */
-    public void setMinNormalDamping(double minNormalDamping)
+    public final void setMinNormalDamping(double minNormalDamping)
     {
         // Negative values shouldn't break anything here.
         this.minNormalDamping = minNormalDamping;
     }
 
     @Override
-    public int getNormalSmoothingIterations()
+    public final int getNormalSmoothingIterations()
     {
         return normalSmoothingIterations;
     }
@@ -66,14 +66,14 @@ public class NormalOptimizationSettings implements ReadonlyNormalOptimizationSet
      *
      * @param normalSmoothingIterations
      */
-    public void setNormalSmoothingIterations(int normalSmoothingIterations)
+    public final void setNormalSmoothingIterations(int normalSmoothingIterations)
     {
         // Negative values shouldn't break anything here.
         this.normalSmoothingIterations = normalSmoothingIterations;
     }
 
     @Override
-    public boolean isLevenbergMarquardtEnabled()
+    public final boolean isLevenbergMarquardtEnabled()
     {
         return levenbergMarquardtEnabled;
     }
@@ -84,13 +84,13 @@ public class NormalOptimizationSettings implements ReadonlyNormalOptimizationSet
      *
      * @param levenbergMarquardtEnabled
      */
-    public void setLevenbergMarquardtEnabled(boolean levenbergMarquardtEnabled)
+    public final void setLevenbergMarquardtEnabled(boolean levenbergMarquardtEnabled)
     {
         this.levenbergMarquardtEnabled = levenbergMarquardtEnabled;
     }
 
     @Override
-    public int getUnsuccessfulLMIterationsAllowed()
+    public final int getUnsuccessfulLMIterationsAllowed()
     {
         return unsuccessfulLMIterationsAllowed;
     }
@@ -101,7 +101,7 @@ public class NormalOptimizationSettings implements ReadonlyNormalOptimizationSet
      *
      * @param unsuccessfulLMIterationsAllowed
      */
-    public void setUnsuccessfulLMIterationsAllowed(int unsuccessfulLMIterationsAllowed)
+    public final void setUnsuccessfulLMIterationsAllowed(int unsuccessfulLMIterationsAllowed)
     {
         this.unsuccessfulLMIterationsAllowed = unsuccessfulLMIterationsAllowed;
     }

@@ -46,7 +46,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
      * Should be called once by Rendering.
      * @param renderableManager
      */
-    void setRenderableManager(RenderableManager<ContextType> renderableManager)
+    final void setRenderableManager(RenderableManager<ContextType> renderableManager)
     {
         this.renderableManager = renderableManager;
     }
@@ -55,13 +55,13 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
      * Should be called once by Rendering.
      * @param progressMonitor
      */
-    void setProgressMonitor(ProgressMonitor progressMonitor)
+    final void setProgressMonitor(ProgressMonitor progressMonitor)
     {
         this.progressMonitor = progressMonitor;
     }
 
     @Override
-    public boolean isEmpty()
+    public final boolean isEmpty()
     {
         // Intentionally not synchronized to prevent blocking just for a simple isEmpty check.
         // If isEmpty is called concurrently with a request being added,
@@ -116,13 +116,13 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public void addRequestAddedListener(Runnable listener)
+    public final void addRequestAddedListener(Runnable listener)
     {
         requestAddedListeners.add(listener);
     }
 
     @Override
-    public void addBackgroundImageBasedGraphicsRequest(ImageBasedGraphicsRequest request)
+    public final void addBackgroundImageBasedGraphicsRequest(ImageBasedGraphicsRequest request)
     {
         if (renderableManager.getMainRenderable() == null)
         {
@@ -171,7 +171,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public void addImageBasedGraphicsRequest(ProgressMonitoredImageBasedGraphicsRequest request)
+    public final void addImageBasedGraphicsRequest(ProgressMonitoredImageBasedGraphicsRequest request)
     {
         if (this.progressMonitor.isConflictingProcess())
         {
@@ -240,7 +240,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
      * @param request
      */
     @Override
-    public void addBackgroundGraphicsRequest(GraphicsRequest request)
+    public final void addBackgroundGraphicsRequest(GraphicsRequest request)
     {
         synchronized (requestList)
         {
@@ -272,7 +272,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public void addGraphicsRequest(ProgressMonitoredGraphicsRequest request)
+    public final void addGraphicsRequest(ProgressMonitoredGraphicsRequest request)
     {
         synchronized (requestList)
         {
@@ -319,7 +319,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public void clear()
+    public final void clear()
     {
         synchronized (requestList)
         {
@@ -327,7 +327,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
         }
     }
 
-    public void executeQueue()
+    public final void executeQueue()
     {
         context.makeContextCurrent();
 

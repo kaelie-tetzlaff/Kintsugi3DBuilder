@@ -30,31 +30,31 @@ public class SynchronizedLightingEnvironmentModel extends LightingEnvironmentMod
     }
 
     @Override
-    public int getLightCount()
+    public final int getLightCount()
     {
         return baseModel.getLightCount();
     }
 
     @Override
-    public int getMaxLightCount()
+    public final int getMaxLightCount()
     {
         return baseModel.getMaxLightCount();
     }
 
     @Override
-    public boolean isLightWidgetEnabled(int index)
+    public final boolean isLightWidgetEnabled(int index)
     {
         return baseModel.isLightWidgetEnabled(index);
     }
 
     @Override
-    public int getSelectedLightIndex()
+    public final int getSelectedLightIndex()
     {
         return selectedLightIndex.getValue();
     }
 
     @Override
-    public void setSelectedLightIndex(int index)
+    public final void setSelectedLightIndex(int index)
     {
         this.selectedLightIndex.setValue(index);
     }

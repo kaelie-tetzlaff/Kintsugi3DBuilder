@@ -41,7 +41,7 @@ class ImageSelectionLoader implements Runnable
     }
 
     @Override
-    public void run()
+    public final void run()
     {
         if (!stopRequested)
         {
@@ -57,7 +57,7 @@ class ImageSelectionLoader implements Runnable
         }
     }
 
-    public void stopThread()
+    public final void stopThread()
     {
         stopRequested = true;
     }

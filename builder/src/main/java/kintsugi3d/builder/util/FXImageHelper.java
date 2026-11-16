@@ -14,6 +14,7 @@ package kintsugi3d.builder.util;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import kintsugi3d.gl.util.ImageHelper;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +44,7 @@ public final class FXImageHelper
         return loadFXImage(new StreamSource(imageStream), imageFileName);
     }
 
-    private static Image loadFXImage(Source source, String imageFileName)
+    private static @Nullable Image loadFXImage(Source source, String imageFileName)
     {
         // convert tiff image if necessary
         if (TIFF_PATTERN.matcher(imageFileName.toLowerCase(Locale.ROOT)).matches())
@@ -96,7 +97,7 @@ public final class FXImageHelper
          * @return
          */
         @Override
-        public Image getStandardImage()
+        public final Image getStandardImage()
         {
             return new Image(file.toURI().toString());
         }
@@ -108,7 +109,7 @@ public final class FXImageHelper
          * @throws IOException
          */
         @Override
-        public ImageHelper getImageHelper() throws IOException
+        public final ImageHelper getImageHelper() throws IOException
         {
             return ImageHelper.read(file);
         }
@@ -129,7 +130,7 @@ public final class FXImageHelper
          * @return
          */
         @Override
-        public Image getStandardImage()
+        public final Image getStandardImage()
         {
             return new Image(inputStream);
         }
@@ -141,7 +142,7 @@ public final class FXImageHelper
          * @throws IOException
          */
         @Override
-        public ImageHelper getImageHelper() throws IOException
+        public final ImageHelper getImageHelper() throws IOException
         {
             return ImageHelper.read(inputStream);
         }

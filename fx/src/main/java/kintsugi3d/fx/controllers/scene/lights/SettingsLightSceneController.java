@@ -24,6 +24,7 @@ import javafx.util.StringConverter;
 import kintsugi3d.fx.util.SafeLogScaleNumberStringConverter;
 import kintsugi3d.fx.util.SafeNumberStringConverter;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -31,7 +32,7 @@ import java.util.ResourceBundle;
 public class SettingsLightSceneController implements Initializable
 {
     @Override
-    public void initialize(URL location, ResourceBundle resources)
+    public final void initialize(URL location, ResourceBundle resources)
     {
         setDisabled(true);
 
@@ -47,7 +48,7 @@ public class SettingsLightSceneController implements Initializable
             }
 
             @Override
-            public Double fromString(String string) {
+            public @Nullable Double fromString(String string) {
                 return null;
             }
         };
@@ -116,12 +117,12 @@ public class SettingsLightSceneController implements Initializable
         }
     };
 
-    public ChangeListener<ObservableLightSettings> getChangeListener()
+    public final ChangeListener<ObservableLightSettings> getChangeListener()
     {
         return changeListener;
     }
 
-    public void setDisabled(Boolean disabled)
+    public final void setDisabled(Boolean disabled)
     {
         root.setDisable(disabled);
     }

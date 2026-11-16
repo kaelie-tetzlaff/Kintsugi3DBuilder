@@ -12,7 +12,7 @@
 package kintsugi3d.builder.fit;
 
 import kintsugi3d.builder.resources.project.ShaderProgramFactory;
-import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
+import kintsugi3d.builder.resources.project.texture.ReadonlyTextureSet;
 import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.ShaderType;
@@ -35,7 +35,7 @@ public final class ReconstructionShaders
 
     public static <ContextType extends Context<ContextType>>
     ProgramBuilder<ContextType> getBasisModelReconstructionProgramBuilder(
-        ShaderProgramFactory<ContextType> programFactory, ReadonlyTextureResources<ContextType> specularFit)
+        ShaderProgramFactory<ContextType> programFactory, ReadonlyTextureSet<ContextType> specularFit)
     {
         return programFactory.getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX,  new File("shaders/common/imgspace.vert"))
@@ -45,7 +45,7 @@ public final class ReconstructionShaders
 
     public static <ContextType extends Context<ContextType>>
     ProgramBuilder<ContextType> getReflectivityModelReconstructionProgramBuilder(
-        ShaderProgramFactory<ContextType> programFactory, ReadonlyTextureResources<ContextType> specularFit)
+        ShaderProgramFactory<ContextType> programFactory, ReadonlyTextureSet<ContextType> specularFit)
     {
         return programFactory.getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX,  new File("shaders/common/imgspace.vert"))

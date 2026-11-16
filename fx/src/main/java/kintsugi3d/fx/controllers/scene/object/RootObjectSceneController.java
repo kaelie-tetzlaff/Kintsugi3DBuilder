@@ -44,7 +44,7 @@ public class RootObjectSceneController
 
     private ObservableProjectModel projectModel;
 
-    public void injectDependencies(ObservableObjectPoseModel objectModel, ObservableProjectModel injectedProjectModel)
+    public final void injectDependencies(ObservableObjectPoseModel objectModel, ObservableProjectModel injectedProjectModel)
     {
         this.projectModel = injectedProjectModel;
 
@@ -167,7 +167,7 @@ public class RootObjectSceneController
     }
 
     @FXML
-    void moveDOWNButton()
+    final void moveDOWNButton()
     {
         int i = getObjectPoseSelectionModel().getSelectedIndex();
         List<ObservableObjectPoseSettings> objectPoseList = projectModel.getObjectPoseList();
@@ -179,7 +179,7 @@ public class RootObjectSceneController
     }
 
     @FXML
-    void lockPoseButton()
+    final void lockPoseButton()
     {
         boolean newValue = !getObjectPoseSelectionModel().getSelectedItem().isLocked();
         getObjectPoseSelectionModel().getSelectedItem().setLocked(newValue);
@@ -188,14 +188,14 @@ public class RootObjectSceneController
     }
 
     @FXML
-    void keyframePoseButton()
+    final void keyframePoseButton()
     {
         //TODO
         LOG.debug("TODO: keyframe added for {}", getObjectPoseSelectionModel().getSelectedItem());
     }
 
     @FXML
-    void deletePoseButton()
+    final void deletePoseButton()
     {
         int selectedIndex = getObjectPoseSelectionModel().getSelectedIndex();
         if (selectedIndex != 0)

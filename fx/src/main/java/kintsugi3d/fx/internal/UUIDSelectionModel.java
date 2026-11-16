@@ -32,23 +32,23 @@ public class UUIDSelectionModel
     // needs to be here to not get garbage-collected
     private final ObservableMap<UUID, Boolean> unmodifiableSelected = FXCollections.unmodifiableObservableMap(selected);
 
-    public boolean isEmpty()
+    public final boolean isEmpty()
     {
         return selected.isEmpty();
     }
 
-    public ObservableMap<UUID, Boolean> getSelected()
+    public final ObservableMap<UUID, Boolean> getSelected()
     {
         //noinspection AssignmentOrReturnOfFieldWithMutableType
         return unmodifiableSelected;
     }
 
-    public boolean isSelected(UUID id)
+    public final boolean isSelected(UUID id)
     {
         return selected.containsKey(id);
     }
 
-    public BooleanExpression createSelectedBinding(UUID id)
+    public final BooleanExpression createSelectedBinding(UUID id)
     {
         return Bindings.createBooleanBinding(
             () -> selected.containsKey(id),
@@ -56,23 +56,23 @@ public class UUIDSelectionModel
         );
     }
 
-    public UUID getLastSelected()
+    public final UUID getLastSelected()
     {
         return lastSelected.get();
     }
 
-    public ObjectExpression<UUID> lastSelectedProperty()
+    public final ObjectExpression<UUID> lastSelectedProperty()
     {
         return lastSelected;
     }
 
-    public void select(UUID id)
+    public final void select(UUID id)
     {
         selected.put(id, true);
         lastSelected.setValue(id);
     }
 
-    public void unselect(UUID id)
+    public final void unselect(UUID id)
     {
         selected.remove(id);
 
@@ -80,7 +80,7 @@ public class UUIDSelectionModel
         lastSelected.setValue(selected.keySet().stream().reduce((a, b) -> b).orElse(null));
     }
 
-    public void clearSelection()
+    public final void clearSelection()
     {
         selected.clear();
         lastSelected.setValue(null);

@@ -61,8 +61,9 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
      */
     private static class Sensor
     {
+        final String id;
+
         int index;
-        String id;
         float width;
         float height;
         float fx;
@@ -112,13 +113,13 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
             this.lightIndex = lightIndex;
         }
 
-        boolean isValid()
+        final boolean isValid()
         {
             return transform != null;
         }
 
         @Override
-        public boolean equals(Object obj)
+        public final boolean equals(Object obj)
         {
             if (obj instanceof Camera)
             {
@@ -132,7 +133,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
         }
 
         @Override
-        public int hashCode()
+        public final int hashCode()
         {
             return Objects.hashCode(id);
         }

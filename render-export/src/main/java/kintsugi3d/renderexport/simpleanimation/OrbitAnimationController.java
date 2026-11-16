@@ -54,13 +54,13 @@ public class OrbitAnimationController
     }
 
     @FXML
-    public void cancel()
+    public final void cancel()
     {
         FXWindowHelper.requestClose(root);
     }
 
     @FXML
-    public void run()
+    public final void run()
     {
         if (Global.io().getProgressMonitor().isConflictingProcess())
         {

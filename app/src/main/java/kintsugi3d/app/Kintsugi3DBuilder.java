@@ -16,6 +16,7 @@ import kintsugi3d.builder.preferences.GlobalUserPreferencesManager;
 import kintsugi3d.builder.util.ApplicationFolders;
 import kintsugi3d.builder.util.OperatingSystem;
 import kintsugi3d.gl.interactive.InitializationException;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.system.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,7 +127,7 @@ public final class Kintsugi3DBuilder
         }
 
         @Override
-        public void write(byte[] b, int off, int len) throws IOException
+        public void write(byte @NotNull [] b, int off, int len) throws IOException
         {
             original.write(b, off, len);
             redirect.write(b, off, len);

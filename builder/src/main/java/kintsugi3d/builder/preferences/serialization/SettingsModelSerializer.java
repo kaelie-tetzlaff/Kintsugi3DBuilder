@@ -37,7 +37,7 @@ public class SettingsModelSerializer extends StdSerializer<GeneralSettingsModel>
     }
 
     @Override
-    public void serialize(GeneralSettingsModel settingsModel, JsonGenerator jGen, SerializerProvider serializerProvider) throws IOException
+    public final void serialize(GeneralSettingsModel settingsModel, JsonGenerator jGen, SerializerProvider serializerProvider) throws IOException
     {
         jGen.writeStartObject();
 

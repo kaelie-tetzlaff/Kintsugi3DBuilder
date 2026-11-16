@@ -96,7 +96,7 @@ public abstract class CacheModelBase implements CacheModel
     }
 
     @Override
-    public void requestClearCache()
+    public final void requestClearCache()
     {
         Global.state().getProjectModel().confirmClose(
             "Deleting the entire cache requires the current project to be closed.  Are you sure you want to close the current project?",
@@ -340,7 +340,7 @@ public abstract class CacheModelBase implements CacheModel
     }
 
     @Override
-    public void requestCleanUpBothCaches(Map<File, Consumer<File[]>> deleteMethods)
+    public final void requestCleanUpBothCaches(Map<File, Consumer<File[]>> deleteMethods)
     {
         new Thread(() -> cleanCacheSubDirs(deleteMethods), "Clean Up Cache").start();
     }
@@ -631,14 +631,7 @@ public abstract class CacheModelBase implements CacheModel
                 }
                 else
                 {
-                    if (projectID == null)
-                    {
-                        length += getDirectorySize(file, newProjectSizes, file.getName());
-                    }
-                    else
-                    {
-                        length += getDirectorySize(file, newProjectSizes, projectID);
-                    }
+                    length += getDirectorySize(file, newProjectSizes, Objects.requireNonNullElse(projectID, file.getName()));
                 }
             }
         }
@@ -651,7 +644,7 @@ public abstract class CacheModelBase implements CacheModel
      * If a request is already running when this method is invoked, another request will not be started.
      */
     @Override
-    public void requestCacheSizeRefresh()
+    public final void requestCacheSizeRefresh()
     {
         requestCacheSizeRefresh(null, null);
     }
@@ -669,7 +662,7 @@ public abstract class CacheModelBase implements CacheModel
      * @param cacheSizeChangeCallback Runs only if the cache size changed.
      * @param onCompleteCallback      Always runs regardless of whether the cache size changed.  Also runs on the JavaFX thread.
      */
-    protected void requestCacheSizeRefresh(DoubleConsumer cacheSizeChangeCallback, Runnable onCompleteCallback)
+    protected final void requestCacheSizeRefresh(DoubleConsumer cacheSizeChangeCallback, Runnable onCompleteCallback)
     {
         synchronized (cacheSizeCalcThreadLock)
         {
@@ -724,7 +717,7 @@ public abstract class CacheModelBase implements CacheModel
      * @param postNewCacheSizes Handles actually posting the new cache size and individual project sizes,
      *                          guaranteed to be invoked from a synchronized context.
      */
-    protected void synchronizedCacheSizeCalcComplete(Runnable postNewCacheSizes)
+    protected final void synchronizedCacheSizeCalcComplete(Runnable postNewCacheSizes)
     {
         // prevent race condition if another call to requestCacheSizeRefresh comes in
         // while updating and cleaning up listeners.

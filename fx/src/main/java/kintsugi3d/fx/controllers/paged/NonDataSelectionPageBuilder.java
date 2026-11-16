@@ -21,7 +21,7 @@ public class NonDataSelectionPageBuilder<FinishType> extends SelectionPageBuilde
     }
 
     @Override
-    public <ControllerType extends SelectionPageController<Object>>
+    public final <ControllerType extends SelectionPageController<Object>>
     NonDataSelectionPageBuilder<FinishType> choiceSubSelect(String choiceLabel, String subprompt, Supplier<ControllerType> controllerConstructorOverride)
     {
         SimpleNonDataSelectionPage<ControllerType> nextPage = getFrameController().createPage(
@@ -32,7 +32,7 @@ public class NonDataSelectionPageBuilder<FinishType> extends SelectionPageBuilde
     }
 
     @Override
-    public NonDataSelectionPageBuilder<FinishType> choiceSubSelect(String choiceLabel, String subprompt)
+    public final NonDataSelectionPageBuilder<FinishType> choiceSubSelect(String choiceLabel, String subprompt)
     {
         return this.<SelectionPageController<Object>>choiceSubSelect(choiceLabel, subprompt, null);
     }

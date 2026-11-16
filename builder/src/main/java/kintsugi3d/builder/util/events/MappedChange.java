@@ -35,12 +35,12 @@ public class MappedChange<K, V>
         this.type = type;
         this.map = Map.of(key, value);
     }
-    public Type getType()
+    public final Type getType()
     {
         return type;
     }
 
-    public Map<K, V> getMap()
+    public final Map<K, V> getMap()
     {
         return map;
     }

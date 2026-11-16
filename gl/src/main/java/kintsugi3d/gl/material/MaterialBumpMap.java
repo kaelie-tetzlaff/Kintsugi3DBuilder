@@ -21,12 +21,12 @@ public class MaterialBumpMap extends MaterialScalarMap implements ReadonlyMateri
     }
 
     @Override
-    public float getBumpMultiplier()
+    public final float getBumpMultiplier()
     {
         return bumpMultiplier;
     }
 
-    public void setBumpMultiplier(float bumpMultiplier)
+    public final void setBumpMultiplier(float bumpMultiplier)
     {
         this.bumpMultiplier = bumpMultiplier;
     }

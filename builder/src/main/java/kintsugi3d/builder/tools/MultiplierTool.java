@@ -32,11 +32,16 @@ public final class MultiplierTool implements KeyPressTool
         UP_SMALL(SMALL_FACTOR),
         DOWN_SMALL(1 / SMALL_FACTOR);
 
-        public final float factor;
+        private final float factor;
 
         Type(float factor)
         {
             this.factor = factor;
+        }
+
+        float getFactor()
+        {
+            return factor;
         }
     }
 
@@ -51,41 +56,41 @@ public final class MultiplierTool implements KeyPressTool
         {
             this.getter = getter;
             this.setter = setter;
-            this.factor = type.factor;
+            this.factor = type.getFactor();
         }
 
         @Override
-        public ToolBuilder<MultiplierTool> setCameraModel(ManipulableViewpointModel cameraModel)
+        public final ToolBuilder<MultiplierTool> setCameraModel(ManipulableViewpointModel cameraModel)
         {
             return this;
         }
 
         @Override
-        public ToolBuilder<MultiplierTool> setLightingEnvironmentModel(ManipulableLightingEnvironmentModel lightingModel)
+        public final ToolBuilder<MultiplierTool> setLightingEnvironmentModel(ManipulableLightingEnvironmentModel lightingModel)
         {
             return this;
         }
 
         @Override
-        public ToolBuilder<MultiplierTool> setObjectModel(ManipulableObjectPoseModel objectModel)
+        public final ToolBuilder<MultiplierTool> setObjectModel(ManipulableObjectPoseModel objectModel)
         {
             return this;
         }
 
         @Override
-        public ToolBuilder<MultiplierTool> setSceneViewport(SceneViewport sceneViewport)
+        public final ToolBuilder<MultiplierTool> setSceneViewport(SceneViewport sceneViewport)
         {
             return this;
         }
 
         @Override
-        public ToolBuilder<MultiplierTool> setSettingsModel(GeneralSettingsModel settingsModel)
+        public final ToolBuilder<MultiplierTool> setSettingsModel(GeneralSettingsModel settingsModel)
         {
             return this;
         }
 
         @Override
-        public MultiplierTool create()
+        public final MultiplierTool create()
         {
             return new MultiplierTool(getter, setter, factor);
         }

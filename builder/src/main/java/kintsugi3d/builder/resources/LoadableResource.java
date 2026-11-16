@@ -13,6 +13,7 @@ package kintsugi3d.builder.resources;
 
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.util.EncodableColorImage;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -84,7 +85,7 @@ public interface LoadableResource<CPUResourceType, GPUResourceType>
      * @param data The loaded resource data.
      * @return The preview image result, or {@code null} if none.
      */
-    default EncodableColorImage getPreviewImage(CPUResourceType data)
+    default @Nullable EncodableColorImage getPreviewImage(CPUResourceType data)
     {
         return null;
     }

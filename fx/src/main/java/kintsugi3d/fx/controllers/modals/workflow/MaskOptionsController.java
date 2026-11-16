@@ -34,13 +34,13 @@ public class MaskOptionsController extends LiveProjectSettingsControllerBase
     @FXML private Slider edgeProximityCutoffSlider;
 
     @Override
-    public Region getRootNode()
+    public final Region getRootNode()
     {
         return rootNode;
     }
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         // bind text fields
         bindFloatSetting(occlusionBiasTextField, "occlusionBias", 0, 1);

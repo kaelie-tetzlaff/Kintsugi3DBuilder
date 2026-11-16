@@ -22,17 +22,17 @@ public class ReadonlyErrorReport
         this.sampleCount = sampleCount;
     }
 
-    public double getPreviousError()
+    public final double getPreviousError()
     {
         return previousError;
     }
 
-    public double getError()
+    public final double getError()
     {
         return error;
     }
 
-    public int getSampleCount() { return sampleCount; }
+    public final int getSampleCount() { return sampleCount; }
 
     protected void setError(double newError)
     {

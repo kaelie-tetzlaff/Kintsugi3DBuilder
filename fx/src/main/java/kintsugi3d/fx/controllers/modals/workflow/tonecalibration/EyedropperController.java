@@ -125,13 +125,13 @@ public class EyedropperController extends NonDataPageControllerBase
     private final Map<TextField, Rectangle> rectangleForTextField = new HashMap<>(6);
 
     @Override
-    public Region getRootNode()
+    public final Region getRootNode()
     {
         return outerVbox;
     }
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         //Image settings/looks
         imageDetailsController.getDisplayImage().setPreserveRatio(true);
@@ -188,7 +188,7 @@ public class EyedropperController extends NonDataPageControllerBase
     }
 
     @Override
-    public void refresh()
+    public final void refresh()
     {
         projectSettingsManager.refresh(); // for flatfield setting
         // First time opening the page -- get the old values and use them as the starting values.
@@ -267,14 +267,14 @@ public class EyedropperController extends NonDataPageControllerBase
     }
 
     @Override
-    public boolean tryConfirm()
+    public final boolean tryConfirm()
     {
         apply();
         return true;
     }
 
     @Override
-    public boolean tryCancel()
+    public final boolean tryCancel()
     {
         if (StaticUtilities.confirmCancel())
         {
@@ -803,7 +803,7 @@ public class EyedropperController extends NonDataPageControllerBase
         }
     }
 
-    public void reset()
+    public final void reset()
     {
         IOModel ioModel = Global.io();
 

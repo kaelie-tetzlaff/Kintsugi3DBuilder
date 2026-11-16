@@ -18,6 +18,7 @@ import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 
 import java.nio.IntBuffer;
@@ -48,7 +49,7 @@ public class SceneViewportModel implements SceneViewport
         this.sceneObjectNameList.add(null); // 0
     }
 
-    public void addSceneObjectType(String sceneObjectTag)
+    public final void addSceneObjectType(String sceneObjectTag)
     {
         sceneObjectNameList.add(sceneObjectTag);
 
@@ -56,12 +57,12 @@ public class SceneViewportModel implements SceneViewport
         sceneObjectIDLookup.put(sceneObjectTag, sceneObjectNameList.size() - 1);
     }
 
-    public int lookupSceneObjectID(String sceneObjectTag)
+    public final int lookupSceneObjectID(String sceneObjectTag)
     {
         return this.sceneObjectIDLookup.get(sceneObjectTag);
     }
 
-    public <ContextType extends Context<ContextType>> void refreshBuffers(Matrix4 newProjection, ReadableFramebuffer<ContextType> offscreenFBO)
+    public final <ContextType extends Context<ContextType>> void refreshBuffers(Matrix4 newProjection, ReadableFramebuffer<ContextType> offscreenFBO)
     {
         this.projection = newProjection;
         this.fboSize = offscreenFBO.getSizeForRead();
@@ -89,7 +90,7 @@ public class SceneViewportModel implements SceneViewport
     }
 
     @Override
-    public Object getObjectAtCoordinates(double x, double y)
+    public final @Nullable Object getObjectAtCoordinates(double x, double y)
     {
         if (pixelObjectIDBuffer != null)
         {
@@ -124,7 +125,7 @@ public class SceneViewportModel implements SceneViewport
     }
 
     @Override
-    public Vector3 get3DPositionAtCoordinates(double x, double y)
+    public final @Nullable Vector3 get3DPositionAtCoordinates(double x, double y)
     {
         if (pixelDepthBuffer != null)
         {
@@ -153,7 +154,7 @@ public class SceneViewportModel implements SceneViewport
     }
 
     @Override
-    public Vector3 getViewingDirection(double x, double y)
+    public final Vector3 getViewingDirection(double x, double y)
     {
         Matrix4 projectionInverse = getProjectionInverse();
 
@@ -170,7 +171,7 @@ public class SceneViewportModel implements SceneViewport
     }
 
     @Override
-    public Vector3 getViewportCenter()
+    public final Vector3 getViewportCenter()
     {
         return sceneModel.getCurrentViewMatrix().quickInverse(0.01f)
                 .getColumn(3)
@@ -178,7 +179,7 @@ public class SceneViewportModel implements SceneViewport
     }
 
     @Override
-    public Vector2 projectPoint(Vector3 point)
+    public final Vector2 projectPoint(Vector3 point)
     {
         Vector4 projectedPoint =
             projection.times(sceneModel.getCurrentViewMatrix())
@@ -194,7 +195,7 @@ public class SceneViewportModel implements SceneViewport
      * @param size
      * @return
      */
-    public float computeRawLightWidgetScale(Matrix4 viewMatrix, FramebufferSize size)
+    public final float computeRawLightWidgetScale(Matrix4 viewMatrix, FramebufferSize size)
     {
         float cameraDistance = viewMatrix
                 .times(sceneModel.getCameraModel().getTarget().times(sceneModel.getScale()).asPosition())
@@ -203,7 +204,7 @@ public class SceneViewportModel implements SceneViewport
     }
 
     @Override
-    public float getLightWidgetScale()
+    public final float getLightWidgetScale()
     {
         return computeRawLightWidgetScale(sceneModel.getCurrentViewMatrix(), fboSize) / sceneModel.getScale();
     }

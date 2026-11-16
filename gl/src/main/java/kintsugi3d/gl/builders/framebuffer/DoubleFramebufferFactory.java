@@ -112,132 +112,132 @@ public final class DoubleFramebufferFactory
         }
 
         @Override
-        public FramebufferSize getSizeForRead()
+        public final FramebufferSize getSizeForRead()
         {
             return frontFBO.getSize();
         }
 
         @Override
-        public FramebufferReadContents<ContextType> getReadContents()
+        public final FramebufferReadContents<ContextType> getReadContents()
         {
             return this.frontFBO.getReadContents();
         }
 
         @Override
-        public FramebufferDrawContents<ContextType> getDrawContents()
+        public final FramebufferDrawContents<ContextType> getDrawContents()
         {
             return this.backFBO.getDrawContents();
         }
 
         @Override
-        public ContextType getContext()
+        public final ContextType getContext()
         {
             return context;
         }
 
         @Override
-        public FramebufferSize getSize()
+        public final FramebufferSize getSize()
         {
             return backFBO.getSize();
         }
 
         @Override
-        public int getColorAttachmentCount()
+        public final int getColorAttachmentCount()
         {
             return 1;
         }
 
         @Override
-        public ColorTextureReader getTextureReaderForColorAttachment(int attachmentIndex)
+        public final ColorTextureReader getTextureReaderForColorAttachment(int attachmentIndex)
         {
             return frontFBO.getTextureReaderForColorAttachment(attachmentIndex);
         }
 
         @Override
-        public DepthTextureReader getTextureReaderForDepthAttachment()
+        public final DepthTextureReader getTextureReaderForDepthAttachment()
         {
             return frontFBO.getTextureReaderForDepthAttachment();
         }
 
         @Override
-        public void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a, int x, int y, int width, int height)
+        public final void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a, int x, int y, int width, int height)
         {
             backFBO.clearColorBuffer(attachmentIndex, r, g, b, a, x, y, width, height);
         }
 
         @Override
-        public void clearIntegerColorBuffer(int attachmentIndex, int r, int g, int b, int a, int x, int y, int width, int height)
+        public final void clearIntegerColorBuffer(int attachmentIndex, int r, int g, int b, int a, int x, int y, int width, int height)
         {
             backFBO.clearIntegerColorBuffer(attachmentIndex, r, g, b, a, x, y, width, height);
         }
 
         @Override
-        public void clearDepthBuffer(float depth, int x, int y, int width, int height)
+        public final void clearDepthBuffer(float depth, int x, int y, int width, int height)
         {
             backFBO.clearDepthBuffer(depth, x, y, width, height);
         }
 
         @Override
-        public void clearStencilBuffer(int stencilIndex, int x, int y, int width, int height)
+        public final void clearStencilBuffer(int stencilIndex, int x, int y, int width, int height)
         {
             backFBO.clearStencilBuffer(stencilIndex, x, y, width, height);
         }
 
         @Override
-        public void blitColorAttachmentFromFramebufferViewport(int drawAttachmentIndex, int destX, int destY, int destWidth, int destHeight,
-            ReadableFramebufferViewport<ContextType> readFramebuffer, int readAttachmentIndex, boolean linearFiltering)
+        public final void blitColorAttachmentFromFramebufferViewport(int drawAttachmentIndex, int destX, int destY, int destWidth, int destHeight,
+                                                                     ReadableFramebufferViewport<ContextType> readFramebuffer, int readAttachmentIndex, boolean linearFiltering)
         {
             backFBO.blitColorAttachmentFromFramebufferViewport(drawAttachmentIndex, destX, destY, destWidth, destHeight,
                 readFramebuffer, readAttachmentIndex, linearFiltering);
         }
 
         @Override
-        public void blitDepthAttachmentFromFramebufferViewport(int destX, int destY, int destWidth, int destHeight,
-            ReadableFramebufferViewport<ContextType> readFramebuffer)
+        public final void blitDepthAttachmentFromFramebufferViewport(int destX, int destY, int destWidth, int destHeight,
+                                                                     ReadableFramebufferViewport<ContextType> readFramebuffer)
         {
             backFBO.blitDepthAttachmentFromFramebufferViewport(destX, destY, destWidth, destHeight, readFramebuffer);
         }
 
         @Override
-        public void blitStencilAttachmentFromFramebufferViewport(int destX, int destY, int destWidth, int destHeight,
-            ReadableFramebufferViewport<ContextType> readFramebuffer)
+        public final void blitStencilAttachmentFromFramebufferViewport(int destX, int destY, int destWidth, int destHeight,
+                                                                       ReadableFramebufferViewport<ContextType> readFramebuffer)
         {
             backFBO.blitStencilAttachmentFromFramebufferViewport(destX, destY, destWidth, destHeight, readFramebuffer);
         }
 
         @Override
-        public void blitDepthStencilAttachmentFromFramebufferViewport(int destX, int destY, int destWidth, int destHeight,
-            ReadableFramebufferViewport<ContextType> readFramebuffer)
+        public final void blitDepthStencilAttachmentFromFramebufferViewport(int destX, int destY, int destWidth, int destHeight,
+                                                                            ReadableFramebufferViewport<ContextType> readFramebuffer)
         {
             backFBO.blitDepthStencilAttachmentFromFramebufferViewport(destX, destY, destWidth, destHeight, readFramebuffer);
         }
 
         @Override
-        public void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a)
+        public final void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a)
         {
             backFBO.clearColorBuffer(attachmentIndex, r, g, b, a);
         }
 
         @Override
-        public void clearIntegerColorBuffer(int attachmentIndex, int r, int g, int b, int a)
+        public final void clearIntegerColorBuffer(int attachmentIndex, int r, int g, int b, int a)
         {
             backFBO.clearIntegerColorBuffer(attachmentIndex, r, g, b, a);
         }
 
         @Override
-        public void clearDepthBuffer(float depth)
+        public final void clearDepthBuffer(float depth)
         {
             backFBO.clearDepthBuffer(depth);
         }
 
         @Override
-        public void clearStencilBuffer(int stencilIndex)
+        public final void clearStencilBuffer(int stencilIndex)
         {
             backFBO.clearStencilBuffer(stencilIndex);
         }
 
         @Override
-        public void requestResize(int width, int height)
+        public final void requestResize(int width, int height)
         {
             // Framebuffer size cannot be smaller than 1x1.
             this.newWidth = Math.max(1, width);
@@ -245,7 +245,7 @@ public final class DoubleFramebufferFactory
         }
 
         @Override
-        public void swapBuffers()
+        public final void swapBuffers()
         {
             // Swap the buffers
             ReadableFramebuffer<ContextType> tmp = backFBO;
@@ -267,19 +267,19 @@ public final class DoubleFramebufferFactory
         }
 
         @Override
-        public void addSwapListener(Consumer<ReadableFramebuffer<ContextType>> listener)
+        public final void addSwapListener(Consumer<ReadableFramebuffer<ContextType>> listener)
         {
             this.swapListeners.add(listener);
         }
 
         @Override
-        public void addResizeListener(Consumer<Framebuffer<ContextType>> listener)
+        public final void addResizeListener(Consumer<Framebuffer<ContextType>> listener)
         {
             this.resizeListeners.add(listener);
         }
 
         @Override
-        public void close()
+        public final void close()
         {
             fbo1.close();
             fbo2.close();

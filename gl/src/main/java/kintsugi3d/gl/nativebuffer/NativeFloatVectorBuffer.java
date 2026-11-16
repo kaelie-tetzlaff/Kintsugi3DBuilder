@@ -81,19 +81,19 @@ class NativeFloatVectorBuffer implements NativeVectorBuffer
     }
 
     @Override
-    public int getDimensions()
+    public final int getDimensions()
     {
         return dimensions;
     }
 
     @Override
-    public int getCount()
+    public final int getCount()
     {
         return count;
     }
 
     @Override
-    public Float get(int index, int dimension)
+    public final Float get(int index, int dimension)
     {
         if (index < 0)
         {
@@ -115,7 +115,7 @@ class NativeFloatVectorBuffer implements NativeVectorBuffer
     }
 
     @Override
-    public void set(int index, int dimension, Number value)
+    public final void set(int index, int dimension, Number value)
     {
         if (index < 0)
         {
@@ -137,13 +137,13 @@ class NativeFloatVectorBuffer implements NativeVectorBuffer
     }
 
     @Override
-    public ByteBuffer getBuffer()
+    public final ByteBuffer getBuffer()
     {
         return buffer;
     }
 
     @Override
-    public NativeDataType getDataType()
+    public final NativeDataType getDataType()
     {
         return NativeDataType.FLOAT;
     }

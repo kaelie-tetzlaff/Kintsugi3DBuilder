@@ -22,27 +22,27 @@ public class AttachmentSpec
     {
     }
 
-    public int getMultisamples()
+    public final int getMultisamples()
     {
         return multisamples;
     }
 
-    public boolean areMultisampleLocationsFixed()
+    public final boolean areMultisampleLocationsFixed()
     {
         return fixedMultisampleLocations;
     }
 
-    public boolean areMipmapsEnabled()
+    public final boolean areMipmapsEnabled()
     {
         return mipmapsEnabled;
     }
 
-    public boolean isLinearFilteringEnabled()
+    public final boolean isLinearFilteringEnabled()
     {
         return linearFilteringEnabled;
     }
 
-    public AttachmentSpec setMultisamples(int samples, boolean fixedSampleLocations)
+    protected AttachmentSpec setMultisamples(int samples, boolean fixedSampleLocations)
     {
         // TODO should this be a property of the framebuffer object builder?
         // Having different number of samples per attachment is not allowed.
@@ -51,13 +51,13 @@ public class AttachmentSpec
         return this;
     }
 
-    public AttachmentSpec setMipmapsEnabled(boolean enabled)
+    protected AttachmentSpec setMipmapsEnabled(boolean enabled)
     {
         mipmapsEnabled = enabled;
         return this;
     }
 
-    public AttachmentSpec setLinearFilteringEnabled(boolean enabled)
+    protected AttachmentSpec setLinearFilteringEnabled(boolean enabled)
     {
         linearFilteringEnabled = enabled;
         return this;

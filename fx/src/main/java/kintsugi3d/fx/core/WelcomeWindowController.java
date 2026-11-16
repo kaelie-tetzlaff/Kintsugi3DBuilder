@@ -75,7 +75,7 @@ public class WelcomeWindowController
 
     private BooleanExpression shouldBeHidden;
 
-    public void init(Stage injectedStage, JavaFXState state, Runnable injectedUserDocumentationHandler)
+    public final void init(Stage injectedStage, JavaFXState state, Runnable injectedUserDocumentationHandler)
     {
         //noinspection AssignmentToStaticFieldFromInstanceMethod
         instance = this;
@@ -153,7 +153,7 @@ public class WelcomeWindowController
      * (and by extension, the main window as a parent of the welcome window).
      * @param runnable
      */
-    public void runOnceWhenShown(Runnable runnable)
+    public final void runOnceWhenShown(Runnable runnable)
     {
         ReadOnlyBooleanProperty showing = window.showingProperty();
         showing.addListener(new OneShotChangeListener(runnable, showing));
@@ -165,7 +165,7 @@ public class WelcomeWindowController
         FrontendIO.openProjectFromFile(new File(projectName));
     }
 
-    public void splitMenuButtonActions(ActionEvent actionEvent)
+    public final void splitMenuButtonActions(ActionEvent actionEvent)
     {
         Object source = actionEvent.getSource();
         //user clicks on a menu item
@@ -180,7 +180,7 @@ public class WelcomeWindowController
         }
     }
 
-    public void createProject()
+    public final void createProject()
     {
         if (!FrontendIO.isCreateProjectWindowOpen())
         {
@@ -211,7 +211,7 @@ public class WelcomeWindowController
         //TODO: ONLY HIDE THE MENU WHEN THE USER'S MOUSE LEAVES THE CONTEXT MENU
     }
 
-    public void recentButton(ActionEvent actionEvent)
+    public final void recentButton(ActionEvent actionEvent)
     {
         Object source = actionEvent.getSource();
         //user clicks on a menu item
@@ -236,18 +236,18 @@ public class WelcomeWindowController
     }
 
     @FXML
-    public void openSystemSettingsModal()
+    public final void openSystemSettingsModal()
     {
         ExperienceManager.getInstance().getExperience(ExperienceManager.SYSTEM_SETTINGS).tryOpen();
     }
 
     @FXML
-    public void openAboutModal()
+    public final void openAboutModal()
     {
         ExperienceManager.getInstance().getExperience(ExperienceManager.ABOUT).tryOpen();
     }
 
-    public void updateRecentProjects()
+    public final void updateRecentProjects()
     {
         List<String> items = RecentProjects.getInstance().getRecentProjectFilenames();
         List<MenuItem> recentItems = RecentProjectsHelper.getMenuItems(items);

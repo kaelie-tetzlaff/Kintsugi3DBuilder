@@ -22,7 +22,7 @@ import java.nio.ShortBuffer;
 public abstract class DepthTextureReaderBase implements DepthTextureReader
 {
     @Override
-    public short[] read(int x, int y, int width, int height)
+    public final short[] read(int x, int y, int width, int height)
     {
         ShortBuffer pixelBuffer = BufferUtils.createShortBuffer(width * height);
 

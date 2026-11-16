@@ -43,13 +43,13 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
     }
 
     @Override
-    public String sanitizeTextureName(CharSequence name)
+    public final String sanitizeTextureName(CharSequence name)
     {
         return TEXTURE_NAME_PROBLEM_CHARS.matcher(name).replaceAll("_");
     }
 
     @Override
-    public void setupShaderProgram(Program<ContextType> program)
+    public final void setupShaderProgram(Program<ContextType> program)
     {
         for (var entry : this.getTextures().entrySet())
         {
@@ -72,7 +72,7 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
     }
 
     @Override
-    public void saveTexture(String texName, String format, File outputDirectory, String filenameOverride)
+    public final void saveTexture(String texName, String format, File outputDirectory, String filenameOverride)
     {
         try
         {
@@ -90,7 +90,7 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
     }
 
     @Override
-    public void savePackedWeightMaps(String format, File outputDirectory, String filenamePrefix)
+    public final void savePackedWeightMaps(String format, File outputDirectory, String filenamePrefix)
     {
         ReadonlyBasisWeightResources<ContextType> weightResources = getBasisWeightResources();
         if (weightResources != null)
@@ -101,7 +101,7 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
     }
 
     @Override
-    public void saveUnpackedWeightMaps(String format, File outputDirectory, String filenamePrefix)
+    public final void saveUnpackedWeightMaps(String format, File outputDirectory, String filenamePrefix)
     {
         ReadonlyBasisWeightResources<ContextType> weightResources = getBasisWeightResources();
         if (weightResources != null)
@@ -111,7 +111,7 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
     }
 
     @Override
-    public void saveUnpackedWeightMaps(String format, File outputDirectory)
+    public final void saveUnpackedWeightMaps(String format, File outputDirectory)
     {
         ReadonlyBasisWeightResources<ContextType> weightResources = getBasisWeightResources();
         if (weightResources != null)
@@ -121,7 +121,7 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
     }
 
     @Override
-    public void saveBasisFunctions(File outputDirectory, String filenameOverride)
+    public final void saveBasisFunctions(File outputDirectory, String filenameOverride)
     {
         ReadonlyBasisResources<ContextType> basisResources = getBasisResources();
         if (basisResources != null)

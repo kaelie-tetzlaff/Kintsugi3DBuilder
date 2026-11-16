@@ -40,7 +40,7 @@ public class GraphicsStreamResource<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         program.close();
         framebuffer.close();
@@ -50,7 +50,7 @@ public class GraphicsStreamResource<ContextType extends Context<ContextType>> im
      * Retrieves the program managed by this graphics stream resource.
      * @return The shader program.
      */
-    public Program<ContextType> getProgram()
+    public final Program<ContextType> getProgram()
     {
         return program;
     }
@@ -59,49 +59,49 @@ public class GraphicsStreamResource<ContextType extends Context<ContextType>> im
      * Retrieves the framebuffer managed by this graphics stream resource.
      * @return The framebuffer.
      */
-    public Framebuffer<ContextType> getFramebuffer()
+    public final Framebuffer<ContextType> getFramebuffer()
     {
         return framebuffer;
     }
 
     @Override
-    public GraphicsStream<ColorList[]> sequential()
+    public final GraphicsStream<ColorList[]> sequential()
     {
         return base.sequential();
     }
 
     @Override
-    public GraphicsStream<ColorList[]> parallel()
+    public final GraphicsStream<ColorList[]> parallel()
     {
         return base.parallel();
     }
 
     @Override
-    public GraphicsStream<ColorList[]> parallel(int maxRunningThreads)
+    public final GraphicsStream<ColorList[]> parallel(int maxRunningThreads)
     {
         return base.parallel(maxRunningThreads);
     }
 
     @Override
-    public int getCount()
+    public final int getCount()
     {
         return base.getCount();
     }
 
     @Override
-    public void forEach(Consumer<? super ColorList[]> action)
+    public final void forEach(Consumer<? super ColorList[]> action)
     {
         base.forEach(action);
     }
 
     @Override
-    public <R> GraphicsStream<R> map(Function<ColorList[], ? extends R> mapper)
+    public final <R> GraphicsStream<R> map(Function<ColorList[], ? extends R> mapper)
     {
         return base.map(mapper);
     }
 
     @Override
-    public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super ColorList[]> accumulator)
+    public final <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super ColorList[]> accumulator)
     {
         return base.collect(supplier, accumulator);
     }

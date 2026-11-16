@@ -31,7 +31,7 @@ public class USDZSpecularExporter extends USDZExporter
     }
 
     @Override
-    protected void addCommands(List<String> commandList)
+    protected final void addCommands(List<String> commandList)
     {
         commandList.add("--diffuse");
         commandList.add(new File(getTempPath(), getTextureFilename(StandardTexture.DIFFUSE_COLOR.getDetails().name, getTextureFileFormat())).getPath());

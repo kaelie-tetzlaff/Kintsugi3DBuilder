@@ -315,15 +315,15 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
         for (int i = 0; i < sampleRows; i++)
         {
-            double r = Math.sin(Math.PI * (double)i / (double)(sampleRows-1));
+            double r = StrictMath.sin(Math.PI * (double)i / (double)(sampleRows-1));
             int sampleColumns = Math.max(1, (int)Math.ceil(densityFactor * r));
 
             for (int j = 0; j < sampleColumns; j++)
             {
                 Vector3 sampleDirection = new Vector3(
-                        (float)(r * Math.cos(2 * Math.PI * (double)j / (double)sampleColumns)),
-                        (float) Math.cos(Math.PI * (double)i / (double)(sampleRows-1)),
-                        (float)(r * Math.sin(2 * Math.PI * (double)j / (double)sampleColumns)));
+                        (float)(r * StrictMath.cos(2 * Math.PI * (double)j / (double)sampleColumns)),
+                        (float) StrictMath.cos(Math.PI * (double)i / (double)(sampleRows-1)),
+                        (float)(r * StrictMath.sin(2 * Math.PI * (double)j / (double)sampleColumns)));
 
                 double minDistance = maxMinDistance;
                 int minDirectionIndex = -1;
@@ -332,7 +332,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
                     Vector3 viewK = viewDirections[k];
                     if (viewK != null)
                     {
-                        double distance = Math.acos(Math.max(-1.0, Math.min(1.0f, sampleDirection.dot(viewK))));
+                        double distance = StrictMath.acos(Math.max(-1.0, Math.min(1.0f, sampleDirection.dot(viewK))));
                         if (distance < minDistance)
                         {
                             minDistance = distance;
@@ -384,7 +384,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
                     Vector3 viewJ = viewDirections[j];
                     if (viewJ != null && i != j)
                     {
-                        minDistance = Math.min(minDistance, Math.acos(Math.max(-1.0, Math.min(1.0f, viewI.dot(viewJ)))));
+                        minDistance = Math.min(minDistance, StrictMath.acos(Math.max(-1.0, Math.min(1.0f, viewI.dot(viewJ)))));
                     }
                 }
                 maxMinDistance = Math.max(maxMinDistance, minDistance);
@@ -476,17 +476,17 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
     private void updateLightData()
     {
         // Store the light positions in a uniform buffer
-        if (lightPositionBuffer != null && getViewSet().getLightPositionData() != null)
+        if (lightPositionBuffer != null && viewSet.getLightPositionData() != null)
         {
             // Create the uniform buffer
-            lightPositionBuffer.setData(getViewSet().getLightPositionData());
+            lightPositionBuffer.setData(viewSet.getLightPositionData());
         }
 
         // Store the light positions in a uniform buffer
-        if (lightIntensityBuffer != null && getViewSet().getLightIntensityData() != null)
+        if (lightIntensityBuffer != null && viewSet.getLightIntensityData() != null)
         {
             // Create the uniform buffer
-            lightIntensityBuffer.setData(getViewSet().getLightIntensityData());
+            lightIntensityBuffer.setData(viewSet.getLightIntensityData());
         }
     }
 
@@ -623,8 +623,8 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
             program.setUniformBuffer("ViewIndices", this.viewIndexBuffer);
         }
 
-        getLuminanceMapResources().setupShaderProgram(program);
-        getTextureResources().setupShaderProgram(program);
+        luminanceMapResources.setupShaderProgram(program);
+        textureResources.setupShaderProgram(program);
     }
 
     public void close()

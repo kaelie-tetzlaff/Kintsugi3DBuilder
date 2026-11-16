@@ -95,7 +95,7 @@ public class SmokeTest
     private static class TestLogListener implements LogMessageListener
     {
         @Override
-        public void newLogMessage(LogMessage logMessage)
+        public final void newLogMessage(LogMessage logMessage)
         {
             // Only record errors, and only note the first error in a run.
             if (logMessage.getLogLevel() == Level.ERROR && LOG_ERROR.get() == null)
@@ -167,7 +167,7 @@ public class SmokeTest
     }
 
     @BeforeEach
-    void setup()
+    final void setup()
     {
         LOG.debug("Entering test setup.");
 
@@ -193,7 +193,7 @@ public class SmokeTest
     }
 
     @AfterEach
-    void tearDown()
+    final void tearDown()
     {
         LOG.debug("Cleaning up after test...");
 
@@ -390,7 +390,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Rodin fit, from Metashape export")
-    void testFit_rodinMetashape() throws URISyntaxException
+    final void testFit_rodinMetashape() throws URISyntaxException
     {
         testFitLooseFiles(
             "Rodin/Mia_001239_Rodin_90cameras.xml",
@@ -402,7 +402,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Rodin fit, from Psx import")
-    void testFit_rodinPsx() throws URISyntaxException
+    final void testFit_rodinPsx() throws URISyntaxException
     {
         File psxFile = new File(
             Objects.requireNonNull(CLASS_LOADER.getResource("Rodin/Mia_001239_Rodin_301.psx")).toURI());
@@ -416,7 +416,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Rodin fit, Reload_Both Test")
-    void testFit_rodinReload() throws URISyntaxException
+    final void testFit_rodinReload() throws URISyntaxException
     {
         File projectFile = new File(
             Objects.requireNonNull(CLASS_LOADER.getResource("Rodin/Rodin_psx.k3d")).toURI());
@@ -431,7 +431,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Rodin fit, Wrong Directory")
-    void testFit_rodin_wrongDirectory()
+    final void testFit_rodin_wrongDirectory()
     {
         assertThrows(
             NullPointerException.class,
@@ -445,7 +445,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Rodin fit, Wrong Camera File")
-    void testFit_rodinMetashape_expectedFailure()
+    final void testFit_rodinMetashape_expectedFailure()
     {
         assertThrows(
             ReportedErrorException.class,
@@ -459,7 +459,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Rodin fit, Reload_First Test")
-    void testFit_rodinReloadFirst() throws URISyntaxException
+    final void testFit_rodinReloadFirst() throws URISyntaxException
     {
         File projectFile = new File(
             Objects.requireNonNull(CLASS_LOADER.getResource("Rodin/Rodin_psx.k3d")).toURI());
@@ -474,7 +474,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Rodin fit, Reload_Second Test")
-    void testFit_rodinReloadSecond() throws URISyntaxException
+    final void testFit_rodinReloadSecond() throws URISyntaxException
     {
         File projectFile = new File(
             Objects.requireNonNull(CLASS_LOADER.getResource("Rodin/Rodin_psx.k3d")).toURI());
@@ -489,7 +489,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Rodin fit, Export Test")
-    void testFit_rodinExport() throws URISyntaxException
+    final void testFit_rodinExport() throws URISyntaxException
     {
         File projectFile = new File(
             Objects.requireNonNull(CLASS_LOADER.getResource("Rodin/Rodin_psx.k3d")).toURI());
@@ -505,7 +505,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Rodin fit, Specular Export Test")
-    void testFit_rodinSpecExport() throws URISyntaxException
+    final void testFit_rodinSpecExport() throws URISyntaxException
     {
         File projectFile = new File(
             Objects.requireNonNull(CLASS_LOADER.getResource("Rodin/Rodin_psx.k3d")).toURI());
@@ -521,7 +521,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Rodin fit, Metallic Export Test")
-    void testFit_rodinMetallicExport() throws URISyntaxException
+    final void testFit_rodinMetallicExport() throws URISyntaxException
     {
         File projectFile = new File(
             Objects.requireNonNull(CLASS_LOADER.getResource("Rodin/Rodin_psx.k3d")).toURI());
@@ -537,7 +537,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Rodin fit, Reload_Both Test")
-    void testFit_rodinReloadfromVset() throws URISyntaxException
+    final void testFit_rodinReloadfromVset() throws URISyntaxException
     {
         File projectFile = new File(Objects.requireNonNull(CLASS_LOADER.getResource(
             "Rodin/Rodin_psx.k3d.files/Rodin_psx.k3d.vset")).toURI());
@@ -552,7 +552,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Rodin fit, Light Calibration Test")
-    void testFit_rodinLightCalibration() throws URISyntaxException, IOException
+    final void testFit_rodinLightCalibration() throws URISyntaxException, IOException
     {
         File projectFile = new File(Objects.requireNonNull(CLASS_LOADER.getResource(
             "Rodin/Rodin_psx.k3d.files/Rodin_psx.k3d.vset")).toURI());
@@ -570,7 +570,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Katrina Fuller fit, from Metashape export")
-    void testFit_katrinaFullerMetashape() throws URISyntaxException
+    final void testFit_katrinaFullerMetashape() throws URISyntaxException
     {
         testFitLooseFiles(
             "KatrinaFuller/Mia_124131_KratinaFuller_168cameras.files.xml",
@@ -585,7 +585,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Katrina Fuller fit, from Reality Capture export")
-    void testFit_katrinaFullerRealityCapture() throws URISyntaxException
+    final void testFit_katrinaFullerRealityCapture() throws URISyntaxException
     {
         testFitLooseFiles(
             "KatrinaFuller/katrinafuller-realitycapture.csv",
@@ -598,7 +598,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Katrina Fuller fit, Reload_Both Test")
-    void testFit_katrinaFullerReload() throws URISyntaxException
+    final void testFit_katrinaFullerReload() throws URISyntaxException
     {
         File projectFile = new File(Objects.requireNonNull(CLASS_LOADER.getResource(
             "KatrinaFuller/KatrinaFuller_realitycapture.k3d")).toURI());
@@ -613,7 +613,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Katrina Fuller fit, Reload_First Test")
-    void testFit_katrinaFullerReloadFirst() throws URISyntaxException
+    final void testFit_katrinaFullerReloadFirst() throws URISyntaxException
     {
         File projectFile = new File(Objects.requireNonNull(CLASS_LOADER.getResource(
             "KatrinaFuller/KatrinaFuller_realitycapture.k3d")).toURI());
@@ -628,7 +628,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Katrina Fuller fit, Reload_Second Test")
-    void testFit_katrinaFullerReloadSecond() throws URISyntaxException
+    final void testFit_katrinaFullerReloadSecond() throws URISyntaxException
     {
         File projectFile = new File(Objects.requireNonNull(CLASS_LOADER.getResource(
             "KatrinaFuller/KatrinaFuller_realitycapture.k3d")).toURI());
@@ -643,7 +643,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Katrina Fuller fit, Export Test")
-    void testFit_katrinaFullerExport() throws URISyntaxException
+    final void testFit_katrinaFullerExport() throws URISyntaxException
     {
         File projectFile = new File(Objects.requireNonNull(CLASS_LOADER.getResource(
             "KatrinaFuller/KatrinaFuller_realitycapture.k3d")).toURI());
@@ -660,7 +660,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Katrina Fuller fit, Specular Export Test")
-    void testFit_katrinaFullerSpecExport() throws URISyntaxException
+    final void testFit_katrinaFullerSpecExport() throws URISyntaxException
     {
         File projectFile = new File(Objects.requireNonNull(CLASS_LOADER.getResource(
             "KatrinaFuller/KatrinaFuller_realitycapture.k3d")).toURI());
@@ -676,7 +676,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Katrina Fuller fit, Metallic Export Test")
-    void testFit_katrinaFullerMetallicExport() throws URISyntaxException
+    final void testFit_katrinaFullerMetallicExport() throws URISyntaxException
     {
         File projectFile = new File(Objects.requireNonNull(CLASS_LOADER.getResource(
             "KatrinaFuller/KatrinaFuller_realitycapture.k3d")).toURI());
@@ -692,7 +692,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Katrina Fuller fit, Reload_Vset Test")
-    void testFit_katrinaFullerReloadfromVset() throws URISyntaxException
+    final void testFit_katrinaFullerReloadfromVset() throws URISyntaxException
     {
         File projectFile = new File(Objects.requireNonNull(CLASS_LOADER.getResource(
             "KatrinaFuller/KatrinaFuller_realitycapture.k3d.files/KatrinaFuller_realitycapture.k3d.vset")).toURI());
@@ -707,7 +707,7 @@ public class SmokeTest
 
     @Test
     @DisplayName("Katrina Fuller fit, Light Calibration Test")
-    void testFit_katrinaFullerLightCalibration() throws URISyntaxException, IOException
+    final void testFit_katrinaFullerLightCalibration() throws URISyntaxException, IOException
     {
         File projectFile = new File(Objects.requireNonNull(CLASS_LOADER.getResource(
             "KatrinaFuller/KatrinaFuller_realitycapture.k3d.files/KatrinaFuller_realitycapture.k3d.vset")).toURI());

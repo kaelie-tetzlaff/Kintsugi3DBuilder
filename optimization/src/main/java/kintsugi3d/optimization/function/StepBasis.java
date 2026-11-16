@@ -28,32 +28,32 @@ public class StepBasis implements BasisFunctions
     }
 
     @Override
-    public double evaluate(int functionIndex, int value)
+    public final double evaluate(int functionIndex, int value)
     {
         return value <= functionIndex ? 1.0 : 0.0;
     }
 
     @Override
-    public int getFunctionCount()
+    public final int getFunctionCount()
     {
         return resolution;
     }
 
     @Override
-    public int getOptimizedDomainSize()
+    public final int getOptimizedDomainSize()
     {
         return resolution;
     }
 
     @Override
-    public double getMetallicity()
+    public final double getMetallicity()
     {
         return this.metallicity;
     }
 
     @Override
-    public void contributeToFittingSystem(int valueCurrent, int valueNext, int instanceCount,
-                                          MatrixBuilderSums sums, MatrixSystem fittingSystem)
+    public final void contributeToFittingSystem(int valueCurrent, int valueNext, int instanceCount,
+                                                MatrixBuilderSums sums, MatrixSystem fittingSystem)
     {
         // Add the running total to elements of the ATA matrix and the ATy vector corresponding to the next value
         // as well as any values skipped over.
@@ -154,7 +154,7 @@ public class StepBasis implements BasisFunctions
     }
 
     @Override
-    public void evaluateSolution(double constantTerm, IntToDoubleFunction nonConstantSolution, ObjIntConsumer<Double> functionConsumer)
+    public final void evaluateSolution(double constantTerm, IntToDoubleFunction nonConstantSolution, ObjIntConsumer<Double> functionConsumer)
     {
         // Constant term
         double currentValue = constantTerm * metallicity;

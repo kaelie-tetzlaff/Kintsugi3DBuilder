@@ -15,6 +15,7 @@ import javafx.beans.value.WritableValue;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.state.settings.GeneralSettingsModelBase;
 import kintsugi3d.builder.state.settings.Setting;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -39,7 +40,7 @@ public class SynchronizedGeneralSettingsModel extends GeneralSettingsModelBase
     }
 
     @Override
-    protected Object getUnchecked(String name)
+    protected final Object getUnchecked(String name)
     {
         if (settings.containsKey(name))
         {
@@ -52,7 +53,7 @@ public class SynchronizedGeneralSettingsModel extends GeneralSettingsModelBase
     }
 
     @Override
-    protected void setUnchecked(String name, Object value)
+    protected final void setUnchecked(String name, Object value)
     {
         if (settings.containsKey(name))
         {
@@ -65,19 +66,19 @@ public class SynchronizedGeneralSettingsModel extends GeneralSettingsModelBase
     }
 
     @Override
-    public Class<?> getType(String name)
+    public final Class<?> getType(String name)
     {
         return baseModel.getType(name);
     }
 
     @Override
-    public boolean exists(String name)
+    public final boolean exists(String name)
     {
         return baseModel.exists(name);
     }
 
     @Override
-    public boolean shouldSerialize(String name)
+    public final boolean shouldSerialize(String name)
     {
         if (exists(name))
         {
@@ -93,7 +94,7 @@ public class SynchronizedGeneralSettingsModel extends GeneralSettingsModelBase
     }
 
     @Override
-    public Iterator<Setting> iterator()
+    public final @NotNull Iterator<Setting> iterator()
     {
         // Before creating iterator, init all settings in the base model
         for (Setting setting : baseModel)
@@ -105,7 +106,7 @@ public class SynchronizedGeneralSettingsModel extends GeneralSettingsModelBase
     }
 
     @Override
-    public void createSetting(String name, Class<?> type, Object initialValue, boolean serialize)
+    public final void createSetting(String name, Class<?> type, Object initialValue, boolean serialize)
     {
         baseModel.createSetting(name, type, initialValue, serialize);
         initSetting(name);
@@ -123,13 +124,13 @@ public class SynchronizedGeneralSettingsModel extends GeneralSettingsModelBase
         }
 
         @Override
-        public boolean hasNext()
+        public final boolean hasNext()
         {
             return base.hasNext();
         }
 
         @Override
-        public Setting next()
+        public final Setting next()
         {
             return settings.getSetting(base.next());
         }

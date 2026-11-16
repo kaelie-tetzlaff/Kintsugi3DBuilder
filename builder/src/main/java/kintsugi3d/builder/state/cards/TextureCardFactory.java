@@ -26,6 +26,7 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.gl.vecmath.IntVector2;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,13 +52,13 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
     }
 
     @Override
-    public List<? extends Map<String, Runnable>> getGlobalActions()
+    public final List<? extends Map<String, Runnable>> getGlobalActions()
     {
         return List.of(Map.of("Refresh All", this::refreshAll));
     }
 
     @Override
-    public Class<TextureInfo> getDataClass()
+    public final Class<TextureInfo> getDataClass()
     {
         return TextureInfo.class;
     }
@@ -70,7 +71,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
      * @return projectDataCard
      */
     @Override
-    public ProjectDataCard createCard(TextureInfo texture)
+    public final @Nullable ProjectDataCard createCard(TextureInfo texture)
     {
         // Base Location where the .pngs and thumbnails folder are.
         File baseDirectory = getViewSet().getSupportingFilesDirectory();
@@ -145,7 +146,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
      * @return
      */
     @Override
-    public List<ProjectDataCard> createAllCards()
+    public final List<ProjectDataCard> createAllCards()
     {
         List<ProjectDataCard> textureCards = new ArrayList<>(8);
         ReadonlyImageBasedGraphicsResources<? extends Context<?>> resources = getInstance().getResources();
@@ -156,14 +157,11 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
             var textures = texResources.getTextures();
             if (textures != null)
             {
-                for (var entry : textures.entrySet().stream().sorted(Comparator.comparing(Entry::getKey)).collect(Collectors.toList()))
-                {
-                    ProjectDataCard card = createCard(entry.getKey());
-                    if (card != null)
-                    {
-                        textureCards.add(card);
-                    }
-                }
+                textureCards = textures.entrySet().stream()
+                    .sorted(Comparator.comparing(Entry::getKey))
+                    .map(entry -> createCard(entry.getKey()))
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
             }
 
             ReadonlyBasisResources<? extends Context<?>> basisResources = texResources.getBasisResources();

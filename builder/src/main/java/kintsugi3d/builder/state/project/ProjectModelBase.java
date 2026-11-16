@@ -45,13 +45,13 @@ public abstract class ProjectModelBase<
 
     private final EnvironmentType noEnvironment = SerializableEnvironmentSettings.createNoEnvironment(this::constructEnvironmentSetting);
 
-    public abstract List<CameraType> getCameraList();
+    protected abstract List<CameraType> getCameraList();
 
-    public abstract List<EnvironmentType> getEnvironmentList();
+    protected abstract List<EnvironmentType> getEnvironmentList();
 
-    public abstract List<LightGroupType> getLightGroupList();
+    protected abstract List<LightGroupType> getLightGroupList();
 
-    public abstract List<ObjectPoseType> getObjectPoseList();
+    protected abstract List<ObjectPoseType> getObjectPoseList();
 
     @Override
     public final void parseXMLDocument(Document document)
@@ -214,7 +214,7 @@ public abstract class ProjectModelBase<
     protected abstract LightGroupType constructLightGroupSetting();
     protected abstract ObjectPoseType constructObjectPoseSetting();
 
-    public EnvironmentType getNoEnvironment()
+    public final EnvironmentType getNoEnvironment()
     {
         return this.noEnvironment;
     }

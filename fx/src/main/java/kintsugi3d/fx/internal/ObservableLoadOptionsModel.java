@@ -31,170 +31,170 @@ public class ObservableLoadOptionsModel implements LoadOptionsModel
     private final IntegerProperty maxLoadingThreads = new SimpleIntegerProperty(12);
 
     @Override
-    public boolean areColorImagesRequested()
+    public final boolean areColorImagesRequested()
     {
         return colorImagesRequested.get();
     }
 
     @Override
-    public boolean areMipmapsRequested()
+    public final boolean areMipmapsRequested()
     {
         return mipmapsRequested.get();
     }
 
     @Override
-    public boolean isCompressionRequested()
+    public final boolean isCompressionRequested()
     {
         return compressionRequested.get();
     }
 
     @Override
-    public boolean isAlphaRequested()
+    public final boolean isAlphaRequested()
     {
         return alphaRequested.get();
     }
 
     @Override
-    public int getMaxLoadingThreads()
+    public final int getMaxLoadingThreads()
     {
         return maxLoadingThreads.get();
     }
 
     @Override
-    public boolean areDepthImagesRequested()
+    public final boolean areDepthImagesRequested()
     {
         return depthImagesRequested.get();
     }
 
     @Override
-    public int getDepthImageWidth()
+    public final int getDepthImageWidth()
     {
         return depthImageWidth.get();
     }
 
     @Override
-    public int getDepthImageHeight()
+    public final int getDepthImageHeight()
     {
         return depthImageHeight.get();
     }
 
     @Override
-    public int getPreviewImageWidth()
+    public final int getPreviewImageWidth()
     {
         return previewImageWidth.get();
     }
 
     @Override
-    public int getPreviewImageHeight()
+    public final int getPreviewImageHeight()
     {
         return previewImageHeight.get();
     }
 
     @Override
-    public void setColorImagesRequested(boolean colorImagesRequested)
+    public final void setColorImagesRequested(boolean colorImagesRequested)
     {
         this.colorImagesRequested.setValue(colorImagesRequested);
     }
 
     @Override
-    public void setMipmapsRequested(boolean mipmapsRequested)
+    public final void setMipmapsRequested(boolean mipmapsRequested)
     {
         this.mipmapsRequested.setValue(mipmapsRequested);
     }
 
     @Override
-    public void setCompressionRequested(boolean compressionRequested)
+    public final void setCompressionRequested(boolean compressionRequested)
     {
         this.compressionRequested.setValue(compressionRequested);
     }
 
     @Override
-    public void setAlphaRequested(boolean alphaRequested)
+    public final void setAlphaRequested(boolean alphaRequested)
     {
         this.alphaRequested.setValue(alphaRequested);
     }
 
     @Override
-    public void setMaxLoadingThreads(int maxLoadingThreads)
+    public final void setMaxLoadingThreads(int maxLoadingThreads)
     {
         this.maxLoadingThreads.setValue(maxLoadingThreads);
     }
 
     @Override
-    public void setDepthImagesRequested(boolean depthImagesRequested)
+    public final void setDepthImagesRequested(boolean depthImagesRequested)
     {
         this.depthImagesRequested.setValue(depthImagesRequested);
     }
 
     @Override
-    public void setDepthImageWidth(int depthImageWidth)
+    public final void setDepthImageWidth(int depthImageWidth)
     {
         this.depthImageWidth.setValue(depthImageWidth);
     }
 
     @Override
-    public void setDepthImageHeight(int depthImageHeight)
+    public final void setDepthImageHeight(int depthImageHeight)
     {
         this.depthImageHeight.setValue(depthImageHeight);
     }
 
     @Override
-    public void setPreviewImageHeight(int previewImageHeight)
+    public final void setPreviewImageHeight(int previewImageHeight)
     {
         this.previewImageHeight.setValue(previewImageHeight);
     }
 
     @Override
-    public void setPreviewImageWidth(int previewImageWidth)
+    public final void setPreviewImageWidth(int previewImageWidth)
     {
         this.previewImageWidth.setValue(previewImageWidth);
     }
 
-    public BooleanProperty colorImagesRequestedProperty()
+    public final BooleanProperty colorImagesRequestedProperty()
     {
         return colorImagesRequested;
     }
-    public BooleanProperty mipmapsRequestedProperty()
+    public final BooleanProperty mipmapsRequestedProperty()
     {
         return mipmapsRequested;
     }
 
-    public BooleanProperty compressionRequestedProperty()
+    public final BooleanProperty compressionRequestedProperty()
     {
         return compressionRequested;
     }
 
-    public BooleanProperty alphaRequestedProperty()
+    public final BooleanProperty alphaRequestedProperty()
     {
         return alphaRequested;
     }
 
-    public BooleanProperty depthImagesRequestedProperty()
+    public final BooleanProperty depthImagesRequestedProperty()
     {
         return depthImagesRequested;
     }
 
-    public IntegerProperty depthImageWidthProperty()
+    public final IntegerProperty depthImageWidthProperty()
     {
         return depthImageWidth;
     }
 
-    public IntegerProperty depthImageHeightProperty()
+    public final IntegerProperty depthImageHeightProperty()
     {
         return depthImageHeight;
     }
 
-    public IntegerProperty previewImageWidthProperty()
+    public final IntegerProperty previewImageWidthProperty()
     {
         return previewImageWidth;
     }
 
-    public IntegerProperty previewImageHeightProperty()
+    public final IntegerProperty previewImageHeightProperty()
     {
         return previewImageHeight;
     }
 
-    public IntegerProperty maxLoadingThreadsProperty()
+    public final IntegerProperty maxLoadingThreadsProperty()
     {
         return maxLoadingThreads;
     }

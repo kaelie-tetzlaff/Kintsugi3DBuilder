@@ -58,7 +58,7 @@ public class RootLightSceneController implements Initializable
 
     @SuppressWarnings("rawtypes")
     @Override
-    public void initialize(URL location, ResourceBundle resources)
+    public final void initialize(URL location, ResourceBundle resources)
     {
         //columns
         TableColumn<ObservableLightGroupSettings, String> nameCol = new TableColumn<>("Name");
@@ -151,8 +151,8 @@ public class RootLightSceneController implements Initializable
         };
     }
 
-    public void injectDependencies(ObservableLightingEnvironmentModel lightingModel,
-                                   ObservableProjectModel injectedProjectModel, SceneViewport injectedSceneViewport)
+    public final void injectDependencies(ObservableLightingEnvironmentModel lightingModel,
+                                         ObservableProjectModel injectedProjectModel, SceneViewport injectedSceneViewport)
     {
         this.projectModel = injectedProjectModel;
         this.sceneViewport = injectedSceneViewport;

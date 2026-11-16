@@ -93,7 +93,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
                     if ("newmtl".equals(id) && scanner.hasNext())
                     {
                         currentMaterial = new ImportedMaterial(scanner.next());
-                        materials.put(currentMaterial.getName(), currentMaterial);
+                        materials.put(currentMaterial.name, currentMaterial);
                     }
                     else if (currentMaterial != null)
                     {
@@ -277,12 +277,12 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
         {
             if(ambientMissing)
             {
-                currentMaterial.ambient = currentMaterial.getDiffuse();
+                currentMaterial.ambient = currentMaterial.diffuse;
             }
 
-            if (currentMaterial.getAmbientMap() == null)
+            if (currentMaterial.ambientMap == null)
             {
-                currentMaterial.ambientMap = currentMaterial.getDiffuseMap();
+                currentMaterial.ambientMap = currentMaterial.diffuseMap;
             }
         }
 

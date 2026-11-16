@@ -53,7 +53,7 @@ public class BaseScene<ContextType extends Context<ContextType>> extends LitCont
     }
 
     @Override
-    protected void addLitComponents(LightingResources<ContextType> lightingResources)
+    protected final void addLitComponents(LightingResources<ContextType> lightingResources)
     {
         // Backplate and environment must be first since they aren't depth tested.
         components.add(new Backplate<>(context, lightingResources, sceneModel));
@@ -70,7 +70,7 @@ public class BaseScene<ContextType extends Context<ContextType>> extends LitCont
     }
 
     @Override
-    public void initialize()
+    public final void initialize()
     {
         // Run initialization for each additional component
         for (RenderedComponent<ContextType> component : components)
@@ -79,13 +79,13 @@ public class BaseScene<ContextType extends Context<ContextType>> extends LitCont
         }
     }
 
-    public RenderingSubject<ContextType> getSubject()
+    public final RenderingSubject<ContextType> getSubject()
     {
         return renderingSubject;
     }
 
     @Override
-    public void reloadShaders()
+    public final void reloadShaders()
     {
         for (RenderedComponent<ContextType> component : components)
         {
@@ -94,7 +94,7 @@ public class BaseScene<ContextType extends Context<ContextType>> extends LitCont
     }
 
     @Override
-    public void update()
+    public final void update()
     {
         for (RenderedComponent<ContextType> component : components)
         {
@@ -103,7 +103,7 @@ public class BaseScene<ContextType extends Context<ContextType>> extends LitCont
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         if (renderingSubject.getProgram() != null)
         {
@@ -126,7 +126,7 @@ public class BaseScene<ContextType extends Context<ContextType>> extends LitCont
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (renderingSubject != null)
         {
@@ -148,32 +148,32 @@ public class BaseScene<ContextType extends Context<ContextType>> extends LitCont
         components.clear();
     }
 
-    protected ContextType getContext()
+    protected final ContextType getContext()
     {
         return context;
     }
 
-    protected SceneModel getSceneModel()
+    protected final SceneModel getSceneModel()
     {
         return sceneModel;
     }
 
-    protected SceneViewportModel getSceneViewportModel()
+    protected final SceneViewportModel getSceneViewportModel()
     {
         return sceneViewportModel;
     }
 
-    protected Collection<RenderedComponent<ContextType>> getComponents()
+    protected final Collection<RenderedComponent<ContextType>> getComponents()
     {
         return Collections.unmodifiableCollection(components);
     }
 
-    protected void addComponent(RenderedComponent<ContextType> component)
+    protected final void addComponent(RenderedComponent<ContextType> component)
     {
         components.add(component);
     }
 
-    protected ReadonlyImageBasedGraphicsResources<ContextType> getResources()
+    protected final ReadonlyImageBasedGraphicsResources<ContextType> getResources()
     {
         return resources;
     }

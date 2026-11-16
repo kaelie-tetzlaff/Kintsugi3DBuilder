@@ -25,7 +25,7 @@ public final class ScrollDollyTool implements ScrollListener
     private static class Builder extends ToolBuilderBase<ScrollDollyTool>
     {
         @Override
-        public ScrollDollyTool create()
+        public final ScrollDollyTool create()
         {
             return new ScrollDollyTool(getCameraModel());
         }

@@ -20,42 +20,42 @@ public class ViewSetDirectories
     private File fullResImageDirectory;
     private boolean fullResImagesNeedUndistort;
 
-    public File getProjectRoot()
+    public final File getProjectRoot()
     {
         return projectRoot;
     }
 
-    public void setProjectRoot(File projectRoot)
+    public final void setProjectRoot(File projectRoot)
     {
         this.projectRoot = projectRoot;
     }
 
-    public File getSupportingFilesDirectory()
+    public final File getSupportingFilesDirectory()
     {
         return supportingFilesDirectory;
     }
 
-    public void setSupportingFilesDirectory(File supportingFilesDirectory)
+    public final void setSupportingFilesDirectory(File supportingFilesDirectory)
     {
         this.supportingFilesDirectory = supportingFilesDirectory;
     }
 
-    public File getFullResImageDirectory()
+    public final File getFullResImageDirectory()
     {
         return fullResImageDirectory;
     }
 
-    public void setFullResImageDirectory(File fullResImageDirectory)
+    public final void setFullResImageDirectory(File fullResImageDirectory)
     {
         this.fullResImageDirectory = fullResImageDirectory;
     }
 
-    public boolean isFullResImagesNeedUndistort()
+    public final boolean isFullResImagesNeedUndistort()
     {
         return fullResImagesNeedUndistort;
     }
 
-    public void setFullResImagesNeedUndistort(boolean fullResImagesNeedUndistort)
+    public final void setFullResImagesNeedUndistort(boolean fullResImagesNeedUndistort)
     {
         this.fullResImagesNeedUndistort = fullResImagesNeedUndistort;
     }

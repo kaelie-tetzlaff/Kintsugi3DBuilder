@@ -13,13 +13,14 @@ package kintsugi3d.app.test;
 
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.state.SelectableViewListModel;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class TestingViewListModel implements SelectableViewListModel
 {
     @Override
-    public View getSelectedView()
+    public final @Nullable View getSelectedView()
     {
         return null;
     }
@@ -31,7 +32,7 @@ public class TestingViewListModel implements SelectableViewListModel
     }
 
     @Override
-    public List<View> getViewList()
+    public final List<View> getViewList()
     {
         return List.of();
     }
@@ -43,7 +44,7 @@ public class TestingViewListModel implements SelectableViewListModel
     }
 
     @Override
-    public boolean isViewSnapEnabled()
+    public final boolean isViewSnapEnabled()
     {
         return false;
     }

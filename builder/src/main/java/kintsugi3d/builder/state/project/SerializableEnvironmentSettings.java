@@ -33,19 +33,19 @@ public abstract class SerializableEnvironmentSettings implements DOMConvertable,
     private boolean isNoEnvironment;
 
     @Override
-    public boolean isNoEnvironment()
+    public final boolean isNoEnvironment()
     {
         return isNoEnvironment;
     }
 
     @Override
-    public void setIsNoEnvironment(boolean isNoEnvironment)
+    public final void setIsNoEnvironment(boolean isNoEnvironment)
     {
         this.isNoEnvironment = isNoEnvironment;
     }
 
     @Override
-    public Element toDOMElement(Document document)
+    public final Element toDOMElement(Document document)
     {
         Element element = document.createElement("Environment");
         element.setAttribute("envUseImage", Boolean.toString(isEnvironmentImageEnabled()));

@@ -29,31 +29,31 @@ public class SimpleCameraModel implements ViewpointModel
     }
 
     @Override
-    public Matrix4 getLookMatrix()
+    public final Matrix4 getLookMatrix()
     {
         return this.lookMatrix;
     }
 
     @Override
-    public void setLookMatrix(Matrix4 lookMatrix)
+    public final void setLookMatrix(Matrix4 lookMatrix)
     {
         this.lookMatrix = lookMatrix;
     }
 
     @Override
-    public void setTarget(Vector3 target)
+    public final void setTarget(Vector3 target)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void setHorizontalFOV(float fov)
+    public final void setHorizontalFOV(float fov)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void setOrthographic(boolean orthographic)
+    public final void setOrthographic(boolean orthographic)
     {
         throw new UnsupportedOperationException();
     }

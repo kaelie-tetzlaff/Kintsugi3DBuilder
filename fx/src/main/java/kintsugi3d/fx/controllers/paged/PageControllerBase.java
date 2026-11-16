@@ -27,6 +27,7 @@ import kintsugi3d.fx.core.JavaFXState;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * Internal base class that is extended for the public-facing classes
@@ -44,7 +45,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
     private volatile boolean alertShown = false;
 
     @Override
-    public PageFrameController getPageFrameController()
+    public final PageFrameController getPageFrameController()
     {
         return pageFrameController;
     }
@@ -74,7 +75,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
     @Override
     public final boolean canAdvance()
     {
-        return getCanAdvanceObservable().get();
+        return canAdvanceProperty.get();
     }
 
     @Override
@@ -97,7 +98,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
     @Override
     public final String getAdvanceLabelOverride()
     {
-        return getAdvanceLabelOverrideObservable().get();
+        return advanceLabelOverrideProperty.get();
     }
 
     protected final void setAdvanceLabelOverride(String advanceLabelOverride)
@@ -145,7 +146,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
 
     private void close()
     {
-        FXWindowHelper.requestClose(getPageFrameController().getWindow());
+        FXWindowHelper.requestClose(pageFrameController.getWindow());
     }
 
     private void alert(String title, String message, boolean allowContinue)
@@ -158,18 +159,15 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
         alertShown = true;
         Platform.runLater(() ->
         {
-            if (getPage().hasFallbackPage())
+            if (page.hasFallbackPage())
             {
                 // "Cancel" closes the modal entirely
                 ButtonType cancel = new ButtonType("Cancel", ButtonData.LEFT);
 
                 // "Fallback" buttons navigate to a different page.
-                Collection<ButtonType> fallbackButtons = new ArrayList<>(getPage().getFallbackPages().size());
-                for (var fallback : getPage().getFallbackPages().entrySet())
-                {
-                    String fallbackName = fallback.getKey();
-                    fallbackButtons.add(new ButtonType(fallbackName));
-                }
+                Collection<ButtonType> fallbackButtons = page.getFallbackPages().keySet().stream()
+                    .map(ButtonType::new)
+                    .collect(Collectors.toList());
 
                 Collection<ButtonType> allButtons = new ArrayList<>(fallbackButtons.size() + 2);
                 allButtons.add(cancel);
@@ -202,7 +200,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
                 {
                     ((ButtonBase) alert.getDialogPane().lookupButton(button)).setOnAction(event ->
                     {
-                        getPageFrameController().fallbackPage(button.getText());
+                        pageFrameController.fallbackPage(button.getText());
                         alertShown = false;
                     });
                 }
@@ -230,12 +228,12 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
         });
     }
 
-    protected void error(String title, String message)
+    protected final void error(String title, String message)
     {
         alert(title, message, false);
     }
 
-    protected void warning(String title, String message)
+    protected final void warning(String title, String message)
     {
         alert(title, message, true);
     }

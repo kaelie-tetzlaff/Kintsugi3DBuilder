@@ -33,14 +33,14 @@ public class Standalone3DWindowBuilder extends WindowBuilderBase<PollableWindow>
         this.primaryStage = primaryStage;
     }
 
-    public Standalone3DWindowBuilder setCanvas(FramebufferCanvas<? extends Context<?>> canvas)
+    public final Standalone3DWindowBuilder setCanvas(FramebufferCanvas<? extends Context<?>> canvas)
     {
         this.canvas = canvas;
         return this;
     }
 
     @Override
-    public PollableWindow create()
+    public final PollableWindow create()
     {
         Platform.runLater(() -> result = new Standalone3DWindow<>(primaryStage, canvas, this));
 

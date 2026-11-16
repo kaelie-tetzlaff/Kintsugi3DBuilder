@@ -33,8 +33,8 @@ public class KNNViewWeightGenerator implements ViewWeightGenerator
 
     private static final class WeightedView implements Comparable<WeightedView>
     {
-        public final int viewIndex;
-        public final float weight;
+        final int viewIndex;
+        final float weight;
 
         private WeightedView(int viewIndex, float weight)
         {
@@ -64,7 +64,7 @@ public class KNNViewWeightGenerator implements ViewWeightGenerator
     }
 
     @Override
-    public float[] generateWeights(ReadonlyImageBasedGraphicsResources<? extends Context<?>> resources, Iterable<View> activeViewList, Matrix4 targetView)
+    public final float[] generateWeights(ReadonlyImageBasedGraphicsResources<? extends Context<?>> resources, Iterable<View> activeViewList, Matrix4 targetView)
     {
         float[] viewWeights = new float[resources.getViewSet().getGPUBufferSize()];
 

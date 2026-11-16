@@ -25,13 +25,13 @@ import java.util.function.Supplier;
 public abstract class GraphicsStreamBase<T> implements GraphicsStream<T>
 {
     @Override
-    public <R> GraphicsStream<R> map(Function<T, ? extends R> mapper)
+    public final <R> GraphicsStream<R> map(Function<T, ? extends R> mapper)
     {
         return new Mapped<>(this, mapper);
     }
 
     @Override
-    public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super T> accumulator)
+    public final <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super T> accumulator)
     {
         R result = supplier.get();
 
@@ -59,31 +59,31 @@ public abstract class GraphicsStreamBase<T> implements GraphicsStream<T>
         }
 
         @Override
-        public GraphicsStream<T> sequential()
+        public final GraphicsStream<T> sequential()
         {
             return new Mapped<>(base.sequential(), mapper);
         }
 
         @Override
-        public GraphicsStream<T> parallel()
+        public final GraphicsStream<T> parallel()
         {
             return new Mapped<>(base.parallel(), mapper);
         }
 
         @Override
-        public GraphicsStream<T> parallel(int maxRunningThreads)
+        public final GraphicsStream<T> parallel(int maxRunningThreads)
         {
             return new Mapped<>(base.parallel(maxRunningThreads), mapper);
         }
 
         @Override
-        public int getCount()
+        public final int getCount()
         {
             return base.getCount();
         }
 
         @Override
-        public void forEach(Consumer<? super T> action)
+        public final void forEach(Consumer<? super T> action)
         {
             // Apply the current mapping before executing the action.
             base.forEach(source -> action.accept(mapper.apply(source)));

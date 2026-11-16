@@ -56,13 +56,13 @@ public class SelectToneCalibrationImageController extends NonDataPageControllerB
     }
 
     @Override
-    public Region getRootNode()
+    public final Region getRootNode()
     {
         return rootPane;
     }
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         buttonGroup.getToggles().add(primaryViewImageButton);
         buttonGroup.getToggles().add(previousImageButton);
@@ -91,7 +91,7 @@ public class SelectToneCalibrationImageController extends NonDataPageControllerB
     }
 
     @Override
-    public void refresh()
+    public final void refresh()
     {
         if (hasPreviousColorCheckerImage())
         {
@@ -118,7 +118,7 @@ public class SelectToneCalibrationImageController extends NonDataPageControllerB
     }
 
     @Override
-    public boolean tryAdvance()
+    public final boolean tryAdvance()
     {
         ViewSet viewSet = Global.io().validateRenderable().getLoadedViewSet();
 

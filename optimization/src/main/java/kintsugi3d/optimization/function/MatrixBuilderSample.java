@@ -90,12 +90,12 @@ public class MatrixBuilderSample
         this.observed = observed;
     }
 
-    public double getWeightForInstance(int instance)
+    public final double getWeightForInstance(int instance)
     {
         return weightByInstance.applyAsDouble(instance);
     }
 
-    public double getObserved(int index)
+    public final double getObserved(int index)
     {
         return observed[index];
     }

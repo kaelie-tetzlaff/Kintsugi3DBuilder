@@ -11,6 +11,8 @@
 
 package kintsugi3d.gl.vecmath;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.DoubleUnaryOperator;
@@ -53,49 +55,49 @@ public class Vector2 implements Iterable<Float>
         this(value, value);
     }
 
-    public Vector3 asVector3()
+    public final Vector3 asVector3()
     {
         return asVector3(0.0f);
     }
 
-    public Vector3 asVector3(float z)
+    public final Vector3 asVector3(float z)
     {
         return new Vector3(this.x, this.y, z);
     }
 
-    public Vector4 asPosition()
+    public final Vector4 asPosition()
     {
         return asVector4(0.0f, 1.0f);
     }
 
-    public Vector4 asDirection()
+    public final Vector4 asDirection()
     {
         return asVector4(0.0f, 0.0f);
     }
 
-    public Vector4 asVector4(float z, float w)
+    public final Vector4 asVector4(float z, float w)
     {
         return new Vector4(this.x, this.y, z, w);
     }
 
-    public IntVector2 rounded()
+    public final IntVector2 rounded()
     {
         return new IntVector2(Math.round(this.x), Math.round(this.y));
     }
 
-    public IntVector2 truncated()
+    public final IntVector2 truncated()
     {
         return new IntVector2((int)this.x, (int)this.y);
     }
 
-    public DoubleVector2 asDoublePrecision()
+    public final DoubleVector2 asDoublePrecision()
     {
         return new DoubleVector2(x, y);
     }
 
     @Override
     @SuppressWarnings("FloatingPointEquality")
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         if (obj instanceof Vector2)
         {
@@ -109,7 +111,7 @@ public class Vector2 implements Iterable<Float>
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         if (this.equals(ZERO))
         {
@@ -127,7 +129,7 @@ public class Vector2 implements Iterable<Float>
      * @param other The vector to add.
      * @return A new vector that is the mathematical (componentwise) sum of this and 'other'.
      */
-    public Vector2 plus(Vector2 other)
+    public final Vector2 plus(Vector2 other)
     {
         return new Vector2(
             this.x + other.x,
@@ -140,7 +142,7 @@ public class Vector2 implements Iterable<Float>
      * @param other The vector to add.
      * @return A new vector that is the mathematical (componentwise) subtraction of 'other' from this.
      */
-    public Vector2 minus(Vector2 other)
+    public final Vector2 minus(Vector2 other)
     {
         return new Vector2(
             this.x - other.x,
@@ -152,7 +154,7 @@ public class Vector2 implements Iterable<Float>
      * Construct a new vector that is the negation of this.
      * @return A new vector with the values (-x, -y)
      */
-    public Vector2 negated()
+    public final Vector2 negated()
     {
         return new Vector2(-this.x, -this.y);
     }
@@ -162,7 +164,7 @@ public class Vector2 implements Iterable<Float>
      * @param s The scaler to multiply by.
      * @return A new vector equal to (s*x, s*y)
      */
-    public Vector2 times(float s)
+    public final Vector2 times(float s)
     {
         return new Vector2(s*this.x, s*this.y);
     }
@@ -172,17 +174,17 @@ public class Vector2 implements Iterable<Float>
      * @param s The scaler to divide by.
      * @return A new vector equal to (x/s, y/s)
      */
-    public Vector2 dividedBy(float s)
+    public final Vector2 dividedBy(float s)
     {
         return new Vector2(this.x/s, this.y/s);
     }
 
-    public Vector2 times(Vector2 other)
+    public final Vector2 times(Vector2 other)
     {
         return new Vector2(this.x * other.x, this.y * other.y);
     }
 
-    public Vector2 dividedBy(Vector2 other)
+    public final Vector2 dividedBy(Vector2 other)
     {
         return new Vector2(this.x / other.x, this.y / other.y);
     }
@@ -192,7 +194,7 @@ public class Vector2 implements Iterable<Float>
      * @param other The vector to use when computing the dot product.
      * @return A scaler value equal to the sum of x1*x2 and y1*y2.
      */
-    public float dot(Vector2 other)
+    public final float dot(Vector2 other)
     {
         return this.x * other.x + this.y * other.y;
     }
@@ -201,7 +203,7 @@ public class Vector2 implements Iterable<Float>
      * Compute a scaler value representing the length/magnitude of this vector.
      * @return A scaler value equal to square root of the sum of squares of the components.
      */
-    public float length()
+    public final float length()
     {
         return (float)Math.sqrt(this.dot(this));
     }
@@ -211,7 +213,7 @@ public class Vector2 implements Iterable<Float>
      * @param other The vector to compute the distance between.
      * @return A scaler value equal to the length of the different vector.
      */
-    public float distance(Vector2 other)
+    public final float distance(Vector2 other)
     {
         return this.minus(other).length();
     }
@@ -222,7 +224,7 @@ public class Vector2 implements Iterable<Float>
      * Do not attempt to normalize a zero-length vector.
      * @return A new vector equal to this vector divided by it's length.
      */
-    public Vector2 normalized()
+    public final Vector2 normalized()
     {
         return this.times(1.0f / this.length());
     }
@@ -232,7 +234,7 @@ public class Vector2 implements Iterable<Float>
      * magnitude (a length of 1.0).  If this vector has zero length, it will return itself.
      * @return A new vector equal to this vector divided by it's length except in cases of a zero-length vector.
      */
-    public Vector2 normalizedSafe()
+    public final Vector2 normalizedSafe()
     {
         float l = this.length();
         if (l == 0.0f)
@@ -245,19 +247,19 @@ public class Vector2 implements Iterable<Float>
         }
     }
 
-    public Vector2 applyOperator(DoubleUnaryOperator operator)
+    public final Vector2 applyOperator(DoubleUnaryOperator operator)
     {
         return new Vector2((float)operator.applyAsDouble(x), (float)operator.applyAsDouble(y));
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return String.format("Vector2{x=%s, y=%s}", x, y);
     }
 
     @Override
-    public Iterator<Float> iterator()
+    public final @NotNull Iterator<Float> iterator()
     {
         return Arrays.asList(x, y).iterator();
     }

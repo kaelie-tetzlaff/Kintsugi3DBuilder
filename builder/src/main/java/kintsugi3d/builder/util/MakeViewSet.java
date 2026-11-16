@@ -28,7 +28,7 @@ public final class MakeViewSet
     {
     }
 
-    static ReadonlyViewSet makeViewSet(int viewCount, float distance, float nearPlane, float aspect, float sensorWidth, float focal)
+    private static ReadonlyViewSet makeViewSet(int viewCount, float distance, float nearPlane, float aspect, float sensorWidth, float focal)
     {
         List<Vector3> viewDirections = new ArrayList<>(viewCount);
 
@@ -37,15 +37,15 @@ public final class MakeViewSet
 
         for (int i = 0; i < sampleRows; i++)
         {
-            double r = Math.sin(0.001 + (Math.PI - 0.002) * (double)i / (double)(sampleRows-1));
+            double r = StrictMath.sin(0.001 + (Math.PI - 0.002) * (double)i / (double)(sampleRows-1));
             int sampleColumns = Math.max(1, (int)Math.ceil(densityFactor * r));
 
             for (int j = 0; j < sampleColumns; j++)
             {
                 viewDirections.add(new Vector3(
-                    (float)(r * Math.cos(2 * Math.PI * (double)j / (double)sampleColumns)),
-                    (float) Math.cos(Math.PI * (double)i / (double)(sampleRows-1)),
-                    (float)(r * Math.sin(2 * Math.PI * (double)j / (double)sampleColumns))));
+                    (float)(r * StrictMath.cos(2 * Math.PI * (double)j / (double)sampleColumns)),
+                    (float) StrictMath.cos(Math.PI * (double)i / (double)(sampleRows-1)),
+                    (float)(r * StrictMath.sin(2 * Math.PI * (double)j / (double)sampleColumns))));
             }
         }
 

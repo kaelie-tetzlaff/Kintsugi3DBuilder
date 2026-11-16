@@ -21,18 +21,18 @@ public class ObservableObjectPoseModel extends ObjectPoseModelFromSettings
     private ObservableValue<ObservableObjectPoseSettings> selectedObjectPoseProperty;
     private final ObjectPoseSettings sentinel = new ObservableObjectPoseSettings("sentinel");
 
-    public ObservableValue<ObservableObjectPoseSettings> getSelectedObjectPoseProperty()
+    public final ObservableValue<ObservableObjectPoseSettings> getSelectedObjectPoseProperty()
     {
         return this.selectedObjectPoseProperty;
     }
 
-    public void setSelectedObjectPoseProperty(ObservableValue<ObservableObjectPoseSettings> selectedObjectPoseProperty)
+    public final void setSelectedObjectPoseProperty(ObservableValue<ObservableObjectPoseSettings> selectedObjectPoseProperty)
     {
         this.selectedObjectPoseProperty = selectedObjectPoseProperty;
     }
 
     @Override
-    protected ObjectPoseSettings getObjectPoseSettings()
+    protected final ObjectPoseSettings getObjectPoseSettings()
     {
         if (selectedObjectPoseProperty == null || selectedObjectPoseProperty.getValue() == null)
         {

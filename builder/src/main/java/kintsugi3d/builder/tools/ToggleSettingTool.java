@@ -13,7 +13,7 @@ package kintsugi3d.builder.tools;
 
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 
-public class ToggleSettingTool implements KeyPressTool
+public final class ToggleSettingTool implements KeyPressTool
 {
     private static class Builder extends ToolBuilderBase<ToggleSettingTool>
     {
@@ -25,7 +25,7 @@ public class ToggleSettingTool implements KeyPressTool
         }
 
         @Override
-        public ToggleSettingTool create()
+        public final ToggleSettingTool create()
         {
             return new ToggleSettingTool(settingName, getSettingsModel());
         }
@@ -39,7 +39,7 @@ public class ToggleSettingTool implements KeyPressTool
     private final String settingName;
     private final GeneralSettingsModel settingsModel;
 
-    public ToggleSettingTool(String settingName, GeneralSettingsModel settingsModel)
+    private ToggleSettingTool(String settingName, GeneralSettingsModel settingsModel)
     {
         this.settingName = settingName;
         this.settingsModel = settingsModel;

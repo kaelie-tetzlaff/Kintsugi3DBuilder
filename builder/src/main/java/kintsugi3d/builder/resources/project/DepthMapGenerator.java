@@ -52,7 +52,7 @@ public final class DepthMapGenerator<ContextType extends Context<ContextType>> i
         depthDrawable.addVertexBuffer("position", geometryResources.getPositionBuffer());
     }
 
-    static <ContextType extends Context<ContextType>> ProgramBuilder<ContextType> getDepthMapProgramBuilder(ContextType context)
+    private static <ContextType extends Context<ContextType>> ProgramBuilder<ContextType> getDepthMapProgramBuilder(ContextType context)
     {
         return context.getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File("shaders/common/depth.vert"))

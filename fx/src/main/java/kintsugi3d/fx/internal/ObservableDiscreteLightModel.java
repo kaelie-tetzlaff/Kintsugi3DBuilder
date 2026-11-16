@@ -29,13 +29,13 @@ public class ObservableDiscreteLightModel extends DiscreteLightModelFromSettings
         this.sentinel.setLocked(true);
     }
 
-    public void setLightInstanceSetting(ObservableValue<ObservableLightSettings> lightInstanceSetting)
+    public final void setLightInstanceSetting(ObservableValue<ObservableLightSettings> lightInstanceSetting)
     {
         this.lightInstanceSetting = lightInstanceSetting;
     }
 
     @Override
-    protected SerializableLightSettings getLightSettings()
+    protected final SerializableLightSettings getLightSettings()
     {
         if (lightInstanceSetting == null || lightInstanceSetting.getValue() == null)
         {
@@ -48,7 +48,7 @@ public class ObservableDiscreteLightModel extends DiscreteLightModelFromSettings
     }
 
     @Override
-    public boolean isEnabled()
+    public final boolean isEnabled()
     {
         return lightInstanceSetting != null && lightInstanceSetting.getValue() != null;
     }

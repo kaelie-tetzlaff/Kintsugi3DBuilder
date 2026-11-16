@@ -27,19 +27,19 @@ public class SelectionPageBuilder<T, FinishType> extends PageBuilder<FinishType>
     }
 
     @Override
-    public SelectionPage<T> getPage()
+    public final SelectionPage<T> getPage()
     {
         return this.page;
     }
 
-    public <PageType extends Page<? super T, NextOutType>, NextOutType>
+    public final <PageType extends Page<? super T, NextOutType>, NextOutType>
     SelectionPageBuilder<? super T, FinishType> choiceJoin(String choiceLabel, PageType joinPage)
     {
         this.page.addChoice(choiceLabel, joinPage);
         return this;
     }
 
-    public <PageType extends Page<? super T, NextOutType>, NextOutType, ControllerType extends PageController<?>>
+    public final <PageType extends Page<? super T, NextOutType>, NextOutType, ControllerType extends PageController<?>>
     SimplePageBuilder<T, NextOutType, SelectionPageBuilder<T,FinishType>> choice(
         String choiceLabel, String fxmlPath, Function<FXMLLoader, PageType> pageConstructor,
         Supplier<ControllerType> controllerConstructorOverride)
@@ -49,27 +49,27 @@ public class SelectionPageBuilder<T, FinishType> extends PageBuilder<FinishType>
         return new DataPageBuilder<>(nextPage, getFrameController(), () -> this);
     }
 
-    public <PageType extends Page<? super T, NextOutType>, NextOutType>
+    public final <PageType extends Page<? super T, NextOutType>, NextOutType>
     SimplePageBuilder<T, NextOutType, SelectionPageBuilder<T,FinishType>> choice(
         String choiceLabel, String fxmlPath, Function<FXMLLoader, PageType> pageConstructor)
     {
         return choice(choiceLabel, fxmlPath, pageConstructor, null);
     }
 
-    public <ControllerType extends NonSupplierPageController<T>>
+    public final <ControllerType extends NonSupplierPageController<T>>
     SimplePageBuilder<T, T, SelectionPageBuilder<T,FinishType>> choice(
         String choiceLabel, String fxmlPath, Supplier<ControllerType> controllerConstructorOverride)
     {
         return choice(choiceLabel, fxmlPath, SimpleDataReceiverPage<T, ControllerType>::new, controllerConstructorOverride);
     }
 
-    public <ControllerType extends NonSupplierPageController<T>>
+    public final <ControllerType extends NonSupplierPageController<T>>
     SimplePageBuilder<T, T, SelectionPageBuilder<T,FinishType>> choice(String choiceLabel, String fxmlPath)
     {
         return this.<ControllerType>choice(choiceLabel, fxmlPath, null);
     }
 
-    public <ControllerType extends NonSupplierPageController<Object>>
+    public final <ControllerType extends NonSupplierPageController<Object>>
     NonDataPageBuilder<SelectionPageBuilder<T,FinishType>> choiceNonData(
         String choiceLabel, String fxmlPath, Supplier<ControllerType> controllerConstructorOverride)
     {
@@ -79,15 +79,15 @@ public class SelectionPageBuilder<T, FinishType> extends PageBuilder<FinishType>
         return new NonDataPageBuilder<>(nextPage, getFrameController(), () -> this);
     }
 
-    public <ControllerType extends NonSupplierPageController<Object>>
+    public final <ControllerType extends NonSupplierPageController<Object>>
     NonDataPageBuilder<SelectionPageBuilder<T,FinishType>> choiceNonData(String choiceLabel, String fxmlPath)
     {
         return this.<ControllerType>choiceNonData(choiceLabel, fxmlPath, null);
     }
 
-    public <PageType extends SelectionPage<T>, ControllerType extends PageController<T>>
+    public final <PageType extends SelectionPage<T>, ControllerType extends PageController<T>>
     SelectionPageBuilder<T, FinishType> choiceSubSelect(String choiceLabel, String subprompt,
-        Function<FXMLLoader, PageType> pageConstructor, Supplier<ControllerType> controllerConstructorOverride)
+                                                        Function<FXMLLoader, PageType> pageConstructor, Supplier<ControllerType> controllerConstructorOverride)
     {
         PageType nextPage = getFrameController().createPage(SELECTION_PAGE_FXML, pageConstructor, controllerConstructorOverride);
         nextPage.setPrompt(subprompt);
@@ -95,7 +95,7 @@ public class SelectionPageBuilder<T, FinishType> extends PageBuilder<FinishType>
         return new SelectionPageBuilder<>(nextPage, getFrameController(), getFinisher());
     }
 
-    public <PageType extends SelectionPage<T>, ControllerType extends PageController<T>>
+    public final <PageType extends SelectionPage<T>, ControllerType extends PageController<T>>
     SelectionPageBuilder<T, FinishType> choiceSubSelect(
         String choiceLabel, String subprompt, Function<FXMLLoader, PageType> pageConstructor)
     {

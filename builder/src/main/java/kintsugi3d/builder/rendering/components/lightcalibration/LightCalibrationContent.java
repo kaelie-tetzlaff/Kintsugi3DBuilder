@@ -44,7 +44,7 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
     }
 
     @Override
-    public void initialize()
+    public final void initialize()
     {
         // the actual subject for image-based rendering
         // No lighting resources since light calibration is effectively unlit shading
@@ -54,19 +54,19 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
     }
 
     @Override
-    public void reloadShaders()
+    public final void reloadShaders()
     {
         renderingSubject.reloadShaders();
     }
 
     @Override
-    public void update()
+    public final void update()
     {
         renderingSubject.update();
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         Vector3 lightPosition = sceneModel.getSettingsModel().get("currentLightCalibration", Vector2.class).asVector3();
         Matrix4 lightTransform = Matrix4.translate(lightPosition.negated());
@@ -107,7 +107,7 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (renderingSubject != null)
         {

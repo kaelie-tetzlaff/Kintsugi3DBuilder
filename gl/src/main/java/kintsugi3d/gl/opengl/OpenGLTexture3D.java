@@ -58,7 +58,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         }
 
         @Override
-        public OpenGLTexture3D createTexture()
+        public final OpenGLTexture3D createTexture()
         {
             if (this.isInternalFormatCompressed())
             {
@@ -114,7 +114,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         }
 
         @Override
-        public OpenGLTexture3D createTexture()
+        public final OpenGLTexture3D createTexture()
         {
             return new OpenGLTexture3D(
                 this.getContext(),
@@ -151,7 +151,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         }
 
         @Override
-        public OpenGLTexture3D createTexture()
+        public final OpenGLTexture3D createTexture()
         {
             return new OpenGLTexture3D(
                 this.getContext(),
@@ -188,7 +188,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         }
 
         @Override
-        public OpenGLTexture3D createTexture()
+        public final OpenGLTexture3D createTexture()
         {
             return new OpenGLTexture3D(
                 this.getContext(),
@@ -614,7 +614,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
             try (FramebufferObject<OpenGLContext> sourceFBO = fboBuilder.createFramebufferObject();
                  FramebufferObject<OpenGLContext> destFBO = fboBuilder.createFramebufferObject())
             {
-                int effectiveDepth = Math.min(Math.min(this.getDepth() - destZ, readSource.getDepth() - srcZ), srcDepth);
+                int effectiveDepth = Math.min(Math.min(this.depth - destZ, readSource.getDepth() - srcZ), srcDepth);
 
                 // Use framebuffer blitting on each depth layer requested
                 for (int i = 0; i < effectiveDepth; i++)
@@ -674,20 +674,20 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         }
 
         @Override
-        public OpenGLContext getContext()
+        public final OpenGLContext getContext()
         {
             return texture.getContext();
         }
 
         @Override
-        public void attachToDrawFramebuffer(int attachment, int level)
+        public final void attachToDrawFramebuffer(int attachment, int level)
         {
             glFramebufferTextureLayer(GL_DRAW_FRAMEBUFFER, attachment, textureId, level, layerIndex);
             OpenGLContext.errorCheck();
         }
 
         @Override
-        public void attachToReadFramebuffer(int attachment, int level)
+        public final void attachToReadFramebuffer(int attachment, int level)
         {
             glFramebufferTextureLayer(GL_READ_FRAMEBUFFER, attachment, textureId, level, layerIndex);
             OpenGLContext.errorCheck();

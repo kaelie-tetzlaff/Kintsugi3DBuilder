@@ -46,76 +46,76 @@ class TestingState implements Kintsugi3DBuilderState
     }
 
     @Override
-    public ReadonlyViewpointModel getCameraModel()
+    public final ReadonlyViewpointModel getCameraModel()
     {
         return cameraModel;
     }
 
     @Override
-    public ReadonlyLightingEnvironmentModel getLightingModel()
+    public final ReadonlyLightingEnvironmentModel getLightingModel()
     {
         return lightingEnvironmentModel;
     }
 
     @Override
-    public ReadonlyObjectPoseModel getObjectModel()
+    public final ReadonlyObjectPoseModel getObjectModel()
     {
         return objectModel;
     }
 
     @Override
-    public ActiveShaderModel getUserShaderModel()
+    public final ActiveShaderModel getUserShaderModel()
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public SelectableViewListModel getViewListModel()
+    public final SelectableViewListModel getViewListModel()
     {
         return viewListModel;
     }
 
     @Override
-    public TabsModel getTabModels()
+    public final TabsModel getTabModels()
     {
         return tabsModel;
     }
 
     @Override
-    public CarouselModel getCarouselModel()
+    public final CarouselModel getCarouselModel()
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public GeneralSettingsModel getSettingsModel()
+    public final GeneralSettingsModel getSettingsModel()
     {
         return settings;
     }
 
     @Override
-    public CacheModel getCacheModel()
+    public final CacheModel getCacheModel()
     {
         return cacheModel;
     }
 
     @Override
-    public ProjectModel getProjectModel()
+    public final ProjectModel getProjectModel()
     {
         return projectModel;
     }
 
-    public List<ErrorMessage> getErrors()
+    public final List<ErrorMessage> getErrors()
     {
         return projectModel.getErrors();
     }
 
-    public List<ErrorMessage> getWarnings()
+    public final List<ErrorMessage> getWarnings()
     {
         return projectModel.getWarnings();
     }
 
-    public void clearErrorsAndWarnings()
+    public final void clearErrorsAndWarnings()
     {
         projectModel.clearErrorsAndWarnings();
     }

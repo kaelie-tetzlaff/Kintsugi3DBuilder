@@ -24,13 +24,8 @@ public class ImageIdentifier
         this.id = id;
     }
 
-    public ImageIdentifier(String name, String group)
-    {
-        this(name, -1, group);
-    }
-
     public ImageIdentifier(String name)
     {
-        this(name, null);
+        this(name, -1, null);
     }
 }

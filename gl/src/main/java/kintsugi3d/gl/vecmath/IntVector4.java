@@ -11,6 +11,8 @@
 
 package kintsugi3d.gl.vecmath;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.IntUnaryOperator;
@@ -43,38 +45,38 @@ public class IntVector4 implements Iterable<Integer>
         this(value, value, value, value);
     }
 
-    public Vector4 asFloatingPoint()
+    public final Vector4 asFloatingPoint()
     {
         return new Vector4(x, y, z, w);
     }
 
-    public Vector4 asFloatingPointNormalized()
+    public final Vector4 asFloatingPointNormalized()
     {
         return new Vector4(x / 255.0f, y / 255.0f, z / 255.0f, w / 255.0f);
     }
 
-    public DoubleVector4 asDoubleFloatingPoint()
+    public final DoubleVector4 asDoubleFloatingPoint()
     {
         return new DoubleVector4(x, y, z, w);
     }
 
-    public DoubleVector4 asDoubleFloatingPointNormalized()
+    public final DoubleVector4 asDoubleFloatingPointNormalized()
     {
         return new DoubleVector4(x / 255.0, y / 255.0, z / 255.0, w / 255.0);
     }
 
-    public IntVector2 getXY()
+    public final IntVector2 getXY()
     {
         return new IntVector2(this.x, this.y);
     }
 
-    public IntVector3 getXYZ()
+    public final IntVector3 getXYZ()
     {
         return new IntVector3(this.x, this.y, this.z);
     }
 
     @Override
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         if (obj instanceof IntVector4)
         {
@@ -88,12 +90,12 @@ public class IntVector4 implements Iterable<Integer>
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return 31 * (31 * (31 * (31 + x) + y) + z) + w;
     }
 
-    public IntVector4 plus(IntVector4 other)
+    public final IntVector4 plus(IntVector4 other)
     {
         return new IntVector4(
             this.x + other.x,
@@ -103,7 +105,7 @@ public class IntVector4 implements Iterable<Integer>
         );
     }
 
-    public IntVector4 minus(IntVector4 other)
+    public final IntVector4 minus(IntVector4 other)
     {
         return new IntVector4(
             this.x - other.x,
@@ -113,37 +115,37 @@ public class IntVector4 implements Iterable<Integer>
         );
     }
 
-    public IntVector4 negated()
+    public final IntVector4 negated()
     {
         return new IntVector4(-this.x, -this.y, -this.z, -this.w);
     }
 
-    public IntVector4 times(int s)
+    public final IntVector4 times(int s)
     {
         return new IntVector4(s*this.x, s*this.y, s*this.z, s*this.w);
     }
 
-    public IntVector4 dividedBy(int s)
+    public final IntVector4 dividedBy(int s)
     {
         return new IntVector4(this.x/s, this.y/s, this.z/s, this.w/s);
     }
 
-    public int dot(IntVector4 other)
+    public final int dot(IntVector4 other)
     {
         return this.x * other.x + this.y * other.y + this.z * other.z + this.w * other.w;
     }
 
-    public double length()
+    public final double length()
     {
         return Math.sqrt(this.dot(this));
     }
 
-    public double distance(IntVector4 other)
+    public final double distance(IntVector4 other)
     {
         return this.minus(other).length();
     }
 
-    public IntVector4 applyOperator(IntUnaryOperator operator)
+    public final IntVector4 applyOperator(IntUnaryOperator operator)
     {
         return new IntVector4(operator.applyAsInt(x), operator.applyAsInt(y), operator.applyAsInt(z), operator.applyAsInt(w));
     }
@@ -153,19 +155,19 @@ public class IntVector4 implements Iterable<Integer>
      * @param operator
      * @return
      */
-    public IntVector4 applyOperatorXYZ(IntUnaryOperator operator)
+    public final IntVector4 applyOperatorXYZ(IntUnaryOperator operator)
     {
         return new IntVector4(operator.applyAsInt(x), operator.applyAsInt(y), operator.applyAsInt(z), w);
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return String.format("IntVector4{x=%d, y=%d, z=%d, w=%d}", x, y, z, w);
     }
 
     @Override
-    public Iterator<Integer> iterator()
+    public final @NotNull Iterator<Integer> iterator()
     {
         return Arrays.asList(x, y, z, w).iterator();
     }

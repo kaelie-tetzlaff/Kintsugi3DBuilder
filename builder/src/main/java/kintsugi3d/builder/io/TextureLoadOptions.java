@@ -17,32 +17,32 @@ public class TextureLoadOptions
     private boolean mipmapsRequested = false;
     private boolean compressionRequested = false;
 
-    public boolean isLinearFilteringRequested()
+    public final boolean isLinearFilteringRequested()
     {
         return linearFilteringRequested;
     }
 
-    public void setLinearFilteringRequested(boolean linearFilteringRequested)
+    public final void setLinearFilteringRequested(boolean linearFilteringRequested)
     {
         this.linearFilteringRequested = linearFilteringRequested;
     }
 
-    public boolean areMipmapsRequested()
+    public final boolean areMipmapsRequested()
     {
         return mipmapsRequested;
     }
 
-    public void setMipmapsRequested(boolean mipmapsRequested)
+    public final void setMipmapsRequested(boolean mipmapsRequested)
     {
         this.mipmapsRequested = mipmapsRequested;
     }
 
-    public boolean isCompressionRequested()
+    public final boolean isCompressionRequested()
     {
         return compressionRequested;
     }
 
-    public void setCompressionRequested(boolean compressionRequested)
+    public final void setCompressionRequested(boolean compressionRequested)
     {
         this.compressionRequested = compressionRequested;
     }

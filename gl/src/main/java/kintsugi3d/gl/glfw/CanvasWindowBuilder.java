@@ -31,14 +31,14 @@ public class CanvasWindowBuilder<ContextType extends WindowContextBase<ContextTy
         this.contextFactory = contextFactory;
     }
 
-    public CanvasWindowBuilder<ContextType> setDefaultFramebufferCreator(Function<ContextType, DoubleFramebuffer<ContextType>> createDefaultFramebuffer)
+    public final CanvasWindowBuilder<ContextType> setDefaultFramebufferCreator(Function<ContextType, DoubleFramebuffer<ContextType>> createDefaultFramebuffer)
     {
         this.createDefaultFramebuffer = createDefaultFramebuffer;
         return this;
     }
 
     @Override
-    public CanvasWindow<ContextType> create()
+    public final CanvasWindow<ContextType> create()
     {
         return new CanvasWindow<>(contextFactory, createDefaultFramebuffer, this);
     }

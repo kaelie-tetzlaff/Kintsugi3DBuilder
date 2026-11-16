@@ -22,7 +22,7 @@ public abstract class SerializableLightGroupSettings<LightInstanceSettingType ex
 {
 
     @Override
-    public Element toDOMElement(Document document)
+    public final Element toDOMElement(Document document)
     {
         Element element = document.createElement("LightGroup");
         element.setAttribute("name", getName());

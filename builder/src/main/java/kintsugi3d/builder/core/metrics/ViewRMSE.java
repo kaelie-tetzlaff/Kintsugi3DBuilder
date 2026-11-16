@@ -22,7 +22,7 @@ public class ViewRMSE implements ReadonlyViewRMSE
      * @return
      */
     @Override
-    public ColorAppearanceRMSE usingBasisWeights()
+    public final ColorAppearanceRMSE usingBasisWeights()
     {
         return basisWeights;
     }
@@ -32,7 +32,7 @@ public class ViewRMSE implements ReadonlyViewRMSE
      * @return
      */
     @Override
-    public ColorAppearanceRMSE usingReflectivity()
+    public final ColorAppearanceRMSE usingReflectivity()
     {
         return reflectivity;
     }
@@ -42,7 +42,7 @@ public class ViewRMSE implements ReadonlyViewRMSE
      * @return
      */
     @Override
-    public ColorAppearanceRMSE usingMetallicity()
+    public final ColorAppearanceRMSE usingMetallicity()
     {
         return metallicity;
     }

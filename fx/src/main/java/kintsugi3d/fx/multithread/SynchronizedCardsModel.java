@@ -14,10 +14,10 @@ package kintsugi3d.fx.multithread;
 import javafx.application.Platform;
 import kintsugi3d.builder.state.cards.CardsModel;
 import kintsugi3d.builder.state.cards.ProjectDataCard;
+import kintsugi3d.builder.state.cards.RefreshFunction;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class SynchronizedCardsModel<T> implements CardsModel<T>
@@ -30,31 +30,31 @@ public class SynchronizedCardsModel<T> implements CardsModel<T>
     }
 
     @Override
-    public List<? extends Map<String, Runnable>> getGlobalActions()
+    public final List<? extends Map<String, Runnable>> getGlobalActions()
     {
         return base.getGlobalActions();
     }
 
     @Override
-    public List<ProjectDataCard> getCardList()
+    public final List<ProjectDataCard> getCardList()
     {
         return base.getCardList();
     }
 
     @Override
-    public void setCardList(List<ProjectDataCard> cards)
+    public final void setCardList(List<ProjectDataCard> cards)
     {
         Platform.runLater(() -> base.setCardList(cards));
     }
 
     @Override
-    public void refreshCards(Function<ProjectDataCard, T> filter)
+    public final void refreshCards(RefreshFunction<T> refreshedData)
     {
-        Platform.runLater(() -> base.refreshCards(filter));
+        Platform.runLater(() -> base.refreshCards(refreshedData));
     }
 
     @Override
-    public void deleteCards(Predicate<ProjectDataCard> filter)
+    public final void deleteCards(Predicate<ProjectDataCard> filter)
     {
         Platform.runLater(() -> base.deleteCards(filter));
     }

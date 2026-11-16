@@ -112,13 +112,13 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
     }
 
     @Override
-    public Collection<? extends IndexAssignableBasisMaterialInfo> getMaterials()
+    public final Collection<? extends IndexAssignableBasisMaterialInfo> getMaterials()
     {
         return basis.values();
     }
 
     @Override
-    public List<BasisMaterialInfo> getIndexableMaterialList()
+    public final List<BasisMaterialInfo> getIndexableMaterialList()
     {
         BasisMaterialInfo[] result = new BasisMaterialInfo[basis.size()];
         for (BasisMaterialInfo material : basis.values())
@@ -130,31 +130,31 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
     }
 
     @Override
-    public BasisMaterialInfo getMaterial(String materialName)
+    public final BasisMaterialInfo getMaterial(String materialName)
     {
         return basis.get(materialName);
     }
 
     @Override
-    public int getMaterialCount()
+    public final int getMaterialCount()
     {
         return basis.size();
     }
 
     @Override
-    public int getEnabledMaterialCount()
+    public final int getEnabledMaterialCount()
     {
         return enabledMaterialCount;
     }
 
     @Override
-    public int getSpecularResolution()
+    public final int getSpecularResolution()
     {
         return specularResolution;
     }
 
     @Override
-    public IndexAssignableBasisMaterialInfo deleteMaterial(String name)
+    public final IndexAssignableBasisMaterialInfo deleteMaterial(String name)
     {
         MutableBasisMaterialInfo removed = basis.remove(name);
         if (removed != null)
@@ -177,7 +177,7 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
     }
 
     @Override
-    public void save(File outputDirectory, String filenameOverride)
+    public final void save(File outputDirectory, String filenameOverride)
     {
         SpecularFitSerializer.serializeBasisFunctions(specularResolution, this, outputDirectory, filenameOverride);
     }
@@ -187,7 +187,7 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
      * @return
      */
     @Override
-    public MutableMaterialBasis copy()
+    public final MutableMaterialBasis copy()
     {
         LinkedHashMap<String, MutableBasisMaterialInfo> copy = new LinkedHashMap<>(basis.size());
         for (var entry : basis.entrySet())
@@ -199,7 +199,7 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
     }
 
     @Override
-    public BasisMaterialInfo disableMaterial(String name)
+    public final BasisMaterialInfo disableMaterial(String name)
     {
         MutableBasisMaterialInfo material = basis.get(name);
 
@@ -225,7 +225,7 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
     }
 
     @Override
-    public BasisMaterialInfo enableMaterial(String name)
+    public final BasisMaterialInfo enableMaterial(String name)
     {
         MutableBasisMaterialInfo material = basis.get(name);
 
@@ -251,7 +251,7 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
     }
 
     @Override
-    public boolean isMaterialEnabled(String name)
+    public final boolean isMaterialEnabled(String name)
     {
         return basis.get(name).isEnabled();
     }

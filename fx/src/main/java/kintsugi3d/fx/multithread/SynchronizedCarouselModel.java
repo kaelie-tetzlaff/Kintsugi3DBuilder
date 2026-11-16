@@ -29,25 +29,25 @@ public class SynchronizedCarouselModel implements CarouselModel
     }
 
     @Override
-    public List<CarouselItem> getCarouselItems()
+    public final List<CarouselItem> getCarouselItems()
     {
         return Collections.unmodifiableList(base.getCarouselItems());
     }
 
     @Override
-    public void addToCarousel(ShaderInfo shader)
+    public final void addToCarousel(ShaderInfo shader)
     {
         Platform.runLater(() -> base.addToCarousel(shader));
     }
 
     @Override
-    public void removeFromCarousel(ShaderInfo shader)
+    public final void removeFromCarousel(ShaderInfo shader)
     {
         Platform.runLater(() -> base.removeFromCarousel(shader));
     }
 
     @Override
-    public void clearCarousel()
+    public final void clearCarousel()
     {
         Platform.runLater(base::clearCarousel);
     }

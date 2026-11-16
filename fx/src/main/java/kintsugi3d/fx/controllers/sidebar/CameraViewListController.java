@@ -26,7 +26,7 @@ public class CameraViewListController
 
     private SearchableListView<View> searchableListView;
 
-    public void init(ObservableViewListModel cameraViewListModel)
+    public final void init(ObservableViewListModel cameraViewListModel)
     {
         cameraViewListModel.setSelectedCameraViewModel(cameraViewList.getSelectionModel());
         cameraViewListModel.setCameraViewListProperty(cameraViewList.itemsProperty());
@@ -34,7 +34,7 @@ public class CameraViewListController
         searchableListView = SearchableListView.createUnboundInstance(cameraViewList, searchTxtField);
     }
 
-    public void rebindSearchableListView(){
+    public final void rebindSearchableListView(){
         searchableListView.bind();
     }
 }

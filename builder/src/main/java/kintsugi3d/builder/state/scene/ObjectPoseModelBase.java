@@ -18,20 +18,20 @@ import kintsugi3d.util.OrbitPolarConverter;
 public abstract class ObjectPoseModelBase implements ManipulableObjectPoseModel
 {
     @Override
-    public Matrix4 getTransformationMatrix()
+    public final Matrix4 getTransformationMatrix()
     {
         return getOrbit().times(Matrix4.translate(getCenter()))
                 .times(Matrix4.scale(getScale()));
     }
 
     @Override
-    public void setTransformationMatrix(Matrix4 transformationMatrix)
+    public final void setTransformationMatrix(Matrix4 transformationMatrix)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Matrix4 getOrbit()
+    public final Matrix4 getOrbit()
     {
         // Intentionally swapping y and x components
         Vector3 polar = new Vector3(getRotationY(), getRotationX(), getRotationZ());
@@ -40,7 +40,7 @@ public abstract class ObjectPoseModelBase implements ManipulableObjectPoseModel
 
     @SuppressWarnings("SuspiciousNameCombination")
     @Override
-    public void setOrbit(Matrix4 orbit)
+    public final void setOrbit(Matrix4 orbit)
     {
         Vector3 polar = OrbitPolarConverter.convertToPolarCoordinates(orbit);
 

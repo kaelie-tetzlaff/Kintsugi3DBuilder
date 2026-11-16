@@ -238,14 +238,8 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
 
     private Element findTargetCamera(String imageName)
     {
-        for (Element camera : cameras)
-        {
-            if (camera.getAttribute("label").matches(".*" + imageName + ".*"))
-            {
-                return camera;
-            }
-        }
-
-        return null;
+        return cameras.stream()
+            .filter(camera -> camera.getAttribute("label").matches(".*" + imageName + ".*"))
+            .findFirst().orElse(null);
     }
 }

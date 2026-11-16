@@ -56,74 +56,74 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
     }
 
     @Override
-    public void flush()
+    public final void flush()
     {
         glFlush();
         errorCheck();
     }
 
     @Override
-    public void finish()
+    public final void finish()
     {
         glFinish();
         errorCheck();
     }
 
     @Override
-    public OpenGLContextState getState()
+    public final OpenGLContextState getState()
     {
         return this.state;
     }
 
     @Override
-    public Shader<OpenGLContext> createShader(ShaderType type, String source)
+    public final Shader<OpenGLContext> createShader(ShaderType type, String source)
     {
         return new OpenGLShader(this, getShaderType(type), source);
     }
 
     @Override
-    public Shader<OpenGLContext> createShader(ShaderType type, File file, Map<String, Object> defines) throws IOException
+    public final Shader<OpenGLContext> createShader(ShaderType type, File file, Map<String, Object> defines) throws IOException
     {
         return new OpenGLShader(this, getShaderType(type), file, defines);
     }
 
     @Override
-    public ProgramBuilder<OpenGLContext> getShaderProgramBuilder()
+    public final ProgramBuilder<OpenGLContext> getShaderProgramBuilder()
     {
         return new OpenGLProgramBuilder(this);
     }
 
     @Override
-    public DoubleFramebuffer<OpenGLContext> getDefaultFramebuffer()
+    public final DoubleFramebuffer<OpenGLContext> getDefaultFramebuffer()
     {
         return this.defaultFramebuffer;
     }
 
-    void setDefaultFramebuffer(DoubleFramebuffer<OpenGLContext> defaultFramebuffer)
+    final void setDefaultFramebuffer(DoubleFramebuffer<OpenGLContext> defaultFramebuffer)
     {
         this.defaultFramebuffer = defaultFramebuffer;
     }
 
     @Override
-    public VertexBuffer<OpenGLContext> createVertexBuffer()
+    public final VertexBuffer<OpenGLContext> createVertexBuffer()
     {
         return new OpenGLVertexBuffer(this);
     }
 
     @Override
-    public IndexBuffer<OpenGLContext> createIndexBuffer()
+    public final IndexBuffer<OpenGLContext> createIndexBuffer()
     {
         return new OpenGLIndexBuffer(this);
     }
 
     @Override
-    public UniformBuffer<OpenGLContext> createUniformBuffer()
+    public final UniformBuffer<OpenGLContext> createUniformBuffer()
     {
         return new OpenGLUniformBuffer(this);
     }
 
     @Override
-    public Drawable<OpenGLContext> createDrawable(Program<OpenGLContext> program)
+    public final Drawable<OpenGLContext> createDrawable(Program<OpenGLContext> program)
     {
         if (program instanceof OpenGLProgramObject)
         {
@@ -136,13 +136,13 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
     }
 
     @Override
-    public FramebufferObjectBuilder<OpenGLContext> buildFramebufferObject(int width, int height)
+    public final FramebufferObjectBuilder<OpenGLContext> buildFramebufferObject(int width, int height)
     {
         return new OpenGLFramebufferObjectBuilder(this, width, height);
     }
 
     @Override
-    public TextureFactory<OpenGLContext> getTextureFactory()
+    public final TextureFactory<OpenGLContext> getTextureFactory()
     {
         return this.textureFactory;
     }
@@ -190,7 +190,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         }
     }
 
-    void bindTextureToUnit(int textureUnitIndex, OpenGLTexture texture)
+    final void bindTextureToUnit(int textureUnitIndex, OpenGLTexture texture)
     {
         glActiveTexture(GL_TEXTURE0 + textureUnitIndex);
         errorCheck();
@@ -201,7 +201,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         textureBindings.put(textureUnitIndex, texture);
     }
 
-    void bindUniformBufferToIndex(int bufferBindingIndex, OpenGLUniformBuffer buffer)
+    final void bindUniformBufferToIndex(int bufferBindingIndex, OpenGLUniformBuffer buffer)
     {
         if (buffer.hasData())
         {
@@ -250,7 +250,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         }
     }
 
-    void updateTextureBindings(List<OpenGLTexture> newTextureBindings)
+    final void updateTextureBindings(List<OpenGLTexture> newTextureBindings)
     {
         updateBindingsGeneric(textureBindings, newTextureBindings,
             (oldTexture, newTexture) -> oldTexture.getTextureTarget() != newTexture.getTextureTarget(),
@@ -265,7 +265,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
             (textureUnitIndex, textureToBind) -> textureToBind.bindToTextureUnit(textureUnitIndex));
     }
 
-    void updateUniformBufferBindings(List<OpenGLUniformBuffer> newUniformBufferBindings)
+    final void updateUniformBufferBindings(List<OpenGLUniformBuffer> newUniformBufferBindings)
     {
         updateBindingsGeneric(uniformBufferBindings, newUniformBufferBindings,
             (oldBuffer, newBuffer) -> oldBuffer.getBufferTarget() != newBuffer.getBufferTarget(),

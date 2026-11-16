@@ -37,7 +37,7 @@ final class LightTool implements PickerTool
     private static class Builder extends ToolBuilderBase<LightTool>
     {
         @Override
-        public LightTool create()
+        public final LightTool create()
         {
             return new LightTool(getLightingEnvironmentModel(), getSceneViewport());
         }
@@ -243,14 +243,14 @@ final class LightTool implements PickerTool
             .plus(new Vector3(
                 0,
                 sceneViewport.getLightWidgetScale() *
-                    (float)Math.sin(lightingModel.getLight(lightIndex).getInclination() * Math.PI / 180),
+                    (float) StrictMath.sin(lightingModel.getLight(lightIndex).getInclination() * Math.PI / 180),
                 0));
 
         float t = (azimuthCenter.y - viewportCenter.y) / cursorDirection.y;
         Vector3 newAzimuthDirection = viewportCenter.plus(cursorDirection.times(t)).minus(azimuthCenter);
         Vector2 newAzimuthDirectionNormalized = new Vector2(newAzimuthDirection.x, newAzimuthDirection.z).normalized();
 
-        return (float)Math.atan2(-newAzimuthDirectionNormalized.x, newAzimuthDirectionNormalized.y);
+        return (float) StrictMath.atan2(-newAzimuthDirectionNormalized.x, newAzimuthDirectionNormalized.y);
     }
 
     private float getInclinationAtWindowPosition(DoubleVector2 normalizedPosition)
@@ -264,13 +264,13 @@ final class LightTool implements PickerTool
 
         double azimuth = lightingModel.getLight(lightIndex).getAzimuth() * Math.PI / 180;
 
-        Vector3 lightDirectionProjected = new Vector3(-(float)Math.sin(azimuth), 0, (float)Math.cos(azimuth));
+        Vector3 lightDirectionProjected = new Vector3(-(float) StrictMath.sin(azimuth), 0, (float) StrictMath.cos(azimuth));
         Vector3 inclinationAxis = new Vector3(-lightDisplacement.z, 0, lightDisplacement.x).normalized();
 
         float t = lightCenter.minus(viewportCenter).dot(inclinationAxis) / cursorDirection.dot(inclinationAxis);
         Vector3 newLightDirection = viewportCenter.plus(cursorDirection.times(t)).minus(lightCenter).normalized();
 
-        return (float)Math.atan2(newLightDirection.y, newLightDirection.dot(lightDirectionProjected));
+        return (float) StrictMath.atan2(newLightDirection.y, newLightDirection.dot(lightDirectionProjected));
     }
 
     private float getDistanceAtWindowPosition(DoubleVector2 normalizedPosition)

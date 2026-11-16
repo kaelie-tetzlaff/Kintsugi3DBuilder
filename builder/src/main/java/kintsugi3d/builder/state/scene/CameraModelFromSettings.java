@@ -19,13 +19,13 @@ public abstract class CameraModelFromSettings extends ViewpointModelBase
     protected abstract CameraSettings getCameraSettings();
 
     @Override
-    public float getLog10Distance()
+    public final float getLog10Distance()
     {
         return (float) getCameraSettings().getLog10Distance();
     }
 
     @Override
-    public void setLog10Distance(float log10Distance)
+    public final void setLog10Distance(float log10Distance)
     {
         if (!getCameraSettings().isLocked())
         {
@@ -34,7 +34,7 @@ public abstract class CameraModelFromSettings extends ViewpointModelBase
     }
 
     @Override
-    public Vector3 getTarget()
+    public final Vector3 getTarget()
     {
         return new Vector3((float) getCameraSettings().getXCenter(),
             (float) getCameraSettings().getYCenter(),
@@ -42,7 +42,7 @@ public abstract class CameraModelFromSettings extends ViewpointModelBase
     }
 
     @Override
-    public void setTarget(Vector3 target)
+    public final void setTarget(Vector3 target)
     {
         if (!getCameraSettings().isLocked())
         {
@@ -53,13 +53,13 @@ public abstract class CameraModelFromSettings extends ViewpointModelBase
     }
 
     @Override
-    public float getTwist()
+    public final float getTwist()
     {
         return (float) getCameraSettings().getTwist();
     }
 
     @Override
-    public void setTwist(float twist)
+    public final void setTwist(float twist)
     {
         if (!getCameraSettings().isLocked())
         {
@@ -68,13 +68,13 @@ public abstract class CameraModelFromSettings extends ViewpointModelBase
     }
 
     @Override
-    public float getAzimuth()
+    public final float getAzimuth()
     {
         return (float) getCameraSettings().getAzimuth();
     }
 
     @Override
-    public void setAzimuth(float azimuth)
+    public final void setAzimuth(float azimuth)
     {
         if (!getCameraSettings().isLocked())
         {
@@ -83,13 +83,13 @@ public abstract class CameraModelFromSettings extends ViewpointModelBase
     }
 
     @Override
-    public float getInclination()
+    public final float getInclination()
     {
         return (float) getCameraSettings().getInclination();
     }
 
     @Override
-    public void setInclination(float inclination)
+    public final void setInclination(float inclination)
     {
         if (!getCameraSettings().isLocked())
         {
@@ -105,19 +105,19 @@ public abstract class CameraModelFromSettings extends ViewpointModelBase
      * @return true for locked
      */
     @Override
-    public boolean isLocked()
+    public final boolean isLocked()
     {
         return getCameraSettings().isLocked();
     }
 
     @Override
-    public float getHorizontalFOV()
+    public final float getHorizontalFOV()
     {
         return (float) (getCameraSettings().getFOV() * Math.PI / 180);
     }
 
     @Override
-    public void setHorizontalFOV(float fov)
+    public final void setHorizontalFOV(float fov)
     {
         if (!getCameraSettings().isLocked())
         {
@@ -126,13 +126,13 @@ public abstract class CameraModelFromSettings extends ViewpointModelBase
     }
 
     @Override
-    public float getFocalLength()
+    public final float getFocalLength()
     {
         return (float) getCameraSettings().getFocalLength();
     }
 
     @Override
-    public void setFocalLength(float focalLength)
+    public final void setFocalLength(float focalLength)
     {
         if (!getCameraSettings().isLocked())
         {
@@ -141,13 +141,13 @@ public abstract class CameraModelFromSettings extends ViewpointModelBase
     }
 
     @Override
-    public boolean isOrthographic()
+    public final boolean isOrthographic()
     {
         return getCameraSettings().isOrthographic();
     }
 
     @Override
-    public void setOrthographic(boolean orthographic)
+    public final void setOrthographic(boolean orthographic)
     {
         if (!getCameraSettings().isLocked())
         {

@@ -31,41 +31,41 @@ public class WeightmapOverlayShaderInfo implements ShaderInfo
     }
 
     @Override
-    public String getFriendlyName()
+    public final String getFriendlyName()
     {
         return baseShader.getFriendlyName();
     }
 
     @Override
-    public String getFullName()
+    public final String getFullName()
     {
         return String.format("%s [%s]", baseShader.getFullName(), weightmapMaterial.getFriendlyName());
     }
 
     @Override
-    public String getFilename()
+    public final String getFilename()
     {
         return baseShader.getFilename();
     }
 
     @Override
-    public File getFile()
+    public final File getFile()
     {
         return baseShader.getFile();
     }
 
-    public ShaderInfo getBaseShader()
+    public final ShaderInfo getBaseShader()
     {
         return baseShader;
     }
 
-    public BasisMaterialInfo getWeightmapMaterial()
+    public final BasisMaterialInfo getWeightmapMaterial()
     {
         return weightmapMaterial;
     }
 
     @Override
-    public Map<String, Optional<Object>> getDefines()
+    public final Map<String, Optional<Object>> getDefines()
     {
         Map<String, Optional<Object>> defines = new HashMap<>(baseShader.getDefines());
         defines.put("OVERLAY_MODE", Optional.of("OVERLAY_MODE_WEIGHTMAP"));
@@ -74,13 +74,13 @@ public class WeightmapOverlayShaderInfo implements ShaderInfo
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return Objects.hash(baseShader.hashCode(), weightmapMaterial.getName());
     }
 
     @Override
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         if (obj instanceof WeightmapOverlayShaderInfo)
         {

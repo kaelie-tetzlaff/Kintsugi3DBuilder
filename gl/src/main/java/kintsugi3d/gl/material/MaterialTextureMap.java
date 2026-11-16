@@ -33,67 +33,67 @@ public class MaterialTextureMap implements ReadonlyMaterialTextureMap
     }
 
     @Override
-    public String getMapName()
+    public final String getMapName()
     {
         return mapName;
     }
 
-    public void setMapName(String mapName)
+    public final void setMapName(String mapName)
     {
         this.mapName = mapName;
     }
 
     @Override
-    public boolean isClampingRequired()
+    public final boolean isClampingRequired()
     {
         return clampingRequired;
     }
 
-    public void setClampingRequired(boolean clampingEnabled)
+    public final void setClampingRequired(boolean clampingEnabled)
     {
         this.clampingRequired = clampingEnabled;
     }
 
     @Override
-    public float getBase()
+    public final float getBase()
     {
         return base;
     }
 
-    public void setBase(float base)
+    public final void setBase(float base)
     {
         this.base = base;
     }
 
     @Override
-    public float getGain()
+    public final float getGain()
     {
         return gain;
     }
 
-    public void setGain(float gain)
+    public final void setGain(float gain)
     {
         this.gain = gain;
     }
 
     @Override
-    public Vector3 getOffset()
+    public final Vector3 getOffset()
     {
         return offset;
     }
 
-    public void setOffset(Vector3 offset)
+    public final void setOffset(Vector3 offset)
     {
         this.offset = offset;
     }
 
     @Override
-    public Vector3 getScale()
+    public final Vector3 getScale()
     {
         return scale;
     }
 
-    public void setScale(Vector3 scale)
+    public final void setScale(Vector3 scale)
     {
         this.scale = scale;
     }

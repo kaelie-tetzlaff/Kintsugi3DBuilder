@@ -34,19 +34,19 @@ public class SelectionPageController<T> extends PageControllerBase<T, SelectionP
     @FXML private VBox optionsRoot;
 
     @Override
-    public Region getRootNode()
+    public final Region getRootNode()
     {
         return rootNode;
     }
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         this.getCanAdvanceObservable().bind(buttons.selectedToggleProperty().isNotNull());
     }
 
     @Override
-    public void refresh()
+    public final void refresh()
     {
         ToggleButton prevSelected = (ToggleButton)buttons.getSelectedToggle();
         String prevSelectedName = null;

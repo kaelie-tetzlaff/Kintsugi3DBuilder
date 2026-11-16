@@ -40,7 +40,7 @@ public class SettingsModelDeserializer extends StdDeserializer<GeneralSettingsMo
     }
 
     @Override
-    public GeneralSettingsModel deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException
+    public final GeneralSettingsModel deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException
     {
         GeneralSettingsModel outputModel = new SimpleGeneralSettingsModel();
         ObjectMapper mapper = new ObjectMapper();

@@ -33,13 +33,13 @@ public class NamedTextureInfo extends TextureInfo
     }
 
     @Override
-    public ShaderInfo getVisualizationShader()
+    public final ShaderInfo getVisualizationShader()
     {
         return new TextureVisualizationShaderInfo(this, "rendermodes/viewTextureSimple.frag");
     }
 
     @Override
-    public void refresh(ImageBasedRenderable<?> instance) throws IOException
+    public final void refresh(ImageBasedRenderable<?> instance) throws IOException
     {
         // TODO switch to observable pattern for textures?
         TextureResources<?> resources = instance.getResources().getTextureResources();
@@ -47,7 +47,7 @@ public class NamedTextureInfo extends TextureInfo
     }
 
     @Override
-    public ImageReplacer getReplaceData(ImageBasedRenderable<?> instance)
+    public final ImageReplacer getReplaceData(ImageBasedRenderable<?> instance)
     {
                 return new NamedTextureReplacer(instance.getResources().getTextureResources(), this,
             new File(Global.io().validateRenderable().getLoadedViewSet().getSupportingFilesDirectory(),

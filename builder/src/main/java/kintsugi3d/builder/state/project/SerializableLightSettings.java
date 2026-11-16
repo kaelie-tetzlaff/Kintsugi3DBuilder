@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 public abstract class SerializableLightSettings implements DOMConvertable, LightSettings
 {
     @Override
-    public Element toDOMElement(Document document)
+    public final Element toDOMElement(Document document)
     {
         Element element = document.createElement("LightInstance");
         element.setAttribute("targetX", Double.toString(getTargetX()));

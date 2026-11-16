@@ -51,7 +51,7 @@ public class CacheSettingsController implements SystemSettingsControllerBase
     private ObservableCacheModel cacheModel;
 
     @Override
-    public void initializePage(Window parentWindow, JavaFXState state)
+    public final void initializePage(Window parentWindow, JavaFXState state)
     {
         previewImageCacheLabel.setText(ApplicationFolders.getPreviewImagesRootDirectory().toString());
         specularFitCacheLabel.setText(ApplicationFolders.getFitCacheRootDirectory().toString());
@@ -76,7 +76,7 @@ public class CacheSettingsController implements SystemSettingsControllerBase
         bind(state.getSettingsModel());
     }
 
-    public void bind(ObservableGeneralSettingsModel injectedSettingsModel)
+    private void bind(ObservableGeneralSettingsModel injectedSettingsModel)
     {
         sizeCheck.selectedProperty().bindBidirectional(injectedSettingsModel.getBooleanProperty("sizePromptEnabled"));
         recentCheck.selectedProperty().bindBidirectional(injectedSettingsModel.getBooleanProperty("recentPromptEnabled"));

@@ -11,9 +11,9 @@
 
 package kintsugi3d.optimization;
 
+import kintsugi3d.gl.util.ColorArrayList;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
-import kintsugi3d.gl.util.ColorArrayList;
 import org.ejml.simple.SimpleMatrix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +38,7 @@ public class KMeansClustering
         this.colorMap = colorMap;
     }
 
-    public List<Vector3> makeClusters(List<SimpleMatrix> solutionOut)
+    public final List<Vector3> makeClusters(List<SimpleMatrix> solutionOut)
     {
         // k-means++ initialization
         Random random = new SecureRandom();

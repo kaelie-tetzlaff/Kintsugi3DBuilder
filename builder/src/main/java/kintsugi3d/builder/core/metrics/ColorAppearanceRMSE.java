@@ -22,45 +22,45 @@ public class ColorAppearanceRMSE implements ReadonlyColorAppearanceRMSE
     private long sampleCount = 0;
 
     @Override
-    public double getNormalizedLinear()
+    public final double getNormalizedLinear()
     {
         return normalizedLinear;
     }
 
-    public void setNormalizedLinear(double normalizedLinear)
+    public final void setNormalizedLinear(double normalizedLinear)
     {
         this.normalizedLinear = normalizedLinear;
     }
 
     @Override
-    public double getNormalizedSRGB()
+    public final double getNormalizedSRGB()
     {
         return normalizedSRGB;
     }
 
-    public void setNormalizedSRGB(double normalizedSRGB)
+    public final void setNormalizedSRGB(double normalizedSRGB)
     {
         this.normalizedSRGB = normalizedSRGB;
     }
 
     @Override
-    public double getEncodedGroundTruth()
+    public final double getEncodedGroundTruth()
     {
         return encodedGroundTruth;
     }
 
-    public void setEncodedGroundTruth(double encodedGroundTruth)
+    public final void setEncodedGroundTruth(double encodedGroundTruth)
     {
         this.encodedGroundTruth = encodedGroundTruth;
     }
 
     @Override
-    public long getSampleCount()
+    public final long getSampleCount()
     {
         return sampleCount;
     }
 
-    public void setSampleCount(long sampleCount)
+    public final void setSampleCount(long sampleCount)
     {
         this.sampleCount = sampleCount;
     }

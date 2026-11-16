@@ -42,7 +42,7 @@ public class MaterialCardFactory extends ProjectDataCardFactoryBase<BasisMateria
     }
 
     @Override
-    public List<? extends Map<String, Runnable>> getGlobalActions()
+    public final List<? extends Map<String, Runnable>> getGlobalActions()
     {
         return List.of(Map.of(
             "Disable All", () ->
@@ -78,13 +78,13 @@ public class MaterialCardFactory extends ProjectDataCardFactoryBase<BasisMateria
     }
 
     @Override
-    public Class<BasisMaterialInfo> getDataClass()
+    public final Class<BasisMaterialInfo> getDataClass()
     {
         return BasisMaterialInfo.class;
     }
 
     @Override
-    public ProjectDataCard createCard(BasisMaterialInfo material)
+    public final ProjectDataCard createCard(BasisMaterialInfo material)
     {
         String name = material.getName();
 
@@ -150,7 +150,7 @@ public class MaterialCardFactory extends ProjectDataCardFactoryBase<BasisMateria
     }
 
     @Override
-    public List<ProjectDataCard> createAllCards()
+    public final List<ProjectDataCard> createAllCards()
     {
         ReadonlyBasisResources<? extends Context<?>> basisResources =
             getInstance().getResources().getTextureResources().getBasisResources();

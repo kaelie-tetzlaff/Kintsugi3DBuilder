@@ -34,28 +34,28 @@ public class SpecularWeightModel implements LeastSquaresModel<ReflectanceData, D
     }
 
     @Override
-    public boolean isValid(ReflectanceData sampleData, int systemIndex)
+    public final boolean isValid(ReflectanceData sampleData, int systemIndex)
     {
         // Visibility test
         return sampleData.getVisibility(systemIndex) > 0;
     }
 
     @Override
-    public double getSampleWeight(ReflectanceData sampleData, int systemIndex)
+    public final double getSampleWeight(ReflectanceData sampleData, int systemIndex)
     {
         // Don't multiply by n dot l when optimizing reflectance (rather than radiance)
         return sampleData.getAdditionalWeight(systemIndex);
     }
 
     @Override
-    public DoubleVector3 getSamples(ReflectanceData sampleData, int systemIndex)
+    public final DoubleVector3 getSamples(ReflectanceData sampleData, int systemIndex)
     {
         // Sampler (ground truth data)
         return new DoubleVector3(sampleData.getRed(systemIndex), sampleData.getGreen(systemIndex), sampleData.getBlue(systemIndex));
     }
 
     @Override
-    public IntFunction<DoubleVector3> getBasisFunctions(ReflectanceData sampleData, int systemIndex)
+    public final IntFunction<DoubleVector3> getBasisFunctions(ReflectanceData sampleData, int systemIndex)
     {
         // Precompute values that will be reused; captured by the lambda expression.
         float halfwayIndex = sampleData.getHalfwayIndex(systemIndex);
@@ -106,14 +106,14 @@ public class SpecularWeightModel implements LeastSquaresModel<ReflectanceData, D
     }
 
     @Override
-    public int getBasisFunctionCount()
+    public final int getBasisFunctionCount()
     {
         // Only need enabled materials during optimization.
         return solution.getMaterialBasis().getEnabledMaterialCount();
     }
 
     @Override
-    public double innerProduct(DoubleVector3 t1, DoubleVector3 t2)
+    public final double innerProduct(DoubleVector3 t1, DoubleVector3 t2)
     {
         return t1.dot(t2);
     }

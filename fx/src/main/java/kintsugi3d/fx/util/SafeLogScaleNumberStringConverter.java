@@ -20,25 +20,25 @@ public class SafeLogScaleNumberStringConverter extends StringConverter<Number>
 
     public SafeLogScaleNumberStringConverter(Number defaultValue)
     {
-        this.defaultValue = Math.log10(defaultValue.doubleValue());
+        this.defaultValue = StrictMath.log10(defaultValue.doubleValue());
         base = new SafeNumberStringConverter(this.defaultValue);
     }
 
     @Override
-    public String toString(Number object)
+    public final String toString(Number object)
     {
-        Double to10 = Math.pow(10, object.doubleValue());
+        Double to10 = StrictMath.pow(10, object.doubleValue());
         return base.toString(to10);
     }
 
     @Override
-    public Number fromString(String string)
+    public final Number fromString(String string)
     {
         Number raw = base.fromString(string);
         if (raw.doubleValue() == 0.0)
         {
             return defaultValue;
         }
-        return Math.log10(raw.doubleValue());
+        return StrictMath.log10(raw.doubleValue());
     }
 }

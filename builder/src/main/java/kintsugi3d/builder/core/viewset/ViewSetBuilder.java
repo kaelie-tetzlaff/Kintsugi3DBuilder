@@ -159,11 +159,6 @@ public final class ViewSetBuilder
         return this;
     }
 
-    public int getNextLightIndex()
-    {
-        return result.getLightCount();
-    }
-
     public ViewSetBuilder setUUID(UUID uuid)
     {
         result.setUUID(uuid);
@@ -389,6 +384,11 @@ public final class ViewSetBuilder
         result.setHasUnsupportedCorrections(this.hasUnsupportedCorrections);
 
         return result;
+    }
+
+    private int getNextLightIndex()
+    {
+        return result.getLightCount();
     }
 
     /**

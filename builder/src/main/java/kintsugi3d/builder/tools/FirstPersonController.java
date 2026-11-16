@@ -62,19 +62,19 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
         this.phi = 0.0f;
     }
 
-    public void addAsWindowListener(WindowListenerManager windowListenerManager)
+    public final void addAsWindowListener(WindowListenerManager windowListenerManager)
     {
         windowListenerManager.addKeyPressListener(this);
         windowListenerManager.addKeyReleaseListener(this);
         windowListenerManager.addCursorPositionListener(this);
     }
 
-    public boolean isEnabled()
+    public final boolean isEnabled()
     {
         return this.enabled;
     }
 
-    public void setEnabled(boolean enabled)
+    public final void setEnabled(boolean enabled)
     {
         this.enabled = enabled;
         if (!enabled)
@@ -85,13 +85,13 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
         }
     }
 
-    public ReadonlyViewpointModel getModel()
+    public final ReadonlyViewpointModel getModel()
     {
         return this.model;
     }
 
     @Override
-    public void keyPressed(Canvas3D<? extends Context<?>> canvas, Key key, ModifierKeys mods)
+    public final void keyPressed(Canvas3D<? extends Context<?>> canvas, Key key, ModifierKeys mods)
     {
         if (enabled)
         {
@@ -139,7 +139,7 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
     }
 
     @Override
-    public void keyReleased(Canvas3D<? extends Context<?>> canvas, Key key, ModifierKeys mods)
+    public final void keyReleased(Canvas3D<? extends Context<?>> canvas, Key key, ModifierKeys mods)
     {
         if (enabled)
         {
@@ -178,7 +178,7 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
     }
 
     @Override
-    public void cursorMoved(Canvas3D<? extends Context<?>> canvas, double xPos, double yPos)
+    public final void cursorMoved(Canvas3D<? extends Context<?>> canvas, double xPos, double yPos)
     {
         if (enabled)
         {
@@ -215,7 +215,7 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
         }
     }
 
-    public void update()
+    public final void update()
     {
         if (enabled)
         {

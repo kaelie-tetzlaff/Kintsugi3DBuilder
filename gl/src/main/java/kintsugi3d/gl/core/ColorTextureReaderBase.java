@@ -32,7 +32,7 @@ import java.util.function.Function;
 public abstract class ColorTextureReaderBase implements ColorTextureReader
 {
     @Override
-    public int[] readARGB(int x, int y, int readWidth, int readHeight)
+    public final int[] readARGB(int x, int y, int readWidth, int readHeight)
     {
         ByteBuffer pixelBuffer = BufferUtils.createByteBuffer(readWidth * readHeight * 4);
 
@@ -44,7 +44,7 @@ public abstract class ColorTextureReaderBase implements ColorTextureReader
     }
 
     @Override
-    public float[] readFloatingPointRGBA(int x, int y, int readWidth, int readHeight)
+    public final float[] readFloatingPointRGBA(int x, int y, int readWidth, int readHeight)
     {
         FloatBuffer pixelBuffer = BufferUtils.createFloatBuffer(readWidth * readHeight * 4);
 
@@ -56,7 +56,7 @@ public abstract class ColorTextureReaderBase implements ColorTextureReader
     }
 
     @Override
-    public int[] readIntegerRGBA(int x, int y, int readWidth, int readHeight)
+    public final int[] readIntegerRGBA(int x, int y, int readWidth, int readHeight)
     {
         IntBuffer pixelBuffer = BufferUtils.createIntBuffer(readWidth * readHeight * 4);
 
@@ -68,7 +68,7 @@ public abstract class ColorTextureReaderBase implements ColorTextureReader
     }
 
     @Override
-    public void saveToFile(String fileFormat, File file) throws IOException
+    public final void saveToFile(String fileFormat, File file) throws IOException
     {
         int[] pixels = this.readARGB();
         BufferedImage outImg = BufferedImageBuilder.build()
@@ -81,21 +81,7 @@ public abstract class ColorTextureReaderBase implements ColorTextureReader
     }
 
     @Override
-    public void saveToFile(String fileFormat, File file, Function<IntVector4, IntVector4> tonemapper) throws IOException
-    {
-        int[] pixels = this.readARGB();
-        BufferedImage outImg = BufferedImageBuilder.build()
-            .setBufferedImageType("JPEG".equals(fileFormat) ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB)
-            .setDataFromArray(pixels, getWidth(), getHeight())
-            .tonemap(tonemapper)
-            .flipVertical()
-            .create();
-        file.getParentFile().mkdirs(); // make sure the directory structure exists
-        ImageIO.write(outImg, fileFormat, file);
-    }
-
-    @Override
-    public void saveToFile(String fileFormat, File file, BiFunction<IntVector4, Integer, IntVector4> tonemapper) throws IOException
+    public final void saveToFile(String fileFormat, File file, Function<IntVector4, IntVector4> tonemapper) throws IOException
     {
         int[] pixels = this.readARGB();
         BufferedImage outImg = BufferedImageBuilder.build()
@@ -109,7 +95,21 @@ public abstract class ColorTextureReaderBase implements ColorTextureReader
     }
 
     @Override
-    public void saveToFile(int x, int y, int width, int height, String fileFormat, File file) throws IOException
+    public final void saveToFile(String fileFormat, File file, BiFunction<IntVector4, Integer, IntVector4> tonemapper) throws IOException
+    {
+        int[] pixels = this.readARGB();
+        BufferedImage outImg = BufferedImageBuilder.build()
+            .setBufferedImageType("JPEG".equals(fileFormat) ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB)
+            .setDataFromArray(pixels, getWidth(), getHeight())
+            .tonemap(tonemapper)
+            .flipVertical()
+            .create();
+        file.getParentFile().mkdirs(); // make sure the directory structure exists
+        ImageIO.write(outImg, fileFormat, file);
+    }
+
+    @Override
+    public final void saveToFile(int x, int y, int width, int height, String fileFormat, File file) throws IOException
     {
         int[] pixels = this.readARGB(x, y, width, height);
         BufferedImage outImg = BufferedImageBuilder.build()
@@ -122,7 +122,7 @@ public abstract class ColorTextureReaderBase implements ColorTextureReader
     }
 
     @Override
-    public void saveToFile(int x, int y, int width, int height, String fileFormat, File file, Function<IntVector4, IntVector4> tonemapper) throws IOException
+    public final void saveToFile(int x, int y, int width, int height, String fileFormat, File file, Function<IntVector4, IntVector4> tonemapper) throws IOException
     {
         int[] pixels = this.readARGB(x, y, width, height);
         BufferedImage outImg = BufferedImageBuilder.build()
@@ -136,7 +136,7 @@ public abstract class ColorTextureReaderBase implements ColorTextureReader
     }
 
     @Override
-    public void saveToFile(int x, int y, int width, int height, String fileFormat, File file, BiFunction<IntVector4, Integer, IntVector4> tonemapper) throws IOException
+    public final void saveToFile(int x, int y, int width, int height, String fileFormat, File file, BiFunction<IntVector4, Integer, IntVector4> tonemapper) throws IOException
     {
         int[] pixels = this.readARGB(x, y, width, height);
         BufferedImage outImg = BufferedImageBuilder.build()

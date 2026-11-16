@@ -48,7 +48,7 @@ public class BasisImageCreator<ContextType extends Context<ContextType>> impleme
             .createFramebufferObject();
     }
 
-    public void createImages(ReadonlyBasisResources<ContextType> basisResources, File outputDirectory) throws IOException
+    public final void createImages(ReadonlyBasisResources<ContextType> basisResources, File outputDirectory) throws IOException
     {
         basisResources.useWithShaderProgram(program);
 
@@ -71,7 +71,7 @@ public class BasisImageCreator<ContextType extends Context<ContextType>> impleme
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         program.close();
         drawable.close();

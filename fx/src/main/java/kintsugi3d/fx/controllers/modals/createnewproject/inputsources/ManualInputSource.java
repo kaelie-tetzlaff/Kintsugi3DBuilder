@@ -39,42 +39,42 @@ public class ManualInputSource extends NonValidatedInputSourceBase
         super(specifyProjectFileToSave);
     }
 
-    public File getCameraFile()
+    public final File getCameraFile()
     {
         return this.cameraFile;
     }
 
-    public ManualInputSource setCameraFile(File cameraFile)
+    public final ManualInputSource setCameraFile(File cameraFile)
     {
         this.cameraFile = cameraFile;
         return this;
     }
 
-    public File getMeshFile()
+    public final File getMeshFile()
     {
         return this.meshFile;
     }
 
-    public ManualInputSource setMeshFile(File meshFile)
+    public final ManualInputSource setMeshFile(File meshFile)
     {
         this.meshFile = meshFile;
         return this;
     }
 
-    public File getPhotosDir()
+    public final File getPhotosDir()
     {
         return this.photosDir;
     }
 
     @Override
-    public ManualInputSource overrideFullResImageDirectory(File directory)
+    public final ManualInputSource overrideFullResImageDirectory(File directory)
     {
         this.photosDir = directory;
         return this;
     }
 
     @Override
-    public ValidatedInputSource validate() throws Exception
+    public final ValidatedInputSource validate() throws Exception
     {
         return new ValidatedManualInputSource(this);
     }
@@ -107,49 +107,49 @@ public class ManualInputSource extends NonValidatedInputSourceBase
         }
     }
 
-    public ManualInputSource setNeedsUndistort(boolean needsUndistort)
+    public final ManualInputSource setNeedsUndistort(boolean needsUndistort)
     {
         this.needsUndistort = needsUndistort;
         return this;
     }
 
-    public boolean shouldHotSwap()
+    public final boolean shouldHotSwap()
     {
         return hotSwap;
     }
 
-    public ManualInputSource setHotSwap(boolean hotSwap)
+    public final ManualInputSource setHotSwap(boolean hotSwap)
     {
         this.hotSwap = hotSwap;
         return this;
     }
 
     @Override
-    public File getInitialPhotosDirectory()
+    public final File getInitialPhotosDirectory()
     {
         return photosDir != null ? photosDir : cameraFile.getParentFile();
     }
 
     @Override
-    public File getMasksDirectory()
+    public final File getMasksDirectory()
     {
         return masksDir;
     }
 
     @Override
-    public File getInitialMasksDirectory()
+    public final File getInitialMasksDirectory()
     {
         return masksDir != null ? masksDir : cameraFile.getParentFile();
     }
 
     @Override
-    public boolean hasProjectMasks()
+    public final boolean hasProjectMasks()
     {
         return false;
     }
 
     @Override
-    public void setMasksDirectory(File file)
+    public final void setMasksDirectory(File file)
     {
         masksDir = file;
     }
@@ -165,7 +165,7 @@ public class ManualInputSource extends NonValidatedInputSourceBase
         }
 
         @Override
-        public boolean confirm()
+        public final boolean confirm()
         {
             if (original.hotSwap)
             {
@@ -179,7 +179,7 @@ public class ManualInputSource extends NonValidatedInputSourceBase
         }
 
         @Override
-        public void confirm(File projectFileToSave)
+        public final void confirm(File projectFileToSave)
         {
             Global.io().loadFromLooseFiles(projectFileToSave, original.cameraFile.getPath(), original.cameraFile, getViewSetLoadOptions());
         }

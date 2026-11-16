@@ -47,8 +47,8 @@ public class WeightImageWriter<ContextType extends Context<ContextType>> impleme
             .createFramebufferObject();
     }
 
-    public void saveImages(ReadonlyBasisWeightResources<ContextType> resources, int materialCount,
-                           String format, File outputDirectory, String... filenames) throws IOException
+    public final void saveImages(ReadonlyBasisWeightResources<ContextType> resources, int materialCount,
+                                 String format, File outputDirectory, String... filenames) throws IOException
     {
         resources.useWithShaderProgram(program);
 
@@ -63,7 +63,7 @@ public class WeightImageWriter<ContextType extends Context<ContextType>> impleme
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         program.close();
         drawable.close();

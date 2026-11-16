@@ -39,12 +39,12 @@ public class ObservableLightGroupSettings extends SerializableLightGroupSettings
     }
 
     @Override
-    public ObservableLightSettings constructLightInstanceSetting()
+    public final ObservableLightSettings constructLightInstanceSetting()
     {
         return new ObservableLightSettings(locked);
     }
 
-    public void addLight()
+    public final void addLight()
     {
         if (lightList.size() < LIGHT_LIMIT)
         {
@@ -53,7 +53,7 @@ public class ObservableLightGroupSettings extends SerializableLightGroupSettings
     }
 
     @Override
-    public void addLight(int index, double targetX, double targetY, double targetZ)
+    public final void addLight(int index, double targetX, double targetY, double targetZ)
     {
         if (lightList.size() < LIGHT_LIMIT)
         {
@@ -73,7 +73,7 @@ public class ObservableLightGroupSettings extends SerializableLightGroupSettings
     }
 
     @Override
-    public void removeLight(int index)
+    public final void removeLight(int index)
     {
         if (!lightList.isEmpty())
         {
@@ -85,68 +85,68 @@ public class ObservableLightGroupSettings extends SerializableLightGroupSettings
     }
 
     @Override
-    public int getLightCount()
+    public final int getLightCount()
     {
         return lightList.size();
     }
 
     @Override
-    public ObservableList<ObservableLightSettings> getLightList()
+    public final ObservableList<ObservableLightSettings> getLightList()
     {
         return lightList.get();
     }
 
     @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
-    public ListProperty<ObservableLightSettings> lightListProperty()
+    public final ListProperty<ObservableLightSettings> lightListProperty()
     {
         return lightList;
     }
 
     @Override
-    public boolean isLocked()
+    public final boolean isLocked()
     {
         return locked.get();
     }
 
-    public BooleanProperty lockedProperty()
+    public final BooleanProperty lockedProperty()
     {
         return locked;
     }
 
     @Override
-    public void setLocked(boolean locked)
+    public final void setLocked(boolean locked)
     {
         this.locked.set(locked);
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return name.get();
     }
 
-    public StringProperty nameProperty()
+    public final StringProperty nameProperty()
     {
         return name;
     }
 
     @Override
-    public void setName(String name)
+    public final void setName(String name)
     {
         this.name.set(name);
     }
 
-    public IntegerProperty selectedLightIndexProperty()
+    public final IntegerProperty selectedLightIndexProperty()
     {
         return selectedLightIndex;
     }
 
-    public int getSelectedLightIndex()
+    public final int getSelectedLightIndex()
     {
         return selectedLightIndex.getValue();
     }
 
-    public void setSelectedLightIndex(int selectedLightIndex)
+    public final void setSelectedLightIndex(int selectedLightIndex)
     {
         this.selectedLightIndex.setValue(selectedLightIndex);
     }

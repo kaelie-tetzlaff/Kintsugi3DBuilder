@@ -13,7 +13,6 @@ package kintsugi3d.builder.state.cards;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  *
@@ -46,5 +45,5 @@ public interface ProjectDataCardFactory<T>
      * @param refreshedData
      * @return
      */
-    void refreshCards(List<ProjectDataCard> mutableCardList, Function<ProjectDataCard, T> refreshedData);
+    void refreshCards(List<ProjectDataCard> mutableCardList, RefreshFunction<T> refreshedData);
 }

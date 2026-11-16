@@ -23,7 +23,7 @@ public class TestingObjectModel implements ObjectPoseModel
     }
 
     @Override
-    public Matrix4 getTransformationMatrix()
+    public final Matrix4 getTransformationMatrix()
     {
         return Matrix4.IDENTITY;
     }

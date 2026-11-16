@@ -22,68 +22,68 @@ public class ImageCacheSettings implements ReadonlyImageCacheSettings
     private int sampledSize;
 
     @Override
-    public File getCacheParentDirectory()
+    public final File getCacheParentDirectory()
     {
         return cacheParentDirectory;
     }
 
     @Override
-    public int getTextureWidth()
+    public final int getTextureWidth()
     {
         return textureWidth;
     }
 
     @Override
-    public int getTextureHeight()
+    public final int getTextureHeight()
     {
         return textureHeight;
     }
 
     @Override
-    public int getTextureSubdiv()
+    public final int getTextureSubdiv()
     {
         return textureSubdiv;
     }
 
     @Override
-    public int getSampledSize()
+    public final int getSampledSize()
     {
         return sampledSize;
     }
 
-    public void setCacheParentDirectory(File cacheParentDirectory)
+    public final void setCacheParentDirectory(File cacheParentDirectory)
     {
         this.cacheParentDirectory = cacheParentDirectory;
     }
 
-    public void setTextureWidth(int textureWidth)
+    public final void setTextureWidth(int textureWidth)
     {
         this.textureWidth = textureWidth;
     }
 
-    public void setTextureHeight(int textureHeight)
+    public final void setTextureHeight(int textureHeight)
     {
         this.textureHeight = textureHeight;
     }
 
-    public void setTextureSubdiv(int textureSubdiv)
+    public final void setTextureSubdiv(int textureSubdiv)
     {
         this.textureSubdiv = textureSubdiv;
     }
 
-    public void setSampledSize(int sampledSize)
+    public final void setSampledSize(int sampledSize)
     {
         this.sampledSize = sampledSize;
     }
 
     @Override
-    public int getBlockStartX(int i)
+    public final int getBlockStartX(int i)
     {
         return (int) Math.round((double) i * (double) textureWidth / (double) textureSubdiv);
     }
 
     @Override
-    public int getBlockStartY(int j)
+    public final int getBlockStartY(int j)
     {
         return (int) Math.round((double) j * (double) textureHeight / (double) textureSubdiv);
     }
