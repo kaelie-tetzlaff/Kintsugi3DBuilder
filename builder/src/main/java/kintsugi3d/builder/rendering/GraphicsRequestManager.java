@@ -17,7 +17,11 @@ import kintsugi3d.gl.interactive.UserCancellationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Objects;
+import java.util.Queue;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GraphicsRequestManager<ContextType extends Context<ContextType>> implements GraphicsRequestQueue
 {
@@ -28,9 +32,9 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
 
     private final ContextType context;
     private final Queue<Runnable> requestList;
-    private final Collection<Runnable> requestAddedListeners = new ArrayList<>(1);
-    private RenderableManager<ContextType> renderableManager;
-    private ProgressMonitor progressMonitor;
+    private final Collection<Runnable> requestAddedListeners = new CopyOnWriteArrayList<>();
+    private volatile RenderableManager<ContextType> renderableManager;
+    private volatile ProgressMonitor progressMonitor;
 
     public GraphicsRequestManager(ContextType context)
     {
@@ -38,20 +42,31 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
         this.requestList = new LinkedList<>();
     }
 
-    @Override
-    public boolean isEmpty()
-    {
-        return requestList.isEmpty();
-    }
-
-    public void setRenderableManager(RenderableManager<ContextType> renderableManager)
+    /**
+     * Should be called once by Rendering.
+     * @param renderableManager
+     */
+    void setRenderableManager(RenderableManager<ContextType> renderableManager)
     {
         this.renderableManager = renderableManager;
     }
 
-    public void setProgressMonitor(ProgressMonitor progressMonitor)
+    /**
+     * Should be called once by Rendering.
+     * @param progressMonitor
+     */
+    void setProgressMonitor(ProgressMonitor progressMonitor)
     {
         this.progressMonitor = progressMonitor;
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        // Intentionally not synchronized to prevent blocking just for a simple isEmpty check.
+        // If isEmpty is called concurrently with a request being added,
+        // we'll just catch the next time through the rendering loop.
+        return requestList.isEmpty();
     }
 
     private static void logCancellation(Throwable e)
