@@ -34,7 +34,7 @@ import kintsugi3d.gl.vecmath.IntVector2;
 import java.io.IOException;
 import java.util.List;
 
-public abstract class ImageBasedGraphicsResourcesBase<ContextType extends Context<ContextType>> implements ImageBasedGraphicsResources<ContextType>
+abstract class ImageBasedGraphicsResourcesBase<ContextType extends Context<ContextType>> implements ImageBasedGraphicsResources<ContextType>
 {
     private final GraphicsResourcesCommon<ContextType> commonResources;
 
@@ -148,6 +148,7 @@ public abstract class ImageBasedGraphicsResourcesBase<ContextType extends Contex
         commonResources.replaceTextureResources(textureResources);
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public void close()
     {
