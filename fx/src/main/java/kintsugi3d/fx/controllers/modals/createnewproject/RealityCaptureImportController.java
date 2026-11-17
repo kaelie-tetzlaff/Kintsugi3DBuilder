@@ -20,10 +20,10 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import java.util.Collections;
 import java.util.List;
 
-public class RealityCaptureImportController extends ManualImportController
+public final class RealityCaptureImportController extends ManualImportControllerBase
 {
     @Override
-    public final List<ExtensionFilter> getCameraExtensionFilters()
+    public List<ExtensionFilter> getCameraExtensionFilters()
     {
         return Collections.singletonList(new ExtensionFilter("Reality Capture CSV file", "*.csv"));
     }
