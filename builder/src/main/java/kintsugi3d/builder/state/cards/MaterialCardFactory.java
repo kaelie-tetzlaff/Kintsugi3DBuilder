@@ -30,7 +30,6 @@ import java.io.FileNotFoundException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -158,7 +157,6 @@ public class MaterialCardFactory extends ProjectDataCardFactoryBase<BasisMateria
         {
             return basisResources.getBasis().getMaterials().stream()
                 .map(this::createCard)
-                .filter(Objects::nonNull)
                 .sorted(Comparator.comparing(ProjectDataCard::getInternalName))
                 .collect(Collectors.toUnmodifiableList());
         }

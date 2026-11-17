@@ -231,15 +231,15 @@ public class SmokeTest
 
     private static void waitFor(BooleanSupplier finished, String operation)
     {
-        List<ErrorMessage> errorsLive = TESTING_STATE.getErrors();
-        int startingErrorCount = errorsLive.size();
+        int startingErrorCount = TESTING_STATE.getErrors().size();
         long start = System.nanoTime();
         while (!finished.getAsBoolean())
         {
-            int currentErrorCount = errorsLive.size();
+            List<ErrorMessage> errors = TESTING_STATE.getErrors();
+            int currentErrorCount = errors.size();
             if (currentErrorCount > startingErrorCount)
             {
-                ErrorMessage firstError = errorsLive.get(startingErrorCount);
+                ErrorMessage firstError = errors.get(startingErrorCount);
                 throw new ReportedErrorException(
                     String.format("Error occurred during project %s: %s", operation, firstError.getMessage()),
                     firstError.getThrowable());

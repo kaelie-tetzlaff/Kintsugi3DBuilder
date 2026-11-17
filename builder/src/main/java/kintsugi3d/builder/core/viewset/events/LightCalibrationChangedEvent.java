@@ -12,6 +12,7 @@
 package kintsugi3d.builder.core.viewset.events;
 
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,9 +49,9 @@ public class LightCalibrationChangedEvent
      * This array may be added to but should never be removed from as indices are expected to be persistent.
      * @return null if light positions were not modified.
      */
-    public final List<Vector3> getLightPositionList()
+    public final @Nullable List<Vector3> getLightPositionList()
     {
-        return Collections.unmodifiableList(lightPositionList);
+        return lightPositionList != null ? Collections.unmodifiableList(lightPositionList) : null;
     }
 
     /**
@@ -59,8 +60,8 @@ public class LightCalibrationChangedEvent
      * This array may be added to but should never be removed from as indices are expected to be persistent.
      * @return null if light intensities were not modified.
      */
-    public final List<Vector3> getLightIntensityList()
+    public final @Nullable List<Vector3> getLightIntensityList()
     {
-        return Collections.unmodifiableList(lightIntensityList);
+        return lightIntensityList != null ? Collections.unmodifiableList(lightIntensityList) : null;
     }
 }

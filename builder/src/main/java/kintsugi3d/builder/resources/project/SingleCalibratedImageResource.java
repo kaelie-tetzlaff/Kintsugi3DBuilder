@@ -65,7 +65,7 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
         File imageFile = view.findFullResImageFile();
 
         // Read the images from a file
-        if (loadOptions.areColorImagesRequested() && imageFile != null)
+        if (loadOptions.areColorImagesRequested())
         {
             File mask = view.getMaskFile();
             var colorTextureBuilder = mask == null ?

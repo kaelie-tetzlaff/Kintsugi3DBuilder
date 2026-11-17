@@ -377,9 +377,9 @@ public class WelcomeWindowController
             View representativeView = viewSet.getRepresentativeView();
             File thumbnailImageFile = representativeView.getThumbnailImageFile();
 
-            if (thumbnailImageFile == null || !thumbnailImageFile.exists())
+            if (!thumbnailImageFile.exists())
             {
-                thumbnailImageFile =  representativeView.tryFindPreviewImageFile();
+                thumbnailImageFile = representativeView.tryFindPreviewImageFile();
             }
 
             if (thumbnailImageFile == null || !thumbnailImageFile.exists())

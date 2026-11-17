@@ -18,6 +18,7 @@ import kintsugi3d.builder.fit.settings.*;
 import kintsugi3d.builder.rendering.ImageBasedRenderable;
 import kintsugi3d.builder.rendering.ProgressMonitoredImageBasedGraphicsRequest;
 import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
+import kintsugi3d.builder.resources.project.ReadonlyGraphicsResources;
 import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.builder.resources.project.ShaderProgramFactory;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
@@ -28,6 +29,7 @@ import kintsugi3d.builder.util.Kintsugi3DViewerLauncher;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -238,16 +240,11 @@ public final class SpecularFitRequest implements ProgressMonitoredImageBasedGrap
                 // Determine basis count and resolution based on the new specularFit.
                 // This will result in a program factory that overrides whatever basis count and resolution
                 // would be specified by the original resources.
-                ReadonlyBasisResources<ContextType> basisResources = specularFit.getBasisResources();
-                ReadonlyBasisSettings basisSettings = new SimpleBasisSettings(
-                    basisResources.getActiveMaterialCount(), basisResources.getBasisResolution());
-
-                // Reconstruct images both from basis functions and from fitted roughness
-                ShaderProgramFactory<ContextType> programFactory =
-                    new SpecularFitResourcesWrapper<ContextType>(settings.isSmithMaskingShadowingEnabled(), basisSettings).wrap(resources);
+                ShaderProgramFactory<ContextType> programFactory = getProgramFactory(resources, specularFit);
                 FinalReconstruction<ContextType> reconstruction =
                     new FinalReconstruction<>(resources, settings.getTextureResolution(), settings.getReconstructionSettings());
 
+                // Reconstruct images both from basis functions and from fitted roughness
                 LOG.info("Reconstructing:");
                 List<Map<String, ReadonlyColorAppearanceRMSE>> rmseList = reconstruction.reconstruct(specularFit, Map.of(
                         "basis", ReconstructionShaders.getBasisModelReconstructionProgramBuilder(programFactory, specularFit),
@@ -282,5 +279,15 @@ public final class SpecularFitRequest implements ProgressMonitoredImageBasedGrap
                 }
             }
         }
+    }
+
+    private <ContextType extends Context<ContextType>> @NotNull ShaderProgramFactory<ContextType> getProgramFactory(
+        ReadonlyGraphicsResources<ContextType> resources, ReadonlyTextureResources<ContextType> specularFit)
+    {
+        ReadonlyBasisResources<ContextType> basisResources = specularFit.getBasisResources();
+        ReadonlyBasisSettings basisSettings = new SimpleBasisSettings(
+            basisResources.getActiveMaterialCount(), basisResources.getBasisResolution());
+
+        return new SpecularFitResourcesWrapper<ContextType>(settings.isSmithMaskingShadowingEnabled(), basisSettings).wrap(resources);
     }
 }
