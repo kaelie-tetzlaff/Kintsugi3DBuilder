@@ -32,12 +32,12 @@ public interface UniformBuffer<ContextType extends Context<ContextType>> extends
      * @param data The raw buffer containing the uniform data.
      * @return The calling object.
      */
-    UniformBuffer<ContextType> setData(ByteBuffer data);
+    void setData(ByteBuffer data);
 
     /**
      * Sets the content of the uniform buffer from a memory buffer with a defined format (an array of vectors).
      * @param data The buffer containing the uniform data.
      * @return The calling object.
      */
-    UniformBuffer<ContextType> setData(ReadonlyNativeVectorBuffer data);
+    void setData(ReadonlyNativeVectorBuffer data);
 }

@@ -57,7 +57,7 @@ abstract class OpenGLBuffer implements ContextBound<OpenGLContext>, ManagedResou
         return hasData;
     }
 
-    OpenGLBuffer setData(ByteBuffer data)
+    public final void setData(ByteBuffer data)
     {
         if (data.remaining() > 0) // make sure there is actually data to set (lwjgl's glBufferData uses data.remaining() as the "size" parameter)
         {
@@ -69,8 +69,6 @@ abstract class OpenGLBuffer implements ContextBound<OpenGLContext>, ManagedResou
             // fix for MacOS which segfaults if using a buffer with no data
             hasData = true;
         }
-
-        return this;
     }
 
     final void bind()

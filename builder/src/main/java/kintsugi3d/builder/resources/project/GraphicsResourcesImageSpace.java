@@ -421,7 +421,8 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         if ((viewSet != null) && (viewSet.getCameraProjectionData() != null))
         {
             // Create the uniform buffer
-            cameraProjectionBuffer = context.createUniformBuffer().setData(viewSet.getCameraProjectionData());
+            cameraProjectionBuffer = context.createUniformBuffer();
+            cameraProjectionBuffer.setData(viewSet.getCameraProjectionData());
         }
         else
         {
@@ -431,7 +432,8 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         // Store the camera projection indices in a uniform buffer
         if ((viewSet != null) && (viewSet.getCameraProjectionIndexData() != null))
         {
-            cameraProjectionIndexBuffer = context.createUniformBuffer().setData(viewSet.getCameraProjectionIndexData());
+            cameraProjectionIndexBuffer = context.createUniformBuffer();
+            cameraProjectionIndexBuffer.setData(viewSet.getCameraProjectionIndexData());
         }
         else
         {

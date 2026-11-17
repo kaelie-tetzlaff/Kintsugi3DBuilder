@@ -124,7 +124,8 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         if (viewSet != null && viewSet.getCameraPoseData() != null)
         {
             // Create the uniform buffer
-            cameraPoseBuffer = context.createUniformBuffer().setData(viewSet.getCameraPoseData());
+            cameraPoseBuffer = context.createUniformBuffer();
+            cameraPoseBuffer.setData(viewSet.getCameraPoseData());
         }
         else
         {
@@ -135,7 +136,8 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         if (viewSet != null && viewSet.getLightPositionData() != null)
         {
             // Create the uniform buffer
-            lightPositionBuffer = context.createUniformBuffer().setData(viewSet.getLightPositionData());
+            lightPositionBuffer = context.createUniformBuffer();
+            lightPositionBuffer.setData(viewSet.getLightPositionData());
         }
         else
         {
@@ -146,7 +148,8 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         if (viewSet != null && viewSet.getLightIntensityData() != null)
         {
             // Create the uniform buffer
-            lightIntensityBuffer = context.createUniformBuffer().setData(viewSet.getLightIntensityData());
+            lightIntensityBuffer = context.createUniformBuffer();
+            lightIntensityBuffer.setData(viewSet.getLightIntensityData());
         }
         else
         {
@@ -156,7 +159,8 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         // Store the light indices in a uniform buffer
         if (viewSet != null && viewSet.getLightIndexData() != null)
         {
-            lightIndexBuffer = context.createUniformBuffer().setData(viewSet.getLightIndexData());
+            lightIndexBuffer = context.createUniformBuffer();
+            lightIndexBuffer.setData(viewSet.getLightIndexData());
         }
         else
         {
@@ -166,7 +170,8 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         // Store the view indices in a uniform buffer
         if (viewSet != null && viewSet.getViewIndexData() != null)
         {
-            viewIndexBuffer = context.createUniformBuffer().setData(viewSet.getViewIndexData());
+            viewIndexBuffer = context.createUniformBuffer();
+            viewIndexBuffer.setData(viewSet.getViewIndexData());
         }
         else
         {
