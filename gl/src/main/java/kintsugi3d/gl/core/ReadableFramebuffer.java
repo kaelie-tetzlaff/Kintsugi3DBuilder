@@ -65,7 +65,7 @@ public interface ReadableFramebuffer<ContextType extends Context<ContextType>> e
      * @return
      */
     @Override
-    default ReadableFramebufferViewport<ContextType> getViewport(int x, int y, int width, int height)
+    default FramebufferViewport<ContextType> getViewport(int x, int y, int width, int height)
     {
         return new ReadableFramebufferViewport<>(this, new IntVector2(x, y), new FramebufferSize(width, height));
     }

@@ -17,7 +17,6 @@ package kintsugi3d.builder.rendering;
 
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Framebuffer;
-import kintsugi3d.gl.core.FramebufferViewport;
 import kintsugi3d.gl.vecmath.Matrix4;
 
 /**
@@ -109,7 +108,7 @@ public class CameraViewport
         return height;
     }
 
-    public final <ContextType extends Context<ContextType>> FramebufferViewport<ContextType> ofFramebuffer(Framebuffer<ContextType> framebuffer)
+    public final <ContextType extends Context<ContextType>> Framebuffer<ContextType> ofFramebuffer(Framebuffer<ContextType> framebuffer)
     {
         return framebuffer.getViewport(x, y, width, height);
     }

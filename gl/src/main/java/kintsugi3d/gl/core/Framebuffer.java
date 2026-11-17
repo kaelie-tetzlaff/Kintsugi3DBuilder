@@ -140,9 +140,9 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * @param height The height of the viewport
      * @return
      */
-    default FramebufferViewport<ContextType> getViewport(int x, int y, int width, int height)
+    default Framebuffer<ContextType> getViewport(int x, int y, int width, int height)
     {
-        return new FramebufferViewport<>(this, new IntVector2(x, y), new FramebufferSize(width, height));
+        return new NonReadableFramebufferViewport<>(this, new IntVector2(x, y), new FramebufferSize(width, height));
     }
 
     /**
@@ -156,8 +156,9 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * @param readAttachmentIndex The index of the attachment within the read framebuffer to copy from.
      * @param linearFiltering Whether or not to use linear filtering if the dimensions of the source and destination are not the same.
      */
-    void blitColorAttachmentFromFramebufferViewport(int drawAttachmentIndex, int destX, int destY, int destWidth, int destHeight,
-        ReadableFramebufferViewport<ContextType> readFramebuffer, int readAttachmentIndex, boolean linearFiltering);
+    void blitColorAttachmentFromFramebufferViewport(
+        int drawAttachmentIndex, int destX, int destY, int destWidth, int destHeight,
+        FramebufferViewport<ContextType> readFramebuffer, int readAttachmentIndex, boolean linearFiltering);
 
     /**
      * Copies pixels from one framebuffer to another.
@@ -214,8 +215,8 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * @param destHeight The height of the rectangle to copy into within this framebuffer.
      * @param readFramebuffer A viewport into the framebuffer to copy from.
      */
-    void blitDepthAttachmentFromFramebufferViewport(int destX, int destY, int destWidth, int destHeight,
-        ReadableFramebufferViewport<ContextType> readFramebuffer);
+    void blitDepthAttachmentFromFramebufferViewport(
+        int destX, int destY, int destWidth, int destHeight, FramebufferViewport<ContextType> readFramebuffer);
 
     /**
      * Copies pixels from one framebuffer depth attachment to another.
@@ -265,8 +266,8 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * @param destHeight The height of the rectangle to copy into within this framebuffer.
      * @param readFramebuffer A viewport into the framebuffer to copy from.
      */
-    void blitStencilAttachmentFromFramebufferViewport(int destX, int destY, int destWidth, int destHeight,
-        ReadableFramebufferViewport<ContextType> readFramebuffer);
+    void blitStencilAttachmentFromFramebufferViewport(
+        int destX, int destY, int destWidth, int destHeight, FramebufferViewport<ContextType> readFramebuffer);
 
     /**
      * Copies pixels from one framebuffer stencil attachment to another.
@@ -316,8 +317,8 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * @param destHeight The height of the rectangle to copy into within this framebuffer.
      * @param readFramebuffer A viewport into the framebuffer to copy from.
      */
-    void blitDepthStencilAttachmentFromFramebufferViewport(int destX, int destY, int destWidth, int destHeight,
-        ReadableFramebufferViewport<ContextType> readFramebuffer);
+    void blitDepthStencilAttachmentFromFramebufferViewport(
+        int destX, int destY, int destWidth, int destHeight, FramebufferViewport<ContextType> readFramebuffer);
 
     /**
      * Copies pixels from one framebuffer's depth and stencil attachments to another.

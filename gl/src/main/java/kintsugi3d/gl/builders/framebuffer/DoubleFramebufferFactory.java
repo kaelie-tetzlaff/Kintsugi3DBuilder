@@ -184,30 +184,31 @@ public final class DoubleFramebufferFactory
         }
 
         @Override
-        public final void blitColorAttachmentFromFramebufferViewport(int drawAttachmentIndex, int destX, int destY, int destWidth, int destHeight,
-                                                                     ReadableFramebufferViewport<ContextType> readFramebuffer, int readAttachmentIndex, boolean linearFiltering)
+        public final void blitColorAttachmentFromFramebufferViewport(
+            int drawAttachmentIndex, int destX, int destY, int destWidth, int destHeight,
+            FramebufferViewport<ContextType> readFramebuffer, int readAttachmentIndex, boolean linearFiltering)
         {
             backFBO.blitColorAttachmentFromFramebufferViewport(drawAttachmentIndex, destX, destY, destWidth, destHeight,
                 readFramebuffer, readAttachmentIndex, linearFiltering);
         }
 
         @Override
-        public final void blitDepthAttachmentFromFramebufferViewport(int destX, int destY, int destWidth, int destHeight,
-                                                                     ReadableFramebufferViewport<ContextType> readFramebuffer)
+        public final void blitDepthAttachmentFromFramebufferViewport(
+            int destX, int destY, int destWidth, int destHeight, FramebufferViewport<ContextType> readFramebuffer)
         {
             backFBO.blitDepthAttachmentFromFramebufferViewport(destX, destY, destWidth, destHeight, readFramebuffer);
         }
 
         @Override
-        public final void blitStencilAttachmentFromFramebufferViewport(int destX, int destY, int destWidth, int destHeight,
-                                                                       ReadableFramebufferViewport<ContextType> readFramebuffer)
+        public final void blitStencilAttachmentFromFramebufferViewport(
+            int destX, int destY, int destWidth, int destHeight, FramebufferViewport<ContextType> readFramebuffer)
         {
             backFBO.blitStencilAttachmentFromFramebufferViewport(destX, destY, destWidth, destHeight, readFramebuffer);
         }
 
         @Override
-        public final void blitDepthStencilAttachmentFromFramebufferViewport(int destX, int destY, int destWidth, int destHeight,
-                                                                            ReadableFramebufferViewport<ContextType> readFramebuffer)
+        public final void blitDepthStencilAttachmentFromFramebufferViewport(
+            int destX, int destY, int destWidth, int destHeight, FramebufferViewport<ContextType> readFramebuffer)
         {
             backFBO.blitDepthStencilAttachmentFromFramebufferViewport(destX, destY, destWidth, destHeight, readFramebuffer);
         }

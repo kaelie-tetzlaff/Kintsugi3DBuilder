@@ -22,9 +22,9 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
-public class ReadableFramebufferViewport<ContextType extends Context<ContextType>>
-    extends FramebufferViewport<ContextType>
-    implements ReadableFramebuffer<ContextType>
+class ReadableFramebufferViewport<ContextType extends Context<ContextType>>
+    extends FramebufferViewportBase<ContextType>
+    implements FramebufferViewport<ContextType>
 {
     private static class ReadContents<ContextType extends Context<ContextType>> implements FramebufferReadContents<ContextType>
     {
@@ -105,7 +105,7 @@ public class ReadableFramebufferViewport<ContextType extends Context<ContextType
      * @return
      */
     @Override
-    public final ReadableFramebufferViewport<ContextType> getViewport(int x, int y, int width, int height)
+    public final FramebufferViewport<ContextType> getViewport(int x, int y, int width, int height)
     {
         return new ReadableFramebufferViewport<>(this,
             new IntVector2(x + this.getOffset().x, y + this.getOffset().y), new FramebufferSize(width, height));
