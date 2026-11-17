@@ -24,24 +24,37 @@ import kintsugi3d.gl.core.Program;
 import kintsugi3d.gl.geometry.GeometryMode;
 import kintsugi3d.gl.geometry.VertexGeometry;
 
+import java.util.function.Function;
+
 public class GraphicsResourcesAnalytic<ContextType extends Context<ContextType>> extends ImageBasedGraphicsResourcesBase<ContextType>
 {
-    public GraphicsResourcesAnalytic(ContextType context, ViewSet viewSet, VertexGeometry geometry)
+    private final Function<ProgramBuilder<ContextType>, ProgramBuilder<ContextType>> definesInjection;
+
+    public GraphicsResourcesAnalytic(
+        ContextType context, ViewSet viewSet, VertexGeometry geometry,
+        Function<ProgramBuilder<ContextType>, ProgramBuilder<ContextType>> definesInjection)
     {
         super(new GraphicsResourcesCommon<>(context, viewSet, geometry, new TextureLoadOptions()), true);
+        this.definesInjection = definesInjection;
+    }
+
+
+    public GraphicsResourcesAnalytic(ContextType context, ViewSet viewSet, VertexGeometry geometry)
+    {
+        this(context, viewSet, geometry, Function.identity());
     }
 
     @Override
-    public ProgramBuilder<ContextType> getShaderProgramBuilder()
+    public final ProgramBuilder<ContextType> getShaderProgramBuilder()
     {
         // Determine shader defines here that do not typically change
         // and should apply globally as defaults, but only for analytic / "fake" source photos.
         // The shader will not reload automatically when these change.
         // The defines can be overridden by the actual shader.
-        return getCommonResources().getShaderProgramBuilder()
+        return definesInjection.apply(getCommonResources().getShaderProgramBuilder()
                 .define("GEOMETRY_MODE", GeometryMode.PROJECT_3D_TO_2D) // should default to this, but just in case
                 .define("GEOMETRY_TEXTURES_ENABLED", false) // should default to this, but just in case
-                .define("COLOR_APPEARANCE_MODE", ColorAppearanceMode.ANALYTIC);
+                .define("COLOR_APPEARANCE_MODE", ColorAppearanceMode.ANALYTIC));
     }
 
     @Override

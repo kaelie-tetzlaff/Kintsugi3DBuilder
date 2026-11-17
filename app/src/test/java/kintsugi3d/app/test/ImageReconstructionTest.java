@@ -964,14 +964,7 @@ class ImageReconstructionTest
     private void testFitSynthetic(ViewSet viewSet, Function<ProgramBuilder<OpenGLContext>, ProgramBuilder<OpenGLContext>> injectDefines,
                                   Consumer<ReadonlyTextureResources<? extends Context<?>>> fitValidation, Consumer<ReadonlyColorAppearanceRMSE> rmseValidation, String testName)
     {
-        try (ImageBasedGraphicsResources<OpenGLContext> resources = new GraphicsResourcesAnalytic<>(context, viewSet, potatoGeometry)
-        {
-            @Override
-            public ProgramBuilder<OpenGLContext> getShaderProgramBuilder()
-            {
-                return injectDefines.apply(super.getShaderProgramBuilder());
-            }
-        })
+        try (ImageBasedGraphicsResources<OpenGLContext> resources = new GraphicsResourcesAnalytic<>(context, viewSet, potatoGeometry, injectDefines))
         {
             // TODO not yet tested
             File outputDirectory = new File(TEST_OUTPUT_DIR, testName);
