@@ -21,80 +21,53 @@ import kintsugi3d.gl.core.CompressionFormat;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Texture;
 
-public abstract class ColorTextureBuilderBase<ContextType extends Context<ContextType>, TextureType extends Texture<ContextType>> 
-    extends TextureBuilderBase<ContextType, TextureType> implements ColorTextureBuilder<ContextType, TextureType>
+public abstract class ColorTextureBuilderBase<ContextType extends Context<ContextType>, TextureType extends Texture<ContextType>>
+    extends ColorTextureBuilderBaseInternal<ContextType, TextureType>
 {
-    private ColorFormat internalColorFormat = ColorFormat.RGBA8;
-    private CompressionFormat internalCompressionFormat;
-
-    protected final ColorFormat getInternalColorFormat()
-    {
-        return internalColorFormat;
-    }
-
-    protected final CompressionFormat getInternalCompressionFormat()
-    {
-        return internalCompressionFormat;
-    }
-
-    protected final boolean isInternalFormatCompressed()
-    {
-        return internalCompressionFormat != null;
-    }
-
     protected ColorTextureBuilderBase(ContextType context)
     {
         super(context);
     }
 
     @Override
-    public ColorTextureBuilderBase<ContextType, TextureType> setInternalFormat(ColorFormat format)
+    public final ColorTextureBuilder<ContextType, TextureType> setInternalFormat(ColorFormat format)
     {
-        internalColorFormat = format;
-        internalCompressionFormat = null;
-        return this;
+        return super.setInternalFormat(format);
     }
 
     @Override
-    public ColorTextureBuilderBase<ContextType, TextureType> setInternalFormat(CompressionFormat format)
+    public final ColorTextureBuilder<ContextType, TextureType> setInternalFormat(CompressionFormat format)
     {
-        internalColorFormat = null;
-        internalCompressionFormat = format;
-        return this;
+        return super.setInternalFormat(format);
     }
 
     @Override
-    public ColorTextureBuilderBase<ContextType, TextureType> setMultisamples(int samples, boolean fixedSampleLocations)
+    public final ColorTextureBuilder<ContextType, TextureType> setMultisamples(int samples, boolean fixedSampleLocations)
     {
-        super.setMultisamples(samples, fixedSampleLocations);
-        return this;
+        return super.setMultisamples(samples, fixedSampleLocations);
     }
 
     @Override
-    public ColorTextureBuilderBase<ContextType, TextureType> setMipmapsEnabled(boolean enabled)
+    public final ColorTextureBuilder<ContextType, TextureType> setMipmapsEnabled(boolean enabled)
     {
-        super.setMipmapsEnabled(enabled);
-        return this;
+        return super.setMipmapsEnabled(enabled);
     }
 
     @Override
-    public ColorTextureBuilderBase<ContextType, TextureType> setMaxMipmapLevel(int maxMipmapLevel)
+    public final ColorTextureBuilder<ContextType, TextureType> setMaxMipmapLevel(int maxMipmapLevel)
     {
-        super.setMaxMipmapLevel(maxMipmapLevel);
-        return this;
+        return super.setMaxMipmapLevel(maxMipmapLevel);
     }
 
     @Override
-    public ColorTextureBuilderBase<ContextType, TextureType> setLinearFilteringEnabled(boolean enabled)
+    public final ColorTextureBuilder<ContextType, TextureType> setLinearFilteringEnabled(boolean enabled)
     {
-        super.setLinearFilteringEnabled(enabled);
-        return this;
+        return super.setLinearFilteringEnabled(enabled);
     }
 
     @Override
-    public ColorTextureBuilderBase<ContextType, TextureType> setMaxAnisotropy(float maxAnisotropy)
+    public final ColorTextureBuilder<ContextType, TextureType> setMaxAnisotropy(float maxAnisotropy)
     {
-        super.setMaxAnisotropy(maxAnisotropy);
-        return this;
+        return super.setMaxAnisotropy(maxAnisotropy);
     }
 }

@@ -22,7 +22,7 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Cubemap;
 
 public abstract class ColorCubemapBuilderBase <ContextType extends Context<ContextType>, TextureType extends Cubemap<ContextType>> 
-    extends ColorTextureBuilderBase<ContextType, TextureType>
+    extends ColorTextureBuilderBaseInternal<ContextType, TextureType>
     implements ColorCubemapBuilder<ContextType, TextureType>
 {
     protected ColorCubemapBuilderBase(ContextType context)
@@ -31,49 +31,49 @@ public abstract class ColorCubemapBuilderBase <ContextType extends Context<Conte
     }
 
     @Override
-    public final ColorCubemapBuilderBase<ContextType, TextureType> setInternalFormat(ColorFormat format)
+    public final ColorCubemapBuilder<ContextType, TextureType> setInternalFormat(ColorFormat format)
     {
         super.setInternalFormat(format);
         return this;
     }
 
     @Override
-    public final ColorCubemapBuilderBase<ContextType, TextureType> setInternalFormat(CompressionFormat format)
+    public final ColorCubemapBuilder<ContextType, TextureType> setInternalFormat(CompressionFormat format)
     {
         super.setInternalFormat(format);
         return this;
     }
 
     @Override
-    public final ColorCubemapBuilderBase<ContextType, TextureType> setMultisamples(int samples, boolean fixedSampleLocations)
+    public final ColorCubemapBuilder<ContextType, TextureType> setMultisamples(int samples, boolean fixedSampleLocations)
     {
         super.setMultisamples(samples, fixedSampleLocations);
         return this;
     }
 
     @Override
-    public final ColorCubemapBuilderBase<ContextType, TextureType> setMipmapsEnabled(boolean enabled)
+    public final ColorCubemapBuilder<ContextType, TextureType> setMipmapsEnabled(boolean enabled)
     {
         super.setMipmapsEnabled(enabled);
         return this;
     }
 
     @Override
-    public final ColorCubemapBuilderBase<ContextType, TextureType> setMaxMipmapLevel(int maxMipmapLevel)
+    public final ColorCubemapBuilder<ContextType, TextureType> setMaxMipmapLevel(int maxMipmapLevel)
     {
         super.setMaxMipmapLevel(maxMipmapLevel);
         return this;
     }
 
     @Override
-    public final ColorCubemapBuilderBase<ContextType, TextureType> setLinearFilteringEnabled(boolean enabled)
+    public final ColorCubemapBuilder<ContextType, TextureType> setLinearFilteringEnabled(boolean enabled)
     {
         super.setLinearFilteringEnabled(enabled);
         return this;
     }
 
     @Override
-    public final ColorCubemapBuilderBase<ContextType, TextureType> setMaxAnisotropy(float maxAnisotropy)
+    public final ColorCubemapBuilder<ContextType, TextureType> setMaxAnisotropy(float maxAnisotropy)
     {
         super.setMaxAnisotropy(maxAnisotropy);
         return this;

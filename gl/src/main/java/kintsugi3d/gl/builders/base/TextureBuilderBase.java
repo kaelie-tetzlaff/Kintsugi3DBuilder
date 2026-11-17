@@ -59,7 +59,7 @@ public abstract class TextureBuilderBase<ContextType extends Context<ContextType
         return maxAnisotropy;
     }
 
-    protected TextureBuilderBase(ContextType context)
+    TextureBuilderBase(ContextType context)
     {
         this.context = context;
     }
