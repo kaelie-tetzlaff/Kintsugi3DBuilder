@@ -17,18 +17,13 @@ import kintsugi3d.gl.core.ManagedResource;
 import kintsugi3d.gl.geometry.GeometryTextures;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class TextureBlockResourceFactory<ContextType extends Context<ContextType>> implements ManagedResource
 {
-    private static final Logger LOG = LoggerFactory.getLogger(TextureBlockResourceFactory.class);
     private final ImageCache<ContextType> imageCache;
-
     private final GraphicsResourcesCommon<ContextType> sharedResources;
-
     private final GeometryTextures<ContextType> fullGeometryTextures;
 
     TextureBlockResourceFactory(GraphicsResourcesCommon<ContextType> sharedResources, ImageCache<ContextType> imageCache)

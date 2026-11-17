@@ -49,7 +49,7 @@ public class AutosaveSettingsController implements SystemSettingsControllerBase
         autosaveOptionsChoiceBox.setOnAction(this::handleDirectoryDropdownSelection);
     }
 
-    private void handleDirectoryDropdownSelection(ActionEvent event)
+    private void handleDirectoryDropdownSelection(ActionEvent ignoredEvent)
     {
         //if user clicks "choose directory" option, open the directory chooser
         //then add an item to the dropdown which contains the path they selected

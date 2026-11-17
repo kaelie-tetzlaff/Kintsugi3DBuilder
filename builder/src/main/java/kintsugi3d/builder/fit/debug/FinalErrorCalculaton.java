@@ -36,6 +36,7 @@ import java.util.stream.IntStream;
  * A module that performs some final steps to finish a specular fit: filling holes in the weight maps, and calculating some final error statistics.
  * TODO this class doesn't have a well defined identity; should probably be refactored.
  */
+@SuppressWarnings("unused")
 public final class FinalErrorCalculaton
 {
     private static final Logger LOG = LoggerFactory.getLogger(FinalErrorCalculaton.class);

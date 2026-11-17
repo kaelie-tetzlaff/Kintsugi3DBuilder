@@ -46,11 +46,8 @@ public final class SearchableListView<T> extends SearchableView
         backup = new ArrayList<>(listView.getItems());
 
         getSearchTextInput().textProperty().addListener((obs, oldText, newText)-> updateView());
+        getRegexMode().selectedProperty().addListener((obs, oldVal, newVal)-> updateView());
 
-        if(getRegexMode() != null)
-        {
-            getRegexMode().selectedProperty().addListener((obs, oldVal, newVal)-> updateView());
-        }
         return this;
     }
 
@@ -72,7 +69,7 @@ public final class SearchableListView<T> extends SearchableView
         {
             String itemName = item.toString();
 
-            if (getRegexMode() != null && getRegexMode().isSelected())
+            if (getRegexMode().isSelected())
             {
                 return itemName.matches(String.format(".*%s.*", searchTxt));
             }

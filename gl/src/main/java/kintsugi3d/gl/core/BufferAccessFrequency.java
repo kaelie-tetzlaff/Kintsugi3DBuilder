@@ -15,6 +15,7 @@ package kintsugi3d.gl.core;
  * Enumerates the possibly modes of frequency with which a buffer may be accessed.
  *
  */
+@SuppressWarnings("unused")
 public enum BufferAccessFrequency 
 {
     /**

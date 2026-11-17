@@ -28,7 +28,6 @@ class EventCollector
     private final Queue<Consumer<CanvasPositionListener>> canvasPos = new LinkedList<>();
     private final Queue<Consumer<CanvasSizeListener>> canvasSize = new LinkedList<>();
     private final Queue<Consumer<WindowCloseListener>> windowClose = new LinkedList<>();
-    private final Queue<Consumer<CanvasRefreshListener>> canvasRefresh = new LinkedList<>();
     private final Queue<Consumer<WindowFocusLostListener>> windowFocusLost = new LinkedList<>();
     private final Queue<Consumer<WindowFocusGainedListener>> windowFocusGained = new LinkedList<>();
     private final Queue<Consumer<WindowIconifiedListener>> windowIconified = new LinkedList<>();
@@ -74,14 +73,6 @@ class EventCollector
         synchronized (lock)
         {
             this.windowClose.add(event);
-        }
-    }
-
-    final void canvasRefresh(Consumer<CanvasRefreshListener> event)
-    {
-        synchronized (lock)
-        {
-            this.canvasRefresh.add(event);
         }
     }
 
@@ -247,7 +238,6 @@ class EventCollector
         pollEvents(canvasPos, listenerManager.getCanvasPosListeners());
         pollEvents(canvasSize, listenerManager.getCanvasSizeListeners());
         pollEvents(windowClose, listenerManager.getWindowCloseListeners());
-        pollEvents(canvasRefresh, listenerManager.getCanvasRefreshListeners());
         pollEvents(windowFocusLost, listenerManager.getWindowFocusLostListeners());
         pollEvents(windowFocusGained, listenerManager.getWindowFocusGainedListeners());
         pollEvents(windowIconified, listenerManager.getWindowIconifiedListeners());

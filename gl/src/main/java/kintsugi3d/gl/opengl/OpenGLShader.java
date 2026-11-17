@@ -81,23 +81,6 @@ class OpenGLShader implements Shader<OpenGLContext>
         }
     }
 
-    private static void handleLineContinuation(Scanner scanner, String finishedLine)
-    {
-        String currentLine = finishedLine;
-        while (currentLine.endsWith("\\") && scanner.hasNextLine())
-        {
-            currentLine = scanner.nextLine();
-        }
-
-        if (currentLine.endsWith("\\"))
-        {
-            while(scanner.hasNext())
-            {
-                scanner.next();
-            }
-        }
-    }
-
     private static void loadSource(File file, StringBuilder sb, Map<String, Object> defines) throws IOException
     {
         int lineCounter = 1;

@@ -37,7 +37,6 @@ class OpenGLUniformBuffer extends OpenGLBuffer implements UniformBuffer<OpenGLCo
         return GL_UNIFORM_BUFFER;
     }
 
-    @Override
     final void bindToIndex(int index)
     {
         getContext().bindUniformBufferToIndex(index, this);

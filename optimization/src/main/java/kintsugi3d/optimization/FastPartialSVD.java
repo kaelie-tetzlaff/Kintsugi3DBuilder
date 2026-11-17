@@ -25,6 +25,7 @@ import static org.ejml.dense.row.CommonOps_FDRM.*;
  * Fast SVD using power iterations for when only a few singular values are needed.
  * Fairly standard algorithm; implemented using the appendix of Chen et al., "Light Field Mapping" for reference.
  */
+@SuppressWarnings("unused")
 public final class FastPartialSVD
 {
     private final SimpleMatrix matrix;

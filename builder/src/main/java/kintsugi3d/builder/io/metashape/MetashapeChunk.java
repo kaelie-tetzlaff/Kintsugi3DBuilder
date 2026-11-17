@@ -186,19 +186,9 @@ public final class MetashapeChunk
         return returned;
     }
 
-    private void setMasksDir(File masksDir)
-    {
-        this.masksDir = masksDir;
-    }
-
     public boolean hasModels()
     {
         return !models.isEmpty();
-    }
-
-    private void setThumbnailsDir(File thumbnailsDir)
-    {
-        this.thumbnailsDir = thumbnailsDir;
     }
 
     public void selectModel(MetashapeModel model)
@@ -228,11 +218,6 @@ public final class MetashapeChunk
     {
         this.chunkXML = doc;
         return this;
-    }
-
-    private void setModels(List<MetashapeModel> models)
-    {
-        this.models = models;
     }
 
     public Document getFrameXML()

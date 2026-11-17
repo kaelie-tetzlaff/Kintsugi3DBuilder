@@ -11,7 +11,8 @@
 
 package kintsugi3d.gl.window;
 
-public enum KeyState 
+@SuppressWarnings("unused")
+public enum KeyState
 {
     UNKNOWN,
     PRESSED,

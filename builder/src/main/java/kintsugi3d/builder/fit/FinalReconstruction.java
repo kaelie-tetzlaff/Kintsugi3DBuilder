@@ -133,15 +133,7 @@ public class FinalReconstruction<ContextType extends Context<ContextType>>
 
     private void saveImageToFile(File outputDirectory, int k, ReadableFramebuffer<ContextType> framebuffer)
     {
-        try
-        {
-            String filename = String.format("%04d.png", k);
-            framebuffer.getTextureReaderForColorAttachment(0).saveToFile("PNG", new File(outputDirectory, filename));
-        }
-        catch (IOException e)
-        {
-            LOG.error("An error occurred while saving image:", e);
-        }
+        saveImageToFile(outputDirectory, String.format("%04d.png", k), framebuffer);
     }
 
     private void saveImageToFile(File outputDirectory, String filename, ReadableFramebuffer<ContextType> framebuffer)

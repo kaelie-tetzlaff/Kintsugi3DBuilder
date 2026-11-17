@@ -14,7 +14,7 @@ package kintsugi3d.builder.tools;
 import kintsugi3d.gl.window.CanvasSize;
 import kintsugi3d.gl.window.CursorPosition;
 
-interface DragTool
+public interface DragTool
 {
     /**
      * Can be overridden to define behavior when a mouse button is pressed.

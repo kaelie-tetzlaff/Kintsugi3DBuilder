@@ -97,8 +97,6 @@ public class LightWidgets<ContextType extends Context<ContextType>> extends Shad
             && this.sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled")
             && sceneModel.getSettingsModel().getBoolean("lightWidgetsEnabled"))
         {
-            FramebufferSize size = framebuffer.getSize();
-
             getContext().getState().disableDepthWrite();
             getContext().getState().disableDepthTest();
             getContext().getState().setBlendFunction(new BlendFunction(Weight.ONE, Weight.ONE));

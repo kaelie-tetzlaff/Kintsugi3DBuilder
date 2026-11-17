@@ -23,7 +23,6 @@ import java.util.stream.IntStream;
 public abstract class ProjectDataCardFactoryBase<T> implements ProjectDataCardFactory<T>
 {
     private final ImageBasedRenderable<?> instance;
-    private ConfirmHandler confirmHandler;
 
     protected ProjectDataCardFactoryBase(ImageBasedRenderable<?> instance)
     {

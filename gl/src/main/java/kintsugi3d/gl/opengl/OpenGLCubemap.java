@@ -505,6 +505,7 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
         return new CubemapSide(getContext(), textureId, layerIndex);
     }
 
+    @SuppressWarnings("unused")
     private static class CubemapSide implements OpenGLFramebufferAttachment
     {
         private final int textureId;

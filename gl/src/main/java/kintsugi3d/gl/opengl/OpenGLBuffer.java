@@ -83,20 +83,6 @@ abstract class OpenGLBuffer implements ContextBound<OpenGLContext>, ManagedResou
         }
     }
 
-    void bindToIndex(int index)
-    {
-        if (hasData) // fix for MacOS which segfaults if using a buffer with no data
-        {
-            glBindBufferBase(this.getBufferTarget(), index, this.bufferId);
-            OpenGLContext.errorCheck();
-        }
-        else
-        {
-            glBindBufferBase(this.getBufferTarget(), index, 0);
-            OpenGLContext.errorCheck();
-        }
-    }
-
     @Override
     public final void close()
     {

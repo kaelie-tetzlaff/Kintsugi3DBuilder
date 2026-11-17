@@ -37,9 +37,9 @@ public abstract class LogMessageAppenderBase extends AbstractAppender
     }
 
     @SuppressWarnings("MethodMayBeStatic")
-    public final boolean isLevelAvailable(Level level)
+    public final boolean isLevelDisabled(Level level)
     {
-        return LogManager.getRootLogger().isEnabled(org.apache.logging.log4j.Level.toLevel(level.name()));
+        return !LogManager.getRootLogger().isEnabled(org.apache.logging.log4j.Level.toLevel(level.name()));
     }
 
     public abstract List<LogMessage> getMessages();

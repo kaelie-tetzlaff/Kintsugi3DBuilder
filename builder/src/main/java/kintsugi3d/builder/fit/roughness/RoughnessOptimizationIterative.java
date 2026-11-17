@@ -32,6 +32,7 @@ import java.util.stream.IntStream;
  * TODO: sketched out but not fully functional; may not be needed
  * @param <ContextType>
  */
+@SuppressWarnings("unused")
 public class RoughnessOptimizationIterative<ContextType extends Context<ContextType>>
         extends RoughnessOptimizationBase<ContextType>
 {
@@ -150,12 +151,12 @@ public class RoughnessOptimizationIterative<ContextType extends Context<ContextT
             .addShader(ShaderType.FRAGMENT, new File("shaders/specularfit/optimizeRoughness.frag"));
     }
 
-    private static <ContextType extends Context<ContextType>>
-    Program<ContextType> createErrorCalcProgram(ContextType context) throws IOException
-    {
-        return context.getShaderProgramBuilder()
-            .addShader(ShaderType.VERTEX, new File("shaders/common/texture.vert"))
-            .addShader(ShaderType.FRAGMENT, new File("shaders/specularfit/basisToGGXErrorCalc.frag"))
-            .createProgram();
-    }
+//    private static <ContextType extends Context<ContextType>>
+//    Program<ContextType> createErrorCalcProgram(ContextType context) throws IOException
+//    {
+//        return context.getShaderProgramBuilder()
+//            .addShader(ShaderType.VERTEX, new File("shaders/common/texture.vert"))
+//            .addShader(ShaderType.FRAGMENT, new File("shaders/specularfit/basisToGGXErrorCalc.frag"))
+//            .createProgram();
+//    }
 }

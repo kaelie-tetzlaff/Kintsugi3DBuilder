@@ -19,16 +19,12 @@ import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.util.Kintsugi3DViewerLauncher;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.ProgressMonitor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 
 public class ExportTexturesRequest implements ProgressMonitoredImageBasedGraphicsRequest
 {
-    private static final Logger LOG = LoggerFactory.getLogger(ExportTexturesRequest.class);
-
     private final File exportLocationFile;
     private final ExportSettings settings;
     private final Runnable callback;

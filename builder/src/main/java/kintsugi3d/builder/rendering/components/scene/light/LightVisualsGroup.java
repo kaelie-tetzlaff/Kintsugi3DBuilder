@@ -17,9 +17,6 @@ import kintsugi3d.builder.rendering.SceneModel;
 import kintsugi3d.builder.rendering.SceneViewportModel;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
-import kintsugi3d.util.RadialTextureGenerator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Class for drawing the 3D light representations and manipulation widgets.
@@ -27,8 +24,6 @@ import org.slf4j.LoggerFactory;
  */
 public class LightVisualsGroup<ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
-    private static final Logger LOG = LoggerFactory.getLogger(LightVisualsGroup.class);
-    private final ContextType context;
     private final SceneModel sceneModel;
     private final SceneViewportModel sceneViewportModel;
 
@@ -40,7 +35,6 @@ public class LightVisualsGroup<ContextType extends Context<ContextType>> impleme
 
     public LightVisualsGroup(ContextType context, SceneModel sceneModel, SceneViewportModel sceneViewportModel)
     {
-        this.context = context;
         this.sceneModel = sceneModel;
         this.sceneViewportModel = sceneViewportModel;
 
@@ -59,9 +53,6 @@ public class LightVisualsGroup<ContextType extends Context<ContextType>> impleme
         this.lightWidgets.initialize();
         this.lightWidgetCircle.initialize();
         this.lightWidgetLines.setSolidProgram(this.lightWidgets.getDrawable().program());
-
-        RadialTextureGenerator<ContextType> radialTextureGenerator = new RadialTextureGenerator<>(context);
-
     }
 
     @Override

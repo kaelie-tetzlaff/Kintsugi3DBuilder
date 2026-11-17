@@ -226,6 +226,7 @@ public final class SpecularFitRequest implements ProgressMonitoredImageBasedGrap
         }
     }
 
+    @SuppressWarnings("unused")
     private <ContextType extends Context<ContextType>> void performReconstruction(
         ReadonlyImageBasedGraphicsResources<ContextType> resources, ReadonlyTextureResources<ContextType> specularFit)
         throws IOException

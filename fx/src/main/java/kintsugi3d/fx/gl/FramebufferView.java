@@ -63,6 +63,7 @@ public final class FramebufferView extends Region
 
     private boolean copyBufferSwapReady = false;
 
+    @SuppressWarnings("unused")
     private static class ModifierKeysInstance extends ModifierKeysBase
     {
         private final boolean shiftModifier;

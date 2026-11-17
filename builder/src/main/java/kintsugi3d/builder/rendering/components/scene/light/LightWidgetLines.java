@@ -60,8 +60,6 @@ public class LightWidgetLines<ContextType extends Context<ContextType>> implemen
             && this.sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled")
             && sceneModel.getSettingsModel().getBoolean("lightWidgetsEnabled"))
         {
-            FramebufferSize size = framebuffer.getSize();
-
             context.getState().disableDepthWrite();
             context.getState().disableDepthTest();
             context.getState().setBlendFunction(new BlendFunction(Weight.ONE, Weight.ONE));
@@ -71,8 +69,6 @@ public class LightWidgetLines<ContextType extends Context<ContextType>> implemen
             // Draw light widget lines
             for (int i = 0; i < sceneModel.getLightingModel().getLightCount(); i++)
             {
-                Matrix4 widgetTransformation = cameraViewport.getView().times(sceneModel.getInverseLightViewMatrix(i));
-
                 if (sceneModel.getLightingModel().isLightWidgetEnabled(i))
                 {
                     if (sceneModel.getLightingModel().getLightWidgetModel(i).isDistanceWidgetVisible() || sceneModel.getLightingModel().getLightWidgetModel(i).isCenterWidgetVisible())

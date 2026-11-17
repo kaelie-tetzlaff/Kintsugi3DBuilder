@@ -36,8 +36,6 @@ public class AdvPhotoViewController implements SystemSettingsControllerBase
     @FXML private Slider isotropyFactorSlider;
     @FXML private ChoiceBox<ShadingParameterMode> weightModeChoiceBox;
 
-    private ObservableGeneralSettingsModel settingsModel;
-
     @Override
     public final void initializePage(Window parentWindow, JavaFXState state)
     {
@@ -73,25 +71,9 @@ public class AdvPhotoViewController implements SystemSettingsControllerBase
         isotropyFactorTextField.textProperty().bindBidirectional(injectedSettingsModel.getNumericProperty("isotropyFactor"),
             new SafeFloatStringConverter(0.0f));
 
-        this.settingsModel = injectedSettingsModel;
-
         //TODO: NEED TO UNBIND PARAMETERS UPON CLOSING
         //uncommenting this will lead to exceptions when opening the new settings modal
 //        root.getScene().getWindow().setOnCloseRequest(param -> unbind());
-    }
-
-    private void unbind()
-    {
-        buehlerCheckBox.selectedProperty().unbindBidirectional(settingsModel.getBooleanProperty("buehlerAlgorithm"));
-        buehlerTextField.textProperty().unbindBidirectional(settingsModel.getNumericProperty("buehlerViewCount"));
-
-        weightModeChoiceBox.valueProperty().unbindBidirectional(settingsModel.getObjectProperty("weightMode", ShadingParameterMode.class));
-
-        weightExponentSlider.valueProperty().unbindBidirectional(settingsModel.getNumericProperty("weightExponent"));
-        weightExponentTextField.textProperty().unbindBidirectional(settingsModel.getNumericProperty("weightExponent"));
-
-        isotropyFactorSlider.valueProperty().unbindBidirectional(settingsModel.getNumericProperty("isotropyFactor"));
-        isotropyFactorTextField.textProperty().unbindBidirectional(settingsModel.getNumericProperty("isotropyFactor"));
     }
 
     private static class WeightModeStringConverter extends StringConverter<ShadingParameterMode>

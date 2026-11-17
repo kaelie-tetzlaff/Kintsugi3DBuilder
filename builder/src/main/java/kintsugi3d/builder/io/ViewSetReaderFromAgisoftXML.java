@@ -77,8 +77,8 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
         float p1;
         float p2;
         float skew;
-        float pixelWidth = 1.0f;
-        float pixelHeight = 1.0f;
+        @SuppressWarnings("unused") float pixelWidth = 1.0f;
+        @SuppressWarnings("unused") float pixelHeight = 1.0f;
 
         Sensor(String id)
         {

@@ -38,11 +38,8 @@ public final class SearchableTreeView extends SearchableView
         backupRoot = deepCopy(treeView.getRoot());
 
         getSearchTextInput().textProperty().addListener((obs, oldText, newText) -> updateView());
+        getRegexMode().selectedProperty().addListener((obs, oldVal, newVal) -> updateView());
 
-        if (getRegexMode() != null)
-        {
-            getRegexMode().selectedProperty().addListener((obs, oldVal, newVal) -> updateView());
-        }
         return this;
     }
 
@@ -71,7 +68,7 @@ public final class SearchableTreeView extends SearchableView
         ObservableList<TreeItem<String>> leaves = getTreeViewLeaves(backupRoot);
         FilteredList<TreeItem<String>> filteredLeaves = new FilteredList<>(leaves, visibility -> true);
 
-        if (getRegexMode() != null && getRegexMode().isSelected())
+        if (getRegexMode().isSelected())
         {
             filteredLeaves.setPredicate(leaf -> leaf.getValue().matches(String.format(".*%s.*", searchTxt)));
         }

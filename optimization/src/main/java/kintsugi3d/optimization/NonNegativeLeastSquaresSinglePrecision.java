@@ -28,7 +28,7 @@ public final class NonNegativeLeastSquaresSinglePrecision
     {
     }
 
-    private static SimpleMatrix solvePartial(SimpleMatrix mATA, SimpleMatrix vATb, boolean[] p, int sizeP, List<Integer> mapping, SimpleMatrix sOut)
+    private static SimpleMatrix solvePartial(SimpleMatrix mATA, SimpleMatrix vATb, boolean[] p, List<Integer> mapping, SimpleMatrix sOut)
     {
         for (int index = 0; index < p.length; index++)
         {
@@ -146,7 +146,7 @@ public final class NonNegativeLeastSquaresSinglePrecision
 
                 // Populates the mapping, sovles the system and copies it into s,
                 // and returns a vector containing only the free variables.
-                SimpleMatrix sForP = solvePartial(mATA, vATb, p, sizeP + 1, mapping, s);
+                SimpleMatrix sForP = solvePartial(mATA, vATb, p, mapping, s);
 
                 // Update size of P based on the number of mappings.
                 sizeP = mapping.size();
@@ -200,7 +200,7 @@ public final class NonNegativeLeastSquaresSinglePrecision
 
                     // Populates the mapping, sovles the system and copies it into s,
                     // and returns a vector containing only the free variables.
-                    sForP = solvePartial(mATA, vATb, p, sizeP, mapping, s);
+                    sForP = solvePartial(mATA, vATb, p, mapping, s);
 
                     // Update size of P based on the number of mappings.
                     sizeP = mapping.size();

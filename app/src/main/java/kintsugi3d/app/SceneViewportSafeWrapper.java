@@ -59,11 +59,6 @@ class SceneViewportSafeWrapper implements SceneViewport
 
     private SceneViewport sceneViewport = SENTINEL;
 
-    final SceneViewport getSceneViewport()
-    {
-        return sceneViewport;
-    }
-
     final void setSceneViewport(SceneViewport sceneViewport)
     {
         this.sceneViewport = sceneViewport;

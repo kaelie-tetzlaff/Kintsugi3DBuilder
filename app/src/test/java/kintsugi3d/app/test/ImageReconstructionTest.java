@@ -184,11 +184,11 @@ class ImageReconstructionTest
         ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
         potatoGeometry = VertexGeometry.createFromOBJStream(in);
 
-        validationLinear = (rmse, noiseScale) -> assertEquals(noiseScale / SQRT12, rmse.getNormalizedLinear(), 0.001);
-        validationSRGB = (rmse, noiseScale) -> assertEquals(noiseScale / SQRT12, rmse.getNormalizedSRGB(), 0.001);
+        validationLinear = (rmse, noiseScale) -> assertEquals(noiseScaleToRMSE(noiseScale), rmse.getNormalizedLinear(), 0.001);
+        validationSRGB = (rmse, noiseScale) -> assertEquals(noiseScaleToRMSE(noiseScale), rmse.getNormalizedSRGB(), 0.001);
 
         // TODO figure out why we need a higher validation delta for this one?
-        validationEncoded = (rmse, noiseScale) -> assertEquals(noiseScale / SQRT12, rmse.getEncodedGroundTruth(), 0.005);
+        validationEncoded = (rmse, noiseScale) -> assertEquals(noiseScaleToRMSE(noiseScale), rmse.getEncodedGroundTruth(), 0.005);
 
         setupColor = program -> program.setUniform("diffuseColor", new Vector3(1.0f, 0.8f, 0.2f));
         setupMetallic = program ->
@@ -956,6 +956,7 @@ class ImageReconstructionTest
         return new ColorArrayImage(groundTruth, 256, 256);
     }
 
+    @SuppressWarnings("unused")
     private void testFitSynthetic(ViewSet viewSet, Function<ProgramBuilder<OpenGLContext>, ProgramBuilder<OpenGLContext>> injectDefines,
                                   Consumer<ReadonlyTextureResources<? extends Context<?>>> fitValidation, Consumer<ReadonlyColorAppearanceRMSE> rmseValidation, String testName)
     {
@@ -1043,6 +1044,7 @@ class ImageReconstructionTest
         }
     }
 
+    @SuppressWarnings("unused")
     private void testFitVSET(File viewSetFile, Consumer<ReadonlyColorAppearanceRMSE> validation, String testName) throws MeshImportException
     {
         LoadOptionsModel loadOptions = new SimpleLoadOptionsModel();

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="EntryPointsManager">
+    <list size="1">
+      <item index="0" class="java.lang.String" itemvalue="com.opencsv.bean.*" />
+    </list>
     <pattern value="kintsugi3d.builder.rendering.ProgressMonitoredGraphicsRequest" hierarchically="true" method="executeRequest" />
     <pattern value="kintsugi3d.builder.rendering.GraphicsRequest" hierarchically="true" method="executeRequest" />
+    <pattern value="kintsugi3d.fx.controllers.modals.systemsettings.SystemSettingsControllerBase" hierarchically="true" method="initializePage" />
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="MavenProjectsManager">

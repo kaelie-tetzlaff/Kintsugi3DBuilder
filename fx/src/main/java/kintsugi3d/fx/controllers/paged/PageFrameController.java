@@ -173,7 +173,6 @@ public class PageFrameController
         controller.setPageFrameController(this);
 
         StringExpression advanceLabelOverride = controller.getAdvanceLabelOverrideObservable();
-        BooleanBinding advanceLabelOverrideNotNull = advanceLabelOverride.isNotNull();
         BooleanBinding shouldConfirm = page.getNextPageObservable().isNull().and(controller.getCanConfirmObservable());
 
         currentPage.addListener(obs ->

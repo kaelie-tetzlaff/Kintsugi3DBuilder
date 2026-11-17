@@ -20,7 +20,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.util.Callback;
 import kintsugi3d.builder.util.logging.LogMessage;
 import kintsugi3d.fx.util.ScrollBarHelper;
@@ -48,7 +47,6 @@ public class LoggerController implements Initializable
     @FXML private ToggleButton toggleButtonInfo;
     @FXML private ToggleButton toggleButtonWarn;
     @FXML private ListView<LogMessage> messageListView;
-    @FXML private Pane cornerPatch;
 
     private FXLogMessageAppender logMessages;
 
@@ -62,19 +60,19 @@ public class LoggerController implements Initializable
         messageListView.scrollTo(messageListView.getItems().size() - 1);
 
         // If the logger cannot log a level, disable a filter button
-        if (!logMessages.isLevelAvailable(Level.ERROR))
+        if (logMessages.isLevelDisabled(Level.ERROR))
         {
             toggleButtonError.setSelected(false);
             toggleButtonError.setDisable(true);
         }
 
-        if (!logMessages.isLevelAvailable(Level.WARN))
+        if (logMessages.isLevelDisabled(Level.WARN))
         {
             toggleButtonWarn.setSelected(false);
             toggleButtonWarn.setDisable(true);
         }
 
-        if (!logMessages.isLevelAvailable(Level.INFO))
+        if (logMessages.isLevelDisabled(Level.INFO))
         {
             toggleButtonInfo.setSelected(false);
             toggleButtonInfo.setDisable(true);

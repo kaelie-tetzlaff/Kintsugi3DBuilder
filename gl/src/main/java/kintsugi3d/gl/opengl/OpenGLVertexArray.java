@@ -11,13 +11,14 @@
 
 package kintsugi3d.gl.opengl;
 
+import kintsugi3d.gl.core.ContextBound;
 import kintsugi3d.gl.core.ManagedResource;
 import kintsugi3d.gl.core.ReadonlyVertexBuffer;
 import kintsugi3d.gl.exceptions.NoSpecifiedVertexBuffersException;
 
 import static org.lwjgl.opengl.GL30.*;
 
-class OpenGLVertexArray implements ManagedResource
+class OpenGLVertexArray implements ManagedResource, ContextBound<OpenGLContext>
 {
     private final OpenGLContext context;
 
@@ -100,6 +101,7 @@ class OpenGLVertexArray implements ManagedResource
         }
     }
 
+    @Override
     public final OpenGLContext getContext()
     {
         return context;

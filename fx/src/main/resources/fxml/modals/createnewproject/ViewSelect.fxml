@@ -32,7 +32,7 @@
                <Insets />
             </VBox.margin>
             <TextField fx:id="imgSearchTxtField" prefColumnCount="25" prefHeight="25.0" promptText="Enter image name" HBox.hgrow="ALWAYS" />
-            <!--                        <CheckBox fx:id="regexMode" mnemonicParsing="false" text="Regex Mode" visible="false" />-->
+            <CheckBox fx:id="regexMode" mnemonicParsing="false" text="Regex Mode" visible="false" managed="false" />
          </HBox>
          <TreeView fx:id="chunkTreeView" onContextMenuRequested="#selectImageInTreeView" onKeyTyped="#selectImageInTreeView" VBox.vgrow="ALWAYS" />
       </VBox>

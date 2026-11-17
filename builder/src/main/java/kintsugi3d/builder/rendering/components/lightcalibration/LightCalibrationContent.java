@@ -78,7 +78,6 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
 
         Matrix4 lightView = lightTransform.times(cameraViewport.getView());
         Vector3 lightPosWorldSpace = lightView.getUpperLeft3x3().transpose().times(lightView.getColumn(3).getXYZ().negated());
-        Vector3 worldSpaceCamAxis = cameraViewport.getView().getRow(2).getXYZ().normalized().negated(); // camera-space -z axis in world space
         Vector3 worldSpaceUpAxis = cameraViewport.getView().getRow(1).getXYZ();
 
         Vector3 targetPosCamSpace = new Vector3(0, 0, cameraViewport.getView().get(2, 3)); // get z-coordinate of world-space origin in cam-space

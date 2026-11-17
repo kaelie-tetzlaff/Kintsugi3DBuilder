@@ -15,14 +15,14 @@ import java.util.function.Supplier;
 
 public final class DataSentinelPageBuilder<T> extends DataPageBuilder<Object, T, PageFrameController>
 {
-    private DataSentinelPageBuilder(PageFrameController frameController, Supplier<PageFrameController> finisher, T data)
+    private DataSentinelPageBuilder(PageFrameController frameController, Supplier<PageFrameController> finisher)
     {
         super(new SentinelPage<>(), frameController, finisher);
     }
 
     static <T> DataSentinelPageBuilder<T> of(PageFrameController frameController, Supplier<PageFrameController> finisher, T data)
     {
-        DataSentinelPageBuilder<T> result = new DataSentinelPageBuilder<>(frameController, finisher, data);
+        DataSentinelPageBuilder<T> result = new DataSentinelPageBuilder<>(frameController, finisher);
 
         // Whenever the next page (i.e. true first page) is assigned, make it the current page of the frame controller.
         result.getPage().getNextPageObservable().addListener(

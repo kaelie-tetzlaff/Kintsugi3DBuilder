@@ -78,7 +78,7 @@ public final class ExperienceManager
             .or(renderExportManager.getAnyModalOpenProperty());
     }
 
-    boolean isAnyModalOpen()
+    public boolean isAnyModalOpen()
     {
         return anyModalOpen.get();
     }

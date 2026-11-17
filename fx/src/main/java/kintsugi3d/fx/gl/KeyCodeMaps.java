@@ -14,16 +14,13 @@ package kintsugi3d.fx.gl;
 import javafx.scene.input.KeyCode;
 import kintsugi3d.gl.window.Key;
 
-import java.util.*;
-import java.util.Map.Entry;
+import java.util.EnumMap;
+import java.util.Map;
 
 final class KeyCodeMaps
 {
     @SuppressWarnings("StaticCollection")
     private static final Map<KeyCode, Key> CODE_TO_KEY;
-
-    @SuppressWarnings("StaticCollection")
-    private static final Map<Key, List<KeyCode>> KEY_TO_CODES;
 
     static
     {
@@ -139,14 +136,6 @@ final class KeyCodeMaps
         CODE_TO_KEY.put(KeyCode.ALT, Key.ALT);
         CODE_TO_KEY.put(KeyCode.META, Key.SUPER);
         CODE_TO_KEY.put(KeyCode.CONTEXT_MENU, Key.MENU);
-
-
-        KEY_TO_CODES = new EnumMap<>(Key.class);
-        for (Entry<KeyCode, Key> entry : CODE_TO_KEY.entrySet())
-        {
-            KEY_TO_CODES.computeIfAbsent(entry.getValue(), key -> new ArrayList<>(1))
-                .add(entry.getKey());
-        }
     }
 
     private KeyCodeMaps()
@@ -156,10 +145,5 @@ final class KeyCodeMaps
     static Key codeToKey(KeyCode code)
     {
         return CODE_TO_KEY.getOrDefault(code, Key.UNKNOWN);
-    }
-
-    static Iterable<KeyCode> keyToCode(Key key)
-    {
-        return KEY_TO_CODES.getOrDefault(key, Collections.emptyList());
     }
 }

@@ -14,6 +14,7 @@ package kintsugi3d.gl.core;
 /**
  * Enumerates the primary use cases for a GPU buffer.
  */
+@SuppressWarnings("unused")
 public enum BufferAccessType 
 {
     /**

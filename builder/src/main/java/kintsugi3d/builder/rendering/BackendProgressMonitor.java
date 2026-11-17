@@ -128,11 +128,6 @@ class BackendProgressMonitor implements ProgressMonitor
         }
     }
 
-    private boolean isProcessed()
-    {
-        return instance.getResources().getTextureResources().getBasisWeightResources() != null;
-    }
-
     @Override
     public final void fail(Throwable e)
     {

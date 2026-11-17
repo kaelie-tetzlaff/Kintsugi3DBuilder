@@ -27,8 +27,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 import kintsugi3d.builder.util.FXImageHelper;
 import kintsugi3d.fx.util.ZoomSafeImageView;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Collection;
@@ -36,7 +34,6 @@ import java.util.List;
 
 public class ImageDetailsController
 {
-    private static final Logger LOG = LoggerFactory.getLogger(ImageDetailsController.class);
     @FXML private VBox detailBox;
     @FXML private HBox buttonRow;
 

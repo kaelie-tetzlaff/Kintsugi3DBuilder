@@ -75,8 +75,6 @@ public class LightCalibrationVisual<ContextType extends Context<ContextType>> ex
     @Override
     public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
-        FramebufferSize size = framebuffer.getSize();
-
         this.getContext().getState().disableDepthWrite();
 
         this.getContext().getState().setBlendFunction(new BlendFunction(Weight.ONE, Weight.ONE));

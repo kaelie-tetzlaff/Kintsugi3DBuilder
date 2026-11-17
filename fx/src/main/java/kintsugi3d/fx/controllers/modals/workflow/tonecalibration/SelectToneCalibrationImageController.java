@@ -183,7 +183,7 @@ public class SelectToneCalibrationImageController extends NonDataPageControllerB
         return true;
     }
 
-    private void selectImageFileAction(ActionEvent event)
+    private void selectImageFileAction(ActionEvent ignoredEvent)
     {
         // Don't show file chooser when deselecting
         if (!selectImageFileButton.isSelected())

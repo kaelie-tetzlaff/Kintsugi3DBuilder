@@ -20,6 +20,7 @@ package kintsugi3d.fx.controllers.paged;
  * @param <InType>
  * @param <OutType>
  */
+@SuppressWarnings("unused")
 public abstract class DataTransformerPageControllerBase<InType, OutType>
     extends PageControllerBase<InType, DataSupplierPage<?, OutType>>
     implements DataSupplierPageController<InType, OutType>

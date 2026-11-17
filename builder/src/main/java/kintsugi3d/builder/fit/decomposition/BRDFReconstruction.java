@@ -123,9 +123,10 @@ public class BRDFReconstruction
 //        }
     }
 
-    private MatrixSystem buildReflectanceMatrix(GraphicsStream<ReflectanceData> viewStream, SpecularDecomposition solution, ProgressMonitor monitor)
+    private MatrixSystem buildReflectanceMatrix(
+        GraphicsStream<ReflectanceData> viewStream, SpecularDecomposition solution,
+        @SuppressWarnings("unused") ProgressMonitor monitor) // TODO add ProgressMonitor support to GraphicsStream.
     {
-        // TODO add ProgressMonitor support to GraphicsStream.
         Counter counter = new Counter();
         MatrixSystem system =
             viewStream.map(reflectanceData ->

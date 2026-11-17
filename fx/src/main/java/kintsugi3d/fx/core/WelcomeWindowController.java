@@ -14,9 +14,6 @@ package kintsugi3d.fx.core;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.BooleanExpression;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -146,17 +143,6 @@ public class WelcomeWindowController
                 });
             },
             promptCacheSize -> LOG.info("No cache cleanup needed (Size: {}GB)", promptCacheSize));
-    }
-
-    /**
-     * Useful for showing alerts that would otherwise be covered by up the welcome window
-     * (and by extension, the main window as a parent of the welcome window).
-     * @param runnable
-     */
-    public final void runOnceWhenShown(Runnable runnable)
-    {
-        ReadOnlyBooleanProperty showing = window.showingProperty();
-        showing.addListener(new OneShotChangeListener(runnable, showing));
     }
 
     private static void handleMenuItemSelection(MenuItem item)
@@ -412,28 +398,6 @@ public class WelcomeWindowController
         catch (IOException e)
         {
             LOG.warn("Could not find preview image for {}", projFile.getName(), e);
-        }
-    }
-
-    private static final class OneShotChangeListener implements ChangeListener<Boolean>
-    {
-        private final Runnable runnable;
-        private final ObservableValue<Boolean> property;
-
-        private OneShotChangeListener(Runnable runnable, ObservableValue<Boolean> property)
-        {
-            this.runnable = runnable;
-            this.property = property;
-        }
-
-        @Override
-        public void changed(ObservableValue<? extends Boolean> observable, Boolean wasTrue, Boolean isTrue)
-        {
-            if (isTrue)
-            {
-                runnable.run();
-                property.removeListener(this);
-            }
         }
     }
 }
