@@ -18,6 +18,7 @@ import kintsugi3d.gl.vecmath.Vector3;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -58,14 +59,16 @@ public class Potato
     {
         this.bumps = new Bump[bumpCount];
 
+        SecureRandom random = new SecureRandom();
+
         for (int i = 0; i < bumpCount; i++)
         {
             bumps[i] = new Bump();
             bumps[i].size = bumpSize;
             bumps[i].height = bumpHeight;
 
-            double phi = Math.random() * 2 * Math.PI;
-            double theta = StrictMath.acos(2 * Math.random() - 1);
+            double phi = random.nextDouble() * 2 * Math.PI;
+            double theta = StrictMath.acos(2 * random.nextDouble() - 1);
             double sinTheta = StrictMath.sin(theta);
             bumps[i].direction = new Vector3(
                 (float) (StrictMath.cos(phi) * sinTheta),
