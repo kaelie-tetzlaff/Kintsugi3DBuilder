@@ -35,7 +35,6 @@ public class BlenderExporter extends MaterialExporter
     private static final Logger LOG = LoggerFactory.getLogger(BlenderExporter.class);
     private static final Path SCRIPT_LOCATION = ApplicationFolders.getAdditionalScriptsDirectory();
     private final boolean cycles;
-    private File outputPath;
 
     public BlenderExporter(boolean cycles)
     {
@@ -67,13 +66,13 @@ public class BlenderExporter extends MaterialExporter
     }
 
     @Override
-    protected final void postExport()
+    protected final void postExport(File outputDirectory)
     {
-        File model = new File(outputPath, getFilename());
-        File normal = new File(outputPath, getTextureFilename(StandardTexture.NORMAL_MAP.getDetails().name, getTextureFileFormat()));
-        File diffuse = new File(outputPath, getTextureFilename(StandardTexture.DIFFUSE_COLOR.getDetails().name, getTextureFileFormat()));
-        File specular = new File(outputPath, getTextureFilename(StandardTexture.SPECULAR_COLOR.getDetails().name, getTextureFileFormat()));
-        File roughness = new File(outputPath, getTextureFilename(StandardTexture.ROUGHNESS.getDetails().name, getTextureFileFormat()));
+        File model = new File(outputDirectory, getFilename());
+        File normal = new File(outputDirectory, getTextureFilename(StandardTexture.NORMAL_MAP.getDetails().name, getTextureFileFormat()));
+        File diffuse = new File(outputDirectory, getTextureFilename(StandardTexture.DIFFUSE_COLOR.getDetails().name, getTextureFileFormat()));
+        File specular = new File(outputDirectory, getTextureFilename(StandardTexture.SPECULAR_COLOR.getDetails().name, getTextureFileFormat()));
+        File roughness = new File(outputDirectory, getTextureFilename(StandardTexture.ROUGHNESS.getDetails().name, getTextureFileFormat()));
 
         // Command list for the ProcessBuilder
         List<String> command = new ArrayList<>(8);
@@ -117,7 +116,7 @@ public class BlenderExporter extends MaterialExporter
         @SuppressWarnings("UseOfProcessBuilder") ProcessBuilder pb = new ProcessBuilder(command);
 
         // Change the working directory of the exporter to the output path
-        pb.directory(outputPath);
+        pb.directory(outputDirectory);
         pb.redirectErrorStream(true);
         try
         {
@@ -141,14 +140,5 @@ public class BlenderExporter extends MaterialExporter
         {
             LOG.error("Process was interrupted.", e);
         }
-    }
-
-    // Grab the output directory after the super call
-    @Override
-    public final void saveTextures(File outputDirectory)
-    {
-        super.saveTextures(outputDirectory);
-
-        outputPath = outputDirectory;
     }
 }

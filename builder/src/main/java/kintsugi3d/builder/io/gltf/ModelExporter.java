@@ -139,9 +139,7 @@ public final class ModelExporter
 
     private void exportTextures(File outputDirectory)
     {
-        materialExporter.saveTextures(outputDirectory);
-        materialExporter.makeLODs(outputDirectory);
-        materialExporter.postExport();
+        materialExporter.export(outputDirectory);
     }
 
     public static ModelExporter fromVertexGeometry(ReadonlyVertexGeometry geometry)

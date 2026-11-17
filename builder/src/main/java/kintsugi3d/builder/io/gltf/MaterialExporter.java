@@ -212,13 +212,28 @@ public class MaterialExporter
         }
     }
 
+    public final void export(File outputDirectory)
+    {
+        File outputDirectoryOrRedirect = redirectOutputDirectory(outputDirectory);
+        saveTextures(outputDirectoryOrRedirect);
+        makeLODs(outputDirectoryOrRedirect);
+        postExport(outputDirectory);
+    }
+
     /**
      * To be overridden by subclass
      * @return
      */
+    @SuppressWarnings("DesignForExtension")
     protected @Nullable Object getExtras()
     {
         return null;
+    }
+
+    @SuppressWarnings("DesignForExtension")
+    protected File redirectOutputDirectory(File outputDirectory)
+    {
+        return outputDirectory;
     }
 
     /**
@@ -231,21 +246,29 @@ public class MaterialExporter
 
     /**
      * To be overridden by subclass.
-     * Called after all other saving textures and LODs.
+     * Called as part of saveTextures, before makeLODs
      */
-    protected void postExport()
+    protected void postExport(File outputDirectory)
     {
     }
 
-    public void saveTextures(File outputDirectory)
+    /**
+     * To be overridden by subclass.
+     * Called after all other saving textures and LODs.
+     */
+    protected void saveAdditionalTextures(File outputDirectory)
+    {
+    }
+
+    public final void saveTextures(File outputDirectory)
     {
         textureResources.saveNamedTextures(getSupportedTextures(), textureFileFormat, outputDirectory, textureFilePrefix);
+        saveAdditionalTextures(outputDirectory);
     }
 
     public final void makeLODs(File outputDirectory)
     {
-        LODGenerator.generateLODs(minLODSize, outputDirectory,
-            textures.values().toArray(TextureExportSpecification[]::new));
+        LODGenerator.generateLODs(minLODSize, outputDirectory, textures.values().toArray(TextureExportSpecification[]::new));
     }
 
     private @Nullable TextureInfo processTextureParam(String texName, Method method, Class<?> paramType, boolean requiresAlpha)

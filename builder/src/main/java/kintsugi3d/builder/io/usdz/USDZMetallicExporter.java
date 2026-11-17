@@ -40,14 +40,14 @@ public class USDZMetallicExporter extends USDZExporter
     }
 
     @Override
-    protected final void addCommands(List<String> commandList)
+    protected final void addCommands(File outputDirectory, List<String> commandList)
     {
         commandList.add("--use-metallic");
         commandList.add("--albedo");
-        commandList.add(new File(getTempPath(), getTextureFilename(StandardTexture.ALBEDO.getDetails().name, getTextureFileFormat())).getPath());
+        commandList.add(new File(outputDirectory, getTextureFilename(StandardTexture.ALBEDO.getDetails().name, getTextureFileFormat())).getPath());
         commandList.add("--occlusion");
-        commandList.add(new File(getTempPath(), getTextureFilename(StandardTexture.OCCLUSION.getDetails().name, getTextureFileFormat())).getPath());
+        commandList.add(new File(outputDirectory, getTextureFilename(StandardTexture.OCCLUSION.getDetails().name, getTextureFileFormat())).getPath());
         commandList.add("--metallic");
-        commandList.add(new File(getTempPath(), getTextureFilename(StandardTexture.METALLIC.getDetails().name, getTextureFileFormat())).getPath());
+        commandList.add(new File(outputDirectory, getTextureFilename(StandardTexture.METALLIC.getDetails().name, getTextureFileFormat())).getPath());
     }
 }

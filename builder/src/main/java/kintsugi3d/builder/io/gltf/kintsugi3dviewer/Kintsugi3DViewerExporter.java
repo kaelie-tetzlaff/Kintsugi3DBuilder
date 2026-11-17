@@ -89,16 +89,12 @@ public class Kintsugi3DViewerExporter extends PBRExporter
     }
 
     @Override
-    public final void saveTextures(File outputDirectory)
+    public final void saveAdditionalTextures(File outputDirectory)
     {
-        super.saveTextures(outputDirectory);
-
         // Check if we need to fallback to PNG to ensure alpha channels exist.
         String format = determineFileFormat(getTextureFileFormat(), true);
         getTextureResources().savePackedWeightMaps(format, outputDirectory, getTextureFilePrefix());
-
-        getTextureResources().saveBasisFunctions(outputDirectory,
-            getBasisFunctionsUri());
+        getTextureResources().saveBasisFunctions(outputDirectory, getBasisFunctionsUri());
     }
 
     private String getBasisFunctionsUri()

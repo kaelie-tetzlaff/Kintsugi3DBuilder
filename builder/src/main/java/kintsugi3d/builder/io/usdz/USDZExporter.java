@@ -40,13 +40,7 @@ public abstract class USDZExporter extends MaterialExporter
     private static final Logger LOG = LoggerFactory.getLogger(USDZExporter.class);
     private static final Path BIN_LOCATION = ApplicationFolders.getAdditionalBinDirectory();
 
-    private File outputPath;
-    private File tempPath;
-
-    protected final File getTempPath()
-    {
-        return tempPath;
-    }
+    private File modelOutputDirectory;
 
     @SuppressWarnings("NoopMethodInAbstractClass")
     @StandardTextureExport(StandardTexture.NORMAL_MAP)
@@ -60,10 +54,10 @@ public abstract class USDZExporter extends MaterialExporter
     {
     }
 
-    protected abstract void addCommands(List<String> commandList);
+    protected abstract void addCommands(File outputDirectory, List<String> commandList);
 
     @Override
-    protected final void postExport()
+    protected final void postExport(File outputDirectory)
     {
         // Command list for the ProcessBuilder
         List<String> command = new ArrayList<>(8);
@@ -113,16 +107,16 @@ public abstract class USDZExporter extends MaterialExporter
         command.add("--format");
         command.add(getTextureFileFormat());
         command.add("--normal");
-        command.add(new File(tempPath, getTextureFilename(StandardTexture.NORMAL_MAP.getDetails().name, getTextureFileFormat())).getPath());
+        command.add(new File(outputDirectory, getTextureFilename(StandardTexture.NORMAL_MAP.getDetails().name, getTextureFileFormat())).getPath());
         command.add("--roughness");
-        command.add(new File(tempPath, getTextureFilename(StandardTexture.ROUGHNESS.getDetails().name, getTextureFileFormat())).getPath());
+        command.add(new File(outputDirectory, getTextureFilename(StandardTexture.ROUGHNESS.getDetails().name, getTextureFileFormat())).getPath());
         // Add inheritance specified commands
-        addCommands(command);
+        addCommands(outputDirectory, command);
 
         @SuppressWarnings("UseOfProcessBuilder") ProcessBuilder pb = new ProcessBuilder(command);
 
-        // Change the working directory of the exporter to the output path
-        pb.directory(outputPath);
+        // Change the working directory of the exporter to the model's output path
+        pb.directory(modelOutputDirectory);
         pb.redirectErrorStream(true);
         try
         {
@@ -151,7 +145,7 @@ public abstract class USDZExporter extends MaterialExporter
         // Cleanup temp files
         try
         {
-            try (Stream<Path> stream = Files.walk(tempPath.toPath()))
+            try (Stream<Path> stream = Files.walk(outputDirectory.toPath()))
             {
                 stream.sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
             }
@@ -164,10 +158,9 @@ public abstract class USDZExporter extends MaterialExporter
 
     // Grab the output directory and redirect the save to a temporary directory
     @Override
-    public final void saveTextures(File outputDirectory)
+    public final File redirectOutputDirectory(File outputDirectory)
     {
-        outputPath = outputDirectory;
-        tempPath = new File(Global.io().getLoadedViewSet().getSupportingFilesDirectory(), "temp");
-        super.saveTextures(tempPath);
+        modelOutputDirectory = outputDirectory;
+        return new File(Global.io().getLoadedViewSet().getSupportingFilesDirectory(), "temp");
     }
 }
