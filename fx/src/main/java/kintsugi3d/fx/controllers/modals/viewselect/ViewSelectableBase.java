@@ -20,6 +20,7 @@ public abstract class ViewSelectableBase implements ViewSelectable
     private String primaryView;
     private double primaryViewRotation;
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public String getAdvanceLabelOverride()
     {
