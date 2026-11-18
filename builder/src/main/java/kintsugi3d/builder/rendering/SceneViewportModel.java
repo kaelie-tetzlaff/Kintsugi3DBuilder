@@ -47,10 +47,10 @@ public class SceneViewportModel implements SceneViewport
     {
         this.sceneModel = sceneModel;
 
-        this.sceneObjectNameList = new ArrayList<>(32);
-        this.sceneObjectIDLookup = new HashMap<>(32);
+        sceneObjectNameList = new ArrayList<>(32);
+        sceneObjectIDLookup = new HashMap<>(32);
 
-        this.sceneObjectNameList.add(null); // 0
+        sceneObjectNameList.add(null); // 0
     }
 
     public final void addSceneObjectType(String sceneObjectTag)
@@ -63,13 +63,13 @@ public class SceneViewportModel implements SceneViewport
 
     public final int lookupSceneObjectID(String sceneObjectTag)
     {
-        return this.sceneObjectIDLookup.get(sceneObjectTag);
+        return sceneObjectIDLookup.get(sceneObjectTag);
     }
 
     public final <ContextType extends Context<ContextType>> void refreshBuffers(Matrix4 newProjection, ReadableFramebuffer<ContextType> offscreenFBO)
     {
-        this.projection = newProjection;
-        this.fboSize = offscreenFBO.getSizeForRead();
+        projection = newProjection;
+        fboSize = offscreenFBO.getSizeForRead();
 
         if (pixelObjectIDBuffer == null || pixelObjectIDBuffer.capacity() != 4 * fboSize.width * fboSize.height)
         {

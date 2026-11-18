@@ -29,11 +29,11 @@ public class ReplaceImage extends ExperienceBase
     @Override
     protected final void open() throws IOException
     {
-        this.buildPagedModal(currentData).then("/fxml/modals/workflow/ReplaceImage.fxml").finish();
+        buildPagedModal(currentData).then("/fxml/modals/workflow/ReplaceImage.fxml").finish();
     }
 
     public final void setData(ImageReplacer data)
     {
-        this.currentData = data;
+        currentData = data;
     }
 }

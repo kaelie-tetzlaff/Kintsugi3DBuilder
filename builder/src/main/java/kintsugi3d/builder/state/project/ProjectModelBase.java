@@ -65,15 +65,15 @@ public abstract class ProjectModelBase<
         {
             NodeList cameraNodes = cameraListNode.getChildNodes();
 
-            synchronized (this.getCameraList())
+            synchronized (getCameraList())
             {
-                this.getCameraList().clear();
+                getCameraList().clear();
                 for (int i = 0; i < cameraNodes.getLength(); i++)
                 {
                     Node cameraNode = cameraNodes.item(i);
                     if (cameraNode instanceof Element)
                     {
-                        this.getCameraList().add(SerializableCameraSettings.fromDOMElement(
+                        getCameraList().add(SerializableCameraSettings.fromDOMElement(
                             (Element) cameraNode, this::constructCameraSetting));
                     }
                 }
@@ -85,17 +85,17 @@ public abstract class ProjectModelBase<
         {
             NodeList environmentNodes = environmentListNode.getChildNodes();
 
-            synchronized (this.getEnvironmentList())
+            synchronized (getEnvironmentList())
             {
-                this.getEnvironmentList().clear();
-                this.getEnvironmentList().add(noEnvironment);
+                getEnvironmentList().clear();
+                getEnvironmentList().add(noEnvironment);
 
                 for (int i = 0; i < environmentNodes.getLength(); i++)
                 {
                     Node environmentNode = environmentNodes.item(i);
                     if (environmentNode instanceof Element)
                     {
-                        this.getEnvironmentList().add(SerializableEnvironmentSettings.fromDOMElement(
+                        getEnvironmentList().add(SerializableEnvironmentSettings.fromDOMElement(
                             (Element) environmentNode, this::constructEnvironmentSetting));
                     }
                 }
@@ -107,15 +107,15 @@ public abstract class ProjectModelBase<
         {
             NodeList lightGroupNodes = lightGroupListNode.getChildNodes();
 
-            synchronized (this.getLightGroupList())
+            synchronized (getLightGroupList())
             {
-                this.getLightGroupList().clear();
+                getLightGroupList().clear();
                 for (int i = 0; i < lightGroupNodes.getLength(); i++)
                 {
                     Node lightGroupNode = lightGroupNodes.item(i);
                     if (lightGroupNode instanceof Element)
                     {
-                        this.getLightGroupList().add(SerializableLightGroupSettings.fromDOMElement(
+                        getLightGroupList().add(SerializableLightGroupSettings.fromDOMElement(
                             (Element) lightGroupNode, this::constructLightGroupSetting));
                     }
                 }
@@ -127,15 +127,15 @@ public abstract class ProjectModelBase<
         {
             NodeList objectPoseNodes = objectPoseListNode.getChildNodes();
 
-            synchronized (this.getObjectPoseList())
+            synchronized (getObjectPoseList())
             {
-                this.getObjectPoseList().clear();
+                getObjectPoseList().clear();
                 for (int i = 0; i < objectPoseNodes.getLength(); i++)
                 {
                     Node objectPoseNode = objectPoseNodes.item(i);
                     if (objectPoseNode instanceof Element)
                     {
-                        this.getObjectPoseList().add(SerializableObjectPoseSettings.fromDOMElement(
+                        getObjectPoseList().add(SerializableObjectPoseSettings.fromDOMElement(
                             (Element) objectPoseNode, this::constructObjectPoseSetting));
                     }
                 }
@@ -145,7 +145,7 @@ public abstract class ProjectModelBase<
         Node colorPickerImageNode = document.getElementsByTagName("ColorCheckerFile").item(0);
         if (colorPickerImageNode != null)
         {
-            this.setColorCheckerFile(new File(colorPickerImageNode.getTextContent()));
+            setColorCheckerFile(new File(colorPickerImageNode.getTextContent()));
         }
     }
 
@@ -156,23 +156,23 @@ public abstract class ProjectModelBase<
         Element rootElement = document.createElement("Project");
         document.appendChild(rootElement);
 
-        synchronized (this.getCameraList())
+        synchronized (getCameraList())
         {
             Element cameraListElement = document.createElement("CameraList");
             rootElement.appendChild(cameraListElement);
 
-            for (SerializableCameraSettings camera : this.getCameraList())
+            for (SerializableCameraSettings camera : getCameraList())
             {
                 cameraListElement.appendChild(camera.toDOMElement(document));
             }
         }
 
-        synchronized (this.getEnvironmentList())
+        synchronized (getEnvironmentList())
         {
             Element environmentListElement = document.createElement("EnvironmentList");
             rootElement.appendChild(environmentListElement);
 
-            for (SerializableEnvironmentSettings environment : this.getEnvironmentList())
+            for (SerializableEnvironmentSettings environment : getEnvironmentList())
             {
                 if (!Objects.equals(environment, noEnvironment))
                 {
@@ -181,32 +181,32 @@ public abstract class ProjectModelBase<
             }
         }
 
-        synchronized (this.getLightGroupList())
+        synchronized (getLightGroupList())
         {
             Element lightGroupListElement = document.createElement("LightGroupList");
             rootElement.appendChild(lightGroupListElement);
 
-            for (SerializableLightGroupSettings<LightType> lightGroup : this.getLightGroupList())
+            for (SerializableLightGroupSettings<LightType> lightGroup : getLightGroupList())
             {
                 lightGroupListElement.appendChild(lightGroup.toDOMElement(document));
             }
         }
 
-        synchronized (this.getObjectPoseList())
+        synchronized (getObjectPoseList())
         {
             Element objectPoseListElement = document.createElement("ObjectPoseList");
             rootElement.appendChild(objectPoseListElement);
 
-            for (SerializableObjectPoseSettings objectPose : this.getObjectPoseList())
+            for (SerializableObjectPoseSettings objectPose : getObjectPoseList())
             {
                 objectPoseListElement.appendChild(objectPose.toDOMElement(document));
             }
         }
 
-        if (this.getColorCheckerFile() != null)
+        if (getColorCheckerFile() != null)
         {
             Element colorPickerImageElement = document.createElement("ColorCheckerFile");
-            colorPickerImageElement.setTextContent(this.getColorCheckerFile().getPath());
+            colorPickerImageElement.setTextContent(getColorCheckerFile().getPath());
             rootElement.appendChild(colorPickerImageElement);
         }
 
@@ -220,6 +220,6 @@ public abstract class ProjectModelBase<
 
     public final EnvironmentType getNoEnvironment()
     {
-        return this.noEnvironment;
+        return noEnvironment;
     }
 }

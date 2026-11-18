@@ -62,13 +62,13 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
     @Override
     public final String toString()
     {
-        if (!this.isNoEnvironment() && locked.getValue())
+        if (!isNoEnvironment() && locked.getValue())
         {
-            return String.format("(L) %s", this.name.getValue());
+            return String.format("(L) %s", name.getValue());
         }
         else
         {
-            return this.name.getValue();
+            return name.getValue();
         }
     }
 

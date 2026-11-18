@@ -60,7 +60,7 @@ class EventCollector
     {
         synchronized (lock)
         {
-            this.canvasPos.add(event);
+            canvasPos.add(event);
         }
     }
 
@@ -68,7 +68,7 @@ class EventCollector
     {
         synchronized (lock)
         {
-            this.canvasSize.add(event);
+            canvasSize.add(event);
         }
     }
 
@@ -76,7 +76,7 @@ class EventCollector
     {
         synchronized (lock)
         {
-            this.windowClose.add(event);
+            windowClose.add(event);
         }
     }
 
@@ -84,7 +84,7 @@ class EventCollector
     {
         synchronized (lock)
         {
-            this.windowFocusLost.add(event);
+            windowFocusLost.add(event);
         }
     }
 
@@ -92,7 +92,7 @@ class EventCollector
     {
         synchronized (lock)
         {
-            this.windowFocusGained.add(event);
+            windowFocusGained.add(event);
         }
     }
 
@@ -100,7 +100,7 @@ class EventCollector
     {
         synchronized (lock)
         {
-            this.windowIconified.add(event);
+            windowIconified.add(event);
         }
     }
 
@@ -108,7 +108,7 @@ class EventCollector
     {
         synchronized (lock)
         {
-            this.windowRestored.add(event);
+            windowRestored.add(event);
         }
     }
 
@@ -116,7 +116,7 @@ class EventCollector
     {
         synchronized (lock)
         {
-            this.framebufferSize.add(event);
+            framebufferSize.add(event);
         }
     }
 
@@ -124,7 +124,7 @@ class EventCollector
     {
         synchronized (lock)
         {
-            this.keyPress.add(event);
+            keyPress.add(event);
         }
     }
 
@@ -132,7 +132,7 @@ class EventCollector
     {
         synchronized (lock)
         {
-            this.keyRelease.add(event);
+            keyRelease.add(event);
         }
     }
 
@@ -140,7 +140,7 @@ class EventCollector
     {
         synchronized (lock)
         {
-            this.keyType.add(event);
+            keyType.add(event);
         }
     }
 
@@ -148,7 +148,7 @@ class EventCollector
     {
         synchronized (lock)
         {
-            this.character.add(event);
+            character.add(event);
         }
     }
 
@@ -156,7 +156,7 @@ class EventCollector
     {
         synchronized (lock)
         {
-            this.charMods.add(event);
+            charMods.add(event);
         }
     }
 
@@ -164,7 +164,7 @@ class EventCollector
     {
         synchronized (lock)
         {
-            this.mouseButtonPress.add(event);
+            mouseButtonPress.add(event);
         }
     }
 
@@ -172,7 +172,7 @@ class EventCollector
     {
         synchronized (lock)
         {
-            this.mouseButtonRelease.add(event);
+            mouseButtonRelease.add(event);
         }
     }
 
@@ -180,7 +180,7 @@ class EventCollector
     {
         synchronized (lock)
         {
-            this.cursorPos.add(event);
+            cursorPos.add(event);
         }
     }
 
@@ -188,7 +188,7 @@ class EventCollector
     {
         synchronized (lock)
         {
-            this.cursorEnter.add(event);
+            cursorEnter.add(event);
         }
     }
 
@@ -196,7 +196,7 @@ class EventCollector
     {
         synchronized (lock)
         {
-            this.cursorExit.add(event);
+            cursorExit.add(event);
         }
     }
 
@@ -204,7 +204,7 @@ class EventCollector
     {
         synchronized (lock)
         {
-            this.scroll.add(event);
+            scroll.add(event);
         }
     }
 

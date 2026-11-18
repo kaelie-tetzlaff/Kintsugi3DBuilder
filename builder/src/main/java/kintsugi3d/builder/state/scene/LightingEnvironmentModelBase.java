@@ -31,8 +31,8 @@ public abstract class LightingEnvironmentModelBase<DiscreteLightType extends Dis
 
     protected LightingEnvironmentModelBase(int lightCount, IntFunction<DiscreteLightType> lightInstanceCreator, EnvironmentModel environmentModel)
     {
-        this.lightInstanceModels = new ArrayList<>(lightCount);
-        this.lightWidgetModels = new LightWidgetModel[lightCount];
+        lightInstanceModels = new ArrayList<>(lightCount);
+        lightWidgetModels = new LightWidgetModel[lightCount];
         for (int i = 0; i < lightCount; i++)
         {
             lightInstanceModels.add(lightInstanceCreator.apply(i));
@@ -129,7 +129,7 @@ public abstract class LightingEnvironmentModelBase<DiscreteLightType extends Dis
     @Override
     public final boolean areLightWidgetsEthereal()
     {
-        return this.lightWidgetsEthereal;
+        return lightWidgetsEthereal;
     }
 
     @Override
@@ -141,7 +141,7 @@ public abstract class LightingEnvironmentModelBase<DiscreteLightType extends Dis
     @Override
     public final LightWidgetModel getLightWidgetModel(int index)
     {
-        return this.lightWidgetModels[index];
+        return lightWidgetModels[index];
     }
 
     @Override
@@ -166,21 +166,21 @@ public abstract class LightingEnvironmentModelBase<DiscreteLightType extends Dis
     @Override
     public final DiscreteLightType getLight(int index)
     {
-        return this.lightInstanceModels.get(index);
+        return lightInstanceModels.get(index);
     }
 
     @Override
     public final void setLightCenter(int i, Vector3 lightCenter)
     {
-        if (this.isLightWidgetEnabled(i))
+        if (isLightWidgetEnabled(i))
         {
-            this.lightInstanceModels.get(i).setTarget(lightCenter);
+            lightInstanceModels.get(i).setTarget(lightCenter);
         }
     }
 
     @Override
     public final EnvironmentModel getEnvironmentModel()
     {
-        return this.environmentModel;
+        return environmentModel;
     }
 }

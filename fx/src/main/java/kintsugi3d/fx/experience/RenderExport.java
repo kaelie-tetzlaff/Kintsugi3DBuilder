@@ -30,7 +30,7 @@ public class RenderExport extends ExperienceBase
 
     public final String getShortName()
     {
-        return this.shortName;
+        return shortName;
     }
 
     @Override

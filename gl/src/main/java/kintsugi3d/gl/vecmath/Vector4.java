@@ -71,22 +71,22 @@ public class Vector4 implements Iterable<Float>
 
     public final Vector2 getXY()
     {
-        return new Vector2(this.x, this.y);
+        return new Vector2(x, y);
     }
 
     public final Vector3 getXYZ()
     {
-        return new Vector3(this.x, this.y, this.z);
+        return new Vector3(x, y, z);
     }
 
     public final IntVector4 rounded()
     {
-        return new IntVector4(Math.round(this.x), Math.round(this.y), Math.round(this.z), Math.round(this.w));
+        return new IntVector4(Math.round(x), Math.round(y), Math.round(z), Math.round(w));
     }
 
     public final IntVector4 truncated()
     {
-        return new IntVector4((int)this.x, (int)this.y, (int)this.z, (int)this.w);
+        return new IntVector4((int) x, (int) y, (int) z, (int) w);
     }
 
     public final DoubleVector4 asDoublePrecision()
@@ -101,7 +101,7 @@ public class Vector4 implements Iterable<Float>
         if (obj instanceof Vector4)
         {
             Vector4 other = (Vector4) obj;
-            return other.x == this.x && other.y == this.y && other.z == this.z && other.w == this.w;
+            return other.x == x && other.y == y && other.z == z && other.w == w;
         }
         else
         {
@@ -112,7 +112,7 @@ public class Vector4 implements Iterable<Float>
     @Override
     public final int hashCode()
     {
-        if (this.equals(ZERO))
+        if (equals(ZERO))
         {
             return 0;
         }
@@ -133,10 +133,10 @@ public class Vector4 implements Iterable<Float>
     public final Vector4 plus(Vector4 other)
     {
         return new Vector4(
-            this.x + other.x,
-            this.y + other.y,
-            this.z + other.z,
-            this.w + other.w
+            x + other.x,
+            y + other.y,
+            z + other.z,
+            w + other.w
         );
     }
 
@@ -148,10 +148,10 @@ public class Vector4 implements Iterable<Float>
     public final Vector4 minus(Vector4 other)
     {
         return new Vector4(
-            this.x - other.x,
-            this.y - other.y,
-            this.z - other.z,
-            this.w - other.w
+            x - other.x,
+            y - other.y,
+            z - other.z,
+            w - other.w
         );
     }
 
@@ -161,7 +161,7 @@ public class Vector4 implements Iterable<Float>
      */
     public final Vector4 negated()
     {
-        return new Vector4(-this.x, -this.y, -this.z, -this.w);
+        return new Vector4(-x, -y, -z, -w);
     }
 
     /**
@@ -171,7 +171,7 @@ public class Vector4 implements Iterable<Float>
      */
     public final Vector4 times(float s)
     {
-        return new Vector4(s*this.x, s*this.y, s*this.z, s*this.w);
+        return new Vector4(s* x, s* y, s* z, s* w);
     }
 
     /**
@@ -181,17 +181,17 @@ public class Vector4 implements Iterable<Float>
      */
     public final Vector4 dividedBy(float s)
     {
-        return new Vector4(this.x/s, this.y/s, this.z/s, this.w/s);
+        return new Vector4(x/s, y/s, z/s, w/s);
     }
 
     public final Vector4 times(Vector4 other)
     {
-        return new Vector4(this.x * other.x, this.y * other.y, this.z * other.z, this.w * other.w);
+        return new Vector4(x * other.x, y * other.y, z * other.z, w * other.w);
     }
 
     public final Vector4 dividedBy(Vector4 other)
     {
-        return new Vector4(this.x / other.x, this.y / other.y, this.z / other.z, this.w * other.w);
+        return new Vector4(x / other.x, y / other.y, z / other.z, w * other.w);
     }
     /**
      * Compute the dot product (scaler product) of this vector and another given vector.
@@ -200,7 +200,7 @@ public class Vector4 implements Iterable<Float>
      */
     public final float dot(Vector4 other)
     {
-        return this.x * other.x + this.y * other.y + this.z * other.z + this.w * other.w;
+        return x * other.x + y * other.y + z * other.z + w * other.w;
     }
 
     /**
@@ -211,10 +211,10 @@ public class Vector4 implements Iterable<Float>
     public final Matrix4 outerProduct(Vector4 other)
     {
         return Matrix4.fromColumns(
-            new Vector4(this.x * other.x, this.y * other.x, this.z * other.x, this.w * other.x),
-            new Vector4(this.x * other.y, this.y * other.y, this.z * other.y, this.w * other.y),
-            new Vector4(this.x * other.z, this.y * other.z, this.z * other.z, this.w * other.z),
-            new Vector4(this.x * other.w, this.y * other.w, this.z * other.w, this.w * other.w)
+            new Vector4(x * other.x, y * other.x, z * other.x, w * other.x),
+            new Vector4(x * other.y, y * other.y, z * other.y, w * other.y),
+            new Vector4(x * other.z, y * other.z, z * other.z, w * other.z),
+            new Vector4(x * other.w, y * other.w, z * other.w, w * other.w)
         );
     }
 
@@ -224,7 +224,7 @@ public class Vector4 implements Iterable<Float>
      */
     public final float length()
     {
-        return (float)Math.sqrt(this.dot(this));
+        return (float)Math.sqrt(dot(this));
     }
 
     /**
@@ -234,7 +234,7 @@ public class Vector4 implements Iterable<Float>
      */
     public final float distance(Vector4 other)
     {
-        return this.minus(other).length();
+        return minus(other).length();
     }
 
     /**
@@ -245,7 +245,7 @@ public class Vector4 implements Iterable<Float>
      */
     public final Vector4 normalized()
     {
-        return this.times(1.0f / this.length());
+        return times(1.0f / length());
     }
     /**
      * Create a new vector with the same direction as this one but with unit
@@ -254,14 +254,14 @@ public class Vector4 implements Iterable<Float>
      */
     public final Vector4 normalizedSafe()
     {
-        float l = this.length();
+        float l = length();
         if (l == 0.0f)
         {
             return this;
         }
         else
         {
-            return this.times(1.0f / l);
+            return times(1.0f / l);
         }
     }
 

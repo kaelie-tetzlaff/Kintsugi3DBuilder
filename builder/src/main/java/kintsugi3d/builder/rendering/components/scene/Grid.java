@@ -80,11 +80,11 @@ public class Grid<ContextType extends Context<ContextType>> extends ShaderCompon
         // Draw grid
         if (sceneModel.getSettingsModel().getBoolean("is3DGridEnabled"))
         {
-            this.getDrawable().program().setUniform("projection", cameraViewport.getViewportProjection());
-            this.getDrawable().program().setUniform("model_view", cameraViewport.getView().times(Matrix4.scale(sceneModel.getScale())));
-            this.getDrawable().program().setUniform("color", new Vector4(0.5f, 0.5f, 0.5f, 1.0f));
-            this.getDrawable().program().setUniform("objectID", 0);
-            this.getDrawable().draw(PrimitiveMode.LINES, cameraViewport.ofFramebuffer(framebuffer));
+            getDrawable().program().setUniform("projection", cameraViewport.getViewportProjection());
+            getDrawable().program().setUniform("model_view", cameraViewport.getView().times(Matrix4.scale(sceneModel.getScale())));
+            getDrawable().program().setUniform("color", new Vector4(0.5f, 0.5f, 0.5f, 1.0f));
+            getDrawable().program().setUniform("objectID", 0);
+            getDrawable().draw(PrimitiveMode.LINES, cameraViewport.ofFramebuffer(framebuffer));
         }
     }
 }

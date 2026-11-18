@@ -177,6 +177,6 @@ public final class SearchableTreeView extends SearchableView
 
     public TreeView<String> getTreeView()
     {
-        return this.treeView;
+        return treeView;
     }
 }

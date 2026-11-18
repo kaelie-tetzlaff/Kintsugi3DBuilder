@@ -40,7 +40,7 @@ public abstract class PixelReaderBase implements PixelReader
     @Override
     public final int getArgb(int x, int y)
     {
-        Color color = this.getColor(x, y);
+        Color color = getColor(x, y);
         int a = clampedFixedPoint(color.getOpacity());
         int r = clampedFixedPoint(color.getRed());
         int g = clampedFixedPoint(color.getGreen());
@@ -55,7 +55,7 @@ public abstract class PixelReaderBase implements PixelReader
         {
             for (int j = 0; j < h; j++)
             {
-                pixelformat.setArgb(buffer, x + i, y + j, scanlineStride, this.getArgb(x + i, y + j));
+                pixelformat.setArgb(buffer, x + i, y + j, scanlineStride, getArgb(x + i, y + j));
             }
         }
     }
@@ -63,12 +63,12 @@ public abstract class PixelReaderBase implements PixelReader
     @Override
     public final void getPixels(int x, int y, int w, int h, WritablePixelFormat<ByteBuffer> pixelformat, byte[] buffer, int offset, int scanlineStride)
     {
-        this.getPixels(x, y, w, h, pixelformat, ByteBuffer.wrap(buffer, offset, buffer.length - offset), scanlineStride);
+        getPixels(x, y, w, h, pixelformat, ByteBuffer.wrap(buffer, offset, buffer.length - offset), scanlineStride);
     }
 
     @Override
     public final void getPixels(int x, int y, int w, int h, WritablePixelFormat<IntBuffer> pixelformat, int[] buffer, int offset, int scanlineStride)
     {
-        this.getPixels(x, y, w, h, pixelformat, IntBuffer.wrap(buffer, offset, buffer.length - offset), scanlineStride);
+        getPixels(x, y, w, h, pixelformat, IntBuffer.wrap(buffer, offset, buffer.length - offset), scanlineStride);
     }
 }

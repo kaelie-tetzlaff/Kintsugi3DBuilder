@@ -52,7 +52,7 @@ final class RotateEnvironmentTool implements DragTool
     @Override
     public void mouseButtonPressed(CursorPosition cursorPosition, CanvasSize canvasSize)
     {
-        this.mouseStart = cursorPosition;
+        mouseStart = cursorPosition;
 
         oldEnvironmentRotation = environmentModel.getEnvironmentRotation();
         rotateSensitivityAdjusted = ROTATE_SENSITIVITY / Math.min(canvasSize.width, canvasSize.height);

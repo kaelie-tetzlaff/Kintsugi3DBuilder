@@ -24,15 +24,15 @@ public abstract class InteractiveRenderableBase<ContextType extends Context<Cont
     @Override
     public final InteractiveApplication getOwningApp()
     {
-        return this.owningApp;
+        return owningApp;
     }
 
     @Override
     public final void setOwningApp(InteractiveApplication app)
     {
-        if (this.owningApp == null)
+        if (owningApp == null)
         {
-            this.owningApp = app;
+            owningApp = app;
         }
         else
         {

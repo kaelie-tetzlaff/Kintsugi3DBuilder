@@ -99,9 +99,9 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
 
         if (geometryResources.isNull() || colorTexture == null || !loadOptions.areDepthImagesRequested())
         {
-            this.depthTexture = null;
-            this.shadowTexture = null;
-            this.shadowMatrix = null;
+            depthTexture = null;
+            shadowTexture = null;
+            shadowMatrix = null;
         }
         else
         {
@@ -116,7 +116,7 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
             {
 
                 // Build depth texture
-                this.depthTexture = context.getTextureFactory()
+                depthTexture = context.getTextureFactory()
                     .build2DDepthTexture(colorTexture.getWidth(), colorTexture.getHeight())
                     .createTexture();
 
@@ -124,12 +124,12 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
                 depthMapGenerator.generateDepthMap(view, depthRenderingFBO);
 
                 // Build shadow texture
-                this.shadowTexture = context.getTextureFactory()
+                shadowTexture = context.getTextureFactory()
                     .build2DDepthTexture(colorTexture.getWidth(), colorTexture.getHeight())
                     .createTexture();
 
                 depthRenderingFBO.setDepthAttachment(shadowTexture);
-                this.shadowMatrix = depthMapGenerator.generateShadowMap(view, depthRenderingFBO);
+                shadowMatrix = depthMapGenerator.generateShadowMap(view, depthRenderingFBO);
             }
         }
     }
@@ -152,19 +152,19 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
     {
         view.getContainingViewSet().setupShaderProgram(program);
 
-        if (this.colorTexture != null)
+        if (colorTexture != null)
         {
             program.setTexture("viewImage", colorTexture);
         }
 
-        if (this.depthTexture != null)
+        if (depthTexture != null)
         {
             program.setTexture("depthImage", depthTexture);
 
-            if (this.shadowTexture != null)
+            if (shadowTexture != null)
             {
                 program.setTexture("shadowImage", shadowTexture);
-                program.setUniform("shadowMatrix", this.shadowMatrix);
+                program.setUniform("shadowMatrix", shadowMatrix);
             }
         }
 

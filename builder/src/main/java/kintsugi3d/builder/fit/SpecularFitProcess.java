@@ -73,12 +73,12 @@ public abstract class SpecularFitProcess
 
     protected final ReadonlySpecularFitSettings getSettings()
     {
-        return this.settings;
+        return settings;
     }
 
     protected final File getOutputDirectory()
     {
-        return this.outputDirectory;
+        return outputDirectory;
     }
 
     public final <ContextType extends Context<ContextType>> void reconstructAll(

@@ -41,13 +41,13 @@ abstract class PageBase<InType, OutType, ControllerType extends PageController<?
     {
         if (loader == null)
         {
-            this.controller = null;
-            this.root = null;
+            controller = null;
+            root = null;
         }
         else
         {
-            this.controller = loader.getController();
-            this.root = loader.getRoot();
+            controller = loader.getController();
+            root = loader.getRoot();
         }
     }
 
@@ -127,26 +127,26 @@ abstract class PageBase<InType, OutType, ControllerType extends PageController<?
     @Override
     public final void setPrevPage(Page<?, ? extends InType> page)
     {
-        this.prevPage = page;
+        prevPage = page;
     }
 
     @Override
     public final void linkBackFromNextPage()
     {
-        this.nextPageProperty.get().setPrevPage(this);
+        nextPageProperty.get().setPrevPage(this);
     }
 
     final void sendDataToController(InType data)
     {
-        this.controller.receiveData(data);
+        controller.receiveData(data);
     }
 
     @Override
     public final void sendOutData()
     {
-        if (this.hasNextPage())
+        if (hasNextPage())
         {
-            this.getNextPage().receiveData(this.getOutData());
+            getNextPage().receiveData(getOutData());
         }
     }
 }

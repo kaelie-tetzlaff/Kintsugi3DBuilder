@@ -59,7 +59,7 @@ public class MasksImportController
         toggleGroup.getToggles().add(customMasksDirButton);
         toggleGroup.getToggles().add(noMasksButton);
 
-        this.getCanAdvanceObservable().bind(toggleGroup.selectedToggleProperty().isNotNull());
+        getCanAdvanceObservable().bind(toggleGroup.selectedToggleProperty().isNotNull());
 
         customMasksDirButton.setOnAction(this::chooseMasksDir);
 

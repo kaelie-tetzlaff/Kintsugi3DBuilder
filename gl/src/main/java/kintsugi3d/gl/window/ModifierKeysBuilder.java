@@ -29,25 +29,25 @@ public class ModifierKeysBuilder
 
     public final ModifierKeysBuilder shift()
     {
-        this.shiftModifier = true;
+        shiftModifier = true;
         return this;
     }
 
     public final ModifierKeysBuilder control()
     {
-        this.controlModifier = true;
+        controlModifier = true;
         return this;
     }
 
     public final ModifierKeysBuilder alt()
     {
-        this.altModifier = true;
+        altModifier = true;
         return this;
     }
 
     public final ModifierKeysBuilder superKey()
     {
-        this.superModifier = true;
+        superModifier = true;
         return this;
     }
 

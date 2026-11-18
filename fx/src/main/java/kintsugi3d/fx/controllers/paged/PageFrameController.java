@@ -77,7 +77,7 @@ public class PageFrameController
 
     private void init()
     {
-        this.window = outerRoot.getScene().getWindow();
+        window = outerRoot.getScene().getWindow();
 
         Platform.runLater(window::requestFocus);
         window.setOnCloseRequest(this::onCloseRequest);
@@ -215,7 +215,7 @@ public class PageFrameController
         return NonDataSentinelPageBuilder.of(this,
             () ->
             {
-                this.init();
+                init();
                 callback.run();
                 return this;
             });
@@ -226,7 +226,7 @@ public class PageFrameController
         return DataSentinelPageBuilder.of(this,
             () ->
             {
-                this.init();
+                init();
                 callback.run();
                 return this;
             },
@@ -329,7 +329,7 @@ public class PageFrameController
         {
             this.shouldConfirm = shouldConfirm;
             this.advanceLabelOverride = advanceLabelOverride;
-            this.advanceLabelOverrideNotNull = advanceLabelOverride.isNotNull();
+            advanceLabelOverrideNotNull = advanceLabelOverride.isNotNull();
 
             bind(shouldConfirm);
             bind(advanceLabelOverrideNotNull);

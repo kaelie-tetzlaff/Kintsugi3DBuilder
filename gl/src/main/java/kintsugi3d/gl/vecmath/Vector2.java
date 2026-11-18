@@ -66,7 +66,7 @@ public class Vector2 implements Iterable<Float>
 
     public final Vector3 asVector3(float z)
     {
-        return new Vector3(this.x, this.y, z);
+        return new Vector3(x, y, z);
     }
 
     public final Vector4 asPosition()
@@ -81,17 +81,17 @@ public class Vector2 implements Iterable<Float>
 
     public final Vector4 asVector4(float z, float w)
     {
-        return new Vector4(this.x, this.y, z, w);
+        return new Vector4(x, y, z, w);
     }
 
     public final IntVector2 rounded()
     {
-        return new IntVector2(Math.round(this.x), Math.round(this.y));
+        return new IntVector2(Math.round(x), Math.round(y));
     }
 
     public final IntVector2 truncated()
     {
-        return new IntVector2((int)this.x, (int)this.y);
+        return new IntVector2((int) x, (int) y);
     }
 
     public final DoubleVector2 asDoublePrecision()
@@ -106,7 +106,7 @@ public class Vector2 implements Iterable<Float>
         if (obj instanceof Vector2)
         {
             Vector2 other = (Vector2) obj;
-            return other.x == this.x && other.y == this.y;
+            return other.x == x && other.y == y;
         }
         else
         {
@@ -117,7 +117,7 @@ public class Vector2 implements Iterable<Float>
     @Override
     public final int hashCode()
     {
-        if (this.equals(ZERO))
+        if (equals(ZERO))
         {
             return 0;
         }
@@ -136,8 +136,8 @@ public class Vector2 implements Iterable<Float>
     public final Vector2 plus(Vector2 other)
     {
         return new Vector2(
-            this.x + other.x,
-            this.y + other.y
+            x + other.x,
+            y + other.y
         );
     }
 
@@ -149,8 +149,8 @@ public class Vector2 implements Iterable<Float>
     public final Vector2 minus(Vector2 other)
     {
         return new Vector2(
-            this.x - other.x,
-            this.y - other.y
+            x - other.x,
+            y - other.y
         );
     }
 
@@ -160,7 +160,7 @@ public class Vector2 implements Iterable<Float>
      */
     public final Vector2 negated()
     {
-        return new Vector2(-this.x, -this.y);
+        return new Vector2(-x, -y);
     }
 
     /**
@@ -170,7 +170,7 @@ public class Vector2 implements Iterable<Float>
      */
     public final Vector2 times(float s)
     {
-        return new Vector2(s*this.x, s*this.y);
+        return new Vector2(s* x, s* y);
     }
 
     /**
@@ -180,17 +180,17 @@ public class Vector2 implements Iterable<Float>
      */
     public final Vector2 dividedBy(float s)
     {
-        return new Vector2(this.x/s, this.y/s);
+        return new Vector2(x/s, y/s);
     }
 
     public final Vector2 times(Vector2 other)
     {
-        return new Vector2(this.x * other.x, this.y * other.y);
+        return new Vector2(x * other.x, y * other.y);
     }
 
     public final Vector2 dividedBy(Vector2 other)
     {
-        return new Vector2(this.x / other.x, this.y / other.y);
+        return new Vector2(x / other.x, y / other.y);
     }
 
     /**
@@ -200,7 +200,7 @@ public class Vector2 implements Iterable<Float>
      */
     public final float dot(Vector2 other)
     {
-        return this.x * other.x + this.y * other.y;
+        return x * other.x + y * other.y;
     }
 
     /**
@@ -209,7 +209,7 @@ public class Vector2 implements Iterable<Float>
      */
     public final float length()
     {
-        return (float)Math.sqrt(this.dot(this));
+        return (float)Math.sqrt(dot(this));
     }
 
     /**
@@ -219,7 +219,7 @@ public class Vector2 implements Iterable<Float>
      */
     public final float distance(Vector2 other)
     {
-        return this.minus(other).length();
+        return minus(other).length();
     }
 
     /**
@@ -230,7 +230,7 @@ public class Vector2 implements Iterable<Float>
      */
     public final Vector2 normalized()
     {
-        return this.times(1.0f / this.length());
+        return times(1.0f / length());
     }
 
     /**
@@ -240,14 +240,14 @@ public class Vector2 implements Iterable<Float>
      */
     public final Vector2 normalizedSafe()
     {
-        float l = this.length();
+        float l = length();
         if (l == 0.0f)
         {
             return this;
         }
         else
         {
-            return this.times(1.0f / l);
+            return times(1.0f / l);
         }
     }
 

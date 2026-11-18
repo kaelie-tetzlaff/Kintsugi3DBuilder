@@ -60,17 +60,17 @@ public class ObservableCameraSettings extends SerializableCameraSettings
     public final ObservableCameraSettings duplicate()
     {
         ObservableCameraSettings newCamera = new ObservableCameraSettings();
-        newCamera.setXCenter(this.xCenter.getValue());
-        newCamera.setYCenter(this.yCenter.getValue());
-        newCamera.setZCenter(this.zCenter.getValue());
-        newCamera.setAzimuth(this.azimuth.getValue());
-        newCamera.setInclination(this.inclination.getValue());
-        newCamera.setLog10Distance(this.log10Distance.getValue());
-        newCamera.setTwist(this.twist.getValue());
-        newCamera.setFOV(this.fov.getValue());
-        newCamera.setLocked(this.locked.getValue());
-        newCamera.setOrthographic(this.orthographic.getValue());
-        newCamera.setName(String.format("%s copy", this.name.getValue()));
+        newCamera.setXCenter(xCenter.getValue());
+        newCamera.setYCenter(yCenter.getValue());
+        newCamera.setZCenter(zCenter.getValue());
+        newCamera.setAzimuth(azimuth.getValue());
+        newCamera.setInclination(inclination.getValue());
+        newCamera.setLog10Distance(log10Distance.getValue());
+        newCamera.setTwist(twist.getValue());
+        newCamera.setFOV(fov.getValue());
+        newCamera.setLocked(locked.getValue());
+        newCamera.setOrthographic(orthographic.getValue());
+        newCamera.setName(String.format("%s copy", name.getValue()));
         return newCamera;
     }
 
@@ -173,7 +173,7 @@ public class ObservableCameraSettings extends SerializableCameraSettings
     @Override
     public final void setLog10Distance(double log10distance)
     {
-        this.log10Distance.set(log10distance);
+        log10Distance.set(log10distance);
     }
 
     @Override
@@ -207,7 +207,7 @@ public class ObservableCameraSettings extends SerializableCameraSettings
     @Override
     public final void setFOV(double fOV)
     {
-        this.fov.set(fOV);
+        fov.set(fOV);
     }
 
     @Override

@@ -43,7 +43,7 @@ public final class RecentProjects
 
     private RecentProjects()
     {
-        this.recentProjectsFile = new File(ApplicationFolders.getUserAppDirectory().toFile(), RECENT_PROJECTS_FILENAME);
+        recentProjectsFile = new File(ApplicationFolders.getUserAppDirectory().toFile(), RECENT_PROJECTS_FILENAME);
     }
 
     public static RecentProjects getInstance()

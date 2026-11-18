@@ -43,7 +43,7 @@ public class SequentialViewRenderStream<ContextType extends Context<ContextType>
         this.drawable = drawable;
         this.framebuffer = framebuffer;
         this.attachmentCount = attachmentCount;
-        this.framebufferData = IntStream.range(0, attachmentCount)
+        framebufferData = IntStream.range(0, attachmentCount)
             .mapToObj(i -> new ColorNativeBufferList(framebuffer.getSizeForRead().width * framebuffer.getSizeForRead().height))
             .toArray(ColorNativeBufferList[]::new);
     }

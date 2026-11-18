@@ -52,7 +52,7 @@ final class DollyTool implements DragTool
     @Override
     public void mouseButtonPressed(CursorPosition cursorPosition, CanvasSize canvasSize)
     {
-        this.mouseStart = cursorPosition;
+        mouseStart = cursorPosition;
         oldLog10Distance = cameraModel.getLog10Distance();
         dollySensitivityAdjusted = DOLLY_SENSITIVITY / canvasSize.height;
     }
@@ -60,6 +60,6 @@ final class DollyTool implements DragTool
     @Override
     public void cursorDragged(CursorPosition cursorPosition, CanvasSize canvasSize)
     {
-        cameraModel.setLog10Distance((float) (oldLog10Distance - 0.5 * dollySensitivityAdjusted * (this.mouseStart.y - cursorPosition.y)));
+        cameraModel.setLog10Distance((float) (oldLog10Distance - 0.5 * dollySensitivityAdjusted * (mouseStart.y - cursorPosition.y)));
     }
 }

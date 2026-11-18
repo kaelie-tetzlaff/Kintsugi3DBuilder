@@ -158,8 +158,8 @@ public class RootLightSceneController implements Initializable
     public final void injectDependencies(ObservableLightingEnvironmentModel lightingModel,
                                          ObservableProjectModel injectedProjectModel, SceneViewport injectedSceneViewport)
     {
-        this.projectModel = injectedProjectModel;
-        this.sceneViewport = injectedSceneViewport;
+        projectModel = injectedProjectModel;
+        sceneViewport = injectedSceneViewport;
 
         ObservableList<ObservableLightGroupSettings> lightGroupList = projectModel.getLightGroupList();
         tableView.setItems(lightGroupList);

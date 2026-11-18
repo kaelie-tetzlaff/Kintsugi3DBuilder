@@ -28,9 +28,9 @@ public class ObservableDiscreteLightModel extends DiscreteLightModelFromSettings
 
     public ObservableDiscreteLightModel()
     {
-        this.sentinel = new ObservableLightSettings("sentinel", new SimpleBooleanProperty(true));
-        this.sentinel.setIntensity(0.0);
-        this.sentinel.setLocked(true);
+        sentinel = new ObservableLightSettings("sentinel", new SimpleBooleanProperty(true));
+        sentinel.setIntensity(0.0);
+        sentinel.setLocked(true);
     }
 
     public final void setLightInstanceSetting(ObservableValue<ObservableLightSettings> lightInstanceSetting)

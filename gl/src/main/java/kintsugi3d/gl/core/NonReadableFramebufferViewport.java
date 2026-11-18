@@ -29,6 +29,6 @@ final class NonReadableFramebufferViewport<ContextType extends Context<ContextTy
     {
         // Make sure that a FramebufferViewport never has another FramebufferViewport as its "full framebuffer"
         return new NonReadableFramebufferViewport<>(getFullFramebuffer(),
-            new IntVector2(x + this.getOffset().x, y + this.getOffset().y), new FramebufferSize(width, height));
+            new IntVector2(x + getOffset().x, y + getOffset().y), new FramebufferSize(width, height));
     }
 }

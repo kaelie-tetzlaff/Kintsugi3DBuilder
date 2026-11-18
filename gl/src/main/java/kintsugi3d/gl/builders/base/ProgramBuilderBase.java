@@ -45,8 +45,8 @@ public abstract class ProgramBuilderBase<ContextType extends Context<ContextType
     protected ProgramBuilderBase(ContextType context)
     {
         this.context = context;
-        this.shaderBuilders = new ArrayList<>(2);
-        this.defines = new HashMap<>(16);
+        shaderBuilders = new ArrayList<>(2);
+        defines = new HashMap<>(16);
     }
 
     protected final Iterable<Shader<ContextType>> compileShaders() throws IOException

@@ -133,7 +133,7 @@ public interface Context<ContextType extends Context<ContextType>> extends Manag
      */
     default VertexBuffer<ContextType> createRectangle()
     {
-        return this.createVertexBuffer().setData(NativeVectorBufferFactory
+        return createVertexBuffer().setData(NativeVectorBufferFactory
             .createFromFloatArray(2, 4, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f), false);
     }
 

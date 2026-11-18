@@ -140,7 +140,7 @@ public class SideBarController
 
         if (Objects.equals(tabToggleGroup.getSelectedToggle(), button))
         {
-            if (this.tabModels.getAllTabs().isEmpty())
+            if (tabModels.getAllTabs().isEmpty())
             {
                 // Deselect if no tabs remain.
                 tabToggleGroup.selectToggle(null);

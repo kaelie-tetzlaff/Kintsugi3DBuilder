@@ -50,7 +50,7 @@ public class BaseScene<ContextType extends Context<ContextType>> extends LitCont
 
     public BaseScene(ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel, SceneViewportModel sceneViewportModel)
     {
-        this.context = resources.getContext();
+        context = resources.getContext();
         this.sceneModel = sceneModel;
         this.sceneViewportModel = sceneViewportModel;
         this.resources = resources;

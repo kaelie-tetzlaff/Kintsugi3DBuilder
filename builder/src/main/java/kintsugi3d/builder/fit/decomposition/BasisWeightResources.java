@@ -83,9 +83,9 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
      */
     private BasisWeightResources(Texture3D<ContextType> weightMaps, Texture2D<ContextType> weightMask, MaterialBasis basis)
     {
-        this.context = weightMaps.getContext();
-        this.width = weightMaps.getWidth();
-        this.height = weightMaps.getHeight();
+        context = weightMaps.getContext();
+        width = weightMaps.getWidth();
+        height = weightMaps.getHeight();
         this.basis = basis;
         this.weightMaps = weightMaps;
         this.weightMask = weightMask;

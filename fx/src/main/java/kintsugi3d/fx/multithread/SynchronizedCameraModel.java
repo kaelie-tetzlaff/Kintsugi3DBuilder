@@ -35,14 +35,14 @@ public class SynchronizedCameraModel extends ViewpointModelBase
     public SynchronizedCameraModel(ManipulableViewpointModel baseModel)
     {
         this.baseModel = baseModel;
-        this.target = SynchronizedValue.createFromFunctions(baseModel::getTarget, baseModel::setTarget);
-        this.azimuth = SynchronizedValue.createFromFunctions(baseModel::getAzimuth, baseModel::setAzimuth);
-        this.inclination = SynchronizedValue.createFromFunctions(baseModel::getInclination, baseModel::setInclination);
-        this.log10Distance = SynchronizedValue.createFromFunctions(baseModel::getLog10Distance, baseModel::setLog10Distance);
-        this.twist = SynchronizedValue.createFromFunctions(baseModel::getTwist, baseModel::setTwist);
-        this.horizontalFOV = SynchronizedValue.createFromFunctions(baseModel::getHorizontalFOV, baseModel::setHorizontalFOV);
-        this.focalLength = SynchronizedValue.createFromFunctions(baseModel::getFocalLength, baseModel::setFocalLength);
-        this.orthographic = SynchronizedValue.createFromFunctions(baseModel::isOrthographic, baseModel::setOrthographic);
+        target = SynchronizedValue.createFromFunctions(baseModel::getTarget, baseModel::setTarget);
+        azimuth = SynchronizedValue.createFromFunctions(baseModel::getAzimuth, baseModel::setAzimuth);
+        inclination = SynchronizedValue.createFromFunctions(baseModel::getInclination, baseModel::setInclination);
+        log10Distance = SynchronizedValue.createFromFunctions(baseModel::getLog10Distance, baseModel::setLog10Distance);
+        twist = SynchronizedValue.createFromFunctions(baseModel::getTwist, baseModel::setTwist);
+        horizontalFOV = SynchronizedValue.createFromFunctions(baseModel::getHorizontalFOV, baseModel::setHorizontalFOV);
+        focalLength = SynchronizedValue.createFromFunctions(baseModel::getFocalLength, baseModel::setFocalLength);
+        orthographic = SynchronizedValue.createFromFunctions(baseModel::isOrthographic, baseModel::setOrthographic);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class SynchronizedCameraModel extends ViewpointModelBase
     @Override
     public final Vector3 getTarget()
     {
-        return this.target.getValue();
+        return target.getValue();
     }
 
     @Override
@@ -66,7 +66,7 @@ public class SynchronizedCameraModel extends ViewpointModelBase
     @Override
     public final boolean isOrthographic()
     {
-        return this.orthographic.getValue();
+        return orthographic.getValue();
     }
 
     @Override
@@ -78,19 +78,19 @@ public class SynchronizedCameraModel extends ViewpointModelBase
     @Override
     public final float getHorizontalFOV()
     {
-        return this.horizontalFOV.getValue();
+        return horizontalFOV.getValue();
     }
 
     @Override
     public final void setHorizontalFOV(float fov)
     {
-        this.horizontalFOV.setValue(fov);
+        horizontalFOV.setValue(fov);
     }
 
     @Override
     public final float getLog10Distance()
     {
-        return this.log10Distance.getValue();
+        return log10Distance.getValue();
     }
 
     @Override
@@ -102,7 +102,7 @@ public class SynchronizedCameraModel extends ViewpointModelBase
     @Override
     public final float getTwist()
     {
-        return this.twist.getValue();
+        return twist.getValue();
     }
 
     @Override
@@ -114,7 +114,7 @@ public class SynchronizedCameraModel extends ViewpointModelBase
     @Override
     public final float getAzimuth()
     {
-        return this.azimuth.getValue();
+        return azimuth.getValue();
     }
 
     @Override
@@ -126,7 +126,7 @@ public class SynchronizedCameraModel extends ViewpointModelBase
     @Override
     public final float getInclination()
     {
-        return this.inclination.getValue();
+        return inclination.getValue();
     }
 
     @Override
@@ -138,7 +138,7 @@ public class SynchronizedCameraModel extends ViewpointModelBase
     @Override
     public final float getFocalLength()
     {
-        return this.focalLength.getValue();
+        return focalLength.getValue();
     }
 
     @Override

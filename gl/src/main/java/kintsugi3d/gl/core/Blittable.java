@@ -75,7 +75,7 @@ public interface Blittable<SourceType extends TwoDimensional> extends TwoDimensi
      */
     default void blitScaled(SourceType readSource, boolean linearFiltering)
     {
-        blitScaled(0, 0, this.getWidth(), this.getHeight(), readSource, linearFiltering);
+        blitScaled(0, 0, getWidth(), getHeight(), readSource, linearFiltering);
     }
 
     /**
@@ -91,7 +91,7 @@ public interface Blittable<SourceType extends TwoDimensional> extends TwoDimensi
      */
     default void blitCroppedAndScaled(SourceType readSource, int srcX, int srcY, int srcWidth, int srcHeight, boolean linearFiltering)
     {
-        blitCroppedAndScaled(0, 0, this.getWidth(), this.getHeight(),
+        blitCroppedAndScaled(0, 0, getWidth(), getHeight(),
             readSource, srcX, srcY, srcWidth, srcHeight, linearFiltering);
     }
 

@@ -110,15 +110,15 @@ public final class FramebufferView extends Region
 
     public FramebufferView()
     {
-        this.imageView = new ImageView();
+        imageView = new ImageView();
 
         // Allows the image view to be the default focused element.
         // This prevents something that we don't want to be default-focused from taking it, like the search box, etc.
-        this.imageView.setFocusTraversable(true);
+        imageView.setFocusTraversable(true);
 
-        this.getChildren().add(imageView);
-        this.widthProperty().addListener(width -> imageView.setFitWidth(this.getWidth()));
-        this.heightProperty().addListener(height -> imageView.setFitHeight(this.getHeight()));
+        getChildren().add(imageView);
+        widthProperty().addListener(width -> imageView.setFitWidth(getWidth()));
+        heightProperty().addListener(height -> imageView.setFitHeight(getHeight()));
 
         // use timeline to set up 60Hz refresh cycle for onscreen framebuffer
         Timeline refresh = new Timeline();
@@ -209,8 +209,8 @@ public final class FramebufferView extends Region
             }
         });
 
-        this.widthProperty().addListener((event, oldValue, newValue) -> handleWindowEvent());
-        this.heightProperty().addListener((event, oldValue, newValue) -> handleWindowEvent());
+        widthProperty().addListener((event, oldValue, newValue) -> handleWindowEvent());
+        heightProperty().addListener((event, oldValue, newValue) -> handleWindowEvent());
     }
 
     /**
@@ -286,7 +286,7 @@ public final class FramebufferView extends Region
 
     public PollableCanvas3D<?> getCanvas()
     {
-        return this.canvas;
+        return canvas;
     }
 
     public void setCanvas(FramebufferCanvas<?> canvas)
@@ -497,7 +497,7 @@ public final class FramebufferView extends Region
     {
         try
         {
-            Point2D localEventPosition = this.getLocalToSceneTransform().inverseTransform(new Point2D(event.getSceneX(), event.getSceneY()));
+            Point2D localEventPosition = getLocalToSceneTransform().inverseTransform(new Point2D(event.getSceneX(), event.getSceneY()));
             return new CursorPosition((int)Math.round(localEventPosition.getX()), (int)Math.round(localEventPosition.getY()));
         }
         catch (NonInvertibleTransformException e)

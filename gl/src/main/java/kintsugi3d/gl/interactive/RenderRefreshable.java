@@ -63,18 +63,18 @@ public final class RenderRefreshable
 
     public RenderableType getRenderable()
     {
-        return this.renderable;
+        return renderable;
     }
 
     public DoubleFramebuffer<ContextType> getFramebuffer()
     {
-        return this.framebuffer;
+        return framebuffer;
     }
 
     @Override
     public boolean isInitialized()
     {
-        return this.initialized;
+        return initialized;
     }
 
     @Override
@@ -82,7 +82,7 @@ public final class RenderRefreshable
     {
         context.makeContextCurrent();
         renderable.initialize();
-        this.initialized = true;
+        initialized = true;
     }
 
     @Override

@@ -53,7 +53,7 @@ public class IntVector3 implements Iterable<Integer>
 
     public final IntVector4 asVector4(int w)
     {
-        return new IntVector4(this.x, this.y, this.z, w);
+        return new IntVector4(x, y, z, w);
     }
 
     public final Vector3 asFloatingPoint()
@@ -78,7 +78,7 @@ public class IntVector3 implements Iterable<Integer>
 
     public final IntVector2 getXY()
     {
-        return new IntVector2(this.x, this.y);
+        return new IntVector2(x, y);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class IntVector3 implements Iterable<Integer>
         if (obj instanceof IntVector3)
         {
             IntVector3 other = (IntVector3) obj;
-            return other.x == this.x && other.y == this.y && other.z == this.z;
+            return other.x == x && other.y == y && other.z == z;
         }
         else
         {
@@ -104,58 +104,58 @@ public class IntVector3 implements Iterable<Integer>
     public final IntVector3 plus(IntVector3 other)
     {
         return new IntVector3(
-            this.x + other.x,
-            this.y + other.y,
-            this.z + other.z
+            x + other.x,
+            y + other.y,
+            z + other.z
         );
     }
 
     public final IntVector3 minus(IntVector3 other)
     {
         return new IntVector3(
-            this.x - other.x,
-            this.y - other.y,
-            this.z - other.z
+            x - other.x,
+            y - other.y,
+            z - other.z
         );
     }
 
     public final IntVector3 negated()
     {
-        return new IntVector3(-this.x, -this.y, -this.z);
+        return new IntVector3(-x, -y, -z);
     }
 
     public final IntVector3 times(int s)
     {
-        return new IntVector3(s*this.x, s*this.y, s*this.z);
+        return new IntVector3(s* x, s* y, s* z);
     }
 
     public final IntVector3 dividedBy(int s)
     {
-        return new IntVector3(this.x/s, this.y/s, this.z/s);
+        return new IntVector3(x/s, y/s, z/s);
     }
 
     public final int dot(IntVector3 other)
     {
-        return this.x * other.x + this.y * other.y + this.z * other.z;
+        return x * other.x + y * other.y + z * other.z;
     }
 
     public final IntVector3 cross(IntVector3 other)
     {
         return new IntVector3(
-            this.y * other.z - this.z * other.y,
-            this.z * other.x - this.x * other.z,
-            this.x * other.y - this.y * other.x
+            y * other.z - z * other.y,
+            z * other.x - x * other.z,
+            x * other.y - y * other.x
         );
     }
 
     public final double length()
     {
-        return Math.sqrt(this.dot(this));
+        return Math.sqrt(dot(this));
     }
 
     public final double distance(IntVector3 other)
     {
-        return this.minus(other).length();
+        return minus(other).length();
     }
 
     public final IntVector3 applyOperator(IntUnaryOperator operator)

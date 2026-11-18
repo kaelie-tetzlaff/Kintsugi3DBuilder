@@ -60,8 +60,8 @@ public class LightWidgetLines<ContextType extends Context<ContextType>> implemen
     @Override
     public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
-        if (this.sceneModel.getSettingsModel().getBoolean("relightingEnabled")
-            && this.sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled")
+        if (sceneModel.getSettingsModel().getBoolean("relightingEnabled")
+            && sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled")
             && sceneModel.getSettingsModel().getBoolean("lightWidgetsEnabled"))
         {
             context.getState().disableDepthWrite();

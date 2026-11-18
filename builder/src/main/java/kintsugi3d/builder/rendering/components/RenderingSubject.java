@@ -70,16 +70,16 @@ public class RenderingSubject<ContextType extends Context<ContextType>> extends 
     @Override
     protected final void setupCustom(Program<ContextType> p, Matrix4 modelView)
     {
-        if (!this.getSceneModel().getSettingsModel().getBoolean("relightingEnabled")
+        if (!getSceneModel().getSettingsModel().getBoolean("relightingEnabled")
             && !isLightCalibrationMode()
-            && this.getSceneModel().getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM)
+            && getSceneModel().getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM)
         {
             if (weightBuffer == null)
             {
                 weightBuffer = resource(getContext().createUniformBuffer());
             }
 
-            weightBuffer.setData(this.generateViewWeights(modelView)); // TODO modelView might not be the right matrix?
+            weightBuffer.setData(generateViewWeights(modelView)); // TODO modelView might not be the right matrix?
             p.setUniformBuffer("ViewWeights", weightBuffer);
         }
     }

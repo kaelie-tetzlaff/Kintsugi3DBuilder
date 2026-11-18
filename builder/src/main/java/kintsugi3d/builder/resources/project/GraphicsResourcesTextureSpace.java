@@ -86,13 +86,13 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
 
         if (loadOptions.isCompressionRequested())
         {
-            this.textureArray = builder
+            textureArray = builder
                 .setInternalFormat(CompressionFormat.RGB_PUNCHTHROUGH_ALPHA1_4BPP)
                 .createTexture();
         }
         else
         {
-            this.textureArray = builder
+            textureArray = builder
                 .setInternalFormat(ColorFormat.RGBA8)
                 .createTexture();
         }
@@ -108,7 +108,7 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
             // Iterate over the layers to load in the texture array.
             // Includes both enabled and disabled views which will all be allocated on the GPU.
             int progressCount = 0;
-            for (View view : this.getViewSet().getViews())
+            for (View view : getViewSet().getViews())
             {
                 if (progressMonitor != null)
                 {
@@ -144,8 +144,8 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
             progressMonitor.setStage(1, "Finished loading textures.");
         }
 
-        this.geometryTextures = geometryTextureFactory.get();
-        this.rectangle = sharedResources.getContext().createRectangle();
+        geometryTextures = geometryTextureFactory.get();
+        rectangle = sharedResources.getContext().createRectangle();
     }
 
     @Override
@@ -188,22 +188,22 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
     {
         super.close();
 
-        if (this.geometryTextures != null)
+        if (geometryTextures != null)
         {
-            this.geometryTextures.close();
-            this.geometryTextures = null;
+            geometryTextures.close();
+            geometryTextures = null;
         }
 
-        if (this.rectangle != null)
+        if (rectangle != null)
         {
-            this.rectangle.close();
-            this.rectangle = null;
+            rectangle.close();
+            rectangle = null;
         }
 
-        if (this.textureArray != null)
+        if (textureArray != null)
         {
-            this.textureArray.close();
-            this.textureArray = null;
+            textureArray.close();
+            textureArray = null;
         }
     }
 }

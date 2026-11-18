@@ -103,7 +103,7 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     @Override
     public final void draw(Framebuffer<ContextType> framebuffer)
     {
-        InteractiveRenderableResource<ContextType> selected = this.getSelectedItem();
+        InteractiveRenderableResource<ContextType> selected = getSelectedItem();
         if (selected != null)
         {
             selected.draw(framebuffer);
@@ -141,7 +141,7 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     @Override
     public final void setSelectedIndex(int index)
     {
-        this.selectedIndex = index;
+        selectedIndex = index;
     }
 
     @Override
@@ -149,11 +149,11 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     {
         if (item == null)
         {
-            this.selectedIndex = -1;
+            selectedIndex = -1;
         }
         else
         {
-            this.selectedIndex = renderables.indexOf(item);
+            selectedIndex = renderables.indexOf(item);
         }
     }
 
@@ -270,8 +270,8 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     @Override
     public final void clear()
     {
-        this.removedRenderables = this.renderables;
-        this.renderables = new ArrayList<>(8);
+        removedRenderables = renderables;
+        renderables = new ArrayList<>(8);
     }
 
     @Override

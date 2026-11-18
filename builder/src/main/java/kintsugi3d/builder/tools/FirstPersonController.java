@@ -54,16 +54,16 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
 
     public FirstPersonController(ViewpointModel cameraModel)
     {
-        this.model = cameraModel;
+        model = cameraModel;
 
-        this.velocity = new Vector3(0.0f, 0.0f, 0.0f);
-        this.position = new Vector3(0.0f, 0.0f, 0.0f);
+        velocity = new Vector3(0.0f, 0.0f, 0.0f);
+        position = new Vector3(0.0f, 0.0f, 0.0f);
 
-        this.lastCursorX = Float.NaN;
-        this.lastCursorY = Float.NaN;
+        lastCursorX = Float.NaN;
+        lastCursorY = Float.NaN;
 
-        this.theta = 0.0f;
-        this.phi = 0.0f;
+        theta = 0.0f;
+        phi = 0.0f;
     }
 
     public final void addAsWindowListener(WindowListenerManager windowListenerManager)
@@ -75,7 +75,7 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
 
     public final boolean isEnabled()
     {
-        return this.enabled;
+        return enabled;
     }
 
     public final void setEnabled(boolean enabled)
@@ -83,15 +83,15 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
         this.enabled = enabled;
         if (!enabled)
         {
-            this.lastCursorX = Float.NaN;
-            this.lastCursorY = Float.NaN;
-            this.velocity = new Vector3(0.0f, 0.0f, 0.0f);
+            lastCursorX = Float.NaN;
+            lastCursorY = Float.NaN;
+            velocity = new Vector3(0.0f, 0.0f, 0.0f);
         }
     }
 
     public final ReadonlyViewpointModel getModel()
     {
-        return this.model;
+        return model;
     }
 
     @Override
@@ -136,7 +136,7 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
             theta = 0.0f;
             phi = 0.0f;
             position = new Vector3(0.0f, 0.0f, 0.0f);
-            this.model.setLookMatrix(Matrix4.IDENTITY);
+            model.setLookMatrix(Matrix4.IDENTITY);
         }
 
         ignoreSensitivity = mods.isControlModifierActive();
@@ -230,7 +230,7 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
                 position = position.plus(rotation.transpose().times(velocity.normalized().times(SPEED)));
             }
 
-            this.model.setLookMatrix(rotation.asMatrix4().times(Matrix4.translate(position.negated())));
+            model.setLookMatrix(rotation.asMatrix4().times(Matrix4.translate(position.negated())));
         }
     }
 }

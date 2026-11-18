@@ -50,7 +50,7 @@ public class RootCameraSceneController
 
     public final void injectDependencies(ObservableCameraModel cameraModel, ObservableProjectModel injectedProjectModel)
     {
-        this.projectModel = injectedProjectModel;
+        projectModel = injectedProjectModel;
 
         cameraListView.setItems(projectModel.getCameraList());
         cameraListView.getSelectionModel().selectedItemProperty().addListener(settingsController.getChangeListener());

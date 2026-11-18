@@ -79,8 +79,8 @@ public class MatrixBuilderSample
         this.actual = actual;
 
         // Calculate which discretized element the current sample belongs to.
-        this.floor = Math.min(basisLibrary.getOptimizedDomainSize() - 1, (int) Math.floor(actual));
-        this.inOptimizedDomain = actual < basisLibrary.getOptimizedDomainSize();
+        floor = Math.min(basisLibrary.getOptimizedDomainSize() - 1, (int) Math.floor(actual));
+        inOptimizedDomain = actual < basisLibrary.getOptimizedDomainSize();
 
         this.analytic = analytic;
         this.sampleWeight = sampleWeight;
@@ -88,7 +88,7 @@ public class MatrixBuilderSample
         // When floor and actual are the same, t = 1.0.
         // When actual is almost a whole increment greater than floor, t approaches 0.0.
         // If mFloor is clamped to the domain size - 1, then mExact will be much larger, so t = 0.0.
-        this.blendingWeight = Math.max(0.0, 1.0 + this.floor - this.actual);
+        blendingWeight = Math.max(0.0, 1.0 + floor - this.actual);
 
         this.weightByInstance = weightByInstance;
         this.observed = observed;

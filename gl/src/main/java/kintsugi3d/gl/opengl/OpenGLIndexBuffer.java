@@ -30,7 +30,7 @@ class OpenGLIndexBuffer extends OpenGLBuffer implements IndexBuffer<OpenGLContex
     OpenGLIndexBuffer(OpenGLContext context, int usage)
     {
         super(context, usage);
-        this.count = 0;
+        count = 0;
     }
 
     OpenGLIndexBuffer(OpenGLContext context)
@@ -55,14 +55,14 @@ class OpenGLIndexBuffer extends OpenGLBuffer implements IndexBuffer<OpenGLContex
     @Override
     public final int count()
     {
-        return this.count;
+        return count;
     }
 
     @Override
     public final OpenGLIndexBuffer setData(int... data)
     {
         super.setData(convertToByteBuffer(data));
-        this.count = data.length;
+        count = data.length;
         return this;
     }
 }

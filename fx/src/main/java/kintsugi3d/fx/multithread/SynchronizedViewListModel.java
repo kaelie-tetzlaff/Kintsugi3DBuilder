@@ -29,9 +29,9 @@ public class SynchronizedViewListModel implements SelectableViewListModel
 
     public SynchronizedViewListModel(SelectableViewListModel baseModel)
     {
-        this.selectedCameraView = SynchronizedValue.createFromFunctions(baseModel::getSelectedView, baseModel::setSelectedView);
-        this.cameraViewList = SynchronizedValue.createFromFunctions(baseModel::getViewList, baseModel::setViewList);
-        this.cameraViewSnapEnabled = SynchronizedValue.createFromFunctions(baseModel::isViewSnapEnabled, baseModel::setViewSnapEnabled);
+        selectedCameraView = SynchronizedValue.createFromFunctions(baseModel::getSelectedView, baseModel::setSelectedView);
+        cameraViewList = SynchronizedValue.createFromFunctions(baseModel::getViewList, baseModel::setViewList);
+        cameraViewSnapEnabled = SynchronizedValue.createFromFunctions(baseModel::isViewSnapEnabled, baseModel::setViewSnapEnabled);
         this.baseModel = baseModel;
     }
 
@@ -49,7 +49,7 @@ public class SynchronizedViewListModel implements SelectableViewListModel
     @Override
     public final void setSelectedView(View cameraView)
     {
-        this.selectedCameraView.setValue(cameraView);
+        selectedCameraView.setValue(cameraView);
     }
 
     @Override

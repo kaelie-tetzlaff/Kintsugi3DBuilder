@@ -32,11 +32,11 @@ public class SynchronizedObjectPoseModel extends ObjectPoseModelBase
     public SynchronizedObjectPoseModel(ManipulableObjectPoseModel baseModel)
     {
         this.baseModel = baseModel;
-        this.center = SynchronizedValue.createFromFunctions(baseModel::getCenter, baseModel::setCenter);
-        this.rotationX = SynchronizedValue.createFromFunctions(baseModel::getRotationX, baseModel::setRotationX);
-        this.rotationY = SynchronizedValue.createFromFunctions(baseModel::getRotationY, baseModel::setRotationY);
-        this.rotationZ = SynchronizedValue.createFromFunctions(baseModel::getRotationZ, baseModel::setRotationZ);
-        this.scale = SynchronizedValue.createFromFunctions(baseModel::getScale, baseModel::setScale);
+        center = SynchronizedValue.createFromFunctions(baseModel::getCenter, baseModel::setCenter);
+        rotationX = SynchronizedValue.createFromFunctions(baseModel::getRotationX, baseModel::setRotationX);
+        rotationY = SynchronizedValue.createFromFunctions(baseModel::getRotationY, baseModel::setRotationY);
+        rotationZ = SynchronizedValue.createFromFunctions(baseModel::getRotationZ, baseModel::setRotationZ);
+        scale = SynchronizedValue.createFromFunctions(baseModel::getScale, baseModel::setScale);
     }
 
     @Override
@@ -48,29 +48,29 @@ public class SynchronizedObjectPoseModel extends ObjectPoseModelBase
     @Override
     public final Vector3 getCenter()
     {
-        return this.center.getValue();
+        return center.getValue();
     }
 
     @Override
     public final float getRotationZ()
     {
-        return this.rotationZ.getValue();
+        return rotationZ.getValue();
     }
 
     @Override
     public final float getRotationY()
     {
-        return this.rotationY.getValue();
+        return rotationY.getValue();
     }
 
     @Override
     public final float getRotationX()
     {
-        return this.rotationX.getValue();
+        return rotationX.getValue();
     }
 
     @Override
-    public final float getScale(){return this.scale.getValue();}
+    public final float getScale(){return scale.getValue();}
 
     @Override
     public final void setCenter(Vector3 center)

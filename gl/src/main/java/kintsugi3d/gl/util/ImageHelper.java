@@ -308,7 +308,7 @@ public final class ImageHelper
 
     public ImageHelper save(String format, File file) throws IOException
     {
-        ImageIO.write(this.image, format, file);
+        ImageIO.write(image, format, file);
         return this;
     }
 

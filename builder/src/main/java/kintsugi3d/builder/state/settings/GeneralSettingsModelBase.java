@@ -26,9 +26,9 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
     @Override
     public final Object getObject(String name)
     {
-        if (this.exists(name))
+        if (exists(name))
         {
-            return this.getUnchecked(name);
+            return getUnchecked(name);
         }
         else
         {
@@ -40,9 +40,9 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
     @Override
     public final <T> T get(String name, Class<T> settingType)
     {
-        if (this.exists(name))
+        if (exists(name))
         {
-            Object value = this.getUnchecked(name);
+            Object value = getUnchecked(name);
             if (settingType.isAssignableFrom(value.getClass()))
             {
                 return (T) value;
@@ -55,11 +55,11 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
     @Override
     public final void set(String name, Object value)
     {
-        if (this.exists(name))
+        if (exists(name))
         {
-            if (value == null || this.getType(name).isAssignableFrom(value.getClass()))
+            if (value == null || getType(name).isAssignableFrom(value.getClass()))
             {
-                this.setUnchecked(name, value);
+                setUnchecked(name, value);
             }
             else
             {
@@ -119,7 +119,7 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
         {
             this.name = name;
             this.type = type;
-            this.initialValue = value;
+            initialValue = value;
             this.serialize = serialize;
         }
 

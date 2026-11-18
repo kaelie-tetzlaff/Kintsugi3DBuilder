@@ -79,7 +79,7 @@ public interface Drawable<ContextType extends Context<ContextType>> extends Cont
      */
     default void draw(Framebuffer<ContextType> framebuffer)
     {
-        this.draw(getDefaultPrimitiveMode(), framebuffer);
+        draw(getDefaultPrimitiveMode(), framebuffer);
     }
 
     /**
@@ -92,7 +92,7 @@ public interface Drawable<ContextType extends Context<ContextType>> extends Cont
      */
     default void draw(Framebuffer<ContextType> framebuffer, int x, int y, int width, int height)
     {
-        this.draw(getDefaultPrimitiveMode(), framebuffer, x, y, width, height);
+        draw(getDefaultPrimitiveMode(), framebuffer, x, y, width, height);
     }
 
     /**
@@ -103,7 +103,7 @@ public interface Drawable<ContextType extends Context<ContextType>> extends Cont
      */
     default void draw(Framebuffer<ContextType> framebuffer, int width, int height)
     {
-        this.draw(getDefaultPrimitiveMode(), framebuffer, width, height);
+        draw(getDefaultPrimitiveMode(), framebuffer, width, height);
     }
 
     /**
@@ -111,7 +111,7 @@ public interface Drawable<ContextType extends Context<ContextType>> extends Cont
      */
     default void draw()
     {
-        this.draw(getDefaultPrimitiveMode());
+        draw(getDefaultPrimitiveMode());
     }
 
     /**

@@ -28,16 +28,16 @@ public abstract class ImageReplacer
 
     protected ImageReplacer()
     {
-        this.resources = null;
-        this.currentImage = null;
-        this.newImage = null;
+        resources = null;
+        currentImage = null;
+        newImage = null;
     }
 
     protected ImageReplacer(TextureResources<?> resources)
     {
         this.resources = resources;
-        this.currentImage = null;
-        this.newImage = null;
+        currentImage = null;
+        newImage = null;
     }
 
     public abstract void replace() throws IOException;
@@ -54,11 +54,11 @@ public abstract class ImageReplacer
 
     final void setCurrentImage(File currentTexture)
     {
-        this.currentImage = currentTexture;
+        currentImage = currentTexture;
 
-        if (this.newImage == null)
+        if (newImage == null)
         {
-            this.newImage = currentTexture;
+            newImage = currentTexture;
         }
     }
 

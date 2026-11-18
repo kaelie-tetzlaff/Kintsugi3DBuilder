@@ -115,11 +115,11 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
             throws MissingImagesException, FileNotFoundException
     {
         MetashapeChunk parentChunk = model.getChunk();
-        this.chunkName = parentChunk.getLabel();
-        this.cameras = parentChunk.findEnabledCameras();
-        this.primaryViewCandidates = getViews(cameras.stream());
-        this.thumbnailMap = parentChunk.loadThumbnailImageList();
-        this.cameraIdToFullRes = parentChunk.buildCameraPathsMap(false, disabledImageFiles);
+        chunkName = parentChunk.getLabel();
+        cameras = parentChunk.findEnabledCameras();
+        primaryViewCandidates = getViews(cameras.stream());
+        thumbnailMap = parentChunk.loadThumbnailImageList();
+        cameraIdToFullRes = parentChunk.buildCameraPathsMap(false, disabledImageFiles);
     }
 
     @Override

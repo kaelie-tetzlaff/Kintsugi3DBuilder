@@ -48,7 +48,7 @@ public class FramebufferSize
         if (obj instanceof FramebufferSize)
         {
             FramebufferSize other = (FramebufferSize)obj;
-            return other.width == this.width && other.height == this.height;
+            return other.width == width && other.height == height;
         }
         else
         {

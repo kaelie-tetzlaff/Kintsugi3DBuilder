@@ -178,7 +178,7 @@ public class DistortionProjection implements Projection
     public final Matrix4 getProjectionMatrix(float nearPlane, float farPlane)
     {
         return Matrix4.translate(getCenter().asVector3())
-            .times(Matrix4.perspective(this.getVerticalFieldOfView(), this.getAspectRatio(), nearPlane, farPlane));
+            .times(Matrix4.perspective(getVerticalFieldOfView(), getAspectRatio(), nearPlane, farPlane));
     }
 
     @Override

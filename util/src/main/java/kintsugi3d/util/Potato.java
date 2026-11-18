@@ -61,7 +61,7 @@ public class Potato
 
     public Potato(int bumpCount, float bumpSize, float bumpHeight, int minTriangles)
     {
-        this.bumps = new Bump[bumpCount];
+        bumps = new Bump[bumpCount];
 
         SecureRandom random = new SecureRandom();
 

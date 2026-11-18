@@ -114,12 +114,12 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
 
     public final File getFragmentShaderFile()
     {
-        return this.fragmentShaderFile;
+        return fragmentShaderFile;
     }
 
     private ProgramObject<ContextType> loadMainProgram(Map<String, Optional<Object>> defineMap) throws IOException
     {
-        return this.getProgramBuilder(defineMap)
+        return getProgramBuilder(defineMap)
             .define("SPOTLIGHTS_ENABLED", true)
             .addShader(ShaderType.VERTEX, new File("shaders/common/imgspace.vert"))
             .addShader(ShaderType.FRAGMENT, fragmentShaderFile)
@@ -177,20 +177,20 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
             defineMap.put("VIEW_COUNT", Optional.of(1));
         }
 
-        if (this.sceneModel.getSettingsModel() != null)
+        if (sceneModel.getSettingsModel() != null)
         {
             defineMap.put("PHYSICALLY_BASED_MASKING_SHADOWING",
-                Optional.of(this.sceneModel.getSettingsModel().getBoolean("pbrGeometricAttenuationEnabled")));
-            defineMap.put("FRESNEL_EFFECT_ENABLED", Optional.of(this.sceneModel.getSettingsModel().getBoolean("fresnelEnabled")));
-            defineMap.put("SHADOWS_ENABLED", Optional.of(this.sceneModel.getSettingsModel().getBoolean("shadowsEnabled")));
+                Optional.of(sceneModel.getSettingsModel().getBoolean("pbrGeometricAttenuationEnabled")));
+            defineMap.put("FRESNEL_EFFECT_ENABLED", Optional.of(sceneModel.getSettingsModel().getBoolean("fresnelEnabled")));
+            defineMap.put("SHADOWS_ENABLED", Optional.of(sceneModel.getSettingsModel().getBoolean("shadowsEnabled")));
 
-            defineMap.put("BUEHLER_ALGORITHM", Optional.of(this.sceneModel.getSettingsModel().getBoolean("buehlerAlgorithm")));
-            defineMap.put("SORTING_SAMPLE_COUNT", Optional.of(this.sceneModel.getSettingsModel().getInt("buehlerViewCount")));
-            defineMap.put("RELIGHTING_ENABLED", Optional.of(this.sceneModel.getSettingsModel().getBoolean("relightingEnabled")
-                && lightingResources != null && this.sceneModel.getLightingModel() != null));
+            defineMap.put("BUEHLER_ALGORITHM", Optional.of(sceneModel.getSettingsModel().getBoolean("buehlerAlgorithm")));
+            defineMap.put("SORTING_SAMPLE_COUNT", Optional.of(sceneModel.getSettingsModel().getInt("buehlerViewCount")));
+            defineMap.put("RELIGHTING_ENABLED", Optional.of(sceneModel.getSettingsModel().getBoolean("relightingEnabled")
+                && lightingResources != null && sceneModel.getLightingModel() != null));
 
-            if (this.sceneModel.getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM
-                && !this.sceneModel.getSettingsModel().getBoolean("relightingEnabled") && !lightCalibrationMode)
+            if (sceneModel.getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM
+                && !sceneModel.getSettingsModel().getBoolean("relightingEnabled") && !lightCalibrationMode)
             {
                 // Disable visibility / shadow test if weight mode is "uniform" and relighting is disabled.
                 defineMap.put("VISIBILITY_TEST_ENABLED", Optional.of(false));
@@ -204,11 +204,11 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
             }
 
             defineMap.put("PRECOMPUTED_VIEW_WEIGHTS_ENABLED",
-                Optional.of(!this.sceneModel.getSettingsModel().getBoolean("relightingEnabled")
+                Optional.of(!sceneModel.getSettingsModel().getBoolean("relightingEnabled")
                         && !lightCalibrationMode
-                    && this.sceneModel.getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM));
+                    && sceneModel.getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM));
 
-            if (this.sceneModel.getLightingModel() != null && this.sceneModel.getSettingsModel().getBoolean("relightingEnabled")
+            if (sceneModel.getLightingModel() != null && sceneModel.getSettingsModel().getBoolean("relightingEnabled")
                 && lightingResources != null)
             {
                 defineMap.put("VIRTUAL_LIGHT_COUNT", Optional.of(sceneModel.getLightingModel().getLightCount()));
@@ -292,10 +292,10 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
     {
         Program<ContextType> program = getDrawable().program();
 
-        this.resources.setupShaderProgram(program);
+        resources.setupShaderProgram(program);
 
-        program.setUniform("weightExponent", this.sceneModel.getSettingsModel().getFloat("weightExponent"));
-        program.setUniform("isotropyFactor", this.sceneModel.getSettingsModel().getFloat("isotropyFactor"));
+        program.setUniform("weightExponent", sceneModel.getSettingsModel().getFloat("weightExponent"));
+        program.setUniform("isotropyFactor", sceneModel.getSettingsModel().getFloat("isotropyFactor"));
 
         if (lightingResources != null)
         {
@@ -313,7 +313,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
             program.setTexture("environmentMap", lightingResources.getEnvironmentMap());
             program.setUniform("environmentMipMapLevel",
                 Math.max(0, Math.min(lightingResources.getEnvironmentMap().getMipmapLevelCount() - 1,
-                    this.sceneModel.getLightingModel().getEnvironmentMapFilteringBias()
+                    sceneModel.getLightingModel().getEnvironmentMapFilteringBias()
                         + (float)(0.5 *
                         StrictMath.log(6 * (double)lightingResources.getEnvironmentMap().getFaceSize() * (double)lightingResources.getEnvironmentMap().getFaceSize()
                             / (double) resources.getViewSet().getEnabledViewCount() )

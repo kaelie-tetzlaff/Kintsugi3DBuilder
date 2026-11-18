@@ -40,7 +40,7 @@ public class LightCalibrationRoot<ContextType extends Context<ContextType>> impl
         this.sceneModel = sceneModel;
         this.sceneViewportModel = sceneViewportModel;
 
-        this.viewSnapRoot = new ViewSnap<>(sceneModel, viewSelection);
+        viewSnapRoot = new ViewSnap<>(sceneModel, viewSelection);
     }
 
     @Override

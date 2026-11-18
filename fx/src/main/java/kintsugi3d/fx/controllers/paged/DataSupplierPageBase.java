@@ -36,14 +36,14 @@ abstract class DataSupplierPageBase<InType, OutType, ControllerType extends Data
     @Override
     public final void initController()
     {
-        this.getController().setPage(this);
-        this.getController().initPage();
+        getController().setPage(this);
+        getController().initPage();
     }
 
     @Override
     public final OutType getOutData()
     {
-        return this.data;
+        return data;
     }
 
     @Override

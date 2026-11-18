@@ -60,14 +60,14 @@ public class LightWidgetCircles<ContextType extends Context<ContextType>> extend
 
     public final void refreshWidgetInfo(LightWidgetInfo[] newWidgetInfo)
     {
-        this.widgetInfo = newWidgetInfo.clone();
+        widgetInfo = newWidgetInfo.clone();
     }
 
     @Override
     public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
-        if (this.sceneModel.getSettingsModel().getBoolean("relightingEnabled")
-            && this.sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled")
+        if (sceneModel.getSettingsModel().getBoolean("relightingEnabled")
+            && sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled")
             && sceneModel.getSettingsModel().getBoolean("lightWidgetsEnabled"))
         {
             Program<ContextType> circleProgram = getDrawable().program();

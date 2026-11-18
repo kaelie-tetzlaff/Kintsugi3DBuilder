@@ -74,7 +74,7 @@ public interface ImageBasedRenderable<ContextType extends Context<ContextType>>
     default void draw(Framebuffer<ContextType> framebuffer, Matrix4 modelViewOverride, Matrix4 projectionOverride)
     {
         FramebufferSize framebufferSize = framebuffer.getSize();
-        this.draw(framebuffer, modelViewOverride, projectionOverride, framebufferSize.width , framebufferSize.height);
+        draw(framebuffer, modelViewOverride, projectionOverride, framebufferSize.width , framebufferSize.height);
     }
 
     /**

@@ -76,95 +76,95 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
         this.subject = subject;
 
         ContextType context = resources.getContext();
-        this.environmentResource = new AsyncLoadedResource<>(new LoadableEnvironmentCubemap<>(context, lightingResources));
-        this.backplateResource = new AsyncLoadedResource<>(new LoadableBackplateTexture<>(context, lightingResources));
+        environmentResource = new AsyncLoadedResource<>(new LoadableEnvironmentCubemap<>(context, lightingResources));
+        backplateResource = new AsyncLoadedResource<>(new LoadableBackplateTexture<>(context, lightingResources));
     }
 
     public final void update()
     {
         // Delegate environment map consumption to AsyncLoadedResource
-        environmentResource.consume(this.progressMonitor);
+        environmentResource.consume(progressMonitor);
 
         // Delegate backplate consumption to AsyncLoadedResource
         backplateResource.consume(null);
 
-        if (this.desiredShaderFile != null)
+        if (desiredShaderFile != null)
         {
-            this.subject.useFragmentShader(desiredShaderFile);
-            this.subject.setExtraFragmentShaderDefinesFactory(this.shaderDefinesFactory);
-            this.subject.reloadShaders();
+            subject.useFragmentShader(desiredShaderFile);
+            subject.setExtraFragmentShaderDefinesFactory(shaderDefinesFactory);
+            subject.reloadShaders();
 
-            this.desiredShaderFile = null;
+            desiredShaderFile = null;
         }
 
-        ViewSet viewSet = this.resources.getViewSet();
+        ViewSet viewSet = resources.getViewSet();
 
-        if (this.newLuminanceEncodingDataAvailable)
+        if (newLuminanceEncodingDataAvailable)
         {
-            if (this.newLinearLuminanceValues != null && this.newEncodedLuminanceValues != null)
+            if (newLinearLuminanceValues != null && newEncodedLuminanceValues != null)
             {
-                viewSet.setLuminanceEncoding(this.newLinearLuminanceValues, this.newEncodedLuminanceValues);
+                viewSet.setLuminanceEncoding(newLinearLuminanceValues, newEncodedLuminanceValues);
             }
             else
             {
                 viewSet.clearLuminanceEncoding();
             }
 
-            this.newLuminanceEncodingDataAvailable = false;
+            newLuminanceEncodingDataAvailable = false;
         }
 
-        if (this.newLightCalibrationAvailable)
+        if (newLightCalibrationAvailable)
         {
-            viewSet.setAllLightPositions(this.newLightCalibration);
-            this.newLightCalibrationAvailable = false;
+            viewSet.setAllLightPositions(newLightCalibration);
+            newLightCalibrationAvailable = false;
         }
     }
 
     @Override
     public final void requestFragmentShader(File shaderFile)
     {
-        this.desiredShaderFile = shaderFile;
+        desiredShaderFile = shaderFile;
     }
 
     @Override
     public final void requestFragmentShader(File shaderFile, Supplier<Map<String, Optional<Object>>> extraDefinesFactory)
     {
-        this.desiredShaderFile = shaderFile;
-        this.shaderDefinesFactory = extraDefinesFactory;
+        desiredShaderFile = shaderFile;
+        shaderDefinesFactory = extraDefinesFactory;
     }
 
     @Override
     public final EncodableColorImage loadEnvironmentMap(File environmentFile) throws FileNotFoundException
     {
-        return this.environmentResource.load(environmentFile, this.progressMonitor);
+        return environmentResource.load(environmentFile, progressMonitor);
     }
 
     @Override
     public final void loadBackplate(File backplateFile) throws FileNotFoundException
     {
-        this.backplateResource.load(backplateFile, null);
+        backplateResource.load(backplateFile, null);
     }
 
     @Override
     public final void setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
     {
-        this.newLinearLuminanceValues = linearLuminanceValues.clone();
-        this.newEncodedLuminanceValues = encodedLuminanceValues.clone();
-        this.newLuminanceEncodingDataAvailable = true;
+        newLinearLuminanceValues = linearLuminanceValues.clone();
+        newEncodedLuminanceValues = encodedLuminanceValues.clone();
+        newLuminanceEncodingDataAvailable = true;
     }
 
     @Override
     public final void clearTonemapping()
     {
-        this.newLinearLuminanceValues = null;
-        this.newEncodedLuminanceValues = null;
-        this.newLuminanceEncodingDataAvailable = true;
+        newLinearLuminanceValues = null;
+        newEncodedLuminanceValues = null;
+        newLuminanceEncodingDataAvailable = true;
     }
 
     @Override
     public final void setLightCalibration(Vector3 lightCalibration)
     {
-        this.newLightCalibration = lightCalibration;
-        this.newLightCalibrationAvailable = true;
+        newLightCalibration = lightCalibration;
+        newLightCalibrationAvailable = true;
     }
 }

@@ -88,7 +88,7 @@ public class MouseMode
         if (obj instanceof MouseMode)
         {
             MouseMode otherMapping = (MouseMode)obj;
-            return otherMapping.buttonIndex == this.buttonIndex && Objects.equals(otherMapping.modifierKeys, this.modifierKeys);
+            return otherMapping.buttonIndex == buttonIndex && Objects.equals(otherMapping.modifierKeys, modifierKeys);
         }
         else
         {
@@ -99,7 +99,7 @@ public class MouseMode
     @Override
     public final int hashCode()
     {
-        return this.getOrdinal();
+        return getOrdinal();
     }
 
     @Override

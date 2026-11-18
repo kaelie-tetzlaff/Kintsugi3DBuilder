@@ -31,7 +31,7 @@ public final class SimpleSelectionPage<T, ControllerType extends SelectionPageCo
     public void receiveData(T inData)
     {
         sendDataToController(inData);
-        this.data = inData;
+        data = inData;
     }
 
     @Override

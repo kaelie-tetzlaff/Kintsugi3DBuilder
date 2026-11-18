@@ -52,7 +52,7 @@ public class StepBasis implements BasisFunctions
     @Override
     public final double getMetallicity()
     {
-        return this.metallicity;
+        return metallicity;
     }
 
     @Override

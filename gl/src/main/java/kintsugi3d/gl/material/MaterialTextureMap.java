@@ -55,7 +55,7 @@ public class MaterialTextureMap implements ReadonlyMaterialTextureMap
 
     public final void setClampingRequired(boolean clampingEnabled)
     {
-        this.clampingRequired = clampingEnabled;
+        clampingRequired = clampingEnabled;
     }
 
     @Override

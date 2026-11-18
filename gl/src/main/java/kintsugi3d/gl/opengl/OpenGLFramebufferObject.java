@@ -52,37 +52,37 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         @Override
         public final FramebufferObject<OpenGLContext> createFramebufferObject()
         {
-            if (this.getColorAttachmentCount() > GL_MAX_COLOR_ATTACHMENTS)
+            if (getColorAttachmentCount() > GL_MAX_COLOR_ATTACHMENTS)
             {
                 throw new IllegalArgumentException("Too many color attachments specified - maximum is " + GL_MAX_COLOR_ATTACHMENTS + '.');
             }
 
-            OpenGLTexture2D[] colorAttachments = new OpenGLTexture2D[this.getColorAttachmentCount()];
-            for (int i = 0; i < this.getColorAttachmentCount(); i++)
+            OpenGLTexture2D[] colorAttachments = new OpenGLTexture2D[getColorAttachmentCount()];
+            for (int i = 0; i < getColorAttachmentCount(); i++)
             {
-                if (this.getColorAttachmentBuilder(i) != null)
+                if (getColorAttachmentBuilder(i) != null)
                 {
-                    colorAttachments[i] = (OpenGLTexture2D)this.getColorAttachmentBuilder(i).createTexture();
+                    colorAttachments[i] = (OpenGLTexture2D) getColorAttachmentBuilder(i).createTexture();
                 }
             }
 
             OpenGLTexture2D depthAttachment = null;
             OpenGLTexture2D stencilAttachment = null;
             OpenGLTexture2D depthStencilAttachment = null;
-            if (this.hasCombinedDepthStencilAttachment())
+            if (hasCombinedDepthStencilAttachment())
             {
-                depthStencilAttachment = (OpenGLTexture2D)this.getDepthStencilAttachmentBuilder().createTexture();
+                depthStencilAttachment = (OpenGLTexture2D) getDepthStencilAttachmentBuilder().createTexture();
             }
             else
             {
-                if (this.hasDepthAttachment())
+                if (hasDepthAttachment())
                 {
-                    depthAttachment = (OpenGLTexture2D)this.getDepthAttachmentBuilder().createTexture();
+                    depthAttachment = (OpenGLTexture2D) getDepthAttachmentBuilder().createTexture();
                 }
 
-                if (this.hasStencilAttachment())
+                if (hasStencilAttachment())
                 {
-                    stencilAttachment = (OpenGLTexture2D)this.getStencilAttachmentBuilder().createTexture();
+                    stencilAttachment = (OpenGLTexture2D) getStencilAttachmentBuilder().createTexture();
                 }
             }
 
@@ -142,12 +142,12 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
     {
         super(context);
 
-        this.id = glGenFramebuffers();
+        id = glGenFramebuffers();
         OpenGLContext.errorCheck();
 
         this.width = width;
         this.height = height;
-        this.ownedAttachments = new ArrayList<>(colorAttachments.length + 1);
+        ownedAttachments = new ArrayList<>(colorAttachments.length + 1);
         this.colorAttachments = new OpenGLFramebufferAttachment[colorAttachments.length];
         this.depthAttachment = depthAttachment;
         this.stencilAttachment = stencilAttachment;
@@ -189,15 +189,15 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
     @Override
     public FramebufferSize getSize()
     {
-        return new FramebufferSize(this.width, this.height);
+        return new FramebufferSize(width, height);
     }
 
     @Override
     Contents getContents()
     {
-        if (this.contents == null)
+        if (contents == null)
         {
-            this.contents = new FBOContents(this);
+            contents = new FBOContents(this);
             contents.drawBufferList = BufferUtils.createIntBuffer(colorAttachments.length);
             for (int i = 0; i < colorAttachments.length; i++)
             {
@@ -205,7 +205,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
             }
         }
 
-        return this.contents;
+        return contents;
     }
 
     @Override
@@ -239,18 +239,18 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         {
             throw new IllegalArgumentException("Attachment index cannot be negative.");
         }
-        else if (index > this.colorAttachments.length)
+        else if (index > colorAttachments.length)
         {
             throw new IllegalArgumentException("Attachment index (" + index +
-                    ") exceeded the number of color attachments for the framebufer (" + this.colorAttachments.length + ").");
+                    ") exceeded the number of color attachments for the framebufer (" + colorAttachments.length + ").");
         }
-        else if (this.colorAttachments[index] == null || !(this.colorAttachments[index] instanceof OpenGLTexture2D))
+        else if (colorAttachments[index] == null || !(colorAttachments[index] instanceof OpenGLTexture2D))
         {
             throw new UnsupportedOperationException("The color attachment for the framebuffer at index " + index + " is not a 2D texture.");
         }
         else
         {
-            return (OpenGLTexture2D) this.colorAttachments[index];
+            return (OpenGLTexture2D) colorAttachments[index];
         }
     }
 
@@ -261,20 +261,20 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         {
             OpenGLFramebufferAttachment attachmentCast = (OpenGLFramebufferAttachment)attachment;
 
-            if (index < this.colorAttachments.length && this.colorAttachments[index] != null)
+            if (index < colorAttachments.length && colorAttachments[index] != null)
             {
                 // Remove the attachment from the list of owned attachments if it existed
-                if (this.ownedAttachments.remove(this.colorAttachments[index]))
+                if (ownedAttachments.remove(colorAttachments[index]))
                 {
                     // Delete it
-                    ((ManagedResource)this.colorAttachments[index]).close();
+                    ((ManagedResource) colorAttachments[index]).close();
                 }
             }
 
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, id);
             OpenGLContext.errorCheck();
             attachmentCast.attachToDrawFramebuffer(GL_COLOR_ATTACHMENT0 + index, 0);
-            this.colorAttachments[index] = attachmentCast;
+            colorAttachments[index] = attachmentCast;
         }
         else
         {
@@ -285,13 +285,13 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
     @Override
     public OpenGLTexture2D getDepthAttachmentTexture()
     {
-        if (this.depthAttachment == null || !(this.depthAttachment instanceof OpenGLTexture2D))
+        if (depthAttachment == null || !(depthAttachment instanceof OpenGLTexture2D))
         {
             throw new UnsupportedOperationException("The depth attachment for the framebuffer is not a 2D texture.");
         }
         else
         {
-            return (OpenGLTexture2D) this.depthAttachment;
+            return (OpenGLTexture2D) depthAttachment;
         }
     }
 
@@ -302,13 +302,13 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         {
             OpenGLFramebufferAttachment attachmentCast = (OpenGLFramebufferAttachment)attachment;
 
-            if (this.depthAttachment != null)
+            if (depthAttachment != null)
             {
                 // Remove the attachment from the list of owned attachments if it existed
-                if (this.ownedAttachments.remove(this.depthAttachment))
+                if (ownedAttachments.remove(depthAttachment))
                 {
                     // Delete it
-                    ((ManagedResource)this.depthAttachment).close();
+                    ((ManagedResource) depthAttachment).close();
                 }
             }
 
@@ -316,7 +316,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
             OpenGLContext.errorCheck();
             attachmentCast.attachToDrawFramebuffer(GL_DEPTH_ATTACHMENT, 0);
 
-            this.depthAttachment = attachmentCast;
+            depthAttachment = attachmentCast;
         }
         else
         {
@@ -327,13 +327,13 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
     @Override
     public OpenGLTexture2D getStencilAttachmentTexture()
     {
-        if (this.stencilAttachment == null || !(this.stencilAttachment instanceof OpenGLTexture2D))
+        if (stencilAttachment == null || !(stencilAttachment instanceof OpenGLTexture2D))
         {
             throw new UnsupportedOperationException("The stencil attachment for the framebuffer is not a 2D texture.");
         }
         else
         {
-            return (OpenGLTexture2D) this.stencilAttachment;
+            return (OpenGLTexture2D) stencilAttachment;
         }
     }
 
@@ -345,13 +345,13 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         {
             OpenGLFramebufferAttachment attachmentCast = (OpenGLFramebufferAttachment)attachment;
 
-            if (this.stencilAttachment != null)
+            if (stencilAttachment != null)
             {
                 // Remove the attachment from the list of owned attachments if it existed
-                if (this.ownedAttachments.remove(this.stencilAttachment))
+                if (ownedAttachments.remove(stencilAttachment))
                 {
                     // Delete it
-                    ((ManagedResource)this.stencilAttachment).close();
+                    ((ManagedResource) stencilAttachment).close();
                 }
             }
 
@@ -359,7 +359,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
             OpenGLContext.errorCheck();
             attachmentCast.attachToDrawFramebuffer(GL_STENCIL_ATTACHMENT, 0);
 
-            this.stencilAttachment = attachmentCast;
+            stencilAttachment = attachmentCast;
         }
         else
         {
@@ -370,13 +370,13 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
     @Override
     public OpenGLTexture2D getDepthStencilAttachmentTexture()
     {
-        if (this.depthStencilAttachment == null || !(this.depthStencilAttachment instanceof OpenGLTexture2D))
+        if (depthStencilAttachment == null || !(depthStencilAttachment instanceof OpenGLTexture2D))
         {
             throw new UnsupportedOperationException("The depth/stencil attachment for the framebuffer is not a 2D texture.");
         }
         else
         {
-            return (OpenGLTexture2D) this.depthStencilAttachment;
+            return (OpenGLTexture2D) depthStencilAttachment;
         }
     }
 
@@ -388,13 +388,13 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         {
             OpenGLFramebufferAttachment attachmentCast = (OpenGLFramebufferAttachment)attachment;
 
-            if (this.depthStencilAttachment != null)
+            if (depthStencilAttachment != null)
             {
                 // Remove the attachment from the list of owned attachments if it existed
-                if (this.ownedAttachments.remove(this.depthStencilAttachment))
+                if (ownedAttachments.remove(depthStencilAttachment))
                 {
                     // Delete it
-                    ((ManagedResource)this.depthStencilAttachment).close();
+                    ((ManagedResource) depthStencilAttachment).close();
                 }
             }
 
@@ -402,7 +402,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
             OpenGLContext.errorCheck();
             attachmentCast.attachToDrawFramebuffer(GL_DEPTH_STENCIL_ATTACHMENT, 0);
 
-            this.depthStencilAttachment = attachmentCast;
+            depthStencilAttachment = attachmentCast;
         }
         else
         {

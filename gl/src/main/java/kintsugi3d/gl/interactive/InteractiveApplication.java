@@ -35,10 +35,10 @@ public class InteractiveApplication
 
     public InteractiveApplication(EventPollable pollable, Refreshable refreshable)
     {
-        this.pollables = new ArrayList<>(16);
-        this.pollables.add(pollable);
-        this.refreshables = new ArrayList<>(16);
-        this.refreshables.add(refreshable);
+        pollables = new ArrayList<>(16);
+        pollables.add(pollable);
+        refreshables = new ArrayList<>(16);
+        refreshables.add(refreshable);
     }
 
     /**
@@ -47,7 +47,7 @@ public class InteractiveApplication
      */
     public final void addPollable(EventPollable pollable)
     {
-        this.pollables.add(pollable);
+        pollables.add(pollable);
     }
 
     /**
@@ -56,12 +56,12 @@ public class InteractiveApplication
      */
     public final void addRefreshable(Refreshable refreshable)
     {
-        this.refreshables.add(refreshable);
+        refreshables.add(refreshable);
     }
 
     public final void run() throws InitializationException
     {
-        for (Refreshable refreshable : this.refreshables)
+        for (Refreshable refreshable : refreshables)
         {
             refreshable.initialize();
         }
@@ -80,7 +80,7 @@ public class InteractiveApplication
         {
             long frameTime = 0;
 
-            for (Refreshable refreshable : this.refreshables)
+            for (Refreshable refreshable : refreshables)
             {
                 try
                 {
@@ -156,7 +156,7 @@ public class InteractiveApplication
         LOG.info("Time spent polling for events: {} milliseconds", pollingTime);
         LOG.info("Time spent on refreshes: {} milliseconds", refreshTime);
 
-        for (Refreshable refreshable : this.refreshables)
+        for (Refreshable refreshable : refreshables)
         {
             try
             {

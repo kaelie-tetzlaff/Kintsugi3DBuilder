@@ -31,7 +31,7 @@ public final class SimpleDataReceiverPage<T, ControllerType extends NonSupplierP
     public void receiveData(T inData)
     {
         sendDataToController(inData);
-        this.data = inData;
+        data = inData;
     }
 
     @Override

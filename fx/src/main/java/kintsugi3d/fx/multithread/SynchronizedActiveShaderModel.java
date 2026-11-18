@@ -30,7 +30,7 @@ public class SynchronizedActiveShaderModel implements ActiveShaderModel
     public SynchronizedActiveShaderModel(ActiveShaderModel base)
     {
         this.base = base;
-        this.activeShader = SynchronizedValue.createFromFunctions(base::getActiveShader, base::setActiveShader);
+        activeShader = SynchronizedValue.createFromFunctions(base::getActiveShader, base::setActiveShader);
     }
 
     @Override
@@ -48,6 +48,6 @@ public class SynchronizedActiveShaderModel implements ActiveShaderModel
     @Override
     public final void setActiveShader(ShaderInfo shaderInfo)
     {
-        this.activeShader.setValue(shaderInfo);
+        activeShader.setValue(shaderInfo);
     }
 }

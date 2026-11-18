@@ -49,9 +49,9 @@ public class BufferedImageBuilder
     public final BufferedImageBuilder loadDataFromFile(File file) throws IOException
     {
         BufferedImage img = ImageHelper.read(file).getBufferedImage();
-        this.width = img.getWidth();
-        this.height = img.getHeight();
-        this.data = img.getRGB(0, 0, width, height, null, 0, width);
+        width = img.getWidth();
+        height = img.getHeight();
+        data = img.getRGB(0, 0, width, height, null, 0, width);
         return this;
     }
 

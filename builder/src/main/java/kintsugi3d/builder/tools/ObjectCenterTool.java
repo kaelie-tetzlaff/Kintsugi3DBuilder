@@ -58,7 +58,7 @@ final class ObjectCenterTool implements DragTool
     @Override
     public void mouseButtonPressed(CursorPosition cursorPosition, CanvasSize canvasSize)
     {
-        this.mouseStart = cursorPosition;
+        mouseStart = cursorPosition;
 
         oldCenter = objectModel.getCenter();
         orbit = cameraModel.getOrbit().times(objectModel.getOrbit());

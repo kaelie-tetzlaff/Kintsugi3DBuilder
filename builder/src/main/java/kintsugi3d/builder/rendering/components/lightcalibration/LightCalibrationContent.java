@@ -41,7 +41,7 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
     public LightCalibrationContent(ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel,
                                    SceneViewportModel sceneViewportModel)
     {
-        this.context = resources.getContext();
+        context = resources.getContext();
         this.resources = resources;
         this.sceneModel = sceneModel;
         this.sceneViewportModel = sceneViewportModel;

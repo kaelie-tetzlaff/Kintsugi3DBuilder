@@ -158,27 +158,27 @@ public class MainWindowController
         //noinspection AssignmentToStaticFieldFromInstanceMethod
         instance = this;
 
-        this.window = injectedStage;
+        window = injectedStage;
 
-        this.framebufferView.registerKeyAndWindowEventsFromStage(injectedStage);
+        framebufferView.registerKeyAndWindowEventsFromStage(injectedStage);
         WindowSynchronization.getInstance().addListener(framebufferView::closeCanvas);
 
         ExperienceManager.getInstance().initialize(window, javaFXState);
 
         // remove camera view list from layout when invisible
-        this.cameraViewList.managedProperty().bind(this.cameraViewList.visibleProperty());
+        cameraViewList.managedProperty().bind(cameraViewList.visibleProperty());
 
         // only show camera view list when light calibration mode is active
         // TODO make this a separate property to allow it to be shown in other contexts
-        this.cameraViewList.visibleProperty().bind(javaFXState.getSettingsModel().getBooleanProperty("lightCalibrationMode"));
-        this.cameraViewListController.init(javaFXState.getCameraViewListModel());
+        cameraViewList.visibleProperty().bind(javaFXState.getSettingsModel().getBooleanProperty("lightCalibrationMode"));
+        cameraViewListController.init(javaFXState.getCameraViewListModel());
 
         this.javaFXState = javaFXState;
-        this.userDocumentationHandler = injectedUserDocumentationHandler;
+        userDocumentationHandler = injectedUserDocumentationHandler;
 
-        this.leftBarController.init(javaFXState.getTabModels());
-        this.rightBarController.init(javaFXState.getTabModels(), javaFXState.getUserShaderModel());
-        this.carouselController.init(javaFXState.getCarouselModel(), this);
+        leftBarController.init(javaFXState.getTabModels());
+        rightBarController.init(javaFXState.getTabModels(), javaFXState.getUserShaderModel());
+        carouselController.init(javaFXState.getCarouselModel(), this);
 
         initRenderExportMenu();
         initToggleGroups();

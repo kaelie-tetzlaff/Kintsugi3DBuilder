@@ -155,7 +155,7 @@ public abstract class CameraModelFromSettings extends ViewpointModelBase
     {
         if (!getCameraSettings().isLocked())
         {
-            this.getCameraSettings().setOrthographic(orthographic);
+            getCameraSettings().setOrthographic(orthographic);
         }
     }
 }

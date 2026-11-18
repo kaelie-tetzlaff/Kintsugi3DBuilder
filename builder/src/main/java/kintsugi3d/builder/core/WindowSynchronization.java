@@ -92,10 +92,10 @@ public final class WindowSynchronization
 
             if (!focus)
             {
-                this.lastFocusLost = Instant.now();
+                lastFocusLost = Instant.now();
             }
 
-            this.globalFocus = focus;
+            globalFocus = focus;
         }
     }
 

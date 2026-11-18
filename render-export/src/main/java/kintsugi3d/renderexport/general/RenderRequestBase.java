@@ -99,14 +99,14 @@ abstract class RenderRequestBase implements ProgressMonitoredImageBasedGraphicsR
         @Override
         public final RenderRequestBuilder useTextureSpaceVertexShader()
         {
-            this.vertexShader = TEX_SPACE_VERTEX_SHADER;
+            vertexShader = TEX_SPACE_VERTEX_SHADER;
             return this;
         }
 
         @Override
         public final RenderRequestBuilder useCameraSpaceVertexShader()
         {
-            this.vertexShader = IMG_SPACE_VERTEX_SHADER;
+            vertexShader = IMG_SPACE_VERTEX_SHADER;
             return this;
         }
 

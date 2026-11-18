@@ -81,9 +81,9 @@ public class WelcomeWindowController
         //noinspection AssignmentToStaticFieldFromInstanceMethod
         instance = this;
 
-        this.parentWindow = injectedStage.getOwner();
-        this.window = injectedStage;
-        this.userDocumentationHandler = injectedUserDocumentationHandler;
+        parentWindow = injectedStage.getOwner();
+        window = injectedStage;
+        userDocumentationHandler = injectedUserDocumentationHandler;
 
         recentButtons.add(recent1);
         recentButtons.add(recent2);

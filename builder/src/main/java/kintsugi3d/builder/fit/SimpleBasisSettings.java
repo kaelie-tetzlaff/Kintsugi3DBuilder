@@ -31,12 +31,12 @@ public class SimpleBasisSettings implements ReadonlyBasisSettings
     @Override
     public final int getMaterialCount()
     {
-        return this.materialCount;
+        return materialCount;
     }
 
     @Override
     public final int getBasisResolution()
     {
-        return this.basisResolution;
+        return basisResolution;
     }
 }

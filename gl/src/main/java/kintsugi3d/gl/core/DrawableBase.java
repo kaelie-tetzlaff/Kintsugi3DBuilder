@@ -28,6 +28,6 @@ public abstract class DrawableBase<ContextType extends Context<ContextType>> imp
     @Override
     public final void setDefaultPrimitiveMode(PrimitiveMode primitiveMode)
     {
-        this.defaultPrimitiveMode = primitiveMode;
+        defaultPrimitiveMode = primitiveMode;
     }
 }

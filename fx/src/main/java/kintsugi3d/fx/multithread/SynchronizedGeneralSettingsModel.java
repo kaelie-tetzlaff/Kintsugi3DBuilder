@@ -123,7 +123,7 @@ public class SynchronizedGeneralSettingsModel extends GeneralSettingsModelBase
 
         SynchronizedGeneralSettingsIterator(SynchronizedGeneralSettingsModel settingsModel)
         {
-            this.settings = settingsModel;
+            settings = settingsModel;
             base = settingsModel.settings.keySet().iterator();
         }
 

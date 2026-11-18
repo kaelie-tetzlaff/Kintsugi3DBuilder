@@ -68,7 +68,7 @@ public final class SpecularFitFinal<ContextType extends Context<ContextType>>
     {
         base = new SpecularFitBase<>(
             basisResources.getContext(), basisResources, basisResources.getWeightResources(), textureResolution);
-        this.mutableBasisResources = basisResources;
+        mutableBasisResources = basisResources;
 
         ContextType context = original.getContext();
 

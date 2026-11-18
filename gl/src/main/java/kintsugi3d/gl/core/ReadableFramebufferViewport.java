@@ -69,7 +69,7 @@ class ReadableFramebufferViewport<ContextType extends Context<ContextType>>
         ReadableFramebuffer<ContextType> fullFramebuffer, IntVector2 viewportOffset, FramebufferSize viewportSize)
     {
         super(fullFramebuffer, viewportOffset, viewportSize);
-        this.framebuffer = fullFramebuffer;
+        framebuffer = fullFramebuffer;
     }
 
     @Override
@@ -108,7 +108,7 @@ class ReadableFramebufferViewport<ContextType extends Context<ContextType>>
     public final FramebufferViewport<ContextType> getViewport(int x, int y, int width, int height)
     {
         return new ReadableFramebufferViewport<>(this,
-            new IntVector2(x + this.getOffset().x, y + this.getOffset().y), new FramebufferSize(width, height));
+            new IntVector2(x + getOffset().x, y + getOffset().y), new FramebufferSize(width, height));
     }
 
     private static class FramebufferViewportColorTextureReader<ContextType extends Context<ContextType>>

@@ -44,7 +44,7 @@ public enum ExportType
 
     public MaterialExporterFactory getFactory()
     {
-        return this.factory;
+        return factory;
     }
 
 
@@ -56,6 +56,6 @@ public enum ExportType
     @Override
     public String toString()
     {
-        return this.friendlyName;
+        return friendlyName;
     }
 }

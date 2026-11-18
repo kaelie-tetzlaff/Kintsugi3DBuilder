@@ -26,7 +26,7 @@ public abstract class StencilTextureBuilderBase<ContextType extends Context<Cont
 
     protected final int getInternalPrecision()
     {
-        return this.precision;
+        return precision;
     }
 
     protected StencilTextureBuilderBase(ContextType context)

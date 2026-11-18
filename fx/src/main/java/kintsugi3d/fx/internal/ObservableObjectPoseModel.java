@@ -27,7 +27,7 @@ public class ObservableObjectPoseModel extends ObjectPoseModelFromSettings
 
     public final ObservableValue<ObservableObjectPoseSettings> getSelectedObjectPoseProperty()
     {
-        return this.selectedObjectPoseProperty;
+        return selectedObjectPoseProperty;
     }
 
     public final void setSelectedObjectPoseProperty(ObservableValue<ObservableObjectPoseSettings> selectedObjectPoseProperty)

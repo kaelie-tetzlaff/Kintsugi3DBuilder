@@ -30,7 +30,7 @@ class OpenGLVertexBuffer extends OpenGLBuffer implements VertexBuffer<OpenGLCont
     OpenGLVertexBuffer(OpenGLContext context, int usage)
     {
         super(context, usage);
-        this.count = 0;
+        count = 0;
     }
 
     OpenGLVertexBuffer(OpenGLContext context)
@@ -47,33 +47,33 @@ class OpenGLVertexBuffer extends OpenGLBuffer implements VertexBuffer<OpenGLCont
     @Override
     public final int count()
     {
-        return this.count;
+        return count;
     }
 
     @Override
     public final OpenGLVertexBuffer setData(ReadonlyNativeVectorBuffer data, boolean normalize)
     {
         super.setData(data.getBuffer());
-        this.count = data.getCount();
-        this.vertexSize = data.getDimensions();
-        this.vertexType = OpenGLContext.getDataTypeConstant(data.getDataType());
+        count = data.getCount();
+        vertexSize = data.getDimensions();
+        vertexType = OpenGLContext.getDataTypeConstant(data.getDataType());
         this.normalize = normalize;
         return this;
     }
 
     final void useAsVertexAttribute(int attribIndex)
     {
-        this.bind();
+        bind();
         glEnableVertexAttribArray(attribIndex);
         OpenGLContext.errorCheck();
-        if (this.vertexType == GL_FLOAT || this.vertexType == GL_DOUBLE)
+        if (vertexType == GL_FLOAT || vertexType == GL_DOUBLE)
         {
-            glVertexAttribPointer(attribIndex, this.vertexSize, this.vertexType, this.normalize, 0, 0);
+            glVertexAttribPointer(attribIndex, vertexSize, vertexType, normalize, 0, 0);
             OpenGLContext.errorCheck();
         }
         else
         {
-            glVertexAttribIPointer(attribIndex, this.vertexSize, this.vertexType, 0, 0);
+            glVertexAttribIPointer(attribIndex, vertexSize, vertexType, 0, 0);
             OpenGLContext.errorCheck();
         }
     }

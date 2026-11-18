@@ -71,7 +71,7 @@ public class TestingProjectModel extends ProjectModelBase<SerializableCameraSett
             @Override
             public void fail(Throwable e)
             {
-                TestingProjectModel.this.error("An error occurred during the operation", e);
+                error("An error occurred during the operation", e);
             }
 
             @Override

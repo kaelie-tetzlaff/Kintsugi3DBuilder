@@ -43,7 +43,7 @@ abstract class ToolBuilderBase<ToolType> implements ToolBuilder<ToolType>
     @Override
     public final ToolBuilder<ToolType> setLightingEnvironmentModel(ManipulableLightingEnvironmentModel lightingModel)
     {
-        this.lightingEnvironmentModel = lightingModel;
+        lightingEnvironmentModel = lightingModel;
         return this;
     }
 

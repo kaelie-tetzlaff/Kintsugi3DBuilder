@@ -121,7 +121,7 @@ public class ReplaceImageController extends DataReceiverPageControllerBase<Image
     @Override
     public final void receiveData(ImageReplacer newData)
     {
-        this.data = newData;
+        data = newData;
 
         currentImage = new Image(data.getCurrentImage().toURI().toString(), 72, 72, false, false);
         currentImageView.setImage(currentImage);

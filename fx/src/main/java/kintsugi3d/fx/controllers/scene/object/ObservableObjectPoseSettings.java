@@ -58,17 +58,17 @@ public class ObservableObjectPoseSettings extends SerializableObjectPoseSettings
     {
         ObservableObjectPoseSettings copy = new ObservableObjectPoseSettings();
 
-        copy.setCenterX(this.getCenterX());
-        copy.setCenterY(this.getCenterY());
-        copy.setCenterZ(this.getCenterZ());
+        copy.setCenterX(getCenterX());
+        copy.setCenterY(getCenterY());
+        copy.setCenterZ(getCenterZ());
 
-        copy.setRotateY(this.getRotateY());
-        copy.setRotateX(this.getRotateX());
-        copy.setRotateZ(this.getRotateZ());
+        copy.setRotateY(getRotateY());
+        copy.setRotateX(getRotateX());
+        copy.setRotateZ(getRotateZ());
 
-        copy.setLocked(this.isLocked());
-        copy.setScale(this.getScale());
-        copy.setName(String.format("%s copy", this.getName()));
+        copy.setLocked(isLocked());
+        copy.setScale(getScale());
+        copy.setName(String.format("%s copy", getName()));
 
         return copy;
     }

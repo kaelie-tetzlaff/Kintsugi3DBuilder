@@ -49,9 +49,9 @@ public interface ReadonlyLoadOptionsModel
 
     default <BuilderType extends ColorTextureBuilder<?,?>> void configureColorTextureBuilder(BuilderType colorTextureBuilder)
     {
-        if (this.isCompressionRequested())
+        if (isCompressionRequested())
         {
-            if (this.isAlphaRequested())
+            if (isAlphaRequested())
             {
                 colorTextureBuilder.setInternalFormat(CompressionFormat.RGB_4BPP_ALPHA_4BPP);
             }
@@ -66,7 +66,7 @@ public interface ReadonlyLoadOptionsModel
         }
 
         colorTextureBuilder
-            .setMipmapsEnabled(this.areMipmapsRequested())
+            .setMipmapsEnabled(areMipmapsRequested())
             .setLinearFilteringEnabled(true)
             .setMaxAnisotropy(16.0f);
     }

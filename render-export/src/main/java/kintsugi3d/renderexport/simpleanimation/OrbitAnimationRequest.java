@@ -47,6 +47,6 @@ public final class OrbitAnimationRequest extends AnimationRequest
     @Override
     protected Matrix4 getViewMatrix(int frame, Matrix4 baseViewMatrix)
     {
-        return baseViewMatrix.times(Matrix4.rotateY(frame * 2 * Math.PI / this.getFrameCount()));
+        return baseViewMatrix.times(Matrix4.rotateY(frame * 2 * Math.PI / getFrameCount()));
     }
 }

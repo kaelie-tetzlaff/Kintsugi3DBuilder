@@ -44,10 +44,10 @@ public class MatrixSystem
     public final void addContribution(MatrixSystem contribution)
     {
         // Add the contribution into the main matrix and vectors.
-        CommonOps_DDRM.addEquals(this.lhs.getMatrix(), contribution.lhs.getMatrix());
+        CommonOps_DDRM.addEquals(lhs.getMatrix(), contribution.lhs.getMatrix());
         for (int i = 0; i < rhs.length; i++)
         {
-            CommonOps_DDRM.addEquals(this.rhs[i].getMatrix(), contribution.rhs[i].getMatrix());
+            CommonOps_DDRM.addEquals(rhs[i].getMatrix(), contribution.rhs[i].getMatrix());
         }
     }
 

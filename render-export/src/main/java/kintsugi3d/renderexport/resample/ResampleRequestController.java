@@ -42,17 +42,17 @@ public class ResampleRequestController
     @FXML
     private void exportDirectoryButtonAction()
     {
-        this.directoryChooser.setTitle("Choose an export directory");
+        directoryChooser.setTitle("Choose an export directory");
         if (exportDirectoryField.getText().isEmpty())
         {
-            this.directoryChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
+            directoryChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         }
         else
         {
             File currentValue = new File(exportDirectoryField.getText());
-            this.directoryChooser.setInitialDirectory(currentValue);
+            directoryChooser.setInitialDirectory(currentValue);
         }
-        File file = this.directoryChooser.showDialog(root.getScene().getWindow());
+        File file = directoryChooser.showDialog(root.getScene().getWindow());
         if (file != null)
         {
             exportDirectoryField.setText(file.toString());
@@ -63,20 +63,20 @@ public class ResampleRequestController
     @FXML
     private void targetVSetFileButtonAction()
     {
-        this.fileChooser.setTitle("Choose a target view set file");
-        this.fileChooser.getExtensionFilters().clear();
-        this.fileChooser.getExtensionFilters().add(new ExtensionFilter("View set files", "*.vset"));
+        fileChooser.setTitle("Choose a target view set file");
+        fileChooser.getExtensionFilters().clear();
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("View set files", "*.vset"));
         if (targetVSetFileField.getText().isEmpty())
         {
-            this.fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
+            fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         }
         else
         {
             File currentValue = new File(targetVSetFileField.getText());
-            this.fileChooser.setInitialDirectory(currentValue.getParentFile());
-            this.fileChooser.setInitialFileName(currentValue.getName());
+            fileChooser.setInitialDirectory(currentValue.getParentFile());
+            fileChooser.setInitialFileName(currentValue.getName());
         }
-        File file = this.fileChooser.showOpenDialog(root.getScene().getWindow());
+        File file = fileChooser.showOpenDialog(root.getScene().getWindow());
         if (file != null)
         {
             targetVSetFileField.setText(file.toString());

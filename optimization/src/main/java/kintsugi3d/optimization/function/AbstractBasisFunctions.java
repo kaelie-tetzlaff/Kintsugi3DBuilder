@@ -66,7 +66,7 @@ public abstract class AbstractBasisFunctions implements BasisFunctions
     @Override
     public final double getMetallicity()
     {
-        return this.metallicity;
+        return metallicity;
     }
 
     @Override

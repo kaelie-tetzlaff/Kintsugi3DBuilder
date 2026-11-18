@@ -38,17 +38,17 @@ public class ScreenshotController
     @FXML
     private void exportFileButtonAction()
     {
-        this.fileChooser.setTitle("Choose an export file");
+        fileChooser.setTitle("Choose an export file");
         if (exportFileField.getText().isEmpty())
         {
-            this.fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
+            fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         }
         else
         {
             File currentValue = new File(exportFileField.getText());
-            this.fileChooser.setInitialDirectory(currentValue);
+            fileChooser.setInitialDirectory(currentValue);
         }
-        File file = this.fileChooser.showSaveDialog(root.getScene().getWindow());
+        File file = fileChooser.showSaveDialog(root.getScene().getWindow());
         if (file != null)
         {
             exportFileField.setText(file.toString());

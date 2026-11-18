@@ -103,7 +103,7 @@ public class JavaFXApplication extends Application
 
         StageSynchronization(Stage sceneStage)
         {
-            this.stage = sceneStage;
+            stage = sceneStage;
         }
 
         @Override

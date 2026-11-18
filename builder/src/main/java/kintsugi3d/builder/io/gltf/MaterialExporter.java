@@ -77,7 +77,7 @@ public class MaterialExporter
 
     public final String getFilename()
     {
-        return this.filename;
+        return filename;
     }
 
     public final int getMinLODSize()
@@ -125,7 +125,7 @@ public class MaterialExporter
     {
         Collection<String> supportedTextures = new ArrayList<>(StandardTexture.values().length);
 
-        for (Method method : this.getClass().getMethods()) // all methods in the current class and superclasses
+        for (Method method : getClass().getMethods()) // all methods in the current class and superclasses
         {
             if (method.isAnnotationPresent(CustomTextureExport.class))
             {
@@ -145,7 +145,7 @@ public class MaterialExporter
         Collection<String> availableTextures = textureResources.getTextures().keySet().stream()
             .map(t -> t.name).collect(Collectors.toList());
 
-        for (Method method : this.getClass().getMethods()) // all methods in the current class and superclasses
+        for (Method method : getClass().getMethods()) // all methods in the current class and superclasses
         {
             String texName;
             boolean requiresAlpha;

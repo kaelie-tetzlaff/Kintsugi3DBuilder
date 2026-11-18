@@ -81,11 +81,11 @@ public class CameraFrustum<ContextType extends Context<ContextType>> extends Sha
             Matrix4 snapViewInverse = viewSelection.getSelectedMatrix().quickInverse(0.01f);
             Vector3 frustumDims = viewSelection.getFrustumDimensions();
 
-            this.getDrawable().program().setUniform("color", new Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-            this.getProgram().setUniform("model_view",
+            getDrawable().program().setUniform("color", new Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+            getProgram().setUniform("model_view",
                 cameraViewport.getView().times(snapViewInverse).times(Matrix4.scale(frustumDims)));
-            this.getProgram().setUniform("projection", cameraViewport.getViewportProjection());
-            this.getDrawable().draw(PrimitiveMode.LINES, cameraViewport.ofFramebuffer(framebuffer));
+            getProgram().setUniform("projection", cameraViewport.getViewportProjection());
+            getDrawable().draw(PrimitiveMode.LINES, cameraViewport.ofFramebuffer(framebuffer));
         }
     }
 

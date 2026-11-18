@@ -68,7 +68,7 @@ public class LeastSquaresMatrixBuilder
     {
         this.systemCount = systemCount;
         this.weightCount = weightCount;
-        this.constraintCount = constraintWeights.size();
+        constraintCount = constraintWeights.size();
 
         weightsQTQAugmented = IntStream.range(0, systemCount)
             .mapToObj(p ->

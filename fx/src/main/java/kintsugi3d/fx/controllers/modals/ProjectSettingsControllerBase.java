@@ -40,7 +40,7 @@ public abstract class ProjectSettingsControllerBase extends NonDataPageControlle
 
     protected ProjectSettingsControllerBase()
     {
-        this.projectSettingsManager = new ProjectSettingsManager();
+        projectSettingsManager = new ProjectSettingsManager();
     }
 
     protected ProjectSettingsControllerBase(ProjectSettingsManager projectSettingsManager)

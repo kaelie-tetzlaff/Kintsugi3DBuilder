@@ -43,7 +43,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     public GraphicsRequestManager(ContextType context)
     {
         this.context = context;
-        this.requestList = new LinkedList<>();
+        requestList = new LinkedList<>();
     }
 
     /**
@@ -137,7 +137,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
         {
             synchronized (requestList)
             {
-                this.requestList.add(() ->
+                requestList.add(() ->
                 {
                     // Check again for null, just in case
                     if (renderableManager.getMainRenderable() == null)
@@ -177,7 +177,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     @Override
     public final void addImageBasedGraphicsRequest(ProgressMonitoredImageBasedGraphicsRequest request)
     {
-        if (this.progressMonitor.isConflictingProcess())
+        if (progressMonitor.isConflictingProcess())
         {
             return;
         }
@@ -191,7 +191,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
         {
             synchronized (requestList)
             {
-                this.requestList.add(() ->
+                requestList.add(() ->
                 {
                     if (progressMonitor != null)
                     {
@@ -248,7 +248,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     {
         synchronized (requestList)
         {
-            this.requestList.add(() ->
+            requestList.add(() ->
             {
                 // Suppress warning about catching and not rethrowing AssertionError.
                 // The request should effectively be regarded a "sandbox" where a critical logic error should not result in the application terminating.
@@ -280,11 +280,11 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     {
         synchronized (requestList)
         {
-            this.requestList.add(() ->
+            requestList.add(() ->
             {
                 if (progressMonitor != null)
                 {
-                    if (this.progressMonitor.isConflictingProcess())
+                    if (progressMonitor.isConflictingProcess())
                     {
                         return;
                     }

@@ -30,9 +30,9 @@ public class SynchronizedEnvironmentModel implements EnvironmentModel
     public SynchronizedEnvironmentModel(EnvironmentModel baseModel)
     {
         this.baseModel = baseModel;
-        this.environmentRotation = SynchronizedValue.createFromFunctions(baseModel::getEnvironmentRotation, baseModel::setEnvironmentRotation);
-        this.environmentIntensity = SynchronizedValue.createFromFunctions(baseModel::getEnvironmentIntensity, baseModel::setEnvironmentIntensity);
-        this.backgroundIntensity = SynchronizedValue.createFromFunctions(baseModel::getBackgroundIntensity, baseModel::setBackgroundIntensity);
+        environmentRotation = SynchronizedValue.createFromFunctions(baseModel::getEnvironmentRotation, baseModel::setEnvironmentRotation);
+        environmentIntensity = SynchronizedValue.createFromFunctions(baseModel::getEnvironmentIntensity, baseModel::setEnvironmentIntensity);
+        backgroundIntensity = SynchronizedValue.createFromFunctions(baseModel::getBackgroundIntensity, baseModel::setBackgroundIntensity);
     }
 
     @Override
@@ -80,19 +80,19 @@ public class SynchronizedEnvironmentModel implements EnvironmentModel
     @Override
     public final float getEnvironmentRotation()
     {
-        return this.environmentRotation.getValue();
+        return environmentRotation.getValue();
     }
 
     @Override
     public final float getEnvironmentIntensity()
     {
-        return this.environmentIntensity.getValue();
+        return environmentIntensity.getValue();
     }
 
     @Override
     public final float getBackgroundIntensity()
     {
-        return this.backgroundIntensity.getValue();
+        return backgroundIntensity.getValue();
     }
 
     @Override

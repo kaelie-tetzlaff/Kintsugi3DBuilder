@@ -129,13 +129,13 @@ public final class AbstractDataTypeFactory
             {
                 int componentIndex = 0;
                 Iterator<? extends Number> iterator = highLevelValue.iterator();
-                while (iterator.hasNext() && componentIndex < this.componentCount)
+                while (iterator.hasNext() && componentIndex < componentCount)
                 {
                     componentConsumer.accept(iterator.next());
                     componentIndex++;
                 }
 
-                while(componentIndex < this.componentCount)
+                while(componentIndex < componentCount)
                 {
                     componentConsumer.accept(0);
                     componentIndex++;
@@ -152,13 +152,13 @@ public final class AbstractDataTypeFactory
             {
                 int componentIndex = 0;
                 Iterator<? extends Number> iterator = highLevelValue.iterator();
-                while (iterator.hasNext() && componentIndex < this.componentCount)
+                while (iterator.hasNext() && componentIndex < componentCount)
                 {
                     componentConsumer.accept(index, iterator.next());
                     componentIndex++;
                 }
 
-                while(componentIndex < this.componentCount)
+                while(componentIndex < componentCount)
                 {
                     componentConsumer.accept(index, 0);
                     componentIndex++;

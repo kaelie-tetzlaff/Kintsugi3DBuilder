@@ -30,7 +30,7 @@ public class SimpleShaderInfo implements ShaderInfo
     public SimpleShaderInfo(String friendlyName, String shaderFilename)
     {
         this.friendlyName = friendlyName;
-        this.filename = shaderFilename;
+        filename = shaderFilename;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class SimpleShaderInfo implements ShaderInfo
     @Override
     public boolean equals(Object obj)
     {
-        return obj instanceof SimpleShaderInfo && Objects.equals(this.filename, ((SimpleShaderInfo) obj).filename);
+        return obj instanceof SimpleShaderInfo && Objects.equals(filename, ((SimpleShaderInfo) obj).filename);
     }
 
     @SuppressWarnings("DesignForExtension")

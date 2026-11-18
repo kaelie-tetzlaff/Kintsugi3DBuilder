@@ -39,17 +39,17 @@ public class OrbitAnimationController
     @FXML
     private void exportDirectoryButtonAction()
     {
-        this.directoryChooser.setTitle("Choose an export directory");
+        directoryChooser.setTitle("Choose an export directory");
         if (exportDirectoryField.getText().isEmpty())
         {
-            this.directoryChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
+            directoryChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         }
         else
         {
             File currentValue = new File(exportDirectoryField.getText());
-            this.directoryChooser.setInitialDirectory(currentValue);
+            directoryChooser.setInitialDirectory(currentValue);
         }
-        File file = this.directoryChooser.showDialog(root.getScene().getWindow());
+        File file = directoryChooser.showDialog(root.getScene().getWindow());
         if (file != null)
         {
             exportDirectoryField.setText(file.toString());

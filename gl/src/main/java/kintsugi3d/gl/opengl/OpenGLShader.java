@@ -54,7 +54,7 @@ class OpenGLShader implements Shader<OpenGLContext>
         
         try
         {
-            this.init(shaderType, sb.toString());
+            init(shaderType, sb.toString());
         }
         catch (ShaderCompileFailureException e)
         {
@@ -210,13 +210,13 @@ class OpenGLShader implements Shader<OpenGLContext>
     OpenGLShader(OpenGLContext context, int shaderType, CharSequence source)
     {
         this.context = context;
-        this.init(shaderType, source);
+        init(shaderType, source);
     }
 
     @Override
     public final OpenGLContext getContext()
     {
-        return this.context;
+        return context;
     }
 
     private void init(int shaderType, CharSequence source)

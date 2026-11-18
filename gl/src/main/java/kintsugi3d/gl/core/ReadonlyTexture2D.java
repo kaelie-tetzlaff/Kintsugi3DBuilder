@@ -62,7 +62,7 @@ public interface ReadonlyTexture2D<ContextType extends Context<ContextType>>
      */
     default Texture2D<ContextType> copy()
     {
-        return this.crop(0, 0, this.getWidth(), this.getHeight());
+        return crop(0, 0, getWidth(), getHeight());
     }
 
     /**

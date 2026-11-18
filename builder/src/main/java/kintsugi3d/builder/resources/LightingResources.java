@@ -67,7 +67,7 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
             .addDepthAttachment()
             .createFramebufferObject();
 
-        this.screenSpaceDepthFBO = context.buildFramebufferObject(512, 512)
+        screenSpaceDepthFBO = context.buildFramebufferObject(512, 512)
             .addDepthAttachment(DepthAttachmentSpec.createFixedPointWithPrecision(16).setLinearFilteringEnabled(true))
             .createFramebufferObject();
 
@@ -124,17 +124,17 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
      */
     public final void takeBackplateTexture(Texture2D<ContextType> newBackplateTexture)
     {
-        if (this.backplateTexture != null)
+        if (backplateTexture != null)
         {
-            this.backplateTexture.close();
+            backplateTexture.close();
         }
 
-        this.backplateTexture = newBackplateTexture;
+        backplateTexture = newBackplateTexture;
     }
 
     public final Cubemap<ContextType> getEnvironmentMap()
     {
-        return this.environmentMap;
+        return environmentMap;
     }
 
     /**
@@ -143,12 +143,12 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
      */
     public final void takeEnvironmentMap(Cubemap<ContextType> newEnvironmentMap)
     {
-        if (this.environmentMap != null)
+        if (environmentMap != null)
         {
-            this.environmentMap.close();
+            environmentMap.close();
         }
 
-        this.environmentMap = newEnvironmentMap;
+        environmentMap = newEnvironmentMap;
     }
 
     /**
@@ -159,7 +159,7 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
     public final void setShadowCastingPositionBuffer(ReadonlyVertexBuffer<ContextType> positionBuffer)
     {
         shadowDrawable.addVertexBuffer("position", positionBuffer);
-        this.shadowCastingPositionBuffer = positionBuffer;
+        shadowCastingPositionBuffer = positionBuffer;
     }
 
     public final Matrix4 getLightProjection(int lightIndex)
@@ -265,16 +265,16 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
     @Override
     public final void close()
     {
-        if (this.backplateTexture != null)
+        if (backplateTexture != null)
         {
-            this.backplateTexture.close();
-            this.backplateTexture = null;
+            backplateTexture.close();
+            backplateTexture = null;
         }
 
-        if (this.environmentMap != null)
+        if (environmentMap != null)
         {
-            this.environmentMap.close();
-            this.environmentMap = null;
+            environmentMap.close();
+            environmentMap = null;
         }
 
         if (shadowMaps != null)

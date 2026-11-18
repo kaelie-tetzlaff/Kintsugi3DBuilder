@@ -35,7 +35,7 @@ public final class ImportedMaterialResourcesWrapper<ContextType extends Context<
 
     private ImportedMaterialResourcesWrapper(Supplier<ImportedMaterialResources<ContextType>> resourcesFactory)
     {
-        this.importedResources = resourcesFactory.get();
+        importedResources = resourcesFactory.get();
     }
 
     public static <ContextType extends Context<ContextType>> ImportedMaterialResourcesWrapper<ContextType> wrap(

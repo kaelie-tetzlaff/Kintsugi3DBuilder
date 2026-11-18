@@ -119,7 +119,7 @@ public final class Kintsugi3DBuilder
 
         private TeeErrorStream(OutputStream redirect)
         {
-            this.original = System.err;
+            original = System.err;
             this.redirect = redirect;
         }
 
@@ -147,7 +147,7 @@ public final class Kintsugi3DBuilder
         @Override
         public void close() throws IOException
         {
-            System.setErr(this.original);
+            System.setErr(original);
             redirect.close();
         }
     }

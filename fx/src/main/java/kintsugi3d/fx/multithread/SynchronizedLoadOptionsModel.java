@@ -32,16 +32,16 @@ public class SynchronizedLoadOptionsModel implements LoadOptionsModel
 
     public SynchronizedLoadOptionsModel(LoadOptionsModel baseModel)
     {
-        this.colorImagesRequested = SynchronizedValue.createFromFunctions(baseModel::areColorImagesRequested, baseModel::setColorImagesRequested);
-        this.mipmapsRequested = SynchronizedValue.createFromFunctions(baseModel::areMipmapsRequested, baseModel::setMipmapsRequested);
-        this.compressionRequested = SynchronizedValue.createFromFunctions(baseModel::isCompressionRequested, baseModel::setCompressionRequested);
-        this.alphaRequested = SynchronizedValue.createFromFunctions(baseModel::isAlphaRequested, baseModel::setAlphaRequested);
-        this.maxLoadingThreads = SynchronizedValue.createFromFunctions(baseModel::getMaxLoadingThreads, baseModel::setMaxLoadingThreads);
-        this.depthImagesRequested = SynchronizedValue.createFromFunctions(baseModel::areDepthImagesRequested,  baseModel::setDepthImagesRequested);
-        this.depthImageWidth = SynchronizedValue.createFromFunctions(baseModel::getDepthImageWidth, baseModel::setDepthImageWidth);
-        this.depthImageHeight = SynchronizedValue.createFromFunctions(baseModel::getDepthImageHeight, baseModel::setDepthImageHeight);
-        this.previewImageWidth = SynchronizedValue.createFromFunctions(baseModel::getPreviewImageWidth, baseModel::setPreviewImageWidth);
-        this.previewImageHeight = SynchronizedValue.createFromFunctions(baseModel::getPreviewImageHeight, baseModel::setPreviewImageHeight);
+        colorImagesRequested = SynchronizedValue.createFromFunctions(baseModel::areColorImagesRequested, baseModel::setColorImagesRequested);
+        mipmapsRequested = SynchronizedValue.createFromFunctions(baseModel::areMipmapsRequested, baseModel::setMipmapsRequested);
+        compressionRequested = SynchronizedValue.createFromFunctions(baseModel::isCompressionRequested, baseModel::setCompressionRequested);
+        alphaRequested = SynchronizedValue.createFromFunctions(baseModel::isAlphaRequested, baseModel::setAlphaRequested);
+        maxLoadingThreads = SynchronizedValue.createFromFunctions(baseModel::getMaxLoadingThreads, baseModel::setMaxLoadingThreads);
+        depthImagesRequested = SynchronizedValue.createFromFunctions(baseModel::areDepthImagesRequested,  baseModel::setDepthImagesRequested);
+        depthImageWidth = SynchronizedValue.createFromFunctions(baseModel::getDepthImageWidth, baseModel::setDepthImageWidth);
+        depthImageHeight = SynchronizedValue.createFromFunctions(baseModel::getDepthImageHeight, baseModel::setDepthImageHeight);
+        previewImageWidth = SynchronizedValue.createFromFunctions(baseModel::getPreviewImageWidth, baseModel::setPreviewImageWidth);
+        previewImageHeight = SynchronizedValue.createFromFunctions(baseModel::getPreviewImageHeight, baseModel::setPreviewImageHeight);
     }
 
     @Override

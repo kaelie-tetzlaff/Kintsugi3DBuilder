@@ -46,7 +46,7 @@ public class MetashapeDocument
 
     public MetashapeDocument(String path)
     {
-        this.psxFilePath = path;
+        psxFilePath = path;
 
         if (!isValidPSXFilePath(psxFilePath))
         {
@@ -182,7 +182,7 @@ public class MetashapeDocument
             return;
         }
 
-        this.activeChunkID = selectedChunk.get().getID();
+        activeChunkID = selectedChunk.get().getID();
     }
 
     public final MetashapeChunk getSelectedChunk()

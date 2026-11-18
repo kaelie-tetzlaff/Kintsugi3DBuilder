@@ -81,28 +81,28 @@ public class ObservableProjectModel extends ProjectModelBase<
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
     public final ObservableList<ObservableCameraSettings> getCameraList()
     {
-        return this.cameraList;
+        return cameraList;
     }
 
     @Override
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
     public final ObservableList<ObservableEnvironmentSettings> getEnvironmentList()
     {
-        return this.environmentList;
+        return environmentList;
     }
 
     @Override
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
     public final ObservableList<ObservableLightGroupSettings> getLightGroupList()
     {
-        return this.lightGroupList;
+        return lightGroupList;
     }
 
     @Override
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
     public final ObservableList<ObservableObjectPoseSettings> getObjectPoseList()
     {
-        return this.objectPoseList;
+        return objectPoseList;
     }
 
     @Override
@@ -142,7 +142,7 @@ public class ObservableProjectModel extends ProjectModelBase<
     @Override
     public final File getColorCheckerFile()
     {
-        return this.colorCheckerFile.get();
+        return colorCheckerFile.get();
     }
 
     @Override
@@ -340,7 +340,7 @@ public class ObservableProjectModel extends ProjectModelBase<
             Platform.runLater(() ->
             {
                 setProjectOpen(false);
-                this.setProjectName(NULL_PROJECT_NAME);
+                setProjectName(NULL_PROJECT_NAME);
                 setProjectLoaded(false);
                 setProjectProcessed(false);
                 setProcessedTextureWidth(0);

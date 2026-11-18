@@ -60,7 +60,7 @@ public interface ViewSetReader
      */
     default ViewSetBuilder readFromFile(File cameraFile, ViewSetLoadOptions loadOptions) throws Exception
     {
-        ViewSetBuilder builder = this.readFromFile(cameraFile, loadOptions.getMainDirectories())
+        ViewSetBuilder builder = readFromFile(cameraFile, loadOptions.getMainDirectories())
             .removeViewsByImageFilename(loadOptions.getDisabledImages());
 
         if (loadOptions.getGeometryFile() != null)

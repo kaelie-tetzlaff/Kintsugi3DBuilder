@@ -29,24 +29,24 @@ public class ToolBindingModelImpl implements ToolBindingModel
     @Override
     public final DragToolType getDragTool(MouseMode mode)
     {
-        return this.dragTools.get(mode);
+        return dragTools.get(mode);
     }
 
     @Override
     public final void setDragTool(MouseMode mode, DragToolType tool)
     {
-        this.dragTools.put(mode, tool);
+        dragTools.put(mode, tool);
     }
 
     @Override
     public final KeyPressToolType getKeyPressTool(KeyPress keyPress)
     {
-        return this.keyPressTools.get(keyPress);
+        return keyPressTools.get(keyPress);
     }
 
     @Override
     public final void setKeyPressTool(KeyPress keyPress, KeyPressToolType tool)
     {
-        this.keyPressTools.put(keyPress, tool);
+        keyPressTools.put(keyPress, tool);
     }
 }

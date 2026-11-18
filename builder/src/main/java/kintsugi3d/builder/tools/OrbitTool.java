@@ -55,7 +55,7 @@ final class OrbitTool implements DragTool
     @Override
     public void mouseButtonPressed(CursorPosition cursorPosition, CanvasSize canvasSize)
     {
-        this.mouseStart = cursorPosition;
+        mouseStart = cursorPosition;
 
         oldOrbitMatrix = cameraModel.getOrbit();
         oldTwist = cameraModel.getTwist();

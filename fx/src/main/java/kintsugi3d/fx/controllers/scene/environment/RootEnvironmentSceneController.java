@@ -53,7 +53,7 @@ public class RootEnvironmentSceneController
 
     public final void injectDependencies(ObservableEnvironmentModel environmentMapModel, ObservableProjectModel injectedProjectModel)
     {
-        this.projectModel = injectedProjectModel;
+        projectModel = injectedProjectModel;
 
         environmentListView.setItems(projectModel.getEnvironmentList());
         environmentListView.getSelectionModel().selectedItemProperty().addListener(settingsController.getChangeListener());

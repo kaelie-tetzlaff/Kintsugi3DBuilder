@@ -56,24 +56,24 @@ public final class DoubleFramebufferFactory
         {
             this.context = context;
 
-            this.fbo1 = context.buildFramebufferObject(initWidth, initHeight)
+            fbo1 = context.buildFramebufferObject(initWidth, initHeight)
                 .addColorAttachment(ColorFormat.RGBA8)
                 .addDepthAttachment()
                 .createFramebufferObject();
 
-            this.fbo2 = context.buildFramebufferObject(initWidth, initHeight)
+            fbo2 = context.buildFramebufferObject(initWidth, initHeight)
                 .addColorAttachment(ColorFormat.RGBA8)
                 .addDepthAttachment()
                 .createFramebufferObject();
 
-            this.frontFBO = fbo1;
-            this.backFBO = fbo2;
+            frontFBO = fbo1;
+            backFBO = fbo2;
 
-            this.width = initWidth;
-            this.height = initHeight;
+            width = initWidth;
+            height = initHeight;
 
-            this.newWidth = initWidth;
-            this.newHeight = initHeight;
+            newWidth = initWidth;
+            newHeight = initHeight;
         }
 
         private void resize()
@@ -84,23 +84,23 @@ public final class DoubleFramebufferFactory
                 {
                     fbo1.close();
 
-                    this.fbo1 = context.buildFramebufferObject(newWidth, newHeight)
+                    fbo1 = context.buildFramebufferObject(newWidth, newHeight)
                         .addColorAttachment(ColorFormat.RGBA8)
                         .addDepthAttachment()
                         .createFramebufferObject();
 
-                    this.backFBO = fbo1;
+                    backFBO = fbo1;
                 }
                 else
                 {
                     fbo2.close();
 
-                    this.fbo2 = context.buildFramebufferObject(newWidth, newHeight)
+                    fbo2 = context.buildFramebufferObject(newWidth, newHeight)
                         .addColorAttachment(ColorFormat.RGBA8)
                         .addDepthAttachment()
                         .createFramebufferObject();
 
-                    this.backFBO = fbo2;
+                    backFBO = fbo2;
                 }
 
                 // Notify listeners with the resized back buffer
@@ -120,13 +120,13 @@ public final class DoubleFramebufferFactory
         @Override
         public final FramebufferReadContents<ContextType> getReadContents()
         {
-            return this.frontFBO.getReadContents();
+            return frontFBO.getReadContents();
         }
 
         @Override
         public final FramebufferDrawContents<ContextType> getDrawContents()
         {
-            return this.backFBO.getDrawContents();
+            return backFBO.getDrawContents();
         }
 
         @Override
@@ -241,8 +241,8 @@ public final class DoubleFramebufferFactory
         public final void requestResize(int width, int height)
         {
             // Framebuffer size cannot be smaller than 1x1.
-            this.newWidth = Math.max(1, width);
-            this.newHeight = Math.max(1, height);
+            newWidth = Math.max(1, width);
+            newHeight = Math.max(1, height);
         }
 
         @Override
@@ -270,13 +270,13 @@ public final class DoubleFramebufferFactory
         @Override
         public final void addSwapListener(Consumer<ReadableFramebuffer<ContextType>> listener)
         {
-            this.swapListeners.add(listener);
+            swapListeners.add(listener);
         }
 
         @Override
         public final void addResizeListener(Consumer<Framebuffer<ContextType>> listener)
         {
-            this.resizeListeners.add(listener);
+            resizeListeners.add(listener);
         }
 
         @Override

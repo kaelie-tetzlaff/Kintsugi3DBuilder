@@ -67,11 +67,11 @@ final class ReflectanceMatrixBuilder
     {
         this.solution = solution;
         this.reflectanceData = reflectanceData;
-        this.basisSettings = settings;
+        basisSettings = settings;
         this.contribution = contribution;
 
         // Initialize running totals
-        matrixBuilder = new MatrixBuilder(this.basisSettings.getMaterialCount(), 3, settings.getMetallicity(), stepBasis, contribution);
+        matrixBuilder = new MatrixBuilder(basisSettings.getMaterialCount(), 3, settings.getMetallicity(), stepBasis, contribution);
     }
 
     public void execute()

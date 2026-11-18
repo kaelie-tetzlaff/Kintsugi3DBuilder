@@ -40,7 +40,7 @@ final class MultiviewRetargetRenderRequest extends RenderRequestBase
                                            File targetViewSet, File vertexShader, File fragmentShader, File outputDirectory)
     {
         super(width, height, shaderSetupCallback, vertexShader, fragmentShader, outputDirectory);
-        this.targetViewSetFile = targetViewSet;
+        targetViewSetFile = targetViewSet;
     }
 
     static class Builder extends BuilderBase

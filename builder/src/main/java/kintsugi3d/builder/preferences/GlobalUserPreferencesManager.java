@@ -73,7 +73,7 @@ public final class GlobalUserPreferencesManager
 
     public void setPreferences(UserPreferencesModel model)
     {
-        this.preferencesModel = model;
+        preferencesModel = model;
     }
 
     public List<Exception> getSerializerStartupExceptions()
@@ -128,7 +128,7 @@ public final class GlobalUserPreferencesManager
 
     public boolean hasStartupFailures()
     {
-        return this.getSerializerStartupExceptions().stream()
+        return getSerializerStartupExceptions().stream()
                 .anyMatch(e -> !(e instanceof FileNotFoundException));
     }
 }

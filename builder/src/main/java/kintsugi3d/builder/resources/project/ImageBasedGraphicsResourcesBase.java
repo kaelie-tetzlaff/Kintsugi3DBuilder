@@ -152,9 +152,9 @@ abstract class ImageBasedGraphicsResourcesBase<ContextType extends Context<Conte
     @Override
     public void close()
     {
-        if (this.ownerOfCommonResources && this.commonResources != null)
+        if (ownerOfCommonResources && commonResources != null)
         {
-            this.commonResources.close();
+            commonResources.close();
         }
     }
 

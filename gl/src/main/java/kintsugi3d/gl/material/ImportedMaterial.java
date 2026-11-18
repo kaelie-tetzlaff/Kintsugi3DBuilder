@@ -65,17 +65,17 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     {
         this.name = name;
 
-        this.ambient = new Vector3(0.0f);
-        this.diffuse = new Vector3(0.0f);
-        this.specular = new Vector3(0.0f);
-        this.exponent = 0.0f;
-        this.roughness = 1.0f;
-        this.opacity = 1.0f;
-        this.emission = new Vector3(0.0f);
-        this.metallic = 0.0f;
-        this.sheen = new Vector3(0.0f);
-        this.clearcoat = new Vector3(0.0f);
-        this.clearcoatRoughness = 0.0f;
+        ambient = new Vector3(0.0f);
+        diffuse = new Vector3(0.0f);
+        specular = new Vector3(0.0f);
+        exponent = 0.0f;
+        roughness = 1.0f;
+        opacity = 1.0f;
+        emission = new Vector3(0.0f);
+        metallic = 0.0f;
+        sheen = new Vector3(0.0f);
+        clearcoat = new Vector3(0.0f);
+        clearcoatRoughness = 0.0f;
     }
 
     public static Map<String, ImportedMaterial> loadFromMTLFile(File mtlFile) throws IOException
@@ -550,13 +550,13 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public String getName()
     {
-        return this.name;
+        return name;
     }
 
     @Override
     public Vector3 getAmbient()
     {
-        return this.ambient;
+        return ambient;
     }
 
     public void setAmbient(Vector3 ambient)
@@ -567,7 +567,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public Vector3 getDiffuse()
     {
-        return this.diffuse;
+        return diffuse;
     }
 
     public void setDiffuse(Vector3 diffuse)
@@ -578,7 +578,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public Vector3 getSpecular()
     {
-        return this.specular;
+        return specular;
     }
 
     public void setSpecular(Vector3 specular)
@@ -589,31 +589,31 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public float getExponent()
     {
-        return this.exponent;
+        return exponent;
     }
 
     public void setExponent(float exponent)
     {
         this.exponent = exponent;
-        this.roughness = (float)Math.sqrt(2.0 / (exponent + 2));
+        roughness = (float)Math.sqrt(2.0 / (exponent + 2));
     }
 
     @Override
     public float getRoughness()
     {
-        return this.roughness;
+        return roughness;
     }
 
     public void setRoughness(float roughness)
     {
         this.roughness = roughness;
-        this.exponent = 2.0f / (roughness * roughness) - 2;
+        exponent = 2.0f / (roughness * roughness) - 2;
     }
 
     @Override
     public Vector3 getEmission()
     {
-        return this.emission;
+        return emission;
     }
 
     public void setEmission(Vector3 emission)
@@ -624,7 +624,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public float getMetallic()
     {
-        return this.metallic;
+        return metallic;
     }
 
     public void setMetallic(float metallic)
@@ -635,7 +635,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public Vector3 getSheen()
     {
-        return this.sheen;
+        return sheen;
     }
 
     public void setSheen(Vector3 sheen)
@@ -646,7 +646,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public Vector3 getClearcoat()
     {
-        return this.clearcoat;
+        return clearcoat;
     }
 
     public void setClearcoat(Vector3 clearcoat)
@@ -657,7 +657,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public float getClearcoatRoughness()
     {
-        return this.clearcoatRoughness;
+        return clearcoatRoughness;
     }
 
     public void setClearcoatRoughness(float clearcoatRoughness)
@@ -668,7 +668,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public float getOpacity()
     {
-        return this.opacity;
+        return opacity;
     }
 
     public void setOpacity(float opacity)
@@ -679,12 +679,12 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public float getTransparency()
     {
-        return 1.0f - this.opacity;
+        return 1.0f - opacity;
     }
 
     public void setTransparency(float transparency)
     {
-        this.opacity = 1.0f - opacity;
+        opacity = 1.0f - opacity;
     }
 
     @Override
@@ -701,7 +701,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public ReadonlyMaterialColorMap getAmbientMap()
     {
-        return this.ambientMap;
+        return ambientMap;
     }
 
     public void setAmbientMap(ReadonlyMaterialColorMap ambientMap)
@@ -712,7 +712,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public ReadonlyMaterialColorMap getDiffuseMap()
     {
-        return this.diffuseMap;
+        return diffuseMap;
     }
 
     public void setDiffuseMap(ReadonlyMaterialColorMap diffuseMap)
@@ -723,7 +723,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public ReadonlyMaterialColorMap getSpecularMap()
     {
-        return this.specularMap;
+        return specularMap;
     }
 
     public void setSpecularMap(ReadonlyMaterialColorMap specularMap)
@@ -734,7 +734,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public ReadonlyMaterialScalarMap getExponentMap()
     {
-        return this.exponentMap;
+        return exponentMap;
     }
 
     public void setExponentMap(ReadonlyMaterialScalarMap exponentMap)
@@ -745,7 +745,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public ReadonlyMaterialScalarMap getRoughnessMap()
     {
-        return this.roughnessMap;
+        return roughnessMap;
     }
 
     public void setRoughnessMap(ReadonlyMaterialScalarMap roughnessMap)
@@ -789,7 +789,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public ReadonlyMaterialColorMap getEmissionMap()
     {
-        return this.emissionMap;
+        return emissionMap;
     }
 
     public void setEmissionMap(ReadonlyMaterialColorMap emissionMap)
@@ -800,7 +800,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public ReadonlyMaterialScalarMap getMetallicMap()
     {
-        return this.metallicMap;
+        return metallicMap;
     }
 
     public void setMetallicMap(ReadonlyMaterialScalarMap metallicMap)
@@ -811,7 +811,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public ReadonlyMaterialColorMap getSheenMap()
     {
-        return this.sheenMap;
+        return sheenMap;
     }
 
     public void setSheenMap(ReadonlyMaterialColorMap sheenMap)
@@ -822,7 +822,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public ReadonlyMaterialScalarMap getAnisotropyMap()
     {
-        return this.anisotropyMap;
+        return anisotropyMap;
     }
 
     public void setAnisotropyMap(ReadonlyMaterialScalarMap anisotropyMap)
@@ -833,7 +833,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public ReadonlyMaterialScalarMap getAnisotropyRotationMap()
     {
-        return this.anisotropyRotationMap;
+        return anisotropyRotationMap;
     }
 
     public void setAnisotropyRotationMap(ReadonlyMaterialScalarMap anisotropyRotationMap)
@@ -844,7 +844,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public ReadonlyMaterialBumpMap getBumpMap()
     {
-        return this.bumpMap;
+        return bumpMap;
     }
 
     public void setBumpMap(ReadonlyMaterialBumpMap bumpMap)
@@ -855,7 +855,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public ReadonlyMaterialTextureMap getNormalMap()
     {
-        return this.normalMap;
+        return normalMap;
     }
 
     public void setNormalMap(ReadonlyMaterialTextureMap normalMap)
@@ -866,12 +866,12 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     @Override
     public ReadonlyMaterialScalarMap getDisplacementMap()
     {
-        return this.displacementMap;
+        return displacementMap;
     }
 
     public void setDisplacementMap(ReadonlyMaterialScalarMap displacmentMap)
     {
-        this.displacementMap = displacmentMap;
+        displacementMap = displacmentMap;
     }
 
     @Override

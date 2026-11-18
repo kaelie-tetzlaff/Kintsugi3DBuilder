@@ -31,7 +31,7 @@ public class SimpleLoadOptionsModel implements LoadOptionsModel
     @Override
     public final boolean areColorImagesRequested()
     {
-        return this.colorImagesRequested;
+        return colorImagesRequested;
     }
 
     @Override
@@ -109,7 +109,7 @@ public class SimpleLoadOptionsModel implements LoadOptionsModel
     @Override
     public final boolean areMipmapsRequested()
     {
-        return this.mipmapsRequested;
+        return mipmapsRequested;
     }
 
     public final SimpleLoadOptionsModel requstMipmaps(boolean mipmapsRequested)
@@ -121,13 +121,13 @@ public class SimpleLoadOptionsModel implements LoadOptionsModel
     @Override
     public final boolean isCompressionRequested()
     {
-        return this.compressionRequested;
+        return compressionRequested;
     }
 
     @Override
     public final boolean isAlphaRequested()
     {
-        return this.alphaRequested;
+        return alphaRequested;
     }
 
     public final SimpleLoadOptionsModel requestAlpha(boolean alphaRequested)
@@ -145,7 +145,7 @@ public class SimpleLoadOptionsModel implements LoadOptionsModel
     @Override
     public final boolean areDepthImagesRequested()
     {
-        return this.depthImagesRequested;
+        return depthImagesRequested;
     }
 
     public final SimpleLoadOptionsModel requestDepthImages(boolean depthImagesRequested)
@@ -157,7 +157,7 @@ public class SimpleLoadOptionsModel implements LoadOptionsModel
     @Override
     public final int getDepthImageWidth()
     {
-        return this.depthImageWidth;
+        return depthImageWidth;
     }
 
     public final SimpleLoadOptionsModel requestDepthImageWidth(int depthImageWidth)
@@ -169,7 +169,7 @@ public class SimpleLoadOptionsModel implements LoadOptionsModel
     @Override
     public final int getDepthImageHeight()
     {
-        return this.depthImageHeight;
+        return depthImageHeight;
     }
 
     public final SimpleLoadOptionsModel requestDepthImageHeight(int depthImageHeight)

@@ -35,7 +35,7 @@ public class SimpleCameraModel implements ViewpointModel
     @Override
     public final Matrix4 getLookMatrix()
     {
-        return this.lookMatrix;
+        return lookMatrix;
     }
 
     @Override

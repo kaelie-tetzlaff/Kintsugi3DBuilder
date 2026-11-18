@@ -39,8 +39,8 @@ public abstract class BasisResourcesBase<ContextType extends Context<ContextType
         this.basisResolution = basisResolution;
 
         this.context = context;
-        this.diffuseUniformBuffer = context.createUniformBuffer();
-        this.basisMaps = createBasisMaps(context, materialCount, basisResolution);
+        diffuseUniformBuffer = context.createUniformBuffer();
+        basisMaps = createBasisMaps(context, materialCount, basisResolution);
     }
 
     private static <ContextType extends Context<ContextType>>

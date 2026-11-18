@@ -33,13 +33,13 @@ public abstract class SelectionPageBuilder<T, FinishType> extends PageBuilder<Fi
     @Override
     public final SelectionPage<T> getPage()
     {
-        return this.page;
+        return page;
     }
 
     final <PageType extends Page<? super T, NextOutType>, NextOutType>
     SelectionPageBuilder<? super T, FinishType> choiceJoin(String choiceLabel, PageType joinPage)
     {
-        this.page.addChoice(choiceLabel, joinPage);
+        page.addChoice(choiceLabel, joinPage);
         return this;
     }
 
@@ -49,7 +49,7 @@ public abstract class SelectionPageBuilder<T, FinishType> extends PageBuilder<Fi
         Supplier<ControllerType> controllerConstructorOverride)
     {
         PageType nextPage = getFrameController().createPage(fxmlPath, pageConstructor, controllerConstructorOverride);
-        this.page.addChoice(choiceLabel, nextPage);
+        page.addChoice(choiceLabel, nextPage);
         return new DataPageBuilder<>(nextPage, getFrameController(), () -> this);
     }
 
@@ -79,7 +79,7 @@ public abstract class SelectionPageBuilder<T, FinishType> extends PageBuilder<Fi
     {
         SimpleNonDataPage<ControllerType> nextPage =
             getFrameController().createPage(fxmlPath, SimpleNonDataPage<ControllerType>::new, controllerConstructorOverride);
-        this.page.addChoice(choiceLabel, nextPage);
+        page.addChoice(choiceLabel, nextPage);
         return new NonDataPageBuilder<>(nextPage, getFrameController(), () -> this);
     }
 
@@ -95,7 +95,7 @@ public abstract class SelectionPageBuilder<T, FinishType> extends PageBuilder<Fi
     {
         PageType nextPage = getFrameController().createPage(SELECTION_PAGE_FXML, pageConstructor, controllerConstructorOverride);
         nextPage.setPrompt(subprompt);
-        this.page.addChoice(choiceLabel, nextPage);
+        page.addChoice(choiceLabel, nextPage);
         return new DataSelectionPageBuilder<>(nextPage, getFrameController(), getFinisher());
     }
 

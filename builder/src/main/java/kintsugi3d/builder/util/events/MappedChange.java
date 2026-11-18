@@ -37,7 +37,7 @@ public class MappedChange<K, V>
     public MappedChange(Type type, K key, V value)
     {
         this.type = type;
-        this.map = Map.of(key, value);
+        map = Map.of(key, value);
     }
     public final Type getType()
     {

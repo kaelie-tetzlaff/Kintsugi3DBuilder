@@ -42,7 +42,7 @@ public class CubicHermiteSpline implements DoubleUnaryOperator
         double[] d = new double[x.length-1];
         Arrays.setAll(d, k -> (y[k + 1] - y[k]) / (x[k + 1] - x[k]));
 
-        this.m = new double[x.length];
+        m = new double[x.length];
         m[0] = d[0];
         for (int k = 1; k < d.length; k++)
         {

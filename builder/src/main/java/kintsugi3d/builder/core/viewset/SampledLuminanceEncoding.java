@@ -38,8 +38,8 @@ public class SampledLuminanceEncoding
 
     public SampledLuminanceEncoding()
     {
-        this.decodeFunction = encoded -> SRGB.toLinear(encoded / 255.0);
-        this.encodeFunction = decoded -> SRGB.fromLinear(decoded) * 255.0;
+        decodeFunction = encoded -> SRGB.toLinear(encoded / 255.0);
+        encodeFunction = decoded -> SRGB.fromLinear(decoded) * 255.0;
     }
 
     public SampledLuminanceEncoding(double[] linear, byte[] encoded)
@@ -91,14 +91,14 @@ public class SampledLuminanceEncoding
             y[y.length - 1] = y[y.length - 2] * 255.0 / x[x.length - 2]; // Extrapolate linearly in sRGB color space
         }
 
-        this.decodeFunction = new CubicHermiteSpline(x, y, true).andThen(SRGB::toLinear);
+        decodeFunction = new CubicHermiteSpline(x, y, true).andThen(SRGB::toLinear);
 
         // Sample decode function to ensure that the round-trip encode(decode(x)) == x is more accurate
         double[] xSampled = IntStream.range(0, 256).mapToDouble(i -> i).toArray();
         double[] ySampled = IntStream.range(0, 256).mapToDouble(i -> SRGB.fromLinear(decodeFunction.applyAsDouble(i))).toArray();
 
         //noinspection SuspiciousNameCombination [x and y intentionally inverted]
-        this.encodeFunction = new CubicHermiteSpline(ySampled, xSampled, true).compose(SRGB::fromLinear);
+        encodeFunction = new CubicHermiteSpline(ySampled, xSampled, true).compose(SRGB::fromLinear);
     }
 
     public SampledLuminanceEncoding(DoubleUnaryOperator decodeFunction, DoubleUnaryOperator encodeFunction)

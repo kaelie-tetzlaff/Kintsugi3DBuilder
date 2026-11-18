@@ -41,7 +41,7 @@ public class GeometryFramebuffer<ContextType extends Context<ContextType>> imple
     {
         this.context = context;
 
-        this.fbo = context.buildFramebufferObject(width, height)
+        fbo = context.buildFramebufferObject(width, height)
             .addColorAttachment(ColorFormat.RGB32F) // position
             .addColorAttachment(ColorFormat.RGB32F) // normal
             .addColorAttachment(ColorFormat.RGB32F) // tangent
@@ -73,7 +73,7 @@ public class GeometryFramebuffer<ContextType extends Context<ContextType>> imple
         catch (IOException e)
         {
             // Make sure there isn't a memory leak if it can't find the shaders.
-            this.fbo.close();
+            fbo.close();
 
             // Re-throw the exception.
             throw e;
@@ -106,9 +106,9 @@ public class GeometryFramebuffer<ContextType extends Context<ContextType>> imple
     @Override
     public final void close()
     {
-        if (this.fbo != null)
+        if (fbo != null)
         {
-            this.fbo.close();
+            fbo.close();
         }
     }
 
@@ -145,15 +145,15 @@ public class GeometryFramebuffer<ContextType extends Context<ContextType>> imple
 
         // Copy positions
         viewportFBO.getFramebuffer().blitColorAttachmentFromFramebuffer(0,
-            this.getFramebuffer().getViewport(x, y, viewportWidth, viewportHeight), 0);
+            getFramebuffer().getViewport(x, y, viewportWidth, viewportHeight), 0);
 
         // Copy normals
         viewportFBO.getFramebuffer().blitColorAttachmentFromFramebuffer(1,
-            this.getFramebuffer().getViewport(x, y, viewportWidth, viewportHeight), 1);
+            getFramebuffer().getViewport(x, y, viewportWidth, viewportHeight), 1);
 
         // Copy tangents
         viewportFBO.getFramebuffer().blitColorAttachmentFromFramebuffer(2,
-            this.getFramebuffer().getViewport(x, y, viewportWidth, viewportHeight), 2);
+            getFramebuffer().getViewport(x, y, viewportWidth, viewportHeight), 2);
 
         // Return the new resource
         return viewportFBO;

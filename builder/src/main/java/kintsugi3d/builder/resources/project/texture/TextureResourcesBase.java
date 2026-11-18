@@ -223,7 +223,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     {
         if (destTex != null && srcTex != null)
         {
-            if (destTex.getWidth() == this.getWidth() && destTex.getHeight() == this.getHeight()
+            if (destTex.getWidth() == getWidth() && destTex.getHeight() == getHeight()
                 && srcTex.getWidth() == readSource.getWidth() && srcTex.getHeight() == readSource.getHeight())
             {
                 // dimensions match, so just do a normal blit
@@ -234,10 +234,10 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
             {
                 // dimensions do not match; try to remap rectangles to grab the same relative area in each
                 destTex.blitCroppedAndScaled(
-                    (int) Math.round((double) destX * destTex.getWidth() / this.getWidth()),
-                    (int) Math.round((double) destY * destTex.getHeight() / this.getHeight()),
-                    (int) Math.round((double) destWidth * destTex.getWidth() / this.getWidth()),
-                    (int) Math.round((double) destHeight * destTex.getHeight() / this.getHeight()),
+                    (int) Math.round((double) destX * destTex.getWidth() / getWidth()),
+                    (int) Math.round((double) destY * destTex.getHeight() / getHeight()),
+                    (int) Math.round((double) destWidth * destTex.getWidth() / getWidth()),
+                    (int) Math.round((double) destHeight * destTex.getHeight() / getHeight()),
                     srcTex,
                     (int) Math.round((double) srcX * srcTex.getWidth() / readSource.getWidth()),
                     (int) Math.round((double) srcY * srcTex.getHeight() / readSource.getHeight()),
@@ -274,17 +274,17 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
         {
             if (readSource.getTextures().containsKey(texEntry.getKey())) // both source and destination must contain the texture to blit
             {
-                this.blitCroppedAndScaledSingle(texEntry.getValue(), destX, destY, destWidth, destHeight,
+                blitCroppedAndScaledSingle(texEntry.getValue(), destX, destY, destWidth, destHeight,
                     readSource, readSource.getTexture(texEntry.getKey()), srcX, srcY, srcWidth, srcHeight, linearFiltering);
             }
         }
 
         // Blit weight maps, weight mask -- handled separately
-        if (this.getBasisWeightResources() != null && readSource.getBasisWeightResources() != null)
+        if (getBasisWeightResources() != null && readSource.getBasisWeightResources() != null)
         {
-            blitCroppedAndScaledSingle(this.getMutableBasisWeightResources().getWeightMaps(), destX, destY, destWidth, destHeight,
+            blitCroppedAndScaledSingle(getMutableBasisWeightResources().getWeightMaps(), destX, destY, destWidth, destHeight,
                 readSource, readSource.getBasisWeightResources().getWeightMaps(), srcX, srcY, srcWidth, srcHeight, linearFiltering);
-            blitCroppedAndScaledSingle(this.getMutableBasisWeightResources().getWeightMask(), destX, destY, destWidth, destHeight,
+            blitCroppedAndScaledSingle(getMutableBasisWeightResources().getWeightMask(), destX, destY, destWidth, destHeight,
                 readSource, readSource.getBasisWeightResources().getWeightMask(), srcX, srcY, srcWidth, srcHeight, linearFiltering);
         }
 

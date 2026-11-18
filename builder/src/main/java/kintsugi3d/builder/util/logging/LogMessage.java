@@ -34,7 +34,7 @@ public class LogMessage
         this.logLevel = logLevel;
         this.sourceClassName = sourceClassName;
         this.message = message;
-        this.thrown = null;
+        thrown = null;
     }
 
     public LogMessage(Instant timestamp, Level logLevel, String sourceClassName, String message, Throwable thrown)

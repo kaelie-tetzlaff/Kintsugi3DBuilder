@@ -34,8 +34,8 @@ public final class LuminanceMapResources<ContextType extends Context<ContextType
     private LuminanceMapResources(ContextType context)
     {
         this.context = context;
-        this.luminanceMap = null;
-        this.inverseLuminanceMap = null;
+        luminanceMap = null;
+        inverseLuminanceMap = null;
     }
 
     public static <ContextType extends Context<ContextType>> LuminanceMapResources<ContextType> createFromEncoding(
@@ -47,8 +47,8 @@ public final class LuminanceMapResources<ContextType extends Context<ContextType
     private LuminanceMapResources(ContextType context, SampledLuminanceEncoding luminanceEncoding)
     {
         this.context = context;
-        this.luminanceMap = luminanceEncoding.createLuminanceMap(context);
-        this.inverseLuminanceMap = luminanceEncoding.createInverseLuminanceMap(context);
+        luminanceMap = luminanceEncoding.createLuminanceMap(context);
+        inverseLuminanceMap = luminanceEncoding.createInverseLuminanceMap(context);
     }
 
     /**
@@ -93,22 +93,22 @@ public final class LuminanceMapResources<ContextType extends Context<ContextType
     @Override
     public void setupShaderProgram(Program<ContextType> program)
     {
-        if (this.luminanceMap == null)
+        if (luminanceMap == null)
         {
             program.setTexture("luminanceMap", context.getTextureFactory().getNullTexture(SamplerType.FLOAT_1D));
         }
         else
         {
-            program.setTexture("luminanceMap", this.luminanceMap);
+            program.setTexture("luminanceMap", luminanceMap);
         }
 
-        if (this.inverseLuminanceMap == null)
+        if (inverseLuminanceMap == null)
         {
             program.setTexture("inverseLuminanceMap", context.getTextureFactory().getNullTexture(SamplerType.FLOAT_1D));
         }
         else
         {
-            program.setTexture("inverseLuminanceMap", this.inverseLuminanceMap);
+            program.setTexture("inverseLuminanceMap", inverseLuminanceMap);
         }
     }
 

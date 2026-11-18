@@ -38,7 +38,7 @@ class LoadableEnvironmentCubemap<ContextType extends Context<ContextType>> imple
     @Override
     public final boolean isLoaded()
     {
-        return this.lightingResources.getEnvironmentMap() != null;
+        return lightingResources.getEnvironmentMap() != null;
     }
 
     @Override

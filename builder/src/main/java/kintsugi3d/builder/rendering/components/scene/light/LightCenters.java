@@ -58,7 +58,7 @@ public class LightCenters<ContextType extends Context<ContextType>> extends Shad
     @Override
     protected final void onInitialize()
     {
-        this.lightCenterTexture = resource(new RadialTextureGenerator<>(getContext())
+        lightCenterTexture = resource(new RadialTextureGenerator<>(getContext())
             .buildCircleTexture(64)
             .setLinearFilteringEnabled(true)
             .setMipmapsEnabled(true)
@@ -83,18 +83,18 @@ public class LightCenters<ContextType extends Context<ContextType>> extends Shad
     @Override
     public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
-        if (this.sceneModel.getSettingsModel().getBoolean("relightingEnabled")
-            && this.sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled")
-            && this.sceneModel.getSettingsModel().getBoolean("lightWidgetsEnabled"))
+        if (sceneModel.getSettingsModel().getBoolean("relightingEnabled")
+            && sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled")
+            && sceneModel.getSettingsModel().getBoolean("lightWidgetsEnabled"))
         {
             FramebufferSize size = framebuffer.getSize();
 
-            this.getContext().getState().disableDepthWrite();
-            this.getContext().getState().disableDepthTest();
-            this.getContext().getState().setBlendFunction(new BlendFunction(Weight.ONE, Weight.ONE));
+            getContext().getState().disableDepthWrite();
+            getContext().getState().disableDepthTest();
+            getContext().getState().setBlendFunction(new BlendFunction(Weight.ONE, Weight.ONE));
 
-            this.getDrawable().program().setUniform("projection", cameraViewport.getViewportProjection());
-            this.getDrawable().program().setTexture("grayscaleTex", this.lightCenterTexture);
+            getDrawable().program().setUniform("projection", cameraViewport.getViewportProjection());
+            getDrawable().program().setTexture("grayscaleTex", lightCenterTexture);
 
             // Draw lights
             for (int i = 0; i < sceneModel.getLightingModel().getLightCount(); i++)
@@ -103,20 +103,20 @@ public class LightCenters<ContextType extends Context<ContextType>> extends Shad
                 if (sceneModel.getLightingModel().isLightWidgetEnabled(i)
                     && sceneModel.getLightingModel().getLightWidgetModel(i).isCenterWidgetVisible())
                 {
-                    this.getDrawable().program().setUniform("objectID", sceneViewportModel.lookupSceneObjectID(getSceneObjectTag(i)));
+                    getDrawable().program().setUniform("objectID", sceneViewportModel.lookupSceneObjectID(getSceneObjectTag(i)));
 
-                    Vector3 lightCenter = cameraViewport.getView().times(this.sceneModel.getLightingModel().getLightCenter(i).times(sceneModel.getScale()).asPosition()).getXYZ();
+                    Vector3 lightCenter = cameraViewport.getView().times(sceneModel.getLightingModel().getLightCenter(i).times(sceneModel.getScale()).asPosition()).getXYZ();
 
-                    this.getDrawable().program().setUniform("model_view",
+                    getDrawable().program().setUniform("model_view",
                         Matrix4.translate(lightCenter)
                             .times(Matrix4.scale(
                                 -lightCenter.z * sceneModel.getVerticalFieldOfView(size) / 64.0f,
                                 -lightCenter.z * sceneModel.getVerticalFieldOfView(size) / 64.0f,
                                 1.0f)));
 
-                    this.getDrawable().program().setUniform("color",
-                        new Vector3(this.sceneModel.getLightingModel().getLightWidgetModel(i).isCenterWidgetSelected() ? 1.0f : 0.5f));
-                    this.getDrawable().draw(PrimitiveMode.TRIANGLE_FAN, cameraViewport.ofFramebuffer(framebuffer));
+                    getDrawable().program().setUniform("color",
+                        new Vector3(sceneModel.getLightingModel().getLightWidgetModel(i).isCenterWidgetSelected() ? 1.0f : 0.5f));
+                    getDrawable().draw(PrimitiveMode.TRIANGLE_FAN, cameraViewport.ofFramebuffer(framebuffer));
                 }
             }
 

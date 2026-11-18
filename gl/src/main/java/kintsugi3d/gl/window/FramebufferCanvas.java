@@ -54,7 +54,7 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     {
         this.framebuffer = framebuffer;
         FramebufferSize fboSize = framebuffer.getSizeForRead();
-        this.canvasSize = new CanvasSize(fboSize.width, fboSize.height);
+        canvasSize = new CanvasSize(fboSize.width, fboSize.height);
         Arrays.fill(buttonStates, MouseButtonState.RELEASED);
 
         // Setup framebuffer size event to be bound directly to the backend framebuffer.
@@ -66,13 +66,13 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     @Override
     public void addSwapListener(Consumer<ReadableFramebuffer<ContextType>> listener)
     {
-        this.framebuffer.addSwapListener(listener);
+        framebuffer.addSwapListener(listener);
     }
 
     @Override
     public void addResizeListener(Consumer<Framebuffer<ContextType>> listener)
     {
-        this.framebuffer.addResizeListener(listener);
+        framebuffer.addResizeListener(listener);
     }
 
     @Override
@@ -95,12 +95,12 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
 
     public void requestTerminate()
     {
-        this.terminating = true;
+        terminating = true;
     }
 
     public void cancelTerminate()
     {
-        this.terminating = false;
+        terminating = false;
     }
 
     @Override
@@ -162,11 +162,11 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     public void pressMouseButton(int buttonIndex, CursorPosition position, ModifierKeys modifierKeys)
     {
         this.modifierKeys = modifierKeys;
-        this.cursorPosition = position;
+        cursorPosition = position;
 
         if (buttonIndex < BUTTON_COUNT)
         {
-            this.buttonStates[buttonIndex] = MouseButtonState.PRESSED;
+            buttonStates[buttonIndex] = MouseButtonState.PRESSED;
         }
 
         eventCollector.mouseButtonPress(l -> l.mouseButtonPressed(this, buttonIndex, modifierKeys));
@@ -176,11 +176,11 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     public void releaseMouseButton(int buttonIndex, CursorPosition position, ModifierKeys modifierKeys)
     {
         this.modifierKeys = modifierKeys;
-        this.cursorPosition = position;
+        cursorPosition = position;
 
         if (buttonIndex < BUTTON_COUNT)
         {
-            this.buttonStates[buttonIndex] = MouseButtonState.RELEASED;
+            buttonStates[buttonIndex] = MouseButtonState.RELEASED;
         }
 
         eventCollector.mouseButtonRelease(l -> l.mouseButtonReleased(this, buttonIndex, modifierKeys));
@@ -190,7 +190,7 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     public void moveCursor(CursorPosition position, ModifierKeys modifierKeys)
     {
         this.modifierKeys = modifierKeys;
-        this.cursorPosition = position;
+        cursorPosition = position;
         eventCollector.cursorPos(l -> l.cursorMoved(this, position.x, position.y));
     }
 
@@ -198,7 +198,7 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     public void cursorEnter(CursorPosition position, ModifierKeys modifierKeys)
     {
         this.modifierKeys = modifierKeys;
-        this.cursorPosition = position;
+        cursorPosition = position;
         eventCollector.cursorEnter(l -> l.cursorEntered(this));
     }
 
@@ -206,7 +206,7 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     public void cursorExit(CursorPosition position, ModifierKeys modifierKeys)
     {
         this.modifierKeys = modifierKeys;
-        this.cursorPosition = position;
+        cursorPosition = position;
         eventCollector.cursorExit(l -> l.cursorExited(this));
     }
 

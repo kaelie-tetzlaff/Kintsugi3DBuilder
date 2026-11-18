@@ -66,6 +66,6 @@ class LoadableBackplateTexture<ContextType extends Context<ContextType>> impleme
     @Override
     public final boolean isLoaded()
     {
-        return this.lightingResources.getBackplateTexture() != null;
+        return lightingResources.getBackplateTexture() != null;
     }
 }

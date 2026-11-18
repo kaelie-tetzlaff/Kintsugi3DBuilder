@@ -37,26 +37,26 @@ public abstract class TextureInfo implements Comparable<TextureInfo>
     protected TextureInfo(String name)
     {
         this.name = name;
-        this.friendlyName = name;
-        this.purpose = "";
+        friendlyName = name;
+        purpose = "";
     }
 
     @Override
     public final boolean equals(Object obj)
     {
-        return obj instanceof TextureInfo && Objects.equals(this.name, ((TextureInfo) obj).name);
+        return obj instanceof TextureInfo && Objects.equals(name, ((TextureInfo) obj).name);
     }
 
     @Override
     public final int hashCode()
     {
-        return this.name.hashCode();
+        return name.hashCode();
     }
 
     @Override
     public final int compareTo(TextureInfo o)
     {
-        return this.name.compareTo(o.name);
+        return name.compareTo(o.name);
     }
 
     public abstract ShaderInfo getVisualizationShader();

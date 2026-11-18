@@ -105,7 +105,7 @@ class ImageReconstructionTest
         @Override
         public final void start()
         {
-            this.stage = 0;
+            stage = 0;
         }
 
         @Override
@@ -116,7 +116,7 @@ class ImageReconstructionTest
         @Override
         public final void setStageCount(int count)
         {
-            this.stageCount = count;
+            stageCount = count;
         }
 
         @Override

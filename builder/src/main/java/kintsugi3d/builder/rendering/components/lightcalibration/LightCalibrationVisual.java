@@ -52,7 +52,7 @@ public class LightCalibrationVisual<ContextType extends Context<ContextType>> ex
     @Override
     protected final void onInitialize()
     {
-        this.lightTexture = resource(new RadialTextureGenerator<>(getContext()).buildBloomTexture(64)
+        lightTexture = resource(new RadialTextureGenerator<>(getContext()).buildBloomTexture(64)
             .setInternalFormat(ColorFormat.R8)
             .setLinearFilteringEnabled(true)
             .setMipmapsEnabled(true)
@@ -77,13 +77,13 @@ public class LightCalibrationVisual<ContextType extends Context<ContextType>> ex
     @Override
     public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
-        this.getContext().getState().disableDepthWrite();
+        getContext().getState().disableDepthWrite();
 
-        this.getContext().getState().setBlendFunction(new BlendFunction(Weight.ONE, Weight.ONE));
-        this.getContext().getState().enableDepthTest();
+        getContext().getState().setBlendFunction(new BlendFunction(Weight.ONE, Weight.ONE));
+        getContext().getState().enableDepthTest();
 
-        this.getContext().getState().setBlendFunction(new BlendFunction(Weight.ONE, Weight.ONE));
-        this.getDrawable().program().setUniform("color", new Vector3((float)Math.PI));
+        getContext().getState().setBlendFunction(new BlendFunction(Weight.ONE, Weight.ONE));
+        getDrawable().program().setUniform("color", new Vector3((float)Math.PI));
 
         // Calculate world space light position.
         Matrix4 snapView = viewSelection.getSelectedMatrix();
@@ -95,15 +95,15 @@ public class LightCalibrationVisual<ContextType extends Context<ContextType>> ex
         Vector3 lightPosWorldSpace = lightView.getUpperLeft3x3().transpose().times(lightView.getColumn(3).getXYZ().negated());
         Vector3 lightPosCamSpace = cameraViewport.getView().times(lightPosWorldSpace.asPosition()).getXYZ();
 
-        this.getDrawable().program().setUniform("model_view", Matrix4.translate(lightPosCamSpace)
+        getDrawable().program().setUniform("model_view", Matrix4.translate(lightPosCamSpace)
                 .times(Matrix4.scale(-lightPosCamSpace.z / 32.0f, -lightPosCamSpace.z / 32.0f, 1.0f)));
-        this.getDrawable().program().setUniform("projection", cameraViewport.getViewportProjection());
-        this.getDrawable().program().setTexture("grayscaleTex", this.lightTexture);
-        this.getDrawable().draw(PrimitiveMode.TRIANGLE_FAN, cameraViewport.ofFramebuffer(framebuffer));
+        getDrawable().program().setUniform("projection", cameraViewport.getViewportProjection());
+        getDrawable().program().setTexture("grayscaleTex", lightTexture);
+        getDrawable().draw(PrimitiveMode.TRIANGLE_FAN, cameraViewport.ofFramebuffer(framebuffer));
 
-        this.getContext().getState().disableBlending();
-        this.getContext().getState().enableDepthWrite();
-        this.getContext().getState().enableDepthTest();
+        getContext().getState().disableBlending();
+        getContext().getState().enableDepthWrite();
+        getContext().getState().enableDepthTest();
     }
 
     public final ViewSelection getViewSelection()

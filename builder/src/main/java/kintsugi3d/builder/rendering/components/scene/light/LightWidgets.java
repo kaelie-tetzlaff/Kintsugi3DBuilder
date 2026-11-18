@@ -91,14 +91,14 @@ public class LightWidgets<ContextType extends Context<ContextType>> extends Shad
 
     public final void refreshWidgetInfo(LightWidgetInfo[] newWidgetInfo)
     {
-        this.widgetInfo = newWidgetInfo.clone();
+        widgetInfo = newWidgetInfo.clone();
     }
 
     @Override
     public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
-        if (this.sceneModel.getSettingsModel().getBoolean("relightingEnabled")
-            && this.sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled")
+        if (sceneModel.getSettingsModel().getBoolean("relightingEnabled")
+            && sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled")
             && sceneModel.getSettingsModel().getBoolean("lightWidgetsEnabled"))
         {
             getContext().getState().disableDepthWrite();
@@ -182,8 +182,8 @@ public class LightWidgets<ContextType extends Context<ContextType>> extends Shad
 //                            Vector3 arrow3PositionR = widgetTransformation.times(new Vector4(0,0,1,1)).getXYZ();
 //                            Vector3 arrow3PositionL = widgetTransformation.times(new Vector4(0,0,-1,1)).getXYZ();
 
-                    this.getContext().getState().disableDepthTest();
-                    this.getContext().getState().disableBlending();
+                    getContext().getState().disableDepthTest();
+                    getContext().getState().disableBlending();
                     getDrawable().program().setUniform("color", new Vector4(1));
 
                     if (sceneModel.getLightingModel().getLightWidgetModel(i).isAzimuthWidgetVisible() &&

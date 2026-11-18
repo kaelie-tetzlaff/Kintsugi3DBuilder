@@ -79,7 +79,7 @@ public interface RenderedComponent<ContextType extends Context<ContextType>> ext
                         .times(cameraViewport.getViewportCrop());
 
                 // Render to off-screen buffer
-                this.draw(framebuffer,
+                draw(framebuffer,
                     new CameraViewport(cameraViewport.getView(), cameraViewport.getFullProjection(),
                         viewportCrop, x, y, effectiveWidth, effectiveHeight));
 

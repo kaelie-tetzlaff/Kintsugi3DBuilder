@@ -84,10 +84,10 @@ final class LightTool implements PickerTool
                 String[] nameParts = clickedObjectName.split("\\.");
                 if ("Light".equals(nameParts[0]))
                 {
-                    this.lightIndex = Integer.parseInt(nameParts[1]);
+                    lightIndex = Integer.parseInt(nameParts[1]);
                     LightWidgetModel lightWidgetModel = lightingModel.getLightWidgetModel(lightIndex);
 
-                    lightingModel.setSelectedLightIndex(this.lightIndex);
+                    lightingModel.setSelectedLightIndex(lightIndex);
 
                     if (nameParts.length > 2)
                     {

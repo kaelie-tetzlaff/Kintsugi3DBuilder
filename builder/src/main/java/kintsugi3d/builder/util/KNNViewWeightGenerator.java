@@ -55,7 +55,7 @@ public class KNNViewWeightGenerator implements ViewWeightGenerator
         @Override
         public boolean equals(Object obj)
         {
-            return obj instanceof WeightedView && this.compareTo((WeightedView) obj) == 0;
+            return obj instanceof WeightedView && compareTo((WeightedView) obj) == 0;
         }
 
         @Override

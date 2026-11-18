@@ -29,7 +29,7 @@ public class ColorNativeBufferList extends AbstractList<Vector4> implements Colo
 
     public ColorNativeBufferList(int size)
     {
-        this.buffer = BufferUtils.createFloatBuffer(size * 4);
+        buffer = BufferUtils.createFloatBuffer(size * 4);
         this.size = size;
     }
 

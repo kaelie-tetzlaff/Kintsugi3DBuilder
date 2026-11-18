@@ -32,8 +32,8 @@ class ImageSelectionCache
 
     ImageSelectionCache()
     {
-        this.imageCache = new HashMap<>(MAX_IMAGE_CACHE_QUEUE_SIZE);
-        this.imageCacheRemovalQueue = new ArrayDeque<>(MAX_IMAGE_CACHE_QUEUE_SIZE);
+        imageCache = new HashMap<>(MAX_IMAGE_CACHE_QUEUE_SIZE);
+        imageCacheRemovalQueue = new ArrayDeque<>(MAX_IMAGE_CACHE_QUEUE_SIZE);
     }
 
     public final boolean contains(String imageName)

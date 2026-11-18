@@ -81,7 +81,7 @@ public class Modal
     {
         Parent root = fxmlLoader.load();
 
-        this.stage = new Stage();
+        stage = new Stage();
         stage.getIcons().add(AppIcon.getImage());
         stage.setTitle(title);
         stage.setScene(new Scene(root));

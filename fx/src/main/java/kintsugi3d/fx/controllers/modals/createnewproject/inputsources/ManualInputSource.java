@@ -45,7 +45,7 @@ public class ManualInputSource extends NonValidatedInputSourceBase
 
     public final File getCameraFile()
     {
-        return this.cameraFile;
+        return cameraFile;
     }
 
     public final ManualInputSource setCameraFile(File cameraFile)
@@ -56,7 +56,7 @@ public class ManualInputSource extends NonValidatedInputSourceBase
 
     public final File getMeshFile()
     {
-        return this.meshFile;
+        return meshFile;
     }
 
     public final ManualInputSource setMeshFile(File meshFile)
@@ -67,13 +67,13 @@ public class ManualInputSource extends NonValidatedInputSourceBase
 
     public final File getPhotosDir()
     {
-        return this.photosDir;
+        return photosDir;
     }
 
     @Override
     public final ManualInputSource overrideFullResImageDirectory(File directory)
     {
-        this.photosDir = directory;
+        photosDir = directory;
         return this;
     }
 

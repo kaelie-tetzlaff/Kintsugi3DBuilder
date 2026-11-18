@@ -30,7 +30,7 @@ public class SynchronizedLightingEnvironmentModel extends LightingEnvironmentMod
             index -> new SynchronizedDiscreteLightModel(baseModel.getLight(index)),
             new SynchronizedEnvironmentModel(baseModel.getEnvironmentModel()));
         this.baseModel = baseModel;
-        this.selectedLightIndex = SynchronizedValue.createFromFunctions(baseModel::getSelectedLightIndex, baseModel::setSelectedLightIndex);
+        selectedLightIndex = SynchronizedValue.createFromFunctions(baseModel::getSelectedLightIndex, baseModel::setSelectedLightIndex);
     }
 
     @Override
@@ -60,6 +60,6 @@ public class SynchronizedLightingEnvironmentModel extends LightingEnvironmentMod
     @Override
     public final void setSelectedLightIndex(int index)
     {
-        this.selectedLightIndex.setValue(index);
+        selectedLightIndex.setValue(index);
     }
 }

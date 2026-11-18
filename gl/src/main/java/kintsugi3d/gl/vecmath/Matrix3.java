@@ -265,9 +265,9 @@ public final class Matrix3
     public Matrix3 plus(Matrix3 other)
     {
         return new Matrix3(
-            this.m[0][0] + other.m[0][0],    this.m[0][1] + other.m[0][1], this.m[0][2] + other.m[0][2],
-            this.m[1][0] + other.m[1][0],    this.m[1][1] + other.m[1][1], this.m[1][2] + other.m[1][2],
-            this.m[2][0] + other.m[2][0],    this.m[2][1] + other.m[2][1], this.m[2][2] + other.m[2][2]
+            m[0][0] + other.m[0][0],    m[0][1] + other.m[0][1], m[0][2] + other.m[0][2],
+            m[1][0] + other.m[1][0],    m[1][1] + other.m[1][1], m[1][2] + other.m[1][2],
+            m[2][0] + other.m[2][0],    m[2][1] + other.m[2][1], m[2][2] + other.m[2][2]
         );
     }
 
@@ -279,9 +279,9 @@ public final class Matrix3
     public Matrix3 minus(Matrix3 other)
     {
         return new Matrix3(
-            this.m[0][0] - other.m[0][0],    this.m[0][1] - other.m[0][1], this.m[0][2] - other.m[0][2],
-            this.m[1][0] - other.m[1][0],    this.m[1][1] - other.m[1][1], this.m[1][2] - other.m[1][2],
-            this.m[2][0] - other.m[2][0],    this.m[2][1] - other.m[2][1], this.m[2][2] - other.m[2][2]
+            m[0][0] - other.m[0][0],    m[0][1] - other.m[0][1], m[0][2] - other.m[0][2],
+            m[1][0] - other.m[1][0],    m[1][1] - other.m[1][1], m[1][2] - other.m[1][2],
+            m[2][0] - other.m[2][0],    m[2][1] - other.m[2][1], m[2][2] - other.m[2][2]
         );
     }
 
@@ -293,15 +293,15 @@ public final class Matrix3
     public Matrix3 times(Matrix3 other)
     {
         return new Matrix3(
-            this.m[0][0] * other.m[0][0] + this.m[0][1] * other.m[1][0] + this.m[0][2] * other.m[2][0],
-            this.m[0][0] * other.m[0][1] + this.m[0][1] * other.m[1][1] + this.m[0][2] * other.m[2][1],
-            this.m[0][0] * other.m[0][2] + this.m[0][1] * other.m[1][2] + this.m[0][2] * other.m[2][2],
-            this.m[1][0] * other.m[0][0] + this.m[1][1] * other.m[1][0] + this.m[1][2] * other.m[2][0],
-            this.m[1][0] * other.m[0][1] + this.m[1][1] * other.m[1][1] + this.m[1][2] * other.m[2][1],
-            this.m[1][0] * other.m[0][2] + this.m[1][1] * other.m[1][2] + this.m[1][2] * other.m[2][2],
-            this.m[2][0] * other.m[0][0] + this.m[2][1] * other.m[1][0] + this.m[2][2] * other.m[2][0],
-            this.m[2][0] * other.m[0][1] + this.m[2][1] * other.m[1][1] + this.m[2][2] * other.m[2][1],
-            this.m[2][0] * other.m[0][2] + this.m[2][1] * other.m[1][2] + this.m[2][2] * other.m[2][2]
+            m[0][0] * other.m[0][0] + m[0][1] * other.m[1][0] + m[0][2] * other.m[2][0],
+            m[0][0] * other.m[0][1] + m[0][1] * other.m[1][1] + m[0][2] * other.m[2][1],
+            m[0][0] * other.m[0][2] + m[0][1] * other.m[1][2] + m[0][2] * other.m[2][2],
+            m[1][0] * other.m[0][0] + m[1][1] * other.m[1][0] + m[1][2] * other.m[2][0],
+            m[1][0] * other.m[0][1] + m[1][1] * other.m[1][1] + m[1][2] * other.m[2][1],
+            m[1][0] * other.m[0][2] + m[1][1] * other.m[1][2] + m[1][2] * other.m[2][2],
+            m[2][0] * other.m[0][0] + m[2][1] * other.m[1][0] + m[2][2] * other.m[2][0],
+            m[2][0] * other.m[0][1] + m[2][1] * other.m[1][1] + m[2][2] * other.m[2][1],
+            m[2][0] * other.m[0][2] + m[2][1] * other.m[1][2] + m[2][2] * other.m[2][2]
         );
     }
 
@@ -313,9 +313,9 @@ public final class Matrix3
     public Vector3 times(Vector3 vector)
     {
         return new Vector3(
-            this.m[0][0] * vector.x + this.m[0][1] * vector.y + this.m[0][2] * vector.z,
-            this.m[1][0] * vector.x + this.m[1][1] * vector.y + this.m[1][2] * vector.z,
-            this.m[2][0] * vector.x + this.m[2][1] * vector.y + this.m[2][2] * vector.z
+            m[0][0] * vector.x + m[0][1] * vector.y + m[0][2] * vector.z,
+            m[1][0] * vector.x + m[1][1] * vector.y + m[1][2] * vector.z,
+            m[2][0] * vector.x + m[2][1] * vector.y + m[2][2] * vector.z
         );
     }
 
@@ -327,9 +327,9 @@ public final class Matrix3
     public Matrix3 times(float factor)
     {
         return new Matrix3(
-            this.m[0][0] * factor, this.m[0][1] * factor, this.m[0][2] * factor,
-            this.m[1][0] * factor, this.m[1][1] * factor, this.m[1][2] * factor,
-            this.m[2][0] * factor, this.m[2][1] * factor, this.m[2][2] * factor
+            m[0][0] * factor, m[0][1] * factor, m[0][2] * factor,
+            m[1][0] * factor, m[1][1] * factor, m[1][2] * factor,
+            m[2][0] * factor, m[2][1] * factor, m[2][2] * factor
         );
     }
 
@@ -340,9 +340,9 @@ public final class Matrix3
     public Matrix3 negate()
     {
         return new Matrix3(
-            -this.m[0][0], -this.m[0][1], -this.m[0][2],
-            -this.m[1][0], -this.m[1][1], -this.m[1][2],
-            -this.m[2][0], -this.m[2][1], -this.m[2][2]
+            -m[0][0], -m[0][1], -m[0][2],
+            -m[1][0], -m[1][1], -m[1][2],
+            -m[2][0], -m[2][1], -m[2][2]
         );
     }
 
@@ -353,9 +353,9 @@ public final class Matrix3
     public Matrix3 transpose()
     {
         return new Matrix3(
-            this.m[0][0], this.m[1][0], this.m[2][0],
-            this.m[0][1], this.m[1][1], this.m[2][1],
-            this.m[0][2], this.m[1][2], this.m[2][2]
+            m[0][0], m[1][0], m[2][0],
+            m[0][1], m[1][1], m[2][1],
+            m[0][2], m[1][2], m[2][2]
         );
     }
 
@@ -365,9 +365,9 @@ public final class Matrix3
      */
     public float determinant()
     {
-        return this.m[0][0] * (this.m[1][1] * this.m[2][2] - this.m[2][1] * this.m[1][2])
-                - this.m[0][1] * (this.m[1][0] * this.m[2][2] - this.m[2][0] * this.m[1][2])
-                + this.m[0][2] * (this.m[1][0] * this.m[2][1] - this.m[2][0] * this.m[1][1]);
+        return m[0][0] * (m[1][1] * m[2][2] - m[2][1] * m[1][2])
+                - m[0][1] * (m[1][0] * m[2][2] - m[2][0] * m[1][2])
+                + m[0][2] * (m[1][0] * m[2][1] - m[2][0] * m[1][1]);
     }
 
     /**
@@ -376,7 +376,7 @@ public final class Matrix3
      */
     public Matrix3 inverse()
     {
-        float det = this.determinant();
+        float det = determinant();
 
         return new Matrix3(
             (m[1][1] * m[2][2] - m[1][2] * m[2][1]) / det, (m[0][2] * m[2][1] - m[0][1] * m[2][2]) / det, (m[0][1] * m[1][2] - m[0][2] * m[1][1]) / det,
@@ -392,7 +392,7 @@ public final class Matrix3
      */
     public float get(int row, int col)
     {
-        return this.m[row][col];
+        return m[row][col];
     }
 
     /**
@@ -402,7 +402,7 @@ public final class Matrix3
      */
     public Vector3 getRow(int row)
     {
-        return new Vector3(this.m[row][0], this.m[row][1], this.m[row][2]);
+        return new Vector3(m[row][0], m[row][1], m[row][2]);
     }
 
     /**
@@ -412,6 +412,6 @@ public final class Matrix3
      */
     public Vector3 getColumn(int col)
     {
-        return new Vector3(this.m[0][col], this.m[1][col], this.m[2][col]);
+        return new Vector3(m[0][col], m[1][col], m[2][col]);
     }
 }

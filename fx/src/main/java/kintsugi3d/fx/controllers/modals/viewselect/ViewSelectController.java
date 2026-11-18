@@ -348,6 +348,6 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
     @Override
     public final void receiveData(ViewSelectable dataReceived)
     {
-        this.newData = dataReceived;
+        newData = dataReceived;
     }
 }

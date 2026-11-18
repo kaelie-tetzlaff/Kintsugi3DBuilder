@@ -38,7 +38,7 @@ public class CameraViewport
         this.view = view;
         this.fullProjection = fullProjection;
         this.viewportCrop = viewportCrop;
-        this.viewportProjection = viewportCrop.times(fullProjection);
+        viewportProjection = viewportCrop.times(fullProjection);
         this.x = x;
         this.y = y;
         this.width = width;

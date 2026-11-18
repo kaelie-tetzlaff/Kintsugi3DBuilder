@@ -64,8 +64,8 @@ public class TestingCacheModel extends CacheModelBase
         {
             synchronizedCacheSizeCalcComplete(() ->
             {
-                this.projectSizes = Collections.unmodifiableMap(newProjectSizes);
-                this.cacheSize = newCacheSize;
+                projectSizes = Collections.unmodifiableMap(newProjectSizes);
+                cacheSize = newCacheSize;
 
                 Collection<DoubleConsumer> callbacks;
                 synchronized (cacheSizeChangedCallbacks)

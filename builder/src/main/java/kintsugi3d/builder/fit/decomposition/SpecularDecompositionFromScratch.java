@@ -97,7 +97,7 @@ public class SpecularDecompositionFromScratch extends SpecularDecompositionBase
         @Override
         public final List<BasisMaterialInfo> getIndexableMaterialList()
         {
-            return IntStream.range(0, this.getEnabledMaterialCount())
+            return IntStream.range(0, getEnabledMaterialCount())
                 .mapToObj(b ->
                     new BasisMaterialInfo()
                     {
@@ -110,7 +110,7 @@ public class SpecularDecompositionFromScratch extends SpecularDecompositionBase
                         @Override
                         public int getResolution()
                         {
-                            return OptimizableMaterialBasis.this.getSpecularResolution();
+                            return getSpecularResolution();
                         }
 
                         @Override

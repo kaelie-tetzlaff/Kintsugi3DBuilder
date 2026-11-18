@@ -41,7 +41,7 @@ public class ToneCalibration extends ExperienceBase
     @Override
     protected final void open() throws IOException
     {
-        this.buildPagedModal(new CurrentProjectViewSelectable(ViewSet::getPrimaryView))
+        buildPagedModal(new CurrentProjectViewSelectable(ViewSet::getPrimaryView))
             .then(PRIMARY_VIEW_SELECT,
                 SimpleDataReceiverPage<ViewSelectable, ToneCalibrationViewSelectController>::new,
                 ToneCalibrationViewSelectController::new)

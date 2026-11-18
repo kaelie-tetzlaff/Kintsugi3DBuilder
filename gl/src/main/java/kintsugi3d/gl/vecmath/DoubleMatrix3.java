@@ -264,9 +264,9 @@ public final class DoubleMatrix3
     public DoubleMatrix3 plus(DoubleMatrix3 other)
     {
         return new DoubleMatrix3(
-            this.m[0][0] + other.m[0][0],    this.m[0][1] + other.m[0][1], this.m[0][2] + other.m[0][2],
-            this.m[1][0] + other.m[1][0],    this.m[1][1] + other.m[1][1], this.m[1][2] + other.m[1][2],
-            this.m[2][0] + other.m[2][0],    this.m[2][1] + other.m[2][1], this.m[2][2] + other.m[2][2]
+            m[0][0] + other.m[0][0],    m[0][1] + other.m[0][1], m[0][2] + other.m[0][2],
+            m[1][0] + other.m[1][0],    m[1][1] + other.m[1][1], m[1][2] + other.m[1][2],
+            m[2][0] + other.m[2][0],    m[2][1] + other.m[2][1], m[2][2] + other.m[2][2]
         );
     }
 
@@ -278,9 +278,9 @@ public final class DoubleMatrix3
     public DoubleMatrix3 minus(DoubleMatrix3 other)
     {
         return new DoubleMatrix3(
-            this.m[0][0] - other.m[0][0],    this.m[0][1] - other.m[0][1], this.m[0][2] - other.m[0][2],
-            this.m[1][0] - other.m[1][0],    this.m[1][1] - other.m[1][1], this.m[1][2] - other.m[1][2],
-            this.m[2][0] - other.m[2][0],    this.m[2][1] - other.m[2][1], this.m[2][2] - other.m[2][2]
+            m[0][0] - other.m[0][0],    m[0][1] - other.m[0][1], m[0][2] - other.m[0][2],
+            m[1][0] - other.m[1][0],    m[1][1] - other.m[1][1], m[1][2] - other.m[1][2],
+            m[2][0] - other.m[2][0],    m[2][1] - other.m[2][1], m[2][2] - other.m[2][2]
         );
     }
 
@@ -292,15 +292,15 @@ public final class DoubleMatrix3
     public DoubleMatrix3 times(DoubleMatrix3 other)
     {
         return new DoubleMatrix3(
-            this.m[0][0] * other.m[0][0] + this.m[0][1] * other.m[1][0] + this.m[0][2] * other.m[2][0],
-            this.m[0][0] * other.m[0][1] + this.m[0][1] * other.m[1][1] + this.m[0][2] * other.m[2][1],
-            this.m[0][0] * other.m[0][2] + this.m[0][1] * other.m[1][2] + this.m[0][2] * other.m[2][2],
-            this.m[1][0] * other.m[0][0] + this.m[1][1] * other.m[1][0] + this.m[1][2] * other.m[2][0],
-            this.m[1][0] * other.m[0][1] + this.m[1][1] * other.m[1][1] + this.m[1][2] * other.m[2][1],
-            this.m[1][0] * other.m[0][2] + this.m[1][1] * other.m[1][2] + this.m[1][2] * other.m[2][2],
-            this.m[2][0] * other.m[0][0] + this.m[2][1] * other.m[1][0] + this.m[2][2] * other.m[2][0],
-            this.m[2][0] * other.m[0][1] + this.m[2][1] * other.m[1][1] + this.m[2][2] * other.m[2][1],
-            this.m[2][0] * other.m[0][2] + this.m[2][1] * other.m[1][2] + this.m[2][2] * other.m[2][2]
+            m[0][0] * other.m[0][0] + m[0][1] * other.m[1][0] + m[0][2] * other.m[2][0],
+            m[0][0] * other.m[0][1] + m[0][1] * other.m[1][1] + m[0][2] * other.m[2][1],
+            m[0][0] * other.m[0][2] + m[0][1] * other.m[1][2] + m[0][2] * other.m[2][2],
+            m[1][0] * other.m[0][0] + m[1][1] * other.m[1][0] + m[1][2] * other.m[2][0],
+            m[1][0] * other.m[0][1] + m[1][1] * other.m[1][1] + m[1][2] * other.m[2][1],
+            m[1][0] * other.m[0][2] + m[1][1] * other.m[1][2] + m[1][2] * other.m[2][2],
+            m[2][0] * other.m[0][0] + m[2][1] * other.m[1][0] + m[2][2] * other.m[2][0],
+            m[2][0] * other.m[0][1] + m[2][1] * other.m[1][1] + m[2][2] * other.m[2][1],
+            m[2][0] * other.m[0][2] + m[2][1] * other.m[1][2] + m[2][2] * other.m[2][2]
         );
     }
 
@@ -312,9 +312,9 @@ public final class DoubleMatrix3
     public DoubleVector3 times(DoubleVector3 vector)
     {
         return new DoubleVector3(
-            this.m[0][0] * vector.x + this.m[0][1] * vector.y + this.m[0][2] * vector.z,
-            this.m[1][0] * vector.x + this.m[1][1] * vector.y + this.m[1][2] * vector.z,
-            this.m[2][0] * vector.x + this.m[2][1] * vector.y + this.m[2][2] * vector.z
+            m[0][0] * vector.x + m[0][1] * vector.y + m[0][2] * vector.z,
+            m[1][0] * vector.x + m[1][1] * vector.y + m[1][2] * vector.z,
+            m[2][0] * vector.x + m[2][1] * vector.y + m[2][2] * vector.z
         );
     }
 
@@ -326,9 +326,9 @@ public final class DoubleMatrix3
     public DoubleMatrix3 times(double factor)
     {
         return new DoubleMatrix3(
-            this.m[0][0] * factor, this.m[0][1] * factor, this.m[0][2] * factor,
-            this.m[1][0] * factor, this.m[1][1] * factor, this.m[1][2] * factor,
-            this.m[2][0] * factor, this.m[2][1] * factor, this.m[2][2] * factor
+            m[0][0] * factor, m[0][1] * factor, m[0][2] * factor,
+            m[1][0] * factor, m[1][1] * factor, m[1][2] * factor,
+            m[2][0] * factor, m[2][1] * factor, m[2][2] * factor
         );
     }
 
@@ -339,9 +339,9 @@ public final class DoubleMatrix3
     public DoubleMatrix3 negate()
     {
         return new DoubleMatrix3(
-            -this.m[0][0], -this.m[0][1], -this.m[0][2],
-            -this.m[1][0], -this.m[1][1], -this.m[1][2],
-            -this.m[2][0], -this.m[2][1], -this.m[2][2]
+            -m[0][0], -m[0][1], -m[0][2],
+            -m[1][0], -m[1][1], -m[1][2],
+            -m[2][0], -m[2][1], -m[2][2]
         );
     }
 
@@ -352,9 +352,9 @@ public final class DoubleMatrix3
     public DoubleMatrix3 transpose()
     {
         return new DoubleMatrix3(
-            this.m[0][0], this.m[1][0], this.m[2][0],
-            this.m[0][1], this.m[1][1], this.m[2][1],
-            this.m[0][2], this.m[1][2], this.m[2][2]
+            m[0][0], m[1][0], m[2][0],
+            m[0][1], m[1][1], m[2][1],
+            m[0][2], m[1][2], m[2][2]
         );
     }
 
@@ -364,9 +364,9 @@ public final class DoubleMatrix3
      */
     public double determinant()
     {
-        return this.m[0][0] * (this.m[1][1] * this.m[2][2] - this.m[2][1] * this.m[1][2])
-                - this.m[0][1] * (this.m[1][0] * this.m[2][2] - this.m[2][0] * this.m[1][2])
-                + this.m[0][2] * (this.m[1][0] * this.m[2][1] - this.m[2][0] * this.m[1][1]);
+        return m[0][0] * (m[1][1] * m[2][2] - m[2][1] * m[1][2])
+                - m[0][1] * (m[1][0] * m[2][2] - m[2][0] * m[1][2])
+                + m[0][2] * (m[1][0] * m[2][1] - m[2][0] * m[1][1]);
     }
 
     /**
@@ -375,7 +375,7 @@ public final class DoubleMatrix3
      */
     public DoubleMatrix3 inverse()
     {
-        double det = this.determinant();
+        double det = determinant();
 
         return new DoubleMatrix3(
             (m[1][1] * m[2][2] - m[1][2] * m[2][1]) / det, (m[0][2] * m[2][1] - m[0][1] * m[2][2]) / det, (m[0][1] * m[1][2] - m[0][2] * m[1][1]) / det,
@@ -391,7 +391,7 @@ public final class DoubleMatrix3
      */
     public double get(int row, int col)
     {
-        return this.m[row][col];
+        return m[row][col];
     }
 
     /**
@@ -401,7 +401,7 @@ public final class DoubleMatrix3
      */
     public DoubleVector3 getRow(int row)
     {
-        return new DoubleVector3(this.m[row][0], this.m[row][1], this.m[row][2]);
+        return new DoubleVector3(m[row][0], m[row][1], m[row][2]);
     }
 
     /**
@@ -411,6 +411,6 @@ public final class DoubleMatrix3
      */
     public DoubleVector3 getColumn(int col)
     {
-        return new DoubleVector3(this.m[0][col], this.m[1][col], this.m[2][col]);
+        return new DoubleVector3(m[0][col], m[1][col], m[2][col]);
     }
 }

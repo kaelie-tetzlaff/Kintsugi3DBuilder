@@ -65,7 +65,7 @@ public class ObservableViewListModel implements SelectableViewListModel
     @Override
     public final void setViewSnapEnabled(boolean cameraViewSnapEnabled)
     {
-        this.cameraViewSnapEnabledProperty.set(cameraViewSnapEnabled);
+        cameraViewSnapEnabledProperty.set(cameraViewSnapEnabled);
     }
 
     public final BooleanProperty getCameraViewSnapEnabledProperty()

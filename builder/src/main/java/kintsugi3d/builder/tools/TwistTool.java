@@ -52,7 +52,7 @@ final class TwistTool implements DragTool
     @Override
     public void mouseButtonPressed(CursorPosition cursorPosition, CanvasSize canvasSize)
     {
-        this.mouseStart = cursorPosition;
+        mouseStart = cursorPosition;
         oldTwist = cameraModel.getTwist();
         twistSensitivityAdjusted = TWIST_SENSITIVITY / canvasSize.width;
     }
@@ -60,6 +60,6 @@ final class TwistTool implements DragTool
     @Override
     public void cursorDragged(CursorPosition cursorPosition, CanvasSize canvasSize)
     {
-        cameraModel.setTwist(oldTwist + (float) Math.toDegrees((cursorPosition.x - this.mouseStart.x) * twistSensitivityAdjusted));
+        cameraModel.setTwist(oldTwist + (float) Math.toDegrees((cursorPosition.x - mouseStart.x) * twistSensitivityAdjusted));
     }
 }

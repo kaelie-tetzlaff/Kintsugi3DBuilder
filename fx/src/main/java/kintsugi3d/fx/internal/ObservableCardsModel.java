@@ -110,7 +110,7 @@ public class ObservableCardsModel<T> implements CardsModel<T>
     public final void initialize()
     {
         List<ProjectDataCard> dataCards = cardFactory.createAllCards();
-        this.setCardList(dataCards);
+        setCardList(dataCards);
     }
 
     public final Class<T> getDataClass()

@@ -35,7 +35,7 @@ public class TextureBlockResourceFactory<ContextType extends Context<ContextType
         this.imageCache = imageCache;
         this.sharedResources = sharedResources;
 
-        this.fullGeometryTextures = sharedResources.getGeometryResources()
+        fullGeometryTextures = sharedResources.getGeometryResources()
             .createGeometryFramebuffer(imageCache.getSettings().getTextureWidth(), imageCache.getSettings().getTextureHeight());
     }
 
@@ -64,7 +64,7 @@ public class TextureBlockResourceFactory<ContextType extends Context<ContextType
     @Override
     public final void close()
     {
-        if (this.fullGeometryTextures != null)
+        if (fullGeometryTextures != null)
         {
             fullGeometryTextures.close();
         }

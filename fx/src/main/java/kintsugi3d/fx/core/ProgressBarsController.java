@@ -491,7 +491,7 @@ public class ProgressBarsController
         @Override
         public final void setStage(int stage, String message)
         {
-            this.localProgress = 0.0;
+            localProgress = 0.0;
             currentStage = stage + 1; //index from 1, copy so we can update currentStageProperty w/ Platform.runLater to avoid threading issue
 
             // Reset text that displays when finishing up for a new stage
@@ -508,7 +508,7 @@ public class ProgressBarsController
                     LOG.info("[Finishing up] {}", message);
                 }
 
-                this.currentStageProperty.setValue(currentStage);
+                currentStageProperty.setValue(currentStage);
                 localProgressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
                 overallTextLabel.setText(message);
                 localTextLabel.setText(DEFAULT_MESSAGE);
@@ -541,7 +541,7 @@ public class ProgressBarsController
         {
             if(currentStageProperty.get() > stageCountProperty.get())
             {
-                localTextLabel.setText(this.finishingUpText);
+                localTextLabel.setText(finishingUpText);
             }
         }
 
@@ -560,21 +560,21 @@ public class ProgressBarsController
         @Override
         public final void setMaxProgress(double maxProgress)
         {
-            this.maximum = maxProgress;
+            maximum = maxProgress;
             Platform.runLater(this::refreshLocalProgress);
         }
 
         @Override
         public final void setProgress(double progress, String message)
         {
-            this.localProgress = progress;
+            localProgress = progress;
 
             LOG.info("[{}%] {}", new DecimalFormat("#.##").format(localProgress / maximum * 100), message);
 
             //remove stage/stageCount from txt if it wouldn't make sense for it to be there (ex. Stage 0/0)
             //useful for simple exports like orbit animation
             boolean removeStageNums = stageCountProperty.getValue() <= 1 || currentStageProperty.getValue() == 0;
-            this.localText = removeStageNums ? message :
+            localText = removeStageNums ? message :
                 String.format("Stage %s/%s -- %s", currentStageProperty.getValue(), stageCountProperty.getValue(), message);
 
             Platform.runLater(() ->
@@ -599,7 +599,7 @@ public class ProgressBarsController
         @Override
         public final void complete()
         {
-            this.maximum = 0.0;
+            maximum = 0.0;
             endStopwatches();
 
             MainWindowController mainWindow = MainWindowController.getInstance();

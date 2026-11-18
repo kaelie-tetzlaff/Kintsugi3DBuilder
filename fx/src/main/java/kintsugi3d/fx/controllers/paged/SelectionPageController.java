@@ -46,7 +46,7 @@ public class SelectionPageController<T> extends PageControllerBase<T, SelectionP
     @Override
     public final void initPage()
     {
-        this.getCanAdvanceObservable().bind(buttons.selectedToggleProperty().isNotNull());
+        getCanAdvanceObservable().bind(buttons.selectedToggleProperty().isNotNull());
     }
 
     @Override
@@ -98,7 +98,7 @@ public class SelectionPageController<T> extends PageControllerBase<T, SelectionP
     {
         if (button.isSelected())
         {
-            this.getPage().setNextPage(page);
+            getPage().setNextPage(page);
         }
         else
         {

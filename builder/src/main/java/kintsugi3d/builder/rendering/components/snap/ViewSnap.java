@@ -91,7 +91,7 @@ public class ViewSnap<ContextType extends Context<ContextType>> implements Rende
             // Include disabled views since snapping to a disabled view (i.e. for light calibration) is valid.
             for (View view : viewSelection.getViewSet().getViews())
             {
-                Matrix4 candidateView = this.viewSelection.getMatrixFromView(view);
+                Matrix4 candidateView = viewSelection.getMatrixFromView(view);
                 float similarity = viewInverse.times(Vector4.ORIGIN).getXYZ()
                     .dot(candidateView.quickInverse(0.01f).times(Vector4.ORIGIN).getXYZ());
 

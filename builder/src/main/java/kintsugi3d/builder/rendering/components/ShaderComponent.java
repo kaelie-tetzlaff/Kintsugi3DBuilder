@@ -76,7 +76,7 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
     @Override
     public final void initialize()
     {
-        this.vertexBuffers = createVertexBuffers();
+        vertexBuffers = createVertexBuffers();
         reloadShaders();
         onInitialize();
     }
@@ -97,32 +97,32 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
         {
             ProgramObject<ContextType> newProgram = createProgram();
 
-            if (this.program != null)
+            if (program != null)
             {
-                this.program.close();
+                program.close();
             }
 
-            this.program = newProgram;
+            program = newProgram;
 
-            if (this.sceneViewportModel != null && this.sceneObjectTag != null)
+            if (sceneViewportModel != null && sceneObjectTag != null)
             {
-                this.program.setUniform("objectID", sceneViewportModel.lookupSceneObjectID(sceneObjectTag));
+                program.setUniform("objectID", sceneViewportModel.lookupSceneObjectID(sceneObjectTag));
             }
             else
             {
-                this.program.setUniform("objectID", 0);
+                program.setUniform("objectID", 0);
             }
 
-            if (this.drawable != null)
+            if (drawable != null)
             {
-                this.drawable.close();
+                drawable.close();
             }
 
-            this.drawable = createDrawable(this.program);
+            drawable = createDrawable(program);
 
             for (var entry : vertexBuffers.entrySet())
             {
-                this.drawable.addVertexBuffer(entry.getKey(), entry.getValue());
+                drawable.addVertexBuffer(entry.getKey(), entry.getValue());
             }
         }
         catch (IOException | RuntimeException e)
@@ -197,7 +197,7 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
 
     protected final <ResourceType extends ManagedResource> ResourceType resource(ResourceType resource)
     {
-        this.otherManagedResources.add(resource);
+        otherManagedResources.add(resource);
         return resource;
     }
 }

@@ -77,7 +77,7 @@ public class View
         this.maskFile = maskFile;
         this.viewErrorMetric = viewErrorMetric;
         this.containingViewSet = containingViewSet;
-        this.isEnabled = true;
+        isEnabled = true;
     }
 
     /**
@@ -267,8 +267,8 @@ public class View
     public final View copy(ViewSet newContainingViewSet)
     {
         // TODO do we need to also do a deep copy of viewErrorMetric?
-        return new View(this.cameraPose, this.cameraPoseInverse, this.cameraProjectionIndex, this.lightIndex,
-            this.gpuViewIndex, this.imageFile, this.maskFile, this.viewErrorMetric, newContainingViewSet);
+        return new View(cameraPose, cameraPoseInverse, cameraProjectionIndex, lightIndex,
+            gpuViewIndex, imageFile, maskFile, viewErrorMetric, newContainingViewSet);
     }
 
     @Override
@@ -276,7 +276,7 @@ public class View
     {
         // Two views are equal either if they have the same memory address / identity OR
         // if they are distinct objects with the same, non-null image file path.
-        return obj == this || ((obj instanceof View) && this.imageFile.equals(((View) obj).imageFile));
+        return obj == this || ((obj instanceof View) && imageFile.equals(((View) obj).imageFile));
     }
 
     @Override

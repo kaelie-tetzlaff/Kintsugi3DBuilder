@@ -99,7 +99,7 @@ public class RefreshableCollection<RefreshableType extends Refreshable> implemen
     @Override
     public final boolean isInitialized()
     {
-        return this.initialized;
+        return initialized;
     }
 
     @Override
@@ -112,7 +112,7 @@ public class RefreshableCollection<RefreshableType extends Refreshable> implemen
         // Initialize added refreshables and add to main list.
         processInitializeQueue();
 
-        this.initialized = true;
+        initialized = true;
     }
 
     @Override

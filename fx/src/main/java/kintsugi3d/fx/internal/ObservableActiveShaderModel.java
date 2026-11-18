@@ -50,7 +50,7 @@ public class ObservableActiveShaderModel implements ActiveShaderModel
     @Override
     public final void setActiveShader(ShaderInfo shaderInfo)
     {
-        this.userShader.set(shaderInfo);
+        userShader.set(shaderInfo);
 
         for (var shaderHandler : shaderHandlers)
         {

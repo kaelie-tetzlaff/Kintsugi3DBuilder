@@ -131,10 +131,10 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
             }
         }
 
-        this.handle = handleIfSuccessful;
+        handle = handleIfSuccessful;
 
         //noinspection ThisEscapedInObjectConstruction
-        this.listenerManager = new WindowCallback(this);
+        listenerManager = new WindowCallback(this);
 
         // Query height and width of screen to set center point
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
@@ -175,7 +175,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
         LOG.info("OpenGL version: {}", glGetString(GL_VERSION));
         LOG.info("OpenGL renderer: {}", glGetString(GL_RENDERER));
 
-        this.context = createDefaultFramebuffer == null ?
+        context = createDefaultFramebuffer == null ?
             contextFactory.createContext(handle) : contextFactory.createContext(handle, createDefaultFramebuffer);
 
         if (windowSpec.getMultisamples() > 0)
@@ -219,7 +219,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     public final void closeAllWindows()
     {
         LOG.debug("Destroying window...");
-        glfwDestroyWindow(this.handle);
+        glfwDestroyWindow(handle);
 
         LOG.debug("Terminating GLFW...");
         glfwTerminate();
@@ -234,7 +234,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     @Override
     public final ContextType getContext()
     {
-        return this.context;
+        return context;
     }
 
     @Override
@@ -277,7 +277,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     @Override
     public final boolean shouldTerminate()
     {
-        return this.isWindowClosing();
+        return isWindowClosing();
     }
 
     @Override

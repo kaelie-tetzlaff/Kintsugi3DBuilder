@@ -113,8 +113,8 @@ public class GenericRenderRequestController implements Initializable
                 throw new IllegalStateException("Unexpected vertex shader mode.");
         }
 
-        builder.setWidth(Integer.parseInt(this.widthTextField.getText()));
-        builder.setHeight(Integer.parseInt(this.heightTextField.getText()));
+        builder.setWidth(Integer.parseInt(widthTextField.getText()));
+        builder.setHeight(Integer.parseInt(heightTextField.getText()));
 
         Rendering.getRequestQueue().addImageBasedGraphicsRequest(builder.create());
     }
@@ -148,20 +148,20 @@ public class GenericRenderRequestController implements Initializable
     @FXML
     private void targetVSetFileButtonAction()
     {
-        this.fileChooser.setTitle("Choose a target view set file");
-        this.fileChooser.getExtensionFilters().clear();
-        this.fileChooser.getExtensionFilters().add(new ExtensionFilter("View set files", "*.vset"));
+        fileChooser.setTitle("Choose a target view set file");
+        fileChooser.getExtensionFilters().clear();
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("View set files", "*.vset"));
         if (targetVSetFileField.getText().isEmpty() || !new File(targetVSetFileField.getText()).exists())
         {
-            this.fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
+            fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         }
         else
         {
             File currentValue = new File(targetVSetFileField.getText());
-            this.fileChooser.setInitialDirectory(currentValue.getParentFile());
-            this.fileChooser.setInitialFileName(currentValue.getName());
+            fileChooser.setInitialDirectory(currentValue.getParentFile());
+            fileChooser.setInitialFileName(currentValue.getName());
         }
-        File file = this.fileChooser.showOpenDialog(root.getScene().getWindow());
+        File file = fileChooser.showOpenDialog(root.getScene().getWindow());
         if (file != null)
         {
             targetVSetFileField.setText(file.toString());
@@ -172,20 +172,20 @@ public class GenericRenderRequestController implements Initializable
     @FXML
     private void vertexShaderButtonAction()
     {
-        this.fileChooser.setTitle("Choose a custom vertex shader");
-        this.fileChooser.getExtensionFilters().clear();
-        this.fileChooser.getExtensionFilters().add(new ExtensionFilter("GLSL vertex shaders", "*.*"));
+        fileChooser.setTitle("Choose a custom vertex shader");
+        fileChooser.getExtensionFilters().clear();
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("GLSL vertex shaders", "*.*"));
         if (customVertexShaderField.getText().isEmpty() || !new File(customVertexShaderField.getText()).exists())
         {
-            this.fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
+            fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         }
         else
         {
             File currentValue = new File(customVertexShaderField.getText());
-            this.fileChooser.setInitialDirectory(currentValue.getParentFile());
-            this.fileChooser.setInitialFileName(currentValue.getName());
+            fileChooser.setInitialDirectory(currentValue.getParentFile());
+            fileChooser.setInitialFileName(currentValue.getName());
         }
-        File file = this.fileChooser.showOpenDialog(root.getScene().getWindow());
+        File file = fileChooser.showOpenDialog(root.getScene().getWindow());
         if (file != null)
         {
             customVertexShaderField.setText(file.toString());
@@ -196,20 +196,20 @@ public class GenericRenderRequestController implements Initializable
     @FXML
     private void fragmentShaderButtonAction()
     {
-        this.fileChooser.setTitle("Choose a fragment shader");
-        this.fileChooser.getExtensionFilters().clear();
-        this.fileChooser.getExtensionFilters().add(new ExtensionFilter("GLSL fragment shaders", "*.*"));
+        fileChooser.setTitle("Choose a fragment shader");
+        fileChooser.getExtensionFilters().clear();
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("GLSL fragment shaders", "*.*"));
         if (fragmentShaderField.getText().isEmpty() || !new File(fragmentShaderField.getText()).exists())
         {
-            this.fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
+            fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         }
         else
         {
             File currentValue = new File(fragmentShaderField.getText());
-            this.fileChooser.setInitialDirectory(currentValue.getParentFile());
-            this.fileChooser.setInitialFileName(currentValue.getName());
+            fileChooser.setInitialDirectory(currentValue.getParentFile());
+            fileChooser.setInitialFileName(currentValue.getName());
         }
-        File file = this.fileChooser.showOpenDialog(root.getScene().getWindow());
+        File file = fileChooser.showOpenDialog(root.getScene().getWindow());
         if (file != null)
         {
             fragmentShaderField.setText(file.toString());
@@ -220,17 +220,17 @@ public class GenericRenderRequestController implements Initializable
     @FXML
     private void exportDirectoryButtonAction()
     {
-        this.directoryChooser.setTitle("Choose an output directory");
+        directoryChooser.setTitle("Choose an output directory");
         if (exportDirectoryField.getText().isEmpty() || !new File(exportDirectoryField.getText()).exists())
         {
-            this.directoryChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
+            directoryChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         }
         else
         {
             File currentValue = new File(exportDirectoryField.getText());
-            this.directoryChooser.setInitialDirectory(currentValue);
+            directoryChooser.setInitialDirectory(currentValue);
         }
-        File file = this.directoryChooser.showDialog(root.getScene().getWindow());
+        File file = directoryChooser.showDialog(root.getScene().getWindow());
         if (file != null)
         {
             exportDirectoryField.setText(file.toString());

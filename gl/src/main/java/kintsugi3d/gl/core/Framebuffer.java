@@ -54,7 +54,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      */
     default void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a)
     {
-        FramebufferSize size = this.getSize();
+        FramebufferSize size = getSize();
         clearColorBuffer(attachmentIndex, r, g, b, a, 0, 0, size.width, size.height);
     }
 
@@ -68,7 +68,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      */
     default void clearIntegerColorBuffer(int attachmentIndex, int r, int g, int b, int a)
     {
-        FramebufferSize size = this.getSize();
+        FramebufferSize size = getSize();
         clearIntegerColorBuffer(attachmentIndex, r, g, b, a, 0, 0, size.width, size.height);
     }
 
@@ -78,7 +78,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      */
     default void clearDepthBuffer(float depth)
     {
-        FramebufferSize size = this.getSize();
+        FramebufferSize size = getSize();
         clearDepthBuffer(depth, 0, 0, size.width, size.height);
     }
 
@@ -87,7 +87,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      */
     default void clearDepthBuffer()
     {
-        this.clearDepthBuffer(1.0f);
+        clearDepthBuffer(1.0f);
     }
 
     /**
@@ -96,7 +96,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      */
     default void clearStencilBuffer(int stencilIndex)
     {
-        FramebufferSize size = this.getSize();
+        FramebufferSize size = getSize();
         clearStencilBuffer(stencilIndex, 0, 0, size.width, size.height);
     }
 
@@ -184,7 +184,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
     default void blitColorAttachmentFromFramebuffer(int drawAttachmentIndex, int x, int y, ReadableFramebuffer<ContextType> readFramebuffer, int readAttachmentIndex)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
-        FramebufferSize drawSize = this.getSize();
+        FramebufferSize drawSize = getSize();
         blitColorAttachmentFromFramebufferViewport(drawAttachmentIndex, x, y, drawSize.width, drawSize.height,
             readFramebuffer.getViewport(0, 0, readSize.width, readSize.height), readAttachmentIndex, false);
     }
@@ -201,7 +201,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
         int drawAttachmentIndex, ReadableFramebuffer<ContextType> readFramebuffer, int readAttachmentIndex, boolean linearFiltering)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
-        FramebufferSize drawSize = this.getSize();
+        FramebufferSize drawSize = getSize();
         blitColorAttachmentFromFramebufferViewport(drawAttachmentIndex, 0, 0, drawSize.width, drawSize.height,
             readFramebuffer.getViewport(0, 0, readSize.width, readSize.height), readAttachmentIndex, linearFiltering);
     }
@@ -238,7 +238,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
     default void blitDepthAttachmentFromFramebuffer(int x, int y, ReadableFramebuffer<ContextType> readFramebuffer)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
-        FramebufferSize drawSize = this.getSize();
+        FramebufferSize drawSize = getSize();
         blitDepthAttachmentFromFramebufferViewport(x, y, drawSize.width, drawSize.height,
             readFramebuffer.getViewport(0, 0, readSize.width, readSize.height));
     }
@@ -252,7 +252,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
     default void blitScaledDepthAttachmentFromFramebuffer(ReadableFramebuffer<ContextType> readFramebuffer)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
-        FramebufferSize drawSize = this.getSize();
+        FramebufferSize drawSize = getSize();
         blitDepthAttachmentFromFramebufferViewport(0, 0, drawSize.width, drawSize.height,
             readFramebuffer.getViewport(0, 0, readSize.width, readSize.height));
     }
@@ -289,7 +289,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
     default void blitStencilAttachmentFromFramebuffer(int x, int y, ReadableFramebuffer<ContextType> readFramebuffer)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
-        FramebufferSize drawSize = this.getSize();
+        FramebufferSize drawSize = getSize();
         blitStencilAttachmentFromFramebufferViewport(x, y, drawSize.width, drawSize.height,
             readFramebuffer.getViewport(0, 0, readSize.width, readSize.height));
     }
@@ -303,7 +303,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
     default void blitScaledStencilAttachmentFromFramebuffer(ReadableFramebuffer<ContextType> readFramebuffer)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
-        FramebufferSize drawSize = this.getSize();
+        FramebufferSize drawSize = getSize();
         blitStencilAttachmentFromFramebufferViewport(0, 0, drawSize.width, drawSize.height,
             readFramebuffer.getViewport(0, 0, readSize.width, readSize.height));
     }
@@ -340,7 +340,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
     default void blitDepthStencilAttachmentFromFramebuffer(int x, int y, ReadableFramebuffer<ContextType> readFramebuffer)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
-        FramebufferSize drawSize = this.getSize();
+        FramebufferSize drawSize = getSize();
         blitDepthStencilAttachmentFromFramebufferViewport(x, y, drawSize.width, drawSize.height,
             readFramebuffer.getViewport(0, 0, readSize.width, readSize.height));
     }
@@ -354,7 +354,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
     default void blitScaledDepthStencilAttachmentFromFramebuffer(ReadableFramebuffer<ContextType> readFramebuffer)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
-        FramebufferSize drawSize = this.getSize();
+        FramebufferSize drawSize = getSize();
         blitDepthStencilAttachmentFromFramebufferViewport(0, 0, drawSize.width, drawSize.height,
             readFramebuffer.getViewport(0, 0, readSize.width, readSize.height));
     }

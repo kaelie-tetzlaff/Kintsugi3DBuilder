@@ -165,7 +165,7 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     public final BackgroundMode getBackgroundMode()
     {
         EnvironmentSettings selectedEnvironment = getEnvironmentSettings();
-        if (this.backplateLoaded && isEnabled() && selectedEnvironment.isBackplateImageEnabled())
+        if (backplateLoaded && isEnabled() && selectedEnvironment.isBackplateImageEnabled())
         {
             return BackgroundMode.IMAGE;
         }
@@ -186,7 +186,7 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     @Override
     public final boolean isEnvironmentMappingEnabled()
     {
-        return this.environmentMapLoaded && isEnabled() && getEnvironmentSettings().isEnvironmentImageEnabled();
+        return environmentMapLoaded && isEnabled() && getEnvironmentSettings().isEnvironmentImageEnabled();
     }
 
     @Override

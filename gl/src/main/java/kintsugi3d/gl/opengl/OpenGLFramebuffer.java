@@ -36,7 +36,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     @Override
     public final OpenGLContext getContext()
     {
-        return this.context;
+        return context;
     }
 
     abstract static class Contents implements FramebufferDrawContents<OpenGLContext>, FramebufferReadContents<OpenGLContext>
@@ -64,7 +64,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
 
         private void bindForDrawCommon(int x, int y, int width, int height)
         {
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this.getId());
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, getId());
             OpenGLContext.errorCheck();
 
             if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -88,7 +88,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
         public final void bindForDraw()
         {
             FramebufferSize size = framebuffer.getSize();
-            this.bindViewportForDraw(0, 0, size.width, size.height);
+            bindViewportForDraw(0, 0, size.width, size.height);
         }
 
         /**
@@ -106,7 +106,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
         public final void bindSingleAttachmentForDraw(int attachmentIndex)
         {
             FramebufferSize size = framebuffer.getSize();
-            this.bindForDrawCommon(0, 0, size.width, size.height);
+            bindForDrawCommon(0, 0, size.width, size.height);
 
             selectColorDestinationForDraw(attachmentIndex);
         }
@@ -115,14 +115,14 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
         public final void bindNonColorAttachmentsForDraw()
         {
             FramebufferSize size = framebuffer.getSize();
-            this.bindForDrawCommon(0, 0, size.width, size.height);
+            bindForDrawCommon(0, 0, size.width, size.height);
         }
 
         abstract void selectColorSourceForRead(int index);
 
         private void bindForReadCommon()
         {
-            glBindFramebuffer(GL_READ_FRAMEBUFFER, this.getId());
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, getId());
             OpenGLContext.errorCheck();
 
             if(glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -305,7 +305,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
         int drawAttachmentIndex, int destX, int destY, int destWidth, int destHeight,
         FramebufferViewport<OpenGLContext> readFramebuffer, int readAttachmentIndex, boolean linearFiltering)
     {
-        this.getDrawContents().bindSingleAttachmentForDraw(drawAttachmentIndex);
+        getDrawContents().bindSingleAttachmentForDraw(drawAttachmentIndex);
         readFramebuffer.getReadContents().bindForRead(readAttachmentIndex);
 
         IntVector2 srcOffset = readFramebuffer.getOffset();
@@ -320,7 +320,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     public final void blitDepthAttachmentFromFramebufferViewport(
         int destX, int destY, int destWidth, int destHeight, FramebufferViewport<OpenGLContext> readFramebuffer)
     {
-        this.getDrawContents().bindNonColorAttachmentsForDraw();
+        getDrawContents().bindNonColorAttachmentsForDraw();
         readFramebuffer.getReadContents().bindNonColorAttachmentForRead();
 
         IntVector2 srcOffset = readFramebuffer.getOffset();
@@ -335,7 +335,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     public final void blitStencilAttachmentFromFramebufferViewport(
         int destX, int destY, int destWidth, int destHeight, FramebufferViewport<OpenGLContext> readFramebuffer)
     {
-        this.getDrawContents().bindNonColorAttachmentsForDraw();
+        getDrawContents().bindNonColorAttachmentsForDraw();
         readFramebuffer.getReadContents().bindNonColorAttachmentForRead();
 
         IntVector2 srcOffset = readFramebuffer.getOffset();
@@ -350,7 +350,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     public final void blitDepthStencilAttachmentFromFramebufferViewport(
         int destX, int destY, int destWidth, int destHeight, FramebufferViewport<OpenGLContext> readFramebuffer)
     {
-        this.getDrawContents().bindNonColorAttachmentsForDraw();
+        getDrawContents().bindNonColorAttachmentsForDraw();
         readFramebuffer.getReadContents().bindNonColorAttachmentForRead();
 
         IntVector2 srcOffset = readFramebuffer.getOffset();

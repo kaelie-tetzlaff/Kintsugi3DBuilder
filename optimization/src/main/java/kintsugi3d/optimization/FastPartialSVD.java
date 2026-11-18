@@ -67,7 +67,7 @@ public final class FastPartialSVD
 
     public SimpleMatrix getError()
     {
-        return this.matrix;
+        return matrix;
     }
 
     public float[] getSingularValues()
@@ -77,7 +77,7 @@ public final class FastPartialSVD
 
     private FastPartialSVD(SimpleMatrix matrix, int singularValueCount, float tolerance, int maxIterations, int maxAttempts)
     {
-        this.transpose = matrix.numCols() > matrix.numRows();
+        transpose = matrix.numCols() > matrix.numRows();
 
         this.matrix = matrix;
 
@@ -86,14 +86,14 @@ public final class FastPartialSVD
         this.maxIterations = maxIterations;
         this.maxAttempts = maxAttempts;
 
-        this.u = new SimpleMatrix(this.transpose ? this.matrix.numCols() : this.matrix.numRows(), singularValueCount, FMatrixRMaj.class);
-        this.v = new SimpleMatrix(this.transpose ? this.matrix.numRows() : this.matrix.numCols(), singularValueCount, FMatrixRMaj.class);
-        this.singularValues = new float[singularValueCount];
+        u = new SimpleMatrix(transpose ? this.matrix.numCols() : this.matrix.numRows(), singularValueCount, FMatrixRMaj.class);
+        v = new SimpleMatrix(transpose ? this.matrix.numRows() : this.matrix.numCols(), singularValueCount, FMatrixRMaj.class);
+        singularValues = new float[singularValueCount];
     }
 
     private void compute()
     {
-        if (this.matrix != null)
+        if (matrix != null)
         {
             Random random = new SecureRandom();
             //SimpleMatrix a = new SimpleMatrix(this.matrix.numCols(), this.matrix.numCols(), FMatrixRMaj.class);
@@ -104,7 +104,7 @@ public final class FastPartialSVD
 
             for (int k = 0; k < singularValueCount; k++)
             {
-                SimpleMatrix vk = SimpleMatrix.random32(this.v.numRows(), 1, -1, 1, random);
+                SimpleMatrix vk = SimpleMatrix.random32(v.numRows(), 1, -1, 1, random);
                 divide(vk.getMatrix(), (float)vk.normF());
 
                 double ev;
@@ -112,8 +112,8 @@ public final class FastPartialSVD
                 int numIterations;
                 int numAttempts = 0;
 
-                SimpleMatrix vkLast = new SimpleMatrix(this.v.numRows(), 1, FMatrixRMaj.class);
-                SimpleMatrix diff = new SimpleMatrix(this.v.numRows(), 1, FMatrixRMaj.class);
+                SimpleMatrix vkLast = new SimpleMatrix(v.numRows(), 1, FMatrixRMaj.class);
+                SimpleMatrix diff = new SimpleMatrix(v.numRows(), 1, FMatrixRMaj.class);
                 SimpleMatrix intermediateProduct = new SimpleMatrix(u.numRows(), 1, FMatrix.class);
 
                 do
@@ -128,13 +128,13 @@ public final class FastPartialSVD
 
                         if (transpose)
                         {
-                            multTransA(this.matrix.getMatrix(), vkLast.getMatrix(), intermediateProduct.getMatrix());
-                            mult(this.matrix.getMatrix(), intermediateProduct.getMatrix(), vk.getMatrix());
+                            multTransA(matrix.getMatrix(), vkLast.getMatrix(), intermediateProduct.getMatrix());
+                            mult(matrix.getMatrix(), intermediateProduct.getMatrix(), vk.getMatrix());
                         }
                         else
                         {
-                            mult(this.matrix.getMatrix(), vkLast.getMatrix(), intermediateProduct.getMatrix());
-                            multTransA(this.matrix.getMatrix(), intermediateProduct.getMatrix(), vk.getMatrix());
+                            mult(matrix.getMatrix(), vkLast.getMatrix(), intermediateProduct.getMatrix());
+                            multTransA(matrix.getMatrix(), intermediateProduct.getMatrix(), vk.getMatrix());
                         }
 
                         //vk = a.mult(vkLast);
@@ -166,7 +166,7 @@ public final class FastPartialSVD
                     float sv = (float)Math.sqrt(ev);
                     singularValues[k] = sv;
 
-                    SimpleMatrix uk = new SimpleMatrix(this.u.numRows(), 1, FMatrixRMaj.class);
+                    SimpleMatrix uk = new SimpleMatrix(u.numRows(), 1, FMatrixRMaj.class);
 
                     if (transpose)
                     {
@@ -189,7 +189,7 @@ public final class FastPartialSVD
                         v.set(i, k, vk.get(i));
                     }
 
-                    FMatrixRMaj matrixTransposeTimesUk = new FMatrixRMaj(this.v.numRows(), 1);
+                    FMatrixRMaj matrixTransposeTimesUk = new FMatrixRMaj(v.numRows(), 1);
 
                     if (transpose)
                     {

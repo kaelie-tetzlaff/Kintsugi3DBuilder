@@ -125,7 +125,7 @@ public class SplitScreenComponent<ContextType extends Context<ContextType>> impl
     @Override
     public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
-        this.drawInSubdivisions(framebuffer, cameraViewport.getWidth(), cameraViewport.getHeight(), cameraViewport);
+        drawInSubdivisions(framebuffer, cameraViewport.getWidth(), cameraViewport.getHeight(), cameraViewport);
     }
 
     /**
@@ -162,6 +162,6 @@ public class SplitScreenComponent<ContextType extends Context<ContextType>> impl
     public final void setSplit(float splitPercentage, int fullViewportWidth)
     {
         this.splitPercentage = splitPercentage;
-        this.splitPixel = Math.round(fullViewportWidth * splitPercentage);
+        splitPixel = Math.round(fullViewportWidth * splitPercentage);
     }
 }

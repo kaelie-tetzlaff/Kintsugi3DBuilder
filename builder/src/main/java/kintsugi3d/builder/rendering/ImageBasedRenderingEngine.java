@@ -109,9 +109,9 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         this.internalName = internalName;
         this.context = context;
         this.resourceBuilder = resourceBuilder;
-        this.managedResources = true;
-        this.sceneModel = new SceneModel();
-        this.sceneViewportModel = createSceneViewportModel(this.sceneModel);
+        managedResources = true;
+        sceneModel = new SceneModel();
+        sceneViewportModel = createSceneViewportModel(sceneModel);
     }
 
     ImageBasedRenderingEngine(String internalName, ContextType context, GraphicsResourcesImageSpace<ContextType> resources)
@@ -119,10 +119,10 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         this.internalName = internalName;
         this.context = context;
         this.resources = resources;
-        this.resourceBuilder = null;
-        this.managedResources = false;
-        this.sceneModel = new SceneModel();
-        this.sceneViewportModel = createSceneViewportModel(this.sceneModel);
+        resourceBuilder = null;
+        managedResources = false;
+        sceneModel = new SceneModel();
+        sceneViewportModel = createSceneViewportModel(sceneModel);
     }
 
     public final boolean isLoaded()
@@ -156,31 +156,31 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     @Override
     public final GraphicsResourcesImageSpace<ContextType> getResources()
     {
-        return this.resources;
+        return resources;
     }
 
     @Override
     public final DynamicResourceManager getDynamicResourceManager()
     {
-        return this.dynamicResourceLoader;
+        return dynamicResourceLoader;
     }
 
     @Override
     public final void setSafeRegionPadding(int left, int top, int right, int bottom)
     {
-        this.paddingLeft = left;
-        this.paddingTop = top;
-        this.paddingRight = right;
-        this.paddingBottom = bottom;
+        paddingLeft = left;
+        paddingTop = top;
+        paddingRight = right;
+        paddingBottom = bottom;
     }
 
     @Override
     public final void clearSafeRegionPadding()
     {
-        this.paddingLeft = 0;
-        this.paddingTop = 0;
-        this.paddingRight = 0;
-        this.paddingBottom = 0;
+        paddingLeft = 0;
+        paddingTop = 0;
+        paddingRight = 0;
+        paddingBottom = 0;
     }
 
     @Override
@@ -188,25 +188,25 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     {
         try
         {
-            this.simpleTexProgram = context.getShaderProgramBuilder()
+            simpleTexProgram = context.getShaderProgramBuilder()
                     .addShader(ShaderType.VERTEX, new File(new File(new File("shaders"), "common"), "texture.vert"))
                     .addShader(ShaderType.FRAGMENT, new File(new File(new File("shaders"), "common"), "texture.frag"))
                     .createProgram();
 
-            this.rectangleVertices = context.createRectangle();
+            rectangleVertices = context.createRectangle();
 
             if (resourceBuilder != null)
             {
-                this.resources = resourceBuilder
-                    .setProgressMonitor(this.progressMonitor) // Use the progress monitor that offsets the stage count if generating preview images
+                resources = resourceBuilder
+                    .setProgressMonitor(progressMonitor) // Use the progress monitor that offsets the stage count if generating preview images
 //                .generateUndistortedPreviewImages()
                     .create();
 
                 context.flush();
             }
 
-            this.simpleTexDrawable = context.createDrawable(simpleTexProgram);
-            this.simpleTexDrawable.addVertexBuffer("position", this.rectangleVertices);
+            simpleTexDrawable = context.createDrawable(simpleTexProgram);
+            simpleTexDrawable.addVertexBuffer("position", rectangleVertices);
 
             ViewSelection viewSelection = new ViewSelectionImpl(getViewSet(), sceneModel);
 
@@ -229,11 +229,11 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
             lightCalibrationSplitScreen = new SplitScreenComponent<>(lightCalibration, lightCalibration3DRoot);
 
-            this.subject = scene.getSubject();
-            this.dynamicResourceLoader = new DynamicResourceLoader<>(progressMonitor,
+            subject = scene.getSubject();
+            dynamicResourceLoader = new DynamicResourceLoader<>(progressMonitor,
                 resources, subject, litRoot.getLightingResources());
 
-            this.updateWorldSpaceDefinition();
+            updateWorldSpaceDefinition();
 
             FramebufferSize framebufferSize = context.getDefaultFramebuffer().getSize();
             FramebufferObject<ContextType> firstShadingFBO =
@@ -256,20 +256,20 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         catch (UserCancellationException e)
         {
             LOG.info("User cancelled operation while initializing ProjectRenderingEngine:", e);
-            this.close();
-            if (this.progressMonitor != null)
+            close();
+            if (progressMonitor != null)
             {
-                this.progressMonitor.cancelComplete(e);
+                progressMonitor.cancelComplete(e);
             }
             throw new InitializationException(e);
         }
         catch (RuntimeException|IOException e)
         {
             LOG.error("Error occurred initializing ProjectRenderingEngine:", e);
-            this.close();
-            if (this.progressMonitor != null)
+            close();
+            if (progressMonitor != null)
             {
-                this.progressMonitor.fail(e);
+                progressMonitor.fail(e);
             }
             throw new InitializationException(e);
         }
@@ -290,7 +290,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
             LOG.error("Error occurred during update:", e);
         }
 
-        this.updateWorldSpaceDefinition();
+        updateWorldSpaceDefinition();
     }
 
     private void updateWorldSpaceDefinition()
@@ -372,7 +372,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     {
         try
         {
-            if(this.sceneModel.getSettingsModel().getBoolean("multisamplingEnabled"))
+            if(sceneModel.getSettingsModel().getBoolean("multisamplingEnabled"))
             {
                 context.getState().enableMultisampling();
             }
@@ -450,7 +450,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
                 // for components that reference it (like environment & backplate)
                 Vector3 clearColor = calculateClearColor();
                 offscreenFBO.clearColorBuffer(0, clearColor.x, clearColor.y, clearColor.z, 1.0f);
-                this.sceneModel.setClearColor(clearColor);
+                sceneModel.setClearColor(clearColor);
 
                 Matrix4 view = modelViewOverride != null ? sceneModel.getViewFromModelViewMatrix(modelViewOverride)
                         : sceneModel.getCurrentViewMatrix();
@@ -481,9 +481,9 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
                     projectLoaded.notify(new ProjectLoadedEvent(getGeometry().getBoundingBoxSize()));
 
-                    if (this.progressMonitor != null)
+                    if (progressMonitor != null)
                     {
-                        this.progressMonitor.complete();
+                        progressMonitor.complete();
                     }
                 }
             }
@@ -573,21 +573,21 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     @Override
     public final ReadonlyVertexGeometry getGeometry()
     {
-        return this.resources.getGeometry();
+        return resources.getGeometry();
     }
 
     @Override
     public final ViewSet getViewSet()
     {
-        return this.resources.getViewSet();
+        return resources.getViewSet();
     }
 
     @Override
     public final String toString()
     {
-        return this.internalName.length() > 32
-                ? String.format("...%s", this.internalName.substring(this.internalName.length() - 31))
-                : this.internalName;
+        return internalName.length() > 32
+                ? String.format("...%s", internalName.substring(internalName.length() - 31))
+                : internalName;
     }
 
     @Override
@@ -638,7 +638,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
             try
             {
-                this.updateWorldSpaceDefinition();
+                updateWorldSpaceDefinition();
 
                 Matrix4 transform = sceneModel.getFullModelMatrix();
 

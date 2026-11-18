@@ -39,6 +39,6 @@ public interface ProgressMonitoredGraphicsRequest extends GraphicsRequest
     default <ContextType extends Context<ContextType>> void executeRequest(ContextType context) throws Exception
     {
         // Use a default ProgressMonitor that does nothing but doesn't cause null pointer exceptions
-        this.executeRequest(context, new DefaultProgressMonitor());
+        executeRequest(context, new DefaultProgressMonitor());
     }
 }

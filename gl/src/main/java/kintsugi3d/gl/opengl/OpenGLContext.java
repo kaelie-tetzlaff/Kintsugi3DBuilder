@@ -50,13 +50,13 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
     OpenGLContext(long handle)
     {
         super(handle);
-        this.state = new OpenGLContextState();
+        state = new OpenGLContextState();
 
         //noinspection ThisEscapedInObjectConstruction
-        this.textureFactory = new OpenGLTextureFactory(this);
+        textureFactory = new OpenGLTextureFactory(this);
 
-        this.textureBindings = new HashMap<>(48);
-        this.uniformBufferBindings = new HashMap<>(24);
+        textureBindings = new HashMap<>(48);
+        uniformBufferBindings = new HashMap<>(24);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
     @Override
     public final OpenGLContextState getState()
     {
-        return this.state;
+        return state;
     }
 
     @Override
@@ -100,7 +100,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
     @Override
     public final DoubleFramebuffer<OpenGLContext> getDefaultFramebuffer()
     {
-        return this.defaultFramebuffer;
+        return defaultFramebuffer;
     }
 
     final void setDefaultFramebuffer(DoubleFramebuffer<OpenGLContext> defaultFramebuffer)
@@ -148,7 +148,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
     @Override
     public final TextureFactory<OpenGLContext> getTextureFactory()
     {
-        return this.textureFactory;
+        return textureFactory;
     }
 
     static int getDataTypeConstant(NativeDataType dataType)

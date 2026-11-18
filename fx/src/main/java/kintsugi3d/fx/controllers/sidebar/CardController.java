@@ -71,7 +71,7 @@ public class CardController
     {
         this.cardsModel = cardsModel;
 
-        this.setCardVisibility(false);
+        setCardVisibility(false);
 
         if (dataCard.getFullResImageFilePath() == null) //if file path is null it disables the checkboxes for the icons
         {
@@ -106,7 +106,7 @@ public class CardController
 
     public final void refresh(ProjectDataCard refreshedDataCard)
     {
-        this.cardId = refreshedDataCard.getCardId();
+        cardId = refreshedDataCard.getCardId();
 
         if (refreshedDataCard.isEnabled())
         {

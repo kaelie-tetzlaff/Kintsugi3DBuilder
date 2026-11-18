@@ -77,7 +77,7 @@ public class BasisOptimizationSettings extends BasisSettings implements Readonly
     @Override
     public final double getMetallicity()
     {
-        return this.metallicity;
+        return metallicity;
     }
 
     /**

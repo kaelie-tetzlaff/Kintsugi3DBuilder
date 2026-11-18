@@ -39,7 +39,7 @@ public abstract class ExperienceBase implements Experience
     public final void initialize(Window parentWindow, JavaFXState state)
     {
         this.parentWindow = parentWindow;
-        this.modal = new Modal(parentWindow);
+        modal = new Modal(parentWindow);
         this.state = state;
 
         if (state != null)
@@ -59,7 +59,7 @@ public abstract class ExperienceBase implements Experience
     @Override
     public final boolean isOpen()
     {
-        return this.modal.isOpen();
+        return modal.isOpen();
     }
 
     @Override

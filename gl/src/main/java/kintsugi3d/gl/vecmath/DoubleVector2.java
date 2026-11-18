@@ -68,7 +68,7 @@ public class DoubleVector2 implements Iterable<Double>
 
     public final DoubleVector3 asVector3(double z)
     {
-        return new DoubleVector3(this.x, this.y, z);
+        return new DoubleVector3(x, y, z);
     }
 
     public final DoubleVector4 asPosition()
@@ -83,17 +83,17 @@ public class DoubleVector2 implements Iterable<Double>
 
     public final DoubleVector4 asVector4(double z, double w)
     {
-        return new DoubleVector4(this.x, this.y, z, w);
+        return new DoubleVector4(x, y, z, w);
     }
 
     public final IntVector2 rounded()
     {
-        return new IntVector2((int)Math.round(this.x), (int)Math.round(this.y));
+        return new IntVector2((int)Math.round(x), (int)Math.round(y));
     }
 
     public final IntVector2 truncated()
     {
-        return new IntVector2((int)this.x, (int)this.y);
+        return new IntVector2((int) x, (int) y);
     }
 
     public final Vector2 asSinglePrecision()
@@ -104,62 +104,62 @@ public class DoubleVector2 implements Iterable<Double>
     public final DoubleVector2 plus(DoubleVector2 other)
     {
         return new DoubleVector2(
-            this.x + other.x,
-            this.y + other.y
+            x + other.x,
+            y + other.y
         );
     }
 
     public final DoubleVector2 minus(DoubleVector2 other)
     {
         return new DoubleVector2(
-            this.x - other.x,
-            this.y - other.y
+            x - other.x,
+            y - other.y
         );
     }
 
     public final DoubleVector2 negated()
     {
-        return new DoubleVector2(-this.x, -this.y);
+        return new DoubleVector2(-x, -y);
     }
 
     public final DoubleVector2 times(double s)
     {
-        return new DoubleVector2(s*this.x, s*this.y);
+        return new DoubleVector2(s* x, s* y);
     }
 
     public final DoubleVector2 dividedBy(double s)
     {
-        return new DoubleVector2(this.x/s, this.y/s);
+        return new DoubleVector2(x/s, y/s);
     }
 
     public final DoubleVector2 times(DoubleVector2 other)
     {
-        return new DoubleVector2(this.x * other.x, this.y * other.y);
+        return new DoubleVector2(x * other.x, y * other.y);
     }
 
     public final DoubleVector2 dividedBy(DoubleVector2 other)
     {
-        return new DoubleVector2(this.x / other.x, this.y / other.y);
+        return new DoubleVector2(x / other.x, y / other.y);
     }
 
     public final double dot(DoubleVector2 other)
     {
-        return this.x * other.x + this.y * other.y;
+        return x * other.x + y * other.y;
     }
 
     public final double length()
     {
-        return Math.sqrt(this.dot(this));
+        return Math.sqrt(dot(this));
     }
 
     public final double distance(DoubleVector2 other)
     {
-        return this.minus(other).length();
+        return minus(other).length();
     }
 
     public final DoubleVector2 normalized()
     {
-        return this.times(1.0 / this.length());
+        return times(1.0 / length());
     }
 
     /**
@@ -169,14 +169,14 @@ public class DoubleVector2 implements Iterable<Double>
      */
     public final DoubleVector2 normalizedSafe()
     {
-        double l = this.length();
+        double l = length();
         if (l == 0.0f)
         {
             return this;
         }
         else
         {
-            return this.times(1.0f / l);
+            return times(1.0f / l);
         }
     }
 

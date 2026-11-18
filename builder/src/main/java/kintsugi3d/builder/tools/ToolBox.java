@@ -207,8 +207,8 @@ public final class ToolBox implements CanvasListener
     {
         this.toolBindingModel = toolBindingModel;
 
-        this.dragTools = new EnumMap<>(DragToolType.class);
-        this.keyPressTools = new EnumMap<>(KeyPressToolType.class);
+        dragTools = new EnumMap<>(DragToolType.class);
+        keyPressTools = new EnumMap<>(KeyPressToolType.class);
 
         Map<DragToolType, ToolBuilder<? extends DragTool>> dragToolBuilders = new EnumMap<>(DragToolType.class);
         dragToolBuilders.put(DragToolType.DOLLY, DollyTool.getBuilder());

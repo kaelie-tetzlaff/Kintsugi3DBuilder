@@ -102,11 +102,11 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
 
         if (textureType == TextureType.NULL)
         {
-            this.textureId = 0;
+            textureId = 0;
         }
         else
         {
-            this.textureId = glGenTextures();
+            textureId = glGenTextures();
             OpenGLContext.errorCheck();
         }
     }
@@ -129,25 +129,25 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     @Override
     public final OpenGLContext getContext()
     {
-        return this.context;
+        return context;
     }
 
     @Override
     public final ColorFormat getInternalUncompressedColorFormat()
     {
-        return this.colorFormat;
+        return colorFormat;
     }
 
     @Override
     public final CompressionFormat getInternalCompressedColorFormat()
     {
-        return this.compressionFormat;
+        return compressionFormat;
     }
 
     @Override
     public final boolean isInternalFormatCompressed()
     {
-        return this.compressionFormat != null;
+        return compressionFormat != null;
     }
 
     @Override
@@ -159,12 +159,12 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     @Override
     public final int getMipmapLevelCount()
     {
-        return this.mipmapLevelCount;
+        return mipmapLevelCount;
     }
 
     protected final int getTextureTarget()
     {
-        return this.textureTarget;
+        return textureTarget;
     }
 
     final void bind()
@@ -174,12 +174,12 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
 
     final int getTextureId()
     {
-        return this.textureId;
+        return textureId;
     }
 
     final void invalidateMipmaps()
     {
-        this.staleMipmaps = true;
+        staleMipmaps = true;
     }
 
     final void bindToTextureUnit(int textureUnitIndex)
@@ -188,21 +188,21 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         {
             throw new IllegalArgumentException("Texture unit index cannot be negative.");
         }
-        else if (textureUnitIndex > this.context.getState().getMaxCombinedTextureImageUnits())
+        else if (textureUnitIndex > context.getState().getMaxCombinedTextureImageUnits())
         {
             throw new IllegalArgumentException("Texture unit index (" + textureUnitIndex + ") is greater than the maximum allowed index (" +
-                    (this.context.getState().getMaxCombinedTextureImageUnits()-1) + ").");
+                    (context.getState().getMaxCombinedTextureImageUnits()-1) + ").");
         }
 
         context.bindTextureToUnit(textureUnitIndex, this);
 
-        if(this.staleMipmaps)
+        if(staleMipmaps)
         {
             // Create mipmaps
-            glGenerateMipmap(this.textureTarget);
+            glGenerateMipmap(textureTarget);
             OpenGLContext.errorCheck();
 
-            this.staleMipmaps = false;
+            staleMipmaps = false;
         }
     }
 
@@ -223,29 +223,29 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         {
             if (maxMipmapLevel < Integer.MAX_VALUE)
             {
-                glTexParameteri(this.textureTarget, GL_TEXTURE_MAX_LEVEL, maxMipmapLevel);
+                glTexParameteri(textureTarget, GL_TEXTURE_MAX_LEVEL, maxMipmapLevel);
                 OpenGLContext.errorCheck();
             }
 
             if (generateMipmaps)
             {
                 // Create mipmaps
-                glGenerateMipmap(this.textureTarget);
+                glGenerateMipmap(textureTarget);
                 OpenGLContext.errorCheck();
             }
 
             if (useLinearFiltering)
             {
-                glTexParameteri(this.textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+                glTexParameteri(textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
                 OpenGLContext.errorCheck();
-                glTexParameteri(this.textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                glTexParameteri(textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                 OpenGLContext.errorCheck();
             }
             else
             {
-                glTexParameteri(this.textureTarget, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+                glTexParameteri(textureTarget, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
                 OpenGLContext.errorCheck();
-                glTexParameteri(this.textureTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                glTexParameteri(textureTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 OpenGLContext.errorCheck();
             }
         }
@@ -253,16 +253,16 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         {
             if (useLinearFiltering)
             {
-                glTexParameteri(this.textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
                 OpenGLContext.errorCheck();
-                glTexParameteri(this.textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                glTexParameteri(textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                 OpenGLContext.errorCheck();
             }
             else
             {
-                glTexParameteri(this.textureTarget, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                glTexParameteri(textureTarget, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                 OpenGLContext.errorCheck();
-                glTexParameteri(this.textureTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                glTexParameteri(textureTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 OpenGLContext.errorCheck();
             }
         }
@@ -273,18 +273,18 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         if (parameters.useMipmaps)
         {
             // Calculate the number of mipmap levels
-            this.mipmapLevelCount = 0;
+            mipmapLevelCount = 0;
             int dim = maxDimension;
-            while (dim > 0 && this.mipmapLevelCount < maxMipmapLevel)
+            while (dim > 0 && mipmapLevelCount < maxMipmapLevel)
             {
-                this.mipmapLevelCount++;
+                mipmapLevelCount++;
                 dim /= 2;
             }
         }
         else
         {
             // No mipmaps
-            this.mipmapLevelCount = 1;
+            mipmapLevelCount = 1;
         }
     }
 
@@ -455,7 +455,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
 
     final boolean hasIntegerInternalFormat()
     {
-        return !this.isInternalFormatCompressed() && this.colorFormat.isInteger();
+        return !isInternalFormatCompressed() && colorFormat.isInteger();
     }
 
     private static Stream<Entry<Integer, int[]>> getScanlineStream(BufferedImage colorImg, boolean flipVertical)
@@ -648,7 +648,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     {
         if (live)
         {
-            glDeleteTextures(this.textureId);
+            glDeleteTextures(textureId);
             OpenGLContext.errorCheck();
             live = false;
         }
@@ -661,18 +661,18 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         {
             throw new IllegalArgumentException("Texture level cannot be negative.");
         }
-        if (level > this.mipmapLevelCount)
+        if (level > mipmapLevelCount)
         {
-            throw new IllegalArgumentException("Illegal level index: " + level + ".  The texture only has " + this.mipmapLevelCount + " levels.");
+            throw new IllegalArgumentException("Illegal level index: " + level + ".  The texture only has " + mipmapLevelCount + " levels.");
         }
-        glFramebufferTexture(GL_DRAW_FRAMEBUFFER, attachment, this.textureId, level);
+        glFramebufferTexture(GL_DRAW_FRAMEBUFFER, attachment, textureId, level);
         OpenGLContext.errorCheck();
     }
 
     @Override
     public final void attachToReadFramebuffer(int attachment, int level)
     {
-        glFramebufferTexture(GL_READ_FRAMEBUFFER, attachment, this.textureId, level);
+        glFramebufferTexture(GL_READ_FRAMEBUFFER, attachment, textureId, level);
         OpenGLContext.errorCheck();
     }
 }

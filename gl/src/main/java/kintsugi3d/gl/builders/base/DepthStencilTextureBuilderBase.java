@@ -26,7 +26,7 @@ public abstract class DepthStencilTextureBuilderBase<ContextType extends Context
 
     protected final boolean isFloatingPointEnabled()
     {
-        return this.floatingPoint;
+        return floatingPoint;
     }
 
     protected DepthStencilTextureBuilderBase(ContextType context)
@@ -37,7 +37,7 @@ public abstract class DepthStencilTextureBuilderBase<ContextType extends Context
     @Override
     public final DepthStencilTextureBuilderBase<ContextType, TextureType> setFloatingPointDepthEnabled(boolean enabled)
     {
-        this.floatingPoint = enabled;
+        floatingPoint = enabled;
         return this;
     }
 

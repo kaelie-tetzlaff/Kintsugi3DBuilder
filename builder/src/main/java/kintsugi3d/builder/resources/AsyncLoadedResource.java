@@ -106,16 +106,16 @@ public class AsyncLoadedResource<CPUResourceType, GPUResourceType>
         if (file == null)
         {
             // Unload requested
-            if (this.loadable.isLoaded())
+            if (loadable.isLoaded())
             {
-                this.unloadRequested = true;
+                unloadRequested = true;
             }
 
             synchronized (lock)
             {
-                this.currentFile = null;
-                this.newData = null;
-                this.previewImage = null;
+                currentFile = null;
+                newData = null;
+                previewImage = null;
             }
 
             return null;
@@ -125,7 +125,7 @@ public class AsyncLoadedResource<CPUResourceType, GPUResourceType>
             LOG.info("Loading new resource: {}", file);
 
             // Update desired file immediately so concurrent callers can see the latest request
-            this.desiredFile = file;
+            desiredFile = file;
 
             long lastModifiedNew = file.lastModified();
 
@@ -133,33 +133,33 @@ public class AsyncLoadedResource<CPUResourceType, GPUResourceType>
             {
                 // Check if this request is still the desired one; if a newer call updated desiredFile, skip loading
                 if (Objects.equals(file, desiredFile) &&
-                    (!Objects.equals(file, currentFile) || lastModifiedNew != this.lastModified))
+                    (!Objects.equals(file, currentFile) || lastModifiedNew != lastModified))
                 {
                     // Check for conflicting process only when we are about to do work
                     if (progressMonitor != null && progressMonitor.isConflictingProcess())
                     {
-                        return this.previewImage;
+                        return previewImage;
                     }
 
                     if (progressMonitor != null)
                     {
                         progressMonitor.start();
                         progressMonitor.setMaxProgress(0.0);
-                        progressMonitor.setProcessName(this.loadable.getProcessName());
+                        progressMonitor.setProcessName(loadable.getProcessName());
                     }
 
                     try
                     {
-                        CPUResourceType data = this.loadable.loadCPU(file);
+                        CPUResourceType data = loadable.loadCPU(file);
                         if (data != null)
                         {
-                            this.newData = data;
-                            this.currentFile = file;
-                            this.lastModified = lastModifiedNew;
-                            this.newDataAvailable = true;
-                            this.previewImage = this.loadable.getPreviewImage(data);
+                            newData = data;
+                            currentFile = file;
+                            lastModified = lastModifiedNew;
+                            newDataAvailable = true;
+                            previewImage = loadable.getPreviewImage(data);
                         }
-                        return this.previewImage;
+                        return previewImage;
                     }
                     catch (FileNotFoundException e)
                     {
@@ -168,11 +168,11 @@ public class AsyncLoadedResource<CPUResourceType, GPUResourceType>
                     catch (IOException e)
                     {
                         LOG.error("Error loading resource:", e);
-                        return this.previewImage;
+                        return previewImage;
                     }
                 }
 
-                return this.previewImage;
+                return previewImage;
             }
         }
         else
@@ -193,13 +193,13 @@ public class AsyncLoadedResource<CPUResourceType, GPUResourceType>
      */
     public final void consume(ProgressMonitor progressMonitor)
     {
-        if (this.unloadRequested)
+        if (unloadRequested)
         {
-            this.loadable.consume(null);
-            this.unloadRequested = false;
+            loadable.consume(null);
+            unloadRequested = false;
         }
 
-        if (this.newDataAvailable)
+        if (newDataAvailable)
         {
             try
             {
@@ -207,17 +207,17 @@ public class AsyncLoadedResource<CPUResourceType, GPUResourceType>
 
                 synchronized (lock)
                 {
-                    if (this.newData != null)
+                    if (newData != null)
                     {
-                        CPUResourceType data = this.newData;
-                        this.newData = null;
-                        newResource = this.loadable.loadGPU(data);
+                        CPUResourceType data = newData;
+                        newData = null;
+                        newResource = loadable.loadGPU(data);
                     }
                 }
 
                 if (newResource != null)
                 {
-                    this.loadable.consume(newResource);
+                    loadable.consume(newResource);
                 }
             }
             catch (RuntimeException e)
@@ -226,7 +226,7 @@ public class AsyncLoadedResource<CPUResourceType, GPUResourceType>
             }
             finally
             {
-                this.newDataAvailable = false;
+                newDataAvailable = false;
 
                 if (progressMonitor != null)
                 {

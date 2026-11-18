@@ -27,12 +27,12 @@ public abstract class DepthTextureBuilderBase<ContextType extends Context<Contex
 
     protected final int getInternalPrecision()
     {
-        return this.precision;
+        return precision;
     }
 
     protected final boolean isFloatingPointEnabled()
     {
-        return this.floatingPoint;
+        return floatingPoint;
     }
 
     protected DepthTextureBuilderBase(ContextType context)
@@ -50,7 +50,7 @@ public abstract class DepthTextureBuilderBase<ContextType extends Context<Contex
     @Override
     public final DepthTextureBuilderBase<ContextType, TextureType> setFloatingPointEnabled(boolean enabled)
     {
-        this.floatingPoint = enabled;
+        floatingPoint = enabled;
         return this;
     }
 

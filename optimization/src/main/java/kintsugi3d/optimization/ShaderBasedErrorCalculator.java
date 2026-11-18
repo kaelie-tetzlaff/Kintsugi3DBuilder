@@ -42,14 +42,14 @@ public final class ShaderBasedErrorCalculator<ContextType extends Context<Contex
     private ShaderBasedErrorCalculator(ContextType context, Supplier<ProgramObject<ContextType>> programFactory,
         Function<Program<ContextType>, Drawable<ContextType>> drawableFactory, int imageWidth, int imageHeight)
     {
-        this.program = programFactory.get();
-        this.drawable = drawableFactory.apply(program);
+        program = programFactory.get();
+        drawable = drawableFactory.apply(program);
 
-        this.framebuffer = context.buildFramebufferObject(imageWidth, imageHeight)
+        framebuffer = context.buildFramebufferObject(imageWidth, imageHeight)
                 .addColorAttachment(ColorFormat.RGBA32F)
                 .addDepthAttachment()
                 .createFramebufferObject();
-        this.report = new ErrorReport(imageWidth * imageHeight);
+        report = new ErrorReport(imageWidth * imageHeight);
     }
 
     public Program<ContextType> getProgram()

@@ -82,7 +82,7 @@ public interface ColorTextureReader
      */
     default void readARGB(ByteBuffer destination)
     {
-        this.readARGB(destination, 0, 0, getWidth(), getHeight());
+        readARGB(destination, 0, 0, getWidth(), getHeight());
     }
 
     /**
@@ -92,7 +92,7 @@ public interface ColorTextureReader
      */
     default void readFloatingPointRGBA(FloatBuffer destination)
     {
-        this.readFloatingPointRGBA(destination, 0, 0, getWidth(), getHeight());
+        readFloatingPointRGBA(destination, 0, 0, getWidth(), getHeight());
     }
 
     /**
@@ -102,7 +102,7 @@ public interface ColorTextureReader
      */
     default void readIntegerRGBA(IntBuffer destination)
     {
-        this.readIntegerRGBA(destination, 0, 0, getWidth(), getHeight());
+        readIntegerRGBA(destination, 0, 0, getWidth(), getHeight());
     }
 
     /**
@@ -113,7 +113,7 @@ public interface ColorTextureReader
      */
     default int[] readARGB()
     {
-        return this.readARGB(0, 0, getWidth(), getHeight());
+        return readARGB(0, 0, getWidth(), getHeight());
     }
 
     /**
@@ -146,7 +146,7 @@ public interface ColorTextureReader
      */
     default float[] readFloatingPointRGBA()
     {
-        return this.readFloatingPointRGBA(0, 0, getWidth(), getHeight());
+        return readFloatingPointRGBA(0, 0, getWidth(), getHeight());
     }
 
     /**
@@ -191,7 +191,7 @@ public interface ColorTextureReader
      */
     default int[] readIntegerRGBA()
     {
-        return this.readIntegerRGBA(0, 0, getWidth(), getHeight());
+        return readIntegerRGBA(0, 0, getWidth(), getHeight());
     }
 
     /**

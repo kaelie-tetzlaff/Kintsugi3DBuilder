@@ -36,7 +36,7 @@ public class ProjectDataCard
         Map<String, String> textFields, Collection<? extends Map<String, Runnable>> actionGroups, boolean isEnabled)
     {
         this.internalName = internalName;
-        this.cardId = UUID.randomUUID();
+        cardId = UUID.randomUUID();
         this.title = title;
         this.fullResImageFilePath = fullResImageFilePath;
         this.thumbnailPath = thumbnailPath;

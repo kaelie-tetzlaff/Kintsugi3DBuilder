@@ -59,7 +59,7 @@ final class PanTool implements DragTool
     @Override
     public void mouseButtonPressed(CursorPosition cursorPosition, CanvasSize canvasSize)
     {
-        this.mouseStart = cursorPosition;
+        mouseStart = cursorPosition;
 
         oldCenter = cameraModel.getTarget();
         orbit = cameraModel.getOrbit();

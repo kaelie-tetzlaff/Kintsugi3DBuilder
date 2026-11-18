@@ -60,7 +60,7 @@ public final class MultiplierTool implements KeyPressTool
         {
             this.getter = getter;
             this.setter = setter;
-            this.factor = type.getFactor();
+            factor = type.getFactor();
         }
 
         @Override
@@ -119,6 +119,6 @@ public final class MultiplierTool implements KeyPressTool
     @Override
     public void keyPressed()
     {
-        setter.accept(getter.getAsDouble() * this.factor);
+        setter.accept(getter.getAsDouble() * factor);
     }
 }

@@ -54,7 +54,7 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
     public final GraphicsStream<ColorList[]> stream(
         Drawable<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer, int attachmentCount)
     {
-        return new SequentialViewRenderStream<>(this.resources.getViewSet().getEnabledViews(), drawable, framebuffer, attachmentCount);
+        return new SequentialViewRenderStream<>(resources.getViewSet().getEnabledViews(), drawable, framebuffer, attachmentCount);
     }
 
     /**
@@ -69,7 +69,7 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
     public final GraphicsStream<ColorList> stream(
         Drawable<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer)
     {
-        return new SequentialViewRenderStream<>(this.resources.getViewSet().getEnabledViews(), drawable, framebuffer, 1)
+        return new SequentialViewRenderStream<>(resources.getViewSet().getEnabledViews(), drawable, framebuffer, 1)
             .map(singletonList -> singletonList[0]);
     }
 
@@ -92,7 +92,7 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
     {
         return new GraphicsStreamResource<>(programBuilder, framebufferBuilder,
             (program, framebuffer) -> new SequentialViewRenderStream<>(
-                this.resources.getViewSet().getEnabledViews(), this.resources.createDrawable(program), framebuffer,
+                resources.getViewSet().getEnabledViews(), resources.createDrawable(program), framebuffer,
                 framebuffer.getColorAttachmentCount()));
     }
 
@@ -111,7 +111,7 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
     public final GraphicsStream<ColorList[]> parallelStream(
         Drawable<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer, int attachmentCount, int maxRunningThreads)
     {
-        return new ParallelViewRenderStream<>(this.resources.getViewSet().getEnabledViews(), drawable, framebuffer,
+        return new ParallelViewRenderStream<>(resources.getViewSet().getEnabledViews(), drawable, framebuffer,
                 attachmentCount, maxRunningThreads);
     }
 
@@ -129,7 +129,7 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
     public final GraphicsStream<ColorList[]> parallelStream(
         Drawable<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer, int attachmentCount)
     {
-        return new ParallelViewRenderStream<>(this.resources.getViewSet().getEnabledViews(), drawable, framebuffer, attachmentCount);
+        return new ParallelViewRenderStream<>(resources.getViewSet().getEnabledViews(), drawable, framebuffer, attachmentCount);
     }
 
     /**
@@ -144,7 +144,7 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
     public final GraphicsStream<ColorList> parallelStream(
         Drawable<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer)
     {
-        return new ParallelViewRenderStream<>(this.resources.getViewSet().getEnabledViews(), drawable, framebuffer, 1)
+        return new ParallelViewRenderStream<>(resources.getViewSet().getEnabledViews(), drawable, framebuffer, 1)
             .map(singletonList -> singletonList[0]);
     }
 
@@ -170,7 +170,7 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
     {
         return new GraphicsStreamResource<>(programBuilder, framebufferBuilder,
             (program, framebuffer) -> new ParallelViewRenderStream<>(
-                this.resources.getViewSet().getEnabledViews(), this.resources.createDrawable(program), framebuffer,
+                resources.getViewSet().getEnabledViews(), resources.createDrawable(program), framebuffer,
                 framebuffer.getColorAttachmentCount(), maxRunningThreads));
     }
 
@@ -194,7 +194,7 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
     {
         return new GraphicsStreamResource<>(programBuilder, framebufferBuilder,
             (program, framebuffer) -> new ParallelViewRenderStream<>(
-                this.resources.getViewSet().getEnabledViews(), this.resources.createDrawable(program), framebuffer,
+                resources.getViewSet().getEnabledViews(), resources.createDrawable(program), framebuffer,
                 framebuffer.getColorAttachmentCount()));
     }
 }

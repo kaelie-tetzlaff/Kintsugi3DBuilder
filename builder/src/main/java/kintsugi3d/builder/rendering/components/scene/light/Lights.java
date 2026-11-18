@@ -58,7 +58,7 @@ public class Lights<ContextType extends Context<ContextType>> extends ShaderComp
     @Override
     protected final void onInitialize()
     {
-        this.lightTexture = resource(new RadialTextureGenerator<>(getContext())
+        lightTexture = resource(new RadialTextureGenerator<>(getContext())
             .buildBloomTexture(64)
             .setLinearFilteringEnabled(true)
             .setMipmapsEnabled(true)
@@ -83,15 +83,15 @@ public class Lights<ContextType extends Context<ContextType>> extends ShaderComp
     @Override
     public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
-        if (this.sceneModel.getSettingsModel().getBoolean("relightingEnabled")
-            && this.sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled"))
+        if (sceneModel.getSettingsModel().getBoolean("relightingEnabled")
+            && sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled"))
         {
             getContext().getState().disableDepthWrite();
             getContext().getState().enableDepthTest();
             getContext().getState().setBlendFunction(new BlendFunction(Weight.ONE, Weight.ONE));
 
-            this.getDrawable().program().setUniform("projection", cameraViewport.getViewportProjection());
-            this.getDrawable().program().setTexture("grayscaleTex", this.lightTexture);
+            getDrawable().program().setUniform("projection", cameraViewport.getViewportProjection());
+            getDrawable().program().setTexture("grayscaleTex", lightTexture);
 
             // Draw lights
             for (int i = 0; i < sceneModel.getLightingModel().getLightCount(); i++)
@@ -99,15 +99,15 @@ public class Lights<ContextType extends Context<ContextType>> extends ShaderComp
                 Matrix4 widgetTransformation = cameraViewport.getView().times(sceneModel.getInverseLightViewMatrix(i));
 
                 getContext().getState().setBlendFunction(new BlendFunction(Weight.ONE, Weight.ONE));
-                this.getDrawable().program().setUniform("objectID", sceneViewportModel.lookupSceneObjectID(getSceneObjectTag(i)));
-                this.getDrawable().program().setUniform("color", sceneModel.getLightingModel().getLightPrototype(i).getColor().times((float) Math.PI));
+                getDrawable().program().setUniform("objectID", sceneViewportModel.lookupSceneObjectID(getSceneObjectTag(i)));
+                getDrawable().program().setUniform("color", sceneModel.getLightingModel().getLightPrototype(i).getColor().times((float) Math.PI));
 
                 Vector3 lightPosition = widgetTransformation.getColumn(3).getXYZ();
 
-                this.getDrawable().program().setUniform("model_view",
+                getDrawable().program().setUniform("model_view",
                     Matrix4.translate(lightPosition)
                         .times(Matrix4.scale(-lightPosition.z / 32.0f, -lightPosition.z / 32.0f, 1.0f)));
-                this.getDrawable().draw(PrimitiveMode.TRIANGLE_FAN, cameraViewport.ofFramebuffer(framebuffer));
+                getDrawable().draw(PrimitiveMode.TRIANGLE_FAN, cameraViewport.ofFramebuffer(framebuffer));
             }
 
             getContext().getState().disableBlending();

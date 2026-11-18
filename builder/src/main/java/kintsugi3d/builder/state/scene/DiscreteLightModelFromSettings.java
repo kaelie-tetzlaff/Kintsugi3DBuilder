@@ -32,7 +32,7 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     @Override
     public final void setLog10Distance(float log10Distance)
     {
-        if (!this.isLocked())
+        if (!isLocked())
         {
             getLightSettings().setLog10Distance(log10Distance);
         }
@@ -49,7 +49,7 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     @Override
     public final void setTarget(Vector3 target)
     {
-        if (!this.isLocked())
+        if (!isLocked())
         {
             getLightSettings().setTargetX(target.x);
             getLightSettings().setTargetY(target.y);
@@ -78,7 +78,7 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     @Override
     public final void setAzimuth(float azimuth)
     {
-        if (!this.isLocked())
+        if (!isLocked())
         {
             getLightSettings().setAzimuth(azimuth);
         }
@@ -105,7 +105,7 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     @Override
     public final void setInclination(float inclination)
     {
-        if (!this.isLocked())
+        if (!isLocked())
         {
             getLightSettings().setInclination(inclination);
         }
@@ -160,7 +160,7 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     @Override
     public final void setColor(Vector3 color)
     {
-        if (!this.isLocked())
+        if (!isLocked())
         {
             LightSettings lightInstance = getLightSettings();
             double intensity = lightInstance.getIntensity();
@@ -186,7 +186,7 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     @Override
     public final void setSpotSize(float spotSize)
     {
-        if (!this.isLocked())
+        if (!isLocked())
         {
             getLightSettings().setSpotSize(spotSize * 180 / Math.PI);
         }
@@ -201,7 +201,7 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     @Override
     public final void setSpotTaper(float spotTaper)
     {
-        if (!this.isLocked())
+        if (!isLocked())
         {
             getLightSettings().setSpotTaper(spotTaper);
         }

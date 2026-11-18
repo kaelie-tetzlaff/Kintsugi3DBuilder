@@ -98,11 +98,11 @@ public final class AlbedoORMOptimization<ContextType extends Context<ContextType
         if (TextureResources.getTextureFile(StandardTexture.OCCLUSION, priorSolutionDirectory).exists())
         {
             // Load occlusion map if it exists (to pack it into the red channel of ORM if reoptimizing)
-            this.occlusionMap = TextureResources.loadTexture(StandardTexture.OCCLUSION, priorSolutionDirectory, context);
+            occlusionMap = TextureResources.loadTexture(StandardTexture.OCCLUSION, priorSolutionDirectory, context);
         }
         else
         {
-            this.occlusionMap = null;
+            occlusionMap = null;
         }
 
         if (albedoMap != null)

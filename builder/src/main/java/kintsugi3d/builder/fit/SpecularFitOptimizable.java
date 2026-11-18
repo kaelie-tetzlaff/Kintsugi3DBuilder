@@ -81,7 +81,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
                 textureResolution.width, textureResolution.height, basisResources.getBasis()),
             textureResolution);
 
-        this.context = resources.getContext();
+        context = resources.getContext();
         this.resources = resources;
         this.textureResolution = textureResolution;
 

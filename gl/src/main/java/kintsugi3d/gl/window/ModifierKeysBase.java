@@ -23,10 +23,10 @@ public abstract class ModifierKeysBase implements ModifierKeys
         if (obj instanceof ModifierKeys)
         {
             ModifierKeys modifierKeys = (ModifierKeys) obj;
-            return (modifierKeys.isShiftModifierActive()     || !this.isShiftModifierActive())
-                && (modifierKeys.isControlModifierActive()   || !this.isControlModifierActive())
-                && (modifierKeys.isAltModifierActive()       || !this.isAltModifierActive())
-                && (modifierKeys.isSuperModifierActive()     || !this.isSuperModifierActive());
+            return (modifierKeys.isShiftModifierActive()     || !isShiftModifierActive())
+                && (modifierKeys.isControlModifierActive()   || !isControlModifierActive())
+                && (modifierKeys.isAltModifierActive()       || !isAltModifierActive())
+                && (modifierKeys.isSuperModifierActive()     || !isSuperModifierActive());
         }
         else
         {
@@ -37,9 +37,9 @@ public abstract class ModifierKeysBase implements ModifierKeys
     @Override
     public final int hashCode()
     {
-        return  (this.isShiftModifierActive()   ? 1 : 0) |
-                (this.isControlModifierActive() ? 2 : 0) |
-                (this.isAltModifierActive()     ? 4 : 0) |
-                (this.isSuperModifierActive()   ? 8 : 0);
+        return  (isShiftModifierActive()   ? 1 : 0) |
+                (isControlModifierActive() ? 2 : 0) |
+                (isAltModifierActive()     ? 4 : 0) |
+                (isSuperModifierActive()   ? 8 : 0);
     }
 }

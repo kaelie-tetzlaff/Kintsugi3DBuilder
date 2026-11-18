@@ -113,19 +113,19 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
 
         private void updateViewSetFromImageLoadOptions()
         {
-            if (this.viewSet != null && this.imageLoadOptions != null)
+            if (viewSet != null && imageLoadOptions != null)
             {
-                this.viewSet.setPreviewImageResolution(imageLoadOptions.getPreviewImageWidth(), imageLoadOptions.getPreviewImageHeight());
+                viewSet.setPreviewImageResolution(imageLoadOptions.getPreviewImageWidth(), imageLoadOptions.getPreviewImageHeight());
                 String directoryName = String.format("%s/_%dx%d", viewSet.getUUID().toString(), imageLoadOptions.getPreviewImageWidth(), imageLoadOptions.getPreviewImageHeight());
 
-                this.viewSet.setRelativePreviewImagePathName(new File(ApplicationFolders.getPreviewImagesRootDirectory().toFile(), directoryName).toString());
+                viewSet.setRelativePreviewImagePathName(new File(ApplicationFolders.getPreviewImagesRootDirectory().toFile(), directoryName).toString());
             }
         }
 
         public Builder<ContextType> setOrientationView(String orientationViewName, double rotation)
         {
             this.orientationViewName = orientationViewName;
-            this.viewSet.setOrientationViewRotationDegrees(rotation);
+            viewSet.setOrientationViewRotationDegrees(rotation);
             return this;
         }
 
@@ -153,7 +153,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
 
         public Builder<ContextType> loadVSETFile(File vsetFile, File supportingFilesDirectory) throws IOException, MeshImportException
         {
-            this.viewSet = ViewSetReaderFromVSET.getInstance().readFromFile(vsetFile, supportingFilesDirectory).finish();
+            viewSet = ViewSetReaderFromVSET.getInstance().readFromFile(vsetFile, supportingFilesDirectory).finish();
             updateViewSetFromImageLoadOptions();
             loadAndValidateGeometry();
             return this;
@@ -185,7 +185,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         public Builder<ContextType> loadLooseFiles(ViewSetReader reader, File cameraFile, ViewSetLoadOptions viewSetLoadOptions) throws Exception
         {
             // Load view set
-            this.viewSet = reader.readFromFile(cameraFile, viewSetLoadOptions)
+            viewSet = reader.readFromFile(cameraFile, viewSetLoadOptions)
                 .finish();
 
             updateViewSetFromImageLoadOptions();
@@ -201,7 +201,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         public Builder<ContextType> loadFromMetashapeModel(MetashapeModel model)
             throws IOException, MeshImportException, XMLStreamException, MissingImagesException
         {
-            this.viewSet = ViewSetReaderFromAgisoftXML
+            viewSet = ViewSetReaderFromAgisoftXML
                 .loadViewsetFromChunk(model.getChunk(), model.getLoadPreferences().getDisabledImageFiles())
                 .finish();
             updateViewSetFromImageLoadOptions();
@@ -213,19 +213,19 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         {
             if (viewSet.getGeometryFile() != null)
             {
-                this.geometry = VertexGeometry.createFromGeometryFile(viewSet.getGeometryFile());
+                geometry = VertexGeometry.createFromGeometryFile(viewSet.getGeometryFile());
 
-                if (this.geometry == null)
+                if (geometry == null)
                 {
                     throw new MeshImportException(MessageFormat.format("Unsupported geometry file: {0}", viewSet.getGeometryFile()));
                 }
 
-                if (!this.geometry.hasNormals())
+                if (!geometry.hasNormals())
                 {
                     throw new MeshImportException("Imported Object has no Normals");
                 }
 
-                if (!this.geometry.hasTexCoords())
+                if (!geometry.hasTexCoords())
                 {
                     throw new MeshImportException("Imported Object has no Texture Coordinates");
                 }
@@ -248,7 +248,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
 
         public Builder<ContextType> useExistingViewSet(ViewSet existingViewSet)
         {
-            this.viewSet = existingViewSet;
+            viewSet = existingViewSet;
 
             if (geometry != null)
             {
@@ -260,7 +260,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
 
         public Builder<ContextType> useExistingGeometry(VertexGeometry existingGeometry)
         {
-            this.geometry = existingGeometry;
+            geometry = existingGeometry;
 
             if (viewSet != null)
             {
@@ -272,7 +272,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
 
         public Builder<ContextType> overrideImageDirectory(File imageDirectory)
         {
-            this.imageDirectoryOverride = imageDirectory;
+            imageDirectoryOverride = imageDirectory;
             return this;
         }
 
@@ -285,10 +285,10 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
          */
         public Builder<ContextType> generateAllPreviewImages() throws IOException, UserCancellationException
         {
-            if (this.viewSet != null)
+            if (viewSet != null)
             {
                 GraphicsResourcesImageSpace.generateAllPreviewImages(
-                    this.viewSet, this.progressMonitor, this.imageLoadOptions.getMaxLoadingThreads());
+                    viewSet, progressMonitor, imageLoadOptions.getMaxLoadingThreads());
             }
 
             return this;
@@ -389,7 +389,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
                 {
                     File imageFile = findOrGeneratePreviewImageFile(view);
 
-                    this.colorTextures.loadLayer(view.getGPUViewIndex(), imageFile, true);
+                    colorTextures.loadLayer(view.getGPUViewIndex(), imageFile, true);
                 }
                 catch (FileNotFoundException e)
                 {
@@ -409,7 +409,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         }
         else
         {
-            this.colorTextures = null;
+            colorTextures = null;
         }
 
         if (progressMonitor != null)
@@ -447,7 +447,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
                 if (loadOptions.areDepthImagesRequested())
                 {
                     // Build depth textures for each view
-                    this.depthTextures = context.getTextureFactory().build2DDepthTextureArray(
+                    depthTextures = context.getTextureFactory().build2DDepthTextureArray(
                             loadOptions.getDepthImageWidth(), loadOptions.getDepthImageHeight(), viewSet.getGPUBufferSize())
                         .createTexture();
                     
@@ -473,23 +473,23 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
                 }
                 else
                 {
-                    this.depthTextures = null;
+                    depthTextures = null;
                 }
             }
             else
             {
-                this.depthTextures = null;
+                depthTextures = null;
             }
         }
         else
         {
-            this.depthTextures = null;
+            depthTextures = null;
         }
 
-        if (this.depthTextures != null)
+        if (depthTextures != null)
         {
             shadowTextures = context.getTextureFactory().build2DDepthTextureArray(
-                    this.depthTextures.getWidth(), this.depthTextures.getHeight(), this.getViewSet().getGPUBufferSize())
+                    depthTextures.getWidth(), depthTextures.getHeight(), getViewSet().getGPUBufferSize())
                 .createTexture();
             shadowMatrixBuffer = context.createUniformBuffer();
 
@@ -570,18 +570,18 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
 
     private void updateShadowTextures() throws IOException
     {
-        updateShadowTextures(this.getViewSet().getViews());
+        updateShadowTextures(getViewSet().getViews());
     }
 
     private void updateShadowTextures(Iterable<View> views) throws IOException
     {
-        if (this.shadowTextures != null)
+        if (shadowTextures != null)
         {
             try
                 (
                     // Don't automatically generate any texture attachments for this framebuffer object
                     FramebufferObject<ContextType> depthRenderingFBO =
-                        getContext().buildFramebufferObject(this.shadowTextures.getWidth(), this.shadowTextures.getHeight())
+                        getContext().buildFramebufferObject(shadowTextures.getWidth(), shadowTextures.getHeight())
                             .createFramebufferObject();
 
                     // Load the program
@@ -590,7 +590,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             {
                 // Flatten the camera pose matrices into 16-component vectors and store them in the vertex list data structure.
                 NativeVectorBuffer flattenedShadowMatrices = NativeVectorBufferFactory.createEmpty(
-                    NativeDataType.FLOAT, 16, this.getViewSet().getGPUBufferSize());
+                    NativeDataType.FLOAT, 16, getViewSet().getGPUBufferSize());
 
                 // Render each depth texture
                 for (View view : views)
@@ -653,13 +653,13 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             .define("GEOMETRY_TEXTURES_ENABLED", false) // should default to this, but just in case
             .define("COLOR_APPEARANCE_MODE", ColorAppearanceMode.IMAGE_SPACE); // should default to this, but just in case
 
-        if (this.depthTextures == null)
+        if (depthTextures == null)
         {
             // Override to disable visibility test if no depth textures exist
             builder.define("VISIBILITY_TEST_ENABLED", false);
         }
 
-        if (this.shadowTextures == null)
+        if (shadowTextures == null)
         {
             // Override to disable shadow test if no shadow textures exist
             builder.define("SHADOW_TEST_ENABLED", false);
@@ -673,34 +673,34 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
     {
         getCommonResources().setupShaderProgram(program);
 
-        if (this.colorTextures != null)
+        if (colorTextures != null)
         {
-            program.setTexture("viewImages", this.colorTextures);
+            program.setTexture("viewImages", colorTextures);
         }
 
-        if ((this.cameraProjectionBuffer != null) && (this.cameraProjectionIndexBuffer != null))
+        if ((cameraProjectionBuffer != null) && (cameraProjectionIndexBuffer != null))
         {
-            program.setUniformBuffer("CameraProjections", this.cameraProjectionBuffer);
-            program.setUniformBuffer("CameraProjectionIndices", this.cameraProjectionIndexBuffer);
+            program.setUniformBuffer("CameraProjections", cameraProjectionBuffer);
+            program.setUniformBuffer("CameraProjectionIndices", cameraProjectionIndexBuffer);
         }
 
-        if (this.depthTextures == null)
+        if (depthTextures == null)
         {
             program.setTexture("depthImages", getContext().getTextureFactory().getNullTexture(SamplerType.FLOAT_2D_ARRAY));
         }
         else
         {
-            program.setTexture("depthImages", this.depthTextures);
+            program.setTexture("depthImages", depthTextures);
         }
 
-        if ((this.shadowMatrixBuffer == null) || (this.shadowTextures == null))
+        if ((shadowMatrixBuffer == null) || (shadowTextures == null))
         {
             program.setTexture("shadowImages", getContext().getTextureFactory().getNullTexture(SamplerType.FLOAT_2D_ARRAY));
         }
         else
         {
-            program.setUniformBuffer("ShadowMatrices", this.shadowMatrixBuffer);
-            program.setTexture("shadowImages", this.shadowTextures);
+            program.setUniformBuffer("ShadowMatrices", shadowMatrixBuffer);
+            program.setTexture("shadowImages", shadowTextures);
         }
     }
 
@@ -715,7 +715,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         if (getViewSet().getProjectSettings().getBoolean("infiniteLightSources"))
         {
             // Use unit light intensity if light sources don't have inverse-square falloff.
-            this.getViewSet().setAllLightIntensities(new Vector3(1.0f));
+            getViewSet().setAllLightIntensities(new Vector3(1.0f));
         }
         else
         {
@@ -723,7 +723,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             {
                 double primaryViewDistance = getMinDepthForView(getViewSet().getPrimaryView());
                 Vector3 lightIntensity = new Vector3((float) (primaryViewDistance * primaryViewDistance));
-                this.getViewSet().setAllLightIntensities(lightIntensity);
+                getViewSet().setAllLightIntensities(lightIntensity);
             }
             catch (IOException e)
             {
@@ -881,34 +881,34 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
     {
         super.close();
 
-        if (this.cameraProjectionBuffer != null)
+        if (cameraProjectionBuffer != null)
         {
-            this.cameraProjectionBuffer.close();
+            cameraProjectionBuffer.close();
         }
 
-        if (this.cameraProjectionIndexBuffer != null)
+        if (cameraProjectionIndexBuffer != null)
         {
-            this.cameraProjectionIndexBuffer.close();
+            cameraProjectionIndexBuffer.close();
         }
 
-        if (this.colorTextures != null)
+        if (colorTextures != null)
         {
-            this.colorTextures.close();
+            colorTextures.close();
         }
 
-        if (this.depthTextures != null)
+        if (depthTextures != null)
         {
-            this.depthTextures.close();
+            depthTextures.close();
         }
 
-        if (this.shadowTextures != null)
+        if (shadowTextures != null)
         {
-            this.shadowTextures.close();
+            shadowTextures.close();
         }
 
-        if (this.shadowMatrixBuffer != null)
+        if (shadowMatrixBuffer != null)
         {
-            this.shadowMatrixBuffer.close();
+            shadowMatrixBuffer.close();
         }
     }
 }

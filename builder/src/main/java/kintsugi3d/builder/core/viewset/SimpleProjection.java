@@ -59,7 +59,7 @@ public class SimpleProjection implements Projection
     @Override
     public final Matrix4 getProjectionMatrix(float nearPlane, float farPlane)
     {
-        return Matrix4.perspective(this.verticalFieldOfView, this.aspectRatio, nearPlane, farPlane);
+        return Matrix4.perspective(verticalFieldOfView, aspectRatio, nearPlane, farPlane);
     }
 
     @Override

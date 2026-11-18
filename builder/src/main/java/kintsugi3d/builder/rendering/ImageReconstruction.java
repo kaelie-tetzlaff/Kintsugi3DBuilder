@@ -92,8 +92,8 @@ public class ImageReconstruction<ContextType extends Context<ContextType>> imple
         throws IOException
     {
         this.viewSet = viewSet;
-        this.incidentRadianceProgram = incidentRadianceProgramBuilder.createProgram();
-        this.incidentRadianceDrawable = resources.createDrawable(incidentRadianceProgram);
+        incidentRadianceProgram = incidentRadianceProgramBuilder.createProgram();
+        incidentRadianceDrawable = resources.createDrawable(incidentRadianceProgram);
         this.groundTruthLoader = groundTruthLoader;
 
         this.buildFramebufferAttachments = buildFramebufferAttachments;
@@ -179,7 +179,7 @@ public class ImageReconstruction<ContextType extends Context<ContextType>> imple
         {
             return new ReconstructionView<>()
             {
-                private final View view = ReconstructionIterator.this.currentView;
+                private final View view = currentView;
 
                 @Override
                 public View getView()

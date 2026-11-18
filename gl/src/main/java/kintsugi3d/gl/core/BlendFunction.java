@@ -104,8 +104,8 @@ public class BlendFunction
      */
     public BlendFunction(Weight source, Weight destination)
     {
-        this.sourceWeightFunction = source;
-        this.destinationWeightFunction = destination;
+        sourceWeightFunction = source;
+        destinationWeightFunction = destination;
     }
 
 }

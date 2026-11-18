@@ -44,7 +44,7 @@ class DepthTextureReader3D<ContextType extends Context<ContextType>> extends Dep
     public final void read(ShortBuffer destination, int x, int y, int width, int height)
     {
         try (FramebufferObject<ContextType> fbo = texture.getContext()
-            .buildFramebufferObject(this.getWidth(), this.getHeight()).createFramebufferObject())
+            .buildFramebufferObject(getWidth(), getHeight()).createFramebufferObject())
         {
             fbo.setDepthAttachment(texture.getLayerAsFramebufferAttachment(layerIndex));
             fbo.getTextureReaderForDepthAttachment().read(destination, x, y, width, height);

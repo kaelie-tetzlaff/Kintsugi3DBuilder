@@ -37,7 +37,7 @@ public class KeyPress
         if (obj instanceof KeyPress)
         {
             KeyPress otherMapping = (KeyPress)obj;
-            return otherMapping.key == this.key && Objects.equals(otherMapping.modifierKeys, this.modifierKeys);
+            return otherMapping.key == key && Objects.equals(otherMapping.modifierKeys, modifierKeys);
         }
         else
         {

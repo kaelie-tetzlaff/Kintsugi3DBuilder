@@ -46,29 +46,29 @@ public class ObservableLightSettings extends SerializableLightSettings
     public ObservableLightSettings(String name, BooleanProperty groupLockedProperty)
     {
         this.name.set(name);
-        this.groupLocked = groupLockedProperty;
+        groupLocked = groupLockedProperty;
     }
 
     public ObservableLightSettings(BooleanProperty groupLockedProperty)
     {
-        this.groupLocked = groupLockedProperty;
+        groupLocked = groupLockedProperty;
     }
 
 
     public final ObservableLightSettings duplicate()
     {
-        ObservableLightSettings dupl = new ObservableLightSettings(name.getValue(), this.groupLocked);
-        dupl.targetX.set(this.targetX.get());
-        dupl.targetY.set(this.targetY.get());
-        dupl.targetZ.set(this.targetZ.get());
-        dupl.azimuth.set(this.azimuth.get());
-        dupl.inclination.set(this.inclination.get());
-        dupl.log10Distance.set(this.log10Distance.get());
-        dupl.intensity.set(this.intensity.get());
-        dupl.spotSize.set(this.spotSize.get());
-        dupl.spotTaper.set(this.spotTaper.get());
-        dupl.locked.set(this.locked.get());
-        dupl.color.setValue(this.color.getValue());
+        ObservableLightSettings dupl = new ObservableLightSettings(name.getValue(), groupLocked);
+        dupl.targetX.set(targetX.get());
+        dupl.targetY.set(targetY.get());
+        dupl.targetZ.set(targetZ.get());
+        dupl.azimuth.set(azimuth.get());
+        dupl.inclination.set(inclination.get());
+        dupl.log10Distance.set(log10Distance.get());
+        dupl.intensity.set(intensity.get());
+        dupl.spotSize.set(spotSize.get());
+        dupl.spotTaper.set(spotTaper.get());
+        dupl.locked.set(locked.get());
+        dupl.color.setValue(color.getValue());
         return dupl;
     }
 
@@ -153,73 +153,73 @@ public class ObservableLightSettings extends SerializableLightSettings
     @Override
     public final void setTargetX(double value)
     {
-        this.targetX.set(value);
+        targetX.set(value);
     }
 
     @Override
     public final void setTargetY(double value)
     {
-        this.targetY.set(value);
+        targetY.set(value);
     }
 
     @Override
     public final void setTargetZ(double value)
     {
-        this.targetZ.set(value);
+        targetZ.set(value);
     }
 
     @Override
     public final void setAzimuth(double value)
     {
-        this.azimuth.set(value);
+        azimuth.set(value);
     }
 
     @Override
     public final void setInclination(double value)
     {
-        this.inclination.set(value);
+        inclination.set(value);
     }
 
     @Override
     public final void setLog10Distance(double value)
     {
-        this.log10Distance.set(value);
+        log10Distance.set(value);
     }
 
     @Override
     public final void setIntensity(double value)
     {
-        this.intensity.set(value);
+        intensity.set(value);
     }
 
     @Override
     public final void setLocked(boolean value)
     {
-        this.locked.set(value);
+        locked.set(value);
     }
 
     @Override
     public final void setName(String value)
     {
-        this.name.set(value);
+        name.set(value);
     }
 
     @Override
     public final void setSpotSize(double value)
     {
-        this.spotSize.set(value);
+        spotSize.set(value);
     }
 
     @Override
     public final void setSpotTaper(double value)
     {
-        this.spotTaper.set(value);
+        spotTaper.set(value);
     }
 
     @Override
     public final void setColor(Color value)
     {
-        this.color.setValue(value);
+        color.setValue(value);
     }
 
     public final DoubleProperty targetX()

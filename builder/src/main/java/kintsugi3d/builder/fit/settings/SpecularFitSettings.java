@@ -44,7 +44,7 @@ public class SpecularFitSettings implements ReadonlySpecularFitSettings
      */
     public SpecularFitSettings(int width, int height, int sampledSize, int subdivSize)
     {
-        this.textureResolution = new TextureResolution(width, height);
+        textureResolution = new TextureResolution(width, height);
 
         imageCacheSettings.setTextureWidth(textureResolution.width);
         imageCacheSettings.setTextureHeight(textureResolution.height);
@@ -86,7 +86,7 @@ public class SpecularFitSettings implements ReadonlySpecularFitSettings
     @Override
     public final double getConvergenceTolerance()
     {
-        return this.convergenceTolerance;
+        return convergenceTolerance;
     }
 
     /**
@@ -107,7 +107,7 @@ public class SpecularFitSettings implements ReadonlySpecularFitSettings
     @Override
     public final double getPreliminaryConvergenceTolerance()
     {
-        return this.preliminaryConvergenceTolerance;
+        return preliminaryConvergenceTolerance;
     }
 
     /**

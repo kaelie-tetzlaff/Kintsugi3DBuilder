@@ -33,13 +33,13 @@ public abstract class SimplePageBuilder<InType, OutType, FinishType> extends Pag
     @Override
     public final Page<? super InType, OutType> getPage()
     {
-        return this.page;
+        return page;
     }
 
     public final <PageType extends Page<? super OutType, NextOutType>, NextOutType>
     FinishType join(PageType joinPage)
     {
-        this.page.setNextPage(joinPage);
+        page.setNextPage(joinPage);
         return getFinisher().get();
     }
 
@@ -48,7 +48,7 @@ public abstract class SimplePageBuilder<InType, OutType, FinishType> extends Pag
                                                              Supplier<ControllerType> controllerConstructorOverride)
     {
         PageType nextPage = getFrameController().createPage(fxmlPath, pageConstructor, controllerConstructorOverride);
-        this.page.setNextPage(nextPage);
+        page.setNextPage(nextPage);
         return new DataPageBuilder<>(nextPage, getFrameController(), getFinisher());
     }
 
@@ -70,7 +70,7 @@ public abstract class SimplePageBuilder<InType, OutType, FinishType> extends Pag
     {
         SimpleNonDataPage<ControllerType> nextPage =
             getFrameController().createPage(fxmlPath, SimpleNonDataPage<ControllerType>::new, controllerConstructorOverride);
-        this.page.setNextPage(nextPage);
+        page.setNextPage(nextPage);
         return new NonDataPageBuilder<>(nextPage, getFrameController(), getFinisher());
     }
 
@@ -85,7 +85,7 @@ public abstract class SimplePageBuilder<InType, OutType, FinishType> extends Pag
     {
         PageType nextPage = getFrameController().createPage(SELECTION_PAGE_FXML, pageConstructor, controllerConstructorOverride);
         nextPage.setPrompt(prompt);
-        this.page.setNextPage(nextPage);
+        page.setNextPage(nextPage);
         return new DataSelectionPageBuilder<>(nextPage, getFrameController(), getFinisher());
     }
 
@@ -108,13 +108,13 @@ public abstract class SimplePageBuilder<InType, OutType, FinishType> extends Pag
         SimpleNonDataSelectionPage<ControllerType> nextPage = getFrameController().createPage(
             SELECTION_PAGE_FXML, SimpleNonDataSelectionPage<ControllerType>::new, controllerConstructorOverride);
         nextPage.setPrompt(prompt);
-        this.page.setNextPage(nextPage);
+        page.setNextPage(nextPage);
         return new NonDataSelectionPageBuilder<>(nextPage, getFrameController(), getFinisher());
     }
 
     protected final NonDataSelectionPageBuilder<FinishType> thenSelectNonData(String prompt)
     {
-        return this.thenSelectNonData(prompt, null);
+        return thenSelectNonData(prompt, null);
     }
 
     public final <PageType extends Page<? super Object, NextOutType>, NextOutType, ControllerType extends PageController<?>>
@@ -123,7 +123,7 @@ public abstract class SimplePageBuilder<InType, OutType, FinishType> extends Pag
                   Supplier<ControllerType> controllerConstructorOverride)
     {
         PageType fallbackPage = getFrameController().createPage(fxmlPath, pageConstructor, controllerConstructorOverride);
-        this.page.addFallbackPage(label, fallbackPage);
+        page.addFallbackPage(label, fallbackPage);
         return new DataPageBuilder<>(fallbackPage, getFrameController(), () -> this);
     }
 
@@ -140,7 +140,7 @@ public abstract class SimplePageBuilder<InType, OutType, FinishType> extends Pag
     {
         SimpleNonDataPage<ControllerType> fallbackPage =
             getFrameController().createPage(fxmlPath, SimpleNonDataPage<ControllerType>::new, controllerConstructorOverride);
-        this.page.addFallbackPage(label, fallbackPage);
+        page.addFallbackPage(label, fallbackPage);
         return new NonDataPageBuilder<>(fallbackPage, getFrameController(), () -> this);
     }
 
@@ -153,7 +153,7 @@ public abstract class SimplePageBuilder<InType, OutType, FinishType> extends Pag
     public final <PageType extends Page<? super Object, NextOutType>, NextOutType>
     SimplePageBuilder<InType, OutType, FinishType> joinFallback(String label, PageType joinPage)
     {
-        this.page.addFallbackPage(label, joinPage);
+        page.addFallbackPage(label, joinPage);
         return this;
     }
 }

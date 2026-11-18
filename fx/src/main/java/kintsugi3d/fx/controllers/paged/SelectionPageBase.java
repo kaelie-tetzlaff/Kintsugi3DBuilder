@@ -49,8 +49,8 @@ public abstract class SelectionPageBase<T, ControllerType extends SelectionPageC
     @Override
     public final void initController()
     {
-        this.getController().setPage(this);
-        this.getController().initPage();
+        getController().setPage(this);
+        getController().initPage();
     }
 
     @Override

@@ -38,7 +38,7 @@ public class SynchronizedProjectModel implements ProjectModel
     public SynchronizedProjectModel(ProjectModel baseModel)
     {
         this.baseModel = baseModel;
-        this.colorCheckerFile = SynchronizedValue.createFromFunctions(baseModel::getColorCheckerFile, baseModel::setColorCheckerFile);
+        colorCheckerFile = SynchronizedValue.createFromFunctions(baseModel::getColorCheckerFile, baseModel::setColorCheckerFile);
     }
 
     @Override

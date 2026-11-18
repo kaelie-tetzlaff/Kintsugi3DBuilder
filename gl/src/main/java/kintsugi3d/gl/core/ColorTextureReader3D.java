@@ -46,7 +46,7 @@ class ColorTextureReader3D<ContextType extends Context<ContextType>> extends Col
     public final void readARGB(ByteBuffer destination, int x, int y, int readWidth, int readHeight)
     {
         try (FramebufferObject<ContextType> fbo = texture.getContext()
-            .buildFramebufferObject(this.getWidth(), this.getHeight())
+            .buildFramebufferObject(getWidth(), getHeight())
             .addEmptyColorAttachment()
             .createFramebufferObject())
         {
@@ -59,7 +59,7 @@ class ColorTextureReader3D<ContextType extends Context<ContextType>> extends Col
     public final void readFloatingPointRGBA(FloatBuffer destination, int x, int y, int readWidth, int readHeight)
     {
         try (FramebufferObject<ContextType> fbo = texture.getContext()
-            .buildFramebufferObject(this.getWidth(), this.getHeight())
+            .buildFramebufferObject(getWidth(), getHeight())
             .addEmptyColorAttachment()
             .createFramebufferObject())
         {
@@ -72,7 +72,7 @@ class ColorTextureReader3D<ContextType extends Context<ContextType>> extends Col
     public final void readIntegerRGBA(IntBuffer destination, int x, int y, int readWidth, int readHeight)
     {
         try (FramebufferObject<ContextType> fbo = texture.getContext()
-            .buildFramebufferObject(this.getWidth(), this.getHeight())
+            .buildFramebufferObject(getWidth(), getHeight())
             .addEmptyColorAttachment()
             .createFramebufferObject())
         {

@@ -63,7 +63,7 @@ public class SquareResolution
     @Override
     public final boolean equals(Object other)
     {
-        return other instanceof SquareResolution && this.getSize() == ((SquareResolution)other).getSize();
+        return other instanceof SquareResolution && getSize() == ((SquareResolution)other).getSize();
     }
 
     @Override

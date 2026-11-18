@@ -34,7 +34,7 @@ public class LiveProjectSettingsManager extends ProjectSettingsManager
     public final void onRefresh()
     {
         // Remember what to set back to if the user cancels
-        this.revertSettingsModel.copyAllFrom(getProjectSettingsModel());
+        revertSettingsModel.copyAllFrom(getProjectSettingsModel());
     }
 
     public final void cancel()

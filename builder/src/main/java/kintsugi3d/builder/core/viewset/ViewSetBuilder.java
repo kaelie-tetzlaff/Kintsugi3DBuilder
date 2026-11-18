@@ -275,16 +275,16 @@ public final class ViewSetBuilder
     public ViewSetBuilder setOrientationViewByIndex(int viewIndex)
     {
         // Defer application until all views have been loaded.
-        this.orientationViewIndex = viewIndex;
-        this.orientationViewName = null;
+        orientationViewIndex = viewIndex;
+        orientationViewName = null;
         return this;
     }
 
     public ViewSetBuilder setOrientationViewByName(String viewName)
     {
         // Defer application until all views have been loaded.
-        this.orientationViewName = viewName;
-        this.orientationViewIndex = -1;
+        orientationViewName = viewName;
+        orientationViewIndex = -1;
         return this;
     }
 
@@ -385,7 +385,7 @@ public final class ViewSetBuilder
             result.getSupportingFilesDirectory().mkdirs();
         }
 
-        result.setHasUnsupportedCorrections(this.hasUnsupportedCorrections);
+        result.setHasUnsupportedCorrections(hasUnsupportedCorrections);
 
         return result;
     }

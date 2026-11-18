@@ -41,8 +41,8 @@ public class ReadonlyErrorReport
     @SuppressWarnings("DesignForExtension")
     void setError(double newError)
     {
-        this.previousError = this.error;
-        this.error = newError;
+        previousError = error;
+        error = newError;
     }
 
     @SuppressWarnings("DesignForExtension")

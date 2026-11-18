@@ -69,17 +69,17 @@ public class ImageCache<ContextType extends Context<ContextType>>
 
     ImageCache(ImageBasedGraphicsResourcesBase<ContextType> resources, ReadonlyImageCacheSettings settings)
     {
-        this.context = resources.getContext();
+        context = resources.getContext();
         this.resources = resources;
         this.settings = settings;
 
         String cacheFolderName = getFolderNameFromSettings(resources.getViewSet().getUUID().toString(), settings);
-        this.cacheDirectory = new File(settings.getCacheParentDirectory(), cacheFolderName);
+        cacheDirectory = new File(settings.getCacheParentDirectory(), cacheFolderName);
 
-        this.sampledDir = new File(cacheDirectory, "sampled");
+        sampledDir = new File(cacheDirectory, "sampled");
 
         // Square 2D array to store sampled pixel coords.
-        this.sampledPixelCoords = IntStream.range(0, settings.getSampledSize())
+        sampledPixelCoords = IntStream.range(0, settings.getSampledSize())
             .mapToObj(i -> new IntVector2[settings.getSampledSize()])
             .toArray(IntVector2[][]::new);
 
@@ -98,7 +98,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
                 LOG.error("Error initializing image cache:", e);
 
                 // Reset in case it partially succeeded.
-                Arrays.stream(this.sampledPixelCoords).forEach(column -> Arrays.fill(column, null));
+                Arrays.stream(sampledPixelCoords).forEach(column -> Arrays.fill(column, null));
             }
         }
     }
@@ -476,7 +476,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
             LOG.warn("Possibly incomplete cache; will try to rebuild.", e);
 
             // Try to reinitialize in case the cache was only partially complete.
-            this.initialize(new CancellationPassthroughMonitor(monitor));
+            initialize(new CancellationPassthroughMonitor(monitor));
 
             // If initialize() completed without exceptions, then it should theoretically work now.
             // If not, it's probably a problem unrelated to the cache.
@@ -525,7 +525,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
     private GeometryTextures<ContextType> createSampledGeometryTextures()
     {
         try(GeometryFramebuffer<ContextType> geomTexturesFullRes =
-            this.resources.getGeometryResources().createGeometryFramebuffer(settings.getTextureWidth(), settings.getTextureHeight()))
+            resources.getGeometryResources().createGeometryFramebuffer(settings.getTextureWidth(), settings.getTextureHeight()))
         {
             // Use non-rendered since we need to sample on the CPU (where the sample coordinates live) and then pass the data back to the GPU.
             GeometryTextures<ContextType> sampledGeometryTextures =

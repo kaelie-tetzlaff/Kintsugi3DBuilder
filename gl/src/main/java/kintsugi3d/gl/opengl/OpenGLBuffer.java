@@ -34,7 +34,7 @@ abstract class OpenGLBuffer implements ContextBound<OpenGLContext>, ManagedResou
     OpenGLBuffer(OpenGLContext context, int usage)
     {
         this.context = context;
-        this.bufferId = glGenBuffers();
+        bufferId = glGenBuffers();
         OpenGLContext.errorCheck();
         this.usage = usage;
     }
@@ -42,12 +42,12 @@ abstract class OpenGLBuffer implements ContextBound<OpenGLContext>, ManagedResou
     @Override
     public final OpenGLContext getContext()
     {
-        return this.context;
+        return context;
     }
 
     final int getBufferId()
     {
-        return this.bufferId;
+        return bufferId;
     }
 
     abstract int getBufferTarget();
@@ -61,9 +61,9 @@ abstract class OpenGLBuffer implements ContextBound<OpenGLContext>, ManagedResou
     {
         if (data.remaining() > 0) // make sure there is actually data to set (lwjgl's glBufferData uses data.remaining() as the "size" parameter)
         {
-            glBindBuffer(this.getBufferTarget(), this.bufferId);
+            glBindBuffer(getBufferTarget(), bufferId);
             OpenGLContext.errorCheck();
-            glBufferData(this.getBufferTarget(), data, this.usage);
+            glBufferData(getBufferTarget(), data, usage);
             OpenGLContext.errorCheck();
 
             // fix for MacOS which segfaults if using a buffer with no data
@@ -75,12 +75,12 @@ abstract class OpenGLBuffer implements ContextBound<OpenGLContext>, ManagedResou
     {
         if (hasData) // fix for MacOS which segfaults if using a buffer with no data
         {
-            glBindBuffer(this.getBufferTarget(), this.bufferId);
+            glBindBuffer(getBufferTarget(), bufferId);
             OpenGLContext.errorCheck();
         }
         else
         {
-            glBindBuffer(this.getBufferTarget(), 0);
+            glBindBuffer(getBufferTarget(), 0);
             OpenGLContext.errorCheck();
         }
     }
@@ -90,7 +90,7 @@ abstract class OpenGLBuffer implements ContextBound<OpenGLContext>, ManagedResou
     {
         if (live)
         {
-            glDeleteBuffers(this.bufferId);
+            glDeleteBuffers(bufferId);
             OpenGLContext.errorCheck();
             live = false;
             hasData = false;

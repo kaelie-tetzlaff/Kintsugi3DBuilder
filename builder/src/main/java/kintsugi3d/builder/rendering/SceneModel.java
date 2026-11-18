@@ -59,7 +59,7 @@ public class SceneModel
 
     public final SafeReadonlyGlobalSettingsModel getSettingsModel()
     {
-        return this.settingsModel;
+        return settingsModel;
     }
 
     public final SelectableViewListModel getCameraViewListModel()
@@ -79,7 +79,7 @@ public class SceneModel
 
     public final float getScale()
     {
-        return this.scale;
+        return scale;
     }
 
     public final Vector3 getClearColor()
@@ -162,7 +162,7 @@ public class SceneModel
     public final Matrix4 getViewMatrixFromCameraPose(Matrix4 cameraPoseMatrix)
     {
         return cameraPoseMatrix
-                .times(Matrix4.translate(this.centroid))
+                .times(Matrix4.translate(centroid))
                 .times(orientation.asMatrix4().quickInverse(0.01f));
     }
 
@@ -185,7 +185,7 @@ public class SceneModel
      */
     public final Matrix4 getFullModelMatrix()
     {
-        return getUnscaledMatrix(this.objectModel.getTransformationMatrix()).times(getBaseModelMatrix());
+        return getUnscaledMatrix(objectModel.getTransformationMatrix()).times(getBaseModelMatrix());
     }
 
     /**
@@ -195,7 +195,7 @@ public class SceneModel
     public final Matrix4 getBaseModelMatrix()
     {
         return orientation.asMatrix4()
-                .times(Matrix4.translate(this.centroid.negated()));
+                .times(Matrix4.translate(centroid.negated()));
     }
 
     public final Matrix4 getModelViewMatrix(Matrix4 view)
@@ -206,9 +206,9 @@ public class SceneModel
     public final Matrix4 getViewFromModelViewMatrix(Matrix4 modelViewMatrix)
     {
         return modelViewMatrix
-                .times(Matrix4.translate(this.centroid))
+                .times(Matrix4.translate(centroid))
                 .times(orientation.asMatrix4().quickInverse(0.01f))
-                .times(getUnscaledMatrix(this.objectModel.getTransformationMatrix().quickInverse(0.01f)));
+                .times(getUnscaledMatrix(objectModel.getTransformationMatrix().quickInverse(0.01f)));
     }
 
     public final float getVerticalFieldOfView(FramebufferSize size)

@@ -55,12 +55,12 @@ public class GeometryResources<ContextType extends Context<ContextType>>
      */
     private GeometryResources()
     {
-        this.context = null;
-        this.geometry = null;
-        this.positionBuffer = null;
-        this.texCoordBuffer = null;
-        this.normalBuffer = null;
-        this.tangentBuffer = null;
+        context = null;
+        geometry = null;
+        positionBuffer = null;
+        texCoordBuffer = null;
+        normalBuffer = null;
+        tangentBuffer = null;
     }
 
     public static <ContextType extends Context<ContextType>> GeometryResources<ContextType> createNullResources()
@@ -75,33 +75,33 @@ public class GeometryResources<ContextType extends Context<ContextType>>
     {
         this.context = context;
         this.geometry = geometry;
-        this.positionBuffer = context.createVertexBuffer().setData(geometry.getVertices());
+        positionBuffer = context.createVertexBuffer().setData(geometry.getVertices());
 
         if (geometry.hasTexCoords())
         {
-            this.texCoordBuffer = context.createVertexBuffer().setData(geometry.getTexCoords());
+            texCoordBuffer = context.createVertexBuffer().setData(geometry.getTexCoords());
         }
         else
         {
-            this.texCoordBuffer = null;
+            texCoordBuffer = null;
         }
 
         if (geometry.hasNormals())
         {
-            this.normalBuffer = context.createVertexBuffer().setData(geometry.getNormals());
+            normalBuffer = context.createVertexBuffer().setData(geometry.getNormals());
         }
         else
         {
-            this.normalBuffer = null;
+            normalBuffer = null;
         }
 
         if (geometry.hasTexCoords() && geometry.hasNormals())
         {
-            this.tangentBuffer = context.createVertexBuffer().setData(geometry.getTangents());
+            tangentBuffer = context.createVertexBuffer().setData(geometry.getTangents());
         }
         else
         {
-            this.tangentBuffer = null;
+            tangentBuffer = null;
         }
     }
 
@@ -151,30 +151,30 @@ public class GeometryResources<ContextType extends Context<ContextType>>
     @Override
     public final boolean isNull()
     {
-        return this.positionBuffer == null;
+        return positionBuffer == null;
     }
 
     @Override
     public final void close()
     {
-        if (this.positionBuffer != null)
+        if (positionBuffer != null)
         {
-            this.positionBuffer.close();
+            positionBuffer.close();
         }
 
-        if (this.texCoordBuffer != null)
+        if (texCoordBuffer != null)
         {
-            this.texCoordBuffer.close();
+            texCoordBuffer.close();
         }
 
-        if (this.normalBuffer != null)
+        if (normalBuffer != null)
         {
-            this.normalBuffer.close();
+            normalBuffer.close();
         }
 
-        if (this.tangentBuffer != null)
+        if (tangentBuffer != null)
         {
-            this.tangentBuffer.close();
+            tangentBuffer.close();
         }
     }
 }

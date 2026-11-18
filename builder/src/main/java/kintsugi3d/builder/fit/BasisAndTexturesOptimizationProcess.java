@@ -139,7 +139,7 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
         try
         {
             // Preliminary optimization at low resolution to determine basis functions
-            this.optimizeTexSpaceFit(resources, decomposition.getTextureResolution(),
+            optimizeTexSpaceFit(resources, decomposition.getTextureResolution(),
                 (stream, monitorLocal) -> specularFit.optimizeFromScratch(
                     basisOptimizationSettings, decomposition, stream, getSettings().getPreliminaryConvergenceTolerance(),
                     monitorLocal, TRACE_IMAGES && getOutputDirectory() != null ? getOutputDirectory() : null),

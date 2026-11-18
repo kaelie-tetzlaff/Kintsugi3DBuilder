@@ -80,7 +80,7 @@ public interface ReadonlyTexture3D<ContextType extends Context<ContextType>>
     @Override
     default Texture3D<ContextType> crop(int x, int y, int cropWidth, int cropHeight)
     {
-        return this.crop(x, y, 0, cropWidth, cropHeight, this.getDepth());
+        return crop(x, y, 0, cropWidth, cropHeight, getDepth());
     }
 
     /**
@@ -89,7 +89,7 @@ public interface ReadonlyTexture3D<ContextType extends Context<ContextType>>
      */
     default Texture3D<ContextType> copy()
     {
-        return this.crop(0, 0, this.getWidth(), this.getHeight());
+        return crop(0, 0, getWidth(), getHeight());
     }
 
     /**

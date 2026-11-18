@@ -104,19 +104,19 @@ final class MutableBasisMaterialInfo implements IndexAssignableBasisMaterialInfo
     @Override
     public String getFriendlyName()
     {
-        return this.friendlyName;
+        return friendlyName;
     }
 
     @Override
     public String getName()
     {
-        return this.name;
+        return name;
     }
 
     @Override
     public boolean isEnabled()
     {
-        return this.enabled;
+        return enabled;
     }
 
     public void setEnabled(boolean enabled)
@@ -133,25 +133,25 @@ final class MutableBasisMaterialInfo implements IndexAssignableBasisMaterialInfo
     @Override
     public int getResolution()
     {
-        return this.redBasis.length - 1;
+        return redBasis.length - 1;
     }
 
     @Override
     public double evaluateSpecularRed(int m)
     {
-        return this.redBasis[m];
+        return redBasis[m];
     }
 
     @Override
     public double evaluateSpecularGreen(int m)
     {
-        return this.greenBasis[m];
+        return greenBasis[m];
     }
 
     @Override
     public double evaluateSpecularBlue(int m)
     {
-        return this.blueBasis[m];
+        return blueBasis[m];
     }
 
     @Override
@@ -168,7 +168,7 @@ final class MutableBasisMaterialInfo implements IndexAssignableBasisMaterialInfo
 
     public MutableBasisMaterialInfo copy()
     {
-        return copy(this.name);
+        return copy(name);
     }
 
     public MutableBasisMaterialInfo copy(String newName)

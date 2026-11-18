@@ -143,9 +143,9 @@ public final class MetashapeModel
 
         MetashapeModel other = (MetashapeModel) obj;
 
-        return this.id.equals(other.id) &&
-            this.label.equals(other.label) &&
-            this.path.equals(other.path);
+        return id.equals(other.id) &&
+            label.equals(other.label) &&
+            path.equals(other.path);
     }
 
     @Override

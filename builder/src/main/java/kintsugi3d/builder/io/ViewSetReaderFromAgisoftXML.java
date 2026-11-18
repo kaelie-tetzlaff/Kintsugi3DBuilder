@@ -128,7 +128,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
             if (obj instanceof Camera)
             {
                 Camera otherCam = (Camera) obj;
-                return this.id.equals(otherCam.id);
+                return id.equals(otherCam.id);
             }
             else
             {

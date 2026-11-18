@@ -244,7 +244,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
 
         // Create the instance (will be initialized on the graphics thread)
         ImageBasedRenderable<ContextType> newInstance = new ImageBasedRenderingEngine<>(internalName, context, builder);
-        newInstance.setOwningApp(this.getOwningApp());
+        newInstance.setOwningApp(getOwningApp());
 
         initializeSceneModel(newInstance.getSceneModel());
 
@@ -367,11 +367,11 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
 
     private void initializeSceneModel(SceneModel sceneModel)
     {
-        sceneModel.setObjectModel(this.objectModel);
-        sceneModel.setCameraModel(this.cameraModel);
-        sceneModel.setLightingModel(this.lightingModel);
-        sceneModel.setSettingsModel(this.settingsModel);
-        sceneModel.setCameraViewListModel(this.viewListModel);
+        sceneModel.setObjectModel(objectModel);
+        sceneModel.setCameraModel(cameraModel);
+        sceneModel.setLightingModel(lightingModel);
+        sceneModel.setSettingsModel(settingsModel);
+        sceneModel.setCameraViewListModel(viewListModel);
     }
 
     @Override
@@ -379,21 +379,21 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         String internalName, File vsetFile, File supportingFilesDirectory, ReadonlyLoadOptionsModel loadOptions)
         throws UserCancellationException, MeshImportException, IOException
     {
-        if (this.progressMonitor.isConflictingProcess())
+        if (progressMonitor.isConflictingProcess())
         {
             return;
         }
 
-        this.progressMonitor.start();
-        this.progressMonitor.setProcessName("Load from File");
+        progressMonitor.start();
+        progressMonitor.setProcessName("Load from File");
 
         try
         {
             Builder<ContextType> builder;
             try
             {
-                builder = GraphicsResourcesImageSpace.getBuilderForContext(this.context)
-                    .setProgressMonitor(this.progressMonitor)
+                builder = GraphicsResourcesImageSpace.getBuilderForContext(context)
+                    .setProgressMonitor(progressMonitor)
                     .setImageLoadOptions(loadOptions)
                     .loadVSETFile(vsetFile, supportingFilesDirectory);
             }
@@ -422,13 +422,13 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         throws UserCancellationException, MissingImagesException, MeshImportException, IOException, XMLStreamException
     {
 
-        if (this.progressMonitor.isConflictingProcess())
+        if (progressMonitor.isConflictingProcess())
         {
             return;
         }
 
-        this.progressMonitor.start();
-        this.progressMonitor.setProcessName("Load from Agisoft Project");
+        progressMonitor.start();
+        progressMonitor.setProcessName("Load from Agisoft Project");
 
         MetashapeChunk parentChunk = model.getChunk();
 
@@ -440,8 +440,8 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                 String orientationView = model.getLoadPreferences().getOrientationViewName();
                 double rotation = model.getLoadPreferences().getOrientationViewRotateDegrees();
 
-                builder = GraphicsResourcesImageSpace.getBuilderForContext(this.context)
-                    .setProgressMonitor(this.progressMonitor)
+                builder = GraphicsResourcesImageSpace.getBuilderForContext(context)
+                    .setProgressMonitor(progressMonitor)
                     .setImageLoadOptions(loadOptionsModel)
                     .loadFromMetashapeModel(model)
                     .setOrientationView(orientationView, rotation);
@@ -471,20 +471,20 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                                          ViewSetLoadOptions viewSetLoadOptions, ReadonlyLoadOptionsModel imageLoadOptions)
         throws Exception
     {
-        if (this.progressMonitor.isConflictingProcess())
+        if (progressMonitor.isConflictingProcess())
         {
             return;
         }
-        this.progressMonitor.start();
-        this.progressMonitor.setProcessName("Load from loose files");
+        progressMonitor.start();
+        progressMonitor.setProcessName("Load from loose files");
 
         try
         {
             Builder<ContextType> builder;
             try
             {
-                builder = GraphicsResourcesImageSpace.getBuilderForContext(this.context)
-                    .setProgressMonitor(this.progressMonitor)
+                builder = GraphicsResourcesImageSpace.getBuilderForContext(context)
+                    .setProgressMonitor(progressMonitor)
                     .setImageLoadOptions(imageLoadOptions)
                     .loadLooseFiles(xmlFile, viewSetLoadOptions);
             }
@@ -818,6 +818,6 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
      */
     public final void setLoadedViewSet(ViewSet viewSet)
     {
-        this.loadedViewSet = viewSet;
+        loadedViewSet = viewSet;
     }
 }

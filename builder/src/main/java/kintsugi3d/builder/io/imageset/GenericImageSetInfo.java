@@ -35,7 +35,7 @@ public final class GenericImageSetInfo implements ImageSetInfo
         this.name = name;
 
         // Makes a snapshot copy; grab all views (not just those disabled) since selecting a disabled view is valid.
-        this.views = viewSet.getViewsSorted();
+        views = viewSet.getViewsSorted();
     }
 
     @Override

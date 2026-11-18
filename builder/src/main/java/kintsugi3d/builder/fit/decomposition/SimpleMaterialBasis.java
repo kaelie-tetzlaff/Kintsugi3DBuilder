@@ -38,17 +38,17 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
 
     SimpleMaterialBasis(DoubleVector3[] diffuseColors, List<double[]> redBasis, List<double[]> greenBasis, List<double[]> blueBasis)
     {
-        this.enabledMaterialCount = redBasis.size();
-        this.specularResolution = redBasis.get(0).length - 1;
+        enabledMaterialCount = redBasis.size();
+        specularResolution = redBasis.get(0).length - 1;
 
-        this.basis = new LinkedHashMap<>(enabledMaterialCount);
+        basis = new LinkedHashMap<>(enabledMaterialCount);
 
         // If we're creating a new basis without disabled materials, just use b as GPU index.
         for (int b = 0; b < enabledMaterialCount; b++)
         {
             String name = String.format("%02d", b);
             String friendlyName = String.format("Material %d", b);
-            this.basis.put(name, MutableBasisMaterialInfo.create(
+            basis.put(name, MutableBasisMaterialInfo.create(
                 name, b, friendlyName, diffuseColors[b], redBasis.get(b), greenBasis.get(b), blueBasis.get(b)));
         }
     }
@@ -56,8 +56,8 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
     private SimpleMaterialBasis(LinkedHashMap<String, MutableBasisMaterialInfo> basis)
     {
         this.basis = basis;
-        this.specularResolution = basis.values().stream().findAny().orElseThrow().getResolution();
-        this.enabledMaterialCount = (int)basis.values().stream().filter(BasisMaterialInfo::isEnabled).count();
+        specularResolution = basis.values().stream().findAny().orElseThrow().getResolution();
+        enabledMaterialCount = (int)basis.values().stream().filter(BasisMaterialInfo::isEnabled).count();
     }
 
     /**
@@ -74,10 +74,10 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
         Map<KeyType, String> names, Map<KeyType, String> disabledNames, Map<KeyType, DoubleVector3> diffuseColors,
         Map<KeyType, double[]> redBasis, Map<KeyType, double[]> greenBasis, Map<KeyType, double[]> blueBasis)
     {
-        this.enabledMaterialCount = names.size();
-        this.specularResolution = redBasis.values().stream().findAny().orElseThrow().length - 1;
+        enabledMaterialCount = names.size();
+        specularResolution = redBasis.values().stream().findAny().orElseThrow().length - 1;
 
-        this.basis = new LinkedHashMap<>(enabledMaterialCount + disabledNames.size());
+        basis = new LinkedHashMap<>(enabledMaterialCount + disabledNames.size());
 
         int gpuIndex = 0;
         for (Entry<KeyType, String> entry : names.entrySet())

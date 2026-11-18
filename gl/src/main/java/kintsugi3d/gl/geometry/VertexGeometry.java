@@ -86,7 +86,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
             if (obj instanceof NormalTexCoordPair)
             {
                 NormalTexCoordPair otherPair = (NormalTexCoordPair) obj;
-                return this.normalIndex == otherPair.normalIndex && this.texCoordIndex == otherPair.texCoordIndex;
+                return normalIndex == otherPair.normalIndex && texCoordIndex == otherPair.texCoordIndex;
             }
             else
             {
@@ -839,13 +839,13 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
     @Override
     public String getMaterialFileName()
     {
-        return this.materialFileName;
+        return materialFileName;
     }
 
     @Override
     public ImportedMaterial getMaterial()
     {
-        return this.material;
+        return material;
     }
 
     @Override

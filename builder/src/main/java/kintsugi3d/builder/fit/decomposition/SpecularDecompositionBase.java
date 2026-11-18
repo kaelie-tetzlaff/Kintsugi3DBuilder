@@ -47,10 +47,10 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
 
     protected SpecularDecompositionBase(TextureResolution textureResolution, int materialCount)
     {
-        this.weightsByTexel = IntStream.range(0, textureResolution.width * textureResolution.height)
+        weightsByTexel = IntStream.range(0, textureResolution.width * textureResolution.height)
             .mapToObj(p -> new SimpleMatrix(materialCount, 1, DMatrixRMaj.class))
             .toArray(SimpleMatrix[]::new);
-        this.weightsValidity = new boolean[textureResolution.width * textureResolution.height];
+        weightsValidity = new boolean[textureResolution.width * textureResolution.height];
 
         this.textureResolution = textureResolution;
     }
@@ -124,7 +124,7 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
             Collection<Integer> filledPositions = new HashSet<>(256);
             for (int p = 0; p < texelCount; p++)
             {
-                if (!this.areWeightsValid(p))
+                if (!areWeightsValid(p))
                 {
                     int left = (texelCount + p - 1) % texelCount;
                     int right = (p + 1) % texelCount;
@@ -133,38 +133,38 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
 
                     int count = 0;
 
-                    for (int b = 0; b < this.getMaterialBasis().getEnabledMaterialCount(); b++)
+                    for (int b = 0; b < getMaterialBasis().getEnabledMaterialCount(); b++)
                     {
                         count = 0;
                         double sum = 0.0;
 
-                        if (this.areWeightsValid(left))
+                        if (areWeightsValid(left))
                         {
-                            sum += this.getWeights(left).get(b);
+                            sum += getWeights(left).get(b);
                             count++;
                         }
 
-                        if (this.areWeightsValid(right))
+                        if (areWeightsValid(right))
                         {
-                            sum += this.getWeights(right).get(b);
+                            sum += getWeights(right).get(b);
                             count++;
                         }
 
-                        if (this.areWeightsValid(up))
+                        if (areWeightsValid(up))
                         {
-                            sum += this.getWeights(up).get(b);
+                            sum += getWeights(up).get(b);
                             count++;
                         }
 
-                        if (this.areWeightsValid(down))
+                        if (areWeightsValid(down))
                         {
-                            sum += this.getWeights(down).get(b);
+                            sum += getWeights(down).get(b);
                             count++;
                         }
 
                         if (sum > 0.0)
                         {
-                            this.getWeights(p).set(b, sum / count);
+                            getWeights(p).set(b, sum / count);
                         }
                     }
 
@@ -177,7 +177,7 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
 
             for (int p : filledPositions)
             {
-                this.setWeightsValidity(p, true);
+                setWeightsValidity(p, true);
             }
         }
 
@@ -244,7 +244,7 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
         SpecularDecompositionWeights(SpecularDecompositionBase specularDecomposition)
         {
             this.specularDecomposition = specularDecomposition;
-            this.basis = specularDecomposition.getMaterialBasis();
+            basis = specularDecomposition.getMaterialBasis();
         }
 
         @Override

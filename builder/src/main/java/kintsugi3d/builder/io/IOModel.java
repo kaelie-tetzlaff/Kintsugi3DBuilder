@@ -101,13 +101,13 @@ public class IOModel implements IO
     @Override
     public final void addProgressMonitor(ProgressMonitor monitor)
     {
-        this.progressMonitor.addSubMonitor(monitor);
+        progressMonitor.addSubMonitor(monitor);
     }
 
     @Override
     public final ReadonlyLoadOptionsModel getLoadOptionsModel()
     {
-        return this.loadOptionsModel;
+        return loadOptionsModel;
     }
 
     public final void setLoadOptionsModel(ReadonlyLoadOptionsModel loadOptionsModel)
@@ -148,25 +148,25 @@ public class IOModel implements IO
     @Override
     public final ImageBasedRenderable<?> getRenderableForShader(ShaderInfo shader)
     {
-        return this.handler.getRenderableForShader(shader);
+        return handler.getRenderableForShader(shader);
     }
 
     @Override
     public final ViewSet getLoadedViewSet()
     {
-        return this.handler.getLoadedViewSet();
+        return handler.getLoadedViewSet();
     }
 
     @Override
     public final ReadonlyVertexGeometry getLoadedGeometry()
     {
-        return this.handler.getLoadedGeometry();
+        return handler.getLoadedGeometry();
     }
 
     @Override
     public final ImageBasedRenderable<?> getMainRenderable()
     {
-        return this.handler.getMainRenderable();
+        return handler.getMainRenderable();
     }
 
     @Override
@@ -208,7 +208,7 @@ public class IOModel implements IO
         {
             try
             {
-                this.handler.loadFromLooseFiles(newProjectFile, internalName, xmlFile, viewSetLoadOptions, loadOptionsModel);
+                handler.loadFromLooseFiles(newProjectFile, internalName, xmlFile, viewSetLoadOptions, loadOptionsModel);
             }
             catch (Exception e)
             {
@@ -227,7 +227,7 @@ public class IOModel implements IO
             try
             {
                 viewSetLoadOptions.setUUID(getLoadedViewSet() != null ? getLoadedViewSet().getUUID() : null);
-                this.handler.loadFromLooseFiles(projectFile, internalName, xmlFile, viewSetLoadOptions, loadOptionsModel);
+                handler.loadFromLooseFiles(projectFile, internalName, xmlFile, viewSetLoadOptions, loadOptionsModel);
             }
             catch (Exception e)
             {
@@ -245,7 +245,7 @@ public class IOModel implements IO
         {
             try
             {
-                this.handler.loadFromMetashapeModel(newProjectFile, model, loadOptionsModel);
+                handler.loadFromMetashapeModel(newProjectFile, model, loadOptionsModel);
             }
             catch (Exception e)
             {
@@ -301,7 +301,7 @@ public class IOModel implements IO
                 try
                 {
                     this.projectFile = projectFile;
-                    this.viewSetFile = vsetFile;
+                    viewSetFile = vsetFile;
 
                     RecentProjects.getInstance().addToRecentFiles(projectFile.getAbsolutePath());
 
@@ -310,12 +310,12 @@ public class IOModel implements IO
                         // VSET file is the project file or they're in the same directory.
                         // Use a supporting files directory underneath by default
                         File supportingFilesDirectory = getDefaultSupportingFilesDirectory(projectFile);
-                        this.handler.loadFromVSETFile(vsetFile.getPath(), vsetFile, supportingFilesDirectory, loadOptionsModel);
+                        handler.loadFromVSETFile(vsetFile.getPath(), vsetFile, supportingFilesDirectory, loadOptionsModel);
                     }
                     else
                     {
                         // VSET file is presumably already in a supporting files directory, so just use that directory by default
-                        this.handler.loadFromVSETFile(vsetFile.getPath(), vsetFile, vsetFile.getParentFile(), loadOptionsModel);
+                        handler.loadFromVSETFile(vsetFile.getPath(), vsetFile, vsetFile.getParentFile(), loadOptionsModel);
                     }
                 }
                 catch (UserCancellationException e)
@@ -349,8 +349,8 @@ public class IOModel implements IO
         ViewSet viewSet = getLoadedViewSet();
         setViewsetDirectories(projectFile, viewSet);
 
-        this.progressMonitor.setStage(0, "Saving project...");
-        this.progressMonitor.setFinishingUpText("This shouldn't take long...");
+        progressMonitor.setStage(0, "Saving project...");
+        progressMonitor.setFinishingUpText("This shouldn't take long...");
 
         copyMasks();
         copyModelAndTextures();
@@ -364,35 +364,35 @@ public class IOModel implements IO
         if (projectFile.getName().toLowerCase(Locale.ROOT).endsWith(".vset"))
         {
             viewSet.setRootDirectory(projectFile.getParentFile());
-            this.handler.saveToVSETFile(projectFile);
-            this.viewSetFile = projectFile;
+            handler.saveToVSETFile(projectFile);
+            viewSetFile = projectFile;
         }
         else
         {
             viewSet.setRootDirectory(filesDirectory);
 
             File vsetFile = new File(filesDirectory, projectFile.getName() + ".vset");
-            this.handler.saveToVSETFile(vsetFile);
-            this.viewSetFile = vsetFile;
+            handler.saveToVSETFile(vsetFile);
+            viewSetFile = vsetFile;
 
             saveXMLProject(projectFile, vsetFile);
         }
 
         this.projectFile = projectFile;
-        this.projectSaved.notify(new ProjectSavedEvent(projectFile.getName()));
+        projectSaved.notify(new ProjectSavedEvent(projectFile.getName()));
 
         // Export glTF for Kintsugi 3D Viewer even if not requested
         // TODO: ensure that GLTF texture filenames match default material texture names;
         //  otherwise might not work when launching Kintsugi 3D Viewer from Builder.
-        this.handler.saveGLTF(getLoadedViewSet().getSupportingFilesDirectory(), /* defaults */ new ExportSettings());
+        handler.saveGLTF(getLoadedViewSet().getSupportingFilesDirectory(), /* defaults */ new ExportSettings());
 
         // Save textures and basis funtions (will be deferred to graphics thread).
-        this.handler.saveAllMaterialFiles(getLoadedViewSet().getSupportingFilesDirectory(), finishedCallback);
+        handler.saveAllMaterialFiles(getLoadedViewSet().getSupportingFilesDirectory(), finishedCallback);
 
         // Add to recent files
         RecentProjects.getInstance().addToRecentFiles(projectFile.getAbsolutePath());
 
-        this.progressMonitor.setStage(1, "Project saved.");
+        progressMonitor.setStage(1, "Project saved.");
     }
 
     @Override
@@ -478,13 +478,13 @@ public class IOModel implements IO
     @Override
     public final EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException
     {
-        return this.handler.loadEnvironmentMap(environmentMapFile);
+        return handler.loadEnvironmentMap(environmentMapFile);
     }
 
     @Override
     public final void loadBackplate(File backplateFile) throws FileNotFoundException
     {
-        this.handler.loadBackplate(backplateFile);
+        handler.loadBackplate(backplateFile);
     }
 
     private static File getDefaultSupportingFilesDirectory(File projectFile)
@@ -495,37 +495,37 @@ public class IOModel implements IO
     @Override
     public final DoubleUnaryOperator getLuminanceEncodingFunction()
     {
-        return this.handler.getLuminanceEncodingFunction();
+        return handler.getLuminanceEncodingFunction();
     }
 
     @Override
     public final void setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
     {
-        this.handler.setTonemapping(linearLuminanceValues, encodedLuminanceValues);
+        handler.setTonemapping(linearLuminanceValues, encodedLuminanceValues);
     }
 
     @Override
     public final void clearTonemapping()
     {
-        this.handler.clearTonemapping();
+        handler.clearTonemapping();
     }
 
     @Override
     public final void requestLightIntensityCalibration()
     {
-        this.handler.requestLightIntensityCalibration();
+        handler.requestLightIntensityCalibration();
     }
 
     @Override
     public final void applyLightOffsetCalibration()
     {
-        this.handler.applyLightCalibration();
+        handler.applyLightCalibration();
     }
 
     @Override
     public final void closeProject()
     {
-        this.closeProject(() -> {});
+        closeProject(() -> {});
     }
 
     @Override
@@ -542,20 +542,20 @@ public class IOModel implements IO
                 projectClosed.notify(new ProjectClosedEvent());
             }
 
-            this.handler.unload(onCloseComplete);
+            handler.unload(onCloseComplete);
         });
     }
 
     @Override
     public final boolean hasLoadedRenderable()
     {
-        return this.handler != null && this.handler.isRenderableLoaded();
+        return handler != null && handler.isRenderableLoaded();
     }
 
     @Override
     public final boolean hasValidHandler()
     {
-        return this.handler != null;
+        return handler != null;
     }
 
     @Override

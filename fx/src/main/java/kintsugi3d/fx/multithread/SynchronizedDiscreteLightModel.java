@@ -31,15 +31,15 @@ public class SynchronizedDiscreteLightModel extends DiscreteLightModelBase
         super(new SynchronizedCameraModel(baseModel));
         this.baseModel = baseModel;
 
-        this.color = SynchronizedValue.createFromFunctions(baseModel::getColor, baseModel::setColor);
-        this.spotSize = SynchronizedValue.createFromFunctions(baseModel::getSpotSize, baseModel::setSpotSize);
-        this.spotTaper = SynchronizedValue.createFromFunctions(baseModel::getSpotTaper, baseModel::setSpotTaper);
+        color = SynchronizedValue.createFromFunctions(baseModel::getColor, baseModel::setColor);
+        spotSize = SynchronizedValue.createFromFunctions(baseModel::getSpotSize, baseModel::setSpotSize);
+        spotTaper = SynchronizedValue.createFromFunctions(baseModel::getSpotTaper, baseModel::setSpotTaper);
     }
 
     @Override
     public final boolean isEnabled()
     {
-        return this.baseModel.isEnabled();
+        return baseModel.isEnabled();
     }
 
     @Override

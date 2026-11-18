@@ -53,32 +53,32 @@ final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLCon
         @Override
         public final OpenGLTexture1D createTexture()
         {
-            if (this.isInternalFormatCompressed())
+            if (isInternalFormatCompressed())
             {
                 return new OpenGLTexture1D(
-                    this.getContext(),
-                        this.textureTarget,
-                        this.getInternalCompressionFormat(),
-                        this.width,
-                        bundleTextureData(this.dimensions, false, this.type, this.buffer),
-                        this.isLinearFilteringEnabled(),
-                        this.areMipmapsEnabled(),
-                        this.getMaxMipmapLevel(),
-                        this.getMaxAnisotropy());
+                    getContext(),
+                        textureTarget,
+                        getInternalCompressionFormat(),
+                        width,
+                        bundleTextureData(dimensions, false, type, buffer),
+                        isLinearFilteringEnabled(),
+                        areMipmapsEnabled(),
+                        getMaxMipmapLevel(),
+                        getMaxAnisotropy());
             }
             else
             {
                 return new OpenGLTexture1D(
-                    this.getContext(),
-                        this.textureTarget,
-                        this.getInternalColorFormat(),
-                        this.width,
+                    getContext(),
+                        textureTarget,
+                        getInternalColorFormat(),
+                        width,
                         bundleTextureData(
-                            this.dimensions, this.getInternalColorFormat().isInteger(), this.type, this.buffer),
-                        this.isLinearFilteringEnabled(),
-                        this.areMipmapsEnabled(),
-                        this.getMaxMipmapLevel(),
-                        this.getMaxAnisotropy());
+                            dimensions, getInternalColorFormat().isInteger(), type, buffer),
+                        isLinearFilteringEnabled(),
+                        areMipmapsEnabled(),
+                        getMaxMipmapLevel(),
+                        getMaxAnisotropy());
             }
         }
     }
@@ -109,7 +109,7 @@ final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLCon
         int textureTarget, int internalFormat, OpenGLTextureData textureData, boolean useLinearFiltering,
         int maxMipmapLevel, float maxAnisotropy)
     {
-        this.bind();
+        bind();
 
         int type = textureData.getType();
         int format = textureData.getFormat();
@@ -121,7 +121,7 @@ final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLCon
         OpenGLContext.errorCheck();
 
         calculateMipmapLevelCount(width, maxMipmapLevel);
-        this.initFilteringAndMipmaps(useLinearFiltering, maxMipmapLevel);
+        initFilteringAndMipmaps(useLinearFiltering, maxMipmapLevel);
 
         glTexParameteri(textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         OpenGLContext.errorCheck();
@@ -136,13 +136,13 @@ final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLCon
     @Override
     public int getWidth()
     {
-        return this.width;
+        return width;
     }
 
     @Override
     public void setTextureWrap(TextureWrapMode wrap)
     {
-        this.bind();
+        bind();
         switch(wrap)
         {
         case NONE:

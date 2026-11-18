@@ -61,14 +61,14 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
         if (basisResources != null)
         {
             // Specular roughness / reflectivity module that manages its own resources
-            this.roughnessOptimization =
+            roughnessOptimization =
                 new RoughnessOptimizationSimple<>(basisResources, basisWeightResources, textureResolution);
             //new RoughnessOptimizationIterative<>(context, basisResources, this::getDiffuseMap, settings);
-            this.roughnessOptimization.clear();
+            roughnessOptimization.clear();
         }
         else
         {
-            this.roughnessOptimization = null;
+            roughnessOptimization = null;
         }
     }
 
@@ -89,7 +89,7 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
         if (basisResources != null)
         {
             // Specular roughness / reflectivity module that manages its own resources
-            this.roughnessOptimization =
+            roughnessOptimization =
                 new RoughnessOptimizationSimple<>(basisResources, basisWeightResources, priorSolutionDirectory);
             //new RoughnessOptimizationIterative<>(context, basisResources, this::getDiffuseMap, settings);
             // Don't clear it since the roughness and specular textures will be storing the images loaded from disk

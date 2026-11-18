@@ -42,21 +42,21 @@ public class LightVisualsGroup<ContextType extends Context<ContextType>> impleme
         this.sceneModel = sceneModel;
         this.sceneViewportModel = sceneViewportModel;
 
-        this.lights = new Lights<>(context, sceneViewportModel, sceneModel);
-        this.lightCenters = new LightCenters<>(context, sceneViewportModel, sceneModel);
-        this.lightWidgets = new LightWidgets<>(context, sceneViewportModel, sceneModel);
-        this.lightWidgetCircle = new LightWidgetCircles<>(context, sceneViewportModel, sceneModel);
-        this.lightWidgetLines = new LightWidgetLines<>(context, sceneViewportModel, sceneModel);
+        lights = new Lights<>(context, sceneViewportModel, sceneModel);
+        lightCenters = new LightCenters<>(context, sceneViewportModel, sceneModel);
+        lightWidgets = new LightWidgets<>(context, sceneViewportModel, sceneModel);
+        lightWidgetCircle = new LightWidgetCircles<>(context, sceneViewportModel, sceneModel);
+        lightWidgetLines = new LightWidgetLines<>(context, sceneViewportModel, sceneModel);
     }
 
     @Override
     public final void initialize()
     {
-        this.lights.initialize();
-        this.lightCenters.initialize();
-        this.lightWidgets.initialize();
-        this.lightWidgetCircle.initialize();
-        this.lightWidgetLines.setSolidProgram(this.lightWidgets.getDrawable().program());
+        lights.initialize();
+        lightCenters.initialize();
+        lightWidgets.initialize();
+        lightWidgetCircle.initialize();
+        lightWidgetLines.setSolidProgram(lightWidgets.getDrawable().program());
     }
 
     @Override
@@ -66,7 +66,7 @@ public class LightVisualsGroup<ContextType extends Context<ContextType>> impleme
         lightCenters.reloadShaders();
         lightWidgets.reloadShaders();
         lightWidgetCircle.reloadShaders();
-        lightWidgetLines.setSolidProgram(this.lightWidgets.getDrawable().program());
+        lightWidgetLines.setSolidProgram(lightWidgets.getDrawable().program());
     }
 
     @Override

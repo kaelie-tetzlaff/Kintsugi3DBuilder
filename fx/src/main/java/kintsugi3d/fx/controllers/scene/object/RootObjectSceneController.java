@@ -50,7 +50,7 @@ public class RootObjectSceneController
 
     public final void injectDependencies(ObservableObjectPoseModel objectModel, ObservableProjectModel injectedProjectModel)
     {
-        this.projectModel = injectedProjectModel;
+        projectModel = injectedProjectModel;
 
         objectPoseListView.setItems(projectModel.getObjectPoseList());
         objectPoseListView.getSelectionModel().selectedItemProperty().addListener(settingsController.getChangeListener());

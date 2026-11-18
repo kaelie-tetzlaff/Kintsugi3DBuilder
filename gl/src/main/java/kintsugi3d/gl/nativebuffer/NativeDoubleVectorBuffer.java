@@ -42,7 +42,7 @@ class NativeDoubleVectorBuffer implements NativeVectorBuffer
 
         this.dimensions = dimensions;
         this.count = count;
-        this.buffer = BufferUtils.createByteBuffer(dimensions * count * 8);
+        buffer = BufferUtils.createByteBuffer(dimensions * count * 8);
     }
 
     NativeDoubleVectorBuffer(int dimensions, int count, ByteBuffer buffer)
@@ -103,19 +103,19 @@ class NativeDoubleVectorBuffer implements NativeVectorBuffer
         {
             throw new IndexOutOfBoundsException("Index cannot be negative.");
         }
-        if (index >= this.count)
+        if (index >= count)
         {
-            throw new IndexOutOfBoundsException("Index (" + index + ") is greater than the size of the vertex list (" + this.count + ").");
+            throw new IndexOutOfBoundsException("Index (" + index + ") is greater than the size of the vertex list (" + count + ").");
         }
         if (dimension < 0)
         {
             throw new IndexOutOfBoundsException("Dimension cannot be negative.");
         }
-        if (dimension >= this.dimensions)
+        if (dimension >= dimensions)
         {
-            throw new IndexOutOfBoundsException("Dimension (" + dimension + ") is greater than the dimensions of the vertex list (" + this.dimensions + ").");
+            throw new IndexOutOfBoundsException("Dimension (" + dimension + ") is greater than the dimensions of the vertex list (" + dimensions + ").");
         }
-        return this.buffer.asDoubleBuffer().get(index * this.dimensions + dimension);
+        return buffer.asDoubleBuffer().get(index * dimensions + dimension);
     }
 
     @Override
@@ -125,19 +125,19 @@ class NativeDoubleVectorBuffer implements NativeVectorBuffer
         {
             throw new IndexOutOfBoundsException("Index cannot be negative.");
         }
-        if (index >= this.count)
+        if (index >= count)
         {
-            throw new IndexOutOfBoundsException("Index (" + index + ") is greater than the size of the vertex list (" + this.count + ").");
+            throw new IndexOutOfBoundsException("Index (" + index + ") is greater than the size of the vertex list (" + count + ").");
         }
         if (dimension < 0)
         {
             throw new IndexOutOfBoundsException("Dimension cannot be negative.");
         }
-        if (dimension >= this.dimensions)
+        if (dimension >= dimensions)
         {
-            throw new IndexOutOfBoundsException("Dimension (" + dimension + ") is greater than the dimensions of the vertex list (" + this.dimensions + ").");
+            throw new IndexOutOfBoundsException("Dimension (" + dimension + ") is greater than the dimensions of the vertex list (" + dimensions + ").");
         }
-        this.buffer.asDoubleBuffer().put(index * this.dimensions + dimension, value.doubleValue());
+        buffer.asDoubleBuffer().put(index * dimensions + dimension, value.doubleValue());
     }
 
     @Override

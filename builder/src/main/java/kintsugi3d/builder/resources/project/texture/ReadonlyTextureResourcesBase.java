@@ -55,7 +55,7 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
     @Override
     public final void setupShaderProgram(Program<ContextType> program)
     {
-        for (var entry : this.getTextures().entrySet())
+        for (var entry : getTextures().entrySet())
         {
             useTextureSafe(program,
                 // Sanitize texture names when being used as shader variables:
@@ -64,14 +64,14 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
                 entry.getValue());
         }
 
-        if (this.getBasisResources() != null)
+        if (getBasisResources() != null)
         {
-            this.getBasisResources().useWithShaderProgram(program);
+            getBasisResources().useWithShaderProgram(program);
         }
 
-        if (this.getBasisWeightResources() != null)
+        if (getBasisWeightResources() != null)
         {
-            this.getBasisWeightResources().useWithShaderProgram(program);
+            getBasisWeightResources().useWithShaderProgram(program);
         }
     }
 

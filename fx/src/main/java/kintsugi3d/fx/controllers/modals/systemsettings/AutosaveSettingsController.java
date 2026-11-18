@@ -60,10 +60,10 @@ public class AutosaveSettingsController implements SystemSettingsControllerBase
 
         if (autosaveOptionsChoiceBox.getValue().equals(CHOOSE_LOCATION))
         {
-            this.directoryChooser.setTitle("Choose an output directory");
+            directoryChooser.setTitle("Choose an output directory");
 
             Stage stage = (Stage) parentWindow;
-            File file = this.directoryChooser.showDialog(stage.getOwner());
+            File file = directoryChooser.showDialog(stage.getOwner());
 
             if (file != null && file.exists())
             {

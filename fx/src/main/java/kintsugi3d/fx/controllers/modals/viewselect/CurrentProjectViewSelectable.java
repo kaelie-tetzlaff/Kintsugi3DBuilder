@@ -34,15 +34,15 @@ public class CurrentProjectViewSelectable extends ViewSelectableBase
     public CurrentProjectViewSelectable(Function<ViewSet, View> getInitialSelection, ToDoubleFunction<ViewSet> getInitialRotationDegrees)
     {
         ViewSet currentViewSet = Global.io().validateRenderable().getLoadedViewSet();
-        this.initialView = getInitialSelection.apply(currentViewSet);
+        initialView = getInitialSelection.apply(currentViewSet);
 
         if (getInitialRotationDegrees != null)
         {
-            this.initialViewRotationDegrees = getInitialRotationDegrees.applyAsDouble(currentViewSet);
+            initialViewRotationDegrees = getInitialRotationDegrees.applyAsDouble(currentViewSet);
         }
         else
         {
-            this.initialViewRotationDegrees = 0.0;
+            initialViewRotationDegrees = 0.0;
         }
 
         if (initialView != null)
@@ -51,7 +51,7 @@ public class CurrentProjectViewSelectable extends ViewSelectableBase
             selectView(viewName, initialViewRotationDegrees);
         }
 
-        this.imageSetInfo = new GenericImageSetInfo("Current Project", currentViewSet);
+        imageSetInfo = new GenericImageSetInfo("Current Project", currentViewSet);
     }
 
     public CurrentProjectViewSelectable(Function<ViewSet, View> getInitialSelection)

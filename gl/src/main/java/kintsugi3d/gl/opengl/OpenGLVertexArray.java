@@ -37,13 +37,13 @@ class OpenGLVertexArray implements ManagedResource, ContextBound<OpenGLContext>
     OpenGLVertexArray(OpenGLContext context)
     {
         this.context = context;
-        this.vaoId = glGenVertexArrays();
+        vaoId = glGenVertexArrays();
         OpenGLContext.errorCheck();
     }
 
     final void bind()
     {
-        glBindVertexArray(this.vaoId);
+        glBindVertexArray(vaoId);
         OpenGLContext.errorCheck();
     }
 
@@ -57,12 +57,12 @@ class OpenGLVertexArray implements ManagedResource, ContextBound<OpenGLContext>
             }
             else
             {
-                glBindVertexArray(this.vaoId);
+                glBindVertexArray(vaoId);
                 OpenGLContext.errorCheck();
                 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
                 OpenGLContext.errorCheck();
                 ((OpenGLVertexBuffer)buffer).useAsVertexAttribute(attributeIndex);
-                this.count = Math.min(this.count, buffer.count());
+                count = Math.min(count, buffer.count());
             }
         }
         else
@@ -79,16 +79,16 @@ class OpenGLVertexArray implements ManagedResource, ContextBound<OpenGLContext>
         }
         else
         {
-            glBindVertexArray(this.vaoId);
+            glBindVertexArray(vaoId);
             OpenGLContext.errorCheck();
             if (usesIndexing)
             {
-                glDrawElements(primitiveMode, this.count, GL_UNSIGNED_INT, 0);
+                glDrawElements(primitiveMode, count, GL_UNSIGNED_INT, 0);
                 OpenGLContext.errorCheck();
             }
             else
             {
-                glDrawArrays(primitiveMode, 0, this.count);
+                glDrawArrays(primitiveMode, 0, count);
                 OpenGLContext.errorCheck();
             }
         }
@@ -99,7 +99,7 @@ class OpenGLVertexArray implements ManagedResource, ContextBound<OpenGLContext>
     {
         if (live)
         {
-            glDeleteVertexArrays(this.vaoId);
+            glDeleteVertexArrays(vaoId);
             OpenGLContext.errorCheck();
             live = false;
         }

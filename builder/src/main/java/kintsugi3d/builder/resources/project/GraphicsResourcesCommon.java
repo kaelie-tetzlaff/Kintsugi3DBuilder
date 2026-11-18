@@ -194,8 +194,8 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
             if (viewSet != null)
             {
-                this.viewWeightBuffer = context.createUniformBuffer(); // prereq for computeViewWeights
-                this.viewWeights = computeViewWeights();
+                viewWeightBuffer = context.createUniformBuffer(); // prereq for computeViewWeights
+                viewWeights = computeViewWeights();
 
                 ImportedMaterial material = geometry.getMaterial();
                 String geometryFileName = viewSet.getGeometryFileName();
@@ -259,7 +259,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
                     TextureLoadOptions mtlLoadOptions = new TextureLoadOptions();
                     mtlLoadOptions.setCompressionRequested(loadOptions.isCompressionRequested());
                     mtlLoadOptions.setMipmapsRequested(loadOptions.areMipmapsRequested());
-                    this.textureResources = ImportedMaterialResourcesWrapper.wrap(
+                    textureResources = ImportedMaterialResourcesWrapper.wrap(
                         () ->
                         {
                             try
@@ -277,26 +277,26 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
                 else
                 {
                     // Neither a texture fit or an OBJ material: material is null
-                    this.textureResources = TextureResources.makeNull(context);
+                    textureResources = TextureResources.makeNull(context);
                 }
             }
             else
             {
-                this.viewWeights = null;
-                this.viewWeightBuffer = null;
-                this.textureResources = TextureResources.makeNull(context);
+                viewWeights = null;
+                viewWeightBuffer = null;
+                textureResources = TextureResources.makeNull(context);
             }
         }
         else
         {
-            this.geometryResources = GeometryResources.createNullResources();
-            this.viewWeights = null;
-            this.viewWeightBuffer = null;
-            this.textureResources = TextureResources.makeNull(context);
+            geometryResources = GeometryResources.createNullResources();
+            viewWeights = null;
+            viewWeightBuffer = null;
+            textureResources = TextureResources.makeNull(context);
         }
 
-        this.textureResources.setBasisObservable(basisObservable);
-        this.textureResources.setTexturesObservable(texturesObservable);
+        textureResources.setBasisObservable(basisObservable);
+        textureResources.setTexturesObservable(texturesObservable);
     }
 
     private float[] computeViewWeights()
@@ -361,7 +361,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
         LOG.info("View weights:");
 
-        this.viewWeights = new float[viewSet.getGPUBufferSize()];
+        viewWeights = new float[viewSet.getGPUBufferSize()];
 
         if (actualSampleCount > 0) // avoid divide by zero
         {
@@ -373,8 +373,8 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
             }
         }
 
-        this.viewWeightBuffer.setData(NativeVectorBufferFactory.createFromFloatArray(
-            1, viewSet.getGPUBufferSize(), this.viewWeights));
+        viewWeightBuffer.setData(NativeVectorBufferFactory.createFromFloatArray(
+            1, viewSet.getGPUBufferSize(), viewWeights));
 
         return viewWeights;
     }
@@ -414,9 +414,9 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
     public float getViewWeight(int index)
     {
-        if (this.viewWeights != null)
+        if (viewWeights != null)
         {
-            return this.viewWeights[index];
+            return viewWeights[index];
         }
         else
         {
@@ -426,7 +426,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
     public List<Float> getViewWeights()
     {
-        if (this.viewWeights != null)
+        if (viewWeights != null)
         {
             return Collections.unmodifiableList(new AbstractList<>()
             {
@@ -543,8 +543,8 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
     public void replaceTextureResources(TextureResources<ContextType> newTextureResources)
     {
-        this.textureResources.close();
-        this.textureResources = newTextureResources == null ? TextureResources.makeNull(context) : newTextureResources;
+        textureResources.close();
+        textureResources = newTextureResources == null ? TextureResources.makeNull(context) : newTextureResources;
 
         if (hasProcessedWeightMaps())
         {
@@ -610,26 +610,26 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
     {
         viewSet.setupShaderProgram(program);
 
-        if (this.viewWeightBuffer != null)
+        if (viewWeightBuffer != null)
         {
-            program.setUniformBuffer("CameraWeights", this.viewWeightBuffer);
+            program.setUniformBuffer("CameraWeights", viewWeightBuffer);
         }
 
-        if (this.cameraPoseBuffer != null)
+        if (cameraPoseBuffer != null)
         {
-            program.setUniformBuffer("CameraPoses", this.cameraPoseBuffer);
+            program.setUniformBuffer("CameraPoses", cameraPoseBuffer);
         }
 
-        if (this.lightPositionBuffer != null && this.lightIntensityBuffer != null && this.lightIndexBuffer != null)
+        if (lightPositionBuffer != null && lightIntensityBuffer != null && lightIndexBuffer != null)
         {
-            program.setUniformBuffer("LightPositions", this.lightPositionBuffer);
-            program.setUniformBuffer("LightIntensities", this.lightIntensityBuffer);
-            program.setUniformBuffer("LightIndices", this.lightIndexBuffer);
+            program.setUniformBuffer("LightPositions", lightPositionBuffer);
+            program.setUniformBuffer("LightIntensities", lightIntensityBuffer);
+            program.setUniformBuffer("LightIndices", lightIndexBuffer);
         }
 
-        if (this.viewIndexBuffer != null)
+        if (viewIndexBuffer != null)
         {
-            program.setUniformBuffer("ViewIndices", this.viewIndexBuffer);
+            program.setUniformBuffer("ViewIndices", viewIndexBuffer);
         }
 
         luminanceMapResources.setupShaderProgram(program);
@@ -638,15 +638,15 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
     public void close()
     {
-        this.viewWeightBuffer.close();
-        this.cameraPoseBuffer.close();
-        this.lightPositionBuffer.close();
-        this.lightIntensityBuffer.close();
-        this.lightIndexBuffer.close();
-        this.geometryResources.close();
-        this.textureResources.close();
-        this.luminanceMapResources.close();
-        this.viewIndexBuffer.close();
+        viewWeightBuffer.close();
+        cameraPoseBuffer.close();
+        lightPositionBuffer.close();
+        lightIntensityBuffer.close();
+        lightIndexBuffer.close();
+        geometryResources.close();
+        textureResources.close();
+        luminanceMapResources.close();
+        viewIndexBuffer.close();
     }
 
     public EventListeners<Observer<MappedChange<String, BasisMaterialInfo>>> basisListeners()

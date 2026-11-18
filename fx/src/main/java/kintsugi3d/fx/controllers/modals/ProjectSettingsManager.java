@@ -68,16 +68,16 @@ public class ProjectSettingsManager
     {
         if (Global.io().hasLoadedRenderable())
         {
-            this.projectSettingsModel = Global.io().getLoadedViewSet().getProjectSettings();
+            projectSettingsModel = Global.io().getLoadedViewSet().getProjectSettings();
         }
         else
         {
-            this.projectSettingsModel = new SimpleGeneralSettingsModel();
+            projectSettingsModel = new SimpleGeneralSettingsModel();
             DefaultSettings.applyProjectDefaults(projectSettingsModel);
         }
 
         // Populate local model with the current project settings.
-        localSettingsModel.copyAllFrom(this.projectSettingsModel);
+        localSettingsModel.copyAllFrom(projectSettingsModel);
 
         onRefresh();
     }
@@ -94,7 +94,7 @@ public class ProjectSettingsManager
     @FXML
     public final void applySettings()
     {
-        this.projectSettingsModel.copyFrom(localSettingsModel, trackedSettings);
+        projectSettingsModel.copyFrom(localSettingsModel, trackedSettings);
     }
 
     /**

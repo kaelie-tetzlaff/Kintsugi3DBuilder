@@ -42,7 +42,7 @@ public class MutableBasisResources<ContextType extends Context<ContextType>> ext
         super(context, basis.getMaterialCount(), basis.getSpecularResolution());
         this.basis = basis;
 
-        this.weightResources = new BasisWeightResources<>(context,
+        weightResources = new BasisWeightResources<>(context,
             textureResolution.width, textureResolution.height, basis);
 
         refreshGraphicsResources();
@@ -64,7 +64,7 @@ public class MutableBasisResources<ContextType extends Context<ContextType>> ext
         {
             LOG.error("Error loading weightmap resources from {}", priorSolutionDirectory, e);
         }
-        this.weightResources = loadedWeightResources;
+        weightResources = loadedWeightResources;
 
         refreshGraphicsResources();
     }

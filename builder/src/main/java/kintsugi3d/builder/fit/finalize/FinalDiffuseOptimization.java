@@ -60,8 +60,8 @@ public class FinalDiffuseOptimization<ContextType extends Context<ContextType>> 
         TextureResolution textureResolution, boolean includeConstant)
         throws IOException
     {
-        this.context = resources.getContext();
-        this.estimationProgram = includeConstant ?
+        context = resources.getContext();
+        estimationProgram = includeConstant ?
             createDiffuseTranslucentEstimationProgram(resources)
             : createDiffuseEstimationProgram(resources);
         this.textureResolution = textureResolution;

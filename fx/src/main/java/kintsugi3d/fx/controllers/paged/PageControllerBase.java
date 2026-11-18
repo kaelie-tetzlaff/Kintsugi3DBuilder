@@ -62,13 +62,13 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
 
     protected final JavaFXState getState()
     {
-        return this.pageFrameController.getState();
+        return pageFrameController.getState();
     }
 
     @Override
     public final PageType getPage()
     {
-        return this.page;
+        return page;
     }
 
     public final void setPage(PageType page)

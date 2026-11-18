@@ -39,7 +39,7 @@ public abstract class GraphicsStreamBase<T> implements GraphicsStream<T>
     {
         R result = supplier.get();
 
-        this.forEach(contribution ->
+        forEach(contribution ->
         {
             // Add the contribution into the main result.
             synchronized (result)

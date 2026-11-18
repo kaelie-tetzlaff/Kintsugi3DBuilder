@@ -63,39 +63,39 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         @Override
         public final OpenGLTexture3D createTexture()
         {
-            if (this.isInternalFormatCompressed())
+            if (isInternalFormatCompressed())
             {
                 return new OpenGLTexture3D(
-                    this.getContext(),
-                    this.textureTarget,
-                    this.getMultisamples(),
-                    this.getInternalCompressionFormat(),
-                    this.width,
-                    this.height,
-                    this.depth,
+                    getContext(),
+                    textureTarget,
+                    getMultisamples(),
+                    getInternalCompressionFormat(),
+                    width,
+                    height,
+                    depth,
                     GL_RGBA,
-                    this.areMultisampleLocationsFixed(),
-                    this.isLinearFilteringEnabled(),
-                    this.areMipmapsEnabled(),
-                    this.getMaxMipmapLevel(),
-                    this.getMaxAnisotropy());
+                    areMultisampleLocationsFixed(),
+                    isLinearFilteringEnabled(),
+                    areMipmapsEnabled(),
+                    getMaxMipmapLevel(),
+                    getMaxAnisotropy());
             }
             else
             {
                 return new OpenGLTexture3D(
-                    this.getContext(),
-                    this.textureTarget,
-                    this.getMultisamples(),
-                    this.getInternalColorFormat(),
-                    this.width,
-                    this.height,
-                    this.depth,
-                    this.getInternalColorFormat().isInteger() ? GL_RGBA_INTEGER : GL_RGBA,
-                    this.areMultisampleLocationsFixed(),
-                    this.isLinearFilteringEnabled(),
-                    this.areMipmapsEnabled(),
-                    this.getMaxMipmapLevel(),
-                    this.getMaxAnisotropy());
+                    getContext(),
+                    textureTarget,
+                    getMultisamples(),
+                    getInternalColorFormat(),
+                    width,
+                    height,
+                    depth,
+                    getInternalColorFormat().isInteger() ? GL_RGBA_INTEGER : GL_RGBA,
+                    areMultisampleLocationsFixed(),
+                    isLinearFilteringEnabled(),
+                    areMipmapsEnabled(),
+                    getMaxMipmapLevel(),
+                    getMaxAnisotropy());
             }
         }
     }
@@ -120,20 +120,20 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         public final OpenGLTexture3D createTexture()
         {
             return new OpenGLTexture3D(
-                this.getContext(),
-                this.textureTarget,
-                this.getMultisamples(),
-                this.isFloatingPointEnabled() ? TextureType.FLOATING_POINT_DEPTH : TextureType.DEPTH,
-                this.getInternalPrecision(),
-                this.width,
-                this.height,
-                this.depth,
+                getContext(),
+                textureTarget,
+                getMultisamples(),
+                isFloatingPointEnabled() ? TextureType.FLOATING_POINT_DEPTH : TextureType.DEPTH,
+                getInternalPrecision(),
+                width,
+                height,
+                depth,
                 GL_DEPTH_COMPONENT,
-                this.areMultisampleLocationsFixed(),
-                this.isLinearFilteringEnabled(),
-                this.areMipmapsEnabled(),
-                this.getMaxMipmapLevel(),
-                this.getMaxAnisotropy());
+                areMultisampleLocationsFixed(),
+                isLinearFilteringEnabled(),
+                areMipmapsEnabled(),
+                getMaxMipmapLevel(),
+                getMaxAnisotropy());
         }
     }
 
@@ -157,20 +157,20 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         public final OpenGLTexture3D createTexture()
         {
             return new OpenGLTexture3D(
-                this.getContext(),
-                this.textureTarget,
-                this.getMultisamples(),
+                getContext(),
+                textureTarget,
+                getMultisamples(),
                 TextureType.STENCIL,
-                this.getInternalPrecision(),
-                this.width,
-                this.height,
-                this.depth,
+                getInternalPrecision(),
+                width,
+                height,
+                depth,
                 GL_STENCIL_INDEX,
-                this.areMultisampleLocationsFixed(),
-                this.isLinearFilteringEnabled(),
-                this.areMipmapsEnabled(),
-                this.getMaxMipmapLevel(),
-                this.getMaxAnisotropy());
+                areMultisampleLocationsFixed(),
+                isLinearFilteringEnabled(),
+                areMipmapsEnabled(),
+                getMaxMipmapLevel(),
+                getMaxAnisotropy());
         }
     }
 
@@ -194,20 +194,20 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         public final OpenGLTexture3D createTexture()
         {
             return new OpenGLTexture3D(
-                this.getContext(),
-                this.textureTarget,
-                this.getMultisamples(),
-                this.isFloatingPointEnabled() ? TextureType.FLOATING_POINT_DEPTH_STENCIL : TextureType.DEPTH_STENCIL,
-                this.isFloatingPointEnabled() ? 40 : 32,
-                this.width,
-                this.height,
-                this.depth,
+                getContext(),
+                textureTarget,
+                getMultisamples(),
+                isFloatingPointEnabled() ? TextureType.FLOATING_POINT_DEPTH_STENCIL : TextureType.DEPTH_STENCIL,
+                isFloatingPointEnabled() ? 40 : 32,
+                width,
+                height,
+                depth,
                 GL_DEPTH_STENCIL,
-                this.areMultisampleLocationsFixed(),
-                this.isLinearFilteringEnabled(),
-                this.areMipmapsEnabled(),
-                this.getMaxMipmapLevel(),
-                this.getMaxAnisotropy());
+                areMultisampleLocationsFixed(),
+                isLinearFilteringEnabled(),
+                areMipmapsEnabled(),
+                getMaxMipmapLevel(),
+                getMaxAnisotropy());
         }
     }
 
@@ -221,7 +221,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
 
         this.width = width;
         this.height = height;
-        this.depth = layerCount;
+        depth = layerCount;
 
         init(textureTarget, multisamples, OpenGLContext.getInternalColorFormat(colorFormat), layerCount, format,
             fixedSampleLocations, useLinearFiltering, maxMipmapLevel, maxAnisotropy);
@@ -237,7 +237,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
 
         this.width = width;
         this.height = height;
-        this.depth = layerCount;
+        depth = layerCount;
 
         init(textureTarget, multisamples, OpenGLContext.getCompressionFormat(compressionFormat), layerCount, format,
             fixedSampleLocations, useLinearFiltering, maxMipmapLevel, maxAnisotropy);
@@ -253,7 +253,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
 
         this.width = width;
         this.height = height;
-        this.depth = layerCount;
+        depth = layerCount;
 
         init(textureTarget, multisamples, getSpecialInternalFormat(textureType, precision), layerCount, format,
             fixedSampleLocations, useLinearFiltering, maxMipmapLevel, maxAnisotropy);
@@ -262,22 +262,22 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
     private void init(int textureTarget, int multisamples, int internalFormat, int layerCount, int format,
                       boolean fixedSampleLocations, boolean useLinearFiltering, int maxMipmapLevel, float maxAnisotropy)
     {
-        this.bind();
+        bind();
 
         if (textureTarget == GL_TEXTURE_2D && multisamples > 1)
         {
-            glTexImage3DMultisample(this.getTextureTarget(), multisamples, internalFormat, width, height, layerCount, fixedSampleLocations);
+            glTexImage3DMultisample(getTextureTarget(), multisamples, internalFormat, width, height, layerCount, fixedSampleLocations);
             OpenGLContext.errorCheck();
         }
         else
         {
             // Last four parameters are meaningless, but are subject to certain validation conditions
-            glTexImage3D(this.getTextureTarget(), 0, internalFormat, width, height, layerCount, 0, format, GL_UNSIGNED_BYTE, 0);
+            glTexImage3D(getTextureTarget(), 0, internalFormat, width, height, layerCount, 0, format, GL_UNSIGNED_BYTE, 0);
             OpenGLContext.errorCheck();
         }
 
-        calculateMipmapLevelCount(Math.max(this.width, this.height), maxMipmapLevel);
-        this.initFilteringAndMipmaps(useLinearFiltering, maxMipmapLevel, false);
+        calculateMipmapLevelCount(Math.max(width, height), maxMipmapLevel);
+        initFilteringAndMipmaps(useLinearFiltering, maxMipmapLevel, false);
 
         glTexParameteri(textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         OpenGLContext.errorCheck();
@@ -297,16 +297,16 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
 
     private void validateLayerIndex(int layerIndex)
     {
-        if (layerIndex < 0 || layerIndex >= this.depth)
+        if (layerIndex < 0 || layerIndex >= depth)
         {
-            throw new IllegalArgumentException("The layer index specified (" + layerIndex + ") is out of bounds (layer count: " + this.depth + ").");
+            throw new IllegalArgumentException("The layer index specified (" + layerIndex + ") is out of bounds (layer count: " + depth + ").");
         }
     }
 
     @Override
     public void loadLayer(int layerIndex, File file, boolean flipVertical) throws IOException
     {
-        this.loadLayer(layerIndex, new FileInputStream(file), flipVertical);
+        loadLayer(layerIndex, new FileInputStream(file), flipVertical);
     }
 
     @Override
@@ -321,25 +321,25 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         ByteBuffer buffer = bufferedImageToNativeBuffer(colorImg, flipVertical);
 
         // Send the data to the GPU.
-        this.bind();
+        bind();
 
         glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
         OpenGLContext.errorCheck();
 
-        glTexSubImage3D(this.getTextureTarget(), 0, 0, 0, layerIndex, this.width, this.height, 1,
+        glTexSubImage3D(getTextureTarget(), 0, 0, 0, layerIndex, width, height, 1,
             GL_BGRA, GL_UNSIGNED_BYTE, buffer);
         OpenGLContext.errorCheck();
 
         if (parameters.useMipmaps)
         {
-            this.invalidateMipmaps();
+            invalidateMipmaps();
         }
     }
 
     @Override
     public void loadLayer(int layerIndex, File imageFile, File maskFile, boolean flipVertical) throws IOException
     {
-        this.loadLayer(layerIndex, new FileInputStream(imageFile), new FileInputStream(maskFile), flipVertical);
+        loadLayer(layerIndex, new FileInputStream(imageFile), new FileInputStream(maskFile), flipVertical);
     }
 
     @Override
@@ -355,18 +355,18 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         ByteBuffer buffer = bufferedImageToNativeBuffer(colorImg, flipVertical);
 
         // Send the data to the GPU.
-        this.bind();
+        bind();
 
         glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
         OpenGLContext.errorCheck();
 
-        glTexSubImage3D(this.getTextureTarget(), 0, 0, 0, layerIndex, this.width, this.height, 1,
+        glTexSubImage3D(getTextureTarget(), 0, 0, 0, layerIndex, width, height, 1,
             GL_BGRA, GL_UNSIGNED_BYTE, buffer);
         OpenGLContext.errorCheck();
 
         if (parameters.useMipmaps)
         {
-            this.invalidateMipmaps();
+            invalidateMipmaps();
         }
     }
 
@@ -374,7 +374,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
     public <MappedType> void loadLayer(int layerIndex, File imageFile, File maskFile, boolean flipVertical,
                                        AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction) throws IOException
     {
-        this.loadLayer(layerIndex, new FileInputStream(imageFile), new FileInputStream(maskFile), flipVertical, mappedType, mappingFunction);
+        loadLayer(layerIndex, new FileInputStream(imageFile), new FileInputStream(maskFile), flipVertical, mappedType, mappingFunction);
     }
 
     @Override
@@ -396,7 +396,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
     public <MappedType> void loadLayer(int layerIndex, File file, boolean flipVertical,
                                        AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction) throws IOException
     {
-        this.loadLayer(layerIndex, new FileInputStream(file), flipVertical, mappedType, mappingFunction);
+        loadLayer(layerIndex, new FileInputStream(file), flipVertical, mappedType, mappingFunction);
     }
 
     @Override
@@ -434,50 +434,50 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
 
     private void loadLayer(int layerIndex, OpenGLTextureData textureData)
     {
-        this.bind();
+        bind();
 
         glPixelStorei(GL_UNPACK_ALIGNMENT, getUnpackAlignment(textureData.getFormat(), textureData.getType()));
         OpenGLContext.errorCheck();
 
-        glTexSubImage3D(this.getTextureTarget(), 0, 0, 0, layerIndex,
-            this.width, this.height, 1, textureData.getFormat(), textureData.getType(), textureData.getBuffer());
+        glTexSubImage3D(getTextureTarget(), 0, 0, 0, layerIndex,
+            width, height, 1, textureData.getFormat(), textureData.getType(), textureData.getBuffer());
         OpenGLContext.errorCheck();
 
         if (parameters.useMipmaps)
         {
-            this.invalidateMipmaps();
+            invalidateMipmaps();
         }
     }
 
     @Override
     public int getWidth()
     {
-        return this.width;
+        return width;
     }
 
     @Override
     public int getHeight()
     {
-        return this.height;
+        return height;
     }
 
     @Override
     public int getDepth()
     {
-        return this.depth;
+        return depth;
     }
 
     @Override
     public OpenGLFramebufferAttachment getLayerAsFramebufferAttachment(int layerIndex)
     {
-        int textureId = this.getTextureId();
+        int textureId = getTextureId();
         return new TextureLayer(this, textureId, layerIndex);
     }
 
     @Override
     public void setTextureWrap(TextureWrapMode wrapS, TextureWrapMode wrapT, TextureWrapMode wrapR)
     {
-        this.bind();
+        bind();
         switch (wrapS)
         {
             case NONE:
@@ -540,24 +540,24 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
     @Override
     public Texture3D<OpenGLContext> createTextureWithMatchingFormat(int newWidth, int newHeight, int newDepth)
     {
-        if (this.getTextureType() == TextureType.COLOR)
+        if (getTextureType() == TextureType.COLOR)
         {
-            if (this.isInternalFormatCompressed())
+            if (isInternalFormatCompressed())
             {
-                return new OpenGLTexture3D(this.getContext(), this.getTextureTarget(), parameters.multisamples,
+                return new OpenGLTexture3D(getContext(), getTextureTarget(), parameters.multisamples,
                     getInternalCompressedColorFormat(), newWidth, newHeight, newDepth, parameters.format, parameters.fixedMultisampleLocations,
                     parameters.useLinearFiltering, parameters.useMipmaps, parameters.maxMipmapLevel, parameters.maxAnisotropy);
             }
             else
             {
-                return new OpenGLTexture3D(this.getContext(), this.getTextureTarget(), parameters.multisamples,
+                return new OpenGLTexture3D(getContext(), getTextureTarget(), parameters.multisamples,
                     getInternalUncompressedColorFormat(), newWidth, newHeight, newDepth, parameters.format, parameters.fixedMultisampleLocations,
                     parameters.useLinearFiltering, parameters.useMipmaps, parameters.maxMipmapLevel, parameters.maxAnisotropy);
             }
         }
         else
         {
-            return new OpenGLTexture3D(this.getContext(), this.getTextureTarget(), parameters.multisamples,
+            return new OpenGLTexture3D(getContext(), getTextureTarget(), parameters.multisamples,
                 getTextureType(), precision, newWidth, newHeight, newDepth, parameters.format, parameters.fixedMultisampleLocations,
                 parameters.useLinearFiltering, parameters.useMipmaps, parameters.maxMipmapLevel, parameters.maxAnisotropy);
         }
@@ -568,7 +568,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
                                      ReadonlyTexture3D<OpenGLContext> readSource, int srcX, int srcY, int srcZ, int srcWidth, int srcHeight, int srcDepth,
                                      boolean linearFiltering)
     {
-        if (this.isInternalFormatCompressed())
+        if (isInternalFormatCompressed())
         {
             throw new UnsupportedOperationException("Cannot blit to a compressed texture.");
         }
@@ -586,7 +586,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
 
             FramebufferObjectBuilder<OpenGLContext> fboBuilder = getContext().buildFramebufferObject(readSource.getWidth(), readSource.getHeight());
 
-            if (this.getTextureType() == TextureType.COLOR)
+            if (getTextureType() == TextureType.COLOR)
             {
                 // Color attachments need to be declared in advance; depth and stencil are assumed to always be a possibility
                 fboBuilder.addEmptyColorAttachment();
@@ -595,7 +595,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
             try (FramebufferObject<OpenGLContext> sourceFBO = fboBuilder.createFramebufferObject();
                  FramebufferObject<OpenGLContext> destFBO = fboBuilder.createFramebufferObject())
             {
-                int effectiveDepth = Math.min(Math.min(this.depth - destZ, readSource.getDepth() - srcZ), srcDepth);
+                int effectiveDepth = Math.min(Math.min(depth - destZ, readSource.getDepth() - srcZ), srcDepth);
 
                 // Use framebuffer blitting on each depth layer requested
                 for (int i = 0; i < effectiveDepth; i++)
@@ -604,31 +604,31 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
                     FramebufferAttachment<OpenGLContext> sourceAttachment =
                         ((OpenGLTexture3D)readSource).getLayerAsFramebufferAttachment(srcZ + i);
 
-                    switch (this.getTextureType())
+                    switch (getTextureType())
                     {
                         case COLOR:
                             sourceFBO.setColorAttachment(0, sourceAttachment);
-                            destFBO.setColorAttachment(0, this.getLayerAsFramebufferAttachment(destZ + i));
+                            destFBO.setColorAttachment(0, getLayerAsFramebufferAttachment(destZ + i));
                             destFBO.blitColorAttachmentFromFramebufferViewport(0, destX, destY, destWidth, destHeight,
                                 sourceFBO.getViewport(srcX, srcY, srcWidth, srcHeight), 0, linearFiltering);
                             break;
                         case DEPTH:
                         case FLOATING_POINT_DEPTH:
                             sourceFBO.setDepthAttachment(sourceAttachment);
-                            destFBO.setDepthAttachment(this.getLayerAsFramebufferAttachment(destZ + i));
+                            destFBO.setDepthAttachment(getLayerAsFramebufferAttachment(destZ + i));
                             destFBO.blitDepthAttachmentFromFramebufferViewport(destX, destY, destWidth, destHeight,
                                 sourceFBO.getViewport(srcX, srcY, srcWidth, srcHeight));
                             break;
                         case STENCIL:
                             sourceFBO.setStencilAttachment(sourceAttachment);
-                            destFBO.setStencilAttachment(this.getLayerAsFramebufferAttachment(destZ + i));
+                            destFBO.setStencilAttachment(getLayerAsFramebufferAttachment(destZ + i));
                             destFBO.blitStencilAttachmentFromFramebufferViewport(destX, destY, destWidth, destHeight,
                                 sourceFBO.getViewport(srcX, srcY, srcWidth, srcHeight));
                             break;
                         case DEPTH_STENCIL:
                         case FLOATING_POINT_DEPTH_STENCIL:
                             sourceFBO.setDepthStencilAttachment(sourceAttachment);
-                            destFBO.setDepthStencilAttachment(this.getLayerAsFramebufferAttachment(destZ + i));
+                            destFBO.setDepthStencilAttachment(getLayerAsFramebufferAttachment(destZ + i));
                             destFBO.blitDepthStencilAttachmentFromFramebufferViewport(destX, destY, destWidth, destHeight,
                                 sourceFBO.getViewport(srcX, srcY, srcWidth, srcHeight));
                             break;

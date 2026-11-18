@@ -51,12 +51,12 @@ public class IntVector2 implements Iterable<Integer>
 
     public final IntVector3 asVector3(int z)
     {
-        return new IntVector3(this.x, this.y, z);
+        return new IntVector3(x, y, z);
     }
 
     public final IntVector4 asVector4(int z, int w)
     {
-        return new IntVector4(this.x, this.y, z, w);
+        return new IntVector4(x, y, z, w);
     }
 
     public final Vector2 asFloatingPoint()
@@ -85,7 +85,7 @@ public class IntVector2 implements Iterable<Integer>
         if (obj instanceof IntVector2)
         {
             IntVector2 other = (IntVector2) obj;
-            return other.x == this.x && other.y == this.y;
+            return other.x == x && other.y == y;
         }
         else
         {
@@ -102,47 +102,47 @@ public class IntVector2 implements Iterable<Integer>
     public final IntVector2 plus(IntVector2 other)
     {
         return new IntVector2(
-            this.x + other.x,
-            this.y + other.y
+            x + other.x,
+            y + other.y
         );
     }
 
     public final IntVector2 minus(IntVector2 other)
     {
         return new IntVector2(
-            this.x - other.x,
-            this.y - other.y
+            x - other.x,
+            y - other.y
         );
     }
 
     public final IntVector2 negated()
     {
-        return new IntVector2(-this.x, -this.y);
+        return new IntVector2(-x, -y);
     }
 
     public final IntVector2 times(int s)
     {
-        return new IntVector2(s*this.x, s*this.y);
+        return new IntVector2(s* x, s* y);
     }
 
     public final IntVector2 dividedBy(int s)
     {
-        return new IntVector2(this.x/s, this.y/s);
+        return new IntVector2(x/s, y/s);
     }
 
     public final int dot(IntVector2 other)
     {
-        return this.x * other.x + this.y * other.y;
+        return x * other.x + y * other.y;
     }
 
     public final double length()
     {
-        return Math.sqrt(this.dot(this));
+        return Math.sqrt(dot(this));
     }
 
     public final double distance(IntVector2 other)
     {
-        return this.minus(other).length();
+        return minus(other).length();
     }
 
     public final IntVector2 applyOperator(IntUnaryOperator operator)

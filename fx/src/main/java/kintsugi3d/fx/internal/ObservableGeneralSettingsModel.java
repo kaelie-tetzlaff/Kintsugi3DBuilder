@@ -42,14 +42,14 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
 
         private TypedProperty(Object initialValue, Class<?> type, boolean serialize)
         {
-            this.base = new SimpleObjectProperty<>(initialValue);
+            base = new SimpleObjectProperty<>(initialValue);
             this.type = type;
             this.serialize = serialize;
         }
 
         Class<?> getType()
         {
-            return this.type;
+            return type;
         }
 
         boolean shouldSerialize()
@@ -187,7 +187,7 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
     @Override
     public final Class<?> getType(String name)
     {
-        if (this.exists(name))
+        if (exists(name))
         {
             return settingsMap.get(name).getType();
         }

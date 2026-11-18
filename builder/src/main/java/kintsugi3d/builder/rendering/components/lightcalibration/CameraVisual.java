@@ -65,24 +65,24 @@ public class CameraVisual<ContextType extends Context<ContextType>> extends Shad
             View selectedView = viewSelection.getSelectedView();
             if (selectedView != null)
             {
-                this.getContext().getState().disableBackFaceCulling();
+                getContext().getState().disableBackFaceCulling();
 
-                this.getContext().getState().disableDepthWrite();
-                this.getContext().getState().enableDepthTest();
+                getContext().getState().disableDepthWrite();
+                getContext().getState().enableDepthTest();
 
                 Matrix4 snapViewInverse = viewSelection.getSelectedMatrix().quickInverse(0.01f);
                 Vector3 frustumDims = viewSelection.getFrustumDimensions();
 
-                programFactory.setupShaderProgram(this.getProgram()); // sets viewImages
-                this.getProgram().setUniform("viewIndex", selectedView.getGPUViewIndex());
-                this.getProgram().setUniform("model_view",
+                programFactory.setupShaderProgram(getProgram()); // sets viewImages
+                getProgram().setUniform("viewIndex", selectedView.getGPUViewIndex());
+                getProgram().setUniform("model_view",
                     cameraViewport.getView().times(snapViewInverse)
                         .times(Matrix4.scaleAndTranslate(frustumDims, new Vector3(0, 0, -frustumDims.z))));
-                this.getProgram().setUniform("projection", cameraViewport.getViewportProjection());
-                this.getDrawable().draw(PrimitiveMode.TRIANGLE_FAN, cameraViewport.ofFramebuffer(framebuffer));
+                getProgram().setUniform("projection", cameraViewport.getViewportProjection());
+                getDrawable().draw(PrimitiveMode.TRIANGLE_FAN, cameraViewport.ofFramebuffer(framebuffer));
 
-                this.getContext().getState().enableDepthWrite();
-                this.getContext().getState().enableDepthTest();
+                getContext().getState().enableDepthWrite();
+                getContext().getState().enableDepthTest();
             }
         }
     }

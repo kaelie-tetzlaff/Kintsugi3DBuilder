@@ -32,7 +32,7 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
     public LitRoot(ContextType context, SceneModel sceneModel)
     {
         this.context = context;
-        this.lightingResources = new LightingResources<>(context, sceneModel);
+        lightingResources = new LightingResources<>(context, sceneModel);
     }
 
     public final LightingResources<ContextType> getLightingResources()
@@ -115,7 +115,7 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
     public final void takeLitContentRoot(LitContent<ContextType> litContentRoot)
     {
         this.litContentRoot = litContentRoot;
-        litContentRoot.initWithLightingResources(this.lightingResources);
+        litContentRoot.initWithLightingResources(lightingResources);
     }
 
     /**

@@ -41,10 +41,10 @@ public class ResampleRequest implements ProgressMonitoredImageBasedGraphicsReque
     
     public ResampleRequest(int width, int height, File targetVSETFile, File exportPath)
     {
-        this.resampleWidth = width;
-        this.resampleHeight = height;
-        this.resampleVSETFile = targetVSETFile;
-        this.resampleExportPath = exportPath;
+        resampleWidth = width;
+        resampleHeight = height;
+        resampleVSETFile = targetVSETFile;
+        resampleExportPath = exportPath;
     }
 
     @Override

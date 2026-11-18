@@ -40,6 +40,6 @@ public interface ProgressMonitoredImageBasedGraphicsRequest extends ImageBasedGr
     default <ContextType extends Context<ContextType>> void executeRequest(ImageBasedRenderable<ContextType> instance) throws Exception
     {
         // Use a default ProgressMonitor that does nothing but doesn't cause null pointer exceptions
-        this.executeRequest(instance, new DefaultProgressMonitor());
+        executeRequest(instance, new DefaultProgressMonitor());
     }
 }

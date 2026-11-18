@@ -56,7 +56,7 @@ public class UUIDSelectionModel
     {
         return Bindings.createBooleanBinding(
             () -> selected.containsKey(id),
-            this.selected
+            selected
         );
     }
 

@@ -36,8 +36,8 @@ public abstract class ViewSelectableBase implements ViewSelectable
     @Override
     public final void selectView(String viewName, double viewRotation)
     {
-        this.primaryView = viewName;
-        this.primaryViewRotation = viewRotation;
+        primaryView = viewName;
+        primaryViewRotation = viewRotation;
     }
 
     @Override

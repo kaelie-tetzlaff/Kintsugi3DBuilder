@@ -40,6 +40,6 @@ public interface VertexBuffer<ContextType extends Context<ContextType>> extends 
      */
     default VertexBuffer<ContextType> setData(ReadonlyNativeVectorBuffer data)
     {
-        return this.setData(data, false);
+        return setData(data, false);
     }
 }

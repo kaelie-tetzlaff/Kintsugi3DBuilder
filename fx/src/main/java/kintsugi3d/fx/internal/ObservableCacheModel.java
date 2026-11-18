@@ -120,10 +120,10 @@ public class ObservableCacheModel extends CacheModelBase
             {
                 synchronizedCacheSizeCalcComplete(() ->
                 {
-                    this.projectSizes = Collections.unmodifiableMap(newProjectSizes);
+                    projectSizes = Collections.unmodifiableMap(newProjectSizes);
 
                     // This will trigger any listeners attached to the property.
-                    this.cacheSize.set(newCacheSize);
+                    cacheSize.set(newCacheSize);
                 });
             }
             finally // Another finally block that isn't synchronized to avoid blocking other threads.

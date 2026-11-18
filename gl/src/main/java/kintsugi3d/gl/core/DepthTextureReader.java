@@ -49,7 +49,7 @@ public interface DepthTextureReader
      */
     default void read(ShortBuffer destination)
     {
-        this.read(destination, 0, 0, getWidth(), getHeight());
+        read(destination, 0, 0, getWidth(), getHeight());
     }
 
     /**
@@ -70,6 +70,6 @@ public interface DepthTextureReader
      */
     default short[] read()
     {
-        return this.read(0, 0, getWidth(), getHeight());
+        return read(0, 0, getWidth(), getHeight());
     }
 }
