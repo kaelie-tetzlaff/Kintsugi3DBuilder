@@ -32,10 +32,8 @@ public class LiveProjectSettingsManager extends ProjectSettingsManager
     }
 
     @Override
-    public final void refresh()
+    public final void onRefresh()
     {
-        super.refresh();
-
         // Remember what to set back to if the user cancels
         this.revertSettingsModel.copyAllFrom(getProjectSettingsModel());
     }

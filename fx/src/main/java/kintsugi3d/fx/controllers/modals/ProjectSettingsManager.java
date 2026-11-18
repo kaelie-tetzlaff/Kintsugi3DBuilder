@@ -64,7 +64,7 @@ public class ProjectSettingsManager
         return Collections.unmodifiableSet(trackedSettings);
     }
 
-    public void refresh()
+    public final void refresh()
     {
         if (Global.io().hasLoadedRenderable())
         {
@@ -78,6 +78,12 @@ public class ProjectSettingsManager
 
         // Populate local model with the current project settings.
         localSettingsModel.copyAllFrom(this.projectSettingsModel);
+
+        onRefresh();
+    }
+
+    protected void onRefresh()
+    {
     }
 
     /**
