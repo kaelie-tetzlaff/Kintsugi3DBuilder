@@ -35,7 +35,7 @@ public class NonDataPageBuilder<FinishType> extends SimplePageBuilder<Object, Ob
     public final <ControllerType extends NonSupplierPageController<? super Object>>
     NonDataPageBuilder<FinishType> then(String fxmlPath)
     {
-        return <ControllerType>thenNonData(fxmlPath);
+        return this.<ControllerType>thenNonData(fxmlPath);
     }
 
     @Override
