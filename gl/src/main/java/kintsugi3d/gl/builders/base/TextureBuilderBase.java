@@ -19,7 +19,12 @@ import kintsugi3d.gl.builders.TextureBuilder;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Texture;
 
-public abstract class TextureBuilderBase<ContextType extends Context<ContextType>, TextureType extends Texture<ContextType>> implements TextureBuilder<ContextType, TextureType>
+/**
+ * Internal base class for various other texture builder base classes.
+ * @param <ContextType>
+ * @param <TextureType>
+ */
+abstract class TextureBuilderBase<ContextType extends Context<ContextType>, TextureType extends Texture<ContextType>> implements TextureBuilder<ContextType, TextureType>
 {
     private final ContextType context;
     private int multisamples = 1;
@@ -64,6 +69,7 @@ public abstract class TextureBuilderBase<ContextType extends Context<ContextType
         this.context = context;
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public TextureBuilder<ContextType, TextureType> setMultisamples(int samples, boolean fixedSampleLocations)
     {
@@ -72,6 +78,7 @@ public abstract class TextureBuilderBase<ContextType extends Context<ContextType
         return this;
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public TextureBuilder<ContextType, TextureType> setMipmapsEnabled(boolean enabled)
     {
@@ -79,6 +86,7 @@ public abstract class TextureBuilderBase<ContextType extends Context<ContextType
         return this;
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public TextureBuilder<ContextType, TextureType> setMaxMipmapLevel(int maxMipmapLevel)
     {
@@ -86,6 +94,7 @@ public abstract class TextureBuilderBase<ContextType extends Context<ContextType
         return this;
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public TextureBuilder<ContextType, TextureType> setLinearFilteringEnabled(boolean enabled)
     {
@@ -93,6 +102,7 @@ public abstract class TextureBuilderBase<ContextType extends Context<ContextType
         return this;
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public TextureBuilder<ContextType, TextureType> setMaxAnisotropy(float maxAnisotropy)
     {
