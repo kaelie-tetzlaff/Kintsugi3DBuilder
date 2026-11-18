@@ -108,9 +108,18 @@ public class ProjectSettingsManager
         localSettingsModel.copyFrom(defaults, trackedSettings);
     }
 
-    public void trackSetting(String settingName)
+    public final void trackSetting(String settingName)
     {
         trackedSettings.add(settingName);
+        onSettingTracked(settingName);
+    }
+
+    /**
+     * Override to add code that runs every time a setting is tracked.
+     * @param settingName
+     */
+    protected void onSettingTracked(String settingName)
+    {
     }
 
     public final void bindFloatSetting(TextField textField, String settingName, float minValue, float maxValue)

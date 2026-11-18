@@ -42,7 +42,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     private final int textureId;
     private final int textureTarget;
 
-    int mipmapLevelCount = 1;
+    private int mipmapLevelCount = 1;
 
     private boolean live = true;
     private boolean staleMipmaps = false;
@@ -157,7 +157,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     }
 
     @Override
-    public int getMipmapLevelCount()
+    public final int getMipmapLevelCount()
     {
         return this.mipmapLevelCount;
     }
@@ -661,9 +661,9 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         {
             throw new IllegalArgumentException("Texture level cannot be negative.");
         }
-        if (level > this.getMipmapLevelCount())
+        if (level > this.mipmapLevelCount)
         {
-            throw new IllegalArgumentException("Illegal level index: " + level + ".  The texture only has " + this.getMipmapLevelCount() + " levels.");
+            throw new IllegalArgumentException("Illegal level index: " + level + ".  The texture only has " + this.mipmapLevelCount + " levels.");
         }
         glFramebufferTexture(GL_DRAW_FRAMEBUFFER, attachment, this.textureId, level);
         OpenGLContext.errorCheck();

@@ -60,12 +60,12 @@ class ManualImportControllerBase extends ProjectImportController
         setInitDirectories(recentFile);
 
         objFileChooser.setTitle("Select 3D model file");
-        objFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Wavefront OBJ file", "*.obj"));
-        objFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Stanford PLY file", "*.ply"));
+        objFileChooser.getExtensionFilters().add(new ExtensionFilter("Wavefront OBJ file", "*.obj"));
+        objFileChooser.getExtensionFilters().add(new ExtensionFilter("Stanford PLY file", "*.ply"));
 
         camFileChooser.setTitle("Select camera positions file");
         StringBuilder cameraPositionsTextBuilder = new StringBuilder("Camera Positions\n(");
-        for (FileChooser.ExtensionFilter filter : getCameraExtensionFilters())
+        for (ExtensionFilter filter : getCameraExtensionFilters())
         {
             camFileChooser.getExtensionFilters().add(filter);
             cameraPositionsTextBuilder.append(filter.getDescription()).append(" or\n");

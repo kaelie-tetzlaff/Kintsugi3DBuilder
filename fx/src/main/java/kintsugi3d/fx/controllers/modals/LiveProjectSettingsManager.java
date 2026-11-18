@@ -22,11 +22,10 @@ public class LiveProjectSettingsManager extends ProjectSettingsManager
     private final ObservableGeneralSettingsModel revertSettingsModel = getDefaultSettingsModel();
 
     @Override
-    public final void trackSetting(String settingName)
+    public final void onSettingTracked(String settingName)
     {
         // Local model automatically updates when the UI is changed
         // Add a listener to automatically push to the project settings model.
-        super.trackSetting(settingName);
         getLocalSettingsModel().getObservable(settingName).addListener(obs ->
             getProjectSettingsModel().copyFrom(getLocalSettingsModel(), settingName));
     }

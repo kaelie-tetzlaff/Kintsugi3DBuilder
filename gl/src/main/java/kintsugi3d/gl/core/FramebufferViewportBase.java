@@ -44,7 +44,7 @@ abstract class FramebufferViewportBase<ContextType extends Context<ContextType>>
     @Override
     public final FramebufferDrawContents<ContextType> getDrawContents()
     {
-        return new DrawContents<ContextType>(this, fullFramebuffer.getDrawContents());
+        return new DrawContents<>(this, fullFramebuffer.getDrawContents());
     }
 
     @Override

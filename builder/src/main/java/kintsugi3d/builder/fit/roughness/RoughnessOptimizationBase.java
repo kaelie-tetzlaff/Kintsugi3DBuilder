@@ -98,7 +98,7 @@ abstract class RoughnessOptimizationBase<ContextType extends Context<ContextType
         return getFramebuffer() == null ? null : getFramebuffer().getColorAttachmentTexture(1);
     }
 
-    void estimateRoughnessMap()
+    final void estimateRoughnessMap()
     {
         // Fit specular so that we have a roughness estimate for masking/shadowing.
         getFramebuffer().clearColorBuffer(0, 0.0f, 0.0f, 0.0f, 0.0f);

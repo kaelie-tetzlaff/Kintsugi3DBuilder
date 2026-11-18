@@ -74,6 +74,21 @@ public final class SearchableListView<T> extends SearchableView
             return;
         }
 
+        FilteredList<T> filteredItems = getFilteredItems(searchTxt);
+
+
+        for (T item : backup)
+        {
+            if (!filteredItems.contains(item))
+            {
+                listView.getItems().remove(item);
+            }
+        }
+
+    }
+
+    private @NotNull FilteredList<T> getFilteredItems(String searchTxt)
+    {
         FilteredList<T> filteredItems = new FilteredList<>(listView.getItems(), visibility->true);
 
         filteredItems.setPredicate(item ->
@@ -91,14 +106,6 @@ public final class SearchableListView<T> extends SearchableView
             }
         });
 
-
-        for (T item : backup)
-        {
-            if (!filteredItems.contains(item))
-            {
-                listView.getItems().remove(item);
-            }
-        }
-
+        return filteredItems;
     }
 }
