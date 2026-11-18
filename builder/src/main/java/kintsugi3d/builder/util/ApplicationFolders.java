@@ -27,10 +27,25 @@ import java.util.Objects;
 @SuppressWarnings({"AccessOfSystemProperties", "CallToSystemGetenv"})
 public final class ApplicationFolders
 {
-    private static final Logger LOG = LoggerFactory.getLogger(ApplicationFolders.class);
-
+    // Initialize OS and app folder name first, so the static block below can compute the log directory.
     private static final OperatingSystem OS = OperatingSystem.getCurrentOS();
     public static final String APP_FOLDER_NAME = "Kintsugi3DBuilder";
+
+    // Set the log directory system property before the static Logger field below triggers
+    // Log4j2 auto-initialization, so Log4j2 reads the correct path from its config.
+    // GlobalUserPreferencesManager does not have a static Logger, so getLogFileDirectory() can be
+    // called here safely and will respect user preferences for the log directory.
+    static
+    {
+        if (System.getProperty("Kintsugi3D.logDir") == null)
+        {
+            System.setProperty("Kintsugi3D.logDir", getLogFileDirectory().toAbsolutePath().toString());
+        }
+
+        LOG = LoggerFactory.getLogger(ApplicationFolders.class);
+    }
+
+    private static final Logger LOG;
 
     private ApplicationFolders()
     {
