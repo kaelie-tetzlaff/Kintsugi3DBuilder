@@ -37,4 +37,18 @@ public class DataPageBuilder<InType, OutType, FinishType> extends SimplePageBuil
     {
         return this.<ControllerType>then(fxmlPath, null);
     }
+
+    @Override
+    public final <ControllerType extends SelectionPageController<OutType>>
+    SelectionPageBuilder<? super OutType, FinishType> thenSelect(String prompt, Supplier<ControllerType> controllerConstructorOverride)
+    {
+        return thenSelect(prompt, SimpleSelectionPage<OutType, ControllerType>::new, controllerConstructorOverride);
+    }
+
+    @Override
+    public final <ControllerType extends SelectionPageController<OutType>>
+    SelectionPageBuilder<? super OutType, FinishType> thenSelect(String prompt)
+    {
+        return thenSelect(prompt, SimpleSelectionPage<OutType, ControllerType>::new, null);
+    }
 }

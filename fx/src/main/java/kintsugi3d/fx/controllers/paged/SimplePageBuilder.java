@@ -85,7 +85,7 @@ public abstract class SimplePageBuilder<InType, OutType, FinishType> extends Pag
         PageType nextPage = getFrameController().createPage(SELECTION_PAGE_FXML, pageConstructor, controllerConstructorOverride);
         nextPage.setPrompt(prompt);
         this.page.setNextPage(nextPage);
-        return new SelectionPageBuilder<>(nextPage, getFrameController(), getFinisher());
+        return new DataSelectionPageBuilder<>(nextPage, getFrameController(), getFinisher());
     }
 
     public final <PageType extends SelectionPage<OutType>, ControllerType extends PageController<OutType>>
@@ -94,17 +94,11 @@ public abstract class SimplePageBuilder<InType, OutType, FinishType> extends Pag
         return this.<PageType, ControllerType>thenSelect(prompt, pageConstructor, null);
     }
 
-    public <ControllerType extends SelectionPageController<OutType>>
-    SelectionPageBuilder<? super OutType, FinishType> thenSelect(String prompt, Supplier<ControllerType> controllerConstructorOverride)
-    {
-        return thenSelect(prompt, SimpleSelectionPage<OutType, ControllerType>::new, controllerConstructorOverride);
-    }
+    public abstract <ControllerType extends SelectionPageController<OutType>>
+    SelectionPageBuilder<? super OutType, FinishType> thenSelect(String prompt, Supplier<ControllerType> controllerConstructorOverride);
 
-    public <ControllerType extends SelectionPageController<OutType>>
-    SelectionPageBuilder<? super OutType, FinishType> thenSelect(String prompt)
-    {
-        return thenSelect(prompt, SimpleSelectionPage<OutType, ControllerType>::new, null);
-    }
+    public abstract <ControllerType extends SelectionPageController<OutType>>
+    SelectionPageBuilder<? super OutType, FinishType> thenSelect(String prompt);
 
     protected final <ControllerType extends SelectionPageController<Object>>
     NonDataSelectionPageBuilder<FinishType> thenSelectNonData(String prompt, Supplier<ControllerType> controllerConstructorOverride)
