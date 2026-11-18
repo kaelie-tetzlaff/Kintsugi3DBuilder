@@ -178,14 +178,18 @@ public class ManualInputSource extends NonValidatedInputSourceBase
             }
             else
             {
-                return super.confirm();
-            }
-        }
+                File projectFileToSave = specifyProjectFileToSave();
 
-        @Override
-        public final void confirm(File projectFileToSave)
-        {
-            Global.io().loadFromLooseFiles(projectFileToSave, original.cameraFile.getPath(), original.cameraFile, getViewSetLoadOptions());
+                if (projectFileToSave != null)
+                {
+                    Global.io().loadFromLooseFiles(projectFileToSave, original.cameraFile.getPath(), original.cameraFile, getViewSetLoadOptions());
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
 
         private ViewSetLoadOptions getViewSetLoadOptions()

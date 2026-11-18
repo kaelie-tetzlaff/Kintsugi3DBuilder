@@ -73,22 +73,4 @@ public abstract class ValidatedInputSourceBase extends ViewSelectableBase implem
     {
         return imageSetInfo;
     }
-
-    @Override
-    public boolean confirm()
-    {
-        File projectFileToSave = specifyProjectFileToSave();
-
-        if (projectFileToSave != null)
-        {
-            confirm(projectFileToSave);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    protected abstract void confirm(File projectFileToSave);
 }
