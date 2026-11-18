@@ -57,18 +57,21 @@ public class SimpleShaderInfo implements ShaderInfo
         return new File(SHADER_DIR, filename);
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public Map<String, Optional<Object>> getDefines()
     {
         return Map.of();
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public boolean equals(Object obj)
     {
         return obj instanceof SimpleShaderInfo && Objects.equals(this.filename, ((SimpleShaderInfo) obj).filename);
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public int hashCode()
     {
