@@ -127,6 +127,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
         canConfirmProperty.set(canConfirm);
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public boolean tryAdvance()
     {
@@ -134,6 +135,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
         return true;
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public boolean tryConfirm()
     {
@@ -141,6 +143,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
         return true;
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public boolean tryCancel()
     {
