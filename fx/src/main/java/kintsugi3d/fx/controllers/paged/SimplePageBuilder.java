@@ -61,6 +61,7 @@ public abstract class SimplePageBuilder<InType, OutType, FinishType> extends Pag
     public abstract <ControllerType extends NonSupplierPageController<? super OutType>>
     SimplePageBuilder<OutType, OutType, FinishType> then(String fxmlPath, Supplier<ControllerType> controllerConstructorOverride);
 
+    @SuppressWarnings("unused") // Suppress warnings about ControllerType being unused -- we need it here to force type checking.
     public abstract <ControllerType extends NonSupplierPageController<? super OutType>>
     SimplePageBuilder<OutType, OutType, FinishType> then(String fxmlPath);
 
@@ -97,6 +98,7 @@ public abstract class SimplePageBuilder<InType, OutType, FinishType> extends Pag
     public abstract <ControllerType extends SelectionPageController<OutType>>
     SelectionPageBuilder<? super OutType, FinishType> thenSelect(String prompt, Supplier<ControllerType> controllerConstructorOverride);
 
+    @SuppressWarnings("unused") // Suppress warnings about ControllerType being unused -- we need it here to force type checking.
     public abstract <ControllerType extends SelectionPageController<OutType>>
     SelectionPageBuilder<? super OutType, FinishType> thenSelect(String prompt);
 
