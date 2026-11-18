@@ -24,6 +24,7 @@ import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Map;
@@ -44,7 +45,7 @@ public class GroundPlane<ContextType extends Context<ContextType>> extends Stand
     }
 
     @Override
-    protected final Drawable<ContextType> createDrawable(Program<ContextType> drawableProgram)
+    protected final @NotNull Drawable<ContextType> createDrawable(Program<ContextType> drawableProgram)
     {
         Drawable<ContextType> drawable = super.createDrawable(drawableProgram);
         drawable.setVertexAttrib("normal", new Vector3(0, 0, 1));

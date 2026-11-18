@@ -50,10 +50,8 @@ public class LightCalibrationVisual<ContextType extends Context<ContextType>> ex
     }
 
     @Override
-    public final void initialize()
+    protected final void onInitialize()
     {
-        super.initialize();
-
         this.lightTexture = resource(new RadialTextureGenerator<>(getContext()).buildBloomTexture(64)
             .setInternalFormat(ColorFormat.R8)
             .setLinearFilteringEnabled(true)

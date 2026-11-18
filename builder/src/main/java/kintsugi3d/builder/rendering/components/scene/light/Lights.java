@@ -56,10 +56,8 @@ public class Lights<ContextType extends Context<ContextType>> extends ShaderComp
     }
 
     @Override
-    public final void initialize()
+    protected final void onInitialize()
     {
-        super.initialize();
-
         this.lightTexture = resource(new RadialTextureGenerator<>(getContext())
             .buildBloomTexture(64)
             .setLinearFilteringEnabled(true)

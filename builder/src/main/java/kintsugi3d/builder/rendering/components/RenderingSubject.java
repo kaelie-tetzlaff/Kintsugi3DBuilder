@@ -28,6 +28,7 @@ import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.ShadingParameterMode;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.Map;
@@ -51,7 +52,7 @@ public class RenderingSubject<ContextType extends Context<ContextType>> extends 
     }
 
     @Override
-    protected final Drawable<ContextType> createDrawable(Program<ContextType> program)
+    protected final @NotNull Drawable<ContextType> createDrawable(Program<ContextType> program)
     {
         // Use GraphicsResources to create a drawable with all the available vertex buffers.
         return getResources().createDrawable(program);

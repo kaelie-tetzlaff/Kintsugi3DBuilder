@@ -56,10 +56,8 @@ public class LightCenters<ContextType extends Context<ContextType>> extends Shad
     }
 
     @Override
-    public final void initialize()
+    protected final void onInitialize()
     {
-        super.initialize();
-
         this.lightCenterTexture = resource(new RadialTextureGenerator<>(getContext())
             .buildCircleTexture(64)
             .setLinearFilteringEnabled(true)

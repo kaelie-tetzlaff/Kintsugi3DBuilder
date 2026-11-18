@@ -18,6 +18,7 @@ package kintsugi3d.builder.rendering.components;
 import kintsugi3d.builder.rendering.RenderedComponent;
 import kintsugi3d.builder.rendering.SceneViewportModel;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,10 +74,20 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
     }
 
     @Override
-    public void initialize()
+    public final void initialize()
     {
         this.vertexBuffers = createVertexBuffers();
         reloadShaders();
+        onInitialize();
+    }
+
+    /**
+     * Override to specify behavior that should happen immediately after initialization
+     * (i.e. after vertex buffer construction and shader compilation).
+     */
+    @SuppressWarnings("NoopMethodInAbstractClass")
+    protected void onInitialize()
+    {
     }
 
     @Override
@@ -178,7 +189,8 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
     /**
      * Override to customize drawable creation.
      */
-    protected Drawable<ContextType> createDrawable(Program<ContextType> drawableProgram)
+    @SuppressWarnings("DesignForExtension")
+    protected @NotNull Drawable<ContextType> createDrawable(Program<ContextType> drawableProgram)
     {
         return context.createDrawable(drawableProgram);
     }
