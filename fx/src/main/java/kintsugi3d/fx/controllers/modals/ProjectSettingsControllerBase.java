@@ -72,9 +72,23 @@ public abstract class ProjectSettingsControllerBase extends NonDataPageControlle
 
     @Override
     @FXML
-    public boolean tryCancel()
+    public final boolean tryCancel()
     {
-        return StaticUtilities.confirmCancel();
+        if (StaticUtilities.confirmCancel())
+        {
+            onCancel();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    @SuppressWarnings("NoopMethodInAbstractClass")
+    protected void onCancel()
+    {
+        // Default no-op implementation if no cancel callback is needed.
     }
 
     /**
