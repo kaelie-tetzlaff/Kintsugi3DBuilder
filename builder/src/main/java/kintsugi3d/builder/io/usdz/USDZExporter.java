@@ -113,6 +113,8 @@ public abstract class USDZExporter extends MaterialExporter
         // Add inheritance specified commands
         addCommands(outputDirectory, command);
 
+        LOG.info("USDZ export command: {}", String.join(" ", command));
+
         @SuppressWarnings("UseOfProcessBuilder") ProcessBuilder pb = new ProcessBuilder(command);
 
         // Change the working directory of the exporter to the model's output path
@@ -127,9 +129,10 @@ public abstract class USDZExporter extends MaterialExporter
             reader.lines().forEachOrdered(LOG::info);
 
             // If the exporter didn't exit with a 0, an error occurred
-            if (process.waitFor() != 0)
+            int errorCode = process.waitFor();
+            if (errorCode != 0)
             {
-                throw new IllegalStateException("Passed files don't match requirements.");
+                throw new IllegalStateException(String.format("An error occurred while exporting USDZ.  Error code: %d", errorCode));
             }
         }
         catch (IOException e)

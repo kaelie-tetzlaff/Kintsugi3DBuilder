@@ -217,7 +217,7 @@ public class MaterialExporter
         File outputDirectoryOrRedirect = redirectOutputDirectory(outputDirectory);
         saveTextures(outputDirectoryOrRedirect);
         makeLODs(outputDirectoryOrRedirect);
-        postExport(outputDirectory);
+        postExport(outputDirectoryOrRedirect);
     }
 
     /**
