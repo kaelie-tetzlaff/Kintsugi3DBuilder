@@ -113,17 +113,13 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
                 IntVector2 dimensions = ImageHelper.dimensionsOf(textureImage);
                 String res = String.format("%dx%d", dimensions.x, dimensions.y);
 
-                return new ShaderDataCard(texture.name, texture.getVisualizationShader(), thumbnailPath, textureImage.getPath(),
-                    new LinkedHashMap<>()
-                    {
-                        private static final long serialVersionUID = -2742394325417777891L;
-                        {
-                            put("File Name", textureImage.getName());
-                            put("Resolution", res);
-                            put("Size", (int) (((double) textureImage.length() / (1024.0 * 1024.0)) * 1000.0) + " KB");
-                            put("Purpose", texture.purpose);
-                        }
-                    },
+                LinkedHashMap<String, String> fields = new LinkedHashMap<>(4);
+                fields.put("File Name", textureImage.getName());
+                fields.put("Resolution", res);
+                fields.put("Size", (int) (((double) textureImage.length() / (1024.0 * 1024.0)) * 1000.0) + " KB");
+                fields.put("Purpose", texture.purpose);
+
+                return new ShaderDataCard(texture.name, texture.getVisualizationShader(), thumbnailPath, textureImage.getPath(), fields,
                     List.of(Map.of(
                         "Refresh Texture", () -> refreshTexture(texture),
                         "Replace Texture...", () -> replaceTexture(texture)

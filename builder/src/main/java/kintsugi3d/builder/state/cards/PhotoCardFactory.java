@@ -66,19 +66,14 @@ public class PhotoCardFactory extends ProjectDataCardFactoryBase<View>
             IntVector2 dimensions = ImageHelper.dimensionsOf(fullResFile);
             String res = String.format("%dx%d", dimensions.x, dimensions.y);
 
+            LinkedHashMap<String, String> fields = new LinkedHashMap<>(2);
+            fields.put("Resolution", res);
+            fields.put("Size", (fullResFile.length() / (1024 * 1024)) + " MB");
+
             return new ProjectDataCard(
                 view.getImageFile().getPath(), // path is used to uniquely identify views for synchronizing with backend
                 view.getImageFile().getName(),
-                fullResFile.getPath(), thumbnailPath,
-                new LinkedHashMap<>()
-                {
-                    private static final long serialVersionUID = -4016579173708691664L;
-
-                    {
-                        put("Resolution", res);
-                        put("Size", (fullResFile.length() / (1024 * 1024)) + " MB");
-                    }
-                },
+                fullResFile.getPath(), thumbnailPath, fields,
                 List.of(Map.of(
                     "Remove from Project", () ->
                         Global.state().getProjectModel().confirm("Remove Image", "Remove Image?",
