@@ -31,7 +31,6 @@ import static org.lwjgl.opengl.GL44.*;
 final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLContext>
 {
     private final int width;
-    private int levelCount;
 
     static class OpenGLTexture1DFromBufferBuilder extends ColorTextureBuilderBase<OpenGLContext, OpenGLTexture1D>
     {
@@ -121,23 +120,7 @@ final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLCon
         glTexImage1D(textureTarget, 0, internalFormat, width, 0, format, type, textureData.getBuffer());
         OpenGLContext.errorCheck();
 
-        if (parameters.useMipmaps)
-        {
-            // Calculate the number of mipmap levels
-            this.levelCount = 0;
-            int dim = width;
-            while (dim > 0)
-            {
-                this.levelCount++;
-                dim /= 2;
-            }
-        }
-        else
-        {
-            // No mipmaps
-            this.levelCount = 1;
-        }
-
+        calculateMipmapLevelCount(width, maxMipmapLevel);
         this.initFilteringAndMipmaps(useLinearFiltering, maxMipmapLevel);
 
         glTexParameteri(textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -154,12 +137,6 @@ final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLCon
     public int getWidth()
     {
         return this.width;
-    }
-
-    @Override
-    public int getMipmapLevelCount()
-    {
-        return this.levelCount;
     }
 
     @Override

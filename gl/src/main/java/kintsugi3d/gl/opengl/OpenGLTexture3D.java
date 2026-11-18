@@ -40,7 +40,6 @@ import static org.lwjgl.opengl.GL44.*;
 
 final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLContext>
 {
-    private int mipmapLevelCount;
     private final int width;
     private final int height;
     private final int depth;
@@ -277,23 +276,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
             OpenGLContext.errorCheck();
         }
 
-        if (parameters.useMipmaps)
-        {
-            // Calculate the number of mipmap levels
-            this.mipmapLevelCount = 0;
-            int dim = Math.max(this.width, this.height);
-            while (dim > 0 && this.mipmapLevelCount < maxMipmapLevel)
-            {
-                this.mipmapLevelCount++;
-                dim /= 2;
-            }
-        }
-        else
-        {
-            // No mipmaps
-            this.mipmapLevelCount = 1;
-        }
-
+        calculateMipmapLevelCount(Math.max(this.width, this.height), maxMipmapLevel);
         this.initFilteringAndMipmaps(useLinearFiltering, maxMipmapLevel, false);
 
         glTexParameteri(textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -482,12 +465,6 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
     public int getDepth()
     {
         return this.depth;
-    }
-
-    @Override
-    public int getMipmapLevelCount()
-    {
-        return this.mipmapLevelCount;
     }
 
     @Override

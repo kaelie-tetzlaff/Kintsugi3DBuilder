@@ -42,6 +42,8 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     private final int textureId;
     private final int textureTarget;
 
+    int mipmapLevelCount = 1;
+
     private boolean live = true;
     private boolean staleMipmaps = false;
 
@@ -154,6 +156,12 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         return textureType;
     }
 
+    @Override
+    public int getMipmapLevelCount()
+    {
+        return this.mipmapLevelCount;
+    }
+
     protected final int getTextureTarget()
     {
         return this.textureTarget;
@@ -203,7 +211,13 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         initFilteringAndMipmaps(useLinearFiltering, maxMipmapLevel, true);
     }
 
-    void initFilteringAndMipmaps(boolean useLinearFiltering, int maxMipmapLevel, boolean generateMipmaps)
+    /**
+     * Responsible for setting GL_TEXTURE_MAX_LEVEL, GL_TEXTURE_MIN_FILTER, GL_TEXTURE_MAG_FILTER
+     * @param useLinearFiltering
+     * @param maxMipmapLevel
+     * @param generateMipmaps
+     */
+    final void initFilteringAndMipmaps(boolean useLinearFiltering, int maxMipmapLevel, boolean generateMipmaps)
     {
         if (parameters.useMipmaps)
         {
@@ -251,6 +265,26 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
                 glTexParameteri(this.textureTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 OpenGLContext.errorCheck();
             }
+        }
+    }
+
+    final void calculateMipmapLevelCount(int maxDimension, int maxMipmapLevel)
+    {
+        if (parameters.useMipmaps)
+        {
+            // Calculate the number of mipmap levels
+            this.mipmapLevelCount = 0;
+            int dim = maxDimension;
+            while (dim > 0 && this.mipmapLevelCount < maxMipmapLevel)
+            {
+                this.mipmapLevelCount++;
+                dim /= 2;
+            }
+        }
+        else
+        {
+            // No mipmaps
+            this.mipmapLevelCount = 1;
         }
     }
 

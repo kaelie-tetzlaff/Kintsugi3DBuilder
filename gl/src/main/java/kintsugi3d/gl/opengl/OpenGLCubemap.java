@@ -29,10 +29,9 @@ import java.nio.ByteBuffer;
 import static org.lwjgl.opengl.EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT;
 import static org.lwjgl.opengl.GL32.*;
 
-public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGLContext>
+final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGLContext>
 {
     private final int faceSize;
-    private int levelCount;
 
     private static class FaceData
     {
@@ -415,7 +414,17 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
             OpenGLContext.errorCheck();
         }
 
+        calculateMipmapLevelCount(faceSize, opt.maxMipmapLevel);
         this.initFilteringAndMipmaps(opt.useLinearFiltering, opt.maxMipmapLevel);
+
+        glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        OpenGLContext.errorCheck();
+
+        glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        OpenGLContext.errorCheck();
+
+        glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+        OpenGLContext.errorCheck();
 
         if (opt.maxAnisotropy > 1.0f)
         {
@@ -425,47 +434,9 @@ public final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGL
     }
 
     @Override
-    void initFilteringAndMipmaps(boolean useLinearFiltering, int maxMipmapLevel, boolean generateMipmaps)
-    {
-        super.initFilteringAndMipmaps(useLinearFiltering, maxMipmapLevel, generateMipmaps);
-
-        if (parameters.useMipmaps)
-        {
-            // Calculate the number of mipmap levels
-            this.levelCount = 0;
-            int dim = faceSize;
-            while (dim > 0)
-            {
-                this.levelCount++;
-                dim /= 2;
-            }
-        }
-        else
-        {
-            // No mipmaps
-            this.levelCount = 1;
-        }
-
-        glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        OpenGLContext.errorCheck();
-        
-        glTexParameteri(getTextureTarget(), GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        OpenGLContext.errorCheck();
-        
-        glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-        OpenGLContext.errorCheck();
-    }
-
-    @Override
     public int getFaceSize()
     {
         return this.faceSize;
-    }
-
-    @Override
-    public int getMipmapLevelCount()
-    {
-        return this.levelCount;
     }
 
     @Override

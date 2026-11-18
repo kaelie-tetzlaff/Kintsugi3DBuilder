@@ -18,16 +18,10 @@ package kintsugi3d.gl.opengl;
 import kintsugi3d.gl.core.SamplerType;
 import kintsugi3d.gl.core.TextureType;
 
-public class OpenGLNullTexture extends OpenGLTexture
+class OpenGLNullTexture extends OpenGLTexture
 {
     OpenGLNullTexture(OpenGLContext context, SamplerType type)
     {
         super(context, translateSamplerType(type), TextureType.NULL, 0, new TextureParameters());
-    }
-
-    @Override
-    public final int getMipmapLevelCount()
-    {
-        return 0;
     }
 }
