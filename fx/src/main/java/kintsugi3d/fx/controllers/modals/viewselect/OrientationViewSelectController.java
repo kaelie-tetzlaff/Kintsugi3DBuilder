@@ -25,9 +25,8 @@ import kintsugi3d.fx.util.StaticUtilities;
 public class OrientationViewSelectController extends ViewSelectController
 {
     @Override
-    public final void initPage()
+    public final void initCustom()
     {
-        super.initPage();
         setCanConfirm(true);
     }
 

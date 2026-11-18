@@ -80,7 +80,7 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
     }
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         loadManager = new ImageSelectionLoadManager(
             imageName -> new ImageSelectionLoader(
@@ -99,6 +99,16 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
 
         setCanAdvance(true);
         ScrollBarHelper.scrollbarFix(chunkTreeView);
+
+        initCustom();
+    }
+
+    /**
+     * Override in a subclass to implement additional initialization.
+     */
+    @SuppressWarnings("NoopMethodInAbstractClass")
+    protected void initCustom()
+    {
     }
 
     @Override

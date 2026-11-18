@@ -110,18 +110,30 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
         advanceLabelOverrideProperty.set(advanceLabelOverride);
     }
 
+    /**
+     * Whether or not this page can "confirm", ending the user workflow.
+     * @return
+     */
     @Override
     public final BooleanProperty getCanConfirmObservable()
     {
         return canConfirmProperty;
     }
 
+    /**
+     * Gets whether or not this page can "confirm", ending the user workflow.
+     * @return
+     */
     @Override
     public final boolean canConfirm()
     {
         return canConfirmProperty.get();
     }
 
+    /**
+     * Sets whether or not this page can "confirm", ending the user workflow.
+     * @param canConfirm
+     */
     protected final void setCanConfirm(boolean canConfirm)
     {
         canConfirmProperty.set(canConfirm);
