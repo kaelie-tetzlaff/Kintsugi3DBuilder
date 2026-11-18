@@ -19,7 +19,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 
-public class SpecularBasisFitController extends SpecularTexturesFitController
+public class SpecularBasisFitController extends SpecularFitControllerBase
 {
     @FXML private TextField basisCountTextField;
     @FXML private TextField mfdResolutionTextField;
