@@ -15,7 +15,6 @@
 
 package kintsugi3d.builder.state.scene;
 
-import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 
 public interface LightingEnvironmentModel extends ReadonlyLightingEnvironmentModel
@@ -31,6 +30,5 @@ public interface LightingEnvironmentModel extends ReadonlyLightingEnvironmentMod
     void setAmbientLightIntensity(float environmentIntensity);
     void setBackgroundIntensity(float backgroundIntensity);
 
-    void setLightMatrix(int i, Matrix4 lightMatrix);
     void setLightCenter(int i, Vector3 lightCenter);
 }

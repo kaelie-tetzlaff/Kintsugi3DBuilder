@@ -170,15 +170,6 @@ public abstract class LightingEnvironmentModelBase<DiscreteLightType extends Dis
     }
 
     @Override
-    public final void setLightMatrix(int i, Matrix4 lightMatrix)
-    {
-        if (this.isLightWidgetEnabled(i))
-        {
-            this.lightInstanceModels.get(i).setLookMatrix(lightMatrix);
-        }
-    }
-
-    @Override
     public final void setLightCenter(int i, Vector3 lightCenter)
     {
         if (this.isLightWidgetEnabled(i))

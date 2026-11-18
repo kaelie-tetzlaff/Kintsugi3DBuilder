@@ -17,7 +17,6 @@ package kintsugi3d.builder.state.scene;
 
 import javafx.scene.paint.Color;
 import kintsugi3d.builder.state.project.LightSettings;
-import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 
 public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase implements DiscreteLightModel
@@ -206,11 +205,5 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
         {
             getLightSettings().setSpotTaper(spotTaper);
         }
-    }
-
-    @Override
-    public final void setLookMatrix(Matrix4 lookMatrix)
-    {
-        throw new UnsupportedOperationException();
     }
 }
