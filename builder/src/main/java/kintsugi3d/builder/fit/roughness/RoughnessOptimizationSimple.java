@@ -106,6 +106,12 @@ public class RoughnessOptimizationSimple<ContextType extends Context<ContextType
     }
 
     @Override
+    public final void execute()
+    {
+        estimateRoughnessMap();
+    }
+
+    @Override
     public final void close()
     {
         super.close();

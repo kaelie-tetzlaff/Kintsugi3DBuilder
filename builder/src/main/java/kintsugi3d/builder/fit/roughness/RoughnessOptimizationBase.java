@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 
-public abstract class RoughnessOptimizationBase<ContextType extends Context<ContextType>>
+abstract class RoughnessOptimizationBase<ContextType extends Context<ContextType>>
         implements RoughnessOptimization<ContextType>
 {
     private static final Logger LOG = LoggerFactory.getLogger(RoughnessOptimizationBase.class);
@@ -36,7 +36,7 @@ public abstract class RoughnessOptimizationBase<ContextType extends Context<Cont
     private final VertexBuffer<ContextType> rect;
     private final Drawable<ContextType> specularRoughnessFitDrawable;
 
-    protected RoughnessOptimizationBase(ReadonlyBasisResources<ContextType> basisResources)
+    RoughnessOptimizationBase(ReadonlyBasisResources<ContextType> basisResources)
         throws IOException
     {
         // Fit specular parameters from weighted basis functions
@@ -98,8 +98,7 @@ public abstract class RoughnessOptimizationBase<ContextType extends Context<Cont
         return getFramebuffer() == null ? null : getFramebuffer().getColorAttachmentTexture(1);
     }
 
-    @Override
-    public void execute()
+    void estimateRoughnessMap()
     {
         // Fit specular so that we have a roughness estimate for masking/shadowing.
         getFramebuffer().clearColorBuffer(0, 0.0f, 0.0f, 0.0f, 0.0f);
@@ -123,6 +122,7 @@ public abstract class RoughnessOptimizationBase<ContextType extends Context<Cont
         }
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public void close()
     {

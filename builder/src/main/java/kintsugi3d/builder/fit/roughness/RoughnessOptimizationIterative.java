@@ -125,7 +125,7 @@ public class RoughnessOptimizationIterative<ContextType extends Context<ContextT
     {
         // Generate initial estimate
         // Renders directly into "front" framebuffer which is fine for the first pass since then we don't have to swap
-        super.execute();
+        estimateRoughnessMap();
 
         // Set damping factor to 1.0 initially at each position.
         roughnessOptimization.getFrontFramebuffer().clearColorBuffer(2, 1.0f, 1.0f, 1.0f, 1.0f);
