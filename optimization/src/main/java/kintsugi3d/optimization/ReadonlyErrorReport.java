@@ -38,13 +38,15 @@ public class ReadonlyErrorReport
 
     public final int getSampleCount() { return sampleCount; }
 
-    protected void setError(double newError)
+    @SuppressWarnings("DesignForExtension")
+    void setError(double newError)
     {
         this.previousError = this.error;
         this.error = newError;
     }
 
-    protected void reject()
+    @SuppressWarnings("DesignForExtension")
+    void reject()
     {
         // Roll back to previous error calculation.
         error = previousError;
