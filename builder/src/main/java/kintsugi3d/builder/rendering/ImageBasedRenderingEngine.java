@@ -229,7 +229,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
             subject = scene.getSubject();
             dynamicResourceLoader = new DynamicResourceLoader<>(progressMonitor,
-                resources, subject, litRoot.getLightingResources());
+                context, subject, litRoot.getLightingResources());
 
             updateWorldSpaceDefinition();
 

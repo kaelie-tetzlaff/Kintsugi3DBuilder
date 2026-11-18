@@ -59,7 +59,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.function.DoubleUnaryOperator;
 
 public class IOModel implements IO
 {
@@ -490,36 +489,6 @@ public class IOModel implements IO
     private static File getDefaultSupportingFilesDirectory(File projectFile)
     {
         return new File(projectFile.getParentFile(), projectFile.getName() + ".files");
-    }
-
-    @Override
-    public final DoubleUnaryOperator getLuminanceEncodingFunction()
-    {
-        return handler.getLuminanceEncodingFunction();
-    }
-
-    @Override
-    public final void setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
-    {
-        handler.setTonemapping(linearLuminanceValues, encodedLuminanceValues);
-    }
-
-    @Override
-    public final void clearTonemapping()
-    {
-        handler.clearTonemapping();
-    }
-
-    @Override
-    public final void requestLightIntensityCalibration()
-    {
-        handler.requestLightIntensityCalibration();
-    }
-
-    @Override
-    public final void applyLightOffsetCalibration()
-    {
-        handler.applyLightCalibration();
     }
 
     @Override

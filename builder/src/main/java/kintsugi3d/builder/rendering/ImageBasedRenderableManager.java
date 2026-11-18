@@ -17,7 +17,6 @@ package kintsugi3d.builder.rendering;
 
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.texture.TextureInfo;
-import kintsugi3d.builder.core.viewset.SampledLuminanceEncoding;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.fit.decomposition.BasisMaterialInfo;
@@ -55,7 +54,6 @@ import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.geometry.VertexGeometry;
 import kintsugi3d.gl.interactive.*;
 import kintsugi3d.gl.vecmath.IntVector2;
-import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.window.FramebufferCanvas;
 import kintsugi3d.util.EncodableColorImage;
 import org.slf4j.Logger;
@@ -67,7 +65,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.DoubleUnaryOperator;
 import java.util.function.Function;
 
 public class ImageBasedRenderableManager<ContextType extends Context<ContextType>>
@@ -596,57 +593,6 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     public final void setProgressMonitor(ProgressMonitor progressMonitor)
     {
         this.progressMonitor = progressMonitor;
-    }
-
-    @Override
-    public final DoubleUnaryOperator getLuminanceEncodingFunction()
-    {
-        if (renderableInstance != null)
-        {
-            return renderableInstance.getViewSet().getLuminanceEncoding().getEncodeFunction();
-        }
-        else
-        {
-            // Default if no instance is loaded.
-            return new SampledLuminanceEncoding().getEncodeFunction();
-        }
-    }
-
-    @Override
-    public final void setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
-    {
-        if (renderableInstance != null)
-        {
-            renderableInstance.getDynamicResourceManager().setTonemapping(linearLuminanceValues, encodedLuminanceValues);
-        }
-    }
-
-    @Override
-    public final void clearTonemapping()
-    {
-        if (renderableInstance != null)
-        {
-            renderableInstance.getDynamicResourceManager().clearTonemapping();
-        }
-    }
-
-    @Override
-    public final void requestLightIntensityCalibration()
-    {
-        if (renderableInstance != null)
-        {
-            Rendering.runLater(() -> renderableInstance.getResources().calibrateLightIntensities());
-        }
-    }
-
-    @Override
-    public final void applyLightCalibration()
-    {
-        if (renderableInstance != null)
-        {
-            renderableInstance.getDynamicResourceManager().setLightCalibration(
-                renderableInstance.getSceneModel().getSettingsModel().get("currentLightCalibration", Vector2.class).asVector3());
-        }
     }
 
     public final void setCameraViewListModel(SelectableViewListModel viewListModel)

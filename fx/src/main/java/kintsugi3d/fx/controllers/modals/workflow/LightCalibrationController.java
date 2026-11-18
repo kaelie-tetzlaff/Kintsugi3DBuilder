@@ -98,7 +98,8 @@ public class LightCalibrationController extends NonDataPageControllerBase
     @Override
     public final boolean tryConfirm()
     {
-        Global.io().applyLightOffsetCalibration();
+        Global.io().getLoadedViewSet().setAllLightPositions(
+            settingsModel.get("currentLightCalibration", Vector2.class).asVector3());
         settingsModel.set("lightCalibrationMode", false);
         unbind();
         return true;

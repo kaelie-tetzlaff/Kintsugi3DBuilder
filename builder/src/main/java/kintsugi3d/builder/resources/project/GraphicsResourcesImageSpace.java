@@ -713,18 +713,24 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
 
     public void calibrateLightIntensities()
     {
-        if (getViewSet().getProjectSettings().getBoolean("infiniteLightSources"))
+        ViewSet viewSet = getViewSet();
+        calibrateLightIntensities(viewSet);
+    }
+
+    private void calibrateLightIntensities(ViewSet viewSet)
+    {
+        if (viewSet.getProjectSettings().getBoolean("infiniteLightSources"))
         {
             // Use unit light intensity if light sources don't have inverse-square falloff.
-            getViewSet().setAllLightIntensities(new Vector3(1.0f));
+            viewSet.setAllLightIntensities(new Vector3(1.0f));
         }
         else
         {
             try
             {
-                double primaryViewDistance = getMinDepthForView(getViewSet().getPrimaryView());
+                double primaryViewDistance = getMinDepthForView(viewSet.getPrimaryView());
                 Vector3 lightIntensity = new Vector3((float) (primaryViewDistance * primaryViewDistance));
-                getViewSet().setAllLightIntensities(lightIntensity);
+                viewSet.setAllLightIntensities(lightIntensity);
             }
             catch (IOException e)
             {

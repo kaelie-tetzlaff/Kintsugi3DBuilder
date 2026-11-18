@@ -15,7 +15,6 @@
 
 package kintsugi3d.builder.resources;
 
-import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.EncodableColorImage;
 
 import java.io.File;
@@ -43,23 +42,4 @@ public interface DynamicResourceManager
      * @throws FileNotFoundException If the environment map image is not found.
      */
     EncodableColorImage loadEnvironmentMap(File environmentFile) throws FileNotFoundException;
-
-    /**
-     * Sets the tonemapping curve used to interpret the photographic data.
-     * The data points specified using this function will be interpolated to form a smooth decoding curve.
-     * @param linearLuminanceValues A sequence of luminance values interpreted as physically linear (linear sRGB / "gamma decoded").
-     * @param encodedLuminanceValues A sequence of sRGB ("gamma-encoded") luminance values representing the actual pixel values
-     *                               that might be found in the photographs.
-     */
-    void setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues);
-
-    /**
-     * Clears the tonemapping curve used to interpret the photographic data.
-     */
-    void clearTonemapping();
-
-    /**
-     * Accept the current light calibration (intended to be used only by the application, when in light calibration mode).
-     */
-    void setLightCalibration(Vector3 lightCalibration);
 }

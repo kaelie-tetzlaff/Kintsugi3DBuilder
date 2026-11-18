@@ -30,7 +30,6 @@ import kintsugi3d.util.EncodableColorImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.function.DoubleUnaryOperator;
 
 public interface IOHandler
 {
@@ -98,11 +97,4 @@ public interface IOHandler
     void unload(Runnable onUnloadComplete);
 
     void setProgressMonitor(ProgressMonitor progressMonitor);
-
-    DoubleUnaryOperator getLuminanceEncodingFunction();
-    void setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues);
-    void clearTonemapping();
-    void requestLightIntensityCalibration();
-
-    void applyLightCalibration();
 }

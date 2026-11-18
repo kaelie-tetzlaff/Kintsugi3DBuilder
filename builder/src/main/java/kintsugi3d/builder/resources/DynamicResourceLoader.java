@@ -15,14 +15,11 @@
 
 package kintsugi3d.builder.resources;
 
-import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.rendering.components.RenderingSubject;
-import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Cubemap;
 import kintsugi3d.gl.core.Texture2D;
 import kintsugi3d.gl.interactive.ProgressMonitor;
-import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.EncodableColorImage;
 import kintsugi3d.util.EnvironmentMap;
 
@@ -36,7 +33,6 @@ import java.util.function.Supplier;
 public class DynamicResourceLoader<ContextType extends Context<ContextType>> implements DynamicResourceManager
 {
     private final ProgressMonitor progressMonitor;
-    private final ImageBasedGraphicsResources<ContextType> resources;
     private final RenderingSubject<ContextType> subject;
 
     /** Async-loaded resource for environment maps. */
@@ -51,31 +47,12 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
     /** Read by the render thread in {@link #update()}; set by the JavaFX thread in {@link #requestFragmentShader(File)}. */
     private volatile Supplier<Map<String, Optional<Object>>> shaderDefinesFactory;
 
-    /** Flag checked by the render thread in {@link #update()}; set by the JavaFX thread in {@link #setTonemapping(double[], byte[])} / {@link #clearTonemapping()}. */
-    private volatile boolean newLuminanceEncodingDataAvailable;
-
-    /** Array reference replaced atomically; read by the render thread in {@link #update()}; set by the JavaFX thread.
-     * The arrays themselves are never mutated after assignment (cloned on write). */
-    private volatile double[] newLinearLuminanceValues;
-
-    /** Array reference replaced atomically; read by the render thread in {@link #update()}; set by the JavaFX thread.
-     * The arrays themselves are never mutated after assignment (cloned on write). */
-    private volatile byte[] newEncodedLuminanceValues;
-
-    /** Flag checked by the render thread in {@link #update()}; set by the JavaFX thread in {@link #setLightCalibration(Vector3)}. */
-    private volatile boolean newLightCalibrationAvailable;
-
-    /** Read by the render thread in {@link #update()}; set by the JavaFX thread in {@link #setLightCalibration(Vector3)}. */
-    private volatile Vector3 newLightCalibration;
-
-    public DynamicResourceLoader(ProgressMonitor progressMonitor, ImageBasedGraphicsResources<ContextType> resources,
+    public DynamicResourceLoader(ProgressMonitor progressMonitor, ContextType context,
         RenderingSubject<ContextType> subject, LightingResources<ContextType> lightingResources)
     {
         this.progressMonitor = progressMonitor;
-        this.resources = resources;
         this.subject = subject;
 
-        ContextType context = resources.getContext();
         environmentResource = new AsyncLoadedResource<>(new LoadableEnvironmentCubemap<>(context, lightingResources));
         backplateResource = new AsyncLoadedResource<>(new LoadableBackplateTexture<>(context, lightingResources));
     }
@@ -95,28 +72,6 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
             subject.reloadShaders();
 
             desiredShaderFile = null;
-        }
-
-        ViewSet viewSet = resources.getViewSet();
-
-        if (newLuminanceEncodingDataAvailable)
-        {
-            if (newLinearLuminanceValues != null && newEncodedLuminanceValues != null)
-            {
-                viewSet.setLuminanceEncoding(newLinearLuminanceValues, newEncodedLuminanceValues);
-            }
-            else
-            {
-                viewSet.clearLuminanceEncoding();
-            }
-
-            newLuminanceEncodingDataAvailable = false;
-        }
-
-        if (newLightCalibrationAvailable)
-        {
-            viewSet.setAllLightPositions(newLightCalibration);
-            newLightCalibrationAvailable = false;
         }
     }
 
@@ -143,28 +98,5 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
     public final void loadBackplate(File backplateFile) throws FileNotFoundException
     {
         backplateResource.load(backplateFile, null);
-    }
-
-    @Override
-    public final void setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
-    {
-        newLinearLuminanceValues = linearLuminanceValues.clone();
-        newEncodedLuminanceValues = encodedLuminanceValues.clone();
-        newLuminanceEncodingDataAvailable = true;
-    }
-
-    @Override
-    public final void clearTonemapping()
-    {
-        newLinearLuminanceValues = null;
-        newEncodedLuminanceValues = null;
-        newLuminanceEncodingDataAvailable = true;
-    }
-
-    @Override
-    public final void setLightCalibration(Vector3 lightCalibration)
-    {
-        newLightCalibration = lightCalibration;
-        newLightCalibrationAvailable = true;
     }
 }

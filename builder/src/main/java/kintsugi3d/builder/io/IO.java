@@ -28,7 +28,6 @@ import kintsugi3d.util.EncodableColorImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.function.DoubleUnaryOperator;
 
 public interface IO
 {
@@ -50,7 +49,6 @@ public interface IO
 
     ImageBasedRenderable<?> getMainRenderable();
     ImageBasedRenderable<?> getRenderableForShader(ShaderInfo shader);
-
 
     void loadFromLooseFiles(File newProjectFile, String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions);
     void hotSwapLooseFiles(String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions);
@@ -117,13 +115,6 @@ public interface IO
 
     EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException;
     void loadBackplate(File backplateFile) throws FileNotFoundException;
-
-    DoubleUnaryOperator getLuminanceEncodingFunction();
-    void setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues);
-    void clearTonemapping();
-
-    void requestLightIntensityCalibration();
-    void applyLightOffsetCalibration();
 
     void closeProject();
     void closeProject(Runnable onCloseComplete);
