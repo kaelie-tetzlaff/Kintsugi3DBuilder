@@ -47,7 +47,7 @@ public class CameraWidgetGroup<ContextType extends Context<ContextType>> impleme
         ViewSelection selection = new ViewSelectionImpl(resources.getViewSet(), sceneModel)
         {
             @Override
-            public View getSelectedView()
+            public View getSelectedViewOverride()
             {
                 return currentView;
             }

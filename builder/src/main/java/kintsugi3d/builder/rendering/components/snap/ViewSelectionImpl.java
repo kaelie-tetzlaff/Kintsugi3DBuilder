@@ -20,6 +20,7 @@ import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.rendering.SceneModel;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.Nullable;
 
 public class ViewSelectionImpl implements ViewSelection
 {
@@ -41,9 +42,16 @@ public class ViewSelectionImpl implements ViewSelection
     }
 
     @Override
-    public View getSelectedView()
+    public final View getSelectedView()
     {
-        return sceneModel.getCameraViewListModel().getSelectedView();
+        View override = getSelectedViewOverride();
+        return override != null ? override : sceneModel.getCameraViewListModel().getSelectedView();
+    }
+
+    @SuppressWarnings("DesignForExtension")
+    protected @Nullable View getSelectedViewOverride()
+    {
+        return null;
     }
 
     @Override
