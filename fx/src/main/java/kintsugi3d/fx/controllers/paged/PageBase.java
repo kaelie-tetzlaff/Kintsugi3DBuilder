@@ -37,7 +37,7 @@ abstract class PageBase<InType, OutType, ControllerType extends PageController<?
 
     private final Map<String, Page<? super OutType,?>> fallbackPages = new LinkedHashMap<>(1);
 
-    protected PageBase(FXMLLoader loader)
+    PageBase(FXMLLoader loader)
     {
         if (loader == null)
         {
@@ -81,6 +81,7 @@ abstract class PageBase<InType, OutType, ControllerType extends PageController<?
         return nextPageProperty.isNotNull().get();
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public void setNextPage(Page<? super OutType, ?> page)
     {
@@ -135,8 +136,7 @@ abstract class PageBase<InType, OutType, ControllerType extends PageController<?
         this.nextPageProperty.get().setPrevPage(this);
     }
 
-    @Override
-    public void receiveData(InType data)
+    final void sendDataToController(InType data)
     {
         this.controller.receiveData(data);
     }

@@ -28,10 +28,10 @@ public final class SimpleDataReceiverPage<T, ControllerType extends NonSupplierP
     }
 
     @Override
-    public void receiveData(T data)
+    public void receiveData(T inData)
     {
-        super.receiveData(data);
-        this.data = data;
+        sendDataToController(inData);
+        this.data = inData;
     }
 
     @Override

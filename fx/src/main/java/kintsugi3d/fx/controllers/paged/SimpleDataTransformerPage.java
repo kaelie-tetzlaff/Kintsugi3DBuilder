@@ -24,4 +24,10 @@ public final class SimpleDataTransformerPage<InType, OutType, ControllerType ext
     {
         super(loader);
     }
+
+    @Override
+    public void receiveData(InType inData)
+    {
+        sendDataToController(inData);
+    }
 }

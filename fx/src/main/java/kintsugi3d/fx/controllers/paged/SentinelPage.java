@@ -48,4 +48,9 @@ public class SentinelPage<T> extends PageBase<Object, T, PageController<? super 
             page.setPrevPage(null);
         }
     }
+
+    @Override
+    public void receiveData(Object data)
+    {
+    }
 }
