@@ -22,6 +22,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
@@ -30,7 +31,7 @@ public final class SearchableTreeView extends SearchableView
     private final TreeView<String> treeView;
     private TreeItem<String> backupRoot;
 
-    private SearchableTreeView(TreeView<String> treeView, TextInputControl searchTextInput, CheckBox regexMode)
+    private SearchableTreeView(@NotNull TreeView<String> treeView, @NotNull TextInputControl searchTextInput, @NotNull CheckBox regexMode)
     {
         super(searchTextInput, regexMode);
         this.treeView = treeView;
@@ -42,7 +43,12 @@ public final class SearchableTreeView extends SearchableView
         backupRoot = deepCopy(treeView.getRoot());
 
         getSearchTextInput().textProperty().addListener((obs, oldText, newText) -> updateView());
-        getRegexMode().selectedProperty().addListener((obs, oldVal, newVal) -> updateView());
+
+        CheckBox regexMode = getRegexMode();
+        if (regexMode != null)
+        {
+            regexMode.selectedProperty().addListener((obs, oldVal, newVal) -> updateView());
+        }
 
         return this;
     }
@@ -50,11 +56,6 @@ public final class SearchableTreeView extends SearchableView
     public static SearchableTreeView createUnboundInstance(TreeView<String> tree, TextInputControl textInput, CheckBox regexMode)
     {
         return new SearchableTreeView(tree, textInput, regexMode);
-    }
-
-    public static SearchableTreeView createUnboundInstance(TreeView<String> tree, TextInputControl textInput)
-    {
-        return new SearchableTreeView(tree, textInput, null);
     }
 
     @Override
@@ -72,7 +73,8 @@ public final class SearchableTreeView extends SearchableView
         ObservableList<TreeItem<String>> leaves = getTreeViewLeaves(backupRoot);
         FilteredList<TreeItem<String>> filteredLeaves = new FilteredList<>(leaves, visibility -> true);
 
-        if (getRegexMode().isSelected())
+        CheckBox regexMode = getRegexMode();
+        if (regexMode != null && regexMode.isSelected())
         {
             filteredLeaves.setPredicate(leaf -> leaf.getValue().matches(String.format(".*%s.*", searchTxt)));
         }

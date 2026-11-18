@@ -19,6 +19,8 @@ import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,7 @@ public final class SearchableListView<T> extends SearchableView
     private final ListView<T> listView;
     private List<T> backup;
 
-    private SearchableListView(ListView<T> listView, TextField searchTextField, CheckBox regexMode)
+    private SearchableListView(@NotNull ListView<T> listView, @NotNull TextField searchTextField, @Nullable CheckBox regexMode)
     {
         super(searchTextField, regexMode);
         this.listView = listView;
@@ -50,7 +52,12 @@ public final class SearchableListView<T> extends SearchableView
         backup = new ArrayList<>(listView.getItems());
 
         getSearchTextInput().textProperty().addListener((obs, oldText, newText)-> updateView());
-        getRegexMode().selectedProperty().addListener((obs, oldVal, newVal)-> updateView());
+
+        CheckBox regexMode = getRegexMode();
+        if (regexMode != null)
+        {
+            regexMode.selectedProperty().addListener((obs, oldVal, newVal)-> updateView());
+        }
 
         return this;
     }
@@ -73,7 +80,8 @@ public final class SearchableListView<T> extends SearchableView
         {
             String itemName = item.toString();
 
-            if (getRegexMode().isSelected())
+            CheckBox regexMode = getRegexMode();
+            if (regexMode != null && regexMode.isSelected())
             {
                 return itemName.matches(String.format(".*%s.*", searchTxt));
             }

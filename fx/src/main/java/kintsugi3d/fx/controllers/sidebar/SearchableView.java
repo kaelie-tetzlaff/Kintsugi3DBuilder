@@ -17,13 +17,15 @@ package kintsugi3d.fx.controllers.sidebar;
 
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextInputControl;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class SearchableView
 {
     private final TextInputControl searchTextInput;
     private final CheckBox regexMode;
 
-    SearchableView(TextInputControl searchTextInput, CheckBox regexMode)
+    SearchableView(@NotNull TextInputControl searchTextInput, @Nullable CheckBox regexMode)
     {
         this.searchTextInput = searchTextInput;
         this.regexMode = regexMode;
@@ -33,12 +35,12 @@ public abstract class SearchableView
 
     protected abstract void updateView();
 
-    final TextInputControl getSearchTextInput()
+    @NotNull final TextInputControl getSearchTextInput()
     {
         return searchTextInput;
     }
 
-    final CheckBox getRegexMode()
+    @Nullable final CheckBox getRegexMode()
     {
         return regexMode;
     }
