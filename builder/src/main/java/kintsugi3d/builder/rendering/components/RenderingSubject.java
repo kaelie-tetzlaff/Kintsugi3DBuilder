@@ -68,10 +68,8 @@ public class RenderingSubject<ContextType extends Context<ContextType>> extends 
     }
 
     @Override
-    protected final void setupModelView(Program<ContextType> p, Matrix4 modelView)
+    protected final void setupCustom(Program<ContextType> p, Matrix4 modelView)
     {
-        super.setupModelView(p, modelView);
-
         if (!this.getSceneModel().getSettingsModel().getBoolean("relightingEnabled")
             && !isLightCalibrationMode()
             && this.getSceneModel().getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM)

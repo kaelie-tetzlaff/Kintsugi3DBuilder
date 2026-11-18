@@ -257,11 +257,13 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         Matrix4 modelView = cameraViewport.getView().times(model);
         setupModelView(getDrawable().program(), modelView);
 
+        setupCustom(getDrawable().program(), modelView);
+
         getDrawable().program().setUniform("projection", cameraViewport.getViewportProjection());
         getDrawable().program().setUniform("fullProjection", cameraViewport.getFullProjection());
     }
 
-    protected void setupModelView(Program<ContextType> p, Matrix4 modelView)
+    protected final void setupModelView(Program<ContextType> p, Matrix4 modelView)
     {
         p.setUniform("model_view", modelView);
         p.setUniform("viewPos", modelView.quickInverse(0.01f).getColumn(3).getXYZ());
@@ -325,6 +327,14 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         }
 
         program.setUniform("ambientColor", sceneModel.getLightingModel().getAmbientLightColor().applyOperator(SRGB::toLinear));
+    }
+
+    /**
+     * Override to inject additional custom setup for a component.
+     */
+    @SuppressWarnings("NoopMethodInAbstractClass")
+    protected void setupCustom(Program<ContextType> program, Matrix4 modelView)
+    {
     }
 
     public final boolean isLightCalibrationMode()
