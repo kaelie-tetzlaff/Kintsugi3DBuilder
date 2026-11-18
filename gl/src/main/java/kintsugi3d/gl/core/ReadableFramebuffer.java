@@ -60,13 +60,13 @@ public interface ReadableFramebuffer<ContextType extends Context<ContextType>> e
      * Gets an object that encapsulates a viewport within this framebuffer that can be drawn to.
      * @param x The left edge of the viewport
      * @param y The bottom edge of the viewport
-     * @param width The width of the viewport
-     * @param height The height of the viewport
+     * @param viewportWidth The width of the viewport
+     * @param viewportHeight The height of the viewport
      * @return
      */
     @Override
-    default FramebufferViewport<ContextType> getViewport(int x, int y, int width, int height)
+    default FramebufferViewport<ContextType> getViewport(int x, int y, int viewportWidth, int viewportHeight)
     {
-        return new ReadableFramebufferViewport<>(this, new IntVector2(x, y), new FramebufferSize(width, height));
+        return new ReadableFramebufferViewport<>(this, new IntVector2(x, y), new FramebufferSize(viewportWidth, viewportHeight));
     }
 }

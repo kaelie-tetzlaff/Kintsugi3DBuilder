@@ -72,8 +72,8 @@ public class IOModel implements IO
     // Set defaults just in case the load options model is never set (i.e. testing)
     private ReadonlyLoadOptionsModel loadOptionsModel = new SimpleLoadOptionsModel();
 
-    private File projectFile;
-    private File viewSetFile;
+    private File currentProjectFile;
+    private File currentViewSetFile;
 
     private final EventDispatcher<ProjectOpenedListener, ProjectOpenedEvent> projectOpened
         = new EventDispatcher<>(ProjectOpenedListener::onProjectOpened);
@@ -172,19 +172,19 @@ public class IOModel implements IO
     @Override
     public final File getViewSetFile()
     {
-        return viewSetFile;
+        return currentViewSetFile;
     }
 
     @Override
     public final File getProjectFile()
     {
-        return projectFile;
+        return currentProjectFile;
     }
 
     @Override
     public final boolean isProjectOpen()
     {
-        return projectFile != null;
+        return currentProjectFile != null;
     }
 
     private void load(Runnable loader)
@@ -227,7 +227,7 @@ public class IOModel implements IO
             try
             {
                 viewSetLoadOptions.setUUID(getLoadedViewSet() != null ? getLoadedViewSet().getUUID() : null);
-                handler.loadFromLooseFiles(projectFile, internalName, xmlFile, viewSetLoadOptions, loadOptionsModel);
+                handler.loadFromLooseFiles(currentProjectFile, internalName, xmlFile, viewSetLoadOptions, loadOptionsModel);
             }
             catch (Exception e)
             {
@@ -300,8 +300,8 @@ public class IOModel implements IO
             {
                 try
                 {
-                    this.projectFile = projectFile;
-                    viewSetFile = vsetFile;
+                    currentProjectFile = projectFile;
+                    currentViewSetFile = vsetFile;
 
                     RecentProjects.getInstance().addToRecentFiles(projectFile.getAbsolutePath());
 
@@ -365,7 +365,7 @@ public class IOModel implements IO
         {
             viewSet.setRootDirectory(projectFile.getParentFile());
             handler.saveToVSETFile(projectFile);
-            viewSetFile = projectFile;
+            currentViewSetFile = projectFile;
         }
         else
         {
@@ -373,12 +373,12 @@ public class IOModel implements IO
 
             File vsetFile = new File(filesDirectory, projectFile.getName() + ".vset");
             handler.saveToVSETFile(vsetFile);
-            viewSetFile = vsetFile;
+            currentViewSetFile = vsetFile;
 
             saveXMLProject(projectFile, vsetFile);
         }
 
-        this.projectFile = projectFile;
+        currentProjectFile = projectFile;
         projectSaved.notify(new ProjectSavedEvent(projectFile.getName()));
 
         // Export glTF for Kintsugi 3D Viewer even if not requested
@@ -461,7 +461,7 @@ public class IOModel implements IO
             File filesDirectory = getDefaultSupportingFilesDirectory(projectFile);
             filesDirectory.mkdirs();
 
-            if (Objects.equals(viewSetFile, projectFile)) // Saved as a VSET
+            if (Objects.equals(currentViewSetFile, projectFile)) // Saved as a VSET
             {
                 viewSet.setRootDirectory(projectFile.getParentFile());
             }
@@ -535,10 +535,10 @@ public class IOModel implements IO
         cancellationMonitor.requestCancellation(() ->
         {
             // Don't bother notifying if there wasn't something open to begin with.
-            if (viewSetFile != null || projectFile != null)
+            if (currentViewSetFile != null || currentProjectFile != null)
             {
-                viewSetFile = null;
-                projectFile = null;
+                currentViewSetFile = null;
+                currentProjectFile = null;
                 projectClosed.notify(new ProjectClosedEvent());
             }
 

@@ -37,30 +37,27 @@ public class ViewSnap<ContextType extends Context<ContextType>> implements Rende
     private final SceneModel sceneModel;
     private final ViewSelection viewSelection;
 
-    private RenderedComponent<ContextType> contentRoot;
+    private final RenderedComponent<ContextType> contentRoot;
 
     private Matrix4 viewSnap = Matrix4.IDENTITY;
     private View lastSnapView;
 
-    public ViewSnap(SceneModel sceneModel, ViewSelection viewSelection)
+    /**
+     *
+     * @param sceneModel
+     * @param viewSelection
+     * @param contentRoot Transfers ownership of the lit content to this object
+     */
+    public ViewSnap(SceneModel sceneModel, ViewSelection viewSelection, RenderedComponent<ContextType> contentRoot)
     {
         this.sceneModel = sceneModel;
         this.viewSelection = viewSelection;
+        this.contentRoot = contentRoot;
     }
 
     public final RenderedComponent<ContextType> getContentRoot()
     {
         return contentRoot;
-    }
-
-    /**
-     * Transfers ownership of the lit content to this object
-     * Must be called before initialize
-     * @param contentRoot
-     */
-    public final void takeContentRoot(RenderedComponent<ContextType> contentRoot)
-    {
-        this.contentRoot = contentRoot;
     }
 
     @Override

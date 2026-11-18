@@ -237,13 +237,13 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     }
 
     @Override
-    public final void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a, int x, int y, int width, int height)
+    public final void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a, int x, int y, int clearWidth, int clearHeight)
     {
         // Use scissor test to only clear the rectangle specified.
         glEnable(GL_SCISSOR_TEST);
         OpenGLContext.errorCheck();
 
-        glScissor(x, y, width, height);
+        glScissor(x, y, clearWidth, clearHeight);
         OpenGLContext.errorCheck();
 
         clearColorBuffer(attachmentIndex, r, g, b, a);
@@ -253,13 +253,13 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     }
 
     @Override
-    public final void clearIntegerColorBuffer(int attachmentIndex, int r, int g, int b, int a, int x, int y, int width, int height)
+    public final void clearIntegerColorBuffer(int attachmentIndex, int r, int g, int b, int a, int x, int y, int clearWidth, int clearHeight)
     {
         // Use scissor test to only clear the rectangle specified.
         glEnable(GL_SCISSOR_TEST);
         OpenGLContext.errorCheck();
 
-        glScissor(x, y, width, height);
+        glScissor(x, y, clearWidth, clearHeight);
         OpenGLContext.errorCheck();
 
         clearIntegerColorBuffer(attachmentIndex, r, g, b, a);
@@ -269,13 +269,13 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     }
 
     @Override
-    public final void clearDepthBuffer(float depth, int x, int y, int width, int height)
+    public final void clearDepthBuffer(float depth, int x, int y, int clearWidth, int clearHeight)
     {
         // Use scissor test to only clear the rectangle specified.
         glEnable(GL_SCISSOR_TEST);
         OpenGLContext.errorCheck();
 
-        glScissor(x, y, width, height);
+        glScissor(x, y, clearWidth, clearHeight);
         OpenGLContext.errorCheck();
 
         clearDepthBuffer(depth);
@@ -285,13 +285,13 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     }
 
     @Override
-    public final void clearStencilBuffer(int stencilIndex, int x, int y, int width, int height)
+    public final void clearStencilBuffer(int stencilIndex, int x, int y, int clearWidth, int clearHeight)
     {
         // Use scissor test to only clear the rectangle specified.
         glEnable(GL_SCISSOR_TEST);
         OpenGLContext.errorCheck();
 
-        glScissor(x, y, width, height);
+        glScissor(x, y, clearWidth, clearHeight);
         OpenGLContext.errorCheck();
 
         clearStencilBuffer(stencilIndex);

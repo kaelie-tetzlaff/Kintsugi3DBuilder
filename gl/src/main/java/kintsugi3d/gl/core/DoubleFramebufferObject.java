@@ -27,10 +27,10 @@ public interface DoubleFramebufferObject<ContextType extends Context<ContextType
 {
     /**
      * Request that the FBOs be resized.
-     * @param width The new width for the FBO.
-     * @param height The new height for the FBO.
+     * @param resizeWidth The new width for the FBO.
+     * @param resizeHeight The new height for the FBO.
      */
-    void requestResize(int width, int height);
+    void requestResize(int resizeWidth, int resizeHeight);
 
     /**
      * Add a listener that will be called whenever the framebuffers swap,

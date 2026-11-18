@@ -35,6 +35,7 @@ public abstract class ExperienceBase implements Experience
     private Modal modal;
     private JavaFXState state;
 
+    @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     public final void initialize(Window parentWindow, JavaFXState state)
     {

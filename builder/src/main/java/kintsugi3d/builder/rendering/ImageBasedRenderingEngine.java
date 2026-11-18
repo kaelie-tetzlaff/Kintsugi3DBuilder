@@ -213,17 +213,15 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
             lightCalibration = new LightCalibrationRoot<>(resources, sceneModel, viewSelection, sceneViewportModel);
             lightCalibration.initialize();
 
-            litRoot = new LitRoot<>(context, sceneModel);
             StandardScene<ContextType> scene = new StandardScene<>(resources, sceneModel, sceneViewportModel);
 //            scene.setLightVisualsEnabled(true); // Enable light visuals when not in light calibration mode
-            litRoot.takeLitContentRoot(scene);
+            litRoot = new LitRoot<>(context, sceneModel, scene);
             litRoot.initialize();
             litRoot.setShadowCaster(resources.getGeometryResources().getPositionBuffer());
 
-            lightCalibration3DRoot = new LitRoot<>(context, sceneModel);
             LightCalibration3DScene<ContextType> lightCalibScene =
                 new LightCalibration3DScene<>(resources, sceneModel, sceneViewportModel, viewSelection);
-            lightCalibration3DRoot.takeLitContentRoot(lightCalibScene);
+            lightCalibration3DRoot = new LitRoot<>(context, sceneModel, lightCalibScene);
             lightCalibration3DRoot.initialize();
             lightCalibration3DRoot.setShadowCaster(resources.getGeometryResources().getPositionBuffer());
 

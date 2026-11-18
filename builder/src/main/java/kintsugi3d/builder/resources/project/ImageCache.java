@@ -17,6 +17,7 @@ package kintsugi3d.builder.resources.project;
 
 import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.core.viewset.View;
+import kintsugi3d.builder.io.LoadOptionsModel;
 import kintsugi3d.builder.io.SimpleLoadOptionsModel;
 import kintsugi3d.builder.io.TextureLoadOptions;
 import kintsugi3d.gl.core.*;
@@ -303,12 +304,12 @@ public class ImageCache<ContextType extends Context<ContextType>>
     private void buildCache(ReadableFramebuffer<ContextType> fbo, ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
-        SimpleLoadOptionsModel loadOptions = new SimpleLoadOptionsModel();
-        loadOptions.requestColorImages(true);
-        loadOptions.requestAlpha(true);
-        loadOptions.requestCompression(false);
-        loadOptions.requstMipmaps(false);
-        loadOptions.requestDepthImages(true);
+        LoadOptionsModel loadOptions = new SimpleLoadOptionsModel();
+        loadOptions.setColorImagesRequested(true);
+        loadOptions.setAlphaRequested(true);
+        loadOptions.setCompressionRequested(false);
+        loadOptions.setMipmapsRequested(false);
+        loadOptions.setDepthImagesRequested(true);
 
         try(ProgramObject<ContextType> texSpaceProgram = SingleCalibratedImageResource.getShaderProgramBuilder(context, resources.getViewSet(), loadOptions)
             .addShader(ShaderType.VERTEX, new File("shaders/common/texspace_dynamic.vert"))

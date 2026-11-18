@@ -153,7 +153,8 @@ public class MainWindowController
         return instance;
     }
 
-    public final void init(Stage injectedStage, JavaFXState javaFXState, Runnable injectedUserDocumentationHandler)
+    public final void init(Stage injectedStage, @SuppressWarnings("ParameterHidesMemberVariable") JavaFXState javaFXState,
+                           Runnable injectedUserDocumentationHandler)
     {
         //noinspection AssignmentToStaticFieldFromInstanceMethod
         instance = this;

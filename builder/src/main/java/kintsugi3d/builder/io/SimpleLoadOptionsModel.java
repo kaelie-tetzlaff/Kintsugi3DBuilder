@@ -35,21 +35,57 @@ public class SimpleLoadOptionsModel implements LoadOptionsModel
     }
 
     @Override
+    public final boolean areMipmapsRequested()
+    {
+        return mipmapsRequested;
+    }
+
+    @Override
+    public final boolean isCompressionRequested()
+    {
+        return compressionRequested;
+    }
+
+    @Override
+    public final boolean isAlphaRequested()
+    {
+        return alphaRequested;
+    }
+
+    @Override
+    public final boolean areDepthImagesRequested()
+    {
+        return depthImagesRequested;
+    }
+
+    @Override
+    public final int getDepthImageWidth()
+    {
+        return depthImageWidth;
+    }
+
+    @Override
+    public final int getDepthImageHeight()
+    {
+        return depthImageHeight;
+    }
+
+    @Override
     public final int getPreviewImageWidth()
     {
         return previewImageWidth;
     }
 
     @Override
-    public final void setPreviewImageWidth(int previewImageWidth)
-    {
-        this.previewImageWidth = previewImageWidth;
-    }
-
-    @Override
     public final int getPreviewImageHeight()
     {
         return previewImageHeight;
+    }
+
+    @Override
+    public final int getMaxLoadingThreads()
+    {
+        return maxLoadingThreads;
     }
 
     @Override
@@ -95,93 +131,15 @@ public class SimpleLoadOptionsModel implements LoadOptionsModel
     }
 
     @Override
+    public final void setPreviewImageWidth(int previewImageWidth)
+    {
+        this.previewImageWidth = previewImageWidth;
+    }
+
+    @Override
     public final void setPreviewImageHeight(int previewImageHeight)
     {
         this.previewImageHeight = previewImageHeight;
-    }
-
-    public final SimpleLoadOptionsModel requestColorImages(boolean colorImagesRequested)
-    {
-        this.colorImagesRequested = colorImagesRequested;
-        return this;
-    }
-
-    @Override
-    public final boolean areMipmapsRequested()
-    {
-        return mipmapsRequested;
-    }
-
-    public final SimpleLoadOptionsModel requstMipmaps(boolean mipmapsRequested)
-    {
-        this.mipmapsRequested = mipmapsRequested;
-        return this;
-    }
-
-    @Override
-    public final boolean isCompressionRequested()
-    {
-        return compressionRequested;
-    }
-
-    @Override
-    public final boolean isAlphaRequested()
-    {
-        return alphaRequested;
-    }
-
-    public final SimpleLoadOptionsModel requestAlpha(boolean alphaRequested)
-    {
-        this.alphaRequested = alphaRequested;
-        return this;
-    }
-
-    public final SimpleLoadOptionsModel requestCompression(boolean compressionRequested)
-    {
-        this.compressionRequested = compressionRequested;
-        return this;
-    }
-
-    @Override
-    public final boolean areDepthImagesRequested()
-    {
-        return depthImagesRequested;
-    }
-
-    public final SimpleLoadOptionsModel requestDepthImages(boolean depthImagesRequested)
-    {
-        this.depthImagesRequested = depthImagesRequested;
-        return this;
-    }
-
-    @Override
-    public final int getDepthImageWidth()
-    {
-        return depthImageWidth;
-    }
-
-    public final SimpleLoadOptionsModel requestDepthImageWidth(int depthImageWidth)
-    {
-        this.depthImageWidth = depthImageWidth;
-        return this;
-    }
-
-    @Override
-    public final int getDepthImageHeight()
-    {
-        return depthImageHeight;
-    }
-
-    public final SimpleLoadOptionsModel requestDepthImageHeight(int depthImageHeight)
-    {
-        this.depthImageHeight = depthImageHeight;
-        return this;
-    }
-
-    @Override
-    public final int getMaxLoadingThreads()
-    {
-        return maxLoadingThreads;
     }
 
     @Override

@@ -38,7 +38,7 @@ public class AutosaveSettingsController implements SystemSettingsControllerBase
     private Window parentWindow;
 
     @Override
-    public final void initializePage(Window parentWindow, JavaFXState state)
+    public final void initializePage(@SuppressWarnings("ParameterHidesMemberVariable") Window parentWindow, JavaFXState state)
     {
         this.parentWindow = parentWindow;
 

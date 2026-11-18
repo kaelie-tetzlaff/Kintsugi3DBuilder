@@ -34,7 +34,7 @@ abstract class ToolBuilderBase<ToolType> implements ToolBuilder<ToolType>
     }
 
     @Override
-    public final ToolBuilder<ToolType> setCameraModel(ManipulableViewpointModel cameraModel)
+    public final ToolBuilder<ToolType> setCameraModel(@SuppressWarnings("ParameterHidesMemberVariable") ManipulableViewpointModel cameraModel)
     {
         this.cameraModel = cameraModel;
         return this;
@@ -48,21 +48,21 @@ abstract class ToolBuilderBase<ToolType> implements ToolBuilder<ToolType>
     }
 
     @Override
-    public final ToolBuilder<ToolType> setObjectModel(ManipulableObjectPoseModel objectModel)
+    public final ToolBuilder<ToolType> setObjectModel(@SuppressWarnings("ParameterHidesMemberVariable") ManipulableObjectPoseModel objectModel)
     {
         this.objectModel = objectModel;
         return this;
     }
 
     @Override
-    public final ToolBuilder<ToolType> setSceneViewport(SceneViewport sceneViewport)
+    public final ToolBuilder<ToolType> setSceneViewport(@SuppressWarnings("ParameterHidesMemberVariable") SceneViewport sceneViewport)
     {
         this.sceneViewport = sceneViewport;
         return this;
     }
 
     @Override
-    public final ToolBuilder<ToolType> setSettingsModel(GeneralSettingsModel settingsModel)
+    public final ToolBuilder<ToolType> setSettingsModel(@SuppressWarnings("ParameterHidesMemberVariable") GeneralSettingsModel settingsModel)
     {
         this.settingsModel = settingsModel;
         return this;

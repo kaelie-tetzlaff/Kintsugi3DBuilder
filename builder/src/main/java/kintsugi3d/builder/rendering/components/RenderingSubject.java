@@ -84,7 +84,7 @@ public class RenderingSubject<ContextType extends Context<ContextType>> extends 
         }
     }
 
-    public final void overrideViewIndexBuffer(UniformBuffer<ContextType> viewIndexBufferOverride)
+    public final void setViewIndexBufferOverride(UniformBuffer<ContextType> viewIndexBufferOverride)
     {
         this.viewIndexBufferOverride = viewIndexBufferOverride;
     }

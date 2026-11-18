@@ -70,6 +70,7 @@ public class CarouselController
     private ObservableCarouselModel carouselModel;
     private MainWindowController mainWindowBox;
 
+    @SuppressWarnings("ParameterHidesMemberVariable")
     public final void init(ObservableCarouselModel carouselModel, MainWindowController mainWindowBox)
     {
         this.carouselModel = carouselModel;

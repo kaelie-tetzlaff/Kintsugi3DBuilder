@@ -97,7 +97,7 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
             viewIndexBuffer.setData(NativeVectorBufferFactory
                 .createFromIntArray(false, 4, 1,
                     selectedCameraViewIndex, selectedCameraViewIndex, selectedCameraViewIndex, selectedCameraViewIndex));
-            renderingSubject.overrideViewIndexBuffer(viewIndexBuffer);
+            renderingSubject.setViewIndexBufferOverride(viewIndexBuffer);
 
             // Draw the actual object, without model transformation for light calibration
             renderingSubject.draw(framebuffer, cameraViewport.copyForView(lookAt));

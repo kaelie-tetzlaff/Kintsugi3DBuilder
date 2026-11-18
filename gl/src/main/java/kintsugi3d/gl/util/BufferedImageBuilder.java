@@ -37,7 +37,7 @@ public class BufferedImageBuilder
         return new BufferedImageBuilder();
     }
 
-    @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
+    @SuppressWarnings({"AssignmentOrReturnOfFieldWithMutableType", "ParameterHidesMemberVariable"})
     public final BufferedImageBuilder setDataFromArray(int[] data, int width, int height)
     {
         this.data = data;

@@ -27,26 +27,17 @@ import kintsugi3d.gl.core.FramebufferObject;
 
 public class LightCalibrationRoot<ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
-    private final ReadonlyImageBasedGraphicsResources<ContextType> resources;
-    private final SceneModel sceneModel;
-    private final SceneViewportModel sceneViewportModel;
-
     private ViewSnap<ContextType> viewSnapRoot;
 
     public LightCalibrationRoot(ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel,
                                 ViewSelection viewSelection, SceneViewportModel sceneViewportModel)
     {
-        this.resources = resources;
-        this.sceneModel = sceneModel;
-        this.sceneViewportModel = sceneViewportModel;
-
-        viewSnapRoot = new ViewSnap<>(sceneModel, viewSelection);
+        viewSnapRoot = new ViewSnap<>(sceneModel, viewSelection, new LightCalibrationContent<>(resources, sceneModel, sceneViewportModel));
     }
 
     @Override
     public final void initialize()
     {
-        viewSnapRoot.takeContentRoot(new LightCalibrationContent<>(resources, sceneModel, sceneViewportModel));
         viewSnapRoot.initialize();
     }
 

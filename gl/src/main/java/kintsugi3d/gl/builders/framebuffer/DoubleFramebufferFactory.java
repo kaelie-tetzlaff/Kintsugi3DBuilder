@@ -160,27 +160,27 @@ public final class DoubleFramebufferFactory
         }
 
         @Override
-        public final void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a, int x, int y, int width, int height)
+        public final void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a, int x, int y, int clearWidth, int clearHeight)
         {
-            backFBO.clearColorBuffer(attachmentIndex, r, g, b, a, x, y, width, height);
+            backFBO.clearColorBuffer(attachmentIndex, r, g, b, a, x, y, clearWidth, clearHeight);
         }
 
         @Override
-        public final void clearIntegerColorBuffer(int attachmentIndex, int r, int g, int b, int a, int x, int y, int width, int height)
+        public final void clearIntegerColorBuffer(int attachmentIndex, int r, int g, int b, int a, int x, int y, int clearWidth, int clearHeight)
         {
-            backFBO.clearIntegerColorBuffer(attachmentIndex, r, g, b, a, x, y, width, height);
+            backFBO.clearIntegerColorBuffer(attachmentIndex, r, g, b, a, x, y, clearWidth, clearHeight);
         }
 
         @Override
-        public final void clearDepthBuffer(float depth, int x, int y, int width, int height)
+        public final void clearDepthBuffer(float depth, int x, int y, int clearWidth, int clearHeight)
         {
-            backFBO.clearDepthBuffer(depth, x, y, width, height);
+            backFBO.clearDepthBuffer(depth, x, y, clearWidth, clearHeight);
         }
 
         @Override
-        public final void clearStencilBuffer(int stencilIndex, int x, int y, int width, int height)
+        public final void clearStencilBuffer(int stencilIndex, int x, int y, int clearWidth, int clearHeight)
         {
-            backFBO.clearStencilBuffer(stencilIndex, x, y, width, height);
+            backFBO.clearStencilBuffer(stencilIndex, x, y, clearWidth, clearHeight);
         }
 
         @Override
@@ -238,11 +238,11 @@ public final class DoubleFramebufferFactory
         }
 
         @Override
-        public final void requestResize(int width, int height)
+        public final void requestResize(int resizeWidth, int resizeHeight)
         {
             // Framebuffer size cannot be smaller than 1x1.
-            newWidth = Math.max(1, width);
-            newHeight = Math.max(1, height);
+            newWidth = Math.max(1, resizeWidth);
+            newHeight = Math.max(1, resizeHeight);
         }
 
         @Override

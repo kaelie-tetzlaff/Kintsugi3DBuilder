@@ -88,7 +88,7 @@ abstract class TextureBuilderBase<ContextType extends Context<ContextType>, Text
 
     @SuppressWarnings("DesignForExtension")
     @Override
-    public TextureBuilder<ContextType, TextureType> setMaxMipmapLevel(int maxMipmapLevel)
+    public TextureBuilder<ContextType, TextureType> setMaxMipmapLevel(@SuppressWarnings("ParameterHidesMemberVariable") int maxMipmapLevel)
     {
         this.maxMipmapLevel = maxMipmapLevel;
         return this;
@@ -104,7 +104,7 @@ abstract class TextureBuilderBase<ContextType extends Context<ContextType>, Text
 
     @SuppressWarnings("DesignForExtension")
     @Override
-    public TextureBuilder<ContextType, TextureType> setMaxAnisotropy(float maxAnisotropy)
+    public TextureBuilder<ContextType, TextureType> setMaxAnisotropy(@SuppressWarnings("ParameterHidesMemberVariable") float maxAnisotropy)
     {
         this.maxAnisotropy = maxAnisotropy;
         return this;

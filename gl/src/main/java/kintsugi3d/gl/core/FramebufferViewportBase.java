@@ -65,31 +65,31 @@ abstract class FramebufferViewportBase<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a, int x, int y, int width, int height)
+    public final void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a, int x, int y, int clearWidth, int clearHeight)
     {
-        fullFramebuffer.clearColorBuffer(attachmentIndex, r, g, b, a, x + viewportOffset.x, y + viewportOffset.y, width, height);
+        fullFramebuffer.clearColorBuffer(attachmentIndex, r, g, b, a, x + viewportOffset.x, y + viewportOffset.y, clearWidth, clearHeight);
     }
 
     @Override
-    public final void clearIntegerColorBuffer(int attachmentIndex, int r, int g, int b, int a, int x, int y, int width, int height)
+    public final void clearIntegerColorBuffer(int attachmentIndex, int r, int g, int b, int a, int x, int y, int clearWidth, int clearHeight)
     {
-        fullFramebuffer.clearIntegerColorBuffer(attachmentIndex, r, g, b, a, x + viewportOffset.x, y + viewportOffset.y, width, height);
+        fullFramebuffer.clearIntegerColorBuffer(attachmentIndex, r, g, b, a, x + viewportOffset.x, y + viewportOffset.y, clearWidth, clearHeight);
     }
 
     @Override
-    public final void clearDepthBuffer(float depth, int x, int y, int width, int height)
+    public final void clearDepthBuffer(float depth, int x, int y, int clearWidth, int clearHeight)
     {
-        fullFramebuffer.clearDepthBuffer(depth, x + viewportOffset.x, y + viewportOffset.y, width, height);
+        fullFramebuffer.clearDepthBuffer(depth, x + viewportOffset.x, y + viewportOffset.y, clearWidth, clearHeight);
     }
 
     @Override
-    public final void clearStencilBuffer(int stencilIndex, int x, int y, int width, int height)
+    public final void clearStencilBuffer(int stencilIndex, int x, int y, int clearWidth, int clearHeight)
     {
-        fullFramebuffer.clearStencilBuffer(stencilIndex, x + viewportOffset.x, y + viewportOffset.y, width, height);
+        fullFramebuffer.clearStencilBuffer(stencilIndex, x + viewportOffset.x, y + viewportOffset.y, clearWidth, clearHeight);
     }
 
     @Override
-    public abstract Framebuffer<ContextType> getViewport(int x, int y, int width, int height);
+    public abstract Framebuffer<ContextType> getViewport(int x, int y, int viewportWidth, int viewportHeight);
 
     @Override
     public final void blitColorAttachmentFromFramebufferViewport(

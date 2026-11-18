@@ -67,7 +67,7 @@ public class CardController
     private File currentPreviewImageFile;
     private File loadedPreviewImageFile;
 
-    public final void init(ObservableCardsModel<?> cardsModel, ProjectDataCard dataCard)
+    public final void init(@SuppressWarnings("ParameterHidesMemberVariable") ObservableCardsModel<?> cardsModel, ProjectDataCard dataCard)
     {
         this.cardsModel = cardsModel;
 

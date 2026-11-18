@@ -90,6 +90,7 @@ public class CarouselCardController
      * and changes the label to have the name of the shader
      * @param shader
      */
+    @SuppressWarnings("ParameterHidesMemberVariable")
     public final void init(ObservableCarouselModel carouselModel, ShaderInfo shader, CarouselController carousel)
     {
         this.carouselModel = carouselModel;

@@ -111,28 +111,29 @@ abstract class RenderRequestBase implements ProgressMonitoredImageBasedGraphicsR
         }
 
         @Override
-        public final RenderRequestBuilder useCustomVertexShader(File vertexShader)
+        public final RenderRequestBuilder useCustomVertexShader(@SuppressWarnings("ParameterHidesMemberVariable") File vertexShader)
         {
             this.vertexShader = vertexShader;
             return this;
         }
 
         @Override
-        public final RenderRequestBuilder setShaderSetupCallback(Consumer<Program<? extends Context<?>>> shaderSetupCallback)
+        public final RenderRequestBuilder setShaderSetupCallback(
+            @SuppressWarnings("ParameterHidesMemberVariable") Consumer<Program<? extends Context<?>>> shaderSetupCallback)
         {
             this.shaderSetupCallback = shaderSetupCallback;
             return this;
         }
 
         @Override
-        public final RenderRequestBuilder setWidth(int width)
+        public final RenderRequestBuilder setWidth(@SuppressWarnings("ParameterHidesMemberVariable") int width)
         {
             this.width = width;
             return this;
         }
 
         @Override
-        public final RenderRequestBuilder setHeight(int height)
+        public final RenderRequestBuilder setHeight(@SuppressWarnings("ParameterHidesMemberVariable") int height)
         {
             this.height = height;
             return this;

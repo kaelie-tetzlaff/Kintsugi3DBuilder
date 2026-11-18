@@ -134,7 +134,7 @@ public final class Rendering
         runLater(new GraphicsRequest()
         {
             @Override
-            public <ContextType extends Context<ContextType>> void executeRequest(ContextType context)
+            public <ContextType extends Context<ContextType>> void executeRequest(ContextType ignored)
             {
                 runnable.run();
             }
@@ -153,7 +153,7 @@ public final class Rendering
             getRequestQueue().addBackgroundGraphicsRequest(new GraphicsRequest()
             {
                 @Override
-                public <ContextType extends Context<ContextType>> void executeRequest(ContextType context)
+                public <ContextType extends Context<ContextType>> void executeRequest(ContextType ignored)
                 {
                     runnable.run();
                 }

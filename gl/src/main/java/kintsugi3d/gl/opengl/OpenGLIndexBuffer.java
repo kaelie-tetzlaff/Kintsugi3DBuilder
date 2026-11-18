@@ -61,7 +61,7 @@ class OpenGLIndexBuffer extends OpenGLBuffer implements IndexBuffer<OpenGLContex
     @Override
     public final OpenGLIndexBuffer setData(int... data)
     {
-        super.setData(convertToByteBuffer(data));
+        setData(convertToByteBuffer(data));
         count = data.length;
         return this;
     }

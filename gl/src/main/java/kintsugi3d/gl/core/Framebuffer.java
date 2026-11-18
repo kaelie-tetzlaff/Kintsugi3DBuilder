@@ -108,7 +108,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * @param b The blue component of the clear color.
      * @param a The alpha component of the clear color.
      */
-    void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a, int x, int y, int width, int height);
+    void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a, int x, int y, int clearWidth, int clearHeight);
 
     /**
      * Clears a rectangle within one of the framebuffer's color attachments.
@@ -118,31 +118,31 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * @param b The blue component of the clear color.
      * @param a The alpha component of the clear color.
      */
-    void clearIntegerColorBuffer(int attachmentIndex, int r, int g, int b, int a, int x, int y, int width, int height);
+    void clearIntegerColorBuffer(int attachmentIndex, int r, int g, int b, int a, int x, int y, int clearWidth, int clearHeight);
 
     /**
      * Clears a rectangle within the framebuffer's depth attachment.
      * @param depth The depth to assign to the entire framebuffer.
      */
-    void clearDepthBuffer(float depth, int x, int y, int width, int height);
+    void clearDepthBuffer(float depth, int x, int y, int clearWidth, int clearHeight);
 
     /**
      * Clears a rectangle within the framebuffer's stencil buffer.
      * @param stencilIndex The stencil index with which to clear.
      */
-    void clearStencilBuffer(int stencilIndex, int x, int y, int width, int height);
+    void clearStencilBuffer(int stencilIndex, int x, int y, int clearWidth, int clearHeight);
 
     /**
      * Gets an object that encapsulates a viewport within this framebuffer that can be drawn to.
      * @param x The left edge of the viewport
      * @param y The bottom edge of the viewport
-     * @param width The width of the viewport
-     * @param height The height of the viewport
+     * @param viewportWidth The width of the viewport
+     * @param viewportHeight The height of the viewport
      * @return
      */
-    default Framebuffer<ContextType> getViewport(int x, int y, int width, int height)
+    default Framebuffer<ContextType> getViewport(int x, int y, int viewportWidth, int viewportHeight)
     {
-        return new NonReadableFramebufferViewport<>(this, new IntVector2(x, y), new FramebufferSize(width, height));
+        return new NonReadableFramebufferViewport<>(this, new IntVector2(x, y), new FramebufferSize(viewportWidth, viewportHeight));
     }
 
     /**

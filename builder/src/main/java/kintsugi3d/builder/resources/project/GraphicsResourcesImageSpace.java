@@ -122,7 +122,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             }
         }
 
-        public Builder<ContextType> setOrientationView(String orientationViewName, double rotation)
+        public Builder<ContextType> setOrientationView(@SuppressWarnings("ParameterHidesMemberVariable") String orientationViewName, double rotation)
         {
             this.orientationViewName = orientationViewName;
             viewSet.setOrientationViewRotationDegrees(rotation);
@@ -144,6 +144,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             return this;
         }
 
+        @SuppressWarnings("ParameterHidesMemberVariable")
         public Builder<ContextType> setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
         {
             this.linearLuminanceValues = Arrays.copyOf(linearLuminanceValues, linearLuminanceValues.length);

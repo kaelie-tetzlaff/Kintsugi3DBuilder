@@ -71,7 +71,7 @@ public class SideBarController
         return mainBox;
     }
 
-    public final void init(ObservableTabsModel tabModels)
+    public final void init(@SuppressWarnings("ParameterHidesMemberVariable") ObservableTabsModel tabModels)
     {
         this.tabModels = tabModels;
 

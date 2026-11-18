@@ -122,7 +122,7 @@ public class ProgressBarsController
         return instance;
     }
 
-    public final void init(Stage stage)
+    public final void init(@SuppressWarnings("ParameterHidesMemberVariable") Stage stage)
     {
         this.stage = stage;
         defaultOverallText = overallTextLabel.getText();

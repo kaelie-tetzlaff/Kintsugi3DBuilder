@@ -83,7 +83,7 @@ public class ParallelViewRenderStream<ContextType extends Context<ContextType>> 
     }
 
     @Override
-    public final GraphicsStream<ColorList[]> parallel(int maxRunningThreads)
+    public final GraphicsStream<ColorList[]> parallel(@SuppressWarnings("ParameterHidesMemberVariable") int maxRunningThreads)
     {
         if (maxRunningThreads == this.maxRunningThreads)
         {

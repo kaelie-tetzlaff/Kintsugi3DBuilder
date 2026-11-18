@@ -75,7 +75,7 @@ public class LightVisualsGroup<ContextType extends Context<ContextType>> impleme
         LightWidgetInfo[] widgetInfo = LightWidgetInfo.calculate(sceneViewportModel, sceneModel, cameraViewport, framebuffer.getSize());
         lightWidgets.refreshWidgetInfo(widgetInfo);
         lightWidgetCircle.refreshWidgetInfo(widgetInfo);
-        lightWidgetLines.refreshWidgetInfo(widgetInfo);
+        lightWidgetLines.setWidgetInfo(widgetInfo);
 
         lightCenters.draw(framebuffer, cameraViewport);
         lights.draw(framebuffer, cameraViewport);

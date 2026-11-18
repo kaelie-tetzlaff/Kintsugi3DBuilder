@@ -106,7 +106,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         }
     }
 
-    public final void useFragmentShader(File fragmentShaderFile)
+    public final void useFragmentShader(@SuppressWarnings("ParameterHidesMemberVariable") File fragmentShaderFile)
     {
         this.fragmentShaderFile = fragmentShaderFile;
         reloadShaders();

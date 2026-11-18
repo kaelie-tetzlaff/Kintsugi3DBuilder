@@ -29,10 +29,19 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
     private LightingResources<ContextType> lightingResources;
     private LitContent<ContextType> litContentRoot;
 
-    public LitRoot(ContextType context, SceneModel sceneModel)
+    /**
+     * x
+     * @param context
+     * @param sceneModel
+     * @param litContentRoot Transfers ownership of the lit content to this object
+     */
+    public LitRoot(ContextType context, SceneModel sceneModel, LitContent<ContextType> litContentRoot)
     {
         this.context = context;
         lightingResources = new LightingResources<>(context, sceneModel);
+
+        this.litContentRoot = litContentRoot;
+        litContentRoot.initWithLightingResources(lightingResources);
     }
 
     public final LightingResources<ContextType> getLightingResources()
@@ -105,17 +114,6 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
     public final RenderedComponent<ContextType> getLitContentRoot()
     {
         return litContentRoot;
-    }
-
-    /**
-     * Transfers ownership of the lit content to this object
-     * Must be called before initialize
-     * @param litContentRoot
-     */
-    public final void takeLitContentRoot(LitContent<ContextType> litContentRoot)
-    {
-        this.litContentRoot = litContentRoot;
-        litContentRoot.initWithLightingResources(lightingResources);
     }
 
     /**

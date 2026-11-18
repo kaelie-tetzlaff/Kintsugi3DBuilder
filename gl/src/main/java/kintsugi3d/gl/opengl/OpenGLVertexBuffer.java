@@ -51,9 +51,10 @@ class OpenGLVertexBuffer extends OpenGLBuffer implements VertexBuffer<OpenGLCont
     }
 
     @Override
-    public final OpenGLVertexBuffer setData(ReadonlyNativeVectorBuffer data, boolean normalize)
+    public final OpenGLVertexBuffer setData(
+        ReadonlyNativeVectorBuffer data, @SuppressWarnings("ParameterHidesMemberVariable") boolean normalize)
     {
-        super.setData(data.getBuffer());
+        setData(data.getBuffer());
         count = data.getCount();
         vertexSize = data.getDimensions();
         vertexType = OpenGLContext.getDataTypeConstant(data.getDataType());

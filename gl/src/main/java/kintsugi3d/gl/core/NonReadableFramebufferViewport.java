@@ -25,10 +25,10 @@ final class NonReadableFramebufferViewport<ContextType extends Context<ContextTy
     }
 
     @Override
-    public Framebuffer<ContextType> getViewport(int x, int y, int width, int height)
+    public Framebuffer<ContextType> getViewport(int x, int y, int viewportWidth, int viewportHeight)
     {
         // Make sure that a FramebufferViewport never has another FramebufferViewport as its "full framebuffer"
         return new NonReadableFramebufferViewport<>(getFullFramebuffer(),
-            new IntVector2(x + getOffset().x, y + getOffset().y), new FramebufferSize(width, height));
+            new IntVector2(x + getOffset().x, y + getOffset().y), new FramebufferSize(viewportWidth, viewportHeight));
     }
 }

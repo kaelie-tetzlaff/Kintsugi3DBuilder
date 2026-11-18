@@ -83,7 +83,7 @@ public class CardTabController
     private static final double WIDTH_TOLERANCE = 2.0;
     private double lastSidebarWidth = -1;
 
-    public final void init(ObservableCardsModel<?> cardsModel)
+    public final void init(@SuppressWarnings("ParameterHidesMemberVariable") ObservableCardsModel<?> cardsModel)
     {
         this.cardsModel = cardsModel;
 

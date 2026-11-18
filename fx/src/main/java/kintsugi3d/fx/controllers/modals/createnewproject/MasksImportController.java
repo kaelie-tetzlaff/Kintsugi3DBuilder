@@ -114,8 +114,8 @@ public class MasksImportController
     }
 
     @Override
-    public final void receiveData(ValidatedInputSource source)
+    public final void receiveData(ValidatedInputSource data)
     {
-        this.source = source;
+        source = data;
     }
 }
