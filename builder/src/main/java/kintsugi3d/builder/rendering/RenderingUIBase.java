@@ -30,14 +30,19 @@ public abstract class RenderingUIBase implements RenderingUI
     private final SleepPollable sleepPollable = new SleepPollable();
 
     @Override
-    public void initialize(InteractiveApplication app)
+    public final void initialize(InteractiveApplication app)
     {
         // Keep the graphics thread paused while the window is minimized.
         app.addPollable(sleepPollable);
 
         // Wake the graphics thread up when work is added to the request queue.
         getRequestQueue().addRequestAddedListener(sleepPollable::wakeUp);
+
+        // Custom initialization logic for the implementation.
+        onInitialized(app);
     }
+
+    protected abstract void onInitialized(InteractiveApplication app);
 
     protected abstract boolean isUnfocused();
 

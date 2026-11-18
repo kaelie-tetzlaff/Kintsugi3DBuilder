@@ -32,10 +32,8 @@ public class JavaFXRenderingUI extends RenderingUIBase
     }
 
     @Override
-    public final void initialize(InteractiveApplication app)
+    public final void onInitialized(InteractiveApplication app)
     {
-        super.initialize(app);
-
         if (MultithreadState.isInitialized())
         {
             JavaFXApplication.getState().getProjectModel().registerIOListeners();
