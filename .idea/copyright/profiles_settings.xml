@@ -1,7 +1,9 @@
 <component name="CopyrightManager">
   <settings>
     <module2copyright>
-      <element module="All" copyright="Kintsugi 3D" />
+      <element module="Kintsugi3DBuilder" copyright="Kintsugi 3D" />
+      <element module="sjm-ply" copyright="sjm-ply" />
+      <element module="ferox" copyright="ferox" />
     </module2copyright>
   </settings>
 </component>
