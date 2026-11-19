@@ -98,6 +98,40 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Check that all dependencies have acceptable licenses -->
+            <plugin>
+                <groupId>org.honton.chas</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>0.0.6</version>
+                <configuration>
+                    <!-- Use OSI widely-used licenses (includes GPL, LGPL, Apache, MIT, BSD, etc.) -->
+                    <acceptableLicenseResources>osi-widely-used</acceptableLicenseResources>
+                    <!-- Additional license names not covered by osi-widely-used -->
+                    <acceptableLicenses>
+                        <license>
+                            <name>MIT X11 License</name>
+                        </license>
+                        <license>
+                            <name>GPLv2\+CE</name>
+                        </license>
+                    </acceptableLicenses>
+                    <!-- Only check non-test scopes -->
+                    <scopes>compile,runtime,provided</scopes>
+                    <!-- Exclude our own modules from third-party license checks -->
+                    <excludes>
+                        <exclude>Kintsugi3D:*</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>check-dependency-licenses</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>compliance</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- Delete test-output on initialize and clean, and also remove bin/ on clean. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -242,7 +276,7 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.13.2</version>
-            <scope>compile</scope>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>
