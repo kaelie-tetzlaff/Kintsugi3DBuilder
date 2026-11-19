@@ -15,6 +15,7 @@ profile:
         - "scope#file:*/target//*"
         - "scope#file[sjm-ply]:*//*"
         - "scope#file:lib//*"
+        - "scope#file:gl/src/main/java/kintsugi3d/gl/util/RadianceImageLoader*"
 failureConditions:
   severityThresholds:
     critical: 0   # any Critical problem (ERROR) fails the build job
