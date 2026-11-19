@@ -6,14 +6,14 @@ version: "1.0"
 linter: qodana-jvm-community
 profile:
   path: .idea/inspectionProfiles/Project_Default.xml
+  inspections:
+    - group: ALL
+      ignore:
+        - "scope#file:src/test/resources//*"
+        - "scope#file:target/generated-sources//*"
+        - "scope#file:target/generated-test-sources//*"
+        - "scope#file:*/target//*"
+        - "scope#file[sjm-ply]:*//*"
+        - "scope#file:lib//*"
 include:
   - name: CheckDependencyLicenses
-inspections:
-  - group: ALL
-    ignore:
-      - "scope#file:src/test/resources//*"
-      - "scope#file:target/generated-sources//*"
-      - "scope#file:target/generated-test-sources//*"
-      - "scope#file:*/target//*"
-      - "scope#file[sjm-ply]:*//*"
-      - "scope#file:lib//*"
