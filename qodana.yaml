@@ -11,19 +11,18 @@ profile:
   inspections:
     - group: ALL
       ignore:
-        - "scope#file:*/src/test/resources//*"
-        - "scope#file:*/target//*"   # covers generated-sources & generated-test-sources everywhere
-        - "scope#file:*/assembly//*"
-        - "scope#file[sjm-ply]:*//*" # sjm-ply library has been incorporated into the repository without modification.
-        - "scope#file:lib//*"
+        - "scope#file[*]:src/test/resources//*"
+        - "scope#file[*]:src/main/assembly//*" # Maven's assembly XMLs throw warnings in Qodana
+        - "scope#file[*]:target//*"   # also covers generated-sources & generated-test-sources everywhere
+        - "scope#file[sjm-ply]:*//*"# sjm-ply library has been incorporated into the repository without modification.
         # copied from Michael Ludwig's ferox project with almost no modification:
-        - "scope#file:gl/src/main/java/kintsugi3d/gl/util/RadianceImageLoader*"
-    - inspection: XmlUnboundNsPrefix
+        - "scope#file[gl]:src/main/java/kintsugi3d/gl/util/RadianceImageLoader*"
+    - inspection: XmlHighlighting
       ignore:
-        - "**/*.fxml" # Suppress warnings about the XML namespace for FXML files.
+        - "scope#file[*]:*.fxml" # Suppress warnings about the XML namespace for FXML files.
     - inspection: MethodMayBeStatic
       ignore:
-        - "scope#file:fx/src/main/java/kintsugi3d/fx/controllers//*" # Suppress warnings about marking methods static for JavaFX controllers.
+        - "scope#src[fx]:kintsugi3d.fx.controllers.." # Suppress warnings about marking methods static for JavaFX controllers.
 failureConditions:
   severityThresholds:
     critical: 0   # any Critical problem (ERROR) fails the build job
