@@ -249,6 +249,7 @@ public class PageFrameController
         }
     }
 
+    @FXML
     public final void advancePage()
     {
         if (currentPage.get().getController().canAdvance())

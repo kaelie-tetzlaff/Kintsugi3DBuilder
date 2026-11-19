@@ -810,6 +810,7 @@ public class MainWindowController
         Platform.runLater(() -> setMiniProgressPaneVisible(false));
     }
 
+    @FXML
     public final void hotSwap()
     {
         FrontendIO.hotSwap(window);
