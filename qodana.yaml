@@ -3,7 +3,7 @@
 ####################################################################################################################
 
 version: "1.0"
-linter: qodana-jvm
+linter: qodana-jvm-community
 profile:
   path: .idea/inspectionProfiles/
 include:
