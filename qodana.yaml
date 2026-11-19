@@ -5,7 +5,7 @@
 version: "1.0"
 linter: qodana-jvm-community
 profile:
-  path: .idea/inspectionProfiles/
+  path: .idea/inspectionProfiles/Project_Default.xml
 include:
   - name: CheckDependencyLicenses
 inspections:
