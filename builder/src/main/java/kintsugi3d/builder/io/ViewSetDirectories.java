@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.io;
@@ -15,8 +19,48 @@ import java.io.File;
 
 public class ViewSetDirectories
 {
-    public File projectRoot;
-    public File supportingFilesDirectory;
-    public File fullResImageDirectory;
-    public boolean fullResImagesNeedUndistort;
+    private File projectRoot;
+    private File supportingFilesDirectory;
+    private File fullResImageDirectory;
+    private boolean fullResImagesNeedUndistort;
+
+    public final File getProjectRoot()
+    {
+        return projectRoot;
+    }
+
+    public final void setProjectRoot(File projectRoot)
+    {
+        this.projectRoot = projectRoot;
+    }
+
+    public final File getSupportingFilesDirectory()
+    {
+        return supportingFilesDirectory;
+    }
+
+    public final void setSupportingFilesDirectory(File supportingFilesDirectory)
+    {
+        this.supportingFilesDirectory = supportingFilesDirectory;
+    }
+
+    public final File getFullResImageDirectory()
+    {
+        return fullResImageDirectory;
+    }
+
+    public final void setFullResImageDirectory(File fullResImageDirectory)
+    {
+        this.fullResImageDirectory = fullResImageDirectory;
+    }
+
+    public final boolean isFullResImagesNeedUndistort()
+    {
+        return fullResImagesNeedUndistort;
+    }
+
+    public final void setFullResImagesNeedUndistort(boolean fullResImagesNeedUndistort)
+    {
+        this.fullResImagesNeedUndistort = fullResImagesNeedUndistort;
+    }
 }

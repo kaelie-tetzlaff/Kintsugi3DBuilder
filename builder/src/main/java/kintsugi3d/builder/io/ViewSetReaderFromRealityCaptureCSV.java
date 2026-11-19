@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.io;
@@ -45,6 +49,9 @@ public final class ViewSetReaderFromRealityCaptureCSV implements ViewSetReader
     {
     }
 
+    /**
+     * Needs to be public in order for OpenCSV to be able to deserialize to this class.
+     */
     @SuppressWarnings("PackageVisibleField")
     public static final class Camera
     {
@@ -78,7 +85,7 @@ public final class ViewSetReaderFromRealityCaptureCSV implements ViewSetReader
 
         public DistortionProjection getDistortionProjection(File imageRootDirectory) throws IOException
         {
-            File imageFile = ImageFinder.getInstance().findImageFile(new File(imageRootDirectory, name));
+            File imageFile = ImageFinder.findImageFile(new File(imageRootDirectory, name));
 
             // Have to read part of image file to determine aspect ratio
             try (var in = ImageIO.createImageInputStream(imageFile))
@@ -112,15 +119,15 @@ public final class ViewSetReaderFromRealityCaptureCSV implements ViewSetReader
             .withType(Camera.class).build().parse();
 
         // Start building the view set
-        ViewSetBuilder builder = ViewSet.getBuilder(directories.projectRoot, cameras.size());
+        ViewSetBuilder builder = ViewSet.getBuilder(directories.getProjectRoot(), cameras.size());
 
         // Try to figure out what the camera groups were
         Map<Projection, List<String>> cameraMap = new HashMap<>(1);
         for (Camera cam : cameras)
         {
-            DistortionProjection distortionProjection = cam.getDistortionProjection(directories.fullResImageDirectory);
+            DistortionProjection distortionProjection = cam.getDistortionProjection(directories.getFullResImageDirectory());
 
-            if (directories.fullResImagesNeedUndistort)
+            if (directories.isFullResImagesNeedUndistort())
             {
                 cameraMap.computeIfAbsent(distortionProjection, k -> new ArrayList<>(1)).add(cam.name);
             }
@@ -162,7 +169,7 @@ public final class ViewSetReaderFromRealityCaptureCSV implements ViewSetReader
         builder.addLight(Vector3.ZERO, Vector3.ZERO);
 
         // Set full res image directory according to input argument
-        builder.setFullResImageDirectory(directories.fullResImageDirectory);
+        builder.setFullResImageDirectory(directories.getFullResImageDirectory());
 
         return builder;
     }

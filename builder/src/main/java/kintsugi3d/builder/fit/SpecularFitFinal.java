@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit;
@@ -64,7 +68,7 @@ public final class SpecularFitFinal<ContextType extends Context<ContextType>>
     {
         base = new SpecularFitBase<>(
             basisResources.getContext(), basisResources, basisResources.getWeightResources(), textureResolution);
-        this.mutableBasisResources = basisResources;
+        mutableBasisResources = basisResources;
 
         ContextType context = original.getContext();
 
@@ -74,7 +78,7 @@ public final class SpecularFitFinal<ContextType extends Context<ContextType>>
         managedTextures.putAll(original.getTextures().entrySet().stream()
             .filter(entry ->
                 // Skip specular color and roughness maps that are handled by SpecularFitBase:
-                !StandardTexture.SPECULAR_COLOR.details.equals(entry.getKey()) && !StandardTexture.ROUGHNESS.details.equals(entry.getKey()))
+                !StandardTexture.SPECULAR_COLOR.getDetails().equals(entry.getKey()) && !StandardTexture.ROUGHNESS.getDetails().equals(entry.getKey()))
             .collect(Collectors.toMap(Entry::getKey,
                 entry -> context.getTextureFactory()
                     .build2DColorTexture(textureResolution.width, textureResolution.height)
@@ -139,11 +143,11 @@ public final class SpecularFitFinal<ContextType extends Context<ContextType>>
     private void addStandardTexture(StandardTexture standardTex, File priorSolutionDirectory) throws IOException
     {
         // Load texture file
-        Texture2D<ContextType> texture = loadTexture(standardTex.details.name, priorSolutionDirectory);
+        Texture2D<ContextType> texture = loadTexture(standardTex.getDetails().name, priorSolutionDirectory);
 
         if (texture != null)
         {
-            managedTextures.put(standardTex.details, texture);
+            managedTextures.put(standardTex.getDetails(), texture);
         }
     }
 

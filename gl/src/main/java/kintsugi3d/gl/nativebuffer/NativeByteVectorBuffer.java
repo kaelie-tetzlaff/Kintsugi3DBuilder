@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.nativebuffer;
@@ -15,14 +19,15 @@ import org.lwjgl.BufferUtils;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.text.MessageFormat;
 import java.util.Objects;
 
 public class NativeByteVectorBuffer implements NativeVectorBuffer
 {
     private final ByteBuffer buffer;
 
-    public final int dimensions;
-    public final int count;
+    private final int dimensions;
+    private final int count;
 
     NativeByteVectorBuffer(int dimensions, int count)
     {
@@ -37,7 +42,7 @@ public class NativeByteVectorBuffer implements NativeVectorBuffer
 
         this.dimensions = dimensions;
         this.count = count;
-        this.buffer = BufferUtils.createByteBuffer(dimensions * count);
+        buffer = BufferUtils.createByteBuffer(dimensions * count);
     }
 
     NativeByteVectorBuffer(int dimensions, int count, ByteBuffer buffer)
@@ -52,8 +57,9 @@ public class NativeByteVectorBuffer implements NativeVectorBuffer
         }
         if (buffer.capacity() < dimensions * count)
         {
-            throw new IllegalArgumentException("Insufficient buffer size - a list of " + count + dimensions +
-                    "D vertices requires a buffer with a capacity of at least " + dimensions * count + '.');
+            throw new IllegalArgumentException(MessageFormat.format(
+                "Insufficient buffer size - a list of {0} {1}D vertices requires a buffer with a capacity of at least {2}.",
+                count, dimensions, dimensions * count));
         }
         if (!Objects.equals(buffer.order(), ByteOrder.nativeOrder()))
         {
@@ -65,7 +71,7 @@ public class NativeByteVectorBuffer implements NativeVectorBuffer
         this.buffer = buffer;
     }
 
-    NativeByteVectorBuffer(int dimensions, int count, byte... buffer)
+    NativeByteVectorBuffer(int dimensions, int count, byte[] buffer)
     {
         this(dimensions, count);
         this.buffer.put(buffer);
@@ -73,74 +79,69 @@ public class NativeByteVectorBuffer implements NativeVectorBuffer
     }
 
     @Override
-    public int getDimensions()
+    public final int getDimensions()
     {
         return dimensions;
     }
 
     @Override
-    public int getCount()
+    public final int getCount()
     {
         return count;
     }
 
     @Override
-    public Byte get(int index, int dimension)
+    public final Byte get(int index, int dimension)
     {
         if (index < 0)
         {
             throw new IndexOutOfBoundsException("Index cannot be negative.");
         }
-        if (index >= this.count)
+        if (index >= count)
         {
-            throw new IndexOutOfBoundsException("Index (" + index + ") is greater than the size of the vertex list (" + this.count + ").");
+            throw new IndexOutOfBoundsException("Index (" + index + ") is greater than the size of the vertex list (" + count + ").");
         }
         if (dimension < 0)
         {
             throw new IndexOutOfBoundsException("Dimension cannot be negative.");
         }
-        if (dimension >= this.dimensions)
+        if (dimension >= dimensions)
         {
-            throw new IndexOutOfBoundsException("Dimension (" + dimension + ") is greater than the dimensions of the vertex list (" + this.dimensions + ").");
+            throw new IndexOutOfBoundsException("Dimension (" + dimension + ") is greater than the dimensions of the vertex list (" + dimensions + ").");
         }
-        return this.buffer.get(index * this.dimensions + dimension);
+        return buffer.get(index * dimensions + dimension);
     }
 
-    public void set(int index, int dimension, byte value)
+    @Override
+    public final void set(int index, int dimension, Number value)
     {
         if (index < 0)
         {
             throw new IndexOutOfBoundsException("Index cannot be negative.");
         }
-        if (index >= this.count)
+        if (index >= count)
         {
-            throw new IndexOutOfBoundsException("Index (" + index + ") is greater than the size of the vertex list (" + this.count + ").");
+            throw new IndexOutOfBoundsException("Index (" + index + ") is greater than the size of the vertex list (" + count + ").");
         }
         if (dimension < 0)
         {
             throw new IndexOutOfBoundsException("Dimension cannot be negative.");
         }
-        if (dimension >= this.dimensions)
+        if (dimension >= dimensions)
         {
-            throw new IndexOutOfBoundsException("Dimension (" + dimension + ") is greater than the dimensions of the vertex list (" + this.dimensions + ").");
+            throw new IndexOutOfBoundsException("Dimension (" + dimension + ") is greater than the dimensions of the vertex list (" + dimensions + ").");
         }
-        this.buffer.put(index * this.dimensions + dimension, value);
+        buffer.put(index * dimensions + dimension, value.byteValue());
     }
 
     @Override
-    public void set(int index, int dimension, Number value)
-    {
-        this.set(index, dimension, value.byteValue());
-    }
-
-    @Override
-    public ByteBuffer getBuffer()
+    public final ByteBuffer getBuffer()
     {
         return buffer;
     }
 
     @Override
-    public NativeDataType getDataType()
+    public final NativeDataType getDataType()
     {
         return NativeDataType.BYTE;
     }

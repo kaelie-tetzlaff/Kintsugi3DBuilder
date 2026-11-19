@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.sidebar;
@@ -62,12 +66,12 @@ public class SideBarController
     private boolean minimized = false;
     private boolean resizingSidebar = false;
 
-    public Node getRootNode()
+    public final Node getRootNode()
     {
         return mainBox;
     }
 
-    public void init(ObservableTabsModel tabModels)
+    public final void init(@SuppressWarnings("ParameterHidesMemberVariable") ObservableTabsModel tabModels)
     {
         this.tabModels = tabModels;
 
@@ -136,7 +140,7 @@ public class SideBarController
 
         if (Objects.equals(tabToggleGroup.getSelectedToggle(), button))
         {
-            if (this.tabModels.getAllTabs().isEmpty())
+            if (tabModels.getAllTabs().isEmpty())
             {
                 // Deselect if no tabs remain.
                 tabToggleGroup.selectToggle(null);
@@ -215,7 +219,7 @@ public class SideBarController
         return newTab;
     }
 
-    public void setVisibility(boolean visible)
+    public final void setVisibility(boolean visible)
     {
         mainBox.setVisible(visible);
         mainBox.setManaged(visible);
@@ -230,7 +234,7 @@ public class SideBarController
      * minimize button has a "+" it will set the mainBox size to 400 and will call
      * maximize
      */
-    public void toggleSideBar()
+    public final void toggleSideBar()
     {
         if (minimized)
         {
@@ -249,7 +253,7 @@ public class SideBarController
      * If it is, cursor is set to resize cursor. Otherwise, default cursor.
      * @param event
      */
-    public void mouseMoved(MouseEvent event)
+    public final void mouseMoved(MouseEvent event)
     {
         if (event.getX() > (mainBox.getWidth() - RESIZE_WIDTH))
         {
@@ -267,7 +271,7 @@ public class SideBarController
      * @param event
      */
     @FXML
-    public void mousePressed(MouseEvent event)
+    public final void mousePressed(MouseEvent event)
     {
         if (Objects.equals(mainBox.getCursor(), Cursor.E_RESIZE))
         {
@@ -285,7 +289,7 @@ public class SideBarController
      * @param event
      */
     @FXML
-    public void mouseDragged(MouseEvent event)
+    public final void mouseDragged(MouseEvent event)
     {
         double newWidth = event.getX();
 
@@ -340,7 +344,7 @@ public class SideBarController
      * @param event
      */
     @FXML
-    public void mouseReleased(MouseEvent event)
+    public final void mouseReleased(MouseEvent event)
     {
         resizingSidebar = false;
 
@@ -451,9 +455,9 @@ public class SideBarController
         }
     }
 
-    public void refreshTabs()
+    public final void refreshTabs()
     {
         tabControllers.forEach(CardTabController::reloadCardList);
     }
-    public double getTabWidth() {return mainBox.getWidth();}
+    public final double getTabWidth() {return mainBox.getWidth();}
 }

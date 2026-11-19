@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.types;
@@ -23,17 +27,6 @@ import java.util.function.Consumer;
  */
 public final class AbstractDataTypeFactory
 {
-    private static final AbstractDataTypeFactory INSTANCE = new AbstractDataTypeFactory();
-
-    /**
-     * Gets the singleton instance.
-     * @return The singleton instance.
-     */
-    public static AbstractDataTypeFactory getInstance()
-    {
-        return INSTANCE;
-    }
-
     private AbstractDataTypeFactory()
     {
     }
@@ -136,13 +129,13 @@ public final class AbstractDataTypeFactory
             {
                 int componentIndex = 0;
                 Iterator<? extends Number> iterator = highLevelValue.iterator();
-                while (iterator.hasNext() && componentIndex < this.componentCount)
+                while (iterator.hasNext() && componentIndex < componentCount)
                 {
                     componentConsumer.accept(iterator.next());
                     componentIndex++;
                 }
 
-                while(componentIndex < this.componentCount)
+                while(componentIndex < componentCount)
                 {
                     componentConsumer.accept(0);
                     componentIndex++;
@@ -159,13 +152,13 @@ public final class AbstractDataTypeFactory
             {
                 int componentIndex = 0;
                 Iterator<? extends Number> iterator = highLevelValue.iterator();
-                while (iterator.hasNext() && componentIndex < this.componentCount)
+                while (iterator.hasNext() && componentIndex < componentCount)
                 {
                     componentConsumer.accept(index, iterator.next());
                     componentIndex++;
                 }
 
-                while(componentIndex < this.componentCount)
+                while(componentIndex < componentCount)
                 {
                     componentConsumer.accept(index, 0);
                     componentIndex++;
@@ -219,7 +212,7 @@ public final class AbstractDataTypeFactory
      * @param nativeType The internal type of each element.
      * @return An AbstractDataType representing a single component of the specified internal type.
      */
-    public AbstractDataType<Number> getSingleComponentDataType(NativeDataType nativeType)
+    public static AbstractDataType<Number> getSingleComponentDataType(NativeDataType nativeType)
     {
         return new SingleComponentDataType(nativeType);
     }
@@ -230,7 +223,7 @@ public final class AbstractDataTypeFactory
      * @param componentCount The number of components.
      * @return An AbstractDataType representing a vector with the specified number of components of the specified internal type.
      */
-    public AbstractDataType<Iterable<? extends Number>> getMultiComponentDataType(NativeDataType nativeType, int componentCount)
+    public static AbstractDataType<Iterable<? extends Number>> getMultiComponentDataType(NativeDataType nativeType, int componentCount)
     {
         return new MultiComponentDataType(nativeType, componentCount);
     }

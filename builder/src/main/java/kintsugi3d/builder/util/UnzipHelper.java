@@ -1,18 +1,23 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.util;
 
 import javafx.scene.image.Image;
 import kintsugi3d.gl.interactive.ProgressMonitor;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -24,11 +29,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -126,6 +126,7 @@ public final class UnzipHelper
         byte[] buffer = new byte[1024];
         StringBuilder s = new StringBuilder(1024);
         int read;
+        //noinspection NestedAssignment
         while ((read = stream.read(buffer, 0, 1024)) >= 0)
         {
             s.append(new String(buffer, 0, read, StandardCharsets.UTF_8));
@@ -133,7 +134,7 @@ public final class UnzipHelper
         return s.toString();
     }
 
-    private static Document convertStringToDocument(String xmlStr)
+    private static @Nullable Document convertStringToDocument(String xmlStr)
     {
         //Taken from https://www.digitalocean.com/community/tutorials/java-convert-string-to-xml-document-and-xml-document-to-string
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -149,25 +150,6 @@ public final class UnzipHelper
         return null;
     }
 
-    private static String convertDocumentToString(Document doc)
-    {
-        //Taken from https://www.digitalocean.com/community/tutorials/java-convert-string-to-xml-document-and-xml-document-to-string
-        TransformerFactory tf = TransformerFactory.newInstance();
-        try
-        {
-            Transformer transformer = tf.newTransformer();
-            StringWriter writer = new StringWriter();
-            transformer.transform(new DOMSource(doc), new StreamResult(writer));
-            return writer.getBuffer().toString();
-        }
-        catch (TransformerException e)
-        {
-            LOG.error("Error converting document:", e);
-        }
-
-        return null;
-    }
-
     public static List<Image> unzipImages(File zipFile)
     {
         ArrayList<Image> images = new ArrayList<>(64);
@@ -175,6 +157,7 @@ public final class UnzipHelper
         try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zipFile)))
         {
             ZipEntry entry;
+            //noinspection NestedAssignment
             while ((entry = zipInputStream.getNextEntry()) != null)
             {
                 String entryName = entry.getName();
@@ -198,14 +181,7 @@ public final class UnzipHelper
 
     private static boolean isValidImageType(String path)
     {
-        for (String extension : VALID_EXTENSIONS)
-        {
-            if (path.matches('.' + extension))
-            {
-                return true;
-            }
-        }
-        return false;
+        return Arrays.stream(VALID_EXTENSIONS).anyMatch(extension -> path.matches('.' + extension));
     }
 
     public static Map<Integer, Image> unzipImagesToMap(File imgsDir)
@@ -221,6 +197,7 @@ public final class UnzipHelper
         try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(imgsDir)))
         {
             ZipEntry entry;
+            //noinspection NestedAssignment
             while ((entry = zipInputStream.getNextEntry()) != null)
             {
                 String entryName = entry.getName();
@@ -300,6 +277,7 @@ public final class UnzipHelper
                 }
                 FileOutputStream fos = new FileOutputStream(new File(destinationDir, zipEntry.getName()));
                 int len;
+                //noinspection NestedAssignment
                 while ((len = zis.read(buffer)) > 0)
                 {
                     fos.write(buffer, 0, len);

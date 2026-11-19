@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.glfw;
@@ -17,7 +21,6 @@ import kintsugi3d.gl.exceptions.GLFWException;
 import kintsugi3d.gl.window.*;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.Version;
-import org.lwjgl.Version.BuildType;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -51,8 +54,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
         WindowSpecification windowSpec)
     {
         LOG.info("LWJGL version: {}.{}.{}{}",
-            Version.VERSION_MAJOR, Version.VERSION_MINOR, Version.VERSION_REVISION,
-            Version.BUILD_TYPE == BuildType.ALPHA ? "a" : ((Version.BUILD_TYPE == BuildType.BETA) ? "b" : "")
+            Version.VERSION_MAJOR, Version.VERSION_MINOR, Version.VERSION_REVISION, getVersionBuildType()
             /*Version.getVersion()*/ /* <== causes annoying exception breakpoints in Eclipse */);
 
         String glfwVersionString = glfwGetVersionString();
@@ -76,7 +78,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
             }
         }));
 
-        String os = System.getProperty("os.name").toLowerCase();
+        @SuppressWarnings("AccessOfSystemProperties") String os = System.getProperty("os.name").toLowerCase();
         if (os.contains("nix") || os.contains("nux") || os.contains("aix"))
         {
             // Force X11 on Linux.
@@ -129,9 +131,10 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
             }
         }
 
-        this.handle = handleIfSuccessful;
+        handle = handleIfSuccessful;
 
-        this.listenerManager = new WindowCallback(this);
+        //noinspection ThisEscapedInObjectConstruction
+        listenerManager = new WindowCallback(this);
 
         // Query height and width of screen to set center point
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
@@ -172,12 +175,25 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
         LOG.info("OpenGL version: {}", glGetString(GL_VERSION));
         LOG.info("OpenGL renderer: {}", glGetString(GL_RENDERER));
 
-        this.context = createDefaultFramebuffer == null ?
+        context = createDefaultFramebuffer == null ?
             contextFactory.createContext(handle) : contextFactory.createContext(handle, createDefaultFramebuffer);
 
         if (windowSpec.getMultisamples() > 0)
         {
             context.getState().enableMultisampling();
+        }
+    }
+
+    private static String getVersionBuildType()
+    {
+        switch (Version.BUILD_TYPE)
+        {
+            case ALPHA:
+                return "a";
+            case BETA:
+                return "b";
+            default:
+                return "";
         }
     }
 
@@ -200,47 +216,47 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
         glfwWindowHint(GLFW_SAMPLES, windowSpec.getMultisamples());
     }
 
-    public void closeAllWindows()
+    public final void closeAllWindows()
     {
         LOG.debug("Destroying window...");
-        glfwDestroyWindow(this.handle);
+        glfwDestroyWindow(handle);
 
         LOG.debug("Terminating GLFW...");
         glfwTerminate();
         LOG.debug("GLFW terminated.");
     }
 
-    long getHandle()
+    final long getHandle()
     {
         return handle;
     }
 
     @Override
-    public ContextType getContext()
+    public final ContextType getContext()
     {
-        return this.context;
+        return context;
     }
 
     @Override
-    public PollableCanvas3D<ContextType> getCanvas()
+    public final PollableCanvas3D<ContextType> getCanvas()
     {
         return this;
     }
 
     @Override
-    protected WindowListenerManager getListenerManager()
+    protected final WindowListenerManager getListenerManager()
     {
         return listenerManager;
     }
 
     @Override
-    public void show()
+    public final void show()
     {
         glfwShowWindow(handle);
     }
 
     @Override
-    public void hide()
+    public final void hide()
     {
         glfwHideWindow(handle);
     }
@@ -252,20 +268,20 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public void pollEvents()
+    public final void pollEvents()
     {
         glfwMakeContextCurrent(handle);
         glfwPollEvents();
     }
 
     @Override
-    public boolean shouldTerminate()
+    public final boolean shouldTerminate()
     {
-        return this.isWindowClosing();
+        return isWindowClosing();
     }
 
     @Override
-    public boolean isHighDPI()
+    public final boolean isHighDPI()
     {
         CanvasSize winSize = getSize();
         FramebufferSize fbSize = context.getDefaultFramebufferSize();
@@ -273,31 +289,31 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public boolean isWindowClosing()
+    public final boolean isWindowClosing()
     {
         return glfwWindowShouldClose(handle);
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         glfwDestroyWindow(handle);
     }
 
     @Override
-    public void requestWindowClose()
+    public final void requestWindowClose()
     {
         glfwSetWindowShouldClose(handle, true);
     }
 
     @Override
-    public void cancelWindowClose()
+    public final void cancelWindowClose()
     {
         glfwSetWindowShouldClose(handle, false);
     }
 
     @Override
-    public CanvasSize getSize()
+    public final CanvasSize getSize()
     {
         IntBuffer widthBuffer = BufferUtils.createIntBuffer(1);
         IntBuffer heightBuffer = BufferUtils.createIntBuffer(1);
@@ -308,13 +324,13 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public CanvasSize getSizeForDisplay()
+    public final CanvasSize getSizeForDisplay()
     {
         return getSize();
     }
 
     @Override
-    public CanvasPosition getPosition()
+    public final CanvasPosition getPosition()
     {
         IntBuffer xBuffer = BufferUtils.createIntBuffer(1);
         IntBuffer yBuffer = BufferUtils.createIntBuffer(1);
@@ -325,25 +341,25 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public void setSize(int width, int height)
+    public final void setSize(int width, int height)
     {
         glfwSetWindowSize(handle, width, height);
     }
 
     @Override
-    public void setPosition(int x, int y)
+    public final void setPosition(int x, int y)
     {
         glfwSetWindowPos(handle, x, y);
     }
 
     @Override
-    public void setWindowTitle(String title)
+    public final void setWindowTitle(String title)
     {
         glfwSetWindowTitle(handle, title);
     }
 
     @Override
-    public MouseButtonState getMouseButtonState(int buttonIndex)
+    public final MouseButtonState getMouseButtonState(int buttonIndex)
     {
         switch (glfwGetMouseButton(handle, buttonIndex))
         {
@@ -364,7 +380,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public KeyState getKeyState(Key key)
+    public final KeyState getKeyState(Key key)
     {
         for (int code : KeyCodeMaps.keyToCodes(key))
         {
@@ -378,7 +394,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public CursorPosition getCursorPosition()
+    public final CursorPosition getCursorPosition()
     {
         DoubleBuffer xBuffer = BufferUtils.createDoubleBuffer(1);
         DoubleBuffer yBuffer = BufferUtils.createDoubleBuffer(1);
@@ -389,9 +405,9 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public kintsugi3d.gl.window.ModifierKeys getModifierKeys()
+    public final ModifierKeys getModifierKeys()
     {
-        return new ModifierKeys(
+        return new GLFWModifierKeys(
             getKeyState(GLFW_KEY_LEFT_SHIFT) == KeyState.PRESSED || getKeyState(GLFW_KEY_RIGHT_SHIFT) == KeyState.PRESSED,
             getKeyState(GLFW_KEY_LEFT_CONTROL) == KeyState.PRESSED || getKeyState(GLFW_KEY_RIGHT_CONTROL) == KeyState.PRESSED,
             getKeyState(GLFW_KEY_LEFT_ALT) == KeyState.PRESSED || getKeyState(GLFW_KEY_RIGHT_ALT) == KeyState.PRESSED,
@@ -400,7 +416,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public boolean isFocused()
+    public final boolean isFocused()
     {
         return glfwGetWindowAttrib(handle, GLFW_FOCUSED) == GLFW_TRUE;
     }

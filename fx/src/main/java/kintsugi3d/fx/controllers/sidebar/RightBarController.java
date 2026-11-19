@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.sidebar;
@@ -63,12 +67,12 @@ public class RightBarController
     private boolean minimized = false;
     private boolean isLoaded = false;
 
-    public Node getRootNode()
+    public final Node getRootNode()
     {
         return mainBox;
     }
 
-    public void init(ObservableTabsModel tabsModel, ObservableActiveShaderModel shaderModel)
+    public final void init(ObservableTabsModel tabsModel, ObservableActiveShaderModel shaderModel)
     {
         //Listener for any changes to selectedCards in tabModels
         tabsModel.lastSelectedCardProperty().addListener(
@@ -155,7 +159,7 @@ public class RightBarController
      * minimize button has a "+" it will set the mainBox size to 400 and will call
      * maximize
      */
-    public void toggleSideBar()
+    public final void toggleSideBar()
     {
         if (minimized)
         {
@@ -174,7 +178,7 @@ public class RightBarController
      * If it is, cursor is set to resize cursor. Otherwise, default cursor.
      * @param event
      */
-    public void mouseMoved(MouseEvent event)
+    public final void mouseMoved(MouseEvent event)
     {
         if (event.getX() <= RESIZE_WIDTH)
         {
@@ -195,7 +199,7 @@ public class RightBarController
      * @param event
      */
     @FXML
-    public void mouseDragged(MouseEvent event)
+    public final void mouseDragged(MouseEvent event)
     {
         double newWidth = mainBox.getWidth()-event.getX();
 
@@ -252,7 +256,7 @@ public class RightBarController
      * @param event
      */
     @FXML
-    public void mouseReleased(MouseEvent event)
+    public final void mouseReleased(MouseEvent event)
     {
         if (minimized)
         {
@@ -336,5 +340,5 @@ public class RightBarController
         mainBox.setMaxWidth(width);
         Platform.runLater(()->detailsBox.requestLayout());
     }
-    public double getTabWidth(){ return mainBox.getWidth(); }
+    public final double getTabWidth(){ return mainBox.getWidth(); }
 }

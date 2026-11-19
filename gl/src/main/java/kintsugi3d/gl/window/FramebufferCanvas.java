@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.window;
@@ -29,7 +33,7 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     private CanvasPosition canvasPosition = new CanvasPosition(0, 0);
 
     private final Map<Key, KeyState> keyStates = new EnumMap<>(Key.class);
-    private ModifierKeys modifierKeys = ModifierKeys.NONE;
+    private ModifierKeys lastModifierKeys = ModifierKeys.NONE;
 
     private static final int BUTTON_COUNT = 3;
     private final MouseButtonState[] buttonStates = new MouseButtonState[BUTTON_COUNT]; // left, right, middle
@@ -50,7 +54,7 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     {
         this.framebuffer = framebuffer;
         FramebufferSize fboSize = framebuffer.getSizeForRead();
-        this.canvasSize = new CanvasSize(fboSize.width, fboSize.height);
+        canvasSize = new CanvasSize(fboSize.width, fboSize.height);
         Arrays.fill(buttonStates, MouseButtonState.RELEASED);
 
         // Setup framebuffer size event to be bound directly to the backend framebuffer.
@@ -62,13 +66,13 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     @Override
     public void addSwapListener(Consumer<ReadableFramebuffer<ContextType>> listener)
     {
-        this.framebuffer.addSwapListener(listener);
+        framebuffer.addSwapListener(listener);
     }
 
     @Override
     public void addResizeListener(Consumer<Framebuffer<ContextType>> listener)
     {
-        this.framebuffer.addResizeListener(listener);
+        framebuffer.addResizeListener(listener);
     }
 
     @Override
@@ -91,12 +95,12 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
 
     public void requestTerminate()
     {
-        this.terminating = true;
+        terminating = true;
     }
 
     public void cancelTerminate()
     {
-        this.terminating = false;
+        terminating = false;
     }
 
     @Override
@@ -151,18 +155,18 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     @Override
     public ModifierKeys getModifierKeys()
     {
-        return modifierKeys;
+        return lastModifierKeys;
     }
 
     @Override
     public void pressMouseButton(int buttonIndex, CursorPosition position, ModifierKeys modifierKeys)
     {
-        this.modifierKeys = modifierKeys;
-        this.cursorPosition = position;
+        lastModifierKeys = modifierKeys;
+        cursorPosition = position;
 
         if (buttonIndex < BUTTON_COUNT)
         {
-            this.buttonStates[buttonIndex] = MouseButtonState.PRESSED;
+            buttonStates[buttonIndex] = MouseButtonState.PRESSED;
         }
 
         eventCollector.mouseButtonPress(l -> l.mouseButtonPressed(this, buttonIndex, modifierKeys));
@@ -171,12 +175,12 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     @Override
     public void releaseMouseButton(int buttonIndex, CursorPosition position, ModifierKeys modifierKeys)
     {
-        this.modifierKeys = modifierKeys;
-        this.cursorPosition = position;
+        lastModifierKeys = modifierKeys;
+        cursorPosition = position;
 
         if (buttonIndex < BUTTON_COUNT)
         {
-            this.buttonStates[buttonIndex] = MouseButtonState.RELEASED;
+            buttonStates[buttonIndex] = MouseButtonState.RELEASED;
         }
 
         eventCollector.mouseButtonRelease(l -> l.mouseButtonReleased(this, buttonIndex, modifierKeys));
@@ -185,37 +189,37 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     @Override
     public void moveCursor(CursorPosition position, ModifierKeys modifierKeys)
     {
-        this.modifierKeys = modifierKeys;
-        this.cursorPosition = position;
+        lastModifierKeys = modifierKeys;
+        cursorPosition = position;
         eventCollector.cursorPos(l -> l.cursorMoved(this, position.x, position.y));
     }
 
     @Override
     public void cursorEnter(CursorPosition position, ModifierKeys modifierKeys)
     {
-        this.modifierKeys = modifierKeys;
-        this.cursorPosition = position;
+        lastModifierKeys = modifierKeys;
+        cursorPosition = position;
         eventCollector.cursorEnter(l -> l.cursorEntered(this));
     }
 
     @Override
     public void cursorExit(CursorPosition position, ModifierKeys modifierKeys)
     {
-        this.modifierKeys = modifierKeys;
-        this.cursorPosition = position;
+        lastModifierKeys = modifierKeys;
+        cursorPosition = position;
         eventCollector.cursorExit(l -> l.cursorExited(this));
     }
 
     @Override
-    public void scroll(double xOffset, double yOffset)
+    public void scroll(double deltaX, double deltaY)
     {
-        eventCollector.scroll(l -> l.scroll(this, xOffset, yOffset));
+        eventCollector.scroll(l -> l.scroll(this, deltaX, deltaY));
     }
 
     @Override
     public void pressKey(Key key, ModifierKeys modifierKeys)
     {
-        this.modifierKeys = modifierKeys;
+        lastModifierKeys = modifierKeys;
         keyStates.put(key, KeyState.PRESSED);
         eventCollector.keyPress(l -> l.keyPressed(this, key, modifierKeys));
     }
@@ -223,7 +227,7 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     @Override
     public void releaseKey(Key key, ModifierKeys modifierKeys)
     {
-        this.modifierKeys = modifierKeys;
+        lastModifierKeys = modifierKeys;
         keyStates.put(key, KeyState.RELEASED);
         eventCollector.keyRelease(l -> l.keyReleased(this, key, modifierKeys));
     }
@@ -231,7 +235,7 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     @Override
     public void typeKey(Key key, ModifierKeys modifierKeys)
     {
-        this.modifierKeys = modifierKeys;
+        lastModifierKeys = modifierKeys;
         eventCollector.keyType(l -> l.keyTyped(this, key, modifierKeys));
     }
 

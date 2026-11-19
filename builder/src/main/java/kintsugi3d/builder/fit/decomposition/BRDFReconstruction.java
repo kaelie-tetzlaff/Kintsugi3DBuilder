@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit.decomposition;
@@ -39,7 +43,7 @@ public class BRDFReconstruction
         matrixSize = this.settings.getMaterialCount() * (this.settings.getBasisComplexity() + 1);
     }
 
-    public void execute(GraphicsStream<ReflectanceData> viewStream, SpecularDecompositionFromScratch solution, ProgressMonitor monitor)
+    public final void execute(GraphicsStream<ReflectanceData> viewStream, SpecularDecompositionFromScratch solution, ProgressMonitor monitor)
     {
         LOG.info("Building reflectance fitting matrix...");
         MatrixSystem system = buildReflectanceMatrix(viewStream, solution, monitor);
@@ -123,9 +127,10 @@ public class BRDFReconstruction
 //        }
     }
 
-    private MatrixSystem buildReflectanceMatrix(GraphicsStream<ReflectanceData> viewStream, SpecularDecomposition solution, ProgressMonitor monitor)
+    private MatrixSystem buildReflectanceMatrix(
+        GraphicsStream<ReflectanceData> viewStream, SpecularDecomposition solution,
+        @SuppressWarnings("unused") ProgressMonitor monitor) // TODO add ProgressMonitor support to GraphicsStream.
     {
-        // TODO add ProgressMonitor support to GraphicsStream.
         Counter counter = new Counter();
         MatrixSystem system =
             viewStream.map(reflectanceData ->
@@ -148,7 +153,7 @@ public class BRDFReconstruction
 
         for (int b = 0; b < settings.getMaterialCount(); b++)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder(settings.getBasisComplexity() * 24);
             sb.append("RHS, red for BRDF #").append(b).append(": ");
 
             sb.append(system.rhs[0].get(b));

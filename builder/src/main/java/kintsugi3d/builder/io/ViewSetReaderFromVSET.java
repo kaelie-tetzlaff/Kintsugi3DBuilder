@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.io;
@@ -54,14 +58,14 @@ public final class ViewSetReaderFromVSET implements ViewSetReader
     @Override
     public ViewSetBuilder readFromStream(InputStream stream, ViewSetDirectories directories)
     {
-        File root = directories.projectRoot;
-        File supportingFilesDirectory = directories.supportingFilesDirectory;
-        boolean needsUndistort = directories.fullResImagesNeedUndistort;
+        File root = directories.getProjectRoot();
+        File supportingFilesDirectory = directories.getSupportingFilesDirectory();
+        boolean needsUndistort = directories.isFullResImagesNeedUndistort();
 
         ViewSetBuilder builder = ViewSet.getBuilder(root, supportingFilesDirectory, 128);
 
         // Set default full res image directory in case it's not specified in the VSET file (could also be null).
-        builder.setFullResImageDirectory(directories.fullResImageDirectory);
+        builder.setFullResImageDirectory(directories.getFullResImageDirectory());
 
         List<Double> linearLuminanceList = new ArrayList<>(8);
         List<Byte> encodedLuminanceList = new ArrayList<>(8);
@@ -214,7 +218,7 @@ public final class ViewSetReaderFromVSET implements ViewSetReader
                         float sensorHeight = sensorWidth / aspect;
 
                         builder.addCameraProjection(new SimpleProjection(
-                            aspect, 2.0f * (float) Math.atan2(sensorHeight, 2 * focalLength)));
+                            aspect, 2.0f * (float) StrictMath.atan2(sensorHeight, 2 * focalLength)));
 
                         // Skip any distortion parameters as they aren't used consistently
                         // and images are probably undistorted from PhotoScan/Metashape
@@ -434,9 +438,9 @@ public final class ViewSetReaderFromVSET implements ViewSetReader
     {
         // Use root directory as supporting files directory
         ViewSetDirectories directories = new ViewSetDirectories();
-        directories.projectRoot = root;
-        directories.supportingFilesDirectory = root;
-        directories.fullResImagesNeedUndistort = true;
+        directories.setProjectRoot(root);
+        directories.setSupportingFilesDirectory(root);
+        directories.setFullResImagesNeedUndistort(true);
         return readFromStream(stream, directories);
     }
 
@@ -454,9 +458,9 @@ public final class ViewSetReaderFromVSET implements ViewSetReader
         try (InputStream stream = new FileInputStream(file))
         {
             ViewSetDirectories directories = new ViewSetDirectories();
-            directories.projectRoot = file.getParentFile();
-            directories.supportingFilesDirectory = supportingFilesDirectory;
-            directories.fullResImagesNeedUndistort = true;
+            directories.setProjectRoot(file.getParentFile());
+            directories.setSupportingFilesDirectory(supportingFilesDirectory);
+            directories.setFullResImagesNeedUndistort(true);
             return readFromStream(stream, directories);
         }
     }

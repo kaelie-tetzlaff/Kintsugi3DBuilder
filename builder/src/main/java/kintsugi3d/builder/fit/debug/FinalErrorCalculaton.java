@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit.debug;
@@ -36,15 +40,10 @@ import java.util.stream.IntStream;
  * A module that performs some final steps to finish a specular fit: filling holes in the weight maps, and calculating some final error statistics.
  * TODO this class doesn't have a well defined identity; should probably be refactored.
  */
+@SuppressWarnings("unused")
 public final class FinalErrorCalculaton
 {
     private static final Logger LOG = LoggerFactory.getLogger(FinalErrorCalculaton.class);
-    private static final FinalErrorCalculaton INSTANCE = new FinalErrorCalculaton();
-
-    public static FinalErrorCalculaton getInstance()
-    {
-        return INSTANCE;
-    }
 
     private static final boolean CALCULATE_NORMAL_RMSE = true;
 
@@ -59,7 +58,7 @@ public final class FinalErrorCalculaton
      * @param rmseOut Text file containing error information
      * @param <ContextType>
      */
-    public <ContextType extends Context<ContextType>> void validateNormalMap(
+    public static <ContextType extends Context<ContextType>> void validateNormalMap(
         ReadonlyImageBasedGraphicsResources<ContextType> resources, ReadonlyTextureResources<ContextType> specularFit, PrintStream rmseOut)
     {
         ReadonlyTexture2D<ContextType> priorNormalMap = resources.getTextureResources().getTexture(StandardTexture.NORMAL_MAP);
@@ -101,7 +100,7 @@ public final class FinalErrorCalculaton
                 LOG.info("Normal map ground truth RMSE: {}", rmse);
 
                 // Print out RMSE for normal map ground truth
-                rmseOut.printf("Normal map ground truth RMSE: %s%n", rmse);
+                rmseOut.printf("Normal map ground truth RMSE: %s\n", rmse);
             }
             catch (IOException e)
             {
@@ -110,7 +109,7 @@ public final class FinalErrorCalculaton
         }
     }
 
-    public <ContextType extends Context<ContextType>> void calculateFinalErrorMetrics(
+    public static <ContextType extends Context<ContextType>> void calculateFinalErrorMetrics(
         ReadonlyImageBasedGraphicsResources<ContextType> resources, ShaderProgramFactory<ContextType> programFactory,
         ReadonlyTextureResources<ContextType> specularFit, ShaderBasedErrorCalculator<ContextType> basisErrorCalculator,
         PrintStream rmseOut)
@@ -120,12 +119,12 @@ public final class FinalErrorCalculaton
         {
             // Calculate linear RMSE using basis diffuse
             basisErrorCalculator.update();
-            rmseOut.printf("RMSE using basis diffuse (linear): %s%n", basisErrorCalculator.getReport().getError());
+            rmseOut.printf("RMSE using basis diffuse (linear): %s\n", basisErrorCalculator.getReport().getError());
 
             // Calculate sRGB RMSE using basis diffuse
             basisErrorCalculator.getProgram().setUniform("sRGB", true);
             basisErrorCalculator.update();
-            rmseOut.printf("RMSE using basis diffuse (sRGB): %s%n", basisErrorCalculator.getReport().getError());
+            rmseOut.printf("RMSE using basis diffuse (sRGB): %s\n", basisErrorCalculator.getReport().getError());
 
             // Setup drawable that uses the final diffuse texture (not limited to basis colors)
             specularFit.setupShaderProgram(finalErrorCalcProgram);
@@ -137,11 +136,11 @@ public final class FinalErrorCalculaton
             // getViews makes a copy, so save it for efficiency.
             Collection<View> views = resources.getViewSet().getEnabledViews();
 
-            rmseOut.printf("Final RMSE with final diffuse estimate (linear): %s%n",
+            rmseOut.printf("Final RMSE with final diffuse estimate (linear): %s\n",
                 runFinalErrorCalculation(finalErrorCalcDrawable, scratchFramebuffer, views));
 
             finalErrorCalcProgram.setUniform("sRGB", true);
-            rmseOut.printf("Final RMSE with final diffuse estimate (sRGB): %s%n",
+            rmseOut.printf("Final RMSE with final diffuse estimate (sRGB): %s\n",
                 runFinalErrorCalculation(finalErrorCalcDrawable, scratchFramebuffer, views));
 
             // Calculate error using the GGX fit rather than the basis functions.
@@ -163,7 +162,7 @@ public final class FinalErrorCalculaton
      * @param <ContextType>
      * @throws FileNotFoundException
      */
-    private <ContextType extends Context<ContextType>> void calculateGGXRMSE(
+    private static <ContextType extends Context<ContextType>> void calculateGGXRMSE(
         ReadonlyImageBasedGraphicsResources<ContextType> resources, ShaderProgramFactory<ContextType> programFactory,
         ReadonlyTextureResources<ContextType> specularFit, ReadableFramebuffer<ContextType> scratchFramebuffer, PrintStream rmseOut)
         throws IOException
@@ -177,11 +176,11 @@ public final class FinalErrorCalculaton
             // getViews makes a copy, so save it for efficiency.
             Collection<View> views = resources.getViewSet().getEnabledViews();
 
-            rmseOut.printf("RMSE for GGX fit (linear): %s%n",
+            rmseOut.printf("RMSE for GGX fit (linear): %s\n",
                 runFinalErrorCalculation(ggxErrorCalcDrawable, scratchFramebuffer, views));
 
             ggxErrorCalcProgram.setUniform("sRGB", true);
-            rmseOut.printf("RMSE for GGX fit (sRGB): %s%n",
+            rmseOut.printf("RMSE for GGX fit (sRGB): %s\n",
                 runFinalErrorCalculation(ggxErrorCalcDrawable, scratchFramebuffer, views));
         }
     }

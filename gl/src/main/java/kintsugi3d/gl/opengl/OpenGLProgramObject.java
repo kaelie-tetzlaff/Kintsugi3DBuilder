@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.opengl;
@@ -21,6 +25,7 @@ import kintsugi3d.gl.exceptions.ProgramLinkFailureException;
 import kintsugi3d.gl.exceptions.UnlinkedProgramException;
 import kintsugi3d.gl.util.ResourceManager;
 import kintsugi3d.gl.vecmath.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.*;
@@ -29,14 +34,14 @@ import static org.lwjgl.opengl.GL31.*;
 
 final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
 {
-    final OpenGLContext context;
+    private final OpenGLContext context;
     private final Map<String, Object> defines;
 
     private int programId;
     private AbstractCollection<OpenGLShader> ownedShaders;
     private ResourceManager<OpenGLTexture> textureManager;
     private ResourceManager<OpenGLUniformBuffer> uniformBufferManager;
-    private boolean closed = false;
+    private boolean live = true;
 
     static class OpenGLProgramBuilder extends ProgramBuilderBase<OpenGLContext>
     {
@@ -46,10 +51,10 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
         }
 
         @Override
-        public OpenGLProgramObject createProgram() throws IOException
+        public final OpenGLProgramObject createProgram() throws IOException
         {
-            OpenGLProgramObject program = new OpenGLProgramObject(this.context, this.getDefines());
-            Iterable<Shader<OpenGLContext>> compiledShaders = this.compileShaders();
+            OpenGLProgramObject program = new OpenGLProgramObject(getContext(), getDefines());
+            Iterable<Shader<OpenGLContext>> compiledShaders = compileShaders();
             for (Shader<OpenGLContext> shader : compiledShaders)
             {
                 program.attachShader(shader);
@@ -72,8 +77,8 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
         OpenGLContext.errorCheck();
         ownedShaders = new ArrayList<>(2);
         // Use one less texture unit because we don't use texture unit 0.
-        textureManager = new ResourceManager<>(this.context.getState().getMaxCombinedTextureImageUnits() - 1);
-        uniformBufferManager = new ResourceManager<>(this.context.getState().getMaxCombinedUniformBlocks());
+        textureManager = new ResourceManager<>(context.getState().getMaxCombinedTextureImageUnits() - 1);
+        uniformBufferManager = new ResourceManager<>(context.getState().getMaxCombinedUniformBlocks());
     }
 
     private void attachShader(Shader<OpenGLContext> shader)
@@ -102,7 +107,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     {
         glLinkProgram(programId);
         OpenGLContext.errorCheck();
-        if (!this.isLinked())
+        if (!isLinked())
         {
             throw new ProgramLinkFailureException(glGetProgramInfoLog(programId));
         }
@@ -123,18 +128,18 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     @Override
     public Map<String, Object> getDefines()
     {
-        return defines;
+        return Collections.unmodifiableMap(defines);
     }
 
     @Override
     public OpenGLContext getContext()
     {
-        return this.context;
+        return context;
     }
 
     private void useForUniformAssignment()
     {
-        if (this.isLinked())
+        if (isLinked())
         {
             glUseProgram(programId);
             OpenGLContext.errorCheck();
@@ -145,11 +150,14 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
         }
     }
 
-    private static final class TextureListWrapper extends AbstractList<Optional<OpenGLTexture>>
+    /**
+     * Needed because texture slot 0 is used as a sentinel.
+     */
+    private static final class TextureSentinelList extends AbstractList<OpenGLTexture>
     {
-        private final List<Optional<OpenGLTexture>> baseTextureList;
+        private final List<OpenGLTexture> baseTextureList;
 
-        private TextureListWrapper(List<Optional<OpenGLTexture>> baseTextureList)
+        private TextureSentinelList(List<OpenGLTexture> baseTextureList)
         {
             this.baseTextureList = baseTextureList;
         }
@@ -161,18 +169,18 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
         }
 
         @Override
-        public Optional<OpenGLTexture> get(int index)
+        public @Nullable OpenGLTexture get(int index)
         {
-            return index == 0 ? Optional.empty() : baseTextureList.get(index - 1);
+            return index == 0 ? null : baseTextureList.get(index - 1);
         }
     }
 
     void use(OpenGLVertexArray vao)
     {
-        if (this.isLinked())
+        if (isLinked())
         {
-            this.context.updateTextureBindings(new TextureListWrapper(textureManager.asReadonlyList()));
-            this.context.updateUniformBufferBindings(uniformBufferManager.asReadonlyList());
+            context.updateTextureBindings(new TextureSentinelList(textureManager.asReadonlyList()));
+            context.updateUniformBufferBindings(uniformBufferManager.asReadonlyList());
 
             vao.bind(); // needs to be bound to validate program
 
@@ -202,13 +210,13 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public boolean setTexture(int location, Texture<OpenGLContext> texture)
+    public void setTexture(int location, Texture<OpenGLContext> texture)
     {
         if (texture instanceof OpenGLTexture)
         {
             // We don't use texture unit 0, so add one to the resource ID.
             int textureUnit = 1 + textureManager.assignResourceByKey(location, (OpenGLTexture)texture);
-            return this.setUniform(location, textureUnit);
+            setUniform(location, textureUnit);
         }
         else
         {
@@ -217,13 +225,13 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public boolean setTexture(String name, Texture<OpenGLContext> texture)
+    public void setTexture(String name, Texture<OpenGLContext> texture)
     {
-        return this.setTexture(this.getUniformLocation(name), texture);
+        setTexture(getUniformLocation(name), texture);
     }
 
     @Override
-    public boolean setUniformBuffer(int index, UniformBuffer<OpenGLContext> buffer)
+    public void setUniformBuffer(int index, UniformBuffer<OpenGLContext> buffer)
     {
         if (buffer instanceof OpenGLUniformBuffer)
         {
@@ -231,14 +239,8 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
             {
                 int bindingPoint = uniformBufferManager.assignResourceByKey(index, (OpenGLUniformBuffer)buffer);
 
-                glUniformBlockBinding(this.programId, index, bindingPoint);
+                glUniformBlockBinding(programId, index, bindingPoint);
                 OpenGLContext.errorCheck();
-
-                return true;
-            }
-            else
-            {
-                return false;
             }
         }
         else
@@ -248,15 +250,15 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public boolean setUniformBuffer(String name, UniformBuffer<OpenGLContext> buffer)
+    public void setUniformBuffer(String name, UniformBuffer<OpenGLContext> buffer)
     {
-        return this.setUniformBuffer(this.getUniformBlockIndex(name), buffer);
+        setUniformBuffer(getUniformBlockIndex(name), buffer);
     }
 
     @Override
     public int getUniformBlockIndex(String name)
     {
-        int index = glGetUniformBlockIndex(this.programId, name);
+        int index = glGetUniformBlockIndex(programId, name);
         OpenGLContext.errorCheck();
         return index;
     }
@@ -264,7 +266,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     @Override
     public void close()
     {
-        if (!closed)
+        if (live)
         {
             glDeleteProgram(programId);
             OpenGLContext.errorCheck();
@@ -272,7 +274,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
             {
                 shader.close();
             }
-            closed = true;
+            live = false;
         }
     }
 
@@ -285,207 +287,159 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public boolean setUniform(int location, int value)
+    public void setUniform(int location, int value)
     {
         if (location >= 0)
         {
-            this.useForUniformAssignment();
+            useForUniformAssignment();
 
             glUniform1i(location, value);
             OpenGLContext.errorCheck();
-
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setUniform(int location, IntVector2 value)
+    public void setUniform(int location, IntVector2 value)
     {
         if (location >= 0)
         {
-            this.useForUniformAssignment();
+            useForUniformAssignment();
 
             glUniform2i(location, value.x, value.y);
             OpenGLContext.errorCheck();
-
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setUniform(int location, IntVector3 value)
+    public void setUniform(int location, IntVector3 value)
     {
         if (location >= 0)
         {
-            this.useForUniformAssignment();
+            useForUniformAssignment();
 
             glUniform3i(location, value.x, value.y, value.z);
             OpenGLContext.errorCheck();
-
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setUniform(int location, IntVector4 value)
+    public void setUniform(int location, IntVector4 value)
     {
         if (location >= 0)
         {
-            this.useForUniformAssignment();
+            useForUniformAssignment();
 
             glUniform4i(location, value.x, value.y, value.z, value.w);
             OpenGLContext.errorCheck();
-
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setUniform(int location, float value)
+    public void setUniform(int location, float value)
     {
         if (location >= 0)
         {
-            this.useForUniformAssignment();
+            useForUniformAssignment();
 
             glUniform1f(location, value);
             OpenGLContext.errorCheck();
-
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setUniform(int location, Vector2 value)
+    public void setUniform(int location, Vector2 value)
     {
         if (location >= 0)
         {
-            this.useForUniformAssignment();
+            useForUniformAssignment();
 
             glUniform2f(location, value.x, value.y);
             OpenGLContext.errorCheck();
-
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setUniform(int location, Vector3 value)
+    public void setUniform(int location, Vector3 value)
     {
         if (location >= 0)
         {
-            this.useForUniformAssignment();
+            useForUniformAssignment();
 
             glUniform3f(location, value.x, value.y, value.z);
             OpenGLContext.errorCheck();
-
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setUniform(int location, Vector4 value)
+    public void setUniform(int location, Vector4 value)
     {
         if (location >= 0)
         {
-            this.useForUniformAssignment();
+            useForUniformAssignment();
 
             glUniform4f(location, value.x, value.y, value.z, value.w);
             OpenGLContext.errorCheck();
-
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setUniform(int location, boolean value)
+    public void setUniform(int location, boolean value)
     {
-        return this.setUniform(location, value ? GL_TRUE : GL_FALSE);
+        setUniform(location, value ? GL_TRUE : GL_FALSE);
     }
 
     @Override
-    public boolean setUniform(String name, boolean value)
+    public void setUniform(String name, boolean value)
     {
-        return this.setUniform(this.getUniformLocation(name), value ? GL_TRUE : GL_FALSE);
+        setUniform(getUniformLocation(name), value ? GL_TRUE : GL_FALSE);
     }
 
     @Override
-    public boolean setUniform(String name, int value)
+    public void setUniform(String name, int value)
     {
-        return this.setUniform(this.getUniformLocation(name), value);
+        setUniform(getUniformLocation(name), value);
     }
 
     @Override
-    public boolean setUniform(String name, IntVector2 value)
+    public void setUniform(String name, IntVector2 value)
     {
-        return this.setUniform(this.getUniformLocation(name), value);
+        setUniform(getUniformLocation(name), value);
     }
 
     @Override
-    public boolean setUniform(String name, IntVector3 value)
+    public void setUniform(String name, IntVector3 value)
     {
-        return this.setUniform(this.getUniformLocation(name), value);
+        setUniform(getUniformLocation(name), value);
     }
 
     @Override
-    public boolean setUniform(String name, IntVector4 value)
+    public void setUniform(String name, IntVector4 value)
     {
-        return this.setUniform(this.getUniformLocation(name), value);
+        setUniform(getUniformLocation(name), value);
     }
 
     @Override
-    public boolean setUniform(String name, float value)
+    public void setUniform(String name, float value)
     {
-        return this.setUniform(this.getUniformLocation(name), value);
+        setUniform(getUniformLocation(name), value);
     }
 
     @Override
-    public boolean setUniform(String name, Vector2 value)
+    public void setUniform(String name, Vector2 value)
     {
-        return this.setUniform(this.getUniformLocation(name), value);
+        setUniform(getUniformLocation(name), value);
     }
 
     @Override
-    public boolean setUniform(String name, Vector3 value)
+    public void setUniform(String name, Vector3 value)
     {
-        return this.setUniform(this.getUniformLocation(name), value);
+        setUniform(getUniformLocation(name), value);
     }
 
     @Override
-    public boolean setUniform(String name, Vector4 value)
+    public void setUniform(String name, Vector4 value)
     {
-        return this.setUniform(this.getUniformLocation(name), value);
+        setUniform(getUniformLocation(name), value);
     }
 
     @Override
@@ -497,26 +451,20 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public boolean setUniform(int location, Matrix4 value)
+    public void setUniform(int location, Matrix4 value)
     {
         if (location >= 0)
         {
-            this.useForUniformAssignment();
+            useForUniformAssignment();
 
             glUniformMatrix4fv(location, false, value.asFloatBuffer());
             OpenGLContext.errorCheck();
-
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setUniform(String name, Matrix4 value)
+    public void setUniform(String name, Matrix4 value)
     {
-        return this.setUniform(this.getUniformLocation(name), value);
+        setUniform(getUniformLocation(name), value);
     }
 }

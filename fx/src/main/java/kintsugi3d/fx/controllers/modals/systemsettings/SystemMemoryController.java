@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.modals.systemsettings;
@@ -14,7 +18,12 @@ package kintsugi3d.fx.controllers.modals.systemsettings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
 import javafx.stage.Window;
 import kintsugi3d.builder.util.Launch4jConfiguration;
 import kintsugi3d.fx.core.JavaFXState;
@@ -40,7 +49,7 @@ public class SystemMemoryController implements SystemSettingsControllerBase
     private Launch4jConfiguration configuration;
 
     @Override
-    public void initializePage(Window parentWindow, JavaFXState state)
+    public final void initializePage(Window parentWindow, JavaFXState state)
     {
         try
         {
@@ -64,12 +73,12 @@ public class SystemMemoryController implements SystemSettingsControllerBase
         maxMemTextField.textProperty().bindBidirectional(maxMemory, converter);
     }
 
-    public void button_Apply()
+    public final void apply()
     {
         configuration.setEnableMaxMemory(maxMemCheckbox.isSelected());
         configuration.setMaxMemoryMb(maxMemory.get());
 
-        ButtonType ok = new ButtonType("OK", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType ok = new ButtonType("OK", ButtonData.CANCEL_CLOSE);
         try
         {
             try
@@ -86,14 +95,14 @@ public class SystemMemoryController implements SystemSettingsControllerBase
         catch (IOException e)
         {
             LOG.error("Failed to write to launch4j configuration file", e);
-            Alert alert = new Alert(Alert.AlertType.NONE, "", ok);
+            Alert alert = new Alert(AlertType.NONE, "", ok);
             alert.setTitle("Kintsugi 3D Builder");
             alert.setHeaderText("Writing failed");
             alert.setContentText("Kintsugi 3D Builder failed to write to the configuration file. Try restarting Kintsugi 3D Builder as administrator and try again.");
             alert.show();
         }
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "", ok);
+        Alert alert = new Alert(AlertType.INFORMATION, "", ok);
         alert.setTitle("Kintsugi 3D Builder");
         alert.setHeaderText("Restart Required");
         alert.setContentText("A restart of Kintsugi 3D Builder is needed for changes to take effect.");

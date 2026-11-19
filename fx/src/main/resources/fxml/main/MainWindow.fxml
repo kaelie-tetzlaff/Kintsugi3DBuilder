@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+  ~ Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+  ~                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
   ~ Copyright (c) 2019 The Regents of the University of Minnesota
   ~
   ~ Licensed under GPLv3
   ~ ( http://www.gnu.org/licenses/gpl-3.0.html )
   ~
-  ~ This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-  ~ This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+  ~ This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+  ~
+  ~ This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+  ~ of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   -->
 
 <?import javafx.geometry.Insets?>
@@ -57,10 +61,8 @@
                         <MenuItem mnemonicParsing="false" text="Action 1" />
                     </Menu>
                     <Menu fx:id="cleanRecentProjectsMenu" mnemonicParsing="false" text="Clear Recent Projects">
-                        <MenuItem fx:id="removeSomeRefsCustMenuItem" text="Clear Missing Projects"
-                                  onAction="#removeInvalidReferences"/>
-                        <MenuItem fx:id="removeAllRefsCustMenuItem" text="Clear All Projects"
-                                  onAction="#removeAllReferences"/>
+                        <MenuItem text="Clear Missing Projects" onAction="#removeInvalidReferences"/>
+                        <MenuItem text="Clear All Projects" onAction="#removeAllReferences"/>
                     </Menu>
 
                     <SeparatorMenuItem mnemonicParsing="false" />
@@ -149,7 +151,6 @@
                     <MenuItem mnemonicParsing="false" text="Process Guides (UNFINISHED)" visible="false" />
                 </Menu>
                 <Menu mnemonicParsing="false" text="Lighting" visible="false">
-                    <CheckMenuItem fx:id="environmentMappingCheckMenuItem" mnemonicParsing="false" selected="true" text="Environment mapping" visible="false" />
                     <CheckMenuItem fx:id="visibleLightsCheckMenuItem" mnemonicParsing="false" selected="true" text="Show light sources" />
                     <CheckMenuItem fx:id="visibleCameraPoseCheckMenuItem" mnemonicParsing="false" text="Show camera poses for photographs" visible="false" />
                     <CheckMenuItem fx:id="visibleSavedCameraPoseCheckMenuItem" mnemonicParsing="false" text="Show saved camera poses" visible="false" />
@@ -170,8 +171,13 @@
                     <fx:include fx:id="framebufferView" source="FramebufferView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                     <fx:include source="Splitter.fxml" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
                 </StackPane>
-                <HBox fx:id = "carouselContainer" pickOnBounds="false" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0">
+                <!-- Carousel container -->
+                <HBox pickOnBounds="false" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0">
+                    <!-- Need to suppress inspections since the IntelliJ JavaFX inspector misses instances where the
+                         fx:id is mapped to a controller reference -->
+                    <!--suppress JavaFxUnresolvedFxIdReference -->
                     <fx:include fx:id="carousel" source="Carousel.fxml" AnchorPane.bottomAnchor="0.0" HBox.hgrow="ALWAYS"/>
+                    <!--suppress JavaFxUnresolvedFxIdReference -->
                     <fx:include fx:id = "transparentContainer" source = "TransparentContainer.fxml" VBox.vgrow="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
                 </HBox>
                 <AnchorPane fx:id="miniProgressPane" prefHeight="24.0" style="-fx-background-color: #202020;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">

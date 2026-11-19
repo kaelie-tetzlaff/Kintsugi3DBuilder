@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.geometry;
@@ -51,12 +55,12 @@ public class GeometryResources<ContextType extends Context<ContextType>>
      */
     private GeometryResources()
     {
-        this.context = null;
-        this.geometry = null;
-        this.positionBuffer = null;
-        this.texCoordBuffer = null;
-        this.normalBuffer = null;
-        this.tangentBuffer = null;
+        context = null;
+        geometry = null;
+        positionBuffer = null;
+        texCoordBuffer = null;
+        normalBuffer = null;
+        tangentBuffer = null;
     }
 
     public static <ContextType extends Context<ContextType>> GeometryResources<ContextType> createNullResources()
@@ -71,56 +75,56 @@ public class GeometryResources<ContextType extends Context<ContextType>>
     {
         this.context = context;
         this.geometry = geometry;
-        this.positionBuffer = context.createVertexBuffer().setData(geometry.getVertices());
+        positionBuffer = context.createVertexBuffer().setData(geometry.getVertices());
 
         if (geometry.hasTexCoords())
         {
-            this.texCoordBuffer = context.createVertexBuffer().setData(geometry.getTexCoords());
+            texCoordBuffer = context.createVertexBuffer().setData(geometry.getTexCoords());
         }
         else
         {
-            this.texCoordBuffer = null;
+            texCoordBuffer = null;
         }
 
         if (geometry.hasNormals())
         {
-            this.normalBuffer = context.createVertexBuffer().setData(geometry.getNormals());
+            normalBuffer = context.createVertexBuffer().setData(geometry.getNormals());
         }
         else
         {
-            this.normalBuffer = null;
+            normalBuffer = null;
         }
 
         if (geometry.hasTexCoords() && geometry.hasNormals())
         {
-            this.tangentBuffer = context.createVertexBuffer().setData(geometry.getTangents());
+            tangentBuffer = context.createVertexBuffer().setData(geometry.getTangents());
         }
         else
         {
-            this.tangentBuffer = null;
+            tangentBuffer = null;
         }
     }
 
     @Override
-    public ContextType getContext()
+    public final ContextType getContext()
     {
         return context;
     }
 
     @Override
-    public ReadonlyVertexGeometry getGeometry()
+    public final ReadonlyVertexGeometry getGeometry()
     {
         return geometry;
     }
 
     @Override
-    public ReadonlyVertexBuffer<ContextType> getPositionBuffer()
+    public final ReadonlyVertexBuffer<ContextType> getPositionBuffer()
     {
         return positionBuffer;
     }
 
     @Override
-    public Drawable<ContextType> createDrawable(Program<ContextType> program)
+    public final Drawable<ContextType> createDrawable(Program<ContextType> program)
     {
         Drawable<ContextType> drawable = program.getContext().createDrawable(program);
         drawable.addVertexBuffer("position", positionBuffer);
@@ -131,7 +135,7 @@ public class GeometryResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public GeometryFramebuffer<ContextType> createGeometryFramebuffer(int width, int height)
+    public final GeometryFramebuffer<ContextType> createGeometryFramebuffer(int width, int height)
     {
         try
         {
@@ -145,32 +149,32 @@ public class GeometryResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public boolean isNull()
+    public final boolean isNull()
     {
-        return this.positionBuffer == null;
+        return positionBuffer == null;
     }
 
     @Override
-    public void close()
+    public final void close()
     {
-        if (this.positionBuffer != null)
+        if (positionBuffer != null)
         {
-            this.positionBuffer.close();
+            positionBuffer.close();
         }
 
-        if (this.texCoordBuffer != null)
+        if (texCoordBuffer != null)
         {
-            this.texCoordBuffer.close();
+            texCoordBuffer.close();
         }
 
-        if (this.normalBuffer != null)
+        if (normalBuffer != null)
         {
-            this.normalBuffer.close();
+            normalBuffer.close();
         }
 
-        if (this.tangentBuffer != null)
+        if (tangentBuffer != null)
         {
-            this.tangentBuffer.close();
+            tangentBuffer.close();
         }
     }
 }

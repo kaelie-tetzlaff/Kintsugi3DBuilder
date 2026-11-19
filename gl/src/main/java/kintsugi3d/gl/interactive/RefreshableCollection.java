@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.interactive;
@@ -27,17 +31,17 @@ public class RefreshableCollection<RefreshableType extends Refreshable> implemen
 
     private boolean initialized = false;
 
-    public void add(RefreshableType refreshable)
+    public final void add(RefreshableType refreshable)
     {
         initializeQueue.add(refreshable);
     }
 
-    public void remove(RefreshableType refreshable)
+    public final void remove(RefreshableType refreshable)
     {
         terminateQueue.add(refreshable);
     }
 
-    public void clear()
+    public final void clear()
     {
         terminateQueue.addAll(refreshables);
     }
@@ -93,13 +97,13 @@ public class RefreshableCollection<RefreshableType extends Refreshable> implemen
     }
 
     @Override
-    public boolean isInitialized()
+    public final boolean isInitialized()
     {
-        return this.initialized;
+        return initialized;
     }
 
     @Override
-    public void initialize()
+    public final void initialize()
     {
         // Edge case for if refreshable was added and removed prior to initialize()
         initializeQueue.removeAll(terminateQueue);
@@ -108,11 +112,11 @@ public class RefreshableCollection<RefreshableType extends Refreshable> implemen
         // Initialize added refreshables and add to main list.
         processInitializeQueue();
 
-        this.initialized = true;
+        initialized = true;
     }
 
     @Override
-    public void refresh()
+    public final void refresh()
     {
         // Process initialize and terminate queues.
         processInitializeQueue();
@@ -125,7 +129,7 @@ public class RefreshableCollection<RefreshableType extends Refreshable> implemen
     }
 
     @Override
-    public void terminate()
+    public final void terminate()
     {
         processTerminateQueue();
 

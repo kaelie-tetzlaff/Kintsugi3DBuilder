@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.state.cards;
@@ -25,14 +29,14 @@ public class ProjectDataCard
     private final String thumbnailPath;
     private final Map<String, String> textFields;
     private final Collection<? extends Map<String, Runnable>> actionGroups;
-    private boolean isEnabled = true;
+    private boolean isEnabled;
 
     public ProjectDataCard(
         String internalName, String title, String fullResImageFilePath, String thumbnailPath,
         Map<String, String> textFields, Collection<? extends Map<String, Runnable>> actionGroups, boolean isEnabled)
     {
         this.internalName = internalName;
-        this.cardId = UUID.randomUUID();
+        cardId = UUID.randomUUID();
         this.title = title;
         this.fullResImageFilePath = fullResImageFilePath;
         this.thumbnailPath = thumbnailPath;
@@ -41,17 +45,17 @@ public class ProjectDataCard
         this.isEnabled = isEnabled;
     }
 
-    public String getInternalName()
+    public final String getInternalName()
     {
         return internalName;
     }
 
-    public UUID getCardId()
+    public final UUID getCardId()
     {
         return cardId;
     }
 
-    public String getTitle()
+    public final String getTitle()
     {
         if (!isEnabled)
         {
@@ -60,12 +64,12 @@ public class ProjectDataCard
         return title;
     }
 
-    public String getThumbnailPath()
+    public final String getThumbnailPath()
     {
         return thumbnailPath;
     }
 
-    public String getValue(String key)
+    public final String getValue(String key)
     {
         if (!textFields.containsKey(key))
         {
@@ -74,21 +78,21 @@ public class ProjectDataCard
         return textFields.get(key);
     }
 
-    public Map<String, String> getTextContent()
+    public final Map<String, String> getTextContent()
     {
         return textFields;
     }
 
-    public Collection<? extends Map<String, Runnable>> getActions()
+    public final Collection<? extends Map<String, Runnable>> getActions()
     {
         return actionGroups;
     }
 
-    public boolean isEnabled() { return isEnabled; }
+    public final boolean isEnabled() { return isEnabled; }
 
-    public void setIsEnabled(boolean isEnabled) { this.isEnabled = isEnabled; }
+    public final void setIsEnabled(boolean isEnabled) { this.isEnabled = isEnabled; }
 
-    public String getFullResImageFilePath()
+    public final String getFullResImageFilePath()
     {
         return fullResImageFilePath;
     }

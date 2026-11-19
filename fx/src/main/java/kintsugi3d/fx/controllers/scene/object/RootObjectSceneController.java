@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.scene.object;
@@ -44,12 +48,12 @@ public class RootObjectSceneController
 
     private ObservableProjectModel projectModel;
 
-    public void injectDependencies(ObservableObjectPoseModel objectModel, ObservableProjectModel injectedProjectModel)
+    public final void injectDependencies(ObservableObjectPoseModel objectModel, ObservableProjectModel injectedProjectModel)
     {
-        this.projectModel = injectedProjectModel;
+        projectModel = injectedProjectModel;
 
         objectPoseListView.setItems(projectModel.getObjectPoseList());
-        objectPoseListView.getSelectionModel().selectedItemProperty().addListener(settingsController.changeListener);
+        objectPoseListView.getSelectionModel().selectedItemProperty().addListener(settingsController.getChangeListener());
 
         ObservableObjectPoseSettings defaultPose = new ObservableObjectPoseSettings();
 
@@ -87,7 +91,7 @@ public class RootObjectSceneController
     private void savePoseButton()
     {
         //TODO
-        LOG.debug("TODO: saved " + getObjectPoseSelectionModel().getSelectedItem() + " to the library.");
+        LOG.debug("TODO: saved {} to the library.", getObjectPoseSelectionModel().getSelectedItem());
     }
 
     @FXML
@@ -167,7 +171,7 @@ public class RootObjectSceneController
     }
 
     @FXML
-    void moveDOWNButton()
+    final void moveDOWNButton()
     {
         int i = getObjectPoseSelectionModel().getSelectedIndex();
         List<ObservableObjectPoseSettings> objectPoseList = projectModel.getObjectPoseList();
@@ -179,7 +183,7 @@ public class RootObjectSceneController
     }
 
     @FXML
-    void lockPoseButton()
+    final void lockPoseButton()
     {
         boolean newValue = !getObjectPoseSelectionModel().getSelectedItem().isLocked();
         getObjectPoseSelectionModel().getSelectedItem().setLocked(newValue);
@@ -188,21 +192,21 @@ public class RootObjectSceneController
     }
 
     @FXML
-    void keyframePoseButton()
+    final void keyframePoseButton()
     {
         //TODO
-        LOG.debug("TODO: keyframe added for " + getObjectPoseSelectionModel().getSelectedItem());
+        LOG.debug("TODO: keyframe added for {}", getObjectPoseSelectionModel().getSelectedItem());
     }
 
     @FXML
-    void deletePoseButton()
+    final void deletePoseButton()
     {
         int selectedIndex = getObjectPoseSelectionModel().getSelectedIndex();
         if (selectedIndex != 0)
         {
             Dialog<ButtonType> confirmation = new Alert(AlertType.CONFIRMATION, "This action cannot be reversed.");
-            confirmation.setHeaderText("Are you sure you want to delete the following object pose: "
-                + projectModel.getObjectPoseList().get(selectedIndex).getName() + '?');
+            confirmation.setHeaderText(String.format("Are you sure you want to delete the following object pose: %s?",
+                projectModel.getObjectPoseList().get(selectedIndex).getName()));
             confirmation.setTitle("Delete?");
 
             confirmation.showAndWait()

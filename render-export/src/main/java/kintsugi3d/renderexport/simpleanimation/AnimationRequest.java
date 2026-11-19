@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.renderexport.simpleanimation;
@@ -23,59 +27,59 @@ import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 
-public abstract class AnimationRequest implements ProgressMonitoredImageBasedGraphicsRequest
+abstract class AnimationRequest implements ProgressMonitoredImageBasedGraphicsRequest
 {
     private final int width;
     private final int height;
     private final int frameCount;
     private final File exportPath;
 
-    protected abstract static class BuilderBase
+    abstract static class BuilderBase
     {
         private int width;
         private int height;
         private int frameCount;
         private File exportPath;
 
-        protected int getWidth()
+        protected final int getWidth()
         {
             return width;
         }
 
-        protected int getHeight()
+        protected final int getHeight()
         {
             return height;
         }
 
-        protected int getFrameCount()
+        protected final int getFrameCount()
         {
             return frameCount;
         }
 
-        protected File getExportPath()
+        protected final File getExportPath()
         {
             return exportPath;
         }
 
-        public BuilderBase setWidth(int width)
+        public final BuilderBase setWidth(int width)
         {
             this.width = width;
             return this;
         }
 
-        public BuilderBase setHeight(int height)
+        public final BuilderBase setHeight(int height)
         {
             this.height = height;
             return this;
         }
 
-        public BuilderBase setFrameCount(int frameCount)
+        public final BuilderBase setFrameCount(int frameCount)
         {
             this.frameCount = frameCount;
             return this;
         }
 
-        public BuilderBase setExportPath(File exportPath)
+        public final BuilderBase setExportPath(File exportPath)
         {
             this.exportPath = exportPath;
             return this;
@@ -94,13 +98,13 @@ public abstract class AnimationRequest implements ProgressMonitoredImageBasedGra
 
     protected abstract Matrix4 getViewMatrix(int frame, Matrix4 baseViewMatrix);
 
-    public int getFrameCount()
+    protected final int getFrameCount()
     {
         return frameCount;
     }
 
     @Override
-    public <ContextType extends Context<ContextType>> void executeRequest(ImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
+    public final <ContextType extends Context<ContextType>> void executeRequest(ImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         try

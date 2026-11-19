@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.scene.camera;
@@ -22,10 +26,10 @@ public class ObservableCameraSettings extends SerializableCameraSettings
     private final DoubleProperty zCenter = new SimpleDoubleProperty();
     private final DoubleProperty azimuth = StaticUtilities.wrapAround(-180, 180, new SimpleDoubleProperty());
     private final DoubleProperty inclination = StaticUtilities.clamp(-90, 90, new SimpleDoubleProperty());
-    private final DoubleProperty log10Distance = new SimpleDoubleProperty(Math.log10(25.0 / 18.0));
+    private final DoubleProperty log10Distance = new SimpleDoubleProperty(StrictMath.log10(25.0 / 18.0));
     private final DoubleProperty twist = StaticUtilities.wrapAround(-180.0, 180.0, new SimpleDoubleProperty());
     private final DoubleProperty fov = new SimpleDoubleProperty(
-        360 / Math.PI /* convert and multiply by 2) */ * Math.atan(0.36 /* "35 mm" film (actual 36mm horizontal), 50mm lens */));
+        360 / Math.PI /* convert and multiply by 2) */ * StrictMath.atan(0.36 /* "35 mm" film (actual 36mm horizontal), 50mm lens */));
     private final DoubleProperty focalLength = new SimpleDoubleProperty(50.0);
     private final BooleanProperty locked = new SimpleBooleanProperty();
     private final BooleanProperty orthographic = new SimpleBooleanProperty();
@@ -37,15 +41,15 @@ public class ObservableCameraSettings extends SerializableCameraSettings
 
     public ObservableCameraSettings(String name)
     {
-        this.setName(name);
+        this.name.set(name);
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         if (locked.getValue())
         {
-            return "(L) " + name.getValue();
+            return String.format("(L) %s", name.getValue());
         }
         else
         {
@@ -53,223 +57,223 @@ public class ObservableCameraSettings extends SerializableCameraSettings
         }
     }
 
-    public ObservableCameraSettings duplicate()
+    public final ObservableCameraSettings duplicate()
     {
         ObservableCameraSettings newCamera = new ObservableCameraSettings();
-        newCamera.setXCenter(this.xCenter.getValue());
-        newCamera.setYCenter(this.yCenter.getValue());
-        newCamera.setZCenter(this.zCenter.getValue());
-        newCamera.setAzimuth(this.azimuth.getValue());
-        newCamera.setInclination(this.inclination.getValue());
-        newCamera.setLog10Distance(this.log10Distance.getValue());
-        newCamera.setTwist(this.twist.getValue());
-        newCamera.setFOV(this.fov.getValue());
-        newCamera.setLocked(this.locked.getValue());
-        newCamera.setOrthographic(this.orthographic.getValue());
-        newCamera.setName(this.name.getValue() + " copy");
+        newCamera.setXCenter(xCenter.getValue());
+        newCamera.setYCenter(yCenter.getValue());
+        newCamera.setZCenter(zCenter.getValue());
+        newCamera.setAzimuth(azimuth.getValue());
+        newCamera.setInclination(inclination.getValue());
+        newCamera.setLog10Distance(log10Distance.getValue());
+        newCamera.setTwist(twist.getValue());
+        newCamera.setFOV(fov.getValue());
+        newCamera.setLocked(locked.getValue());
+        newCamera.setOrthographic(orthographic.getValue());
+        newCamera.setName(String.format("%s copy", name.getValue()));
         return newCamera;
     }
 
     @Override
-    public double getXCenter()
+    public final double getXCenter()
     {
         return xCenter.get();
     }
 
-    public DoubleProperty xCenterProperty()
+    public final DoubleProperty xCenterProperty()
     {
         return xCenter;
     }
 
     @Override
-    public void setXCenter(double xCenter)
+    public final void setXCenter(double xCenter)
     {
         this.xCenter.set(xCenter);
     }
 
     @Override
-    public double getYCenter()
+    public final double getYCenter()
     {
         return yCenter.get();
     }
 
-    public DoubleProperty yCenterProperty()
+    public final DoubleProperty yCenterProperty()
     {
         return yCenter;
     }
 
     @Override
-    public void setYCenter(double yCenter)
+    public final void setYCenter(double yCenter)
     {
         this.yCenter.set(yCenter);
     }
 
     @Override
-    public double getZCenter()
+    public final double getZCenter()
     {
         return zCenter.get();
     }
 
-    public DoubleProperty zCenterProperty()
+    public final DoubleProperty zCenterProperty()
     {
         return zCenter;
     }
 
     @Override
-    public void setZCenter(double zCenter)
+    public final void setZCenter(double zCenter)
     {
         this.zCenter.set(zCenter);
     }
 
     @Override
-    public double getAzimuth()
+    public final double getAzimuth()
     {
         return azimuth.get();
     }
 
-    public DoubleProperty azimuthProperty()
+    public final DoubleProperty azimuthProperty()
     {
         return azimuth;
     }
 
     @Override
-    public void setAzimuth(double azimuth)
+    public final void setAzimuth(double azimuth)
     {
         this.azimuth.set(azimuth);
     }
 
     @Override
-    public double getInclination()
+    public final double getInclination()
     {
         return inclination.get();
     }
 
-    public DoubleProperty inclinationProperty()
+    public final DoubleProperty inclinationProperty()
     {
         return inclination;
     }
 
     @Override
-    public void setInclination(double inclination)
+    public final void setInclination(double inclination)
     {
         this.inclination.set(inclination);
     }
 
     @Override
-    public double getLog10Distance()
+    public final double getLog10Distance()
     {
         return log10Distance.get();
     }
 
-    public DoubleProperty log10DistanceProperty()
+    public final DoubleProperty log10DistanceProperty()
     {
         return log10Distance;
     }
 
     @Override
-    public void setLog10Distance(double log10distance)
+    public final void setLog10Distance(double log10distance)
     {
-        this.log10Distance.set(log10distance);
+        log10Distance.set(log10distance);
     }
 
     @Override
-    public double getTwist()
+    public final double getTwist()
     {
         return twist.get();
     }
 
-    public DoubleProperty twistProperty()
+    public final DoubleProperty twistProperty()
     {
         return twist;
     }
 
     @Override
-    public void setTwist(double twist)
+    public final void setTwist(double twist)
     {
         this.twist.set(twist);
     }
 
     @Override
-    public double getFOV()
+    public final double getFOV()
     {
         return fov.get();
     }
 
-    public DoubleProperty fovProperty()
+    public final DoubleProperty fovProperty()
     {
         return fov;
     }
 
     @Override
-    public void setFOV(double fOV)
+    public final void setFOV(double fOV)
     {
-        this.fov.set(fOV);
+        fov.set(fOV);
     }
 
     @Override
-    public double getFocalLength()
+    public final double getFocalLength()
     {
         return focalLength.get();
     }
 
-    public DoubleProperty focalLengthProperty()
+    public final DoubleProperty focalLengthProperty()
     {
         return focalLength;
     }
 
     @Override
-    public void setFocalLength(double focalLength)
+    public final void setFocalLength(double focalLength)
     {
         this.focalLength.set(focalLength);
     }
 
     @Override
-    public boolean isLocked()
+    public final boolean isLocked()
     {
         return locked.get();
     }
 
-    public BooleanProperty lockedProperty()
+    public final BooleanProperty lockedProperty()
     {
         return locked;
     }
 
     @Override
-    public void setLocked(boolean locked)
+    public final void setLocked(boolean locked)
     {
         this.locked.set(locked);
     }
 
     @Override
-    public boolean isOrthographic()
+    public final boolean isOrthographic()
     {
         return orthographic.get();
     }
 
-    public BooleanProperty orthographicProperty()
+    public final BooleanProperty orthographicProperty()
     {
         return orthographic;
     }
 
     @Override
-    public void setOrthographic(boolean orthographic)
+    public final void setOrthographic(boolean orthographic)
     {
         this.orthographic.set(orthographic);
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return name.get();
     }
 
-    public StringProperty nameProperty()
+    public final StringProperty nameProperty()
     {
         return name;
     }
 
     @Override
-    public void setName(String name)
+    public final void setName(String name)
     {
         this.name.set(name);
     }

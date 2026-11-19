@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.optimization;
@@ -24,7 +28,11 @@ import static org.ejml.dense.row.CommonOps_FDRM.multTransA;
 // TODO combine with double-precision version via abstract class?
 public final class NonNegativeLeastSquaresSinglePrecision
 {
-    private static SimpleMatrix solvePartial(SimpleMatrix mATA, SimpleMatrix vATb, boolean[] p, int sizeP, List<Integer> mapping, SimpleMatrix sOut)
+    private NonNegativeLeastSquaresSinglePrecision()
+    {
+    }
+
+    private static SimpleMatrix solvePartial(SimpleMatrix mATA, SimpleMatrix vATb, boolean[] p, List<Integer> mapping, SimpleMatrix sOut)
     {
         for (int index = 0; index < p.length; index++)
         {
@@ -36,36 +44,36 @@ public final class NonNegativeLeastSquaresSinglePrecision
 
         // Create versions of A'A and A'b containing only the rows and columns
         // corresponding to the free variables.
-        SimpleMatrix mATA_P = new SimpleMatrix(mapping.size(), mapping.size(), FMatrixRMaj.class);
-        SimpleMatrix vATb_P = new SimpleMatrix(mapping.size(), 1, FMatrixRMaj.class);
+        SimpleMatrix mATAForP = new SimpleMatrix(mapping.size(), mapping.size(), FMatrixRMaj.class);
+        SimpleMatrix vATbForP = new SimpleMatrix(mapping.size(), 1, FMatrixRMaj.class);
 
-        for (int i = 0; i < mATA_P.numRows(); i++)
+        for (int i = 0; i < mATAForP.numRows(); i++)
         {
             if (p[mapping.get(i)])
             {
-                vATb_P.set(i, vATb.get(mapping.get(i)));
+                vATbForP.set(i, vATb.get(mapping.get(i)));
 
-                for (int j = 0; j < mATA_P.numCols(); j++)
+                for (int j = 0; j < mATAForP.numCols(); j++)
                 {
                     if (p[mapping.get(j)])
                     {
-                        mATA_P.set(i, j, mATA.get(mapping.get(i), mapping.get(j)));
+                        mATAForP.set(i, j, mATA.get(mapping.get(i), mapping.get(j)));
                     }
                 }
             }
         }
 
         // Solve the system.
-        SimpleMatrix s_P = mATA_P.solve(vATb_P);
+        SimpleMatrix sForP = mATAForP.solve(vATbForP);
 
         // Copy the solution for the free variables into a vector containing the full solution,
         // including the variables fixed at zero.
-        for (int i = 0; i < s_P.numRows(); i++)
+        for (int i = 0; i < sForP.numRows(); i++)
         {
-            sOut.set(mapping.get(i), s_P.get(i));
+            sOut.set(mapping.get(i), sForP.get(i));
         }
 
-        return s_P;
+        return sForP;
     }
 
     public static SimpleMatrix solve(SimpleMatrix mA, SimpleMatrix b, double epsilon)
@@ -142,19 +150,19 @@ public final class NonNegativeLeastSquaresSinglePrecision
 
                 // Populates the mapping, sovles the system and copies it into s,
                 // and returns a vector containing only the free variables.
-                SimpleMatrix s_P = solvePartial(mATA, vATb, p, sizeP + 1, mapping, s);
+                SimpleMatrix sForP = solvePartial(mATA, vATb, p, mapping, s);
 
                 // Update size of P based on the number of mappings.
                 sizeP = mapping.size();
 
                 // Make sure that none of the free variables went negative.
-                while(elementMin(s_P.getMatrix()) <= 0.0)
+                while(elementMin(sForP.getMatrix()) <= 0.0)
                 {
                     double alpha = 1.0;
                     int j = -1;
                     for (int i = 0; i < sizeP; i++)
                     {
-                        double sVal = s_P.get(i);
+                        double sVal = sForP.get(i);
 
                         if (sVal <= 0.0)
                         {
@@ -196,7 +204,7 @@ public final class NonNegativeLeastSquaresSinglePrecision
 
                     // Populates the mapping, sovles the system and copies it into s,
                     // and returns a vector containing only the free variables.
-                    s_P = solvePartial(mATA, vATb, p, sizeP, mapping, s);
+                    sForP = solvePartial(mATA, vATb, p, mapping, s);
 
                     // Update size of P based on the number of mappings.
                     sizeP = mapping.size();

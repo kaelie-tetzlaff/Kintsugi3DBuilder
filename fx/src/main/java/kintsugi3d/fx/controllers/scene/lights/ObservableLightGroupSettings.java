@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.scene.lights;
@@ -35,16 +39,16 @@ public class ObservableLightGroupSettings extends SerializableLightGroupSettings
 
     public ObservableLightGroupSettings(String name)
     {
-        this.setName(name);
+        this.name.set(name);
     }
 
     @Override
-    public ObservableLightSettings constructLightInstanceSetting()
+    public final ObservableLightSettings constructLightInstanceSetting()
     {
         return new ObservableLightSettings(locked);
     }
 
-    public void addLight()
+    public final void addLight()
     {
         if (lightList.size() < LIGHT_LIMIT)
         {
@@ -53,7 +57,7 @@ public class ObservableLightGroupSettings extends SerializableLightGroupSettings
     }
 
     @Override
-    public void addLight(int index, double targetX, double targetY, double targetZ)
+    public final void addLight(int index, double targetX, double targetY, double targetZ)
     {
         if (lightList.size() < LIGHT_LIMIT)
         {
@@ -73,7 +77,7 @@ public class ObservableLightGroupSettings extends SerializableLightGroupSettings
     }
 
     @Override
-    public void removeLight(int index)
+    public final void removeLight(int index)
     {
         if (!lightList.isEmpty())
         {
@@ -85,67 +89,68 @@ public class ObservableLightGroupSettings extends SerializableLightGroupSettings
     }
 
     @Override
-    public int getLightCount()
+    public final int getLightCount()
     {
         return lightList.size();
     }
 
     @Override
-    public ObservableList<ObservableLightSettings> getLightList()
+    public final ObservableList<ObservableLightSettings> getLightList()
     {
         return lightList.get();
     }
 
-    public ListProperty<ObservableLightSettings> lightListProperty()
+    @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
+    public final ListProperty<ObservableLightSettings> lightListProperty()
     {
         return lightList;
     }
 
     @Override
-    public boolean isLocked()
+    public final boolean isLocked()
     {
         return locked.get();
     }
 
-    public BooleanProperty lockedProperty()
+    public final BooleanProperty lockedProperty()
     {
         return locked;
     }
 
     @Override
-    public void setLocked(boolean locked)
+    public final void setLocked(boolean locked)
     {
         this.locked.set(locked);
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return name.get();
     }
 
-    public StringProperty nameProperty()
+    public final StringProperty nameProperty()
     {
         return name;
     }
 
     @Override
-    public void setName(String name)
+    public final void setName(String name)
     {
         this.name.set(name);
     }
 
-    public IntegerProperty selectedLightIndexProperty()
+    public final IntegerProperty selectedLightIndexProperty()
     {
         return selectedLightIndex;
     }
 
-    public int getSelectedLightIndex()
+    public final int getSelectedLightIndex()
     {
         return selectedLightIndex.getValue();
     }
 
-    public void setSelectedLightIndex(int selectedLightIndex)
+    public final void setSelectedLightIndex(int selectedLightIndex)
     {
         this.selectedLightIndex.setValue(selectedLightIndex);
     }

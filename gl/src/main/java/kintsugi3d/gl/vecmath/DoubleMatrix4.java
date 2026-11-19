@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.vecmath;
@@ -116,7 +120,7 @@ public final class DoubleMatrix4
         return scaleAndTranslate(sx, sy, sz, 0.0, 0.0, 0.0);
     }
 
-    public static DoubleMatrix4 scale(double s)
+    public static DoubleMatrix4 scale(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") double s)
     {
         return scale(s, s, s);
     }
@@ -163,7 +167,7 @@ public final class DoubleMatrix4
 
     public static DoubleMatrix4 perspective(double fovy, double aspect, double near, double far)
     {
-        double f = 1.0f / Math.tan(fovy / 2);
+        double f = 1.0f / StrictMath.tan(fovy / 2);
         return new DoubleMatrix4(
             f / aspect,    0.0f,    0.0f,                            0.0f,
             0.0f,        f,        0.0f,                            0.0f,
@@ -231,80 +235,80 @@ public final class DoubleMatrix4
     public DoubleMatrix3 getUpperLeft3x3()
     {
         return DoubleMatrix3.fromRows(
-                new DoubleVector3(this.get(0,0), this.get(0,1),    this.get(0,2)),
-                new DoubleVector3(this.get(1,0), this.get(1,1),    this.get(1,2)),
-                new DoubleVector3(this.get(2,0), this.get(2,1),    this.get(2,2)) );
+                new DoubleVector3(get(0,0), get(0,1),    get(0,2)),
+                new DoubleVector3(get(1,0), get(1,1),    get(1,2)),
+                new DoubleVector3(get(2,0), get(2,1),    get(2,2)) );
     }
 
     public DoubleMatrix4 plus(DoubleMatrix4 other)
     {
         return new DoubleMatrix4(
-            this.m[0][0] + other.m[0][0],    this.m[0][1] + other.m[0][1], this.m[0][2] + other.m[0][2], this.m[0][3] + other.m[0][3],
-            this.m[1][0] + other.m[1][0],    this.m[1][1] + other.m[1][1], this.m[1][2] + other.m[1][2], this.m[1][3] + other.m[1][3],
-            this.m[2][0] + other.m[2][0],    this.m[2][1] + other.m[2][1], this.m[2][2] + other.m[2][2], this.m[2][3] + other.m[2][3],
-            this.m[3][0] + other.m[3][0],    this.m[3][1] + other.m[3][1], this.m[3][2] + other.m[3][2], this.m[3][3] + other.m[3][3]
+            m[0][0] + other.m[0][0],    m[0][1] + other.m[0][1], m[0][2] + other.m[0][2], m[0][3] + other.m[0][3],
+            m[1][0] + other.m[1][0],    m[1][1] + other.m[1][1], m[1][2] + other.m[1][2], m[1][3] + other.m[1][3],
+            m[2][0] + other.m[2][0],    m[2][1] + other.m[2][1], m[2][2] + other.m[2][2], m[2][3] + other.m[2][3],
+            m[3][0] + other.m[3][0],    m[3][1] + other.m[3][1], m[3][2] + other.m[3][2], m[3][3] + other.m[3][3]
         );
     }
 
     public DoubleMatrix4 minus(DoubleMatrix4 other)
     {
         return new DoubleMatrix4(
-            this.m[0][0] - other.m[0][0],    this.m[0][1] - other.m[0][1], this.m[0][2] - other.m[0][2], this.m[0][3] - other.m[0][3],
-            this.m[1][0] - other.m[1][0],    this.m[1][1] - other.m[1][1], this.m[1][2] - other.m[1][2], this.m[1][3] - other.m[1][3],
-            this.m[2][0] - other.m[2][0],    this.m[2][1] - other.m[2][1], this.m[2][2] - other.m[2][2], this.m[2][3] - other.m[2][3],
-            this.m[3][0] - other.m[3][0],    this.m[3][1] - other.m[3][1], this.m[3][2] - other.m[3][2], this.m[3][3] - other.m[3][3]
+            m[0][0] - other.m[0][0],    m[0][1] - other.m[0][1], m[0][2] - other.m[0][2], m[0][3] - other.m[0][3],
+            m[1][0] - other.m[1][0],    m[1][1] - other.m[1][1], m[1][2] - other.m[1][2], m[1][3] - other.m[1][3],
+            m[2][0] - other.m[2][0],    m[2][1] - other.m[2][1], m[2][2] - other.m[2][2], m[2][3] - other.m[2][3],
+            m[3][0] - other.m[3][0],    m[3][1] - other.m[3][1], m[3][2] - other.m[3][2], m[3][3] - other.m[3][3]
         );
     }
 
     public DoubleMatrix4 times(DoubleMatrix4 other)
     {
         return new DoubleMatrix4(
-            this.m[0][0] * other.m[0][0] + this.m[0][1] * other.m[1][0] + this.m[0][2] * other.m[2][0] + this.m[0][3] * other.m[3][0],
-            this.m[0][0] * other.m[0][1] + this.m[0][1] * other.m[1][1] + this.m[0][2] * other.m[2][1] + this.m[0][3] * other.m[3][1],
-            this.m[0][0] * other.m[0][2] + this.m[0][1] * other.m[1][2] + this.m[0][2] * other.m[2][2] + this.m[0][3] * other.m[3][2],
-            this.m[0][0] * other.m[0][3] + this.m[0][1] * other.m[1][3] + this.m[0][2] * other.m[2][3] + this.m[0][3] * other.m[3][3],
-            this.m[1][0] * other.m[0][0] + this.m[1][1] * other.m[1][0] + this.m[1][2] * other.m[2][0] + this.m[1][3] * other.m[3][0],
-            this.m[1][0] * other.m[0][1] + this.m[1][1] * other.m[1][1] + this.m[1][2] * other.m[2][1] + this.m[1][3] * other.m[3][1],
-            this.m[1][0] * other.m[0][2] + this.m[1][1] * other.m[1][2] + this.m[1][2] * other.m[2][2] + this.m[1][3] * other.m[3][2],
-            this.m[1][0] * other.m[0][3] + this.m[1][1] * other.m[1][3] + this.m[1][2] * other.m[2][3] + this.m[1][3] * other.m[3][3],
-            this.m[2][0] * other.m[0][0] + this.m[2][1] * other.m[1][0] + this.m[2][2] * other.m[2][0] + this.m[2][3] * other.m[3][0],
-            this.m[2][0] * other.m[0][1] + this.m[2][1] * other.m[1][1] + this.m[2][2] * other.m[2][1] + this.m[2][3] * other.m[3][1],
-            this.m[2][0] * other.m[0][2] + this.m[2][1] * other.m[1][2] + this.m[2][2] * other.m[2][2] + this.m[2][3] * other.m[3][2],
-            this.m[2][0] * other.m[0][3] + this.m[2][1] * other.m[1][3] + this.m[2][2] * other.m[2][3] + this.m[2][3] * other.m[3][3],
-            this.m[3][0] * other.m[0][0] + this.m[3][1] * other.m[1][0] + this.m[3][2] * other.m[2][0] + this.m[3][3] * other.m[3][0],
-            this.m[3][0] * other.m[0][1] + this.m[3][1] * other.m[1][1] + this.m[3][2] * other.m[2][1] + this.m[3][3] * other.m[3][1],
-            this.m[3][0] * other.m[0][2] + this.m[3][1] * other.m[1][2] + this.m[3][2] * other.m[2][2] + this.m[3][3] * other.m[3][2],
-            this.m[3][0] * other.m[0][3] + this.m[3][1] * other.m[1][3] + this.m[3][2] * other.m[2][3] + this.m[3][3] * other.m[3][3]
+            m[0][0] * other.m[0][0] + m[0][1] * other.m[1][0] + m[0][2] * other.m[2][0] + m[0][3] * other.m[3][0],
+            m[0][0] * other.m[0][1] + m[0][1] * other.m[1][1] + m[0][2] * other.m[2][1] + m[0][3] * other.m[3][1],
+            m[0][0] * other.m[0][2] + m[0][1] * other.m[1][2] + m[0][2] * other.m[2][2] + m[0][3] * other.m[3][2],
+            m[0][0] * other.m[0][3] + m[0][1] * other.m[1][3] + m[0][2] * other.m[2][3] + m[0][3] * other.m[3][3],
+            m[1][0] * other.m[0][0] + m[1][1] * other.m[1][0] + m[1][2] * other.m[2][0] + m[1][3] * other.m[3][0],
+            m[1][0] * other.m[0][1] + m[1][1] * other.m[1][1] + m[1][2] * other.m[2][1] + m[1][3] * other.m[3][1],
+            m[1][0] * other.m[0][2] + m[1][1] * other.m[1][2] + m[1][2] * other.m[2][2] + m[1][3] * other.m[3][2],
+            m[1][0] * other.m[0][3] + m[1][1] * other.m[1][3] + m[1][2] * other.m[2][3] + m[1][3] * other.m[3][3],
+            m[2][0] * other.m[0][0] + m[2][1] * other.m[1][0] + m[2][2] * other.m[2][0] + m[2][3] * other.m[3][0],
+            m[2][0] * other.m[0][1] + m[2][1] * other.m[1][1] + m[2][2] * other.m[2][1] + m[2][3] * other.m[3][1],
+            m[2][0] * other.m[0][2] + m[2][1] * other.m[1][2] + m[2][2] * other.m[2][2] + m[2][3] * other.m[3][2],
+            m[2][0] * other.m[0][3] + m[2][1] * other.m[1][3] + m[2][2] * other.m[2][3] + m[2][3] * other.m[3][3],
+            m[3][0] * other.m[0][0] + m[3][1] * other.m[1][0] + m[3][2] * other.m[2][0] + m[3][3] * other.m[3][0],
+            m[3][0] * other.m[0][1] + m[3][1] * other.m[1][1] + m[3][2] * other.m[2][1] + m[3][3] * other.m[3][1],
+            m[3][0] * other.m[0][2] + m[3][1] * other.m[1][2] + m[3][2] * other.m[2][2] + m[3][3] * other.m[3][2],
+            m[3][0] * other.m[0][3] + m[3][1] * other.m[1][3] + m[3][2] * other.m[2][3] + m[3][3] * other.m[3][3]
         );
     }
 
     public DoubleVector4 times(DoubleVector4 vector)
     {
         return new DoubleVector4(
-            this.m[0][0] * vector.x + this.m[0][1] * vector.y + this.m[0][2] * vector.z + this.m[0][3] * vector.w,
-            this.m[1][0] * vector.x + this.m[1][1] * vector.y + this.m[1][2] * vector.z + this.m[1][3] * vector.w,
-            this.m[2][0] * vector.x + this.m[2][1] * vector.y + this.m[2][2] * vector.z + this.m[2][3] * vector.w,
-            this.m[3][0] * vector.x + this.m[3][1] * vector.y + this.m[3][2] * vector.z + this.m[3][3] * vector.w
+            m[0][0] * vector.x + m[0][1] * vector.y + m[0][2] * vector.z + m[0][3] * vector.w,
+            m[1][0] * vector.x + m[1][1] * vector.y + m[1][2] * vector.z + m[1][3] * vector.w,
+            m[2][0] * vector.x + m[2][1] * vector.y + m[2][2] * vector.z + m[2][3] * vector.w,
+            m[3][0] * vector.x + m[3][1] * vector.y + m[3][2] * vector.z + m[3][3] * vector.w
         );
     }
 
     public DoubleMatrix4 negate()
     {
         return new DoubleMatrix4(
-            -this.m[0][0], -this.m[0][1], -this.m[0][2], -this.m[0][3],
-            -this.m[1][0], -this.m[1][1], -this.m[1][2], -this.m[1][3],
-            -this.m[2][0], -this.m[2][1], -this.m[2][2], -this.m[2][3],
-            -this.m[3][0], -this.m[3][1], -this.m[3][2], -this.m[3][3]
+            -m[0][0], -m[0][1], -m[0][2], -m[0][3],
+            -m[1][0], -m[1][1], -m[1][2], -m[1][3],
+            -m[2][0], -m[2][1], -m[2][2], -m[2][3],
+            -m[3][0], -m[3][1], -m[3][2], -m[3][3]
         );
     }
 
     public DoubleMatrix4 transpose()
     {
         return new DoubleMatrix4(
-            this.m[0][0], this.m[1][0], this.m[2][0], this.m[3][0],
-            this.m[0][1], this.m[1][1], this.m[2][1], this.m[3][1],
-            this.m[0][2], this.m[1][2], this.m[2][2], this.m[3][2],
-            this.m[0][3], this.m[1][3], this.m[2][3], this.m[3][3]
+            m[0][0], m[1][0], m[2][0], m[3][0],
+            m[0][1], m[1][1], m[2][1], m[3][1],
+            m[0][2], m[1][2], m[2][2], m[3][2],
+            m[0][3], m[1][3], m[2][3], m[3][3]
         );
     }
 
@@ -316,15 +320,15 @@ public final class DoubleMatrix4
      */
     public DoubleMatrix4 quickInverse(double tolerance)
     {
-        DoubleMatrix3 rotationScale = this.getUpperLeft3x3();
-        double scaleSquared = Math.pow(rotationScale.determinant(), 2.0 / 3.0);
+        DoubleMatrix3 rotationScale = getUpperLeft3x3();
+        double scaleSquared = StrictMath.pow(rotationScale.determinant(), 2.0 / 3.0);
 
         DoubleMatrix4 invCandidate = rotationScale.transpose().times(1.0 / scaleSquared).asMatrix4()
-                .times(translate(this.getColumn(3).getXYZ().negated()));
+                .times(translate(getColumn(3).getXYZ().negated()));
 
-        DoubleMatrix4 identityCandidate = this.times(invCandidate);
+        DoubleMatrix4 identityCandidate = times(invCandidate);
 
-        double translationScale = this.getColumn(3).getXYZ().length();
+        double translationScale = getColumn(3).getXYZ().length();
 
         if (Math.abs(identityCandidate.get(0, 0) - 1.0f) > tolerance ||
             Math.abs(identityCandidate.get(1, 1) - 1.0f) > tolerance ||
@@ -351,21 +355,21 @@ public final class DoubleMatrix4
 
     public double get(int row, int col)
     {
-        return this.m[row][col];
+        return m[row][col];
     }
 
     public DoubleVector4 getRow(int row)
     {
-        return new DoubleVector4(this.m[row][0], this.m[row][1], this.m[row][2], this.m[row][3]);
+        return new DoubleVector4(m[row][0], m[row][1], m[row][2], m[row][3]);
     }
 
     public DoubleVector4 getColumn(int col)
     {
-        return new DoubleVector4(this.m[0][col], this.m[1][col], this.m[2][col], this.m[3][col]);
+        return new DoubleVector4(m[0][col], m[1][col], m[2][col], m[3][col]);
     }
 
     public DoubleBuffer asFloatBuffer()
     {
-        return this.buffer.asReadOnlyBuffer();
+        return buffer.asReadOnlyBuffer();
     }
 }

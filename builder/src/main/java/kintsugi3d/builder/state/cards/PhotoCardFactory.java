@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.state.cards;
@@ -17,6 +21,7 @@ import kintsugi3d.builder.rendering.ImageBasedRenderable;
 import kintsugi3d.builder.util.AppIcon;
 import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.gl.vecmath.IntVector2;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,13 +41,13 @@ public class PhotoCardFactory extends ProjectDataCardFactoryBase<View>
     }
 
     @Override
-    public Class<View> getDataClass()
+    public final Class<View> getDataClass()
     {
         return View.class;
     }
 
     @Override
-    public ProjectDataCard createCard(View view)
+    public final @Nullable ProjectDataCard createCard(View view)
     {
         String thumbnailPath;
         try
@@ -61,15 +66,14 @@ public class PhotoCardFactory extends ProjectDataCardFactoryBase<View>
             IntVector2 dimensions = ImageHelper.dimensionsOf(fullResFile);
             String res = String.format("%dx%d", dimensions.x, dimensions.y);
 
+            LinkedHashMap<String, String> fields = new LinkedHashMap<>(2);
+            fields.put("Resolution", res);
+            fields.put("Size", (fullResFile.length() / (1024 * 1024)) + " MB");
+
             return new ProjectDataCard(
                 view.getImageFile().getPath(), // path is used to uniquely identify views for synchronizing with backend
                 view.getImageFile().getName(),
-                fullResFile.getPath(), thumbnailPath,
-                new LinkedHashMap<>()
-                {{
-                    put("Resolution", res);
-                    put("Size", (fullResFile.length() / (1024 * 1024)) + " MB");
-                }},
+                fullResFile.getPath(), thumbnailPath, fields,
                 List.of(Map.of(
                     "Remove from Project", () ->
                         Global.state().getProjectModel().confirm("Remove Image", "Remove Image?",
@@ -88,7 +92,7 @@ public class PhotoCardFactory extends ProjectDataCardFactoryBase<View>
     }
 
     @Override
-    public List<? extends Map<String, Runnable>> getGlobalActions()
+    public final List<? extends Map<String, Runnable>> getGlobalActions()
     {
         return List.of(Map.of(
             "Disable All", () ->
@@ -111,7 +115,7 @@ public class PhotoCardFactory extends ProjectDataCardFactoryBase<View>
     }
 
     @Override
-    public List<ProjectDataCard> createAllCards()
+    public final List<ProjectDataCard> createAllCards()
     {
         List<ProjectDataCard> cardsList = getViewSet().getViews().stream()
             .map(this::createCard)

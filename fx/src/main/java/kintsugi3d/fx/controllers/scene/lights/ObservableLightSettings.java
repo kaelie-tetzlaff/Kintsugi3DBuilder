@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.scene.lights;
@@ -34,246 +38,246 @@ public class ObservableLightSettings extends SerializableLightSettings
     private final BooleanProperty groupLocked;
 
     @Override
-    public boolean isGroupLocked()
+    public final boolean isGroupLocked()
     {
         return groupLocked.get();
     }
 
     public ObservableLightSettings(String name, BooleanProperty groupLockedProperty)
     {
-        this.setName(name);
-        this.groupLocked = groupLockedProperty;
+        this.name.set(name);
+        groupLocked = groupLockedProperty;
     }
 
     public ObservableLightSettings(BooleanProperty groupLockedProperty)
     {
-        this.groupLocked = groupLockedProperty;
+        groupLocked = groupLockedProperty;
     }
 
 
-    public ObservableLightSettings duplicate()
+    public final ObservableLightSettings duplicate()
     {
-        ObservableLightSettings dupl = new ObservableLightSettings(name.getValue(), this.groupLocked);
-        dupl.targetX.set(this.targetX.get());
-        dupl.targetY.set(this.targetY.get());
-        dupl.targetZ.set(this.targetZ.get());
-        dupl.azimuth.set(this.azimuth.get());
-        dupl.inclination.set(this.inclination.get());
-        dupl.log10Distance.set(this.log10Distance.get());
-        dupl.intensity.set(this.intensity.get());
-        dupl.spotSize.set(this.spotSize.get());
-        dupl.spotTaper.set(this.spotTaper.get());
-        dupl.locked.set(this.locked.get());
-        dupl.color.setValue(this.color.getValue());
+        ObservableLightSettings dupl = new ObservableLightSettings(name.getValue(), groupLocked);
+        dupl.targetX.set(targetX.get());
+        dupl.targetY.set(targetY.get());
+        dupl.targetZ.set(targetZ.get());
+        dupl.azimuth.set(azimuth.get());
+        dupl.inclination.set(inclination.get());
+        dupl.log10Distance.set(log10Distance.get());
+        dupl.intensity.set(intensity.get());
+        dupl.spotSize.set(spotSize.get());
+        dupl.spotTaper.set(spotTaper.get());
+        dupl.locked.set(locked.get());
+        dupl.color.setValue(color.getValue());
         return dupl;
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return name.getValue();
     }
 
     @Override
-    public double getTargetX()
+    public final double getTargetX()
     {
         return targetX.get();
     }
 
     @Override
-    public double getTargetY()
+    public final double getTargetY()
     {
         return targetY.get();
     }
 
     @Override
-    public double getTargetZ()
+    public final double getTargetZ()
     {
         return targetZ.get();
     }
 
     @Override
-    public double getAzimuth()
+    public final double getAzimuth()
     {
         return azimuth.get();
     }
 
     @Override
-    public double getInclination()
+    public final double getInclination()
     {
         return inclination.get();
     }
 
     @Override
-    public double getLog10Distance()
+    public final double getLog10Distance()
     {
         return log10Distance.get();
     }
 
     @Override
-    public double getIntensity()
+    public final double getIntensity()
     {
         return intensity.get();
     }
 
     @Override
-    public boolean isLocked()
+    public final boolean isLocked()
     {
         return locked.get();
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return name.get();
     }
 
     @Override
-    public double getSpotSize()
+    public final double getSpotSize()
     {
         return spotSize.get();
     }
 
     @Override
-    public double getSpotTaper()
+    public final double getSpotTaper()
     {
         return spotTaper.get();
     }
 
     @Override
-    public Color getColor()
+    public final Color getColor()
     {
         return color.getValue();
     }
 
     @Override
-    public void setTargetX(double value)
+    public final void setTargetX(double value)
     {
-        this.targetX.set(value);
+        targetX.set(value);
     }
 
     @Override
-    public void setTargetY(double value)
+    public final void setTargetY(double value)
     {
-        this.targetY.set(value);
+        targetY.set(value);
     }
 
     @Override
-    public void setTargetZ(double value)
+    public final void setTargetZ(double value)
     {
-        this.targetZ.set(value);
+        targetZ.set(value);
     }
 
     @Override
-    public void setAzimuth(double value)
+    public final void setAzimuth(double value)
     {
-        this.azimuth.set(value);
+        azimuth.set(value);
     }
 
     @Override
-    public void setInclination(double value)
+    public final void setInclination(double value)
     {
-        this.inclination.set(value);
+        inclination.set(value);
     }
 
     @Override
-    public void setLog10Distance(double value)
+    public final void setLog10Distance(double value)
     {
-        this.log10Distance.set(value);
+        log10Distance.set(value);
     }
 
     @Override
-    public void setIntensity(double value)
+    public final void setIntensity(double value)
     {
-        this.intensity.set(value);
+        intensity.set(value);
     }
 
     @Override
-    public void setLocked(boolean value)
+    public final void setLocked(boolean value)
     {
-        this.locked.set(value);
+        locked.set(value);
     }
 
     @Override
-    public void setName(String value)
+    public final void setName(String value)
     {
-        this.name.set(value);
+        name.set(value);
     }
 
     @Override
-    public void setSpotSize(double value)
+    public final void setSpotSize(double value)
     {
-        this.spotSize.set(value);
+        spotSize.set(value);
     }
 
     @Override
-    public void setSpotTaper(double value)
+    public final void setSpotTaper(double value)
     {
-        this.spotTaper.set(value);
+        spotTaper.set(value);
     }
 
     @Override
-    public void setColor(Color value)
+    public final void setColor(Color value)
     {
-        this.color.setValue(value);
+        color.setValue(value);
     }
 
-    public DoubleProperty targetX()
+    public final DoubleProperty targetX()
     {
         return targetX;
     }
 
-    public DoubleProperty targetY()
+    public final DoubleProperty targetY()
     {
         return targetY;
     }
 
-    public DoubleProperty targetZ()
+    public final DoubleProperty targetZ()
     {
         return targetZ;
     }
 
-    public DoubleProperty azimuth()
+    public final DoubleProperty azimuth()
     {
         return azimuth;
     }
 
-    public DoubleProperty inclination()
+    public final DoubleProperty inclination()
     {
         return inclination;
     }
 
-    public DoubleProperty log10Distance()
+    public final DoubleProperty log10Distance()
     {
         return log10Distance;
     }
 
-    public DoubleProperty intensity()
+    public final DoubleProperty intensity()
     {
         return intensity;
     }
 
-    public BooleanProperty locked()
+    public final BooleanProperty locked()
     {
         return locked;
     }
 
-    public StringProperty name()
+    public final StringProperty name()
     {
         return name;
     }
 
-    public Property<Color> color()
+    public final Property<Color> color()
     {
         return color;
     }
 
-    public DoubleProperty spotSize()
+    public final DoubleProperty spotSize()
     {
         return spotSize;
     }
 
-    public DoubleProperty spotTaper()
+    public final DoubleProperty spotTaper()
     {
         return spotTaper;
     }

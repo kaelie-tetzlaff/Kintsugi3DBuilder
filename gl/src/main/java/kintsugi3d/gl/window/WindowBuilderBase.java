@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.window;
@@ -31,70 +35,70 @@ public abstract class WindowBuilderBase<WindowType extends PollableWindow> imple
     }
 
     @Override
-    public String getTitle()
+    public final String getTitle()
     {
         return title;
     }
 
     @Override
-    public int getWidth()
+    public final int getWidth()
     {
         return width;
     }
 
     @Override
-    public int getHeight()
+    public final int getHeight()
     {
         return height;
     }
 
     @Override
-    public int getX()
+    public final int getX()
     {
         return x;
     }
 
     @Override
-    public int getY()
+    public final int getY()
     {
         return y;
     }
 
     @Override
-    public boolean isResizable()
+    public final boolean isResizable()
     {
         return resizable;
     }
 
     @Override
-    public int getMultisamples()
+    public final int getMultisamples()
     {
         return multisamples;
     }
 
     @Override
-    public WindowBuilderBase<WindowType> setX(int x)
+    public final WindowBuilderBase<WindowType> setX(int x)
     {
         this.x = x;
         return this;
     }
 
     @Override
-    public WindowBuilderBase<WindowType> setY(int y)
+    public final WindowBuilderBase<WindowType> setY(int y)
     {
         this.y = y;
         return this;
     }
 
     @Override
-    public WindowBuilderBase<WindowType> setResizable(boolean resizable)
+    public final WindowBuilderBase<WindowType> setResizable(boolean resizable)
     {
         this.resizable = resizable;
         return this;
     }
 
     @Override
-    public WindowBuilderBase<WindowType> setMultisamples(int multisamples)
+    public final WindowBuilderBase<WindowType> setMultisamples(int multisamples)
     {
         this.multisamples = multisamples;
         return this;

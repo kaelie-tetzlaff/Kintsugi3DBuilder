@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.io.imageset;
@@ -86,7 +90,7 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
         {
             if (!disabledImageFiles.contains(new File(primaryViewCandidate.name)))
             {
-                File imgFile = ImageFinder.getInstance().tryFindImageFile(new File(fullResSearchDir, primaryViewCandidate.name));
+                File imgFile = ImageFinder.tryFindImageFile(new File(fullResSearchDir, primaryViewCandidate.name));
                 if (imgFile != null && primaryViewCandidate.id != -1)
                 {
                     cameraIdToFullRes.put(primaryViewCandidate.id, imgFile.getPath());
@@ -111,11 +115,11 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
             throws MissingImagesException, FileNotFoundException
     {
         MetashapeChunk parentChunk = model.getChunk();
-        this.chunkName = parentChunk.getLabel();
-        this.cameras = parentChunk.findEnabledCameras();
-        this.primaryViewCandidates = getViews(cameras.stream());
-        this.thumbnailMap = parentChunk.loadThumbnailImageList();
-        this.cameraIdToFullRes = parentChunk.buildCameraPathsMap(false, disabledImageFiles);
+        chunkName = parentChunk.getLabel();
+        cameras = parentChunk.findEnabledCameras();
+        primaryViewCandidates = getViews(cameras.stream());
+        thumbnailMap = parentChunk.loadThumbnailImageList();
+        cameraIdToFullRes = parentChunk.buildCameraPathsMap(false, disabledImageFiles);
     }
 
     @Override
@@ -174,7 +178,7 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
         File finalImgFile;
 
         //return original file
-        finalImgFile = ImageFinder.getInstance().tryFindImageFile(imageFile);
+        finalImgFile = ImageFinder.tryFindImageFile(imageFile);
         if (finalImgFile != null)
         {
             return Optional.of(finalImgFile.getPath());
@@ -183,7 +187,7 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
         //return file by searching canonical path
         try
         {
-            finalImgFile = ImageFinder.getInstance().tryFindImageFile(new File(imageFile.getCanonicalPath()));
+            finalImgFile = ImageFinder.tryFindImageFile(new File(imageFile.getCanonicalPath()));
             if (finalImgFile != null)
             {
                 return Optional.of(finalImgFile.getPath());
@@ -195,7 +199,7 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
         }
 
         //throw a hail mary and see if it sticks
-        finalImgFile = ImageFinder.getInstance().tryFindImageFile(new File(imageFile.getAbsolutePath()
+        finalImgFile = ImageFinder.tryFindImageFile(new File(imageFile.getAbsolutePath()
             .replace("..\\", "")
             .replace("../", "")));
         if (finalImgFile != null)
@@ -238,14 +242,8 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
 
     private Element findTargetCamera(String imageName)
     {
-        for (Element camera : cameras)
-        {
-            if (camera.getAttribute("label").matches(".*" + imageName + ".*"))
-            {
-                return camera;
-            }
-        }
-
-        return null;
+        return cameras.stream()
+            .filter(camera -> camera.getAttribute("label").matches(".*" + imageName + ".*"))
+            .findFirst().orElse(null);
     }
 }

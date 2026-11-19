@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering.components.scene.light;
@@ -17,9 +21,6 @@ import kintsugi3d.builder.rendering.SceneModel;
 import kintsugi3d.builder.rendering.SceneViewportModel;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
-import kintsugi3d.util.RadialTextureGenerator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Class for drawing the 3D light representations and manipulation widgets.
@@ -27,8 +28,6 @@ import org.slf4j.LoggerFactory;
  */
 public class LightVisualsGroup<ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
-    private static final Logger LOG = LoggerFactory.getLogger(LightVisualsGroup.class);
-    private final ContextType context;
     private final SceneModel sceneModel;
     private final SceneViewportModel sceneViewportModel;
 
@@ -40,47 +39,43 @@ public class LightVisualsGroup<ContextType extends Context<ContextType>> impleme
 
     public LightVisualsGroup(ContextType context, SceneModel sceneModel, SceneViewportModel sceneViewportModel)
     {
-        this.context = context;
         this.sceneModel = sceneModel;
         this.sceneViewportModel = sceneViewportModel;
 
-        this.lights = new Lights<>(context, sceneViewportModel, sceneModel);
-        this.lightCenters = new LightCenters<>(context, sceneViewportModel, sceneModel);
-        this.lightWidgets = new LightWidgets<>(context, sceneViewportModel, sceneModel);
-        this.lightWidgetCircle = new LightWidgetCircles<>(context, sceneViewportModel, sceneModel);
-        this.lightWidgetLines = new LightWidgetLines<>(context, sceneViewportModel, sceneModel);
+        lights = new Lights<>(context, sceneViewportModel, sceneModel);
+        lightCenters = new LightCenters<>(context, sceneViewportModel, sceneModel);
+        lightWidgets = new LightWidgets<>(context, sceneViewportModel, sceneModel);
+        lightWidgetCircle = new LightWidgetCircles<>(context, sceneViewportModel, sceneModel);
+        lightWidgetLines = new LightWidgetLines<>(context, sceneViewportModel, sceneModel);
     }
 
     @Override
-    public void initialize()
+    public final void initialize()
     {
-        this.lights.initialize();
-        this.lightCenters.initialize();
-        this.lightWidgets.initialize();
-        this.lightWidgetCircle.initialize();
-        this.lightWidgetLines.setSolidProgram(this.lightWidgets.getDrawable().program());
-
-        RadialTextureGenerator<ContextType> radialTextureGenerator = new RadialTextureGenerator<>(context);
-
+        lights.initialize();
+        lightCenters.initialize();
+        lightWidgets.initialize();
+        lightWidgetCircle.initialize();
+        lightWidgetLines.setSolidProgram(lightWidgets.getDrawable().program());
     }
 
     @Override
-    public void reloadShaders()
+    public final void reloadShaders()
     {
         lights.reloadShaders();
         lightCenters.reloadShaders();
         lightWidgets.reloadShaders();
         lightWidgetCircle.reloadShaders();
-        lightWidgetLines.setSolidProgram(this.lightWidgets.getDrawable().program());
+        lightWidgetLines.setSolidProgram(lightWidgets.getDrawable().program());
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         LightWidgetInfo[] widgetInfo = LightWidgetInfo.calculate(sceneViewportModel, sceneModel, cameraViewport, framebuffer.getSize());
         lightWidgets.refreshWidgetInfo(widgetInfo);
         lightWidgetCircle.refreshWidgetInfo(widgetInfo);
-        lightWidgetLines.refreshWidgetInfo(widgetInfo);
+        lightWidgetLines.setWidgetInfo(widgetInfo);
 
         lightCenters.draw(framebuffer, cameraViewport);
         lights.draw(framebuffer, cameraViewport);
@@ -90,7 +85,7 @@ public class LightVisualsGroup<ContextType extends Context<ContextType>> impleme
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         lights.close();
         lightCenters.close();

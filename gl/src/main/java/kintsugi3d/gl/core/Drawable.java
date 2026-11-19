@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.core;
@@ -75,7 +79,7 @@ public interface Drawable<ContextType extends Context<ContextType>> extends Cont
      */
     default void draw(Framebuffer<ContextType> framebuffer)
     {
-        this.draw(getDefaultPrimitiveMode(), framebuffer);
+        draw(getDefaultPrimitiveMode(), framebuffer);
     }
 
     /**
@@ -88,7 +92,7 @@ public interface Drawable<ContextType extends Context<ContextType>> extends Cont
      */
     default void draw(Framebuffer<ContextType> framebuffer, int x, int y, int width, int height)
     {
-        this.draw(getDefaultPrimitiveMode(), framebuffer, x, y, width, height);
+        draw(getDefaultPrimitiveMode(), framebuffer, x, y, width, height);
     }
 
     /**
@@ -99,7 +103,7 @@ public interface Drawable<ContextType extends Context<ContextType>> extends Cont
      */
     default void draw(Framebuffer<ContextType> framebuffer, int width, int height)
     {
-        this.draw(getDefaultPrimitiveMode(), framebuffer, width, height);
+        draw(getDefaultPrimitiveMode(), framebuffer, width, height);
     }
 
     /**
@@ -107,7 +111,7 @@ public interface Drawable<ContextType extends Context<ContextType>> extends Cont
      */
     default void draw()
     {
-        this.draw(getDefaultPrimitiveMode());
+        draw(getDefaultPrimitiveMode());
     }
 
     /**
@@ -115,132 +119,106 @@ public interface Drawable<ContextType extends Context<ContextType>> extends Cont
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param name The name used to reference the vertex attribute within the shaders.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setVertexAttrib(String name, DoubleVector4 value);
+    void setVertexAttrib(String name, DoubleVector4 value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param name The name used to reference the vertex attribute within the shaders.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setVertexAttrib(String name, DoubleVector3 value);
+    void setVertexAttrib(String name, DoubleVector3 value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param name The name used to reference the vertex attribute within the shaders.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setVertexAttrib(String name, DoubleVector2 value);
+    void setVertexAttrib(String name, DoubleVector2 value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param name The name used to reference the vertex attribute within the shaders.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setVertexAttrib(String name, double value);
+    void setVertexAttrib(String name, double value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param name The name used to reference the vertex attribute within the shaders.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setVertexAttrib(String name, Vector4 value);
+    void setVertexAttrib(String name, Vector4 value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param name The name used to reference the vertex attribute within the shaders.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setVertexAttrib(String name, Vector3 value);
+    void setVertexAttrib(String name, Vector3 value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param name The name used to reference the vertex attribute within the shaders.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setVertexAttrib(String name, Vector2 value);
+    void setVertexAttrib(String name, Vector2 value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param name The name used to reference the vertex attribute within the shaders.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setVertexAttrib(String name, float value);
+    void setVertexAttrib(String name, float value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param name The name used to reference the vertex attribute within the shaders.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setVertexAttrib(String name, IntVector4 value);
+    void setVertexAttrib(String name, IntVector4 value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param name The name used to reference the vertex attribute within the shaders.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setVertexAttrib(String name, IntVector3 value);
+    void setVertexAttrib(String name, IntVector3 value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param name The name used to reference the vertex attribute within the shaders.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setVertexAttrib(String name, IntVector2 value);
+    void setVertexAttrib(String name, IntVector2 value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param name The name used to reference the vertex attribute within the shaders.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setVertexAttrib(String name, int value);
+    void setVertexAttrib(String name, int value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param name The name used to reference the vertex attribute within the shaders.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    default boolean setVertexAttrib(String name, IntLike value)
+    default void setVertexAttrib(String name, IntLike value)
     {
-        return setVertexAttrib(name, value.getIntValue());
+        setVertexAttrib(name, value.getIntValue());
     }
 
     /**
@@ -248,120 +226,96 @@ public interface Drawable<ContextType extends Context<ContextType>> extends Cont
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param location The location of the vertex attribute to set.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no vertex attribute exists at the specified location in this shader program.
      */
-    boolean setVertexAttrib(int location, DoubleVector4 value);
+    void setVertexAttrib(int location, DoubleVector4 value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param location The location of the vertex attribute to set.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no vertex attribute exists at the specified location in this shader program.
      */
-    boolean setVertexAttrib(int location, DoubleVector3 value);
+    void setVertexAttrib(int location, DoubleVector3 value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param location The location of the vertex attribute to set.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no vertex attribute exists at the specified location in this shader program.
      */
-    boolean setVertexAttrib(int location, DoubleVector2 value);
+    void setVertexAttrib(int location, DoubleVector2 value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param location The location of the vertex attribute to set.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no vertex attribute exists at the specified location in this shader program.
      */
-    boolean setVertexAttrib(int location, double value);
+    void setVertexAttrib(int location, double value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param location The location of the vertex attribute to set.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no vertex attribute exists at the specified location in this shader program.
      */
-    boolean setVertexAttrib(int location, Vector4 value);
+    void setVertexAttrib(int location, Vector4 value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param location The location of the vertex attribute to set.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no vertex attribute exists at the specified location in this shader program.
      */
-    boolean setVertexAttrib(int location, Vector3 value);
+    void setVertexAttrib(int location, Vector3 value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param location The location of the vertex attribute to set.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no vertex attribute exists at the specified location in this shader program.
      */
-    boolean setVertexAttrib(int location, Vector2 value);
+    void setVertexAttrib(int location, Vector2 value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param location The location of the vertex attribute to set.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no vertex attribute exists at the specified location in this shader program.
      */
-    boolean setVertexAttrib(int location, float value);
+    void setVertexAttrib(int location, float value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param location The location of the vertex attribute to set.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no vertex attribute exists at the specified location in this shader program.
      */
-    boolean setVertexAttrib(int location, IntVector4 value);
+    void setVertexAttrib(int location, IntVector4 value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param location The location of the vertex attribute to set.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no vertex attribute exists at the specified location in this shader program.
      */
-    boolean setVertexAttrib(int location, IntVector3 value);
+    void setVertexAttrib(int location, IntVector3 value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param location The location of the vertex attribute to set.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no vertex attribute exists at the specified location in this shader program.
      */
-    boolean setVertexAttrib(int location, IntVector2 value);
+    void setVertexAttrib(int location, IntVector2 value);
 
     /**
      * Designates a specific value for a vertex attribute that should be used for every vertex when this renderable is drawn.
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param location The location of the vertex attribute to set.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no vertex attribute exists at the specified location in this shader program.
      */
-    boolean setVertexAttrib(int location, int value);
+    void setVertexAttrib(int location, int value);
 
 
     /**
@@ -369,29 +323,23 @@ public interface Drawable<ContextType extends Context<ContextType>> extends Cont
      * This method can be called once and the vertex attribute assignment will persist whenever this renderable is drawn, regardless of changes to the internal GL state.
      * @param location The location of the vertex attribute to set.
      * @param value The value to set the vertex attribute to.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no vertex attribute exists at the specified location in this shader program.
      */
-    default boolean setVertexAttrib(int location, IntLike value)
+    default void setVertexAttrib(int location, IntLike value)
     {
-        return setVertexAttrib(location, value.getIntValue());
+        setVertexAttrib(location, value.getIntValue());
     }
 
     /**
      * Designates a vertex buffer to be used for the vertex attribute at a particular location in this renderable's shader program.
      * @param location The location of the vertex attribute to set.
      * @param buffer The vertex buffer to bind to the vertex attribute.
-     * @return true if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no vertex attribute exists at the specified location in this shader program.
      */
-    boolean addVertexBuffer(int location, ReadonlyVertexBuffer<ContextType> buffer);
+    void addVertexBuffer(int location, ReadonlyVertexBuffer<ContextType> buffer);
 
     /**
      * Designates a vertex buffer to be used for the vertex attribute with a particular shader name.
      * @param name The name used to reference the vertex attribute within the shaders.
      * @param buffer The vertex buffer to bind to the vertex attribute.
-     * @return if the vertex attribute was successfully set;
-     * false if the vertex attribute was not set because no vertex attribute exists at the specified location in this shader program.
      */
-    boolean addVertexBuffer(String name, ReadonlyVertexBuffer<ContextType> buffer);
+    void addVertexBuffer(String name, ReadonlyVertexBuffer<ContextType> buffer);
 }

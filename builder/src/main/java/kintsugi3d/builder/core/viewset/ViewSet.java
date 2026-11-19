@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.core.viewset;
@@ -33,6 +37,7 @@ import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -217,9 +222,9 @@ public final class ViewSet implements ReadonlyViewSet
         views = Collections.synchronizedMap(new HashMap<>(initialCapacity));
 
         // Often these lists will have just one element
-        this.cameraProjectionList = Collections.synchronizedList(new ArrayList<>(1));
-        this.lightIntensityList = Collections.synchronizedList(new ArrayList<>(1));
-        this.lightPositionList = Collections.synchronizedList(new ArrayList<>(1));
+        cameraProjectionList = Collections.synchronizedList(new ArrayList<>(1));
+        lightIntensityList = Collections.synchronizedList(new ArrayList<>(1));
+        lightPositionList = Collections.synchronizedList(new ArrayList<>(1));
     }
 
     /**
@@ -228,7 +233,7 @@ public final class ViewSet implements ReadonlyViewSet
      */
     public boolean hasUnsupportedCorrections()
     {
-        return this.hasUnsupportedCorrections;
+        return hasUnsupportedCorrections;
     }
 
     /**
@@ -275,7 +280,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public ReadonlyNativeVectorBuffer getCameraPoseData()
+    public @Nullable ReadonlyNativeVectorBuffer getCameraPoseData()
     {
         synchronized (views)
         {
@@ -287,7 +292,7 @@ public final class ViewSet implements ReadonlyViewSet
             else
             {
                 // Flatten the camera pose matrices into 16-component vectors and store them in the vertex list data structure.
-                NativeVectorBuffer cameraPoseData = NativeVectorBufferFactory.getInstance().createEmpty(
+                NativeVectorBuffer cameraPoseData = NativeVectorBufferFactory.createEmpty(
                     NativeDataType.FLOAT, 16, gpuBufferSize);
 
                 for (View view : views.values())
@@ -297,7 +302,7 @@ public final class ViewSet implements ReadonlyViewSet
                     {
                         for (int row = 0; row < 4; row++) // row
                         {
-                            cameraPoseData.set(view.getGPUViewIndex(), d, view.cameraPose.get(row, col));
+                            cameraPoseData.set(view.getGPUViewIndex(), d, view.getCameraPose().get(row, col));
                             d++;
                         }
                     }
@@ -309,7 +314,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public ReadonlyNativeVectorBuffer getCameraProjectionData()
+    public @Nullable ReadonlyNativeVectorBuffer getCameraProjectionData()
     {
         synchronized (cameraProjectionList)
         {
@@ -321,7 +326,7 @@ public final class ViewSet implements ReadonlyViewSet
             else
             {
                 // Flatten the camera projection matrices into 16-component vectors and store them in the vertex list data structure.
-                NativeVectorBuffer cameraProjectionData = NativeVectorBufferFactory.getInstance().createEmpty(NativeDataType.FLOAT, 16, cameraProjectionList.size());
+                NativeVectorBuffer cameraProjectionData = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 16, cameraProjectionList.size());
 
                 for (int k = 0; k < cameraProjectionList.size(); k++)
                 {
@@ -342,7 +347,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public ReadonlyNativeVectorBuffer getCameraProjectionIndexData()
+    public @Nullable ReadonlyNativeVectorBuffer getCameraProjectionIndexData()
     {
         synchronized (views)
         {
@@ -356,15 +361,15 @@ public final class ViewSet implements ReadonlyViewSet
                 int[] indexArray = new int[gpuBufferSize];
                 for (View view : views.values())
                 {
-                    indexArray[view.gpuViewIndex] = view.cameraProjectionIndex;
+                    indexArray[view.getGPUViewIndex()] = view.getCameraProjectionIndex();
                 }
-                return NativeVectorBufferFactory.getInstance().createFromIntArray(false, 1, gpuBufferSize, indexArray);
+                return NativeVectorBufferFactory.createFromIntArray(false, 1, gpuBufferSize, indexArray);
             }
         }
     }
 
     @Override
-    public ReadonlyNativeVectorBuffer getLightPositionData()
+    public @Nullable ReadonlyNativeVectorBuffer getLightPositionData()
     {
         synchronized (lightPositionList)
         {
@@ -375,7 +380,7 @@ public final class ViewSet implements ReadonlyViewSet
             }
             else
             {
-                NativeVectorBuffer lightPositionData = NativeVectorBufferFactory.getInstance().createEmpty(NativeDataType.FLOAT, 4, lightPositionList.size());
+                NativeVectorBuffer lightPositionData = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 4, lightPositionList.size());
                 for (int k = 0; k < lightPositionList.size(); k++)
                 {
                     lightPositionData.set(k, 0, lightPositionList.get(k).x);
@@ -390,7 +395,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public ReadonlyNativeVectorBuffer getLightIntensityData()
+    public @Nullable ReadonlyNativeVectorBuffer getLightIntensityData()
     {
         synchronized (lightIntensityList)
         {
@@ -401,7 +406,7 @@ public final class ViewSet implements ReadonlyViewSet
             }
             else
             {
-                NativeVectorBuffer lightIntensityData = NativeVectorBufferFactory.getInstance().createEmpty(NativeDataType.FLOAT, 4, lightIntensityList.size());
+                NativeVectorBuffer lightIntensityData = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 4, lightIntensityList.size());
                 for (int k = 0; k < lightIntensityList.size(); k++)
                 {
                     lightIntensityData.set(k, 0, lightIntensityList.get(k).x);
@@ -415,7 +420,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public ReadonlyNativeVectorBuffer getLightIndexData()
+    public @Nullable ReadonlyNativeVectorBuffer getLightIndexData()
     {
         synchronized (views)
         {
@@ -429,14 +434,14 @@ public final class ViewSet implements ReadonlyViewSet
                 int[] indexArray = new int[gpuBufferSize];
                 for (View view : views.values())
                 {
-                    indexArray[view.gpuViewIndex] = view.lightIndex;
+                    indexArray[view.getGPUViewIndex()] = view.getLightIndex();
                 }
-                return NativeVectorBufferFactory.getInstance().createFromIntArray(false, 1, gpuBufferSize, indexArray);
+                return NativeVectorBufferFactory.createFromIntArray(false, 1, gpuBufferSize, indexArray);
             }
         }
     }
 
-    public ReadonlyNativeVectorBuffer getViewIndexData()
+    public @Nullable ReadonlyNativeVectorBuffer getViewIndexData()
     {
         synchronized (views)
         {
@@ -453,7 +458,7 @@ public final class ViewSet implements ReadonlyViewSet
             }
             else
             {
-                return NativeVectorBufferFactory.getInstance().createFromIntArray(false, 1, indexArray.length, indexArray);
+                return NativeVectorBufferFactory.createFromIntArray(false, 1, indexArray.length, indexArray);
             }
         }
     }
@@ -461,76 +466,76 @@ public final class ViewSet implements ReadonlyViewSet
     @Override
     public ViewSet copy()
     {
-        ViewSet result = new ViewSet(this.getViewCount());
+        ViewSet result = new ViewSet(getViewCount());
 
-        result.uuid = this.uuid;
+        result.uuid = uuid;
 
         synchronized (views)
         {
-            for (var entry : this.views.entrySet())
+            for (var entry : views.entrySet())
             {
                 result.views.put(entry.getKey(), entry.getValue().copy(result));
             }
 
-            result.gpuBufferSize = this.gpuBufferSize;
+            result.gpuBufferSize = gpuBufferSize;
 
-            if (this.primaryView != null)
+            if (primaryView != null)
             {
-                result.primaryView = result.views.get(this.primaryView.getImageFile());
+                result.primaryView = result.views.get(primaryView.getImageFile());
             }
 
-            if (this.orientationView != null)
+            if (orientationView != null)
             {
-                result.orientationView = result.views.get(this.orientationView.getImageFile());
+                result.orientationView = result.views.get(orientationView.getImageFile());
             }
         }
 
         synchronized (cameraProjectionList)
         {
-            result.cameraProjectionList.addAll(this.cameraProjectionList);
+            result.cameraProjectionList.addAll(cameraProjectionList);
         }
 
         synchronized (lightPositionList)
         {
-            result.lightPositionList.addAll(this.lightPositionList);
+            result.lightPositionList.addAll(lightPositionList);
         }
 
         synchronized (lightIntensityList)
         {
-            result.lightIntensityList.addAll(this.lightIntensityList);
+            result.lightIntensityList.addAll(lightIntensityList);
         }
 
         synchronized (luminanceEncodingLock)
         {
-            if (this.linearLuminanceValues != null && this.encodedLuminanceValues != null)
+            if (linearLuminanceValues != null && encodedLuminanceValues != null)
             {
                 result.setLuminanceEncoding(
-                    Arrays.copyOf(this.linearLuminanceValues, this.linearLuminanceValues.length),
-                    Arrays.copyOf(this.encodedLuminanceValues, this.encodedLuminanceValues.length));
+                    Arrays.copyOf(linearLuminanceValues, linearLuminanceValues.length),
+                    Arrays.copyOf(encodedLuminanceValues, encodedLuminanceValues.length));
             }
         }
 
-        result.rootDirectory = this.rootDirectory;
-        result.fullResImageDirectory = this.fullResImageDirectory;
-        result.previewImageDirectory = this.previewImageDirectory;
-        result.supportingFilesDirectory = this.supportingFilesDirectory;
-        result.thumbnailImageDirectory = this.thumbnailImageDirectory;
-        result.masksDirectory = this.masksDirectory;
-        result.geometryFile = this.geometryFile;
+        result.rootDirectory = rootDirectory;
+        result.fullResImageDirectory = fullResImageDirectory;
+        result.previewImageDirectory = previewImageDirectory;
+        result.supportingFilesDirectory = supportingFilesDirectory;
+        result.thumbnailImageDirectory = thumbnailImageDirectory;
+        result.masksDirectory = masksDirectory;
+        result.geometryFile = geometryFile;
 
-        result.recommendedNearPlane = this.recommendedNearPlane;
-        result.recommendedFarPlane = this.recommendedFarPlane;
+        result.recommendedNearPlane = recommendedNearPlane;
+        result.recommendedFarPlane = recommendedFarPlane;
 
-        result.orientationViewRotationDegrees = this.orientationViewRotationDegrees;
-        result.orientationMatrix = this.orientationMatrix;
-        result.objectTranslation = this.objectTranslation;
-        result.objectScale = this.objectScale;
+        result.orientationViewRotationDegrees = orientationViewRotationDegrees;
+        result.orientationMatrix = orientationMatrix;
+        result.objectTranslation = objectTranslation;
+        result.objectScale = objectScale;
 
-        result.previewWidth = this.previewWidth;
-        result.previewHeight = this.previewHeight;
+        result.previewWidth = previewWidth;
+        result.previewHeight = previewHeight;
 
-        result.projectSettings.copyFrom(this.projectSettings);
-        result.resourceMap.putAll(this.resourceMap);
+        result.projectSettings.copyAllFrom(projectSettings);
+        result.resourceMap.putAll(resourceMap);
 
         return result;
     }
@@ -580,7 +585,7 @@ public final class ViewSet implements ReadonlyViewSet
         View view = findViewByName(image.getName());
         if (view != null)
         {
-            setViewEnabled(image, !view.isEnabled);
+            setViewEnabled(image, !view.isEnabled());
         }
     }
 
@@ -588,21 +593,21 @@ public final class ViewSet implements ReadonlyViewSet
     {
         View view = findViewByName(image.getName());
 
-        if (view.isEnabled) // Currently enabled, so disable camera
+        if (Objects.requireNonNull(view).isEnabled()) // Currently enabled, so disable camera
         {
-            view.isEnabled = isEnabled;
+            view.setEnabled(isEnabled);
             if (!isEnabled)
             {
-                viewsObservable.notify(new MappedChange<>(Type.MODIFIED, view.imageFile, view));
+                viewsObservable.notify(new MappedChange<>(Type.MODIFIED, view.getImageFile(), view));
             }
             // Else still enabled so nothing needs to change
         }
         else // Currently disabled, so enable camera
         {
-            view.isEnabled = isEnabled;
+            view.setEnabled(isEnabled);
             if (isEnabled)
             {
-                viewsObservable.notify(new MappedChange<>(Type.MODIFIED, view.imageFile, view));
+                viewsObservable.notify(new MappedChange<>(Type.MODIFIED, view.getImageFile(), view));
             }
             // Else still disabled so nothing needs to change
         }
@@ -616,7 +621,7 @@ public final class ViewSet implements ReadonlyViewSet
             for (File image : images)
             {
                 View view = findViewByName(image.getName());
-                view.isEnabled = isEnabled;
+                Objects.requireNonNull(view).setEnabled(isEnabled);
                 imageFilesModified.put(view.getImageFile(), view);
             }
         }
@@ -630,7 +635,7 @@ public final class ViewSet implements ReadonlyViewSet
     @Override
     public File getRootDirectory()
     {
-        return this.rootDirectory;
+        return rootDirectory;
     }
 
     /**
@@ -647,21 +652,21 @@ public final class ViewSet implements ReadonlyViewSet
     public File getSupportingFilesDirectory()
     {
         // Fallback to root directory if no supporting files defined
-        return Optional.ofNullable(this.supportingFilesDirectory).orElse(this.rootDirectory);
+        return Optional.ofNullable(supportingFilesDirectory).orElse(rootDirectory);
     }
 
     @Override
-    public String getRelativeSupportingFilesPathName()
+    public @Nullable String getRelativeSupportingFilesPathName()
     {
-        File effectiveSupportingFilesDirectory = this.getSupportingFilesDirectory();
+        File effectiveSupportingFilesDirectory = getSupportingFilesDirectory();
         try
         {
-            return this.getAbsoluteRootDirectory().relativize(effectiveSupportingFilesDirectory.toPath().toAbsolutePath()).toString();
+            return getAbsoluteRootDirectory().relativize(effectiveSupportingFilesDirectory.toPath().toAbsolutePath()).toString();
         }
         catch (RuntimeException e) // If the root and other directories are located under different drive letters on Windows
         {
             LOG.warn("Could not relativize supporting files directory ({}) using root directory {}",
-                effectiveSupportingFilesDirectory, this.getAbsoluteRootDirectory(), e);
+                effectiveSupportingFilesDirectory, getAbsoluteRootDirectory(), e);
             return effectiveSupportingFilesDirectory == null ? null : effectiveSupportingFilesDirectory.toString();
         }
     }
@@ -676,15 +681,15 @@ public final class ViewSet implements ReadonlyViewSet
         this.supportingFilesDirectory = supportingFilesDirectory;
 
         // TODO would this work?
-        this.thumbnailImageDirectory = new File(supportingFilesDirectory, "thumbnails");
+        thumbnailImageDirectory = new File(supportingFilesDirectory, "thumbnails");
     }
 
     @Override
     public File getFullResImageDirectory()
     {
-        return Optional.ofNullable(this.fullResImageDirectory)
-            .orElse(Optional.ofNullable(this.previewImageDirectory)
-                .orElse(this.rootDirectory));
+        return Optional.ofNullable(fullResImageDirectory)
+            .orElse(Optional.ofNullable(previewImageDirectory)
+                .orElse(rootDirectory));
     }
 
     /**
@@ -694,11 +699,11 @@ public final class ViewSet implements ReadonlyViewSet
      */
     public void setFullResImageDirectory(File absoluteImageDirectory)
     {
-        this.fullResImageDirectory = absoluteImageDirectory;
+        fullResImageDirectory = absoluteImageDirectory;
     }
 
     @Override
-    public String getRelativeFullResImagePathName()
+    public @Nullable String getRelativeFullResImagePathName()
     {
         File effectiveFullResImageDirectory = getFullResImageDirectory();
 
@@ -709,14 +714,14 @@ public final class ViewSet implements ReadonlyViewSet
         catch (RuntimeException e) // If the root and other directories are located under different drive letters on Windows
         {
             LOG.warn("Could not relativize full resolution image directory ({}) using root directory {}",
-                effectiveFullResImageDirectory, this.getAbsoluteRootDirectory(), e);
+                effectiveFullResImageDirectory, getAbsoluteRootDirectory(), e);
             return effectiveFullResImageDirectory == null ? null : effectiveFullResImageDirectory.toString();
         }
     }
 
     private Path getAbsoluteRootDirectory()
     {
-        return this.rootDirectory.toPath().toAbsolutePath();
+        return rootDirectory.toPath().toAbsolutePath();
     }
 
     /**
@@ -726,16 +731,16 @@ public final class ViewSet implements ReadonlyViewSet
      */
     public void setRelativeFullResImagePathName(String relativeImagePath)
     {
-        this.fullResImageDirectory = this.getAbsoluteRootDirectory().resolve(relativeImagePath).toFile();
+        fullResImageDirectory = getAbsoluteRootDirectory().resolve(relativeImagePath).toFile();
     }
 
     @Override
     public File getPreviewImageDirectory()
     {
         // If no preview images, default to just using full res images, or root directory as last fallback
-        return Optional.ofNullable(this.previewImageDirectory)
-            .orElse(Optional.ofNullable(this.fullResImageDirectory)
-                .orElse(this.rootDirectory));
+        return Optional.ofNullable(previewImageDirectory)
+            .orElse(Optional.ofNullable(fullResImageDirectory)
+                .orElse(rootDirectory));
     }
 
     public void setPreviewImageDirectory(File previewImageDirectory)
@@ -747,22 +752,22 @@ public final class ViewSet implements ReadonlyViewSet
     public File getThumbnailImageDirectory()
     {
         // If no thumbnail images, default to just using full res images, or preview images, or root directory as last fallback
-        return Optional.ofNullable(this.thumbnailImageDirectory).orElse(getFullResImageDirectory());
+        return Optional.ofNullable(thumbnailImageDirectory).orElse(getFullResImageDirectory());
     }
 
     @Override
-    public String getRelativePreviewImagePathName()
+    public @Nullable String getRelativePreviewImagePathName()
     {
-        File effectivePreviewImageDirectory = this.getPreviewImageDirectory();
+        File effectivePreviewImageDirectory = getPreviewImageDirectory();
 
         try
         {
-            return this.getAbsoluteRootDirectory().relativize(effectivePreviewImageDirectory.toPath().toAbsolutePath()).toString();
+            return getAbsoluteRootDirectory().relativize(effectivePreviewImageDirectory.toPath().toAbsolutePath()).toString();
         }
         catch (RuntimeException e) // If the root and other directories are located under different drive letters on Windows
         {
             LOG.warn("Could not relativize preview image directory ({}) using root directory {}",
-                effectivePreviewImageDirectory, this.getAbsoluteRootDirectory(), e);
+                effectivePreviewImageDirectory, getAbsoluteRootDirectory(), e);
             return effectivePreviewImageDirectory == null ? null : effectivePreviewImageDirectory.toString();
         }
     }
@@ -774,17 +779,17 @@ public final class ViewSet implements ReadonlyViewSet
      */
     public void setRelativePreviewImagePathName(String relativeImagePath)
     {
-        this.previewImageDirectory = this.getAbsoluteRootDirectory().resolve(relativeImagePath).toFile();
+        previewImageDirectory = getAbsoluteRootDirectory().resolve(relativeImagePath).toFile();
     }
 
     public void setRelativeThumbnailImagePathName(String relativeImagePath)
     {
-        this.thumbnailImageDirectory = this.getAbsoluteRootDirectory().resolve(relativeImagePath).toFile();
+        thumbnailImageDirectory = getAbsoluteRootDirectory().resolve(relativeImagePath).toFile();
     }
 
     public void setRelativeMasksPathName(String relativeMasksPath)
     {
-        this.masksDirectory = this.getAbsoluteRootDirectory().resolve(relativeMasksPath).toFile();
+        masksDirectory = getAbsoluteRootDirectory().resolve(relativeMasksPath).toFile();
     }
 
     @Override
@@ -801,8 +806,8 @@ public final class ViewSet implements ReadonlyViewSet
 
     public void setPreviewImageResolution(int width, int height)
     {
-        this.previewWidth = width;
-        this.previewHeight = height;
+        previewWidth = width;
+        previewHeight = height;
     }
 
 
@@ -830,7 +835,7 @@ public final class ViewSet implements ReadonlyViewSet
     @Override
     public View getOrientationView()
     {
-        return this.orientationView;
+        return orientationView;
     }
 
     /**
@@ -875,7 +880,7 @@ public final class ViewSet implements ReadonlyViewSet
 
                 if (newView != null)
                 {
-                    this.orientationView = newView;
+                    orientationView = newView;
                 }
                 else
                 {
@@ -884,7 +889,7 @@ public final class ViewSet implements ReadonlyViewSet
             }
             else
             {
-                this.orientationView = null;
+                orientationView = null;
             }
         }
     }
@@ -901,7 +906,7 @@ public final class ViewSet implements ReadonlyViewSet
     @Override
     public double getOrientationViewRotationDegrees()
     {
-        return this.orientationViewRotationDegrees;
+        return orientationViewRotationDegrees;
     }
 
     public void setOrientationViewRotationDegrees(double rotation)
@@ -933,7 +938,7 @@ public final class ViewSet implements ReadonlyViewSet
         }
     }
 
-    public View findViewByName(String viewName)
+    public @Nullable View findViewByName(String viewName)
     {
         // Treat null as "not found" or "not present"
         // Important for allowing for orientation pose to remain unset.
@@ -1058,19 +1063,19 @@ public final class ViewSet implements ReadonlyViewSet
             }
         }
 
-        viewsObservable.notify(new MappedChange<>(Type.ADDED, view.imageFile, view));
+        viewsObservable.notify(new MappedChange<>(Type.ADDED, view.getImageFile(), view));
     }
 
     public void removeViewByImageFilename(File image)
     {
-        View removed = null;
+        View removed;
 
         synchronized (views)
         {
             removed = views.remove(image);
 
             // Check to see if we just removed the tone calibration primary or orientation views.
-            if (primaryView != null && Objects.equals(image.getName(), primaryView.imageFile.getName()))
+            if (primaryView != null && Objects.equals(image.getName(), primaryView.getImageFile().getName()))
             {
                 // Primary view should always be non-null, if possible.
                 // NOTE: This will not automatically re-calculate light intensity;
@@ -1081,7 +1086,7 @@ public final class ViewSet implements ReadonlyViewSet
                 primaryView = views.isEmpty() ? null : getRepresentativeView();
             }
 
-            if (orientationView != null && Objects.equals(image.getName(), orientationView.imageFile.getName()))
+            if (orientationView != null && Objects.equals(image.getName(), orientationView.getImageFile().getName()))
             {
                 // Orientation view can be null.
                 // TODO notify renderer that the orientation has changed.
@@ -1091,7 +1096,7 @@ public final class ViewSet implements ReadonlyViewSet
 
         if (removed != null)
         {
-            viewsObservable.notify(new MappedChange<>(Type.REMOVED, removed.imageFile, removed));
+            viewsObservable.notify(new MappedChange<>(Type.REMOVED, removed.getImageFile(), removed));
         }
     }
 
@@ -1100,7 +1105,7 @@ public final class ViewSet implements ReadonlyViewSet
     {
         synchronized (cameraProjectionList)
         {
-            return this.cameraProjectionList.get(projectionIndex);
+            return cameraProjectionList.get(projectionIndex);
         }
     }
 
@@ -1108,7 +1113,7 @@ public final class ViewSet implements ReadonlyViewSet
     {
         synchronized (cameraProjectionList)
         {
-            this.cameraProjectionList.add(projection);
+            cameraProjectionList.add(projection);
         }
     }
 
@@ -1117,7 +1122,7 @@ public final class ViewSet implements ReadonlyViewSet
     {
         synchronized (lightPositionList)
         {
-            return this.lightPositionList.get(lightIndex);
+            return lightPositionList.get(lightIndex);
         }
     }
 
@@ -1126,7 +1131,7 @@ public final class ViewSet implements ReadonlyViewSet
     {
         synchronized (lightIntensityList)
         {
-            return this.lightIntensityList.get(lightIndex);
+            return lightIntensityList.get(lightIndex);
         }
     }
 
@@ -1136,8 +1141,8 @@ public final class ViewSet implements ReadonlyViewSet
 
         synchronized (lightPositionList)
         {
-            this.lightPositionList.set(lightIndex, lightPosition);
-            event = new LightCalibrationChangedEvent(this.lightPositionList, null);
+            lightPositionList.set(lightIndex, lightPosition);
+            event = new LightCalibrationChangedEvent(lightPositionList, null);
         }
 
         lightCalibrationChanged.notify(event);
@@ -1150,10 +1155,10 @@ public final class ViewSet implements ReadonlyViewSet
         {
             for (int i = 0; i < getLightCount(); i++)
             {
-                this.lightPositionList.set(i, lightPosition);
+                lightPositionList.set(i, lightPosition);
             }
 
-            event = new LightCalibrationChangedEvent(this.lightPositionList, null);
+            event = new LightCalibrationChangedEvent(lightPositionList, null);
         }
 
         lightCalibrationChanged.notify(event);
@@ -1164,8 +1169,8 @@ public final class ViewSet implements ReadonlyViewSet
         LightCalibrationChangedEvent event;
         synchronized (lightIntensityList)
         {
-            this.lightIntensityList.set(lightIndex, lightIntensity);
-            event = new LightCalibrationChangedEvent(null, this.lightIntensityList);
+            lightIntensityList.set(lightIndex, lightIntensity);
+            event = new LightCalibrationChangedEvent(null, lightIntensityList);
         }
 
         lightCalibrationChanged.notify(event);
@@ -1178,10 +1183,10 @@ public final class ViewSet implements ReadonlyViewSet
         {
             for (int i = 0; i < getLightCount(); i++)
             {
-                this.lightIntensityList.set(i, lightIntensity);
+                lightIntensityList.set(i, lightIntensity);
             }
 
-            event = new LightCalibrationChangedEvent(null, this.lightIntensityList);
+            event = new LightCalibrationChangedEvent(null, lightIntensityList);
         }
 
         lightCalibrationChanged.notify(event);
@@ -1193,7 +1198,7 @@ public final class ViewSet implements ReadonlyViewSet
 
         synchronized (lightIntensityList)
         {
-            this.lightIntensityList.add(intensity);
+            lightIntensityList.add(intensity);
 
             // Copy here just in case for synchronization.
             lightIntensityListCopy = new ArrayList<>(lightIntensityList);
@@ -1204,8 +1209,8 @@ public final class ViewSet implements ReadonlyViewSet
         LightCalibrationChangedEvent event;
         synchronized (lightPositionList)
         {
-            this.lightPositionList.add(position);
-            event = new LightCalibrationChangedEvent(this.lightPositionList, lightIntensityListCopy);
+            lightPositionList.add(position);
+            event = new LightCalibrationChangedEvent(lightPositionList, lightIntensityListCopy);
         }
 
         lightCalibrationChanged.notify(event);
@@ -1243,7 +1248,7 @@ public final class ViewSet implements ReadonlyViewSet
     {
         synchronized (views)
         {
-            return this.gpuBufferSize;
+            return gpuBufferSize;
         }
     }
 
@@ -1260,7 +1265,7 @@ public final class ViewSet implements ReadonlyViewSet
             // Reassign view indices for smaller data set.
             for (int i = 0; i < sortedViews.size(); ++i)
             {
-                sortedViews.get(i).gpuViewIndex = i;
+                sortedViews.get(i).setGpuViewIndex(i);
             }
             gpuBufferSize = views.size();
         }
@@ -1271,7 +1276,7 @@ public final class ViewSet implements ReadonlyViewSet
     {
         synchronized (cameraProjectionList)
         {
-            return this.cameraProjectionList.size();
+            return cameraProjectionList.size();
         }
     }
 
@@ -1280,26 +1285,26 @@ public final class ViewSet implements ReadonlyViewSet
     {
         synchronized (lightPositionList)
         {
-            return this.lightPositionList.size();
+            return lightPositionList.size();
         }
     }
 
     @Override
     public float getRecommendedNearPlane()
     {
-        return this.recommendedNearPlane;
+        return recommendedNearPlane;
     }
 
     @Override
     public float getRecommendedFarPlane()
     {
-        return this.recommendedFarPlane;
+        return recommendedFarPlane;
     }
 
     void setRecommmendedClipPlanes(float near, float far)
     {
-        this.recommendedNearPlane = near;
-        this.recommendedFarPlane = far;
+        recommendedNearPlane = near;
+        recommendedFarPlane = far;
     }
 
     @Override
@@ -1333,7 +1338,7 @@ public final class ViewSet implements ReadonlyViewSet
     {
         synchronized (luminanceEncodingLock)
         {
-            return Arrays.copyOf(this.linearLuminanceValues, this.linearLuminanceValues.length);
+            return Arrays.copyOf(linearLuminanceValues, linearLuminanceValues.length);
         }
     }
 
@@ -1342,7 +1347,7 @@ public final class ViewSet implements ReadonlyViewSet
     {
         synchronized (luminanceEncodingLock)
         {
-            return Arrays.copyOf(this.encodedLuminanceValues, this.encodedLuminanceValues.length);
+            return Arrays.copyOf(encodedLuminanceValues, encodedLuminanceValues.length);
         }
     }
 
@@ -1370,8 +1375,8 @@ public final class ViewSet implements ReadonlyViewSet
     {
         synchronized (luminanceEncodingLock)
         {
-            this.linearLuminanceValues = null;
-            this.encodedLuminanceValues = null;
+            linearLuminanceValues = null;
+            encodedLuminanceValues = null;
         }
 
         luminanceEncodingChanged.notify(new LuminanceEncodingChangedEvent(null, null));
@@ -1395,18 +1400,18 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public String getRelativeMaskPathName()
+    public @Nullable String getRelativeMaskPathName()
     {
         File masksDirectoryRef = masksDirectory;
 
         try
         {
-            return this.getAbsoluteRootDirectory().relativize(masksDirectoryRef.toPath().toAbsolutePath()).toString();
+            return getAbsoluteRootDirectory().relativize(masksDirectoryRef.toPath().toAbsolutePath()).toString();
         }
         catch (RuntimeException e) // If the root and other directories are located under different drive letters on Windows
         {
             LOG.warn("Could not relativize masks directory ({}) using root directory {}",
-                masksDirectoryRef, this.getAbsoluteRootDirectory(), e);
+                masksDirectoryRef, getAbsoluteRootDirectory(), e);
             return masksDirectoryRef == null ? null : masksDirectoryRef.toString();
         }
     }
@@ -1429,7 +1434,7 @@ public final class ViewSet implements ReadonlyViewSet
 
                     // Could set maskFile to null if it doesn't actually exist,
                     // or change the file extension if it exists with a different file extension.
-                    maskFile = ImageFinder.getInstance().tryFindImageFile(maskFile);
+                    maskFile = ImageFinder.tryFindImageFile(maskFile);
 
                     if (maskFile == null)
                     {
@@ -1441,31 +1446,31 @@ public final class ViewSet implements ReadonlyViewSet
                 {
                     // Search for the name of the photo in the masks directory
                     // Will check both with and without _mask suffix
-                    maskFile = ImageFinder.getInstance().tryFindImageFile(
-                        new File(getMasksDirectory(), view.getFullResImageFile().getName()),
+                    maskFile = ImageFinder.tryFindImageFile(
+                        new File(masksDirectory, view.getFullResImageFile().getName()),
                         "_mask");
                 }
 
                 // Remove if no mask file was found, otherwise overwrite based on the file that was found
-                view.maskFile = maskFile;
+                view.setMaskFile(maskFile);
             }
         }
     }
 
     @Override
-    public String getGeometryFileName()
+    public @Nullable String getGeometryFileName()
     {
         // Grab reference for thread synchronization, just in case.
-        File geometryFileRef = this.geometryFile;
+        File geometryFileRef = geometryFile;
 
         try
         {
-            return this.getAbsoluteRootDirectory().relativize(geometryFileRef.toPath().toAbsolutePath()).toString();
+            return getAbsoluteRootDirectory().relativize(geometryFileRef.toPath().toAbsolutePath()).toString();
         }
         catch (RuntimeException e) // If the root and other directories are located under different drive letters on windows
         {
             LOG.warn("Could not relativize geometry file ({}) using root directory {}",
-                geometryFileRef, this.getAbsoluteRootDirectory(), e);
+                geometryFileRef, getAbsoluteRootDirectory(), e);
             return geometryFileRef == null ? null : geometryFileRef.toString();
         }
     }
@@ -1500,7 +1505,7 @@ public final class ViewSet implements ReadonlyViewSet
 
     void putResources(Map<String, File> newResourceMap)
     {
-        this.resourceMap.putAll(newResourceMap);
+        resourceMap.putAll(newResourceMap);
     }
 
     @Override

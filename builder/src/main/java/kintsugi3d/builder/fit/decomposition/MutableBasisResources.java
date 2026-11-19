@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit.decomposition;
@@ -14,6 +18,7 @@ package kintsugi3d.builder.fit.decomposition;
 import kintsugi3d.builder.core.texture.TextureResolution;
 import kintsugi3d.builder.io.specular.SpecularFitSerializer;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +42,7 @@ public class MutableBasisResources<ContextType extends Context<ContextType>> ext
         super(context, basis.getMaterialCount(), basis.getSpecularResolution());
         this.basis = basis;
 
-        this.weightResources = new BasisWeightResources<>(context,
+        weightResources = new BasisWeightResources<>(context,
             textureResolution.width, textureResolution.height, basis);
 
         refreshGraphicsResources();
@@ -59,29 +64,29 @@ public class MutableBasisResources<ContextType extends Context<ContextType>> ext
         {
             LOG.error("Error loading weightmap resources from {}", priorSolutionDirectory, e);
         }
-        this.weightResources = loadedWeightResources;
+        weightResources = loadedWeightResources;
 
         refreshGraphicsResources();
     }
 
     @Override
-    public MutableMaterialBasis getBasis()
+    public final MutableMaterialBasis getBasis()
     {
         return basis;
     }
 
-    public BasisWeightResources<ContextType> getWeightResources()
+    public final BasisWeightResources<ContextType> getWeightResources()
     {
         return weightResources;
     }
 
-    public void setBasis(MutableMaterialBasis basis)
+    public final void setBasis(MutableMaterialBasis basis)
     {
         this.basis = basis;
         refreshGraphicsResources();
     }
 
-    public BasisMaterialInfo deleteBasisMaterial(String name)
+    public final BasisMaterialInfo deleteBasisMaterial(String name)
     {
         // Delete the basis materials themselves and the corresponding weight maps
         BasisMaterialInfo deleted = basis.deleteMaterial(name);
@@ -103,7 +108,7 @@ public class MutableBasisResources<ContextType extends Context<ContextType>> ext
         return result;
     }
 
-    public BasisMaterialInfo toggleBasisMaterial(String name)
+    public final BasisMaterialInfo toggleBasisMaterial(String name)
     {
         if (basis.isMaterialEnabled(name))
         {
@@ -115,7 +120,7 @@ public class MutableBasisResources<ContextType extends Context<ContextType>> ext
         }
     }
 
-    public Map<String, BasisMaterialInfo> disableBasisMaterials(Collection<String> materialNames)
+    public final Map<String, BasisMaterialInfo> disableBasisMaterials(Collection<String> materialNames)
     {
         Map<String, BasisMaterialInfo> disabled = new HashMap<>(materialNames.size());
 
@@ -131,7 +136,7 @@ public class MutableBasisResources<ContextType extends Context<ContextType>> ext
         return disabled;
     }
 
-    public Map<String, BasisMaterialInfo> enableBasisMaterials(Collection<String> materialNames)
+    public final Map<String, BasisMaterialInfo> enableBasisMaterials(Collection<String> materialNames)
     {
         Map<String, BasisMaterialInfo> enabled = new HashMap<>(materialNames.size());
 
@@ -163,7 +168,7 @@ public class MutableBasisResources<ContextType extends Context<ContextType>> ext
      * @param priorSolutionDirectory The directory from which to load a prior solution.
      * @throws IOException If a part of the solution cannot be loaded form file.
      */
-    public static <ContextType extends Context<ContextType>> MutableBasisResources<ContextType> loadFromPriorSolution(
+    public static <ContextType extends Context<ContextType>> @Nullable MutableBasisResources<ContextType> loadFromPriorSolution(
         ContextType context, File priorSolutionDirectory)
     {
         try

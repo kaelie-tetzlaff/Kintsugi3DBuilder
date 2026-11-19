@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.opengl;
@@ -14,7 +18,7 @@ package kintsugi3d.gl.opengl;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.core.ColorFormat.DataType;
 import kintsugi3d.gl.types.AbstractDataType;
-import kintsugi3d.gl.util.RadianceImageLoader.Image;
+import kintsugi3d.gl.util.RadianceImageLoader.HDRImage;
 import org.lwjgl.BufferUtils;
 
 import java.awt.*;
@@ -24,6 +28,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.IntStream;
@@ -33,33 +38,34 @@ import static org.lwjgl.opengl.GL44.*;
 
 abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebufferAttachment, ManagedResource
 {
-    protected final OpenGLContext context;
-
+    private final OpenGLContext context;
     private final int textureId;
-    private boolean closed = false;
+    private final int textureTarget;
 
-    protected final int openGLTextureTarget;
-    protected boolean staleMipmaps = false;
+    private int mipmapLevelCount = 1;
 
-    static final class Parameters
+    private boolean live = true;
+    private boolean staleMipmaps = false;
+
+    static final class TextureParameters
     {
-        final int multisamples;
-        final int format;
-        final boolean fixedMultisampleLocations;
-        final boolean useLinearFiltering;
-        final boolean useMipmaps;
-        final int maxMipmapLevel;
-        final float maxAnisotropy;
+        public final int multisamples;
+        public final int format;
+        public final boolean fixedMultisampleLocations;
+        public final boolean useLinearFiltering;
+        public final boolean useMipmaps;
+        public final int maxMipmapLevel;
+        public final float maxAnisotropy;
 
         /**
          * Default constructor for a null texture
          */
-        Parameters()
+        TextureParameters()
         {
             this(0, false, false, 0, 0.0f, 0, true);
         }
 
-        Parameters(int format, boolean useLinearFiltering, boolean useMipmaps, int maxMipmapLevel, float maxAnisotropy, int multisamples, boolean fixedMultisampleLocations)
+        TextureParameters(int format, boolean useLinearFiltering, boolean useMipmaps, int maxMipmapLevel, float maxAnisotropy, int multisamples, boolean fixedMultisampleLocations)
         {
             this.format = format;
             this.useLinearFiltering = useLinearFiltering;
@@ -70,24 +76,24 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
             this.fixedMultisampleLocations = fixedMultisampleLocations;
         }
 
-        Parameters(int format, boolean useLinearFiltering, boolean useMipmaps, int maxMipmapLevel, float maxAnisotropy)
+        TextureParameters(int format, boolean useLinearFiltering, boolean useMipmaps, int maxMipmapLevel, float maxAnisotropy)
         {
             this(format, useLinearFiltering, useMipmaps, maxMipmapLevel, maxAnisotropy, 1, true);
         }
     }
 
-    final Parameters parameters;
+    public final TextureParameters parameters;
 
+    public final int precision;
     private final ColorFormat colorFormat;
     private final CompressionFormat compressionFormat;
-    final int precision;
     private final TextureType textureType;
 
-    private OpenGLTexture(OpenGLContext context, int openGLTextureTarget, ColorFormat colorFormat,
-        CompressionFormat compressionFormat, TextureType textureType, int precision, Parameters parameters)
+    private OpenGLTexture(OpenGLContext context, int textureTarget, ColorFormat colorFormat,
+        CompressionFormat compressionFormat, TextureType textureType, int precision, TextureParameters parameters)
     {
         this.context = context;
-        this.openGLTextureTarget = openGLTextureTarget;
+        this.textureTarget = textureTarget;
         this.textureType = textureType;
         this.colorFormat = colorFormat;
         this.compressionFormat = compressionFormat;
@@ -96,133 +102,150 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
 
         if (textureType == TextureType.NULL)
         {
-            this.textureId = 0;
+            textureId = 0;
         }
         else
         {
-            this.textureId = glGenTextures();
+            textureId = glGenTextures();
             OpenGLContext.errorCheck();
         }
     }
 
-    OpenGLTexture(OpenGLContext context, int openGLTextureTarget, TextureType textureType, int precision, Parameters parameters)
+    OpenGLTexture(OpenGLContext context, int textureTarget, TextureType textureType, int precision, TextureParameters parameters)
     {
-        this(context, openGLTextureTarget, null, null, textureType, precision, parameters);
+        this(context, textureTarget, null, null, textureType, precision, parameters);
     }
 
-    OpenGLTexture(OpenGLContext context, int openGLTextureTarget, ColorFormat colorFormat, Parameters parameters)
+    OpenGLTexture(OpenGLContext context, int textureTarget, ColorFormat colorFormat, TextureParameters parameters)
     {
-        this(context, openGLTextureTarget, colorFormat, null, TextureType.COLOR, 0, parameters);
+        this(context, textureTarget, colorFormat, null, TextureType.COLOR, 0, parameters);
     }
 
-    OpenGLTexture(OpenGLContext context, int openGLTextureTarget, CompressionFormat compressionFormat, Parameters parameters)
+    OpenGLTexture(OpenGLContext context, int textureTarget, CompressionFormat compressionFormat, TextureParameters parameters)
     {
-        this(context, openGLTextureTarget, null, compressionFormat, TextureType.COLOR, 0, parameters);
-    }
-
-    @Override
-    public OpenGLContext getContext()
-    {
-        return this.context;
+        this(context, textureTarget, null, compressionFormat, TextureType.COLOR, 0, parameters);
     }
 
     @Override
-    public ColorFormat getInternalUncompressedColorFormat()
+    public final OpenGLContext getContext()
     {
-        return this.colorFormat;
+        return context;
     }
 
     @Override
-    public CompressionFormat getInternalCompressedColorFormat()
+    public final ColorFormat getInternalUncompressedColorFormat()
     {
-        return this.compressionFormat;
+        return colorFormat;
     }
 
     @Override
-    public boolean isInternalFormatCompressed()
+    public final CompressionFormat getInternalCompressedColorFormat()
     {
-        return this.compressionFormat != null;
+        return compressionFormat;
     }
 
     @Override
-    public TextureType getTextureType()
+    public final boolean isInternalFormatCompressed()
+    {
+        return compressionFormat != null;
+    }
+
+    @Override
+    public final TextureType getTextureType()
     {
         return textureType;
     }
 
-    protected int getOpenGLTextureTarget()
+    @Override
+    public final int getMipmapLevelCount()
     {
-        return this.openGLTextureTarget;
+        return mipmapLevelCount;
     }
 
-    void bind()
+    protected final int getTextureTarget()
+    {
+        return textureTarget;
+    }
+
+    final void bind()
     {
         context.bindTextureToUnit(0, this);
     }
 
-    int getTextureId()
+    final int getTextureId()
     {
-        return this.textureId;
+        return textureId;
     }
 
-    void bindToTextureUnit(int textureUnitIndex)
+    final void invalidateMipmaps()
+    {
+        staleMipmaps = true;
+    }
+
+    final void bindToTextureUnit(int textureUnitIndex)
     {
         if (textureUnitIndex < 0)
         {
             throw new IllegalArgumentException("Texture unit index cannot be negative.");
         }
-        else if (textureUnitIndex > this.context.getState().getMaxCombinedTextureImageUnits())
+        else if (textureUnitIndex > context.getState().getMaxCombinedTextureImageUnits())
         {
             throw new IllegalArgumentException("Texture unit index (" + textureUnitIndex + ") is greater than the maximum allowed index (" +
-                    (this.context.getState().getMaxCombinedTextureImageUnits()-1) + ").");
+                    (context.getState().getMaxCombinedTextureImageUnits()-1) + ").");
         }
 
         context.bindTextureToUnit(textureUnitIndex, this);
 
-        if(this.staleMipmaps)
+        if(staleMipmaps)
         {
             // Create mipmaps
-            glGenerateMipmap(this.openGLTextureTarget);
+            glGenerateMipmap(textureTarget);
             OpenGLContext.errorCheck();
 
-            this.staleMipmaps = false;
+            staleMipmaps = false;
         }
     }
 
-    void initFilteringAndMipmaps(boolean useLinearFiltering, int maxMipmapLevel)
+    final void initFilteringAndMipmaps(boolean useLinearFiltering, int maxMipmapLevel)
     {
         initFilteringAndMipmaps(useLinearFiltering, maxMipmapLevel, true);
     }
 
-    void initFilteringAndMipmaps(boolean useLinearFiltering, int maxMipmapLevel, boolean generateMipmaps)
+    /**
+     * Responsible for setting GL_TEXTURE_MAX_LEVEL, GL_TEXTURE_MIN_FILTER, GL_TEXTURE_MAG_FILTER
+     * @param useLinearFiltering
+     * @param maxMipmapLevel
+     * @param generateMipmaps
+     */
+    final void initFilteringAndMipmaps(boolean useLinearFiltering, int maxMipmapLevel, boolean generateMipmaps)
     {
         if (parameters.useMipmaps)
         {
             if (maxMipmapLevel < Integer.MAX_VALUE)
             {
-                glTexParameteri(this.getOpenGLTextureTarget(), GL_TEXTURE_MAX_LEVEL, maxMipmapLevel);
+                glTexParameteri(textureTarget, GL_TEXTURE_MAX_LEVEL, maxMipmapLevel);
                 OpenGLContext.errorCheck();
             }
 
             if (generateMipmaps)
             {
                 // Create mipmaps
-                glGenerateMipmap(this.getOpenGLTextureTarget());
+                glGenerateMipmap(textureTarget);
                 OpenGLContext.errorCheck();
             }
 
             if (useLinearFiltering)
             {
-                glTexParameteri(this.getOpenGLTextureTarget(), GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+                glTexParameteri(textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
                 OpenGLContext.errorCheck();
-                glTexParameteri(this.getOpenGLTextureTarget(), GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                glTexParameteri(textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                 OpenGLContext.errorCheck();
             }
             else
             {
-                glTexParameteri(this.getOpenGLTextureTarget(), GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+                glTexParameteri(textureTarget, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
                 OpenGLContext.errorCheck();
-                glTexParameteri(this.getOpenGLTextureTarget(), GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                glTexParameteri(textureTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 OpenGLContext.errorCheck();
             }
         }
@@ -230,18 +253,38 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         {
             if (useLinearFiltering)
             {
-                glTexParameteri(this.getOpenGLTextureTarget(), GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
                 OpenGLContext.errorCheck();
-                glTexParameteri(this.getOpenGLTextureTarget(), GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                glTexParameteri(textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                 OpenGLContext.errorCheck();
             }
             else
             {
-                glTexParameteri(this.getOpenGLTextureTarget(), GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                glTexParameteri(textureTarget, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                 OpenGLContext.errorCheck();
-                glTexParameteri(this.getOpenGLTextureTarget(), GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                glTexParameteri(textureTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 OpenGLContext.errorCheck();
             }
+        }
+    }
+
+    final void calculateMipmapLevelCount(int maxDimension, int maxMipmapLevel)
+    {
+        if (parameters.useMipmaps)
+        {
+            // Calculate the number of mipmap levels
+            mipmapLevelCount = 0;
+            int dim = maxDimension;
+            while (dim > 0 && mipmapLevelCount < maxMipmapLevel)
+            {
+                mipmapLevelCount++;
+                dim /= 2;
+            }
+        }
+        else
+        {
+            // No mipmaps
+            mipmapLevelCount = 1;
         }
     }
 
@@ -272,9 +315,9 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         switch(textureType)
         {
         case DEPTH:
-            return OpenGLContext.getOpenGLInternalDepthFormat(precision);
+            return getInternalDepthFormat(precision);
         case STENCIL:
-            return OpenGLContext.getOpenGLInternalStencilFormat(precision);
+            return getInternalStencilFormat(precision);
         case DEPTH_STENCIL:
             return GL_DEPTH24_STENCIL8;
         case FLOATING_POINT_DEPTH:
@@ -283,8 +326,44 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
             return GL_DEPTH32F_STENCIL8;
         case COLOR:
         default:
-            return OpenGLContext.getOpenGLInternalColorFormat(
+            return OpenGLContext.getInternalColorFormat(
                 ColorFormat.createCustom(precision, precision, precision, precision, DataType.NORMALIZED_FIXED_POINT));
+        }
+    }
+
+    private static int getInternalDepthFormat(int precision)
+    {
+        if (precision <= 16)
+        {
+            return GL_DEPTH_COMPONENT16;
+        }
+        else if (precision <= 24)
+        {
+            return GL_DEPTH_COMPONENT24;
+        }
+        else
+        {
+            return GL_DEPTH_COMPONENT32;
+        }
+    }
+
+    private static int getInternalStencilFormat(int precision)
+    {
+        if (precision == 1)
+        {
+            return GL_STENCIL_INDEX1;
+        }
+        if (precision <= 4)
+        {
+            return GL_STENCIL_INDEX4;
+        }
+        else if (precision <= 8)
+        {
+            return GL_STENCIL_INDEX8;
+        }
+        else
+        {
+            return GL_STENCIL_INDEX16;
         }
     }
 
@@ -292,10 +371,10 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     {
         switch(wrapMode)
         {
-        case None: return GL_CLAMP_TO_EDGE;
-        case MirrorOnce: return GL_MIRROR_CLAMP_TO_EDGE;
-        case Repeat: return GL_REPEAT;
-        case MirroredRepeat: return GL_MIRRORED_REPEAT;
+        case NONE: return GL_CLAMP_TO_EDGE;
+        case MIRROR_ONCE: return GL_MIRROR_CLAMP_TO_EDGE;
+        case REPEAT: return GL_REPEAT;
+        case MIRRORED_REPEAT: return GL_MIRRORED_REPEAT;
         default: return 0;
         }
     }
@@ -336,6 +415,47 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
             default:
                 throw new IllegalArgumentException();
         }
+    }
+
+    static int getPixelDataFormatFromDimensions(int dimensions, boolean integer)
+    {
+        if (integer)
+        {
+            switch (dimensions)
+            {
+                case 1:
+                    return GL_RED_INTEGER;
+                case 2:
+                    return GL_RG_INTEGER;
+                case 3:
+                    return GL_RGB_INTEGER;
+                case 4:
+                    return GL_RGBA_INTEGER;
+                default:
+                    throw new IllegalArgumentException("Data must be a vertex list of no more than 4 dimensions.");
+            }
+        }
+        else
+        {
+            switch (dimensions)
+            {
+                case 1:
+                    return GL_RED;
+                case 2:
+                    return GL_RG;
+                case 3:
+                    return GL_RGB;
+                case 4:
+                    return GL_RGBA;
+                default:
+                    throw new IllegalArgumentException("Data must be a vertex list of no more than 4 dimensions.");
+            }
+        }
+    }
+
+    final boolean hasIntegerInternalFormat()
+    {
+        return !isInternalFormatCompressed() && colorFormat.isInteger();
     }
 
     private static Stream<Entry<Integer, int[]>> getScanlineStream(BufferedImage colorImg, boolean flipVertical)
@@ -396,7 +516,8 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
      *                          This determines how large of a buffer will be allocated.
      * @return
      */
-    static ByteBuffer bufferedImageToNativeBuffer(BufferedImage colorImg, boolean flipVertical,
+    static ByteBuffer bufferedImageToNativeBuffer(
+        BufferedImage colorImg, boolean flipVertical,
         Function<ByteBuffer, BiConsumer<Integer, Color>> bufferWrapperFunction, int mappedColorLength)
     {
         ByteBuffer buffer = BufferUtils.createByteBuffer(colorImg.getWidth() * colorImg.getHeight() * mappedColorLength);
@@ -427,7 +548,8 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
      * @param <MappedType>
      */
     static <MappedType> ByteBuffer bufferedImageToNativeBuffer(
-        BufferedImage colorImg, boolean flipVertical, AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction)
+        BufferedImage colorImg, boolean flipVertical,
+        AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction)
     {
         int mappedColorLength = mappedType.getSizeInBytes();
         Function<ByteBuffer, BiConsumer<Integer, ? super MappedType>> bufferWrapperFunctionPartial = mappedType::wrapIndexedByteBuffer;
@@ -440,83 +562,117 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         return bufferedImageToNativeBuffer(colorImg, flipVertical, bufferWrapperFunctionFull, mappedColorLength);
     }
 
-    static ByteBuffer hdrImageToNativeBuffer(Image colorImg, BufferedImage maskImg)
+    static ByteBuffer hdrImageToNativeBuffer(HDRImage colorImg)
     {
-        ByteBuffer buffer = BufferUtils.createByteBuffer(colorImg.width * colorImg.height * (maskImg == null ? 12 : 16));
-        FloatBuffer floatBuffer = buffer.asFloatBuffer();
-
         // Use parallel stream to accelerate image copy
         IntStream scanlineRange = IntStream.range(0, colorImg.height);
 
-        if (maskImg == null)
-        {
-            scanlineRange.forEach(y ->
-            {
-                int k = y * colorImg.width * 3;
-                for (int x = 0; x < colorImg.width; x++)
-                {
-                    floatBuffer.put(colorImg.data[k]);
-                    k++;
-                    floatBuffer.put(colorImg.data[k]);
-                    k++;
-                    floatBuffer.put(colorImg.data[k]);
-                    k++;
-                }
-            });
-        }
-        else
-        {
-            scanlineRange.forEach(y ->
-            {
-                int k = y * colorImg.width * 4;
-                for (int x = 0; x < colorImg.width; x++)
-                {
-                    floatBuffer.put(colorImg.data[k]);
-                    k++;
-                    floatBuffer.put(colorImg.data[k]);
-                    k++;
-                    floatBuffer.put(colorImg.data[k]);
-                    k++;
+        ByteBuffer buffer = BufferUtils.createByteBuffer(colorImg.width * colorImg.height * 12);
+        FloatBuffer floatBuffer = buffer.asFloatBuffer();
 
-                    // Use green channel of the mask image for alpha
-                    floatBuffer.put((float)((maskImg.getRGB(x, y) & 0x0000ff00) >>> 8) / 255.0f);
-                }
-            });
-        }
+        scanlineRange.forEach(y ->
+        {
+            int k = y * colorImg.width * 3;
+            for (int x = 0; x < colorImg.width; x++)
+            {
+                floatBuffer.put(colorImg.data[k]);
+                k++;
+                floatBuffer.put(colorImg.data[k]);
+                k++;
+                floatBuffer.put(colorImg.data[k]);
+                k++;
+            }
+        });
 
         return buffer;
     }
 
-    @Override
-    public void close()
+    static ByteBuffer hdrImageToNativeBuffer(HDRImage colorImg, BufferedImage maskImg)
     {
-        if (!closed)
+        // Use parallel stream to accelerate image copy
+        IntStream scanlineRange = IntStream.range(0, colorImg.height);
+
+        ByteBuffer buffer = BufferUtils.createByteBuffer(colorImg.width * colorImg.height * 16);
+        FloatBuffer floatBuffer = buffer.asFloatBuffer();
+
+        scanlineRange.forEach(y ->
         {
-            glDeleteTextures(this.textureId);
+            int k = y * colorImg.width * 4;
+            for (int x = 0; x < colorImg.width; x++)
+            {
+                floatBuffer.put(colorImg.data[k]);
+                k++;
+                floatBuffer.put(colorImg.data[k]);
+                k++;
+                floatBuffer.put(colorImg.data[k]);
+                k++;
+
+                // Use green channel of the mask image for alpha
+                floatBuffer.put((float)((maskImg.getRGB(x, y) & 0x0000ff00) >>> 8) / 255.0f);
+            }
+        });
+
+        return buffer;
+    }
+
+    static OpenGLTextureData bundleTextureData(int dimensions, boolean integer, int type, ByteBuffer buffer)
+    {
+        return new OpenGLTextureData(getPixelDataFormatFromDimensions(dimensions, integer), type, Objects.requireNonNull(buffer));
+    }
+
+    static OpenGLTextureData bundleTextureData(AbstractDataType<?> type, boolean integer, ByteBuffer buffer)
+    {
+        return new OpenGLTextureData(getPixelDataFormatFromDimensions(type.getComponentCount(), integer),
+            OpenGLContext.getDataTypeConstant(type), Objects.requireNonNull(buffer));
+    }
+
+    static OpenGLTextureData bundleTextureData(BufferedImage image, boolean flipVertical)
+    {
+        return new OpenGLTextureData(GL_BGRA, GL_UNSIGNED_BYTE,
+            bufferedImageToNativeBuffer(Objects.requireNonNull(image), flipVertical));
+    }
+
+    static OpenGLTextureData bundleTextureData(HDRImage colorImg, BufferedImage maskImg)
+    {
+        return new OpenGLTextureData(GL_RGBA, GL_FLOAT,
+            hdrImageToNativeBuffer(Objects.requireNonNull(colorImg), Objects.requireNonNull(maskImg)));
+    }
+
+    static OpenGLTextureData bundleTextureData(HDRImage image)
+    {
+        return new OpenGLTextureData(GL_RGB, GL_FLOAT, hdrImageToNativeBuffer(Objects.requireNonNull(image)));
+    }
+
+    @Override
+    public final void close()
+    {
+        if (live)
+        {
+            glDeleteTextures(textureId);
             OpenGLContext.errorCheck();
-            closed = true;
+            live = false;
         }
     }
 
     @Override
-    public void attachToDrawFramebuffer(int attachment, int level)
+    public final void attachToDrawFramebuffer(int attachment, int level)
     {
         if (level < 0)
         {
             throw new IllegalArgumentException("Texture level cannot be negative.");
         }
-        if (level > this.getMipmapLevelCount())
+        if (level > mipmapLevelCount)
         {
-            throw new IllegalArgumentException("Illegal level index: " + level + ".  The texture only has " + this.getMipmapLevelCount() + " levels.");
+            throw new IllegalArgumentException("Illegal level index: " + level + ".  The texture only has " + mipmapLevelCount + " levels.");
         }
-        glFramebufferTexture(GL_DRAW_FRAMEBUFFER, attachment, this.textureId, level);
+        glFramebufferTexture(GL_DRAW_FRAMEBUFFER, attachment, textureId, level);
         OpenGLContext.errorCheck();
     }
 
     @Override
-    public void attachToReadFramebuffer(int attachment, int level)
+    public final void attachToReadFramebuffer(int attachment, int level)
     {
-        glFramebufferTexture(GL_READ_FRAMEBUFFER, attachment, this.textureId, level);
+        glFramebufferTexture(GL_READ_FRAMEBUFFER, attachment, textureId, level);
         OpenGLContext.errorCheck();
     }
 }

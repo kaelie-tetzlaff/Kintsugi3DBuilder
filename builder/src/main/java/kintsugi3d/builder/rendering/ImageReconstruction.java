@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering;
@@ -19,11 +23,12 @@ import kintsugi3d.builder.resources.project.ReadonlyGraphicsResources;
 import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.builders.framebuffer.FramebufferObjectBuilder;
 import kintsugi3d.gl.core.*;
+import kintsugi3d.gl.util.BufferedImageColorList;
+import kintsugi3d.gl.util.ColorImage;
 import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.gl.vecmath.DoubleVector3;
-import kintsugi3d.util.BufferedImageColorList;
-import kintsugi3d.util.ColorImage;
 import kintsugi3d.util.SRGB;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.BufferUtils;
 
 import java.awt.image.BufferedImage;
@@ -87,8 +92,8 @@ public class ImageReconstruction<ContextType extends Context<ContextType>> imple
         throws IOException
     {
         this.viewSet = viewSet;
-        this.incidentRadianceProgram = incidentRadianceProgramBuilder.createProgram();
-        this.incidentRadianceDrawable = resources.createDrawable(incidentRadianceProgram);
+        incidentRadianceProgram = incidentRadianceProgramBuilder.createProgram();
+        incidentRadianceDrawable = resources.createDrawable(incidentRadianceProgram);
         this.groundTruthLoader = groundTruthLoader;
 
         this.buildFramebufferAttachments = buildFramebufferAttachments;
@@ -174,7 +179,7 @@ public class ImageReconstruction<ContextType extends Context<ContextType>> imple
         {
             return new ReconstructionView<>()
             {
-                private final View view = ReconstructionIterator.this.currentView;
+                private final View view = currentView;
 
                 @Override
                 public View getView()
@@ -304,14 +309,14 @@ public class ImageReconstruction<ContextType extends Context<ContextType>> imple
     }
 
     @Override
-    public ReconstructionIterator iterator()
+    public final @NotNull ReconstructionIterator iterator()
     {
         //noinspection ReturnOfInnerClass
         return new ReconstructionIterator(viewSet.getEnabledViews().iterator());
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         incidentRadianceProgram.close();
         incidentRadianceDrawable.close();

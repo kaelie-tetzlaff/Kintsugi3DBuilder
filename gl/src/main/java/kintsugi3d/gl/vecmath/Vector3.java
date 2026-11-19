@@ -1,15 +1,21 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.vecmath;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -54,54 +60,54 @@ public class Vector3 implements Iterable<Float>
      * Construct a vector in three dimensions with the given values.
      * @param value Value of all three dimensions.
      */
-    public Vector3(float value)
+    public Vector3(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") float value)
     {
         this(value, value, value);
     }
 
-    public Vector4 asVector4(float w)
+    public final Vector4 asVector4(float w)
     {
-        return new Vector4(this.x, this.y, this.z, w);
+        return new Vector4(x, y, z, w);
     }
 
-    public Vector4 asDirection()
+    public final Vector4 asDirection()
     {
-        return new Vector4(this.x, this.y, this.z, 0.0f);
+        return new Vector4(x, y, z, 0.0f);
     }
 
-    public Vector4 asPosition()
+    public final Vector4 asPosition()
     {
-        return new Vector4(this.x, this.y, this.z, 1.0f);
+        return new Vector4(x, y, z, 1.0f);
     }
 
-    public Vector2 getXY()
+    public final Vector2 getXY()
     {
-        return new Vector2(this.x, this.y);
+        return new Vector2(x, y);
     }
 
-    public IntVector3 rounded()
+    public final IntVector3 rounded()
     {
-        return new IntVector3(Math.round(this.x), Math.round(this.y), Math.round(this.z));
+        return new IntVector3(Math.round(x), Math.round(y), Math.round(z));
     }
 
-    public IntVector3 truncated()
+    public final IntVector3 truncated()
     {
-        return new IntVector3((int)this.x, (int)this.y, (int)this.z);
+        return new IntVector3((int) x, (int) y, (int) z);
     }
 
-    public DoubleVector3 asDoublePrecision()
+    public final DoubleVector3 asDoublePrecision()
     {
         return new DoubleVector3(x, y, z);
     }
 
     @Override
     @SuppressWarnings("FloatingPointEquality")
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         if (obj instanceof Vector3)
         {
             Vector3 other = (Vector3) obj;
-            return other.x == this.x && other.y == this.y && other.z == this.z;
+            return other.x == x && other.y == y && other.z == z;
         }
         else
         {
@@ -110,9 +116,9 @@ public class Vector3 implements Iterable<Float>
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
-        if (this.equals(ZERO))
+        if (equals(ZERO))
         {
             return 0;
         }
@@ -129,12 +135,12 @@ public class Vector3 implements Iterable<Float>
      * @param other The vector to add.
      * @return A new vector that is the mathematical (componentwise) sum of this and 'other'.
      */
-    public Vector3 plus(Vector3 other)
+    public final Vector3 plus(Vector3 other)
     {
         return new Vector3(
-            this.x + other.x,
-            this.y + other.y,
-            this.z + other.z
+            x + other.x,
+            y + other.y,
+            z + other.z
         );
     }
 
@@ -143,12 +149,12 @@ public class Vector3 implements Iterable<Float>
      * @param other The vector to add.
      * @return A new vector that is the mathematical (componentwise) subtraction of 'other' from this.
      */
-    public Vector3 minus(Vector3 other)
+    public final Vector3 minus(Vector3 other)
     {
         return new Vector3(
-            this.x - other.x,
-            this.y - other.y,
-            this.z - other.z
+            x - other.x,
+            y - other.y,
+            z - other.z
         );
     }
 
@@ -156,9 +162,9 @@ public class Vector3 implements Iterable<Float>
      * Construct a new vector that is the negation of this.
      * @return A new vector with the values (-x, -y, -z)
      */
-    public Vector3 negated()
+    public final Vector3 negated()
     {
-        return new Vector3(-this.x, -this.y, -this.z);
+        return new Vector3(-x, -y, -z);
     }
 
     /**
@@ -166,9 +172,9 @@ public class Vector3 implements Iterable<Float>
      * @param s The scaler to multiply by.
      * @return A new vector equal to (s*x, s*y, s*z)
      */
-    public Vector3 times(float s)
+    public final Vector3 times(float s)
     {
-        return new Vector3(s*this.x, s*this.y, s*this.z);
+        return new Vector3(s* x, s* y, s* z);
     }
 
     /**
@@ -176,19 +182,19 @@ public class Vector3 implements Iterable<Float>
      * @param s The scaler to divide by.
      * @return A new vector equal to (x/s, y/s, z/s)
      */
-    public Vector3 dividedBy(float s)
+    public final Vector3 dividedBy(float s)
     {
-        return new Vector3(this.x/s, this.y/s, this.z/s);
+        return new Vector3(x/s, y/s, z/s);
     }
 
-    public Vector3 times(Vector3 other)
+    public final Vector3 times(Vector3 other)
     {
-        return new Vector3(this.x * other.x, this.y * other.y, this.z * other.z);
+        return new Vector3(x * other.x, y * other.y, z * other.z);
     }
 
-    public Vector3 dividedBy(Vector3 other)
+    public final Vector3 dividedBy(Vector3 other)
     {
-        return new Vector3(this.x / other.x, this.y / other.y, this.z / other.z);
+        return new Vector3(x / other.x, y / other.y, z / other.z);
     }
 
     /**
@@ -196,9 +202,9 @@ public class Vector3 implements Iterable<Float>
      * @param other The vector to use when computing the dot product.
      * @return A scalar value equal to the sum of x1*x2, y1*y2 and z1*z2.
      */
-    public float dot(Vector3 other)
+    public final float dot(Vector3 other)
     {
-        return this.x * other.x + this.y * other.y + this.z * other.z;
+        return x * other.x + y * other.y + z * other.z;
     }
 
     /**
@@ -206,12 +212,12 @@ public class Vector3 implements Iterable<Float>
      * @param other The vector to use when computing the outer product.
      * @return The matrix that is the outer product of the vectors.
      */
-    public Matrix3 outerProduct(Vector3 other)
+    public final Matrix3 outerProduct(Vector3 other)
     {
         return Matrix3.fromColumns(
-            new Vector3(this.x * other.x, this.y * other.x, this.z * other.x),
-            new Vector3(this.x * other.y, this.y * other.y, this.z * other.y),
-            new Vector3(this.x * other.z, this.y * other.z, this.z * other.z)
+            new Vector3(x * other.x, y * other.x, z * other.x),
+            new Vector3(x * other.y, y * other.y, z * other.y),
+            new Vector3(x * other.z, y * other.z, z * other.z)
         );
     }
 
@@ -220,12 +226,12 @@ public class Vector3 implements Iterable<Float>
      * @param other The vector to use when computing the dot product.
      * @return A new 3d vector with the values (y1*z2-z1*y2, z1*x2-x1*z2, x1*y2-y1*x2)
      */
-    public Vector3 cross(Vector3 other)
+    public final Vector3 cross(Vector3 other)
     {
         return new Vector3(
-            this.y * other.z - this.z * other.y,
-            this.z * other.x - this.x * other.z,
-            this.x * other.y - this.y * other.x
+            y * other.z - z * other.y,
+            z * other.x - x * other.z,
+            x * other.y - y * other.x
         );
     }
 
@@ -233,9 +239,9 @@ public class Vector3 implements Iterable<Float>
      * Compute a scaler value representing the length/magnitude of this vector.
      * @return A scaler value equal to square root of the sum of squares of the components.
      */
-    public float length()
+    public final float length()
     {
-        return (float)Math.sqrt(this.dot(this));
+        return (float)Math.sqrt(dot(this));
     }
 
     /**
@@ -243,9 +249,9 @@ public class Vector3 implements Iterable<Float>
      * @param other The vector to compute the distance between.
      * @return A scaler value equal to the length of the different vector.
      */
-    public float distance(Vector3 other)
+    public final float distance(Vector3 other)
     {
-        return this.minus(other).length();
+        return minus(other).length();
     }
 
     /**
@@ -254,9 +260,9 @@ public class Vector3 implements Iterable<Float>
      * Do not attempt to normalize a zero-length vector.
      * @return A new vector equal to this vector divided by it's length.
      */
-    public Vector3 normalized()
+    public final Vector3 normalized()
     {
-        return this.times(1.0f / this.length());
+        return times(1.0f / length());
     }
 
     /**
@@ -264,36 +270,32 @@ public class Vector3 implements Iterable<Float>
      * magnitude (a length of 1.0).  If this vector has zero length, it will return itself.
      * @return A new vector equal to this vector divided by it's length except in cases of a zero-length vector.
      */
-    public Vector3 normalizedSafe()
+    public final Vector3 normalizedSafe()
     {
-        float l = this.length();
+        float l = length();
         if (l == 0.0f)
         {
             return this;
         }
         else
         {
-            return this.times(1.0f / l);
+            return times(1.0f / l);
         }
     }
 
-    public Vector3 applyOperator(DoubleUnaryOperator operator)
+    public final Vector3 applyOperator(DoubleUnaryOperator operator)
     {
         return new Vector3((float)operator.applyAsDouble(x), (float)operator.applyAsDouble(y), (float)operator.applyAsDouble(z));
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
-        return "Vector3{" +
-                "x=" + x +
-                ", y=" + y +
-                ", z=" + z +
-                '}';
+        return String.format("Vector3{x=%s, y=%s, z=%s}", x, y, z);
     }
 
     @Override
-    public Iterator<Float> iterator()
+    public final @NotNull Iterator<Float> iterator()
     {
         return Arrays.asList(x, y, z).iterator();
     }

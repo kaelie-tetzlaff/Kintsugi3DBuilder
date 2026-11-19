@@ -1,19 +1,23 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.io;
 
 import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.core.viewset.View;
-import kintsugi3d.builder.state.settings.ReadonlyGeneralSettingsModel.Setting;
+import kintsugi3d.builder.state.settings.Setting;
 import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
@@ -38,7 +42,7 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
     {
     }
 
-    public static void writePoseMatrix(View view, PrintStream out)
+    private static void writePoseMatrix(View view, PrintStream out)
     {
         Matrix4 pose = view.getCameraPose();
 
@@ -80,26 +84,26 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
 
         out.println();
         out.println("# ViewSet UUID");
-        out.printf("U %s%n", viewSet.getUUID());
+        out.printf("U %s\n", viewSet.getUUID());
 
         if (viewSet.getGeometryFileName() != null)
         {
             out.println();
             out.println("# Geometry file name (mesh)");
-            out.printf("m %s%n", viewSet.getGeometryFileName());
+            out.printf("m %s\n", viewSet.getGeometryFileName());
         }
 
         out.println();
         out.println("# Full resolution image file path");
-        out.printf("I %s%n", viewSet.getRelativeFullResImagePathName());
+        out.printf("I %s\n", viewSet.getRelativeFullResImagePathName());
 
         out.println();
         out.println("# Preview resolution image file path");
-        out.printf("i %s%n", viewSet.getPreviewImageDirectory().getAbsolutePath());
+        out.printf("i %s\n", viewSet.getPreviewImageDirectory().getAbsolutePath());
 
         out.println();
         out.println("# Supporting files (texture fit results) file path");
-        out.printf("t %s%n", viewSet.getRelativeSupportingFilesPathName());
+        out.printf("t %s\n", viewSet.getRelativeSupportingFilesPathName());
 
         out.println();
         out.println("# Estimated near and far planes");
@@ -113,7 +117,8 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
         // Want views sorted by original GPU index to preserve the original order when the view set was loaded.
         List<View> viewsCopy = viewSet.getViewsSorted();
 
-        int primaryViewIndex, orientationViewIndex;
+        int primaryViewIndex;
+        int orientationViewIndex;
 
         if (primaryView != null)
         {
@@ -149,11 +154,11 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
 
         out.println();
         out.println("# Reference orientation view index");
-        out.printf("O %d%n", correctedOrientationViewIndex);
+        out.printf("O %d\n", correctedOrientationViewIndex);
         out.println();
 
         out.println("# Reference View Pose Rotation (degrees)");
-        out.printf("r %s%n", viewSet.getOrientationViewRotationDegrees());
+        out.printf("r %s\n", viewSet.getOrientationViewRotationDegrees());
         out.println();
 
         Matrix3 orientation = viewSet.getOrientationMatrix();
@@ -212,10 +217,10 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
         {
             out.println();
             out.println("# Masks directory");
-            out.printf("M %s%n", viewSet.getRelativeMaskPathName());
+            out.printf("M %s\n", viewSet.getRelativeMaskPathName());
 
             out.println();
-            out.printf("# %d masks%n", viewsCopy.stream().filter(view -> view.getMaskFile() != null).count());
+            out.printf("# %d masks\n", viewsCopy.stream().filter(view -> view.getMaskFile() != null).count());
             for (int i = 0; i < viewsCopy.size(); i++)
             {
                 File maskFile = viewsCopy.get(i).getMaskFile();
@@ -227,7 +232,7 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
         }
 
         out.println();
-        out.printf("# %d%s%n", viewSet.getCameraProjectionCount(), viewSet.getCameraProjectionCount() == 1 ? " Sensor" : " Sensors");
+        out.printf("# %d%s\n", viewSet.getCameraProjectionCount(), viewSet.getCameraProjectionCount() == 1 ? " Sensor" : " Sensors");
         for (int i = 0; i < viewSet.getCameraProjectionCount(); i++)
         {
             out.println(viewSet.getCameraProjection(i).toVSETString());
@@ -250,7 +255,7 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
         }
 
         out.println();
-        out.printf("# %d%s%n", viewsCopy.size(), viewsCopy.size() == 1 ? " Camera" : " Cameras");
+        out.printf("# %d%s\n", viewsCopy.size(), viewsCopy.size() == 1 ? " Camera" : " Cameras");
 
         // Enabled photos
         for (View view : viewsCopy)
@@ -261,7 +266,7 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
         if (viewSet.getLightCount() > 0)
         {
             out.println();
-            out.printf("# %d%s%n", viewSet.getLightCount(), viewSet.getLightCount() == 1 ? " Light" : " Lights");
+            out.printf("# %d%s\n", viewSet.getLightCount(), viewSet.getLightCount() == 1 ? " Light" : " Lights");
             for (int id = 0; id < viewSet.getLightCount(); id++)
             {
                 Vector3 pos = viewSet.getLightPosition(id);
@@ -272,7 +277,7 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
         }
 
         out.println();
-        out.printf("# %d%s%n", viewsCopy.size(), viewsCopy.size() == 1 ? " View" : " Views");
+        out.printf("# %d%s\n", viewsCopy.size(), viewsCopy.size() == 1 ? " View" : " Views");
 
         if (primaryViewIndex >= 0)
         {

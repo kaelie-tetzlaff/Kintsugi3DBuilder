@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.io.gltf;
@@ -17,6 +21,7 @@ import kintsugi3d.builder.core.texture.StandardTexture;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,22 +70,22 @@ public class MaterialExporter
         this.asset = asset;
     }
 
-    public void setFilename(String filename)
+    public final void setFilename(String filename)
     {
         this.filename = filename;
     }
 
-    public String getFilename()
+    public final String getFilename()
     {
-        return this.filename;
+        return filename;
     }
 
-    public int getMinLODSize()
+    public final int getMinLODSize()
     {
         return minLODSize;
     }
 
-    public void setMinLODSize(int minLODSize)
+    public final void setMinLODSize(int minLODSize)
     {
         this.minLODSize = minLODSize;
     }
@@ -106,21 +111,21 @@ public class MaterialExporter
         this.textureFileFormat = textureFileFormat;
     }
 
-    public ReadonlyTextureResources<?> getTextureResources()
+    public final ReadonlyTextureResources<?> getTextureResources()
     {
         return textureResources;
     }
 
-    public void setTextureResources(ReadonlyTextureResources<? extends Context<?>> textureResources)
+    public final void setTextureResources(ReadonlyTextureResources<? extends Context<?>> textureResources)
     {
         this.textureResources = textureResources;
     }
 
-    public final Iterable<String> getSupportedTextures()
+    private Iterable<String> getSupportedTextures()
     {
         Collection<String> supportedTextures = new ArrayList<>(StandardTexture.values().length);
 
-        for (Method method : this.getClass().getMethods()) // all methods in the current class and superclasses
+        for (Method method : getClass().getMethods()) // all methods in the current class and superclasses
         {
             if (method.isAnnotationPresent(CustomTextureExport.class))
             {
@@ -128,7 +133,7 @@ public class MaterialExporter
             }
             else if (method.isAnnotationPresent(StandardTextureExport.class))
             {
-                supportedTextures.add(method.getAnnotation(StandardTextureExport.class).value().details.name);
+                supportedTextures.add(method.getAnnotation(StandardTextureExport.class).value().getDetails().name);
             }
         }
 
@@ -140,7 +145,7 @@ public class MaterialExporter
         Collection<String> availableTextures = textureResources.getTextures().keySet().stream()
             .map(t -> t.name).collect(Collectors.toList());
 
-        for (Method method : this.getClass().getMethods()) // all methods in the current class and superclasses
+        for (Method method : getClass().getMethods()) // all methods in the current class and superclasses
         {
             String texName;
             boolean requiresAlpha;
@@ -154,7 +159,7 @@ public class MaterialExporter
             else if (method.isAnnotationPresent(StandardTextureExport.class))
             {
                 StandardTextureExport annotation = method.getAnnotation(StandardTextureExport.class);
-                texName = annotation.value().details.name;
+                texName = annotation.value().getDetails().name;
                 requiresAlpha = annotation.requiresAlpha();
             }
             else
@@ -202,18 +207,33 @@ public class MaterialExporter
         {
             for (var texEntry : textures.entrySet())
             {
-                addLodsToTexture(texEntry.getValue().info, texEntry.getKey(), baseRes, minLODSize);
+                addLodsToTexture(texEntry.getValue().getInfo(), texEntry.getKey(), baseRes, minLODSize);
             }
         }
+    }
+
+    public final void export(File outputDirectory)
+    {
+        File outputDirectoryOrRedirect = redirectOutputDirectory(outputDirectory);
+        saveTextures(outputDirectoryOrRedirect);
+        makeLODs(outputDirectoryOrRedirect);
+        postExport(outputDirectoryOrRedirect);
     }
 
     /**
      * To be overridden by subclass
      * @return
      */
-    protected Object getExtras()
+    @SuppressWarnings("DesignForExtension")
+    protected @Nullable Object getExtras()
     {
         return null;
+    }
+
+    @SuppressWarnings("DesignForExtension")
+    protected File redirectOutputDirectory(File outputDirectory)
+    {
+        return outputDirectory;
     }
 
     /**
@@ -226,24 +246,32 @@ public class MaterialExporter
 
     /**
      * To be overridden by subclass.
+     * Called as part of saveTextures, before makeLODs
+     */
+    protected void postExport(File outputDirectory)
+    {
+    }
+
+    /**
+     * To be overridden by subclass.
      * Called after all other saving textures and LODs.
      */
-    protected void postExport()
+    protected void saveAdditionalTextures(File outputDirectory)
     {
     }
 
-    public void saveTextures(File outputDirectory)
+    public final void saveTextures(File outputDirectory)
     {
         textureResources.saveNamedTextures(getSupportedTextures(), textureFileFormat, outputDirectory, textureFilePrefix);
+        saveAdditionalTextures(outputDirectory);
     }
 
-    public void makeLODs(File outputDirectory)
+    public final void makeLODs(File outputDirectory)
     {
-        LODGenerator.getInstance().generateLODs(minLODSize, outputDirectory,
-            textures.values().toArray(TextureExportSpecification[]::new));
+        LODGenerator.generateLODs(minLODSize, outputDirectory, textures.values().toArray(TextureExportSpecification[]::new));
     }
 
-    private TextureInfo processTextureParam(String texName, Method method, Class<?> paramType, boolean requiresAlpha)
+    private @Nullable TextureInfo processTextureParam(String texName, Method method, Class<?> paramType, boolean requiresAlpha)
     {
         String format = determineFileFormat(textureFileFormat, requiresAlpha);
         TextureInfo tex = createRelativeTexture(getTextureFilename(texName, format), texName, format);
@@ -273,7 +301,7 @@ public class MaterialExporter
      * @param texName
      * @return
      */
-    protected TextureInfo addTexture(String texName)
+    protected final TextureInfo addTexture(String texName)
     {
         return addTexture(texName, false);
     }
@@ -284,7 +312,7 @@ public class MaterialExporter
      * @param requiresAlpha
      * @return
      */
-    protected TextureInfo addTexture(String texName, boolean requiresAlpha)
+    protected final TextureInfo addTexture(String texName, boolean requiresAlpha)
     {
         String format = determineFileFormat(textureFileFormat, requiresAlpha);
         return createRelativeTexture(getTextureFilename(texName, format), texName, format);
@@ -342,7 +370,7 @@ public class MaterialExporter
         return occlusionInfo;
     }
 
-    protected String getTextureFilename(String name, String format)
+    protected final String getTextureFilename(String name, String format)
     {
         return TextureResources.getTextureFilename(name, format, textureFilePrefix);
     }

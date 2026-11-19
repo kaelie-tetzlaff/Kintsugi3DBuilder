@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit;
@@ -46,7 +50,7 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
         this.basisOptimizationSettings = basisOptimizationSettings;
     }
 
-    public <ContextType extends Context<ContextType>> TextureResources<ContextType> optimizeFitWithCache(
+    public final <ContextType extends Context<ContextType>> TextureResources<ContextType> optimizeFitWithCache(
         ReadonlyImageBasedGraphicsResources<ContextType> resources, ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
@@ -79,32 +83,7 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
             monitor.setStage(1, "Performing low-res fit...");
         }
 
-        try (GraphicsResourcesTextureSpace<ContextType> sampled = cache.createSampledResources(
-            new DefaultProgressMonitor() // simple progress monitor for logging; will not be shown in the UI
-            {
-                private double maxProgress = 0.0;
-
-                @Override
-                public void allowUserCancellation() throws UserCancellationException
-                {
-                    if (monitor != null)
-                    {
-                        monitor.allowUserCancellation();
-                    }
-                }
-
-                @Override
-                public void setMaxProgress(double maxProgress)
-                {
-                    this.maxProgress = maxProgress;
-                }
-
-                @Override
-                public void setProgress(double progress, String message)
-                {
-                    LOG.info("[{}%] {}", new DecimalFormat("#.##").format(progress / maxProgress * 100), message);
-                }
-            }))
+        try (GraphicsResourcesTextureSpace<ContextType> sampled = cache.createSampledResources(new CacheProgressMonitor(monitor)))
         {
             ContextType context = sampled.getContext();
             // Disable back face culling since we're rendering in texture space
@@ -127,7 +106,7 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
         }
     }
 
-    public <ContextType extends Context<ContextType>> SpecularFitOptimizable<ContextType> optimizeFit(
+    public final <ContextType extends Context<ContextType>> SpecularFitOptimizable<ContextType> optimizeFit(
         ReadonlyImageBasedGraphicsResources<ContextType> resources, ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
@@ -160,7 +139,7 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
         try
         {
             // Preliminary optimization at low resolution to determine basis functions
-            this.optimizeTexSpaceFit(resources, decomposition.getTextureResolution(),
+            optimizeTexSpaceFit(resources, decomposition.getTextureResolution(),
                 (stream, monitorLocal) -> specularFit.optimizeFromScratch(
                     basisOptimizationSettings, decomposition, stream, getSettings().getPreliminaryConvergenceTolerance(),
                     monitorLocal, TRACE_IMAGES && getOutputDirectory() != null ? getOutputDirectory() : null),
@@ -195,8 +174,44 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
     }
 
     @Override
-    protected <ContextType extends Context<ContextType>> SpecularFitResourcesWrapper<ContextType> getResourcesWrapper()
+    protected final <ContextType extends Context<ContextType>> SpecularFitResourcesWrapper<ContextType> getResourcesWrapper()
     {
         return new SpecularFitResourcesWrapper<>(getSettings().isSmithMaskingShadowingEnabled(), basisOptimizationSettings);
+    }
+
+    /**
+     * Simple progress monitor for logging; will not be shown in the UI
+     */
+    private static final class CacheProgressMonitor extends DefaultProgressMonitor
+    {
+        private final ProgressMonitor monitor;
+        private double maxProgress;
+
+        private CacheProgressMonitor(ProgressMonitor monitor)
+        {
+            this.monitor = monitor;
+            maxProgress = 0.0;
+        }
+
+        @Override
+        public void allowUserCancellation() throws UserCancellationException
+        {
+            if (monitor != null)
+            {
+                monitor.allowUserCancellation();
+            }
+        }
+
+        @Override
+        public void setMaxProgress(double maxProgress)
+        {
+            this.maxProgress = maxProgress;
+        }
+
+        @Override
+        public void setProgress(double progress, String message)
+        {
+            LOG.info("[{}%] {}", new DecimalFormat("#.##").format(progress / maxProgress * 100), message);
+        }
     }
 }

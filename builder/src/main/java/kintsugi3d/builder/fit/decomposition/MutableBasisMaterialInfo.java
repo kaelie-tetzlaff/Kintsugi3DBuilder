@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit.decomposition;
@@ -100,19 +104,19 @@ final class MutableBasisMaterialInfo implements IndexAssignableBasisMaterialInfo
     @Override
     public String getFriendlyName()
     {
-        return this.friendlyName;
+        return friendlyName;
     }
 
     @Override
     public String getName()
     {
-        return this.name;
+        return name;
     }
 
     @Override
     public boolean isEnabled()
     {
-        return this.enabled;
+        return enabled;
     }
 
     public void setEnabled(boolean enabled)
@@ -129,25 +133,25 @@ final class MutableBasisMaterialInfo implements IndexAssignableBasisMaterialInfo
     @Override
     public int getResolution()
     {
-        return this.redBasis.length - 1;
+        return redBasis.length - 1;
     }
 
     @Override
     public double evaluateSpecularRed(int m)
     {
-        return this.redBasis[m];
+        return redBasis[m];
     }
 
     @Override
     public double evaluateSpecularGreen(int m)
     {
-        return this.greenBasis[m];
+        return greenBasis[m];
     }
 
     @Override
     public double evaluateSpecularBlue(int m)
     {
-        return this.blueBasis[m];
+        return blueBasis[m];
     }
 
     @Override
@@ -164,7 +168,7 @@ final class MutableBasisMaterialInfo implements IndexAssignableBasisMaterialInfo
 
     public MutableBasisMaterialInfo copy()
     {
-        return copy(this.name);
+        return copy(name);
     }
 
     public MutableBasisMaterialInfo copy(String newName)

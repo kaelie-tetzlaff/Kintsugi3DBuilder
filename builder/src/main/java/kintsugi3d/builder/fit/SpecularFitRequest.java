@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit;
@@ -18,6 +22,7 @@ import kintsugi3d.builder.fit.settings.*;
 import kintsugi3d.builder.rendering.ImageBasedRenderable;
 import kintsugi3d.builder.rendering.ProgressMonitoredImageBasedGraphicsRequest;
 import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
+import kintsugi3d.builder.resources.project.ReadonlyGraphicsResources;
 import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.builder.resources.project.ShaderProgramFactory;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
@@ -28,6 +33,7 @@ import kintsugi3d.builder.util.Kintsugi3DViewerLauncher;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +43,7 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public final class SpecularFitRequest implements ProgressMonitoredImageBasedGraphicsRequest
 {
@@ -223,6 +230,7 @@ public final class SpecularFitRequest implements ProgressMonitoredImageBasedGrap
         }
     }
 
+    @SuppressWarnings("unused")
     private <ContextType extends Context<ContextType>> void performReconstruction(
         ReadonlyImageBasedGraphicsResources<ContextType> resources, ReadonlyTextureResources<ContextType> specularFit)
         throws IOException
@@ -237,16 +245,11 @@ public final class SpecularFitRequest implements ProgressMonitoredImageBasedGrap
                 // Determine basis count and resolution based on the new specularFit.
                 // This will result in a program factory that overrides whatever basis count and resolution
                 // would be specified by the original resources.
-                ReadonlyBasisResources<ContextType> basisResources = specularFit.getBasisResources();
-                ReadonlyBasisSettings basisSettings = new SimpleBasisSettings(
-                    basisResources.getActiveMaterialCount(), basisResources.getBasisResolution());
-
-                // Reconstruct images both from basis functions and from fitted roughness
-                ShaderProgramFactory<ContextType> programFactory =
-                    new SpecularFitResourcesWrapper<ContextType>(settings.isSmithMaskingShadowingEnabled(), basisSettings).wrap(resources);
+                ShaderProgramFactory<ContextType> programFactory = getProgramFactory(resources, specularFit);
                 FinalReconstruction<ContextType> reconstruction =
                     new FinalReconstruction<>(resources, settings.getTextureResolution(), settings.getReconstructionSettings());
 
+                // Reconstruct images both from basis functions and from fitted roughness
                 LOG.info("Reconstructing:");
                 List<Map<String, ReadonlyColorAppearanceRMSE>> rmseList = reconstruction.reconstruct(specularFit, Map.of(
                         "basis", ReconstructionShaders.getBasisModelReconstructionProgramBuilder(programFactory, specularFit),
@@ -255,7 +258,8 @@ public final class SpecularFitRequest implements ProgressMonitoredImageBasedGrap
                     DEBUG_IMAGES ? outputDirectory : null,
                     DEBUG_IMAGES ? new File(outputDirectory, "ground-truth") : null);
 
-                double reconstructionRMSE = rmseList.stream().mapToDouble(map ->
+                double reconstructionRMSE = Objects.requireNonNull(rmseList).stream()
+                    .mapToDouble(map ->
                     {
                         double rmse = map.get("basis").getEncodedGroundTruth();
                         return rmse * rmse; // mean of mean-squared errors
@@ -274,11 +278,21 @@ public final class SpecularFitRequest implements ProgressMonitoredImageBasedGrap
                     try (PrintStream rmseOut = new PrintStream(new File(outputDirectory, "rmse.txt"), StandardCharsets.UTF_8))
                     // Text file containing error information
                     {
-                        rmseOut.printf("basis, %s%n", reconstructionRMSE);
-                        rmseOut.printf("reflectivity, %s%n", fittedRMSE);
+                        rmseOut.printf("basis, %s\n", reconstructionRMSE);
+                        rmseOut.printf("reflectivity, %s\n", fittedRMSE);
                     }
                 }
             }
         }
+    }
+
+    private <ContextType extends Context<ContextType>> @NotNull ShaderProgramFactory<ContextType> getProgramFactory(
+        ReadonlyGraphicsResources<ContextType> resources, ReadonlyTextureResources<ContextType> specularFit)
+    {
+        ReadonlyBasisResources<ContextType> basisResources = specularFit.getBasisResources();
+        ReadonlyBasisSettings basisSettings = new SimpleBasisSettings(
+            basisResources.getActiveMaterialCount(), basisResources.getBasisResolution());
+
+        return new SpecularFitResourcesWrapper<ContextType>(settings.isSmithMaskingShadowingEnabled(), basisSettings).wrap(resources);
     }
 }

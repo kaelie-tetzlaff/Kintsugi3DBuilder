@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.sidebar;
@@ -79,7 +83,7 @@ public class CardTabController
     private static final double WIDTH_TOLERANCE = 2.0;
     private double lastSidebarWidth = -1;
 
-    public void init(ObservableCardsModel<?> cardsModel)
+    public final void init(@SuppressWarnings("ParameterHidesMemberVariable") ObservableCardsModel<?> cardsModel)
     {
         this.cardsModel = cardsModel;
 
@@ -139,39 +143,34 @@ public class CardTabController
         filePathLabel.maxWidthProperty().bind(tab.widthProperty().multiply(0.50).subtract(locationLabel.widthProperty()).subtract(25));
     }
 
-    public void initialize()
+    public final void initialize()
     {
-        //Listener to detect scroll bar
+        // Listener to detect scroll bar
         scrollpane.viewportBoundsProperty().addListener((obs, oldBounds, newBounds) ->
         {
-            //Exits if we are not dragging or if scrollbar is locked
-            if (!isDragging || scrollbarLockedDuringDrag)
+            // Only need to respond if we're dragging and scrollbar is not locked
+            if (isDragging && !scrollbarLockedDuringDrag)
             {
-                return;
-            }
+                // Old and new widths
+                double oldWidth = oldBounds.getWidth();
+                double newWidth = newBounds.getWidth();
 
-            //Old and new widths
-            double oldWidth = oldBounds.getWidth();
-            double newWidth = newBounds.getWidth();
+                if (oldWidth > 0 && newWidth > 0) // Check for negative widths
+                {
+                    double viewportShrink = oldWidth - newWidth; // amount changed
 
-            if (oldWidth <= 0 || newWidth <= 0) //If negative widths
-            {
-                return;
-            }
+                    // If viewport lost about the amount of width of the scrollbar
+                    if (viewportShrink >= (SCROLLBAR_WIDTH - WIDTH_TOLERANCE))
+                    {
+                        scrollbarLockedDuringDrag = true; //Locks scrollbar
 
-            double viewportShrink = oldWidth - newWidth; //amount changed
+                        // Gets the last sidebar width
+                        scrollbarActivationWidth = lastSidebarWidth;
 
-
-            //If viewport lost about the amount of width of the scrollbar
-            if (viewportShrink >= (SCROLLBAR_WIDTH - WIDTH_TOLERANCE))
-            {
-                scrollbarLockedDuringDrag = true; //Locks scrollbar
-
-                //Gets the last sidebar width
-                scrollbarActivationWidth = lastSidebarWidth;
-
-                //Makes scroll bar always appear
-                scrollpane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+                        // Makes scroll bar always appear
+                        scrollpane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+                    }
+                }
             }
         });
     }
@@ -181,7 +180,7 @@ public class CardTabController
      * change the scroll bar back to as needed during drag
      * @param width
      */
-    public void onSidebarWidthChanged(double width)
+    public final void onSidebarWidthChanged(double width)
     {
         lastSidebarWidth = width; //Assigns last width with param width
 
@@ -207,7 +206,7 @@ public class CardTabController
     /**
      * Assigns is dragging to true
      */
-    public void onDragStarted()
+    public final void onDragStarted()
     {
         isDragging = true;
     }
@@ -216,7 +215,7 @@ public class CardTabController
      * Assigns is dragging to false
      * If scroll bar is locked it will unlock and make scroll bar as needed
      */
-    public void onDragEnded()
+    public final void onDragEnded()
     {
         isDragging = false;
 
@@ -271,7 +270,7 @@ public class CardTabController
         LOG.error("Could not load DataCard.fxml!", e);
     }
 
-    public void setVisible(boolean visibility)
+    public final void setVisible(boolean visibility)
     {
         tab.setVisible(visibility);
         tab.setManaged(visibility);
@@ -280,7 +279,7 @@ public class CardTabController
     /**
      * Does not recreate the listener!!!
      */
-    public void reloadCardList()
+    public final void reloadCardList()
     {
         try
         {
@@ -433,7 +432,7 @@ public class CardTabController
         scrollpane.viewportBoundsProperty().addListener(change -> updateViewportVisibility());
     }
 
-    public void updateViewportVisibility()
+    public final void updateViewportVisibility()
     {
         double viewportHeight = scrollpane.getViewportBounds().getHeight();
         double contentHeight = vbox.getHeight();
@@ -451,7 +450,7 @@ public class CardTabController
      * When Open file path button is called, this method is activated and will open file
      * explorer with the path for that particular tab.
      */
-    public void openFilePath()
+    public final void openFilePath()
     {
         findFilePath();
         try
@@ -466,13 +465,13 @@ public class CardTabController
                 }
                 else
                 {
-                    System.err.println("The folder does not exist.");
+                    LOG.error("The folder does not exist: {}", folder);
                 }
             }
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            LOG.error("Error opening file path: {}", path, e);
         }
     }
 
@@ -480,7 +479,7 @@ public class CardTabController
      * Similar to openFilePath, but instead of opening file explorer it
      * copies path to clipboard
      */
-    public void copyFilePath()
+    public final void copyFilePath()
     {
         findFilePath();
 
@@ -514,7 +513,7 @@ public class CardTabController
      * Calls card.updateCheckBox() on every CardController. The method will set the checkboxes to
      * deselect state.
      */
-    public void updateCardCheckBoxes()
+    public final void updateCardCheckBoxes()
     {
         for (CardController card : cardControllers) // Each card in cardControllers
         {

@@ -1,57 +1,49 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.core;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Objects;
 
 public final class WindowSynchronization
 {
-    private final Collection<SynchronizedWindow> listeners = new LinkedList<>();
+    private final Collection<SynchronizedWindow> listeners = new ArrayList<>(4);
 
+    private final Object lock = new Object();
+
+    @SuppressWarnings("BooleanVariableAlwaysNegated")
     private boolean globalFocus = true;
-    
-    public void addListener(SynchronizedWindow listener)
-    {
-        listeners.add(listener);
-    }
-
-    private boolean inFocusMethod = false;
 
     private Instant lastFocusLost;
 
-    // TODO make focus more robust.  Need to think more about how things work with multithreading.
+    public void addListener(SynchronizedWindow listener)
+    {
+        synchronized (lock)
+        {
+            listeners.add(listener);
+        }
+    }
+
     public void focusGained(SynchronizedWindow trigger)
     {
-        boolean alreadyRunning;
-
         // Make sure that multiple focus-related methods don't run at the same time.
-        synchronized (this)
-        {
-            if (inFocusMethod)
-            {
-                alreadyRunning = true;
-            }
-            else
-            {
-                alreadyRunning = false;
-                inFocusMethod = true;
-            }
-        }
-
-        if (!alreadyRunning)
+        synchronized (lock)
         {
             //System.out.println(trigger + ": Started focusGained()");
 
@@ -83,38 +75,14 @@ public final class WindowSynchronization
             {
                 globalFocus = true;
             }
-
-            //System.out.println(trigger + ": Ended focusGained()");
-
-            synchronized (this)
-            {
-                inFocusMethod = false;
-            }
         }
     }
 
     public void focusLost(SynchronizedWindow trigger)
     {
-        boolean alreadyRunning;
-
         // Make sure that multiple focus-related methods don't run at the same time.
-        synchronized (this)
+        synchronized (lock)
         {
-            if (inFocusMethod)
-            {
-                alreadyRunning = true;
-            }
-            else
-            {
-                alreadyRunning = false;
-                inFocusMethod = true;
-            }
-        }
-
-        if (!alreadyRunning)
-        {
-            //System.out.println(trigger + ": Started focusLost()");
-
             // Determine if the application as a whole has lost focus.
             boolean focus = false;
             for (SynchronizedWindow listener : listeners)
@@ -124,33 +92,32 @@ public final class WindowSynchronization
 
             if (!focus)
             {
-                this.lastFocusLost = Instant.now();
+                lastFocusLost = Instant.now();
             }
 
-            this.globalFocus = focus;
-
-            //System.out.println(trigger + ": Ended focusLost()");
-
-            synchronized (this)
-            {
-                inFocusMethod = false;
-            }
+            globalFocus = focus;
         }
     }
 
     public void quit()
     {
+        Collection<SynchronizedWindow> snapshot;
+        synchronized (lock)
+        {
+            snapshot = new ArrayList<>(listeners);
+        }
+
         new Thread(() ->
         {
             boolean quitConfirmed = true;
-            for (SynchronizedWindow listener : listeners)
+            for (SynchronizedWindow listener : snapshot)
             {
                 quitConfirmed = quitConfirmed && listener.confirmQuit();
             }
 
             if (quitConfirmed)
             {
-                for (SynchronizedWindow listener : listeners)
+                for (SynchronizedWindow listener : snapshot)
                 {
                     listener.quit();
                 }
@@ -161,7 +128,13 @@ public final class WindowSynchronization
 
     public void quitWithoutConfirmation()
     {
-        for (SynchronizedWindow listener : listeners)
+        Collection<SynchronizedWindow> snapshot;
+        synchronized (lock)
+        {
+            snapshot = new ArrayList<>(listeners);
+        }
+
+        for (SynchronizedWindow listener : snapshot)
         {
             listener.quit();
         }

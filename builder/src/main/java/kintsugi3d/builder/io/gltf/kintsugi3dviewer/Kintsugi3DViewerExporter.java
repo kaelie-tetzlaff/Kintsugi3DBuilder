@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.io.gltf.kintsugi3dviewer;
@@ -29,19 +33,19 @@ public class Kintsugi3DViewerExporter extends PBRExporter
     private final Kintsugi3DViewerExtras extras = new Kintsugi3DViewerExtras();
 
     @StandardTextureExport(StandardTexture.DIFFUSE_COLOR)
-    public void diffuseColor(TextureInfo diffuseColor)
+    public final void diffuseColor(TextureInfo diffuseColor)
     {
         extras.setDiffuseTexture(diffuseColor);
     }
 
     @CustomTextureExport("constant")
-    public void diffuseConstant(TextureInfo diffuseConstant)
+    public final void diffuseConstant(TextureInfo diffuseConstant)
     {
         extras.setDiffuseConstantTexture(diffuseConstant);
     }
 
     @StandardTextureExport(StandardTexture.SPECULAR_COLOR)
-    public void specularColor(TextureInfo specularColor)
+    public final void specularColor(TextureInfo specularColor)
     {
         extras.setSpecularTexture(specularColor);
     }
@@ -59,7 +63,7 @@ public class Kintsugi3DViewerExporter extends PBRExporter
     }
 
     @Override
-    public void finishTextures()
+    public final void finishTextures()
     {
         if (getTextureResources().getBasisResources() != null)
         {
@@ -85,16 +89,12 @@ public class Kintsugi3DViewerExporter extends PBRExporter
     }
 
     @Override
-    public void saveTextures(File outputDirectory)
+    public final void saveAdditionalTextures(File outputDirectory)
     {
-        super.saveTextures(outputDirectory);
-
         // Check if we need to fallback to PNG to ensure alpha channels exist.
         String format = determineFileFormat(getTextureFileFormat(), true);
         getTextureResources().savePackedWeightMaps(format, outputDirectory, getTextureFilePrefix());
-
-        getTextureResources().saveBasisFunctions(outputDirectory,
-            getBasisFunctionsUri());
+        getTextureResources().saveBasisFunctions(outputDirectory, getBasisFunctionsUri());
     }
 
     private String getBasisFunctionsUri()
@@ -103,7 +103,7 @@ public class Kintsugi3DViewerExporter extends PBRExporter
     }
 
     @Override
-    public Kintsugi3DViewerExtras getExtras()
+    public final Kintsugi3DViewerExtras getExtras()
     {
         return extras;
     }

@@ -1,15 +1,21 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.vecmath;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -38,48 +44,48 @@ public class IntVector4 implements Iterable<Integer>
         this.w = w;
     }
 
-    public IntVector4(int value)
+    public IntVector4(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") int value)
     {
         this(value, value, value, value);
     }
 
-    public Vector4 asFloatingPoint()
+    public final Vector4 asFloatingPoint()
     {
         return new Vector4(x, y, z, w);
     }
 
-    public Vector4 asFloatingPointNormalized()
+    public final Vector4 asFloatingPointNormalized()
     {
         return new Vector4(x / 255.0f, y / 255.0f, z / 255.0f, w / 255.0f);
     }
 
-    public DoubleVector4 asDoubleFloatingPoint()
+    public final DoubleVector4 asDoubleFloatingPoint()
     {
         return new DoubleVector4(x, y, z, w);
     }
 
-    public DoubleVector4 asDoubleFloatingPointNormalized()
+    public final DoubleVector4 asDoubleFloatingPointNormalized()
     {
         return new DoubleVector4(x / 255.0, y / 255.0, z / 255.0, w / 255.0);
     }
 
-    public IntVector2 getXY()
+    public final IntVector2 getXY()
     {
-        return new IntVector2(this.x, this.y);
+        return new IntVector2(x, y);
     }
 
-    public IntVector3 getXYZ()
+    public final IntVector3 getXYZ()
     {
-        return new IntVector3(this.x, this.y, this.z);
+        return new IntVector3(x, y, z);
     }
 
     @Override
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         if (obj instanceof IntVector4)
         {
             IntVector4 other = (IntVector4) obj;
-            return other.x == this.x && other.y == this.y && other.z == this.z && other.w == this.w;
+            return other.x == x && other.y == y && other.z == z && other.w == w;
         }
         else
         {
@@ -88,62 +94,62 @@ public class IntVector4 implements Iterable<Integer>
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return 31 * (31 * (31 * (31 + x) + y) + z) + w;
     }
 
-    public IntVector4 plus(IntVector4 other)
+    public final IntVector4 plus(IntVector4 other)
     {
         return new IntVector4(
-            this.x + other.x,
-            this.y + other.y,
-            this.z + other.z,
-            this.w + other.w
+            x + other.x,
+            y + other.y,
+            z + other.z,
+            w + other.w
         );
     }
 
-    public IntVector4 minus(IntVector4 other)
+    public final IntVector4 minus(IntVector4 other)
     {
         return new IntVector4(
-            this.x - other.x,
-            this.y - other.y,
-            this.z - other.z,
-            this.w - other.w
+            x - other.x,
+            y - other.y,
+            z - other.z,
+            w - other.w
         );
     }
 
-    public IntVector4 negated()
+    public final IntVector4 negated()
     {
-        return new IntVector4(-this.x, -this.y, -this.z, -this.w);
+        return new IntVector4(-x, -y, -z, -w);
     }
 
-    public IntVector4 times(int s)
+    public final IntVector4 times(int s)
     {
-        return new IntVector4(s*this.x, s*this.y, s*this.z, s*this.w);
+        return new IntVector4(s* x, s* y, s* z, s* w);
     }
 
-    public IntVector4 dividedBy(int s)
+    public final IntVector4 dividedBy(int s)
     {
-        return new IntVector4(this.x/s, this.y/s, this.z/s, this.w/s);
+        return new IntVector4(x/s, y/s, z/s, w/s);
     }
 
-    public int dot(IntVector4 other)
+    public final int dot(IntVector4 other)
     {
-        return this.x * other.x + this.y * other.y + this.z * other.z + this.w * other.w;
+        return x * other.x + y * other.y + z * other.z + w * other.w;
     }
 
-    public double length()
+    public final double length()
     {
-        return Math.sqrt(this.dot(this));
+        return Math.sqrt(dot(this));
     }
 
-    public double distance(IntVector4 other)
+    public final double distance(IntVector4 other)
     {
-        return this.minus(other).length();
+        return minus(other).length();
     }
 
-    public IntVector4 applyOperator(IntUnaryOperator operator)
+    public final IntVector4 applyOperator(IntUnaryOperator operator)
     {
         return new IntVector4(operator.applyAsInt(x), operator.applyAsInt(y), operator.applyAsInt(z), operator.applyAsInt(w));
     }
@@ -153,24 +159,19 @@ public class IntVector4 implements Iterable<Integer>
      * @param operator
      * @return
      */
-    public IntVector4 applyOperatorXYZ(IntUnaryOperator operator)
+    public final IntVector4 applyOperatorXYZ(IntUnaryOperator operator)
     {
         return new IntVector4(operator.applyAsInt(x), operator.applyAsInt(y), operator.applyAsInt(z), w);
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
-        return "IntVector4{" +
-            "x=" + x +
-            ", y=" + y +
-            ", z=" + z +
-            ", w=" + w +
-            '}';
+        return String.format("IntVector4{x=%d, y=%d, z=%d, w=%d}", x, y, z, w);
     }
 
     @Override
-    public Iterator<Integer> iterator()
+    public final @NotNull Iterator<Integer> iterator()
     {
         return Arrays.asList(x, y, z, w).iterator();
     }

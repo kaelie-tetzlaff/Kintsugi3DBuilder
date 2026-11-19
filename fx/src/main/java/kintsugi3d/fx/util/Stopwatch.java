@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.util;
@@ -26,16 +30,13 @@ public class Stopwatch
     private long initTime;
     private final BooleanProperty running = new SimpleBooleanProperty(false);
 
-    //used to manually set elapsed time for a stopwatch which is stopped and
-    //   has its elapsed time retrieved later
+    /**
+     * used to manually set elapsed time for a stopwatch which is stopped and
+     * has its elapsed time retrieved later
+     */
     private long manualElapsedTime = -1;
 
-
-    public Stopwatch()
-    {
-    }
-
-    public long start()
+    public final long start()
     {
         if (running.getValue())
         {
@@ -53,7 +54,7 @@ public class Stopwatch
         return initTime;
     }
 
-    public long click()
+    public final long click()
     {
         rollingAverageStorage[trackingIdx] = System.nanoTime();
 
@@ -69,17 +70,17 @@ public class Stopwatch
         return difference;
     }
 
-    public long getInitTime()
+    public final long getInitTime()
     {
         return initTime;
     }
 
-    public ReadOnlyBooleanProperty isRunningProperty()
+    public final ReadOnlyBooleanProperty runningProperty()
     {
         return running;
     }
 
-    public long getElapsedTime()
+    public final long getElapsedTime()
     {
         if (running.getValue())
         {
@@ -90,7 +91,7 @@ public class Stopwatch
         return manualElapsedTime;
     }
 
-    public long stop()
+    public final long stop()
     {
         if (!running.getValue())
         {
@@ -102,17 +103,12 @@ public class Stopwatch
         return manualElapsedTime;
     }
 
-    public long getAvgDifference()
+    public final long getAvgDifference()
     {
         long recordedTimes = 0;
         int numToDivide = 0;
-        for (int i = 1; i < ARR_SIZE; ++i)
+        for (int i = 1; i < ARR_SIZE && rollingAverageStorage[i] != initTime; ++i)
         {
-            if (rollingAverageStorage[i] == initTime)
-            {
-                break;
-            }
-
             long difference = rollingAverageStorage[i] - rollingAverageStorage[i - 1];
 
             if (difference > 0)

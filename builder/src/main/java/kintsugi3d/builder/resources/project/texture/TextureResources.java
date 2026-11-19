@@ -1,17 +1,20 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.resources.project.texture;
 
-import kintsugi3d.builder.core.texture.NamedTextureInfo;
 import kintsugi3d.builder.core.texture.StandardTexture;
 import kintsugi3d.builder.core.texture.TextureInfo;
 import kintsugi3d.builder.fit.decomposition.BasisMaterialInfo;
@@ -20,6 +23,7 @@ import kintsugi3d.builder.fit.decomposition.MutableBasisResources;
 import kintsugi3d.builder.util.events.MappedChange;
 import kintsugi3d.builder.util.events.Observable;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,40 +32,9 @@ import java.util.Locale;
 import java.util.Map;
 
 public interface TextureResources<ContextType extends Context<ContextType>>
-    extends Blittable<ReadonlyTextureResources<ContextType>>, ReadonlyTextureResources<ContextType>, ManagedResource
+    extends Blittable<ReadonlyTextureResources<ContextType>>, ReadonlyTextureResources<ContextType>, TextureSet<ContextType>, ManagedResource
 {
     int WEIGHTS_PER_CHANNEL_PACKED_IMAGE = 4;
-
-    @Override
-    Map<TextureInfo, ? extends Texture2D<ContextType>> getTextures();
-
-    /**
-     * Returns a map containing only the standard textures
-     * @return
-     */
-    @Override
-    default Map<StandardTexture, ? extends Texture2D<ContextType>> getStandardTextures()
-    {
-        return StandardTexture.convertObjectMapToEnumMap(getTextures());
-    }
-
-    @Override
-    default Texture2D<ContextType> getTexture(String texName)
-    {
-        return getTextures().get(new NamedTextureInfo(texName));
-    }
-
-    @Override
-    default Texture2D<ContextType> getTexture(TextureInfo tex)
-    {
-        return getTextures().get(tex);
-    }
-
-    @Override
-    default Texture2D<ContextType> getTexture(StandardTexture tex)
-    {
-        return getTextures().get(tex.details);
-    }
 
     void disableBasisMaterials(Collection<String> materialNames);
 
@@ -122,12 +95,12 @@ public interface TextureResources<ContextType extends Context<ContextType>>
 
     static String getTextureFilename(StandardTexture tex, String format)
     {
-        return getTextureFilename(tex.details.name, format);
+        return getTextureFilename(tex.getDetails().name, format);
     }
 
     static String getTextureFilename(StandardTexture tex, String format, String filenamePrefix)
     {
-        return getTextureFilename(tex.details.name, format, filenamePrefix);
+        return getTextureFilename(tex.getDetails().name, format, filenamePrefix);
     }
 
     static String getTextureFilename(String texName, String format)
@@ -168,7 +141,7 @@ public interface TextureResources<ContextType extends Context<ContextType>>
 
     static File getTextureFile(StandardTexture t, File directory)
     {
-        return getTextureFile(t.details.name, directory);
+        return getTextureFile(t.getDetails().name, directory);
     }
 
     static File getTextureFile(String texName, File directory)
@@ -177,7 +150,7 @@ public interface TextureResources<ContextType extends Context<ContextType>>
     }
 
     static <ContextType extends Context<ContextType>>
-    Texture2D<ContextType> loadTexture(String texName, File directory, ContextType context) throws IOException
+    @Nullable Texture2D<ContextType> loadTexture(String texName, File directory, ContextType context) throws IOException
     {
         // Load texture file
         File textureFile = getTextureFile(texName, directory);
@@ -198,7 +171,7 @@ public interface TextureResources<ContextType extends Context<ContextType>>
     static <ContextType extends Context<ContextType>>
     Texture2D<ContextType> loadTexture(StandardTexture tex, File directory, ContextType context) throws IOException
     {
-        return loadTexture(tex.details.name, directory, context);
+        return loadTexture(tex.getDetails().name, directory, context);
     }
 
     default Texture2D<ContextType> loadTexture(String texName, File directory) throws IOException
@@ -208,7 +181,7 @@ public interface TextureResources<ContextType extends Context<ContextType>>
 
     default Texture2D<ContextType> loadTexture(StandardTexture tex, File directory) throws IOException
     {
-        return loadTexture(tex.details.name, directory, getContext());
+        return loadTexture(tex.getDetails().name, directory, getContext());
     }
 
     static <ContextType extends Context<ContextType>> TextureResources<ContextType> makeNull(ContextType context)
@@ -240,15 +213,21 @@ public interface TextureResources<ContextType extends Context<ContextType>>
             }
 
             @Override
-            public MutableBasisResources<ContextType> getBasisResources()
+            public @Nullable MutableBasisResources<ContextType> getBasisResources()
             {
                 return null;
             }
 
             @Override
-            public BasisWeightResources<ContextType> getBasisWeightResources()
+            public @Nullable BasisWeightResources<ContextType> getBasisWeightResources()
             {
                 return null;
+            }
+
+            @Override
+            public String sanitizeTextureName(CharSequence name)
+            {
+                throw new UnsupportedOperationException();
             }
 
             @Override

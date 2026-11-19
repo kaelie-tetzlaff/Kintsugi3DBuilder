@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.state.settings;
@@ -15,6 +19,8 @@ import kintsugi3d.builder.io.ExportType;
 import kintsugi3d.builder.util.OperatingSystem;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.util.ShadingParameterMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -23,6 +29,8 @@ import java.nio.file.Path;
 
 public final class DefaultSettings
 {
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultSettings.class);
+
     private DefaultSettings()
     {
     }
@@ -78,16 +86,19 @@ public final class DefaultSettings
                 {
                     Path path = stream.iterator().next();
 
-                    if (!Files.exists(path))
+                    if (Files.exists(path))
                     {
-                        throw new IOException("Could not find Blender.");
+                        settingsModel.createObjectSetting("blenderLocation", path.resolve("blender.exe").toString());
                     }
-
-                    settingsModel.createObjectSetting("blenderLocation", path.resolve("blender.exe").toString());
+                    else
+                    {
+                        setDefaultBlenderLocation(settingsModel);
+                    }
                 }
                 catch (IOException e)
                 {
-                    settingsModel.createObjectSetting("blenderLocation", "");
+                    LOG.info("IO exception while trying to find Blender.", e);
+                    setDefaultBlenderLocation(settingsModel);
                 }
                 break;
 
@@ -96,9 +107,14 @@ public final class DefaultSettings
                 break;
 
             default:
-                settingsModel.createObjectSetting("blenderLocation", "");
+                setDefaultBlenderLocation(settingsModel);
                 break;
         }
+    }
+
+    private static void setDefaultBlenderLocation(GeneralSettingsModel settingsModel)
+    {
+        settingsModel.createObjectSetting("blenderLocation", "");
     }
 
     public static void applyProjectDefaults(GeneralSettingsModel settingsModel)

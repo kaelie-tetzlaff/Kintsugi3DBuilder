@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering.components.lightcalibration;
@@ -39,7 +43,7 @@ public class CameraVisual<ContextType extends Context<ContextType>> extends Shad
     }
 
     @Override
-    protected ProgramObject<ContextType> createProgram() throws IOException
+    protected final ProgramObject<ContextType> createProgram() throws IOException
     {
         return getContext().getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File(new File(new File("shaders"), "common"), "texture_imgspace.vert"))
@@ -48,47 +52,47 @@ public class CameraVisual<ContextType extends Context<ContextType>> extends Shad
     }
 
     @Override
-    protected Map<String, VertexBuffer<ContextType>> createVertexBuffers()
+    protected final Map<String, VertexBuffer<ContextType>> createVertexBuffers()
     {
         return Map.of("position", getContext().createRectangle());
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         if (programFactory instanceof GraphicsResourcesImageSpace)
         {
             View selectedView = viewSelection.getSelectedView();
             if (selectedView != null)
             {
-                this.getContext().getState().disableBackFaceCulling();
+                getContext().getState().disableBackFaceCulling();
 
-                this.getContext().getState().disableDepthWrite();
-                this.getContext().getState().enableDepthTest();
+                getContext().getState().disableDepthWrite();
+                getContext().getState().enableDepthTest();
 
                 Matrix4 snapViewInverse = viewSelection.getSelectedMatrix().quickInverse(0.01f);
                 Vector3 frustumDims = viewSelection.getFrustumDimensions();
 
-                programFactory.setupShaderProgram(this.getProgram()); // sets viewImages
-                this.getProgram().setUniform("viewIndex", selectedView.getGPUViewIndex());
-                this.getProgram().setUniform("model_view",
+                programFactory.setupShaderProgram(getProgram()); // sets viewImages
+                getProgram().setUniform("viewIndex", selectedView.getGPUViewIndex());
+                getProgram().setUniform("model_view",
                     cameraViewport.getView().times(snapViewInverse)
                         .times(Matrix4.scaleAndTranslate(frustumDims, new Vector3(0, 0, -frustumDims.z))));
-                this.getProgram().setUniform("projection", cameraViewport.getViewportProjection());
-                this.getDrawable().draw(PrimitiveMode.TRIANGLE_FAN, cameraViewport.ofFramebuffer(framebuffer));
+                getProgram().setUniform("projection", cameraViewport.getViewportProjection());
+                getDrawable().draw(PrimitiveMode.TRIANGLE_FAN, cameraViewport.ofFramebuffer(framebuffer));
 
-                this.getContext().getState().enableDepthWrite();
-                this.getContext().getState().enableDepthTest();
+                getContext().getState().enableDepthWrite();
+                getContext().getState().enableDepthTest();
             }
         }
     }
 
-    public ViewSelection getViewSelection()
+    public final ViewSelection getViewSelection()
     {
         return viewSelection;
     }
 
-    public void setViewSelection(ViewSelection viewSelection)
+    public final void setViewSelection(ViewSelection viewSelection)
     {
         this.viewSelection = viewSelection;
     }

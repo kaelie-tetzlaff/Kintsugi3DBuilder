@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering;
@@ -27,7 +31,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void allowUserCancellation() throws UserCancellationException
+    public final void allowUserCancellation() throws UserCancellationException
     {
         if (base != null)
         {
@@ -36,7 +40,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void cancelComplete(UserCancellationException e)
+    public final void cancelComplete(UserCancellationException e)
     {
         if (base != null)
         {
@@ -45,7 +49,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void start()
+    public final void start()
     {
         if (base != null)
         {
@@ -54,7 +58,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void setProcessName(String processName)
+    public final void setProcessName(String processName)
     {
         if (base != null)
         {
@@ -63,7 +67,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void setStageCount(int count)
+    public final void setStageCount(int count)
     {
         if (base != null)
         {
@@ -73,7 +77,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void setStage(int stage, String message)
+    public final void setStage(int stage, String message)
     {
         if (base != null)
         {
@@ -83,7 +87,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void advanceStage(String message)
+    public final void advanceStage(String message)
     {
         if (base != null)
         {
@@ -93,7 +97,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void setMaxProgress(double maxProgress)
+    public final void setMaxProgress(double maxProgress)
     {
         if (base != null)
         {
@@ -102,7 +106,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void setProgress(double progress, String message)
+    public final void setProgress(double progress, String message)
     {
         if (base != null)
         {
@@ -111,7 +115,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void complete()
+    public final void complete()
     {
         // Zero vector signals that the light requires calibration.
         // TODO support multiple light sources.
@@ -128,13 +132,8 @@ class BackendProgressMonitor implements ProgressMonitor
         }
     }
 
-    private boolean isProcessed()
-    {
-        return instance.getResources().getTextureResources().getBasisWeightResources() != null;
-    }
-
     @Override
-    public void fail(Throwable e)
+    public final void fail(Throwable e)
     {
         if (base != null)
         {
@@ -143,7 +142,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void warn(Throwable e)
+    public final void warn(Throwable e)
     {
         if (base != null)
         {
@@ -152,7 +151,7 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public boolean isConflictingProcess()
+    public final boolean isConflictingProcess()
     {
         if (base == null)
         {

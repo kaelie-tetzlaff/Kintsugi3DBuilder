@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.geometry;
@@ -37,7 +41,7 @@ public class GeometryFramebuffer<ContextType extends Context<ContextType>> imple
     {
         this.context = context;
 
-        this.fbo = context.buildFramebufferObject(width, height)
+        fbo = context.buildFramebufferObject(width, height)
             .addColorAttachment(ColorFormat.RGB32F) // position
             .addColorAttachment(ColorFormat.RGB32F) // normal
             .addColorAttachment(ColorFormat.RGB32F) // tangent
@@ -69,65 +73,65 @@ public class GeometryFramebuffer<ContextType extends Context<ContextType>> imple
         catch (IOException e)
         {
             // Make sure there isn't a memory leak if it can't find the shaders.
-            this.fbo.close();
+            fbo.close();
 
             // Re-throw the exception.
             throw e;
         }
     }
 
-    public ReadableFramebuffer<ContextType> getFramebuffer()
+    public final ReadableFramebuffer<ContextType> getFramebuffer()
     {
         return fbo;
     }
 
     @Override
-    public Texture2D<ContextType> getPositionTexture()
+    public final Texture2D<ContextType> getPositionTexture()
     {
         return fbo.getColorAttachmentTexture(0);
     }
 
     @Override
-    public Texture2D<ContextType> getNormalTexture()
+    public final Texture2D<ContextType> getNormalTexture()
     {
         return fbo.getColorAttachmentTexture(1);
     }
 
     @Override
-    public Texture2D<ContextType> getTangentTexture()
+    public final Texture2D<ContextType> getTangentTexture()
     {
         return fbo.getColorAttachmentTexture(2);
     }
 
     @Override
-    public void close()
+    public final void close()
     {
-        if (this.fbo != null)
+        if (fbo != null)
         {
-            this.fbo.close();
+            fbo.close();
         }
     }
 
     @Override
-    public ContextType getContext()
+    public final ContextType getContext()
     {
         return context;
     }
 
     @Override
-    public int getWidth()
+    public final int getWidth()
     {
         return fbo.getSizeForRead().width;
     }
 
     @Override
-    public int getHeight()
+    public final int getHeight()
     {
         return fbo.getSizeForRead().height;
     }
 
     @Override
-    public void setupShaderProgram(Program<ContextType> program)
+    public final void setupShaderProgram(Program<ContextType> program)
     {
         program.setTexture("positionTex", getPositionTexture());
         program.setTexture("normalTex", getNormalTexture());
@@ -135,21 +139,21 @@ public class GeometryFramebuffer<ContextType extends Context<ContextType>> imple
     }
 
     @Override
-    public GeometryTextures<ContextType> createViewportCopy(int x, int y, int viewportWidth, int viewportHeight)
+    public final GeometryTextures<ContextType> createViewportCopy(int x, int y, int viewportWidth, int viewportHeight)
     {
         GeometryFramebuffer<ContextType> viewportFBO = createEmpty(context, viewportWidth, viewportHeight);
 
         // Copy positions
         viewportFBO.getFramebuffer().blitColorAttachmentFromFramebuffer(0,
-            this.getFramebuffer().getViewport(x, y, viewportWidth, viewportHeight), 0);
+            getFramebuffer().getViewport(x, y, viewportWidth, viewportHeight), 0);
 
         // Copy normals
         viewportFBO.getFramebuffer().blitColorAttachmentFromFramebuffer(1,
-            this.getFramebuffer().getViewport(x, y, viewportWidth, viewportHeight), 1);
+            getFramebuffer().getViewport(x, y, viewportWidth, viewportHeight), 1);
 
         // Copy tangents
         viewportFBO.getFramebuffer().blitColorAttachmentFromFramebuffer(2,
-            this.getFramebuffer().getViewport(x, y, viewportWidth, viewportHeight), 2);
+            getFramebuffer().getViewport(x, y, viewportWidth, viewportHeight), 2);
 
         // Return the new resource
         return viewportFBO;

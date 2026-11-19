@@ -1,15 +1,21 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.vecmath;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -58,44 +64,44 @@ public class Vector4 implements Iterable<Float>
         this.w = w;
     }
 
-    public Vector4 (float value)
+    public Vector4 (@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") float value)
     {
         this(value, value, value, value);
     }
 
-    public Vector2 getXY()
+    public final Vector2 getXY()
     {
-        return new Vector2(this.x, this.y);
+        return new Vector2(x, y);
     }
 
-    public Vector3 getXYZ()
+    public final Vector3 getXYZ()
     {
-        return new Vector3(this.x, this.y, this.z);
+        return new Vector3(x, y, z);
     }
 
-    public IntVector4 rounded()
+    public final IntVector4 rounded()
     {
-        return new IntVector4(Math.round(this.x), Math.round(this.y), Math.round(this.z), Math.round(this.w));
+        return new IntVector4(Math.round(x), Math.round(y), Math.round(z), Math.round(w));
     }
 
-    public IntVector4 truncated()
+    public final IntVector4 truncated()
     {
-        return new IntVector4((int)this.x, (int)this.y, (int)this.z, (int)this.w);
+        return new IntVector4((int) x, (int) y, (int) z, (int) w);
     }
 
-    public DoubleVector4 asDoublePrecision()
+    public final DoubleVector4 asDoublePrecision()
     {
         return new DoubleVector4(x, y, z, w);
     }
 
     @Override
     @SuppressWarnings("FloatingPointEquality")
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         if (obj instanceof Vector4)
         {
             Vector4 other = (Vector4) obj;
-            return other.x == this.x && other.y == this.y && other.z == this.z && other.w == this.w;
+            return other.x == x && other.y == y && other.z == z && other.w == w;
         }
         else
         {
@@ -104,9 +110,9 @@ public class Vector4 implements Iterable<Float>
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
-        if (this.equals(ZERO))
+        if (equals(ZERO))
         {
             return 0;
         }
@@ -124,13 +130,13 @@ public class Vector4 implements Iterable<Float>
      * @param other The vector to add.
      * @return A new vector that is the mathematical (componentwise) sum of this and 'other'.
      */
-    public Vector4 plus(Vector4 other)
+    public final Vector4 plus(Vector4 other)
     {
         return new Vector4(
-            this.x + other.x,
-            this.y + other.y,
-            this.z + other.z,
-            this.w + other.w
+            x + other.x,
+            y + other.y,
+            z + other.z,
+            w + other.w
         );
     }
 
@@ -139,13 +145,13 @@ public class Vector4 implements Iterable<Float>
      * @param other The vector to add.
      * @return A new vector that is the mathematical (componentwise) subtraction of 'other' from this.
      */
-    public Vector4 minus(Vector4 other)
+    public final Vector4 minus(Vector4 other)
     {
         return new Vector4(
-            this.x - other.x,
-            this.y - other.y,
-            this.z - other.z,
-            this.w - other.w
+            x - other.x,
+            y - other.y,
+            z - other.z,
+            w - other.w
         );
     }
 
@@ -153,9 +159,9 @@ public class Vector4 implements Iterable<Float>
      * Construct a new vector that is the negation of this.
      * @return A new vector with the values (-x, -y, -z, -w)
      */
-    public Vector4 negated()
+    public final Vector4 negated()
     {
-        return new Vector4(-this.x, -this.y, -this.z, -this.w);
+        return new Vector4(-x, -y, -z, -w);
     }
 
     /**
@@ -163,9 +169,9 @@ public class Vector4 implements Iterable<Float>
      * @param s The scaler to multiply by.
      * @return A new vector equal to (s*x, s*y, s*z, s*w)
      */
-    public Vector4 times(float s)
+    public final Vector4 times(float s)
     {
-        return new Vector4(s*this.x, s*this.y, s*this.z, s*this.w);
+        return new Vector4(s* x, s* y, s* z, s* w);
     }
 
     /**
@@ -173,28 +179,28 @@ public class Vector4 implements Iterable<Float>
      * @param s The scaler to divide by.
      * @return A new vector equal to (x/s, y/s, z/s, w/s)
      */
-    public Vector4 dividedBy(float s)
+    public final Vector4 dividedBy(float s)
     {
-        return new Vector4(this.x/s, this.y/s, this.z/s, this.w/s);
+        return new Vector4(x/s, y/s, z/s, w/s);
     }
 
-    public Vector4 times(Vector4 other)
+    public final Vector4 times(Vector4 other)
     {
-        return new Vector4(this.x * other.x, this.y * other.y, this.z * other.z, this.w * other.w);
+        return new Vector4(x * other.x, y * other.y, z * other.z, w * other.w);
     }
 
-    public Vector4 dividedBy(Vector4 other)
+    public final Vector4 dividedBy(Vector4 other)
     {
-        return new Vector4(this.x / other.x, this.y / other.y, this.z / other.z, this.w * other.w);
+        return new Vector4(x / other.x, y / other.y, z / other.z, w * other.w);
     }
     /**
      * Compute the dot product (scaler product) of this vector and another given vector.
      * @param other The vector to use when computing the dot product.
      * @return A scaler value equal to the sum of x1*x2, y1*y2, z1*z2 and w1*w2.
      */
-    public float dot(Vector4 other)
+    public final float dot(Vector4 other)
     {
-        return this.x * other.x + this.y * other.y + this.z * other.z + this.w * other.w;
+        return x * other.x + y * other.y + z * other.z + w * other.w;
     }
 
     /**
@@ -202,13 +208,13 @@ public class Vector4 implements Iterable<Float>
      * @param other The vector to use when computing the outer product.
      * @return The matrix that is the outer product of the vectors.
      */
-    public Matrix4 outerProduct(Vector4 other)
+    public final Matrix4 outerProduct(Vector4 other)
     {
         return Matrix4.fromColumns(
-            new Vector4(this.x * other.x, this.y * other.x, this.z * other.x, this.w * other.x),
-            new Vector4(this.x * other.y, this.y * other.y, this.z * other.y, this.w * other.y),
-            new Vector4(this.x * other.z, this.y * other.z, this.z * other.z, this.w * other.z),
-            new Vector4(this.x * other.w, this.y * other.w, this.z * other.w, this.w * other.w)
+            new Vector4(x * other.x, y * other.x, z * other.x, w * other.x),
+            new Vector4(x * other.y, y * other.y, z * other.y, w * other.y),
+            new Vector4(x * other.z, y * other.z, z * other.z, w * other.z),
+            new Vector4(x * other.w, y * other.w, z * other.w, w * other.w)
         );
     }
 
@@ -216,9 +222,9 @@ public class Vector4 implements Iterable<Float>
      * Compute a scaler value representing the length/magnitude of this vector.
      * @return A scaler value equal to square root of the sum of squares of the components.
      */
-    public float length()
+    public final float length()
     {
-        return (float)Math.sqrt(this.dot(this));
+        return (float)Math.sqrt(dot(this));
     }
 
     /**
@@ -226,9 +232,9 @@ public class Vector4 implements Iterable<Float>
      * @param other The vector to compute the distance between.
      * @return A scaler value equal to the length of the different vector.
      */
-    public float distance(Vector4 other)
+    public final float distance(Vector4 other)
     {
-        return this.minus(other).length();
+        return minus(other).length();
     }
 
     /**
@@ -237,29 +243,29 @@ public class Vector4 implements Iterable<Float>
      * Do not attempt to normalize a zero-length vector.
      * @return A new vector equal to this vector divided by it's length.
      */
-    public Vector4 normalized()
+    public final Vector4 normalized()
     {
-        return this.times(1.0f / this.length());
+        return times(1.0f / length());
     }
     /**
      * Create a new vector with the same direction as this one but with unit
      * magnitude (a length of 1.0).  If this vector has zero length, it will return itself.
      * @return A new vector equal to this vector divided by it's length except in cases of a zero-length vector.
      */
-    public Vector4 normalizedSafe()
+    public final Vector4 normalizedSafe()
     {
-        float l = this.length();
+        float l = length();
         if (l == 0.0f)
         {
             return this;
         }
         else
         {
-            return this.times(1.0f / l);
+            return times(1.0f / l);
         }
     }
 
-    public Vector4 applyOperator(DoubleUnaryOperator operator)
+    public final Vector4 applyOperator(DoubleUnaryOperator operator)
     {
         return new Vector4((float)operator.applyAsDouble(x), (float)operator.applyAsDouble(y), (float)operator.applyAsDouble(z), (float)operator.applyAsDouble(w));
     }
@@ -269,24 +275,19 @@ public class Vector4 implements Iterable<Float>
      * @param operator
      * @return
      */
-    public Vector4 applyOperatorXYZ(DoubleUnaryOperator operator)
+    public final Vector4 applyOperatorXYZ(DoubleUnaryOperator operator)
     {
         return new Vector4((float)operator.applyAsDouble(x), (float)operator.applyAsDouble(y), (float)operator.applyAsDouble(z), w);
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
-        return "Vector4{" +
-            "x=" + x +
-            ", y=" + y +
-            ", z=" + z +
-            ", w=" + w +
-            '}';
+        return String.format("Vector4{x=%s, y=%s, z=%s, w=%s}", x, y, z, w);
     }
 
     @Override
-    public Iterator<Float> iterator()
+    public final @NotNull Iterator<Float> iterator()
     {
         return Arrays.asList(x, y, z, w).iterator();
     }

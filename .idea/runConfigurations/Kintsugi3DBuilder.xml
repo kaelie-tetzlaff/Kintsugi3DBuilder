@@ -2,6 +2,9 @@
   <configuration default="false" name="Kintsugi3DBuilder" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="ALTERNATIVE_JRE_PATH" value="temurin-11" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <envs>
+      <env name="KINTSUGI3D_LOG_LEVEL" value="debug" />
+    </envs>
     <option name="MAIN_CLASS_NAME" value="kintsugi3d.app.Kintsugi3DBuilder" />
     <module name="app" />
     <method v="2">

@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering.components.lit;
@@ -25,19 +29,28 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
     private LightingResources<ContextType> lightingResources;
     private LitContent<ContextType> litContentRoot;
 
-    public LitRoot(ContextType context, SceneModel sceneModel)
+    /**
+     * x
+     * @param context
+     * @param sceneModel
+     * @param litContentRoot Transfers ownership of the lit content to this object
+     */
+    public LitRoot(ContextType context, SceneModel sceneModel, LitContent<ContextType> litContentRoot)
     {
         this.context = context;
-        this.lightingResources = new LightingResources<>(context, sceneModel);
+        lightingResources = new LightingResources<>(context, sceneModel);
+
+        this.litContentRoot = litContentRoot;
+        litContentRoot.initWithLightingResources(lightingResources);
     }
 
-    public LightingResources<ContextType> getLightingResources()
+    public final LightingResources<ContextType> getLightingResources()
     {
         return lightingResources;
     }
 
     @Override
-    public void initialize()
+    public final void initialize()
     {
         // i.e. shadow map, environment map, etc.
         lightingResources.initialize();
@@ -45,28 +58,28 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
     }
 
     @Override
-    public void reloadShaders()
+    public final void reloadShaders()
     {
         lightingResources.reloadShadowShader();
         litContentRoot.reloadShaders();
     }
 
     @Override
-    public void update()
+    public final void update()
     {
         litContentRoot.update();
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         setupForDraw(cameraViewport);
         litContentRoot.draw(framebuffer, cameraViewport);
     }
 
     @Override
-    public void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight,
-                                   CameraViewport cameraViewport)
+    public final void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight,
+                                         CameraViewport cameraViewport)
     {
         setupForDraw(cameraViewport);
         litContentRoot.drawInSubdivisions(framebuffer, subdivWidth, subdivHeight, cameraViewport);
@@ -83,7 +96,7 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (lightingResources != null)
         {
@@ -98,27 +111,16 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
         }
     }
 
-    public RenderedComponent<ContextType> getLitContentRoot()
+    public final RenderedComponent<ContextType> getLitContentRoot()
     {
         return litContentRoot;
-    }
-
-    /**
-     * Transfers ownership of the lit content to this object
-     * Must be called before initialize
-     * @param litContentRoot
-     */
-    public void takeLitContentRoot(LitContent<ContextType> litContentRoot)
-    {
-        this.litContentRoot = litContentRoot;
-        litContentRoot.initWithLightingResources(this.lightingResources);
     }
 
     /**
      * Must be called after initialize
      * @param shadowCaster
      */
-    public void setShadowCaster(ReadonlyVertexBuffer<ContextType> shadowCaster)
+    public final void setShadowCaster(ReadonlyVertexBuffer<ContextType> shadowCaster)
     {
         lightingResources.setShadowCastingPositionBuffer(shadowCaster);
     }

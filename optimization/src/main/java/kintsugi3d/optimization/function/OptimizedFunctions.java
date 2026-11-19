@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.optimization.function;
@@ -14,23 +18,24 @@ package kintsugi3d.optimization.function;
 import kintsugi3d.optimization.MatrixSystem;
 import org.ejml.simple.SimpleMatrix;
 
+import java.util.Arrays;
 import java.util.function.ObjIntConsumer;
 import java.util.stream.IntStream;
 
 /**
  * Class to store the results of optimizing a small set of functions using a larger library of basis functions.
  */
-public class OptimizedFunctions
+public final class OptimizedFunctions
 {
     /**
      * The library of basis function
      */
-    private BasisFunctions basisFunctions;
+    private final BasisFunctions basisFunctions;
 
     /**
      * The solution vectors
      */
-    private SimpleMatrix[] solutions;
+    private final SimpleMatrix[] solutions;
 
     /**
      * Construct using solution vectors
@@ -54,11 +59,7 @@ public class OptimizedFunctions
     public static OptimizedFunctions solveSystem(BasisFunctions basisFunctions, MatrixSystem system)
     {
         SimpleMatrix[] solutions = new SimpleMatrix[system.rhs.length];
-        for (int i = 0; i < solutions.length; i++)
-        {
-            solutions[i] = system.solve(i);
-        }
-
+        Arrays.setAll(solutions, system::solve);
         return new OptimizedFunctions(basisFunctions, solutions);
     }
 
@@ -75,11 +76,7 @@ public class OptimizedFunctions
             BasisFunctions basisFunctions, MatrixSystem system, double toleranceScale)
     {
         SimpleMatrix[] solutions = new SimpleMatrix[system.rhs.length];
-        for (int i = 0; i < solutions.length; i++)
-        {
-            solutions[i] = system.solveNonNegative(i, toleranceScale);
-        }
-
+        Arrays.setAll(solutions, i -> system.solveNonNegative(i, toleranceScale));
         return new OptimizedFunctions(basisFunctions, solutions);
     }
 

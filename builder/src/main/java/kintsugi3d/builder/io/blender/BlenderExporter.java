@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.io.blender;
@@ -20,10 +24,7 @@ import kintsugi3d.builder.util.ApplicationFolders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -34,7 +35,6 @@ public class BlenderExporter extends MaterialExporter
     private static final Logger LOG = LoggerFactory.getLogger(BlenderExporter.class);
     private static final Path SCRIPT_LOCATION = ApplicationFolders.getAdditionalScriptsDirectory();
     private final boolean cycles;
-    private File outputPath;
 
     public BlenderExporter(boolean cycles)
     {
@@ -66,13 +66,13 @@ public class BlenderExporter extends MaterialExporter
     }
 
     @Override
-    protected void postExport()
+    protected final void postExport(File outputDirectory)
     {
-        File model = new File(outputPath, getFilename());
-        File normal = new File(outputPath, getTextureFilename(StandardTexture.NORMAL_MAP.details.name, getTextureFileFormat()));
-        File diffuse = new File(outputPath, getTextureFilename(StandardTexture.DIFFUSE_COLOR.details.name, getTextureFileFormat()));
-        File specular = new File(outputPath, getTextureFilename(StandardTexture.SPECULAR_COLOR.details.name, getTextureFileFormat()));
-        File roughness = new File(outputPath, getTextureFilename(StandardTexture.ROUGHNESS.details.name, getTextureFileFormat()));
+        File model = new File(outputDirectory, getFilename());
+        File normal = new File(outputDirectory, getTextureFilename(StandardTexture.NORMAL_MAP.getDetails().name, getTextureFileFormat()));
+        File diffuse = new File(outputDirectory, getTextureFilename(StandardTexture.DIFFUSE_COLOR.getDetails().name, getTextureFileFormat()));
+        File specular = new File(outputDirectory, getTextureFilename(StandardTexture.SPECULAR_COLOR.getDetails().name, getTextureFileFormat()));
+        File roughness = new File(outputDirectory, getTextureFilename(StandardTexture.ROUGHNESS.getDetails().name, getTextureFileFormat()));
 
         // Command list for the ProcessBuilder
         List<String> command = new ArrayList<>(8);
@@ -88,8 +88,8 @@ public class BlenderExporter extends MaterialExporter
             diffuse.delete();
             specular.delete();
             roughness.delete();
-            throw new RuntimeException(
-                String.format("Can't find Blender, check Application Settings.  Expected location: %s", blenderLocation));
+            throw new UncheckedIOException(new IOException(
+                String.format("Can't find Blender, check Application Settings.  Expected location: %s", blenderLocation)));
         }
 
         command.add(blenderLocation.getPath());
@@ -113,10 +113,10 @@ public class BlenderExporter extends MaterialExporter
             command.add("--use-cycles");
         }
 
-        ProcessBuilder pb = new ProcessBuilder(command);
+        @SuppressWarnings("UseOfProcessBuilder") ProcessBuilder pb = new ProcessBuilder(command);
 
         // Change the working directory of the exporter to the output path
-        pb.directory(outputPath);
+        pb.directory(outputDirectory);
         pb.redirectErrorStream(true);
         try
         {
@@ -129,25 +129,16 @@ public class BlenderExporter extends MaterialExporter
             // If the exporter didn't exit with a 0, an error occurred
             if (process.waitFor() != 0)
             {
-                throw new RuntimeException("Passed files don't match requirements.");
+                throw new IllegalStateException("Blender export script failed.");
             }
         }
         catch (IOException e)
         {
-            throw new RuntimeException("Couldn't open Blender.", e);
+            throw new UncheckedIOException("Couldn't open Blender.", e);
         }
         catch (InterruptedException e)
         {
             LOG.error("Process was interrupted.", e);
         }
-    }
-
-    // Grab the output directory after the super call
-    @Override
-    public void saveTextures(File outputDirectory)
-    {
-        super.saveTextures(outputDirectory);
-
-        outputPath = outputDirectory;
     }
 }

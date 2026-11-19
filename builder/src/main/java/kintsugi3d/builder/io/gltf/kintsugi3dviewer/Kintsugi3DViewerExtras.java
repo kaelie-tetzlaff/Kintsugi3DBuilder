@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.io.gltf.kintsugi3dviewer;
@@ -15,62 +19,62 @@ import de.javagl.jgltf.impl.v2.TextureInfo;
 
 public class Kintsugi3DViewerExtras
 {
-    private TextureInfo diffuseTexture = null;
+    private TextureInfo diffuseTexture;
 
-    private TextureInfo diffuseConstantTexture = null;
+    private TextureInfo diffuseConstantTexture;
 
-    private TextureInfo specularTexture = null;
+    private TextureInfo specularTexture;
 
-    private String basisFunctionsUri = null;
+    private String basisFunctionsUri;
 
-    private SpecularWeights specularWeights = null;
+    private SpecularWeights specularWeights;
 
-    public TextureInfo getSpecularTexture()
+    public final TextureInfo getSpecularTexture()
     {
         return specularTexture;
     }
 
-    public void setSpecularTexture(TextureInfo specularTexture)
+    public final void setSpecularTexture(TextureInfo specularTexture)
     {
         this.specularTexture = specularTexture;
     }
 
-    public String getBasisFunctionsUri()
+    public final String getBasisFunctionsUri()
     {
         return basisFunctionsUri;
     }
 
-    public void setBasisFunctionsUri(String basisFunctionsUri)
+    public final void setBasisFunctionsUri(String basisFunctionsUri)
     {
         this.basisFunctionsUri = basisFunctionsUri;
     }
 
-    public SpecularWeights getSpecularWeights()
+    public final SpecularWeights getSpecularWeights()
     {
         return specularWeights;
     }
 
-    public void setSpecularWeights(SpecularWeights specularWeights)
+    public final void setSpecularWeights(SpecularWeights specularWeights)
     {
         this.specularWeights = specularWeights;
     }
 
-    public TextureInfo getDiffuseTexture()
+    public final TextureInfo getDiffuseTexture()
     {
         return diffuseTexture;
     }
 
-    public void setDiffuseTexture(TextureInfo diffuseTexture)
+    public final void setDiffuseTexture(TextureInfo diffuseTexture)
     {
         this.diffuseTexture = diffuseTexture;
     }
 
-    public TextureInfo getDiffuseConstantTexture()
+    public final TextureInfo getDiffuseConstantTexture()
     {
         return diffuseConstantTexture;
     }
 
-    public void setDiffuseConstantTexture(TextureInfo diffuseConstantTexture)
+    public final void setDiffuseConstantTexture(TextureInfo diffuseConstantTexture)
     {
         this.diffuseConstantTexture = diffuseConstantTexture;
     }

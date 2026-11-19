@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering.components;
@@ -30,29 +34,30 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.IntStream;
 
 public class BaseScene<ContextType extends Context<ContextType>> extends LitContent<ContextType>
 {
     private static final Logger LOG = LoggerFactory.getLogger(BaseScene.class);
 
-    protected final ContextType context;
-    protected final SceneModel sceneModel;
-    protected final SceneViewportModel sceneViewportModel;
-    protected final Collection<RenderedComponent<ContextType>> components = new ArrayList<>(5);
-    protected final ReadonlyImageBasedGraphicsResources<ContextType> resources;
+    private final ContextType context;
+    private final SceneModel sceneModel;
+    private final SceneViewportModel sceneViewportModel;
+    private final Collection<RenderedComponent<ContextType>> components = new ArrayList<>(5);
+    private final ReadonlyImageBasedGraphicsResources<ContextType> resources;
     private RenderingSubject<ContextType> renderingSubject;
 
     public BaseScene(ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel, SceneViewportModel sceneViewportModel)
     {
-        this.context = resources.getContext();
+        context = resources.getContext();
         this.sceneModel = sceneModel;
         this.sceneViewportModel = sceneViewportModel;
         this.resources = resources;
     }
 
     @Override
-    protected void addLitComponents(LightingResources<ContextType> lightingResources)
+    protected final void addLitComponents(LightingResources<ContextType> lightingResources)
     {
         // Backplate and environment must be first since they aren't depth tested.
         components.add(new Backplate<>(context, lightingResources, sceneModel));
@@ -69,7 +74,7 @@ public class BaseScene<ContextType extends Context<ContextType>> extends LitCont
     }
 
     @Override
-    public void initialize()
+    public final void initialize()
     {
         // Run initialization for each additional component
         for (RenderedComponent<ContextType> component : components)
@@ -78,13 +83,13 @@ public class BaseScene<ContextType extends Context<ContextType>> extends LitCont
         }
     }
 
-    public RenderingSubject<ContextType> getSubject()
+    public final RenderingSubject<ContextType> getSubject()
     {
         return renderingSubject;
     }
 
     @Override
-    public void reloadShaders()
+    public final void reloadShaders()
     {
         for (RenderedComponent<ContextType> component : components)
         {
@@ -93,7 +98,7 @@ public class BaseScene<ContextType extends Context<ContextType>> extends LitCont
     }
 
     @Override
-    public void update()
+    public final void update()
     {
         for (RenderedComponent<ContextType> component : components)
         {
@@ -102,7 +107,7 @@ public class BaseScene<ContextType extends Context<ContextType>> extends LitCont
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         if (renderingSubject.getProgram() != null)
         {
@@ -125,7 +130,7 @@ public class BaseScene<ContextType extends Context<ContextType>> extends LitCont
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (renderingSubject != null)
         {
@@ -145,5 +150,35 @@ public class BaseScene<ContextType extends Context<ContextType>> extends LitCont
         }
 
         components.clear();
+    }
+
+    protected final ContextType getContext()
+    {
+        return context;
+    }
+
+    protected final SceneModel getSceneModel()
+    {
+        return sceneModel;
+    }
+
+    protected final SceneViewportModel getSceneViewportModel()
+    {
+        return sceneViewportModel;
+    }
+
+    protected final Collection<RenderedComponent<ContextType>> getComponents()
+    {
+        return Collections.unmodifiableCollection(components);
+    }
+
+    protected final void addComponent(RenderedComponent<ContextType> component)
+    {
+        components.add(component);
+    }
+
+    protected final ReadonlyImageBasedGraphicsResources<ContextType> getResources()
+    {
+        return resources;
     }
 }

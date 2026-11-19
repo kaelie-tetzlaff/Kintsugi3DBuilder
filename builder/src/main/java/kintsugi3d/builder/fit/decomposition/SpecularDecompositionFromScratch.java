@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit.decomposition;
@@ -16,6 +20,7 @@ import kintsugi3d.builder.io.specular.SpecularFitSerializer;
 import kintsugi3d.gl.vecmath.DoubleVector3;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.simple.SimpleMatrix;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.Arrays;
@@ -49,43 +54,50 @@ public class SpecularDecompositionFromScratch extends SpecularDecompositionBase
     }
 
     @Override
-    public MaterialBasis getMaterialBasis()
+    public final MaterialBasis getMaterialBasis()
     {
-        return new OptimizableMaterialBasis();
+        return new OptimizableMaterialBasis(this);
     }
 
-    public void setDiffuseAlbedo(int basisIndex, DoubleVector3 diffuseAlbedo)
+    public final void setDiffuseAlbedo(int basisIndex, DoubleVector3 diffuseAlbedo)
     {
         diffuseAlbedos[basisIndex] = diffuseAlbedo;
     }
 
-    public SimpleMatrix getSpecularRed()
+    public final SimpleMatrix getSpecularRed()
     {
         return specularRed;
     }
 
-    public SimpleMatrix getSpecularGreen()
+    public final SimpleMatrix getSpecularGreen()
     {
         return specularGreen;
     }
 
-    public SimpleMatrix getSpecularBlue()
+    public final SimpleMatrix getSpecularBlue()
     {
         return specularBlue;
     }
 
-    private final class OptimizableMaterialBasis implements MaterialBasis
+    private static class OptimizableMaterialBasis implements MaterialBasis
     {
+        private final SpecularDecompositionFromScratch specularDecomposition;
+
+        OptimizableMaterialBasis(SpecularDecompositionFromScratch specularDecomposition)
+        {
+            this.specularDecomposition = specularDecomposition;
+        }
+
         @Override
-        public Collection<BasisMaterialInfo> getMaterials()
+        public final Collection<BasisMaterialInfo> getMaterials()
         {
             return getIndexableMaterialList();
         }
 
         @Override
-        public List<BasisMaterialInfo> getIndexableMaterialList()
+        public final List<BasisMaterialInfo> getIndexableMaterialList()
         {
-            return IntStream.range(0, this.getEnabledMaterialCount())
+            return IntStream.range(0, getEnabledMaterialCount())
                 .mapToObj(b ->
                     new BasisMaterialInfo()
                     {
@@ -98,7 +110,7 @@ public class SpecularDecompositionFromScratch extends SpecularDecompositionBase
                         @Override
                         public int getResolution()
                         {
-                            return OptimizableMaterialBasis.this.getSpecularResolution();
+                            return getSpecularResolution();
                         }
 
                         @Override
@@ -147,12 +159,12 @@ public class SpecularDecompositionFromScratch extends SpecularDecompositionBase
         }
 
         @Override
-        public BasisMaterialInfo getMaterial(String materialName)
+        public final @Nullable BasisMaterialInfo getMaterial(String materialName)
         {
             try
             {
                 int index = Integer.parseInt(materialName);
-                if (index >= 0 && index < materialCount)
+                if (index >= 0 && index < specularDecomposition.materialCount)
                 {
                     return getIndexableMaterialList().get(index);
                 }
@@ -168,74 +180,74 @@ public class SpecularDecompositionFromScratch extends SpecularDecompositionBase
         }
 
         @Override
-        public int getMaterialCount()
+        public final int getMaterialCount()
         {
-            return materialCount;
+            return specularDecomposition.materialCount;
         }
 
         @Override
-        public int getEnabledMaterialCount()
+        public final int getEnabledMaterialCount()
         {
-            return materialCount;
+            return specularDecomposition.materialCount;
         }
 
         @Override
-        public int getSpecularResolution()
+        public final int getSpecularResolution()
         {
-            return basisResolution;
+            return specularDecomposition.basisResolution;
         }
 
-        DoubleVector3 getDiffuseColor(int b)
+        final DoubleVector3 getDiffuseColor(int b)
         {
-            return diffuseAlbedos[b];
+            return specularDecomposition.diffuseAlbedos[b];
         }
 
-        double evaluateSpecularRed(int b, int m)
+        final double evaluateSpecularRed(int b, int m)
         {
-            return specularRed.get(m, b);
+            return specularDecomposition.specularRed.get(m, b);
         }
 
-        double evaluateSpecularGreen(int b, int m)
+        final double evaluateSpecularGreen(int b, int m)
         {
-            return specularGreen.get(m, b);
+            return specularDecomposition.specularGreen.get(m, b);
         }
 
-        double evaluateSpecularBlue(int b, int m)
+        final double evaluateSpecularBlue(int b, int m)
         {
-            return specularBlue.get(m, b);
-        }
-
-        @Override
-        public void save(File outputDirectory, String filenameOverride)
-        {
-            SpecularFitSerializer.serializeBasisFunctions(basisResolution, this, outputDirectory, filenameOverride);
+            return specularDecomposition.specularBlue.get(m, b);
         }
 
         @Override
-        public MutableMaterialBasis copy()
+        public final void save(File outputDirectory, String filenameOverride)
         {
-            List<double[]> redBasis = IntStream.range(0, materialCount)
+            SpecularFitSerializer.serializeBasisFunctions(specularDecomposition.basisResolution, this, outputDirectory, filenameOverride);
+        }
+
+        @Override
+        public final MutableMaterialBasis copy()
+        {
+            List<double[]> redBasis = IntStream.range(0, specularDecomposition.materialCount)
                 .mapToObj(b ->
-                    IntStream.range(0, basisResolution + 1)
+                    IntStream.range(0, specularDecomposition.basisResolution + 1)
                         .mapToDouble(m -> evaluateSpecularRed(b, m))
                         .toArray())
                 .collect(Collectors.toList());
 
-            List<double[]> greenBasis = IntStream.range(0, materialCount)
+            List<double[]> greenBasis = IntStream.range(0, specularDecomposition.materialCount)
                 .mapToObj(b ->
-                    IntStream.range(0, basisResolution + 1)
+                    IntStream.range(0, specularDecomposition.basisResolution + 1)
                         .mapToDouble(m -> evaluateSpecularGreen(b, m))
                         .toArray())
                 .collect(Collectors.toList());
 
-            List<double[]> blueBasis = IntStream.range(0, materialCount)
+            List<double[]> blueBasis = IntStream.range(0, specularDecomposition.materialCount)
                 .mapToObj(b ->
-                    IntStream.range(0, basisResolution + 1)
+                    IntStream.range(0, specularDecomposition.basisResolution + 1)
                         .mapToDouble(m -> evaluateSpecularBlue(b, m))
                         .toArray())
                 .collect(Collectors.toList());
 
-            return new SimpleMaterialBasis(diffuseAlbedos, redBasis, greenBasis, blueBasis);
+            return new SimpleMaterialBasis(specularDecomposition.diffuseAlbedos, redBasis, greenBasis, blueBasis);
         }
     }
 }

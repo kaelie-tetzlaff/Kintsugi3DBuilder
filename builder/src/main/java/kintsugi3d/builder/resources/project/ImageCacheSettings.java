@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.resources.project;
@@ -22,68 +26,68 @@ public class ImageCacheSettings implements ReadonlyImageCacheSettings
     private int sampledSize;
 
     @Override
-    public File getCacheParentDirectory()
+    public final File getCacheParentDirectory()
     {
         return cacheParentDirectory;
     }
 
     @Override
-    public int getTextureWidth()
+    public final int getTextureWidth()
     {
         return textureWidth;
     }
 
     @Override
-    public int getTextureHeight()
+    public final int getTextureHeight()
     {
         return textureHeight;
     }
 
     @Override
-    public int getTextureSubdiv()
+    public final int getTextureSubdiv()
     {
         return textureSubdiv;
     }
 
     @Override
-    public int getSampledSize()
+    public final int getSampledSize()
     {
         return sampledSize;
     }
 
-    public void setCacheParentDirectory(File cacheParentDirectory)
+    public final void setCacheParentDirectory(File cacheParentDirectory)
     {
         this.cacheParentDirectory = cacheParentDirectory;
     }
 
-    public void setTextureWidth(int textureWidth)
+    public final void setTextureWidth(int textureWidth)
     {
         this.textureWidth = textureWidth;
     }
 
-    public void setTextureHeight(int textureHeight)
+    public final void setTextureHeight(int textureHeight)
     {
         this.textureHeight = textureHeight;
     }
 
-    public void setTextureSubdiv(int textureSubdiv)
+    public final void setTextureSubdiv(int textureSubdiv)
     {
         this.textureSubdiv = textureSubdiv;
     }
 
-    public void setSampledSize(int sampledSize)
+    public final void setSampledSize(int sampledSize)
     {
         this.sampledSize = sampledSize;
     }
 
     @Override
-    public int getBlockStartX(int i)
+    public final int getBlockStartX(int i)
     {
         return (int) Math.round((double) i * (double) textureWidth / (double) textureSubdiv);
     }
 
     @Override
-    public int getBlockStartY(int j)
+    public final int getBlockStartY(int j)
     {
         return (int) Math.round((double) j * (double) textureHeight / (double) textureSubdiv);
     }

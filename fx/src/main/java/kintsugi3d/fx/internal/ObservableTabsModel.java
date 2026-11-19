@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.internal;
@@ -19,6 +23,7 @@ import javafx.collections.ObservableMap;
 import kintsugi3d.builder.state.cards.ProjectDataCard;
 import kintsugi3d.builder.state.cards.ProjectDataCardFactory;
 import kintsugi3d.builder.state.cards.TabsModel;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -67,7 +72,7 @@ public class ObservableTabsModel implements TabsModel
     }
 
     @Override
-    public <T> void addTab(String tabName, ProjectDataCardFactory<T> cardFactory, String path)
+    public final <T> void addTab(String tabName, ProjectDataCardFactory<T> cardFactory, String path)
     {
         ObservableCardsModel<?> newTab = new ObservableCardsModel<>(tabName, path, cardFactory, carouselModel);
         newTab.initialize();
@@ -76,7 +81,7 @@ public class ObservableTabsModel implements TabsModel
     }
 
     @Override
-    public void clearTabs()
+    public final void clearTabs()
     {
         tabs.clear();
 
@@ -88,13 +93,13 @@ public class ObservableTabsModel implements TabsModel
     }
 
     @Override
-    public ObservableCardsModel<?> getTab(String label)
+    public final ObservableCardsModel<?> getTab(String label)
     {
         return tabs.get(label);
     }
 
     @Override
-    public <T> ObservableCardsModel<T> getTab(String label, Class<T> dataClass)
+    public final <T> @Nullable ObservableCardsModel<T> getTab(String label, Class<T> dataClass)
     {
         ObservableCardsModel<?> observableCardsModel = tabs.get(label);
 
@@ -110,43 +115,43 @@ public class ObservableTabsModel implements TabsModel
     }
 
     @Override
-    public Map<String, ObservableCardsModel<?>> getTabsMap()
+    public final Map<String, ObservableCardsModel<?>> getTabsMap()
     {
         return Collections.unmodifiableMap(tabs);
     }
 
-    public Collection<ObservableCardsModel<?>> getAllTabs()
+    public final Collection<ObservableCardsModel<?>> getAllTabs()
     {
         return Collections.unmodifiableCollection(tabs.values());
     }
 
-    public ObservableMap<String, ObservableCardsModel<?>> getObservableTabsMap()
+    public final ObservableMap<String, ObservableCardsModel<?>> getObservableTabsMap()
     {
         //noinspection AssignmentOrReturnOfFieldWithMutableType
         return unmodifiableTabs;
     }
 
-    public ObjectProperty<ObservableCardsModel<?>> activeTabProperty()
+    public final ObjectProperty<ObservableCardsModel<?>> activeTabProperty()
     {
         return activeTab;
     }
 
-    public ObservableCardsModel<?> getActiveTab()
+    public final ObservableCardsModel<?> getActiveTab()
     {
         return activeTab.get();
     }
 
-    public void setActiveTab(ObservableCardsModel<?> activeTab)
+    public final void setActiveTab(ObservableCardsModel<?> activeTab)
     {
         this.activeTab.set(activeTab);
     }
 
-    public ObjectExpression<ProjectDataCard> lastSelectedCardProperty()
+    public final ObjectExpression<ProjectDataCard> lastSelectedCardProperty()
     {
         return lastSelectedCard;
     }
 
-    public ProjectDataCard getLastSelectedCard()
+    public final ProjectDataCard getLastSelectedCard()
     {
         return lastSelectedCard.get();
     }
@@ -155,7 +160,7 @@ public class ObservableTabsModel implements TabsModel
      * Returns the observable list of selected cards across all tabs
      * @return
      */
-    public Collection<ProjectDataCard> getSelectedCards()
+    public final Collection<ProjectDataCard> getSelectedCards()
     {
         return tabs.values().stream()
             .flatMap(tab -> tab.getSelectedCards().stream())

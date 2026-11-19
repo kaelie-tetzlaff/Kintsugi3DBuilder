@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.experience;
@@ -31,11 +35,12 @@ public abstract class ExperienceBase implements Experience
     private Modal modal;
     private JavaFXState state;
 
+    @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     public final void initialize(Window parentWindow, JavaFXState state)
     {
         this.parentWindow = parentWindow;
-        this.modal = new Modal(parentWindow);
+        modal = new Modal(parentWindow);
         this.state = state;
 
         if (state != null)
@@ -55,7 +60,7 @@ public abstract class ExperienceBase implements Experience
     @Override
     public final boolean isOpen()
     {
-        return this.modal.isOpen();
+        return modal.isOpen();
     }
 
     @Override
@@ -114,7 +119,7 @@ public abstract class ExperienceBase implements Experience
     protected final PageFrameController createPagedModal() throws IOException
     {
         PageFrameController frameController = createModal("/fxml/PageFrame.fxml");
-        frameController.setState(getState());
+        frameController.setState(state);
 
         frameController.setPageFactory(loader ->
         {
@@ -185,25 +190,25 @@ public abstract class ExperienceBase implements Experience
      * Handles errors that occur opening this experience (logging them and popping up a dialog window indicating that an error occurred).
      * @param e The exception that occurred.
      */
-    protected void handleError(Exception e)
+    protected final void handleError(Exception e)
     {
         ExceptionHandling.error(MessageFormat.format("An error occurred opening window:\n{0}", getName()), e);
     }
 
     @Override
-    public boolean isInitialized()
+    public final boolean isInitialized()
     {
         return parentWindow != null;
     }
 
     @Override
-    public Window getParentWindow()
+    public final Window getParentWindow()
     {
         return parentWindow;
     }
 
     @Override
-    public Modal getModal()
+    public final Modal getModal()
     {
         return modal;
     }
@@ -212,7 +217,7 @@ public abstract class ExperienceBase implements Experience
      * Gets the state-related data that the experience has access to
      * @return The state object.
      */
-    protected JavaFXState getState()
+    protected final JavaFXState getState()
     {
         return state;
     }

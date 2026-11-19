@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.modals.workflow.tonecalibration;
@@ -39,8 +43,10 @@ import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.viewset.SampledLuminanceEncoding;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
+import kintsugi3d.builder.io.IO;
 import kintsugi3d.builder.io.IOModel;
 import kintsugi3d.builder.io.RecentProjects;
+import kintsugi3d.builder.rendering.Rendering;
 import kintsugi3d.fx.controllers.modals.LiveProjectSettingsManager;
 import kintsugi3d.fx.controllers.paged.NonDataPageControllerBase;
 import kintsugi3d.fx.controllers.sidebar.ImageDetailsController;
@@ -70,7 +76,12 @@ public class EyedropperController extends NonDataPageControllerBase
     @FXML private Pane selectionPane;
 
     @FXML private Rectangle selectionRectangle;
-    @FXML private Rectangle finalSelectRect1, finalSelectRect2, finalSelectRect3, finalSelectRect4, finalSelectRect5, finalSelectRect6;
+    @FXML private Rectangle finalSelectRect1;
+    @FXML private Rectangle finalSelectRect2;
+    @FXML private Rectangle finalSelectRect3;
+    @FXML private Rectangle finalSelectRect4;
+    @FXML private Rectangle finalSelectRect5;
+    @FXML private Rectangle finalSelectRect6;
 
     @FXML private CheckBox useCurveCheckbox;
     @FXML private CheckBox distanceCompensationCheckbox; // inverse-square attenuation
@@ -89,8 +100,6 @@ public class EyedropperController extends NonDataPageControllerBase
     private Button sourceButton;
 
     private List<Rectangle> finalSelectRectangles;
-
-    private List<TextField> colorSelectTxtFields;
 
     private List<Color> selectedColors;
 
@@ -114,7 +123,7 @@ public class EyedropperController extends NonDataPageControllerBase
      * Set to true after the first time the warning about using multiple images for tone calibration has been shown
      * to prevent the warning from appearing every time.
      */
-    private boolean multiImageWarningShown = false;
+    private boolean showMultiImageWarning = true;
 
     private final Map<Button, TextField> textFieldForButton = new HashMap<>(6);
     private final Map<Button, Rectangle> rectangleForButton = new HashMap<>(6);
@@ -122,13 +131,13 @@ public class EyedropperController extends NonDataPageControllerBase
     private final Map<TextField, Rectangle> rectangleForTextField = new HashMap<>(6);
 
     @Override
-    public Region getRootNode()
+    public final Region getRootNode()
     {
         return outerVbox;
     }
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         //Image settings/looks
         imageDetailsController.getDisplayImage().setPreserveRatio(true);
@@ -138,14 +147,6 @@ public class EyedropperController extends NonDataPageControllerBase
         selectionPane.setMouseTransparent(true); //Prevent pane from absorbing clicks
 
         selectedColors = new ArrayList<>(6);
-
-        colorSelectTxtFields = new ArrayList<>(6);
-        colorSelectTxtFields.add(txtField1);
-        colorSelectTxtFields.add(txtField2);
-        colorSelectTxtFields.add(txtField3);
-        colorSelectTxtFields.add(txtField4);
-        colorSelectTxtFields.add(txtField5);
-        colorSelectTxtFields.add(txtField6);
 
         finalSelectRectangles = new ArrayList<>(6);
         finalSelectRectangles.add(finalSelectRect1);
@@ -193,7 +194,7 @@ public class EyedropperController extends NonDataPageControllerBase
     }
 
     @Override
-    public void refresh()
+    public final void refresh()
     {
         projectSettingsManager.refresh(); // for flatfield setting
         // First time opening the page -- get the old values and use them as the starting values.
@@ -202,14 +203,14 @@ public class EyedropperController extends NonDataPageControllerBase
             //initialize txtFields with their respective values
             if (hasValidIOModel())
             {
-                IOModel ioModel = Global.io();
+                IOModel io = Global.io();
 
                 // Initialize from loaded view set (projectSettingsManager will handle flatfieldCorrected)
-                ViewSet viewSet = ioModel.getLoadedViewSet();
+                ViewSet viewSet = io.getLoadedViewSet();
                 useCurveCheckbox.setSelected(viewSet.hasCustomLuminanceEncoding());
 
                 // Refresh the text fields and retrieve their new values.
-                refreshToneValueTextFields(ioModel.getLuminanceEncodingFunction());
+                refreshToneValueTextFields(viewSet.getLuminanceEncoding().getEncodeFunction());
 
                 if (viewSet.hasCustomLuminanceEncoding())
                 {
@@ -272,30 +273,32 @@ public class EyedropperController extends NonDataPageControllerBase
     }
 
     @Override
-    public boolean confirm()
+    public final boolean tryConfirm()
     {
         apply();
         return true;
     }
 
     @Override
-    public boolean cancel()
+    public final boolean tryCancel()
     {
         if (StaticUtilities.confirmCancel())
         {
             projectSettingsManager.cancel(); // for flatfield setting
 
-            IOModel ioModel = Global.io();
-            ioModel.requestLightIntensityCalibration(); // in case "infinite light sources" was toggled
+            IO io = Global.io();
+
+            // in case "infinite light sources" was toggled
+            Rendering.runLater(Global.io().getMainRenderable().getResources()::calibrateLightIntensities);
 
             // revert the tone calibration to what it was when the page was opened.
             if (prevEncodedLuminanceValues != null)
             {
-                ioModel.setTonemapping(LINEAR_LUMINANCE_VALUES, prevEncodedLuminanceValues);
+                io.getLoadedViewSet().setLuminanceEncoding(LINEAR_LUMINANCE_VALUES, prevEncodedLuminanceValues);
             }
             else
             {
-                ioModel.clearTonemapping();
+                io.getLoadedViewSet().clearLuminanceEncoding();
             }
 
             return true;
@@ -634,7 +637,7 @@ public class EyedropperController extends NonDataPageControllerBase
     private void autoApply()
     {
         // Only apply if all fields contain good data (integers) and model is loaded
-        if (areAllFieldsValid() && hasValidIOModel())
+        if (hasValidIOModel())
         {
             apply();
         }
@@ -643,50 +646,51 @@ public class EyedropperController extends NonDataPageControllerBase
     @FXML
     private void apply()
     {
-        IOModel ioModel = Global.io();
+        IO io = Global.io();
 
         // light intensities depend on whether inverse-square attenuation is enabled
-        ioModel.requestLightIntensityCalibration();
+        Rendering.runLater(Global.io().getMainRenderable().getResources()::calibrateLightIntensities);
 
-        if (!useCurveCheckbox.selectedProperty().get())
+        if (useCurveCheckbox.selectedProperty().get())
         {
-            // tone curve is disabled
-            ioModel.clearTonemapping();
-        }
-        else if (areAllFieldsValid() && hasValidIOModel()) // check to see if all text fields contain valid input, and model is loaded
-        {
-            ioModel.setTonemapping(
-                LINEAR_LUMINANCE_VALUES,
-                new byte[]
+            if (hasValidIOModel()) // check to see if all text fields contain valid input, and model is loaded
+            {
+                try
                 {
-                    (byte) Integer.parseInt(txtField1.getText()),
-                    (byte) Integer.parseInt(txtField2.getText()),
-                    (byte) Integer.parseInt(txtField3.getText()),
-                    (byte) Integer.parseInt(txtField4.getText()),
-                    (byte) Integer.parseInt(txtField5.getText()),
-                    (byte) Integer.parseInt(txtField6.getText())
-                });
+                    io.getLoadedViewSet().setLuminanceEncoding(
+                        LINEAR_LUMINANCE_VALUES,
+                        new byte[]
+                        {
+                            (byte) Integer.parseInt(txtField1.getText()),
+                            (byte) Integer.parseInt(txtField2.getText()),
+                            (byte) Integer.parseInt(txtField3.getText()),
+                            (byte) Integer.parseInt(txtField4.getText()),
+                            (byte) Integer.parseInt(txtField5.getText()),
+                            (byte) Integer.parseInt(txtField6.getText())
+                        });
+                }
+                catch (NumberFormatException e)
+                {
+                    applyFailed();
+                }
+            }
+            else
+            {
+                applyFailed();
+            }
         }
         else
         {
-//            Toolkit.getDefaultToolkit().beep();
-            //TODO: PROBABLY CHANGE THIS VERIFICATION METHOD
-            LOG.error("Please fill all fields and load a model before performing tone calibration.");
+            // tone curve is disabled
+            io.getLoadedViewSet().clearLuminanceEncoding();
         }
     }
 
-    private boolean areAllFieldsValid()
+    private static void applyFailed()
     {
-        // only return true if all text fields are filled with good info (integers)
-        for (TextField field : colorSelectTxtFields)
-        {   //TODO: CHECK IF VALS ARE 0-255?
-            if (!field.getText().matches("-?\\d+"))
-            {
-                // regex to check if input is integer
-                return false;
-            }
-        }
-        return true;
+        //            Toolkit.getDefaultToolkit().beep();
+        //TODO: PROBABLY CHANGE THIS VERIFICATION METHOD
+        LOG.error("Please fill all fields and load a model before performing tone calibration.");
     }
 
     @FXML
@@ -738,7 +742,7 @@ public class EyedropperController extends NonDataPageControllerBase
     @FXML
     private void selectImage(ActionEvent actionEvent)
     {
-        if (!multiImageWarningShown)
+        if (showMultiImageWarning)
         {
             Alert alert = new Alert(AlertType.WARNING,
                 "Warning: using multiple images for tone calibration can result in inconsistencies in tone interpretation.  To be used for advanced workflows only.",
@@ -753,14 +757,14 @@ public class EyedropperController extends NonDataPageControllerBase
             else
             {
                 // User confirmed; do not show warning again while this controller is active.
-                multiImageWarningShown = true;
+                showMultiImageWarning = false;
             }
         }
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Image File");
         fileChooser.getExtensionFilters().add(new ExtensionFilter("Image Files", VALID_EXTENSIONS));
-        fileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+        fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
 
         ViewSet viewSet = Global.io().getLoadedViewSet();
         if (viewSet == null)
@@ -797,7 +801,7 @@ public class EyedropperController extends NonDataPageControllerBase
     {
         if (file != null)
         {
-            RecentProjects.setMostRecentDirectory(file.getParentFile());
+            RecentProjects.getInstance().setMostRecentDirectory(file.getParentFile());
             selectedFile.set(new Image(file.toURI().toString()));
             imageDetailsController.setImage(file.getPath());
 
@@ -807,13 +811,11 @@ public class EyedropperController extends NonDataPageControllerBase
         }
     }
 
-    public void reset()
+    public final void reset()
     {
-        IOModel ioModel = Global.io();
-
         // Clear tonemapping and reset text fields to a standard curve
-        ioModel.clearTonemapping();
-        refreshToneValueTextFields(new SampledLuminanceEncoding().encodeFunction);
+        Global.io().getLoadedViewSet().clearLuminanceEncoding();
+        refreshToneValueTextFields(new SampledLuminanceEncoding().getEncodeFunction());
 
         // Disable curve
         useCurveCheckbox.setSelected(false);

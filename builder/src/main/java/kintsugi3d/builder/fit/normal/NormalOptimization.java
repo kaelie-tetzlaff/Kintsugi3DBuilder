@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit.normal;
@@ -106,24 +110,24 @@ public class NormalOptimization<ContextType extends Context<ContextType>> implem
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         estimateNormals.close();
         smoothNormals.close();
     }
 
-    public void finish()
+    public final void finish()
     {
         estimateNormals.close();
         smoothNormals.finish();
     }
 
-    public boolean isNormalRefinementEnabled()
+    public final boolean isNormalRefinementEnabled()
     {
         return normalOptimizationSettings.isNormalRefinementEnabled();
     }
 
-    public void execute(Function<Texture<ContextType>, ReadonlyErrorReport> errorCalculator, double convergenceTolerance)
+    public final void execute(Function<Texture<ContextType>, ReadonlyErrorReport> errorCalculator, double convergenceTolerance)
     {
         if (normalOptimizationSettings.isLevenbergMarquardtEnabled())
         {
@@ -168,12 +172,12 @@ public class NormalOptimization<ContextType extends Context<ContextType>> implem
     }
 
 
-    public Texture2D<ContextType> getNormalMap()
+    public final Texture2D<ContextType> getNormalMap()
     {
         return getNormalMapFBO().getColorAttachmentTexture(0);
     }
 
-    public void saveNormalMapEstimate(File outputDirectory)
+    public final void saveNormalMapEstimate(File outputDirectory)
     {
         try
         {

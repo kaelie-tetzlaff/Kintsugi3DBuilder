@@ -1,21 +1,25 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering.components.lightcalibration;
 
 import kintsugi3d.builder.rendering.CameraViewport;
+import kintsugi3d.builder.rendering.RenderedComponent;
 import kintsugi3d.builder.rendering.SceneModel;
 import kintsugi3d.builder.rendering.SceneViewportModel;
 import kintsugi3d.builder.rendering.components.RenderingSubject;
-import kintsugi3d.builder.rendering.components.snap.ViewSnapContent;
 import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
@@ -25,7 +29,7 @@ import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
 
-public class LightCalibrationContent <ContextType extends Context<ContextType>> extends ViewSnapContent<ContextType>
+public class LightCalibrationContent <ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
     private final ContextType context;
     private final ReadonlyImageBasedGraphicsResources<ContextType> resources;
@@ -37,14 +41,14 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
     public LightCalibrationContent(ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel,
                                    SceneViewportModel sceneViewportModel)
     {
-        this.context = resources.getContext();
+        context = resources.getContext();
         this.resources = resources;
         this.sceneModel = sceneModel;
         this.sceneViewportModel = sceneViewportModel;
     }
 
     @Override
-    public void initialize()
+    public final void initialize()
     {
         // the actual subject for image-based rendering
         // No lighting resources since light calibration is effectively unlit shading
@@ -54,19 +58,19 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
     }
 
     @Override
-    public void reloadShaders()
+    public final void reloadShaders()
     {
         renderingSubject.reloadShaders();
     }
 
     @Override
-    public void update()
+    public final void update()
     {
         renderingSubject.update();
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         Vector3 lightPosition = sceneModel.getSettingsModel().get("currentLightCalibration", Vector2.class).asVector3();
         Matrix4 lightTransform = Matrix4.translate(lightPosition.negated());
@@ -78,7 +82,6 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
 
         Matrix4 lightView = lightTransform.times(cameraViewport.getView());
         Vector3 lightPosWorldSpace = lightView.getUpperLeft3x3().transpose().times(lightView.getColumn(3).getXYZ().negated());
-        Vector3 worldSpaceCamAxis = cameraViewport.getView().getRow(2).getXYZ().normalized().negated(); // camera-space -z axis in world space
         Vector3 worldSpaceUpAxis = cameraViewport.getView().getRow(1).getXYZ();
 
         Vector3 targetPosCamSpace = new Vector3(0, 0, cameraViewport.getView().get(2, 3)); // get z-coordinate of world-space origin in cam-space
@@ -91,10 +94,10 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
         {
             // TODO byte ordering seems to be OS-dependent when setting up this uniform buffer, or perhaps less tolerant of incomplete GLSL types
             int selectedCameraViewIndex = sceneModel.getCameraViewListModel().getSelectedView().getGPUViewIndex();
-            viewIndexBuffer.setData(NativeVectorBufferFactory.getInstance()
+            viewIndexBuffer.setData(NativeVectorBufferFactory
                 .createFromIntArray(false, 4, 1,
                     selectedCameraViewIndex, selectedCameraViewIndex, selectedCameraViewIndex, selectedCameraViewIndex));
-            renderingSubject.overrideViewIndexBuffer(viewIndexBuffer);
+            renderingSubject.setViewIndexBufferOverride(viewIndexBuffer);
 
             // Draw the actual object, without model transformation for light calibration
             renderingSubject.draw(framebuffer, cameraViewport.copyForView(lookAt));
@@ -107,7 +110,7 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (renderingSubject != null)
         {

@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.util;
@@ -16,7 +20,9 @@ import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TextFormatter.Change;
 import kintsugi3d.builder.core.Global;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -99,30 +105,32 @@ public final class StaticUtilities
 
     public static void makeNumeric(TextField textField)
     {
-        textField.setTextFormatter(new TextFormatter<Double>(change ->
+        textField.setTextFormatter(new TextFormatter<Double>(StaticUtilities::validateNumericChange));
+    }
+
+    private static @Nullable Change validateNumericChange(Change change)
+    {
+        if (change.isDeleted() && !change.isReplaced())
         {
-            if (change.isDeleted() && !change.isReplaced())
+            return change;
+        }
+        String text = change.getControlNewText();
+        if (text.isEmpty() || Objects.equals("-", text))
+        {
+            return change;
+        }
+        else
+        {
+            try
             {
+                Double.parseDouble(text);
                 return change;
             }
-            String text = change.getControlNewText();
-            if (text.isEmpty() || Objects.equals("-", text))
+            catch (NumberFormatException e)
             {
-                return change;
+                return null;
             }
-            else
-            {
-                try
-                {
-                    Double.parseDouble(text);
-                    return change;
-                }
-                catch (NumberFormatException e)
-                {
-                    return null;
-                }
-            }
-        }));
+        }
     }
 
     public static void makeClampedInteger(double min, double max, TextField textField)
@@ -147,8 +155,8 @@ public final class StaticUtilities
 
     public static void bindLogScaleToLinear(DoubleProperty logScaleProperty, DoubleProperty linearScaleProperty)
     {
-        logScaleProperty.addListener((b, o, n) -> linearScaleProperty.set(Math.pow(10, n.doubleValue())));
-        linearScaleProperty.addListener((b, o, n) -> logScaleProperty.set(Math.log10(n.doubleValue())));
+        logScaleProperty.addListener((b, o, n) -> linearScaleProperty.set(StrictMath.pow(10, n.doubleValue())));
+        linearScaleProperty.addListener((b, o, n) -> logScaleProperty.set(StrictMath.log10(n.doubleValue())));
     }
 
     public static void makeSquareResolutionComboBox(ComboBox<SquareResolution> comboBox)
@@ -182,18 +190,7 @@ public final class StaticUtilities
 
     private static double clamp(double min, double max, double value)
     {
-        if (value < min)
-        {
-            return min;
-        }
-        else if (value > max)
-        {
-            return max;
-        }
-        else
-        {
-            return value;
-        }
+        return Math.max(min, Math.min(max, value));
     }
 
     public static boolean confirmCancel()

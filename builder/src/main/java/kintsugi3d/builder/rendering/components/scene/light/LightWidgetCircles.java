@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering.components.scene.light;
@@ -40,7 +44,7 @@ public class LightWidgetCircles<ContextType extends Context<ContextType>> extend
     }
 
     @Override
-    protected ProgramObject<ContextType> createProgram() throws IOException
+    protected final ProgramObject<ContextType> createProgram() throws IOException
     {
         return getContext().getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File(new File(new File("shaders"), "common"), "imgspace.vert"))
@@ -49,21 +53,21 @@ public class LightWidgetCircles<ContextType extends Context<ContextType>> extend
     }
 
     @Override
-    protected Map<String, VertexBuffer<ContextType>> createVertexBuffers()
+    protected final Map<String, VertexBuffer<ContextType>> createVertexBuffers()
     {
         return Map.of("position", getContext().createRectangle());
     }
 
-    public void refreshWidgetInfo(LightWidgetInfo[] newWidgetInfo)
+    public final void refreshWidgetInfo(LightWidgetInfo[] newWidgetInfo)
     {
-        this.widgetInfo = newWidgetInfo.clone();
+        widgetInfo = newWidgetInfo.clone();
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
-        if (this.sceneModel.getSettingsModel().getBoolean("relightingEnabled")
-            && this.sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled")
+        if (sceneModel.getSettingsModel().getBoolean("relightingEnabled")
+            && sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled")
             && sceneModel.getSettingsModel().getBoolean("lightWidgetsEnabled"))
         {
             Program<ContextType> circleProgram = getDrawable().program();
@@ -86,26 +90,26 @@ public class LightWidgetCircles<ContextType extends Context<ContextType>> extend
                     circleProgram.setUniform("threshold", 0.005f);
 
                     if (sceneModel.getLightingModel().getLightWidgetModel(i).isAzimuthWidgetVisible() &&
-                        (Math.abs(widgetInfo[i].lightDisplacementWorld.x) > 0.001f || Math.abs(widgetInfo[i].lightDisplacementWorld.z) > 0.001f))
+                        (Math.abs(widgetInfo[i].getLightDisplacementWorld().x) > 0.001f || Math.abs(widgetInfo[i].getLightDisplacementWorld().z) > 0.001f))
                     {
                         // Azimuth circle
                         circleProgram.setUniform("maxAngle",
                             (float) (sceneModel.getLightingModel().getLightWidgetModel(i).isAzimuthWidgetSelected() ?
-                                Math.PI : widgetInfo[i].azimuthArrowRotation));
+                                Math.PI : widgetInfo[i].getAzimuthArrowRotation()));
                         circleProgram.setUniform("objectID",
                             sceneViewportModel.lookupSceneObjectID(String.format(LightWidgets.AZIMUTH_TAG_FORMAT, i)));
                         circleProgram.setUniform("color",
                             new Vector3(sceneModel.getLightingModel().getLightWidgetModel(i).isAzimuthWidgetSelected() ? 1.0f : 0.5f));
                         circleProgram.setUniform("model_view",
                             Matrix4.translate(
-                                    widgetInfo[i].lightCenter
-                                        .plus(widgetInfo[i].azimuthRotationAxis
-                                            .times(widgetInfo[i].widgetDisplacement
-                                                .dot(widgetInfo[i].azimuthRotationAxis))))
+                                    widgetInfo[i].getLightCenter()
+                                        .plus(widgetInfo[i].getAzimuthRotationAxis()
+                                            .times(widgetInfo[i].getWidgetDisplacement()
+                                                .dot(widgetInfo[i].getAzimuthRotationAxis()))))
                                 .times(cameraViewport.getView().getUpperLeft3x3().asMatrix4())
-                                .times(Matrix4.scale(2 * widgetInfo[i].lightDistanceAtInclination))
+                                .times(Matrix4.scale(2 * widgetInfo[i].getLightDistanceAtInclination()))
                                 .times(Matrix4.rotateX(-Math.PI / 2))
-                                .times(Matrix4.rotateZ(widgetInfo[i].azimuth - Math.PI / 2)));
+                                .times(Matrix4.rotateZ(widgetInfo[i].getAzimuth() - Math.PI / 2)));
                         getDrawable().draw(PrimitiveMode.TRIANGLE_FAN, cameraViewport.ofFramebuffer(framebuffer));
                     }
 
@@ -114,18 +118,18 @@ public class LightWidgetCircles<ContextType extends Context<ContextType>> extend
                         // Inclination circle
                         circleProgram.setUniform("maxAngle",
                             (float) (sceneModel.getLightingModel().getLightWidgetModel(i).isInclinationWidgetSelected() ?
-                                Math.PI / 2 : widgetInfo[i].inclinationArrowRotation));
+                                Math.PI / 2 : widgetInfo[i].getInclinationArrowRotation()));
                         circleProgram.setUniform("objectID",
                             sceneViewportModel.lookupSceneObjectID(String.format(LightWidgets.INCLINATION_TAG_FORMAT, i)));
                         circleProgram.setUniform("color",
                             new Vector3(sceneModel.getLightingModel().getLightWidgetModel(i).isInclinationWidgetSelected() ? 1.0f : 0.5f));
                         circleProgram.setUniform("model_view",
-                            Matrix4.translate(widgetInfo[i].lightCenter)
-                                .times(Matrix4.scale(2 * widgetInfo[i].widgetDistance))
-                                .times(widgetInfo[i].widgetTransformation.getUpperLeft3x3()
+                            Matrix4.translate(widgetInfo[i].getLightCenter())
+                                .times(Matrix4.scale(2 * widgetInfo[i].getWidgetDistance()))
+                                .times(widgetInfo[i].getTransformation().getUpperLeft3x3()
                                     .times(Matrix3.rotateY(-Math.PI / 2))
                                     .times(sceneModel.getLightingModel().getLightWidgetModel(i).isInclinationWidgetSelected() ?
-                                        Matrix3.rotateZ(-widgetInfo[i].inclination) : Matrix3.IDENTITY)
+                                        Matrix3.rotateZ(-widgetInfo[i].getInclination()) : Matrix3.IDENTITY)
                                     .asMatrix4()));
                         getDrawable().draw(PrimitiveMode.TRIANGLE_FAN, cameraViewport.ofFramebuffer(framebuffer));
                     }

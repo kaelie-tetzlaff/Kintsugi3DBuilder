@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.interactive;
@@ -31,33 +35,33 @@ public class InteractiveApplication
 
     public InteractiveApplication(EventPollable pollable, Refreshable refreshable)
     {
-        this.pollables = new ArrayList<>(16);
-        this.pollables.add(pollable);
-        this.refreshables = new ArrayList<>(16);
-        this.refreshables.add(refreshable);
+        pollables = new ArrayList<>(16);
+        pollables.add(pollable);
+        refreshables = new ArrayList<>(16);
+        refreshables.add(refreshable);
     }
 
     /**
      * Must be called before run().
      * @param pollable
      */
-    public void addPollable(EventPollable pollable)
+    public final void addPollable(EventPollable pollable)
     {
-        this.pollables.add(pollable);
+        pollables.add(pollable);
     }
 
     /**
      * Must be called before run().
      * @param refreshable
      */
-    public void addRefreshable(Refreshable refreshable)
+    public final void addRefreshable(Refreshable refreshable)
     {
-        this.refreshables.add(refreshable);
+        refreshables.add(refreshable);
     }
 
-    public void run() throws InitializationException
+    public final void run() throws InitializationException
     {
-        for (Refreshable refreshable : this.refreshables)
+        for (Refreshable refreshable : refreshables)
         {
             refreshable.initialize();
         }
@@ -66,17 +70,17 @@ public class InteractiveApplication
         Date timestampA = startTimestamp;
         LOG.info("Main loop started.");
         boolean shouldTerminate = false;
-        int refreshTime = 0;
-        int pollingTime = 0;
+        long refreshTime = 0;
+        long pollingTime = 0;
 
         long lastSecond = startTimestamp.getTime();
         int frames = 0;
 
         while (!shouldTerminate)
         {
-            int frameTime = 0;
+            long frameTime = 0;
 
-            for (Refreshable refreshable : this.refreshables)
+            for (Refreshable refreshable : refreshables)
             {
                 try
                 {
@@ -152,7 +156,7 @@ public class InteractiveApplication
         LOG.info("Time spent polling for events: {} milliseconds", pollingTime);
         LOG.info("Time spent on refreshes: {} milliseconds", refreshTime);
 
-        for (Refreshable refreshable : this.refreshables)
+        for (Refreshable refreshable : refreshables)
         {
             try
             {
@@ -278,12 +282,12 @@ public class InteractiveApplication
         }
     }
 
-    public double getFPSCap()
+    public final double getFPSCap()
     {
         return fpsCap;
     }
 
-    public void setFPSCap(double fpsCap)
+    public final void setFPSCap(double fpsCap)
     {
         this.fpsCap = fpsCap;
     }

@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering;
@@ -39,8 +43,8 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
 
     private final LightingResources<ContextType> lightingResources;
 
-    protected final ReadonlyImageBasedGraphicsResources<ContextType> resources;
-    protected final SceneModel sceneModel;
+    private final ReadonlyImageBasedGraphicsResources<ContextType> resources;
+    private final SceneModel sceneModel;
 
     private boolean lightCalibrationMode = false;
 
@@ -67,13 +71,13 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
 
 
     @Override
-    protected ProgramObject<ContextType> createProgram() throws IOException
+    protected final ProgramObject<ContextType> createProgram() throws IOException
     {
         return loadMainProgram(getPreprocessorDefines());
     }
 
     @Override
-    public void update()
+    public final void update()
     {
         if (getDrawable() != null && getDrawable().program() != null)
         {
@@ -102,7 +106,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         }
     }
 
-    public void useFragmentShader(File fragmentShaderFile)
+    public final void useFragmentShader(@SuppressWarnings("ParameterHidesMemberVariable") File fragmentShaderFile)
     {
         this.fragmentShaderFile = fragmentShaderFile;
         reloadShaders();
@@ -110,12 +114,12 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
 
     public final File getFragmentShaderFile()
     {
-        return this.fragmentShaderFile;
+        return fragmentShaderFile;
     }
 
     private ProgramObject<ContextType> loadMainProgram(Map<String, Optional<Object>> defineMap) throws IOException
     {
-        return this.getProgramBuilder(defineMap)
+        return getProgramBuilder(defineMap)
             .define("SPOTLIGHTS_ENABLED", true)
             .addShader(ShaderType.VERTEX, new File("shaders/common/imgspace.vert"))
             .addShader(ShaderType.FRAGMENT, fragmentShaderFile)
@@ -173,20 +177,20 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
             defineMap.put("VIEW_COUNT", Optional.of(1));
         }
 
-        if (this.sceneModel.getSettingsModel() != null)
+        if (sceneModel.getSettingsModel() != null)
         {
             defineMap.put("PHYSICALLY_BASED_MASKING_SHADOWING",
-                Optional.of(this.sceneModel.getSettingsModel().getBoolean("pbrGeometricAttenuationEnabled")));
-            defineMap.put("FRESNEL_EFFECT_ENABLED", Optional.of(this.sceneModel.getSettingsModel().getBoolean("fresnelEnabled")));
-            defineMap.put("SHADOWS_ENABLED", Optional.of(this.sceneModel.getSettingsModel().getBoolean("shadowsEnabled")));
+                Optional.of(sceneModel.getSettingsModel().getBoolean("pbrGeometricAttenuationEnabled")));
+            defineMap.put("FRESNEL_EFFECT_ENABLED", Optional.of(sceneModel.getSettingsModel().getBoolean("fresnelEnabled")));
+            defineMap.put("SHADOWS_ENABLED", Optional.of(sceneModel.getSettingsModel().getBoolean("shadowsEnabled")));
 
-            defineMap.put("BUEHLER_ALGORITHM", Optional.of(this.sceneModel.getSettingsModel().getBoolean("buehlerAlgorithm")));
-            defineMap.put("SORTING_SAMPLE_COUNT", Optional.of(this.sceneModel.getSettingsModel().getInt("buehlerViewCount")));
-            defineMap.put("RELIGHTING_ENABLED", Optional.of(this.sceneModel.getSettingsModel().getBoolean("relightingEnabled")
-                && lightingResources != null && this.sceneModel.getLightingModel() != null));
+            defineMap.put("BUEHLER_ALGORITHM", Optional.of(sceneModel.getSettingsModel().getBoolean("buehlerAlgorithm")));
+            defineMap.put("SORTING_SAMPLE_COUNT", Optional.of(sceneModel.getSettingsModel().getInt("buehlerViewCount")));
+            defineMap.put("RELIGHTING_ENABLED", Optional.of(sceneModel.getSettingsModel().getBoolean("relightingEnabled")
+                && lightingResources != null && sceneModel.getLightingModel() != null));
 
-            if (this.sceneModel.getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM
-                && !this.sceneModel.getSettingsModel().getBoolean("relightingEnabled") && !lightCalibrationMode)
+            if (sceneModel.getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM
+                && !sceneModel.getSettingsModel().getBoolean("relightingEnabled") && !lightCalibrationMode)
             {
                 // Disable visibility / shadow test if weight mode is "uniform" and relighting is disabled.
                 defineMap.put("VISIBILITY_TEST_ENABLED", Optional.of(false));
@@ -200,11 +204,11 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
             }
 
             defineMap.put("PRECOMPUTED_VIEW_WEIGHTS_ENABLED",
-                Optional.of(!this.sceneModel.getSettingsModel().getBoolean("relightingEnabled")
+                Optional.of(!sceneModel.getSettingsModel().getBoolean("relightingEnabled")
                         && !lightCalibrationMode
-                    && this.sceneModel.getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM));
+                    && sceneModel.getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM));
 
-            if (this.sceneModel.getLightingModel() != null && this.sceneModel.getSettingsModel().getBoolean("relightingEnabled")
+            if (sceneModel.getLightingModel() != null && sceneModel.getSettingsModel().getBoolean("relightingEnabled")
                 && lightingResources != null)
             {
                 defineMap.put("VIRTUAL_LIGHT_COUNT", Optional.of(sceneModel.getLightingModel().getLightCount()));
@@ -221,12 +225,12 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         return defineMap;
     }
 
-    protected void setupShader(CameraViewport cameraViewport)
+    protected final void setupShader(CameraViewport cameraViewport)
     {
         setupShader(cameraViewport, sceneModel.getFullModelMatrix());
     }
 
-    protected void setupShader(CameraViewport cameraViewport, Matrix4 model)
+    protected final void setupShader(CameraViewport cameraViewport, Matrix4 model)
     {
         setupUnlit(model);
 
@@ -253,11 +257,13 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         Matrix4 modelView = cameraViewport.getView().times(model);
         setupModelView(getDrawable().program(), modelView);
 
+        setupCustom(getDrawable().program(), modelView);
+
         getDrawable().program().setUniform("projection", cameraViewport.getViewportProjection());
         getDrawable().program().setUniform("fullProjection", cameraViewport.getFullProjection());
     }
 
-    protected void setupModelView(Program<ContextType> p, Matrix4 modelView)
+    protected final void setupModelView(Program<ContextType> p, Matrix4 modelView)
     {
         p.setUniform("model_view", modelView);
         p.setUniform("viewPos", modelView.quickInverse(0.01f).getColumn(3).getXYZ());
@@ -278,7 +284,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         program.setUniform(String.format("lightOrientationVirtual[%d]", lightIndex),
                 lightMatrixInverse.times(new Vector4(0.0f, 0.0f, -1.0f, 0.0f)).getXYZ().normalized());
         program.setUniform(String.format("lightSpotSizeVirtual[%d]", lightIndex),
-                (float)Math.sin(sceneModel.getLightingModel().getLightPrototype(lightIndex).getSpotSize()));
+                (float) StrictMath.sin(sceneModel.getLightingModel().getLightPrototype(lightIndex).getSpotSize()));
         program.setUniform(String.format("lightSpotTaperVirtual[%d]", lightIndex), sceneModel.getLightingModel().getLightPrototype(lightIndex).getSpotTaper());
     }
 
@@ -286,10 +292,10 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
     {
         Program<ContextType> program = getDrawable().program();
 
-        this.resources.setupShaderProgram(program);
+        resources.setupShaderProgram(program);
 
-        program.setUniform("weightExponent", this.sceneModel.getSettingsModel().getFloat("weightExponent"));
-        program.setUniform("isotropyFactor", this.sceneModel.getSettingsModel().getFloat("isotropyFactor"));
+        program.setUniform("weightExponent", sceneModel.getSettingsModel().getFloat("weightExponent"));
+        program.setUniform("isotropyFactor", sceneModel.getSettingsModel().getFloat("isotropyFactor"));
 
         if (lightingResources != null)
         {
@@ -307,11 +313,11 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
             program.setTexture("environmentMap", lightingResources.getEnvironmentMap());
             program.setUniform("environmentMipMapLevel",
                 Math.max(0, Math.min(lightingResources.getEnvironmentMap().getMipmapLevelCount() - 1,
-                    this.sceneModel.getLightingModel().getEnvironmentMapFilteringBias()
+                    sceneModel.getLightingModel().getEnvironmentMapFilteringBias()
                         + (float)(0.5 *
-                        Math.log(6 * (double)lightingResources.getEnvironmentMap().getFaceSize() * (double)lightingResources.getEnvironmentMap().getFaceSize()
+                        StrictMath.log(6 * (double)lightingResources.getEnvironmentMap().getFaceSize() * (double)lightingResources.getEnvironmentMap().getFaceSize()
                             / (double) resources.getViewSet().getEnabledViewCount() )
-                        / Math.log(2.0)))));
+                        / StrictMath.log(2.0)))));
             program.setUniform("diffuseEnvironmentMipMapLevel", lightingResources.getEnvironmentMap().getMipmapLevelCount() - 1);
 
             Matrix4 envMapMatrix = sceneModel.getEnvironmentMapMatrix(model);
@@ -323,18 +329,36 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         program.setUniform("ambientColor", sceneModel.getLightingModel().getAmbientLightColor().applyOperator(SRGB::toLinear));
     }
 
-    public boolean isLightCalibrationMode()
+    /**
+     * Override to inject additional custom setup for a component.
+     */
+    @SuppressWarnings("NoopMethodInAbstractClass")
+    protected void setupCustom(Program<ContextType> program, Matrix4 modelView)
+    {
+    }
+
+    public final boolean isLightCalibrationMode()
     {
         return lightCalibrationMode;
     }
 
-    public void setLightCalibrationMode(boolean lightCalibrationMode)
+    public final void setLightCalibrationMode(boolean lightCalibrationMode)
     {
         this.lightCalibrationMode = lightCalibrationMode;
     }
 
-    public void setExtraFragmentShaderDefinesFactory(Supplier<Map<String, Optional<Object>>> fragmentShaderDefinesFactory)
+    public final void setExtraFragmentShaderDefinesFactory(Supplier<Map<String, Optional<Object>>> fragmentShaderDefinesFactory)
     {
         this.fragmentShaderDefinesFactory = fragmentShaderDefinesFactory;
+    }
+
+    protected final ReadonlyImageBasedGraphicsResources<ContextType> getResources()
+    {
+        return resources;
+    }
+
+    protected final SceneModel getSceneModel()
+    {
+        return sceneModel;
     }
 }

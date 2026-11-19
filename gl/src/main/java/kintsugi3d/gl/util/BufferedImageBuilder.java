@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.util;
@@ -33,7 +37,8 @@ public class BufferedImageBuilder
         return new BufferedImageBuilder();
     }
 
-    public BufferedImageBuilder setDataFromArray(int[] data, int width, int height)
+    @SuppressWarnings({"AssignmentOrReturnOfFieldWithMutableType", "ParameterHidesMemberVariable"})
+    public final BufferedImageBuilder setDataFromArray(int[] data, int width, int height)
     {
         this.data = data;
         this.width = width;
@@ -41,16 +46,16 @@ public class BufferedImageBuilder
         return this;
     }
 
-    public BufferedImageBuilder loadDataFromFile(File file) throws IOException
+    public final BufferedImageBuilder loadDataFromFile(File file) throws IOException
     {
         BufferedImage img = ImageHelper.read(file).getBufferedImage();
-        this.width = img.getWidth();
-        this.height = img.getHeight();
-        this.data = img.getRGB(0, 0, width, height, null, 0, width);
+        width = img.getWidth();
+        height = img.getHeight();
+        data = img.getRGB(0, 0, width, height, null, 0, width);
         return this;
     }
 
-    public BufferedImageBuilder flipVertical()
+    public final BufferedImageBuilder flipVertical()
     {
         for (int y = 0; y < height / 2; y++)
         {
@@ -65,18 +70,18 @@ public class BufferedImageBuilder
         return this;
     }
 
-    public BufferedImageBuilder setBufferedImageType(int bufferedImageType)
+    public final BufferedImageBuilder setBufferedImageType(int bufferedImageType)
     {
         this.bufferedImageType = bufferedImageType;
         return this;
     }
 
-    public BufferedImageBuilder tonemap(Function<IntVector4, IntVector4> mapper)
+    public final BufferedImageBuilder tonemap(Function<IntVector4, IntVector4> mapper)
     {
         return tonemap((color, index) -> mapper.apply(color));
     }
 
-    public BufferedImageBuilder tonemap(BiFunction<IntVector4, Integer, IntVector4> mapper)
+    public final BufferedImageBuilder tonemap(BiFunction<IntVector4, Integer, IntVector4> mapper)
     {
         RenderedImage test = new BufferedImage(1, 1, bufferedImageType); // need a BufferedImage to convert imageType to ColorModel.
         ColorModel colorModel = test.getColorModel();
@@ -95,7 +100,7 @@ public class BufferedImageBuilder
         return this;
     }
 
-    public BufferedImage create()
+    public final BufferedImage create()
     {
         BufferedImage img = new BufferedImage(width, height, bufferedImageType);
         img.setRGB(0, 0, width, height, data, 0, width);

@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.modals.workflow.tonecalibration;
@@ -56,13 +60,13 @@ public class SelectToneCalibrationImageController extends NonDataPageControllerB
     }
 
     @Override
-    public Region getRootNode()
+    public final Region getRootNode()
     {
         return rootPane;
     }
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         buttonGroup.getToggles().add(primaryViewImageButton);
         buttonGroup.getToggles().add(previousImageButton);
@@ -87,11 +91,11 @@ public class SelectToneCalibrationImageController extends NonDataPageControllerB
         selectImageFileLabel.visibleProperty().bind(selectImageFileButton.selectedProperty()
             .or(previousImageButton.selectedProperty().and(selectedImageFile.isNotNull())));
 
-        this.getCanAdvanceObservable().bind(buttonGroup.selectedToggleProperty().isNotNull());
+        getCanAdvanceObservable().bind(buttonGroup.selectedToggleProperty().isNotNull());
     }
 
     @Override
-    public void refresh()
+    public final void refresh()
     {
         if (hasPreviousColorCheckerImage())
         {
@@ -118,7 +122,7 @@ public class SelectToneCalibrationImageController extends NonDataPageControllerB
     }
 
     @Override
-    public boolean advance()
+    public final boolean tryAdvance()
     {
         ViewSet viewSet = Global.io().validateRenderable().getLoadedViewSet();
 
@@ -183,7 +187,7 @@ public class SelectToneCalibrationImageController extends NonDataPageControllerB
         return true;
     }
 
-    private void selectImageFileAction(ActionEvent event)
+    private void selectImageFileAction(ActionEvent ignoredEvent)
     {
         // Don't show file chooser when deselecting
         if (!selectImageFileButton.isSelected())

@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.multithread;
@@ -29,31 +33,31 @@ public class SynchronizedTabsModel implements TabsModel
     }
 
     @Override
-    public <T> void addTab(String tabName, ProjectDataCardFactory<T> cardFactory, String path)
+    public final <T> void addTab(String tabName, ProjectDataCardFactory<T> cardFactory, String path)
     {
         Platform.runLater(() -> base.addTab(tabName, cardFactory, path));
     }
 
     @Override
-    public void clearTabs()
+    public final void clearTabs()
     {
         Platform.runLater(base::clearTabs);
     }
 
     @Override
-    public CardsModel<?> getTab(String label)
+    public final CardsModel<?> getTab(String label)
     {
         return new SynchronizedCardsModel<>(base.getTab(label));
     }
 
     @Override
-    public <T> CardsModel<T> getTab(String label, Class<T> dataClass)
+    public final <T> CardsModel<T> getTab(String label, Class<T> dataClass)
     {
         return new SynchronizedCardsModel<>(base.getTab(label, dataClass));
     }
 
     @Override
-    public Map<String, CardsModel<?>> getTabsMap()
+    public final Map<String, CardsModel<?>> getTabsMap()
     {
         Map<String, CardsModel<?>> wrapped = new LinkedHashMap<>(4);
 

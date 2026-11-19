@@ -1,44 +1,53 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.builders.framebuffer;
 
-public abstract class AttachmentSpec
+public class AttachmentSpec
 {
     private int multisamples = 1;
     private boolean fixedMultisampleLocations = true;
     private boolean mipmapsEnabled = false;
     private boolean linearFilteringEnabled = false;
 
-    public int getMultisamples()
+    protected AttachmentSpec()
+    {
+    }
+
+    public final int getMultisamples()
     {
         return multisamples;
     }
 
-    public boolean areMultisampleLocationsFixed()
+    public final boolean areMultisampleLocationsFixed()
     {
         return fixedMultisampleLocations;
     }
 
-    public boolean areMipmapsEnabled()
+    public final boolean areMipmapsEnabled()
     {
         return mipmapsEnabled;
     }
 
-    public boolean isLinearFilteringEnabled()
+    public final boolean isLinearFilteringEnabled()
     {
         return linearFilteringEnabled;
     }
 
-    public AttachmentSpec setMultisamples(int samples, boolean fixedSampleLocations)
+    @SuppressWarnings("DesignForExtension")
+    AttachmentSpec setMultisamples(int samples, boolean fixedSampleLocations)
     {
         // TODO should this be a property of the framebuffer object builder?
         // Having different number of samples per attachment is not allowed.
@@ -47,13 +56,15 @@ public abstract class AttachmentSpec
         return this;
     }
 
-    public AttachmentSpec setMipmapsEnabled(boolean enabled)
+    @SuppressWarnings("DesignForExtension")
+    AttachmentSpec setMipmapsEnabled(boolean enabled)
     {
         mipmapsEnabled = enabled;
         return this;
     }
 
-    public AttachmentSpec setLinearFilteringEnabled(boolean enabled)
+    @SuppressWarnings("DesignForExtension")
+    AttachmentSpec setLinearFilteringEnabled(boolean enabled)
     {
         linearFilteringEnabled = enabled;
         return this;

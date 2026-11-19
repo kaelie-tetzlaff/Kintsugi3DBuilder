@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering.components;
@@ -24,6 +28,7 @@ import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.ShadingParameterMode;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.Map;
@@ -40,54 +45,52 @@ public class RenderingSubject<ContextType extends Context<ContextType>> extends 
     }
 
     @Override
-    protected Map<String, VertexBuffer<ContextType>> createVertexBuffers()
+    protected final Map<String, VertexBuffer<ContextType>> createVertexBuffers()
     {
         // Vertex buffers come from the GraphicsResources and don't need to be created.
         return Collections.emptyMap();
     }
 
     @Override
-    protected Drawable<ContextType> createDrawable(Program<ContextType> program)
+    protected final @NotNull Drawable<ContextType> createDrawable(Program<ContextType> program)
     {
         // Use GraphicsResources to create a drawable with all the available vertex buffers.
-        return resources.createDrawable(program);
+        return getResources().createDrawable(program);
     }
 
     private ReadonlyNativeVectorBuffer generateViewWeights(Matrix4 targetView)
     {
         float[] viewWeights = //new PowerViewWeightGenerator(settings.getWeightExponent())
             new KNNViewWeightGenerator(4)
-                .generateWeights(resources, resources.getViewSet().getEnabledViews(), targetView);
+                .generateWeights(getResources(), getResources().getViewSet().getEnabledViews(), targetView);
 
-        return NativeVectorBufferFactory.getInstance().createFromFloatArray(1, viewWeights.length, viewWeights);
+        return NativeVectorBufferFactory.createFromFloatArray(1, viewWeights.length, viewWeights);
     }
 
     @Override
-    protected void setupModelView(Program<ContextType> p, Matrix4 modelView)
+    protected final void setupCustom(Program<ContextType> p, Matrix4 modelView)
     {
-        super.setupModelView(p, modelView);
-
-        if (!this.sceneModel.getSettingsModel().getBoolean("relightingEnabled")
+        if (!getSceneModel().getSettingsModel().getBoolean("relightingEnabled")
             && !isLightCalibrationMode()
-            && this.sceneModel.getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM)
+            && getSceneModel().getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM)
         {
             if (weightBuffer == null)
             {
                 weightBuffer = resource(getContext().createUniformBuffer());
             }
 
-            weightBuffer.setData(this.generateViewWeights(modelView)); // TODO modelView might not be the right matrix?
+            weightBuffer.setData(generateViewWeights(modelView)); // TODO modelView might not be the right matrix?
             p.setUniformBuffer("ViewWeights", weightBuffer);
         }
     }
 
-    public void overrideViewIndexBuffer(UniformBuffer<ContextType> viewIndexBufferOverride)
+    public final void setViewIndexBufferOverride(UniformBuffer<ContextType> viewIndexBufferOverride)
     {
         this.viewIndexBufferOverride = viewIndexBufferOverride;
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         getContext().getState().disableBackFaceCulling();
 

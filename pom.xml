@@ -1,12 +1,16 @@
 <!--
-  ~ Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+  ~ Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+  ~                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
   ~ Copyright (c) 2019 The Regents of the University of Minnesota
   ~
   ~ Licensed under GPLv3
   ~ ( http://www.gnu.org/licenses/gpl-3.0.html )
   ~
-  ~ This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-  ~ This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+  ~ This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+  ~
+  ~ This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+  ~ of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -94,6 +98,40 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Check that all dependencies have acceptable licenses -->
+            <plugin>
+                <groupId>org.honton.chas</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>0.0.6</version>
+                <configuration>
+                    <!-- Use OSI widely-used licenses (includes GPL, LGPL, Apache, MIT, BSD, etc.) -->
+                    <acceptableLicenseResources>osi-widely-used</acceptableLicenseResources>
+                    <!-- Additional license names not covered by osi-widely-used -->
+                    <acceptableLicenses>
+                        <license>
+                            <name>MIT X11 License</name>
+                        </license>
+                        <license>
+                            <name>GPLv2\+CE</name>
+                        </license>
+                    </acceptableLicenses>
+                    <!-- Only check non-test scopes -->
+                    <scopes>compile,runtime,provided</scopes>
+                    <!-- Exclude our own modules from third-party license checks -->
+                    <excludes>
+                        <exclude>Kintsugi3D:*</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>check-dependency-licenses</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>compliance</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- Delete test-output on initialize and clean, and also remove bin/ on clean. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -150,6 +188,11 @@
         <release-basename>Kintsugi3DBuilder</release-basename>
         <!-- Define skipTests explicitly so that it can be used by test runners other than Surefire. -->
         <skipTests>false</skipTests>
+        <!-- Defaults to suppress errors; should be set by profile -->
+        <jre.os>unknown</jre.os>
+        <jre.arch>unknown</jre.arch>
+        <viewer.os>unknown</viewer.os>
+        <usdz-exporter.os>unknown</usdz-exporter.os>
     </properties>
     <profiles>
         <profile>
@@ -233,7 +276,7 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.13.2</version>
-            <scope>compile</scope>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>

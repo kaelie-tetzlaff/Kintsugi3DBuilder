@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.renderexport.resample;
@@ -37,14 +41,14 @@ public class ResampleRequest implements ProgressMonitoredImageBasedGraphicsReque
     
     public ResampleRequest(int width, int height, File targetVSETFile, File exportPath)
     {
-        this.resampleWidth = width;
-        this.resampleHeight = height;
-        this.resampleVSETFile = targetVSETFile;
-        this.resampleExportPath = exportPath;
+        resampleWidth = width;
+        resampleHeight = height;
+        resampleVSETFile = targetVSETFile;
+        resampleExportPath = exportPath;
     }
 
     @Override
-    public <ContextType extends Context<ContextType>> void executeRequest(ImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor) throws IOException, UserCancellationException
+    public final <ContextType extends Context<ContextType>> void executeRequest(ImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor) throws IOException, UserCancellationException
     {
         ReadonlyViewSet targetViewSet = ViewSetReaderFromVSET.getInstance().readFromFile(resampleVSETFile).finish();
 
@@ -75,7 +79,7 @@ public class ResampleRequest implements ProgressMonitoredImageBasedGraphicsReque
                 renderable.draw(framebuffer, view.getCameraPose(), view.getProjectionMatrix());
 
                 File exportFile = new File(resampleExportPath,
-                    ImageFinder.getInstance().getImageFileNameWithExtension(view.getImageFile().getName(), "png"));
+                    ImageFinder.getImageFileNameWithExtension(view.getImageFile().getName(), "png"));
 
                 exportFile.getParentFile().mkdirs();
                 framebuffer.getTextureReaderForColorAttachment(0).saveToFile("PNG", exportFile);

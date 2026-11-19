@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.preferences;
@@ -24,13 +28,13 @@ import java.util.List;
 
 public final class GlobalUserPreferencesManager
 {
-    private static final Logger LOG = LoggerFactory.getLogger(GlobalUserPreferencesManager.class);
-
     private static final GlobalUserPreferencesManager INSTANCE = new GlobalUserPreferencesManager();
     private final UserPreferencesSerializer serializer = new JacksonUserPreferencesSerializer();
 
+    // IMPORTANT: Don't add a static logger to this class otherwise it will prevent the log directories from being set correcftly.
+
     private UserPreferencesModel preferencesModel;
-    private boolean modelLoaded = false;
+    private boolean needsReadFromSerializer = true;
 
     private GlobalUserPreferencesManager() {}
 
@@ -41,24 +45,27 @@ public final class GlobalUserPreferencesManager
 
     public void logStartupExceptions()
     {
+        // Use a lazy logger to avoid triggering Log4j2 initialization during static class loading.
+        Logger log = LoggerFactory.getLogger(GlobalUserPreferencesManager.class);
+
         // Log any exceptions that may have occurred while loading the log file directory from preferences
         List<Exception> startupExceptions = getSerializerStartupExceptions();
         for (Exception e : startupExceptions)
         {
-            LOG.error("A user preferences exception occurred during pre-logger application startup", e);
+            log.error("A user preferences exception occurred during pre-logger application startup", e);
         }
 
         if (!startupExceptions.isEmpty())
         {
-            LOG.warn("Exceptions occurred while attempting to read the user preferences file, and the default preferences were likely restored.");
+            log.warn("Exceptions occurred while attempting to read the user preferences file, and the default preferences were likely restored.");
         }
     }
 
     public UserPreferencesModel getPreferences()
     {
-        if (!modelLoaded)
+        if (needsReadFromSerializer)
         {
-            rollback();
+            readFromSerializer();
         }
 
         return preferencesModel;
@@ -66,7 +73,7 @@ public final class GlobalUserPreferencesManager
 
     public void setPreferences(UserPreferencesModel model)
     {
-        this.preferencesModel = model;
+        preferencesModel = model;
     }
 
     public List<Exception> getSerializerStartupExceptions()
@@ -81,7 +88,7 @@ public final class GlobalUserPreferencesManager
      */
     public void load(LoadOptionsModel loadOptionsModel, GeneralSettingsModel settingsModel)
     {
-        rollback();
+        readFromSerializer();
         inject(loadOptionsModel, settingsModel);
     }
 
@@ -99,7 +106,7 @@ public final class GlobalUserPreferencesManager
     private void inject(LoadOptionsModel loadOptionsModel, GeneralSettingsModel settingsModel)
     {
         loadOptionsModel.copyFrom(preferencesModel.getLoadOptions());
-        settingsModel.copyFrom(preferencesModel.getSettings());
+        settingsModel.copyAllFrom(preferencesModel.getSettings());
     }
 
     private void collect(LoadOptionsModel loadOptionsModel, GeneralSettingsModel settingsModel)
@@ -113,15 +120,15 @@ public final class GlobalUserPreferencesManager
         serializer.writeUserPreferences(preferencesModel);
     }
 
-    private void rollback()
+    private void readFromSerializer()
     {
         preferencesModel = serializer.readOrDefault();
-        modelLoaded = true;
+        needsReadFromSerializer = false;
     }
 
     public boolean hasStartupFailures()
     {
-        return this.getSerializerStartupExceptions().stream()
+        return getSerializerStartupExceptions().stream()
                 .anyMatch(e -> !(e instanceof FileNotFoundException));
     }
 }

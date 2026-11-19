@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.geometry;
@@ -22,6 +26,7 @@ import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
 import org.jengineering.sjmply.PLY;
 import org.jengineering.sjmply.PLYElementList;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,12 +81,12 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         }
 
         @Override
-        public boolean equals(Object obj)
+        public final boolean equals(Object obj)
         {
             if (obj instanceof NormalTexCoordPair)
             {
                 NormalTexCoordPair otherPair = (NormalTexCoordPair) obj;
-                return this.normalIndex == otherPair.normalIndex && this.texCoordIndex == otherPair.texCoordIndex;
+                return normalIndex == otherPair.normalIndex && texCoordIndex == otherPair.texCoordIndex;
             }
             else
             {
@@ -90,7 +95,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         }
 
         @Override
-        public int hashCode()
+        public final int hashCode()
         {
             int result = normalIndex;
             result = 31 * result + texCoordIndex;
@@ -103,19 +108,26 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
      * @param geometryFile
      * @throws IOException
      */
-    public static VertexGeometry createFromGeometryFile(File geometryFile) throws IOException
+    public static @Nullable VertexGeometry createFromGeometryFile(File geometryFile) throws IOException
     {
         String fileName = geometryFile.getName();
         String fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
 
-        if ("zip".equalsIgnoreCase(fileExtension)){
+        if ("zip".equalsIgnoreCase(fileExtension))
+        {
             //TODO: set VertexGeometry.geometryFile to unzipped file?
             return createFromZippedPLYFile(geometryFile, "mesh.ply");
-        } else if("obj".equalsIgnoreCase(fileExtension)) {
+        }
+        else if("obj".equalsIgnoreCase(fileExtension))
+        {
              return createFromOBJFile(geometryFile);
-        }else if("ply".equalsIgnoreCase(fileExtension)){
+        }
+        else if("ply".equalsIgnoreCase(fileExtension))
+        {
             return createFromPLYFile(geometryFile);
-        }else{
+        }
+        else
+        {
             return null;
         }
     }
@@ -298,7 +310,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         {
             try
             {
-                Dictionary<String, ImportedMaterial> materialLibrary = ImportedMaterial.loadFromMTLFile(new File(file.getParentFile(), inst.materialFileName));
+                Map<String, ImportedMaterial> materialLibrary = ImportedMaterial.loadFromMTLFile(new File(file.getParentFile(), inst.materialFileName));
                 inst.material = materialLibrary.get(materialName);
             }
             catch(IOException e)
@@ -467,11 +479,13 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         inst.hasTexCoords = hasTexCoords;
 
         // Compute smooth normals if applicable
+        List<Vector3> effectiveNormalList = normalList;
+        List<Integer> effectiveNormalIndexList = normalIndexList;
         if (!inst.hasNormals)
         {
             ComputedNormals norms = computeNormals(vertexList, vertexIndexList);
-            normalList = norms.normals;
-            normalIndexList = norms.indices;
+            effectiveNormalList = norms.normals;
+            effectiveNormalIndexList = norms.indices;
             inst.hasNormals = true;
         }
 
@@ -487,7 +501,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
 
         // Copy the vertex position data into a data structure that OpenGL can use.
         int vertexCount = vertexIndexList.size();
-        inst.vertices = NativeVectorBufferFactory.getInstance().createEmpty(NativeDataType.FLOAT, 3, vertexCount);
+        inst.vertices = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 3, vertexCount);
 
         // Centroid, bounding box, and populate vertex position buffer
         int index = 0;
@@ -527,7 +541,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         // Texture coordinate buffer
         if (inst.hasTexCoords)
         {
-            inst.texCoords = NativeVectorBufferFactory.getInstance().createEmpty(NativeDataType.FLOAT, 2, vertexCount);
+            inst.texCoords = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 2, vertexCount);
             int i = 0;
             for (int k : texCoordIndexList)
             {
@@ -540,13 +554,13 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         if (inst.hasNormals)
         {
             // Normals buffer
-            inst.normals = NativeVectorBufferFactory.getInstance().createEmpty(NativeDataType.FLOAT, 3, vertexCount);
+            inst.normals = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 3, vertexCount);
             int i = 0;
-            for (int k : normalIndexList)
+            for (int k : effectiveNormalIndexList)
             {
-                inst.normals.set(i, 0, normalList.get(k).x);
-                inst.normals.set(i, 1, normalList.get(k).y);
-                inst.normals.set(i, 2, normalList.get(k).z);
+                inst.normals.set(i, 0, effectiveNormalList.get(k).x);
+                inst.normals.set(i, 1, effectiveNormalList.get(k).y);
+                inst.normals.set(i, 2, effectiveNormalList.get(k).z);
                 i++;
             }
 
@@ -554,13 +568,13 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
             {
                 // Calculate tangents from normals and texture coordinates
                 Map<NormalTexCoordPair, Vector4> orthoTangentsMap =
-                    computeTangents(vertexList, vertexIndexList, texCoordList, texCoordIndexList, normalList, normalIndexList);
+                    computeTangents(vertexList, vertexIndexList, texCoordList, texCoordIndexList, effectiveNormalList, effectiveNormalIndexList);
 
                 // tangent buffer
-                inst.tangents = NativeVectorBufferFactory.getInstance().createEmpty(NativeDataType.FLOAT, 4, vertexCount);
-                for (i = 0; i < normalIndexList.size(); i++)
+                inst.tangents = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 4, vertexCount);
+                for (i = 0; i < effectiveNormalIndexList.size(); i++)
                 {
-                    Vector4 tangent = orthoTangentsMap.get(new NormalTexCoordPair(normalIndexList.get(i), texCoordIndexList.get(i)));
+                    Vector4 tangent = orthoTangentsMap.get(new NormalTexCoordPair(effectiveNormalIndexList.get(i), texCoordIndexList.get(i)));
                     if (tangent == null)
                     {
                         // Probably a degenerate face or a vertex not connected to any faces
@@ -628,9 +642,9 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
             // Only update the normals if this faces is not degenerate
             if (e10Length != 0.0f && e02Length != 0.0f && e21Length != 0.0f)
             {
-                float angle0 = (float) Math.acos(Math.max(-1.0f, Math.min(1.0f, -e10Norm.dot(e02Norm))));
-                float angle1 = (float) Math.acos(Math.max(-1.0f, Math.min(1.0f, -e21Norm.dot(e10Norm))));
-                float angle2 = (float) Math.acos(Math.max(-1.0f, Math.min(1.0f, -e02Norm.dot(e21Norm))));
+                float angle0 = (float) StrictMath.acos(Math.max(-1.0f, Math.min(1.0f, -e10Norm.dot(e02Norm))));
+                float angle1 = (float) StrictMath.acos(Math.max(-1.0f, Math.min(1.0f, -e21Norm.dot(e10Norm))));
+                float angle2 = (float) StrictMath.acos(Math.max(-1.0f, Math.min(1.0f, -e02Norm.dot(e21Norm))));
 
                 normals.set(i0, normals.get(i0).plus(facialNorm.times(angle0)));
                 normals.set(i1, normals.get(i1).plus(facialNorm.times(angle1)));
@@ -686,9 +700,9 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
             // Only update the normals if this face is not degenerate
             if (e10Length != 0.0f && e02Length != 0.0f && e21Length != 0.0f)
             {
-                float angle0 = (float) Math.acos(Math.max(-1.0f, Math.min(1.0f, -e10Norm.dot(e02Norm))));
-                float angle1 = (float) Math.acos(Math.max(-1.0f, Math.min(1.0f, -e21Norm.dot(e10Norm))));
-                float angle2 = (float) Math.acos(Math.max(-1.0f, Math.min(1.0f, -e02Norm.dot(e21Norm))));
+                float angle0 = (float) StrictMath.acos(Math.max(-1.0f, Math.min(1.0f, -e10Norm.dot(e02Norm))));
+                float angle1 = (float) StrictMath.acos(Math.max(-1.0f, Math.min(1.0f, -e21Norm.dot(e10Norm))));
+                float angle2 = (float) StrictMath.acos(Math.max(-1.0f, Math.min(1.0f, -e02Norm.dot(e21Norm))));
 
                 tangentMap.put(pair0, tangentMap.getOrDefault(pair0, Vector3.ZERO).plus(tangents[0].times(angle0)));
                 tangentMap.put(pair1, tangentMap.getOrDefault(pair1, Vector3.ZERO).plus(tangents[0].times(angle1)));
@@ -825,13 +839,13 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
     @Override
     public String getMaterialFileName()
     {
-        return this.materialFileName;
+        return materialFileName;
     }
 
     @Override
     public ImportedMaterial getMaterial()
     {
-        return this.material;
+        return material;
     }
 
     @Override

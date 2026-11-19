@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.sidebar;
@@ -62,7 +66,7 @@ public class CarouselCardController
      * remove the shader / change it to the default shader.
      */
     @FXML
-    public void selectedChanged()
+    public final void selectedChanged()
     {
         if (selectedCheckbox.isSelected())
         {
@@ -86,7 +90,8 @@ public class CarouselCardController
      * and changes the label to have the name of the shader
      * @param shader
      */
-    public void init(ObservableCarouselModel carouselModel, ShaderInfo shader, CarouselController carousel)
+    @SuppressWarnings("ParameterHidesMemberVariable")
+    public final void init(ObservableCarouselModel carouselModel, ShaderInfo shader, CarouselController carousel)
     {
         this.carouselModel = carouselModel;
         this.carousel = carousel;
@@ -103,7 +108,7 @@ public class CarouselCardController
         updateCheckboxState(Global.state().getUserShaderModel().getActiveShader());
     }
 
-    public void initialize()
+    public final void initialize()
     {
         buttonBox.translateYProperty().bind(carouselCard.heightProperty().divide(2.0).subtract(buttonBox.heightProperty().divide(2.0)));
 
@@ -117,7 +122,7 @@ public class CarouselCardController
         moveRight.setTooltip(rightTip);
     }
 
-    public void setupCanvas(FramebufferCanvas<?> canvas)
+    public final void setupCanvas(FramebufferCanvas<?> canvas)
     {
         framebufferView.setCanvas(canvas);
     }
@@ -136,7 +141,7 @@ public class CarouselCardController
      * removes the element from global carousel list of shaders.
      */
     @FXML
-    public void closeCard()
+    public final void closeCard()
     {
         if (shader != null)
         {
@@ -161,32 +166,32 @@ public class CarouselCardController
         }
     }
 
-    @FXML public void showMoveButtons()
+    @FXML public final void showMoveButtons()
     {
         buttonBox.setVisible(true);
     }
 
-    @FXML public void hideMoveButtons()
+    @FXML public final void hideMoveButtons()
     {
         buttonBox.setVisible(false);
     }
 
-    @FXML public void moveCarouselCardLeft()
+    @FXML public final void moveCarouselCardLeft()
     {
         carouselModel.moveCardLeft(this);
     }
 
-    @FXML public void moveCarouselCardRight()
+    @FXML public final void moveCarouselCardRight()
     {
         carouselModel.moveCardRight(this);
     }
 
-    public ShaderInfo getShader()
+    public final ShaderInfo getShader()
     {
         return shader;
     }
 
-    public CarouselController getCarouselController()
+    public final CarouselController getCarouselController()
     {
         return carousel;
     }

@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.modals.viewselect;
@@ -23,7 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 class ImageSelectionLoader implements Runnable
@@ -42,7 +45,7 @@ class ImageSelectionLoader implements Runnable
     }
 
     @Override
-    public void run()
+    public final void run()
     {
         if (!stopRequested)
         {
@@ -50,7 +53,7 @@ class ImageSelectionLoader implements Runnable
             {
                 loadFullResImg();
             }
-            catch (FileNotFoundException|RuntimeException e)
+            catch (RuntimeException e)
             {
                 preview.setImageViewText(
                     String.format("%s (full res image not found)", preview.getImageViewText()));
@@ -58,12 +61,12 @@ class ImageSelectionLoader implements Runnable
         }
     }
 
-    public void stopThread()
+    public final void stopThread()
     {
         stopRequested = true;
     }
 
-    private void loadFullResImg() throws FileNotFoundException
+    private void loadFullResImg()
     {
         ImageView imgView = preview.getImageView();
         Image image = preview.retrieveFromCache(imageName); //use cached img if possible
@@ -72,7 +75,7 @@ class ImageSelectionLoader implements Runnable
             try
             {
                 String path = model.findFullResImagePath(imageName).orElse("");
-                File imgFile = ImageFinder.getInstance().findImageFile(new File(path));
+                File imgFile = ImageFinder.findImageFile(new File(path));
 
                 if (stopRequested)
                 {

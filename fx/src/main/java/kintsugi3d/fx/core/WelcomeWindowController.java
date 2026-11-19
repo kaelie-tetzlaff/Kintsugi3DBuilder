@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.core;
@@ -14,9 +18,6 @@ package kintsugi3d.fx.core;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.BooleanExpression;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -40,10 +41,7 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -57,6 +55,7 @@ public class WelcomeWindowController
 
     static WelcomeWindowController getInstance()
     {
+        //noinspection StaticVariableUsedBeforeInitialization
         return instance;
     }
 
@@ -77,13 +76,14 @@ public class WelcomeWindowController
 
     private BooleanExpression shouldBeHidden;
 
-    public void init(Stage injectedStage, JavaFXState state, Runnable injectedUserDocumentationHandler)
+    public final void init(Stage injectedStage, JavaFXState state, Runnable injectedUserDocumentationHandler)
     {
+        //noinspection AssignmentToStaticFieldFromInstanceMethod
         instance = this;
 
-        this.parentWindow = injectedStage.getOwner();
-        this.window = injectedStage;
-        this.userDocumentationHandler = injectedUserDocumentationHandler;
+        parentWindow = injectedStage.getOwner();
+        window = injectedStage;
+        userDocumentationHandler = injectedUserDocumentationHandler;
 
         recentButtons.add(recent1);
         recentButtons.add(recent2);
@@ -149,38 +149,13 @@ public class WelcomeWindowController
             promptCacheSize -> LOG.info("No cache cleanup needed (Size: {}GB)", promptCacheSize));
     }
 
-    /**
-     * Useful for showing alerts that would otherwise be covered by up the welcome window
-     * (and by extension, the main window as a parent of the welcome window).
-     * @param runnable
-     */
-    public void runOnceWhenShown(Runnable runnable)
-    {
-        ReadOnlyBooleanProperty showing = window.showingProperty();
-
-        ChangeListener<Boolean> runOnce = new ChangeListener<>()
-        {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean wasShown, Boolean isShown)
-            {
-                if (isShown)
-                {
-                    runnable.run();
-                    showing.removeListener(this);
-                }
-            }
-        };
-
-        showing.addListener(runOnce);
-    }
-
     private static void handleMenuItemSelection(MenuItem item)
     {
         String projectName = item.getText();
         FrontendIO.openProjectFromFile(new File(projectName));
     }
 
-    public void splitMenuButtonActions(ActionEvent actionEvent)
+    public final void splitMenuButtonActions(ActionEvent actionEvent)
     {
         Object source = actionEvent.getSource();
         //user clicks on a menu item
@@ -195,7 +170,7 @@ public class WelcomeWindowController
         }
     }
 
-    public void createProject()
+    public final void createProject()
     {
         if (!FrontendIO.isCreateProjectWindowOpen())
         {
@@ -226,7 +201,7 @@ public class WelcomeWindowController
         //TODO: ONLY HIDE THE MENU WHEN THE USER'S MOUSE LEAVES THE CONTEXT MENU
     }
 
-    public void recentButton(ActionEvent actionEvent)
+    public final void recentButton(ActionEvent actionEvent)
     {
         Object source = actionEvent.getSource();
         //user clicks on a menu item
@@ -238,7 +213,7 @@ public class WelcomeWindowController
 
     private void handleButtonSelection(Button item)
     {
-        ArrayList<String> recentFileNames = (ArrayList<String>) RecentProjects.getRecentProjectFilenames();
+        ArrayList<String> recentFileNames = (ArrayList<String>) RecentProjects.getInstance().getRecentProjectFilenames();
         int i = 0;
         for (Button button : recentButtons)
         {
@@ -251,20 +226,20 @@ public class WelcomeWindowController
     }
 
     @FXML
-    public void openSystemSettingsModal()
+    public final void openSystemSettingsModal()
     {
         ExperienceManager.getInstance().getExperience(ExperienceManager.SYSTEM_SETTINGS).tryOpen();
     }
 
     @FXML
-    public void openAboutModal()
+    public final void openAboutModal()
     {
         ExperienceManager.getInstance().getExperience(ExperienceManager.ABOUT).tryOpen();
     }
 
-    public void updateRecentProjects()
+    public final void updateRecentProjects()
     {
-        List<String> items = RecentProjects.getRecentProjectFilenames();
+        List<String> items = RecentProjects.getInstance().getRecentProjectFilenames();
         List<MenuItem> recentItems = RecentProjectsHelper.getMenuItems(items);
 
         recentProjectsSplitMenuButton.getItems().clear();
@@ -358,22 +333,12 @@ public class WelcomeWindowController
 
     private static void removeReference(String fileName)
     {
-        List<String> newRecentItems = RecentProjects.getRecentProjectFilenames().stream()
+        List<String> newRecentItems = RecentProjects.getInstance().getRecentProjectFilenames().stream()
             .filter(item -> !item.equals(fileName))
             .collect(Collectors.toList());
 
         // Write the updated content back to the file
-        try (PrintWriter writer = new PrintWriter(new FileWriter(RecentProjects.RECENT_PROJECTS_FILE, StandardCharsets.UTF_8)))
-        {
-            for (String name : newRecentItems)
-            {
-                writer.println(name);
-            }
-        }
-        catch (IOException ioe)
-        {
-            LOG.error("Failed to update recent files list while removing invalid reference.", ioe);
-        }
+        RecentProjects.getInstance().refreshRecentProjectsFile(newRecentItems);
 
         RecentProjectsHelper.updateAllControlStructures();
     }
@@ -402,9 +367,9 @@ public class WelcomeWindowController
             View representativeView = viewSet.getRepresentativeView();
             File thumbnailImageFile = representativeView.getThumbnailImageFile();
 
-            if (thumbnailImageFile == null || !thumbnailImageFile.exists())
+            if (!thumbnailImageFile.exists())
             {
-                thumbnailImageFile =  representativeView.tryFindPreviewImageFile();
+                thumbnailImageFile = representativeView.tryFindPreviewImageFile();
             }
 
             if (thumbnailImageFile == null || !thumbnailImageFile.exists())

@@ -1,27 +1,32 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.resources.project;
 
 import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.core.viewset.View;
+import kintsugi3d.builder.io.LoadOptionsModel;
 import kintsugi3d.builder.io.SimpleLoadOptionsModel;
+import kintsugi3d.builder.io.TextureLoadOptions;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.geometry.GeometryFramebuffer;
 import kintsugi3d.gl.geometry.GeometryTextures;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
-import kintsugi3d.gl.interactive.DefaultProgressMonitor;
+import kintsugi3d.gl.interactive.CancellationPassthroughMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
-import kintsugi3d.gl.material.TextureLoadOptions;
 import kintsugi3d.gl.nativebuffer.NativeDataType;
 import kintsugi3d.gl.nativebuffer.NativeVectorBuffer;
 import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
@@ -51,6 +56,7 @@ import java.util.stream.IntStream;
 public class ImageCache<ContextType extends Context<ContextType>>
 {
     private static final Logger LOG = LoggerFactory.getLogger(ImageCache.class);
+
     private final ContextType context;
     private final ImageBasedGraphicsResourcesBase<ContextType> resources;
     private final ReadonlyImageCacheSettings settings;
@@ -64,17 +70,17 @@ public class ImageCache<ContextType extends Context<ContextType>>
 
     ImageCache(ImageBasedGraphicsResourcesBase<ContextType> resources, ReadonlyImageCacheSettings settings)
     {
-        this.context = resources.getContext();
+        context = resources.getContext();
         this.resources = resources;
         this.settings = settings;
 
         String cacheFolderName = getFolderNameFromSettings(resources.getViewSet().getUUID().toString(), settings);
-        this.cacheDirectory = new File(settings.getCacheParentDirectory(), cacheFolderName);
+        cacheDirectory = new File(settings.getCacheParentDirectory(), cacheFolderName);
 
-        this.sampledDir = new File(cacheDirectory, "sampled");
+        sampledDir = new File(cacheDirectory, "sampled");
 
         // Square 2D array to store sampled pixel coords.
-        this.sampledPixelCoords = IntStream.range(0, settings.getSampledSize())
+        sampledPixelCoords = IntStream.range(0, settings.getSampledSize())
             .mapToObj(i -> new IntVector2[settings.getSampledSize()])
             .toArray(IntVector2[][]::new);
 
@@ -93,7 +99,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
                 LOG.error("Error initializing image cache:", e);
 
                 // Reset in case it partially succeeded.
-                Arrays.stream(this.sampledPixelCoords).forEach(column -> Arrays.fill(column, null));
+                Arrays.stream(sampledPixelCoords).forEach(column -> Arrays.fill(column, null));
             }
         }
     }
@@ -110,37 +116,37 @@ public class ImageCache<ContextType extends Context<ContextType>>
         }
     }
 
-    public File getCacheDirectory()
+    public final File getCacheDirectory()
     {
         return cacheDirectory;
     }
 
-    public File getBlockDirectory(int i, int j)
+    public final File getBlockDirectory(int i, int j)
     {
         return new File(cacheDirectory, String.format("%d_%d", i, j));
     }
 
-    public ContextType getContext()
+    public final ContextType getContext()
     {
         return context;
     }
 
-    public ReadonlyViewSet getViewSet()
+    public final ReadonlyViewSet getViewSet()
     {
         return resources.getViewSet();
     }
 
-    public ReadonlyVertexGeometry getGeometry()
+    public final ReadonlyVertexGeometry getGeometry()
     {
         return resources.getGeometry();
     }
 
-    public ReadonlyImageCacheSettings getSettings()
+    public final ReadonlyImageCacheSettings getSettings()
     {
         return settings;
     }
 
-    public boolean isInitialized()
+    public final boolean isInitialized()
     {
         return initialized;
     }
@@ -150,7 +156,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
      * As a side effect of this method, the context's state will have back face culling enabled,
      * @throws IOException
      */
-    public void initialize(ProgressMonitor monitor) throws IOException, UserCancellationException
+    public final void initialize(ProgressMonitor monitor) throws IOException, UserCancellationException
     {
         // Create directories to organize the cache
         sampledDir.mkdirs();
@@ -298,12 +304,12 @@ public class ImageCache<ContextType extends Context<ContextType>>
     private void buildCache(ReadableFramebuffer<ContextType> fbo, ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
-        SimpleLoadOptionsModel loadOptions = new SimpleLoadOptionsModel();
-        loadOptions.requestColorImages(true);
-        loadOptions.requestAlpha(true);
-        loadOptions.requestCompression(false);
-        loadOptions.requstMipmaps(false);
-        loadOptions.requestDepthImages(true);
+        LoadOptionsModel loadOptions = new SimpleLoadOptionsModel();
+        loadOptions.setColorImagesRequested(true);
+        loadOptions.setAlphaRequested(true);
+        loadOptions.setCompressionRequested(false);
+        loadOptions.setMipmapsRequested(false);
+        loadOptions.setDepthImagesRequested(true);
 
         try(ProgramObject<ContextType> texSpaceProgram = SingleCalibratedImageResource.getShaderProgramBuilder(context, resources.getViewSet(), loadOptions)
             .addShader(ShaderType.VERTEX, new File("shaders/common/texspace_dynamic.vert"))
@@ -336,7 +342,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
                     texSpaceDrawable.draw(fbo);
 
                     // Force PNG format for lossless encoding
-                    String pngFilename = ImageFinder.getInstance().getImageFileNameWithExtension(
+                    String pngFilename = ImageFinder.getImageFileNameWithExtension(
                         view.getImageFile().getName(), "png");
 
                     // "Sampled" image to store randomly selected pixels for preliminary optimization at a lower resolution.
@@ -349,7 +355,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
                     // Loop over "columns"
                     for (int i = 0; i < settings.getTextureSubdiv(); i++)
                     {
-                        int xNext = getSettings().getBlockStartX(i + 1);
+                        int xNext = settings.getBlockStartX(i + 1);
 
                         // xRand < round(texture width * (xSample + 1) / sampled width)
                         // xRand <= texture width * (xSample + 1) / sampled width - 0.5;
@@ -369,7 +375,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
                         // Loop over "rows"
                         for (int j = 0; j < settings.getTextureSubdiv(); j++)
                         {
-                            int yNext = getSettings().getBlockStartY(j + 1);
+                            int yNext = settings.getBlockStartY(j + 1);
 
                             int width = xNext - x;
                             int height = yNext - y;
@@ -432,42 +438,66 @@ public class ImageCache<ContextType extends Context<ContextType>>
         }
     }
 
-    public GraphicsResourcesTextureSpace<ContextType> createSampledResources(ProgressMonitor monitor) throws IOException, UserCancellationException
+    public final GraphicsResourcesTextureSpace<ContextType> createSampledResources(ProgressMonitor monitor) throws IOException, UserCancellationException
     {
-        TextureLoadOptions loadOptions = new TextureLoadOptions();
-        loadOptions.setLinearFilteringRequested(false);
-        loadOptions.setMipmapsRequested(false);
-        loadOptions.setCompressionRequested(false);
+        return createWithRetryAfterCacheRebuild(
+            () ->
+            {
+                TextureLoadOptions loadOptions = new TextureLoadOptions();
+                loadOptions.setLinearFilteringRequested(false);
+                loadOptions.setMipmapsRequested(false);
+                loadOptions.setCompressionRequested(false);
 
+                return new GraphicsResourcesTextureSpace<>(resources.getCommonResources(), this::createSampledGeometryTextures,
+                        sampledDir, loadOptions, settings.getSampledSize(), settings.getSampledSize(), monitor);
+            },
+            monitor);
+    }
+
+    /**
+     * Invokes {@code supplier} up to twice. If the first invocation throws
+     * {@link IOException}, the cache is reinitialized once and the supplier
+     * is invoked again; the second invocation's exceptions propagate uncaught.
+     * @param supplier
+     * @param monitor
+     * @return
+     * @param <T>
+     * @throws UserCancellationException
+     * @throws IOException
+     */
+    public final <T> T createWithRetryAfterCacheRebuild(CacheDependentSupplier<T> supplier, ProgressMonitor monitor)
+        throws UserCancellationException, IOException
+    {
         try
         {
-            return new GraphicsResourcesTextureSpace<>(resources.getCommonResources(), this::createSampledGeometryTextures,
-                sampledDir, loadOptions, settings.getSampledSize(), settings.getSampledSize(), monitor);
+            return supplier.get();
         }
         catch (IOException e)
         {
-            LOG.warn("Incomplete cache; will try to rebuild.");
+            LOG.warn("Possibly incomplete cache; will try to rebuild.", e);
 
             // Try to reinitialize in case the cache was only partially complete.
-            this.initialize(new DefaultProgressMonitor()
-            {
-                @Override
-                public void allowUserCancellation() throws UserCancellationException
-                {
-                    monitor.allowUserCancellation();
-                }
-            });
+            initialize(new CancellationPassthroughMonitor(monitor));
 
-            // If initialize() completed without exceptions, then createSampledResources() should work now.
-            return createSampledResources(monitor);
+            // If initialize() completed without exceptions, then it should theoretically work now.
+            // If not, it's probably a problem unrelated to the cache.
         }
+
+        // Attempt again without catching any exceptions.
+        return supplier.get();
+    }
+
+    @FunctionalInterface
+    public interface CacheDependentSupplier<T>
+    {
+        T get() throws IOException, UserCancellationException;
     }
 
     /**
      *
      * @return A resource (that itself needs to be closed with no longer needed) which in turn creates resources for specific blocks
      */
-    public TextureBlockResourceFactory<ContextType> createBlockResourceFactory()
+    public final TextureBlockResourceFactory<ContextType> createBlockResourceFactory()
     {
         return new TextureBlockResourceFactory<>(resources.getCommonResources(), this);
     }
@@ -481,7 +511,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
 
     private ReadonlyNativeVectorBuffer sampleHighResBuffer(ReadonlyNativeVectorBuffer highResBuffer)
     {
-        NativeVectorBuffer sampledBuffer = NativeVectorBufferFactory.getInstance()
+        NativeVectorBuffer sampledBuffer = NativeVectorBufferFactory
             .createEmpty(NativeDataType.FLOAT, 3, settings.getSampledSize() * settings.getSampledSize());
         for (int i = 0; i < sampledBuffer.getCount(); i++)
         {
@@ -496,7 +526,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
     private GeometryTextures<ContextType> createSampledGeometryTextures()
     {
         try(GeometryFramebuffer<ContextType> geomTexturesFullRes =
-            this.resources.getGeometryResources().createGeometryFramebuffer(settings.getTextureWidth(), settings.getTextureHeight()))
+            resources.getGeometryResources().createGeometryFramebuffer(settings.getTextureWidth(), settings.getTextureHeight()))
         {
             // Use non-rendered since we need to sample on the CPU (where the sample coordinates live) and then pass the data back to the GPU.
             GeometryTextures<ContextType> sampledGeometryTextures =
@@ -505,21 +535,21 @@ public class ImageCache<ContextType extends Context<ContextType>>
             // Sample position buffer
             ReadableFramebuffer<ContextType> contextTypeFramebuffer2 = geomTexturesFullRes.getFramebuffer();
             sampledGeometryTextures.getPositionTexture().load(
-                sampleHighResBuffer(NativeVectorBufferFactory.getInstance()
+                sampleHighResBuffer(NativeVectorBufferFactory
                     .createFromFloatArray(4, settings.getTextureWidth() * settings.getTextureHeight(),
                         contextTypeFramebuffer2.getTextureReaderForColorAttachment(0).readFloatingPointRGBA())));
 
             // Sample normal buffer
             ReadableFramebuffer<ContextType> contextTypeFramebuffer1 = geomTexturesFullRes.getFramebuffer();
             sampledGeometryTextures.getNormalTexture().load(
-                sampleHighResBuffer(NativeVectorBufferFactory.getInstance()
+                sampleHighResBuffer(NativeVectorBufferFactory
                     .createFromFloatArray(4, settings.getTextureWidth() * settings.getTextureHeight(),
                         contextTypeFramebuffer1.getTextureReaderForColorAttachment(1).readFloatingPointRGBA())));
 
             // Sample tangent buffer
             ReadableFramebuffer<ContextType> contextTypeFramebuffer = geomTexturesFullRes.getFramebuffer();
             sampledGeometryTextures.getTangentTexture().load(
-                sampleHighResBuffer(NativeVectorBufferFactory.getInstance()
+                sampleHighResBuffer(NativeVectorBufferFactory
                     .createFromFloatArray(4, settings.getTextureWidth() * settings.getTextureHeight(),
                         contextTypeFramebuffer.getTextureReaderForColorAttachment(2).readFloatingPointRGBA())));
 

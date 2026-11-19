@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.resources.project;
@@ -30,7 +34,7 @@ import kintsugi3d.gl.vecmath.IntVector2;
 import java.io.IOException;
 import java.util.List;
 
-public abstract class ImageBasedGraphicsResourcesBase<ContextType extends Context<ContextType>> implements ImageBasedGraphicsResources<ContextType>
+abstract class ImageBasedGraphicsResourcesBase<ContextType extends Context<ContextType>> implements ImageBasedGraphicsResources<ContextType>
 {
     private final GraphicsResourcesCommon<ContextType> commonResources;
 
@@ -45,7 +49,7 @@ public abstract class ImageBasedGraphicsResourcesBase<ContextType extends Contex
         this.ownerOfCommonResources = ownerOfCommonResources;
     }
 
-    GraphicsResourcesCommon<ContextType> getCommonResources()
+    final GraphicsResourcesCommon<ContextType> getCommonResources()
     {
         return commonResources;
     }
@@ -63,13 +67,13 @@ public abstract class ImageBasedGraphicsResourcesBase<ContextType extends Contex
     }
 
     @Override
-    public float getCameraWeight(int index)
+    public final float getCameraWeight(int index)
     {
         return commonResources.getViewWeight(index);
     }
 
     @Override
-    public List<Float> getCameraWeights()
+    public final List<Float> getCameraWeights()
     {
         return commonResources.getViewWeights();
     }
@@ -100,14 +104,14 @@ public abstract class ImageBasedGraphicsResourcesBase<ContextType extends Contex
      * @return
      * @throws IOException
      */
-    public SingleCalibratedImageResource<ContextType> createSingleImageResource(View view, ReadonlyLoadOptionsModel loadOptions)
+    public final SingleCalibratedImageResource<ContextType> createSingleImageResource(View view, ReadonlyLoadOptionsModel loadOptions)
         throws IOException
     {
         return new SingleCalibratedImageResource<>(getContext(), view, getGeometry(), loadOptions);
     }
 
     @Override
-    public ImageCache<ContextType> cache(ReadonlyImageCacheSettings settings, ProgressMonitor monitor)
+    public final ImageCache<ContextType> cache(ReadonlyImageCacheSettings settings, ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         ImageCache<ContextType> cache = new ImageCache<>(this, settings);
@@ -121,44 +125,45 @@ public abstract class ImageBasedGraphicsResourcesBase<ContextType extends Contex
     }
 
     @Override
-    public boolean hasProcessedWeightMaps()
+    public final boolean hasProcessedWeightMaps()
     {
         return commonResources.hasProcessedWeightMaps();
     }
 
     @Override
-    public IntVector2 getProcessedWeightMapResolution()
+    public final IntVector2 getProcessedWeightMapResolution()
     {
-        return getCommonResources().getProcessedWeightMapResolution();
+        return commonResources.getProcessedWeightMapResolution();
     }
 
     @Override
-    public EventListeners<ProjectProcessedListener> weightMapsProcessedListeners()
+    public final EventListeners<ProjectProcessedListener> weightMapsProcessedListeners()
     {
-        return getCommonResources().weightMapsProcessedListeners();
+        return commonResources.weightMapsProcessedListeners();
     }
 
     @Override
-    public void replaceTextureResources(TextureResources<ContextType> textureResources)
+    public final void replaceTextureResources(TextureResources<ContextType> textureResources)
     {
         commonResources.replaceTextureResources(textureResources);
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public void close()
     {
-        if (this.ownerOfCommonResources && this.commonResources != null)
+        if (ownerOfCommonResources && commonResources != null)
         {
-            this.commonResources.close();
+            commonResources.close();
         }
     }
 
-    public EventListeners<Observer<MappedChange<String, BasisMaterialInfo>>> basisListeners()
+    public final EventListeners<Observer<MappedChange<String, BasisMaterialInfo>>> basisListeners()
     {
         return commonResources.basisListeners();
     }
 
-    public EventListeners<Observer<MappedChange<String, TextureInfo>>> texturesListeners()
+    public final EventListeners<Observer<MappedChange<String, TextureInfo>>> texturesListeners()
     {
         return commonResources.texturesListeners();
     }

@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.tools;
@@ -25,6 +29,9 @@ import kintsugi3d.gl.window.listeners.KeyReleaseListener;
 
 public class FirstPersonController implements KeyPressListener, KeyReleaseListener, CursorPositionListener
 {
+    private static final float SENSITIVITY = 0.5f;
+    private static final float SPEED = 0.01f;
+
     private boolean enabled;
 
     private final ViewpointModel model;
@@ -39,8 +46,6 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
     private float phi;
 
     private boolean ignoreSensitivity = false;
-    private final float sensitivity = 0.5f;
-    private final float speed = 0.01f;
 
     public FirstPersonController()
     {
@@ -49,48 +54,48 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
 
     public FirstPersonController(ViewpointModel cameraModel)
     {
-        this.model = cameraModel;
+        model = cameraModel;
 
-        this.velocity = new Vector3(0.0f, 0.0f, 0.0f);
-        this.position = new Vector3(0.0f, 0.0f, 0.0f);
+        velocity = new Vector3(0.0f, 0.0f, 0.0f);
+        position = new Vector3(0.0f, 0.0f, 0.0f);
 
-        this.lastCursorX = Float.NaN;
-        this.lastCursorY = Float.NaN;
+        lastCursorX = Float.NaN;
+        lastCursorY = Float.NaN;
 
-        this.theta = 0.0f;
-        this.phi = 0.0f;
+        theta = 0.0f;
+        phi = 0.0f;
     }
 
-    public void addAsWindowListener(WindowListenerManager windowListenerManager)
+    public final void addAsWindowListener(WindowListenerManager windowListenerManager)
     {
         windowListenerManager.addKeyPressListener(this);
         windowListenerManager.addKeyReleaseListener(this);
         windowListenerManager.addCursorPositionListener(this);
     }
 
-    public boolean getEnabled()
+    public final boolean isEnabled()
     {
-        return this.enabled;
+        return enabled;
     }
 
-    public void setEnabled(boolean enabled)
+    public final void setEnabled(boolean enabled)
     {
         this.enabled = enabled;
         if (!enabled)
         {
-            this.lastCursorX = Float.NaN;
-            this.lastCursorY = Float.NaN;
-            this.velocity = new Vector3(0.0f, 0.0f, 0.0f);
+            lastCursorX = Float.NaN;
+            lastCursorY = Float.NaN;
+            velocity = new Vector3(0.0f, 0.0f, 0.0f);
         }
     }
 
-    public ReadonlyViewpointModel getModel()
+    public final ReadonlyViewpointModel getModel()
     {
-        return this.model;
+        return model;
     }
 
     @Override
-    public void keyPressed(Canvas3D<? extends Context<?>> canvas, Key key, ModifierKeys mods)
+    public final void keyPressed(Canvas3D<? extends Context<?>> canvas, Key key, ModifierKeys mods)
     {
         if (enabled)
         {
@@ -131,14 +136,14 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
             theta = 0.0f;
             phi = 0.0f;
             position = new Vector3(0.0f, 0.0f, 0.0f);
-            this.model.setLookMatrix(Matrix4.IDENTITY);
+            model.setLookMatrix(Matrix4.IDENTITY);
         }
 
-        ignoreSensitivity = mods.getControlModifier();
+        ignoreSensitivity = mods.isControlModifierActive();
     }
 
     @Override
-    public void keyReleased(Canvas3D<? extends Context<?>> canvas, Key key, ModifierKeys mods)
+    public final void keyReleased(Canvas3D<? extends Context<?>> canvas, Key key, ModifierKeys mods)
     {
         if (enabled)
         {
@@ -173,11 +178,11 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
             }
         }
 
-        ignoreSensitivity = mods.getControlModifier();
+        ignoreSensitivity = mods.isControlModifierActive();
     }
 
     @Override
-    public void cursorMoved(Canvas3D<? extends Context<?>> canvas, double xPos, double yPos)
+    public final void cursorMoved(Canvas3D<? extends Context<?>> canvas, double xPos, double yPos)
     {
         if (enabled)
         {
@@ -185,17 +190,17 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
 
             if (!Double.isNaN(lastCursorX) && !Double.isNaN(lastCursorY))
             {
-                theta += (ignoreSensitivity ? 1.0f : sensitivity) * 2 * Math.PI * (xPos - lastCursorX) / size.width;
-                phi += (ignoreSensitivity ? 1.0f : sensitivity) * Math.PI * (yPos - lastCursorY) / size.height;
+                theta += (ignoreSensitivity ? 1.0f : SENSITIVITY) * 2 * (float)Math.PI * (float)(xPos - lastCursorX) / size.width;
+                phi += (ignoreSensitivity ? 1.0f : SENSITIVITY) * (float)Math.PI * (float)(yPos - lastCursorY) / size.height;
 
                 if (theta < 0.0f)
                 {
-                    theta += 2 * Math.PI;
+                    theta += 2 * (float)Math.PI;
                 }
 
                 if (theta > 2 * Math.PI)
                 {
-                    theta -= 2 * Math.PI;
+                    theta -= 2 * (float)Math.PI;
                 }
 
                 if (phi > Math.PI / 2)
@@ -214,7 +219,7 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
         }
     }
 
-    public void update()
+    public final void update()
     {
         if (enabled)
         {
@@ -222,10 +227,10 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
 
             if (velocity.dot(velocity) > 0.0f)
             {
-                position = position.plus(rotation.transpose().times(velocity.normalized().times(speed)));
+                position = position.plus(rotation.transpose().times(velocity.normalized().times(SPEED)));
             }
 
-            this.model.setLookMatrix(rotation.asMatrix4().times(Matrix4.translate(position.negated())));
+            model.setLookMatrix(rotation.asMatrix4().times(Matrix4.translate(position.negated())));
         }
     }
 }

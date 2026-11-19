@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.internal;
@@ -24,18 +28,18 @@ public class ObservableDiscreteLightModel extends DiscreteLightModelFromSettings
 
     public ObservableDiscreteLightModel()
     {
-        this.sentinel = new ObservableLightSettings("sentinel", new SimpleBooleanProperty(true));
-        this.sentinel.setIntensity(0.0);
-        this.sentinel.setLocked(true);
+        sentinel = new ObservableLightSettings("sentinel", new SimpleBooleanProperty(true));
+        sentinel.setIntensity(0.0);
+        sentinel.setLocked(true);
     }
 
-    public void setLightInstanceSetting(ObservableValue<ObservableLightSettings> lightInstanceSetting)
+    public final void setLightInstanceSetting(ObservableValue<ObservableLightSettings> lightInstanceSetting)
     {
         this.lightInstanceSetting = lightInstanceSetting;
     }
 
     @Override
-    protected SerializableLightSettings getLightSettings()
+    protected final SerializableLightSettings getLightSettings()
     {
         if (lightInstanceSetting == null || lightInstanceSetting.getValue() == null)
         {
@@ -48,7 +52,7 @@ public class ObservableDiscreteLightModel extends DiscreteLightModelFromSettings
     }
 
     @Override
-    public boolean isEnabled()
+    public final boolean isEnabled()
     {
         return lightInstanceSetting != null && lightInstanceSetting.getValue() != null;
     }

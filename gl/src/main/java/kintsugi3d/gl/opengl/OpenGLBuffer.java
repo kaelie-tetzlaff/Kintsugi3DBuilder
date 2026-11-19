@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.opengl;
@@ -20,91 +24,75 @@ import static org.lwjgl.opengl.GL30.*;
 
 abstract class OpenGLBuffer implements ContextBound<OpenGLContext>, ManagedResource
 {
-    protected final OpenGLContext context;
+    private final OpenGLContext context;
 
     private final int bufferId;
     private final int usage;
     private boolean hasData = false;
-    private boolean closed = false;
+    private boolean live = true;
 
     OpenGLBuffer(OpenGLContext context, int usage)
     {
         this.context = context;
-        this.bufferId = glGenBuffers();
+        bufferId = glGenBuffers();
         OpenGLContext.errorCheck();
         this.usage = usage;
     }
 
     @Override
-    public OpenGLContext getContext()
+    public final OpenGLContext getContext()
     {
-        return this.context;
+        return context;
     }
 
-    int getBufferId()
+    final int getBufferId()
     {
-        return this.bufferId;
+        return bufferId;
     }
 
     abstract int getBufferTarget();
 
-    boolean hasData()
+    final boolean hasData()
     {
         return hasData;
     }
 
-    OpenGLBuffer setData(ByteBuffer data)
+    public final void setData(ByteBuffer data)
     {
         if (data.remaining() > 0) // make sure there is actually data to set (lwjgl's glBufferData uses data.remaining() as the "size" parameter)
         {
-            glBindBuffer(this.getBufferTarget(), this.bufferId);
+            glBindBuffer(getBufferTarget(), bufferId);
             OpenGLContext.errorCheck();
-            glBufferData(this.getBufferTarget(), data, this.usage);
+            glBufferData(getBufferTarget(), data, usage);
             OpenGLContext.errorCheck();
 
             // fix for MacOS which segfaults if using a buffer with no data
             hasData = true;
         }
-
-        return this;
     }
 
-    void bind()
+    final void bind()
     {
         if (hasData) // fix for MacOS which segfaults if using a buffer with no data
         {
-            glBindBuffer(this.getBufferTarget(), this.bufferId);
+            glBindBuffer(getBufferTarget(), bufferId);
             OpenGLContext.errorCheck();
         }
         else
         {
-            glBindBuffer(this.getBufferTarget(), 0);
-            OpenGLContext.errorCheck();
-        }
-    }
-
-    void bindToIndex(int index)
-    {
-        if (hasData) // fix for MacOS which segfaults if using a buffer with no data
-        {
-            glBindBufferBase(this.getBufferTarget(), index, this.bufferId);
-            OpenGLContext.errorCheck();
-        }
-        else
-        {
-            glBindBufferBase(this.getBufferTarget(), index, 0);
+            glBindBuffer(getBufferTarget(), 0);
             OpenGLContext.errorCheck();
         }
     }
 
     @Override
-    public void close()
+    public final void close()
     {
-        if (!closed)
+        if (live)
         {
-            glDeleteBuffers(this.bufferId);
+            glDeleteBuffers(bufferId);
             OpenGLContext.errorCheck();
-            closed = true;
+            live = false;
             hasData = false;
         }
     }

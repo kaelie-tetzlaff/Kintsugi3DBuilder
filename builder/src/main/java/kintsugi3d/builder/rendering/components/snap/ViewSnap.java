@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering.components.snap;
@@ -33,40 +37,37 @@ public class ViewSnap<ContextType extends Context<ContextType>> implements Rende
     private final SceneModel sceneModel;
     private final ViewSelection viewSelection;
 
-    private ViewSnapContent<ContextType> contentRoot;
+    private final RenderedComponent<ContextType> contentRoot;
 
     private Matrix4 viewSnap = Matrix4.IDENTITY;
     private View lastSnapView;
 
-    public ViewSnap(SceneModel sceneModel, ViewSelection viewSelection)
+    /**
+     *
+     * @param sceneModel
+     * @param viewSelection
+     * @param contentRoot Transfers ownership of the lit content to this object
+     */
+    public ViewSnap(SceneModel sceneModel, ViewSelection viewSelection, RenderedComponent<ContextType> contentRoot)
     {
         this.sceneModel = sceneModel;
         this.viewSelection = viewSelection;
+        this.contentRoot = contentRoot;
     }
 
-    public ViewSnapContent<ContextType> getContentRoot()
+    public final RenderedComponent<ContextType> getContentRoot()
     {
         return contentRoot;
     }
 
-    /**
-     * Transfers ownership of the lit content to this object
-     * Must be called before initialize
-     * @param contentRoot
-     */
-    public void takeContentRoot(ViewSnapContent<ContextType> contentRoot)
-    {
-        this.contentRoot = contentRoot;
-    }
-
     @Override
-    public void initialize()
+    public final void initialize()
     {
         contentRoot.initialize();
     }
 
     @Override
-    public void reloadShaders()
+    public final void reloadShaders()
     {
         contentRoot.reloadShaders();
     }
@@ -87,7 +88,7 @@ public class ViewSnap<ContextType extends Context<ContextType>> implements Rende
             // Include disabled views since snapping to a disabled view (i.e. for light calibration) is valid.
             for (View view : viewSelection.getViewSet().getViews())
             {
-                Matrix4 candidateView = this.viewSelection.getMatrixFromView(view);
+                Matrix4 candidateView = viewSelection.getMatrixFromView(view);
                 float similarity = viewInverse.times(Vector4.ORIGIN).getXYZ()
                     .dot(candidateView.quickInverse(0.01f).times(Vector4.ORIGIN).getXYZ());
 
@@ -128,14 +129,14 @@ public class ViewSnap<ContextType extends Context<ContextType>> implements Rende
     }
 
     @Override
-    public void update()
+    public final void update()
     {
         viewSnap = snapToView(sceneModel.getCurrentViewMatrix());
         contentRoot.update();
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         View selectedView = viewSelection.getSelectedView();
         if (selectedView != null)
@@ -173,13 +174,13 @@ public class ViewSnap<ContextType extends Context<ContextType>> implements Rende
     }
 
     @Override
-    public void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight, CameraViewport cameraViewport)
+    public final void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight, CameraViewport cameraViewport)
     {
         contentRoot.drawInSubdivisions(framebuffer, subdivWidth, subdivHeight, cameraViewport.copyForView(viewSnap));
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         contentRoot.close();
     }

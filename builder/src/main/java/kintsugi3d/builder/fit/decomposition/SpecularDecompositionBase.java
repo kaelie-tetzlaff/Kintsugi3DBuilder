@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit.decomposition;
@@ -43,99 +47,71 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
 
     protected SpecularDecompositionBase(TextureResolution textureResolution, int materialCount)
     {
-        this.weightsByTexel = IntStream.range(0, textureResolution.width * textureResolution.height)
+        weightsByTexel = IntStream.range(0, textureResolution.width * textureResolution.height)
             .mapToObj(p -> new SimpleMatrix(materialCount, 1, DMatrixRMaj.class))
             .toArray(SimpleMatrix[]::new);
-        this.weightsValidity = new boolean[textureResolution.width * textureResolution.height];
+        weightsValidity = new boolean[textureResolution.width * textureResolution.height];
 
         this.textureResolution = textureResolution;
     }
 
     @Override
-    public SpecularBasisWeights getWeights()
+    public final SpecularBasisWeights getWeights()
     {
-        return new SpecularBasisWeights()
-        {
-            private final MaterialBasis basis = getMaterialBasis();
-
-            @Override
-            public double getWeight(int b, int p)
-            {
-                return weightsByTexel[p].get(b);
-            }
-
-            @Override
-            public boolean areWeightsValid(int p)
-            {
-                return weightsValidity[p];
-            }
-
-            @Override
-            public int getCount()
-            {
-                return basis.getEnabledMaterialCount();
-            }
-
-            @Override
-            public void save(File outputDirectory)
-            {
-                SpecularFitSerializer.saveWeightImages(
-                    basis, textureResolution.width, textureResolution.height, this, outputDirectory);
-            }
-        };
+        return new SpecularDecompositionWeights(this);
     }
 
     @Override
-    public TextureResolution getTextureResolution()
+    public final TextureResolution getTextureResolution()
     {
         return textureResolution;
     }
 
     @Override
-    public boolean areWeightsValid(int texelIndex)
+    public final boolean areWeightsValid(int texelIndex)
     {
         return weightsValidity[texelIndex];
     }
 
     @Override
-    public double getWeight(int b, int p)
+    public final double getWeight(int b, int p)
     {
         return weightsByTexel[p].get(b);
     }
 
     @Override
-    public SimpleMatrix getWeights(int texelIndex)
+    public final SimpleMatrix getWeights(int texelIndex)
     {
         return weightsByTexel[texelIndex];
     }
 
     @Override
-    public void setWeights(int texelIndex, SimpleMatrix weights)
+    public final void setWeights(int texelIndex, SimpleMatrix weights)
     {
         weightsByTexel[texelIndex] = weights;
     }
 
     @Override
-    public List<SimpleMatrix> getWeightsList()
+    public final List<SimpleMatrix> getWeightsList()
     {
         return Arrays.asList(weightsByTexel);
     }
 
     @Override
-    public void invalidateWeights()
+    public final void invalidateWeights()
     {
         // Quickly invalidate all the weights
         Arrays.fill(weightsValidity, false);
     }
 
     @Override
-    public void setWeightsValidity(int texelIndex, boolean validity)
+    public final void setWeightsValidity(int texelIndex, boolean validity)
     {
         weightsValidity[texelIndex] = validity;
     }
 
     @Override
-    public void fillHoles()
+    public final void fillHoles()
     {
         // Fill holes
         // TODO Quick hack; should be replaced with something more robust.
@@ -148,7 +124,7 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
             Collection<Integer> filledPositions = new HashSet<>(256);
             for (int p = 0; p < texelCount; p++)
             {
-                if (!this.areWeightsValid(p))
+                if (!areWeightsValid(p))
                 {
                     int left = (texelCount + p - 1) % texelCount;
                     int right = (p + 1) % texelCount;
@@ -157,38 +133,38 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
 
                     int count = 0;
 
-                    for (int b = 0; b < this.getMaterialBasis().getEnabledMaterialCount(); b++)
+                    for (int b = 0; b < getMaterialBasis().getEnabledMaterialCount(); b++)
                     {
                         count = 0;
                         double sum = 0.0;
 
-                        if (this.areWeightsValid(left))
+                        if (areWeightsValid(left))
                         {
-                            sum += this.getWeights(left).get(b);
+                            sum += getWeights(left).get(b);
                             count++;
                         }
 
-                        if (this.areWeightsValid(right))
+                        if (areWeightsValid(right))
                         {
-                            sum += this.getWeights(right).get(b);
+                            sum += getWeights(right).get(b);
                             count++;
                         }
 
-                        if (this.areWeightsValid(up))
+                        if (areWeightsValid(up))
                         {
-                            sum += this.getWeights(up).get(b);
+                            sum += getWeights(up).get(b);
                             count++;
                         }
 
-                        if (this.areWeightsValid(down))
+                        if (areWeightsValid(down))
                         {
-                            sum += this.getWeights(down).get(b);
+                            sum += getWeights(down).get(b);
                             count++;
                         }
 
                         if (sum > 0.0)
                         {
-                            this.getWeights(p).set(b, sum / count);
+                            getWeights(p).set(b, sum / count);
                         }
                     }
 
@@ -201,7 +177,7 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
 
             for (int p : filledPositions)
             {
-                this.setWeightsValidity(p, true);
+                setWeightsValidity(p, true);
             }
         }
 
@@ -209,11 +185,11 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
     }
 
     @Override
-    public void saveDiffuseMap(File outputDirectory)
+    public final void saveDiffuseMap(File outputDirectory)
     {
-        BufferedImage diffuseImg = new BufferedImage(getTextureResolution().width, getTextureResolution().height, BufferedImage.TYPE_INT_ARGB);
-        int[] diffuseDataPacked = new int[getTextureResolution().width * getTextureResolution().height];
-        for (int p = 0; p < getTextureResolution().width * getTextureResolution().height; p++)
+        BufferedImage diffuseImg = new BufferedImage(textureResolution.width, textureResolution.height, BufferedImage.TYPE_INT_ARGB);
+        int[] diffuseDataPacked = new int[textureResolution.width * textureResolution.height];
+        for (int p = 0; p < textureResolution.width * textureResolution.height; p++)
         {
             DoubleVector4 diffuseSum = DoubleVector4.ZERO;
 
@@ -231,7 +207,7 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
                 DoubleVector3 diffuseAvgGamma = diffuseSum.getXYZ().dividedBy(diffuseSum.w).applyOperator(x -> Math.min(1.0, SRGB.fromLinear(x)));
 
                 // Flip vertically
-                int dataBufferIndex = p % getTextureResolution().width + getTextureResolution().width * (getTextureResolution().height - p / getTextureResolution().width - 1);
+                int dataBufferIndex = p % textureResolution.width + textureResolution.width * (textureResolution.height - p / textureResolution.width - 1);
                 diffuseDataPacked[dataBufferIndex] = new Color((float) diffuseAvgGamma.x, (float) diffuseAvgGamma.y, (float) diffuseAvgGamma.z).getRGB();
             }
         }
@@ -249,14 +225,51 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
     }
 
     @Override
-    public void saveBasisFunctions(File outputDirectory)
+    public final void saveBasisFunctions(File outputDirectory)
     {
         getMaterialBasis().save(outputDirectory, null);
     }
 
     @Override
-    public void saveWeightMaps(File outputDirectory)
+    public final void saveWeightMaps(File outputDirectory)
     {
         getWeights().save(outputDirectory);
+    }
+
+    private static class SpecularDecompositionWeights implements SpecularBasisWeights
+    {
+        private final SpecularDecompositionBase specularDecomposition;
+        private final MaterialBasis basis;
+
+        SpecularDecompositionWeights(SpecularDecompositionBase specularDecomposition)
+        {
+            this.specularDecomposition = specularDecomposition;
+            basis = specularDecomposition.getMaterialBasis();
+        }
+
+        @Override
+        public final double getWeight(int b, int p)
+        {
+            return specularDecomposition.weightsByTexel[p].get(b);
+        }
+
+        @Override
+        public final boolean areWeightsValid(int p)
+        {
+            return specularDecomposition.weightsValidity[p];
+        }
+
+        @Override
+        public final int getCount()
+        {
+            return basis.getEnabledMaterialCount();
+        }
+
+        @Override
+        public final void save(File outputDirectory)
+        {
+            SpecularFitSerializer.saveWeightImages(
+                basis, specularDecomposition.textureResolution.width, specularDecomposition.textureResolution.height, this, outputDirectory);
+        }
     }
 }

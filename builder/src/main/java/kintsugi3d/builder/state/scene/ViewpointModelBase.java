@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.state.scene;
@@ -18,7 +22,7 @@ import kintsugi3d.util.OrbitPolarConverter;
 public abstract class ViewpointModelBase implements ManipulableViewpointModel
 {
     @Override
-    public Matrix4 getLookMatrix()
+    public final Matrix4 getLookMatrix()
     {
         return Matrix4.lookAt(
             new Vector3(0, 0, getDistance()),
@@ -30,36 +34,36 @@ public abstract class ViewpointModelBase implements ManipulableViewpointModel
     }
 
     @Override
-    public void setLookMatrix(Matrix4 lookMatrix)
+    public final void setLookMatrix(Matrix4 lookMatrix)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Matrix4 getOrbit()
+    public final Matrix4 getOrbit()
     {
         Vector3 polar = new Vector3(getAzimuth(), getInclination(), getTwist());
-        return OrbitPolarConverter.getInstance().convertToOrbitMatrix(polar);
+        return OrbitPolarConverter.convertToOrbitMatrix(polar);
     }
 
     @Override
-    public void setOrbit(Matrix4 orbit)
+    public final void setOrbit(Matrix4 orbit)
     {
-        Vector3 polar = OrbitPolarConverter.getInstance().convertToPolarCoordinates(orbit);
+        Vector3 polar = OrbitPolarConverter.convertToPolarCoordinates(orbit);
         setAzimuth(polar.x);
         setInclination(polar.y);
         setTwist(polar.z);
     }
 
     @Override
-    public float getDistance()
+    public final float getDistance()
     {
-        return (float) Math.pow(10, getLog10Distance());
+        return (float) StrictMath.pow(10, getLog10Distance());
     }
 
     @Override
-    public void setDistance(float distance)
+    public final void setDistance(float distance)
     {
-        setLog10Distance((float)Math.log10(distance));
+        setLog10Distance((float) StrictMath.log10(distance));
     }
 }

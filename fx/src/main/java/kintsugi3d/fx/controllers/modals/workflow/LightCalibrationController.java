@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.modals.workflow;
@@ -39,13 +43,13 @@ public class LightCalibrationController extends NonDataPageControllerBase
     private ObservableGeneralSettingsModel settingsModel;
 
     @Override
-    public Region getRootNode()
+    public final Region getRootNode()
     {
         return root;
     }
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         StaticUtilities.makeNumeric(xTextField);
         StaticUtilities.makeNumeric(yTextField);
@@ -57,7 +61,7 @@ public class LightCalibrationController extends NonDataPageControllerBase
     }
 
     @Override
-    public void refresh()
+    public final void refresh()
     {
         // Bind controller to settings model to synchronize with "currentLightCalibration".
         bind();
@@ -77,7 +81,7 @@ public class LightCalibrationController extends NonDataPageControllerBase
     }
 
     @Override
-    public boolean cancel()
+    public final boolean tryCancel()
     {
         if (StaticUtilities.confirmCancel())
         {
@@ -92,15 +96,16 @@ public class LightCalibrationController extends NonDataPageControllerBase
     }
 
     @Override
-    public boolean confirm()
+    public final boolean tryConfirm()
     {
-        Global.io().applyLightOffsetCalibration();
+        Global.io().getLoadedViewSet().setAllLightPositions(
+            settingsModel.get("currentLightCalibration", Vector2.class).asVector3());
         settingsModel.set("lightCalibrationMode", false);
         unbind();
         return true;
     }
 
-    public void bind()
+    private void bind()
     {
         // Bind sliders to settings model
         ChangeListener<? super Number> xListener = (observable, oldValue, newValue) ->
@@ -223,18 +228,18 @@ public class LightCalibrationController extends NonDataPageControllerBase
 
     private static double roundToLeadingDecimal(double value)
     {
-        double orderOfMagnitude = Math.floor(Math.log10(value)); // figure out the leading decimal place
-        double oomScale = Math.pow(10, orderOfMagnitude); // put a 1 in the leading decimal place followed by zeros
+        double orderOfMagnitude = Math.floor(StrictMath.log10(value)); // figure out the leading decimal place
+        double oomScale = StrictMath.pow(10, orderOfMagnitude); // put a 1 in the leading decimal place followed by zeros
         // Round to the leading decimal place
         return Math.round(value / oomScale) * oomScale;
     }
 
-    public void unbind()
+    private void unbind()
     {
         settingsModel.getObjectProperty("currentLightCalibration", Vector2.class).removeListener(settingsListener);
     }
 
-    public void reset()
+    public final void reset()
     {
         xSlider.setValue(0.0);
         ySlider.setValue(0.0);

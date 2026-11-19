@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.modals;
@@ -38,42 +42,48 @@ public class ProjectSettingsManager
     private final ObservableGeneralSettingsModel localSettingsModel = getDefaultSettingsModel();
     private final Set<String> trackedSettings = new HashSet<>(8);
 
-    public static ObservableGeneralSettingsModel getDefaultSettingsModel()
+    protected static ObservableGeneralSettingsModel getDefaultSettingsModel()
     {
         ObservableGeneralSettingsModel settingsModel = new ObservableGeneralSettingsModel();
         DefaultSettings.applyProjectDefaults(settingsModel);
         return settingsModel;
     }
 
-    public ReadonlyObservableGeneralSettingsModel getLocalSettingsModel()
+    public final ReadonlyObservableGeneralSettingsModel getLocalSettingsModel()
     {
         return localSettingsModel;
     }
 
-    public GeneralSettingsModel getProjectSettingsModel()
+    public final GeneralSettingsModel getProjectSettingsModel()
     {
         return projectSettingsModel;
     }
 
-    public Set<String> getTrackedSettings()
+    public final Set<String> getTrackedSettings()
     {
         return Collections.unmodifiableSet(trackedSettings);
     }
 
-    public void refresh()
+    public final void refresh()
     {
         if (Global.io().hasLoadedRenderable())
         {
-            this.projectSettingsModel = Global.io().getLoadedViewSet().getProjectSettings();
+            projectSettingsModel = Global.io().getLoadedViewSet().getProjectSettings();
         }
         else
         {
-            this.projectSettingsModel = new SimpleGeneralSettingsModel();
+            projectSettingsModel = new SimpleGeneralSettingsModel();
             DefaultSettings.applyProjectDefaults(projectSettingsModel);
         }
 
         // Populate local model with the current project settings.
-        localSettingsModel.copyFrom(this.projectSettingsModel);
+        localSettingsModel.copyAllFrom(projectSettingsModel);
+
+        onRefresh();
+    }
+
+    protected void onRefresh()
+    {
     }
 
     /**
@@ -82,9 +92,9 @@ public class ProjectSettingsManager
      * @return
      */
     @FXML
-    public void applySettings()
+    public final void applySettings()
     {
-        this.projectSettingsModel.copyFrom(localSettingsModel, trackedSettings);
+        projectSettingsModel.copyFrom(localSettingsModel, trackedSettings);
     }
 
     /**
@@ -92,18 +102,27 @@ public class ProjectSettingsManager
      * To have these defaults applied to the project, applyBoundSettings() will also need to be called.
      */
     @FXML
-    public void resetSettingsToDefaults()
+    public final void resetSettingsToDefaults()
     {
         GeneralSettingsModel defaults = getDefaultSettingsModel();
         localSettingsModel.copyFrom(defaults, trackedSettings);
     }
 
-    public void trackSetting(String settingName)
+    public final void trackSetting(String settingName)
     {
         trackedSettings.add(settingName);
+        onSettingTracked(settingName);
     }
 
-    public void bindFloatSetting(TextField textField, String settingName, float minValue, float maxValue)
+    /**
+     * Override to add code that runs every time a setting is tracked.
+     * @param settingName
+     */
+    protected void onSettingTracked(String settingName)
+    {
+    }
+
+    public final void bindFloatSetting(TextField textField, String settingName, float minValue, float maxValue)
     {
         trackSetting(settingName);
         StaticUtilities.makeClampedNumeric(minValue, maxValue, textField);
@@ -112,12 +131,12 @@ public class ProjectSettingsManager
         textField.textProperty().bindBidirectional(localSettingsModel.getNumericProperty(settingName), converter);
     }
 
-    public void bindNormalizedSetting(TextField textField, String settingName)
+    public final void bindNormalizedSetting(TextField textField, String settingName)
     {
         bindFloatSetting(textField, settingName, 0, 1);
     }
 
-    public void bindIntegerSetting(TextField textField, String settingName, int minValue, int maxValue)
+    public final void bindIntegerSetting(TextField textField, String settingName, int minValue, int maxValue)
     {
         trackSetting(settingName);
         StaticUtilities.makeClampedInteger(minValue, maxValue, textField);
@@ -126,29 +145,29 @@ public class ProjectSettingsManager
         textField.textProperty().bindBidirectional(localSettingsModel.getNumericProperty(settingName), converter);
     }
 
-    public void bindNumericSetting(Slider slider, String settingName)
+    public final void bindNumericSetting(Slider slider, String settingName)
     {
         trackSetting(settingName);
         slider.setValue(localSettingsModel.getDouble(settingName));
         slider.valueProperty().bindBidirectional(localSettingsModel.getNumericProperty(settingName));
     }
 
-    public void bindBooleanSetting(CheckBox checkBox, String settingName)
+    public final void bindBooleanSetting(CheckBox checkBox, String settingName)
     {
         trackSetting(settingName);
         checkBox.setSelected(localSettingsModel.getBoolean(settingName));
         checkBox.selectedProperty().bindBidirectional(localSettingsModel.getBooleanProperty(settingName));
     }
 
-    public void bindBooleanSetting(BooleanProperty property, String settingName)
+    public final void bindBooleanSetting(BooleanProperty property, String settingName)
     {
         trackSetting(settingName);
         property.set(localSettingsModel.getBoolean(settingName));
         property.bindBidirectional(localSettingsModel.getBooleanProperty(settingName));
     }
 
-    public <T> void bindNumericComboBox(ComboBox<T> comboBox, String settingName,
-        Function<Number, T> choiceConstructor, Function<T, Number> extractNumeric)
+    public final <T> void bindNumericComboBox(ComboBox<T> comboBox, String settingName,
+                                              Function<Number, T> choiceConstructor, Function<T, Number> extractNumeric)
     {
         trackSetting(settingName);
 
@@ -162,8 +181,8 @@ public class ProjectSettingsManager
         comboBox.setValue(choiceConstructor.apply(localSettingsModel.get(settingName, Number.class)));
     }
 
-    public <T> void bindTextComboBox(ComboBox<T> comboBox, String settingName,
-        Function<String, T> choiceConstructor, Function<T, String> extractText)
+    public final <T> void bindTextComboBox(ComboBox<T> comboBox, String settingName,
+                                           Function<String, T> choiceConstructor, Function<T, String> extractText)
     {
         trackSetting(settingName);
 
@@ -177,12 +196,12 @@ public class ProjectSettingsManager
         comboBox.setValue(choiceConstructor.apply(localSettingsModel.get(settingName, String.class)));
     }
 
-    public void bindTextComboBox(ComboBox<String> comboBox, String settingName)
+    public final void bindTextComboBox(ComboBox<String> comboBox, String settingName)
     {
         bindTextComboBox(comboBox, settingName, Function.identity(), Function.identity());
     }
 
-    public <T> void bindObjectComboBox(ComboBox<T> comboBox, String settingName, Class<T> objectClass)
+    public final <T> void bindObjectComboBox(ComboBox<T> comboBox, String settingName, Class<T> objectClass)
     {
         trackSetting(settingName);
 

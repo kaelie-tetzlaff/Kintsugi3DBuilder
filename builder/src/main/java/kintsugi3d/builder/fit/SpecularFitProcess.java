@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit;
@@ -33,17 +37,14 @@ import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.material.ReadonlyImportedMaterial;
 import kintsugi3d.gl.material.ReadonlyMaterialTextureMap;
 import kintsugi3d.gl.stream.GraphicsStreamResource;
+import kintsugi3d.gl.util.BufferedImageColorList;
 import kintsugi3d.gl.util.ImageHelper;
-import kintsugi3d.util.BufferedImageColorList;
 import kintsugi3d.util.ImageFinder;
 import org.ejml.simple.SimpleMatrix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
@@ -70,17 +71,17 @@ public abstract class SpecularFitProcess
         this.outputDirectory = outputDirectory;
     }
 
-    public ReadonlySpecularFitSettings getSettings()
+    protected final ReadonlySpecularFitSettings getSettings()
     {
-        return this.settings;
+        return settings;
     }
 
-    public File getOutputDirectory()
+    protected final File getOutputDirectory()
     {
-        return this.outputDirectory;
+        return outputDirectory;
     }
 
-    public <ContextType extends Context<ContextType>> void reconstructAll(
+    public final <ContextType extends Context<ContextType>> void reconstructAll(
         ReadonlyImageBasedGraphicsResources<ContextType> resources, BiConsumer<ReconstructionView<ContextType>, ReadonlyColorAppearanceRMSE> reconstructionCallback)
         throws IOException
     {
@@ -116,7 +117,7 @@ public abstract class SpecularFitProcess
                 }
                 catch (IOException e)
                 {
-                    throw new RuntimeException(e);
+                    throw new UncheckedIOException(e);
                 }
             });
             ProgramObject<ContextType> basisModelReconstructionProgram =
@@ -135,7 +136,7 @@ public abstract class SpecularFitProcess
         }
     }
 
-    protected <ContextType extends Context<ContextType>> SpecularFitFinal<ContextType> optimizeFullResTexturesWithCache(
+    protected final <ContextType extends Context<ContextType>> SpecularFitFinal<ContextType> optimizeFullResTexturesWithCache(
         ImageCache<ContextType> cache, ProgressMonitor monitor, ReadonlyTextureResources<ContextType> original,
         MaterialBasis basis, Temporal start) throws IOException, UserCancellationException
     {
@@ -155,7 +156,7 @@ public abstract class SpecularFitProcess
             ReadonlyImportedMaterial material = cache.getGeometry().getMaterial();
             ReadonlyMaterialTextureMap normalMap = material == null ? null : material.getNormalMap();
             File inputNormalMap = geometryFile == null || material == null || normalMap == null ? null :
-                ImageFinder.getInstance().tryFindImageFile(new File(geometryFile.getParentFile(), normalMap.getMapName()));
+                ImageFinder.tryFindImageFile(new File(geometryFile.getParentFile(), normalMap.getMapName()));
 
             // Optimize weight maps and normal maps by blocks to fill the full resolution textures
             optimizeBlocks(fullResolution, cache, basis, inputNormalMap, monitor);
@@ -205,6 +206,35 @@ public abstract class SpecularFitProcess
         LOG.info("Total processing time: {}", duration);
     }
 
+    private static <ContextType extends Context<ContextType>>
+    Texture2D<ContextType> loadInitialNormalMap(ContextType context, int targetWidth, int targetHeight, File inputNormalMapFile)
+        throws IOException
+    {
+        Texture2D<ContextType> normalMap = context.getTextureFactory()
+            .build2DColorTexture(targetWidth, targetHeight)
+            .setInternalFormat(ColorFormat.RGBA8)
+            .setMipmapsEnabled(false)
+            .setLinearFilteringEnabled(true)
+            .createTexture();
+
+        if (inputNormalMapFile != null)
+        {
+            // Reload input normal map since it needs to be uncompressed for blit operations
+            try (Texture2D<ContextType> inputNormalMap = context.getTextureFactory()
+                .build2DColorTextureFromFile(inputNormalMapFile, true)
+                .setInternalFormat(ColorFormat.RGBA8)
+                .setMipmapsEnabled(false)
+                .setLinearFilteringEnabled(true)
+                .createTexture())
+            {
+                // May need to rescale to the target resolution
+                normalMap.blitScaled(inputNormalMap, true);
+            }
+        }
+
+        return normalMap;
+    }
+
     private <ContextType extends Context<ContextType>> void optimizeBlocks(
         Blittable<ReadonlyTextureResources<ContextType>> fullResolutionDestination,
         ImageCache<ContextType> cache,
@@ -216,28 +246,11 @@ public abstract class SpecularFitProcess
         SpecularFitResourcesWrapper<ContextType> resourcesWrapper = getResourcesWrapper();
 
         try(TextureBlockResourceFactory<ContextType> blockResourceFactory = cache.createBlockResourceFactory();
-            Texture2D<ContextType> initialNormalMap = cache.getContext().getTextureFactory()
-                .build2DColorTexture(fullResolutionDestination.getWidth(), fullResolutionDestination.getHeight())
-                .setInternalFormat(ColorFormat.RGBA8)
-                .setMipmapsEnabled(false)
-                .setLinearFilteringEnabled(true)
-                .createTexture())
+            OptionalManagedResource<Texture2D<ContextType>> initialNormalMap = inputNormalMapFile == null ?
+                OptionalManagedResource.empty() :
+                OptionalManagedResource.of(loadInitialNormalMap(cache.getContext(),
+                    fullResolutionDestination.getWidth(), fullResolutionDestination.getHeight(), inputNormalMapFile)))
         {
-            if (inputNormalMapFile != null)
-            {
-                // Reload input normal map since it needs to be uncompressed for blit operations
-                try (Texture2D<ContextType> inputNormalMap = cache.getContext().getTextureFactory()
-                    .build2DColorTextureFromFile(inputNormalMapFile, true)
-                    .setInternalFormat(ColorFormat.RGBA8)
-                    .setMipmapsEnabled(false)
-                    .setLinearFilteringEnabled(true)
-                    .createTexture())
-                {
-                    // May need to rescale to the target resolution
-                    initialNormalMap.blitScaled(inputNormalMap, true);
-                }
-            }
-
             if (monitor != null)
             {
                 monitor.setMaxProgress(cache.getSettings().getTextureSubdiv() * cache.getSettings().getTextureSubdiv());
@@ -256,32 +269,8 @@ public abstract class SpecularFitProcess
                         monitor.allowUserCancellation();
                     }
 
-                    try (GraphicsResourcesTextureSpace<ContextType> blockResources = blockResourceFactory.createBlockResources(i, j,
-                            new DefaultProgressMonitor() // simple progress monitor for logging; will not be shown in the UI
-                            {
-                                private double maxProgress = 0.0;
-
-                                @Override
-                                public void allowUserCancellation() throws UserCancellationException
-                                {
-                                    if (monitor != null)
-                                    {
-                                        monitor.allowUserCancellation();
-                                    }
-                                }
-
-                                @Override
-                                public void setMaxProgress(double maxProgress)
-                                {
-                                    this.maxProgress = maxProgress;
-                                }
-
-                                @Override
-                                public void setProgress(double progress, String message)
-                                {
-                                    LOG.info("[{}%] {}", new DecimalFormat("#.##").format(progress / maxProgress * 100), message);
-                                }
-                            }))
+                    try (GraphicsResourcesTextureSpace<ContextType> blockResources =
+                             blockResourceFactory.createBlockResources(i, j, new BlockResourcesProgressMonitor(monitor)))
                     {
                         TextureResolution blockResolution = blockResources.getTextureResolution();
                         try (SpecularFitOptimizable<ContextType> blockOptimization = SpecularFitOptimizable.createNew(
@@ -290,7 +279,7 @@ public abstract class SpecularFitProcess
                             blockResources, resourcesWrapper, basis.copy(), blockResolution,
                             settings.getNormalOptimizationSettings(), settings.shouldIncludeConstantTerm()))
                         {
-                            if (inputNormalMapFile != null)
+                            if (initialNormalMap.isPresent())
                             {
                                 int x = settings.getImageCacheSettings().getBlockStartX(i);
                                 int y = settings.getImageCacheSettings().getBlockStartY(j);
@@ -298,7 +287,7 @@ public abstract class SpecularFitProcess
                                 int height = settings.getImageCacheSettings().getBlockStartY(j + 1) - y;
 
                                 blockOptimization.getNormalOptimization().getNormalMap().blitCropped(
-                                    initialNormalMap, x, y, width, height);
+                                    initialNormalMap.get(), x, y, width, height);
                             }
 
                             // Use basis functions previously optimized at a lower resolution
@@ -322,52 +311,7 @@ public abstract class SpecularFitProcess
                                 (stream, monitorLocal) -> blockOptimization.optimizeFromExistingBasis(
                                     blockDecomposition, stream, settings.getConvergenceTolerance(), monitorLocal,
                                     TRACE_IMAGES && outputDirectory != null ? outputDirectory : null),
-                                new DefaultProgressMonitor() // wrap progress monitor with logic to account for it being just one block out of the whole.
-                                {
-                                    private double maxProgress = 0.0;
-
-                                    @Override
-                                    public void allowUserCancellation() throws UserCancellationException
-                                    {
-                                        if (monitor != null)
-                                        {
-                                            monitor.allowUserCancellation();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void setMaxProgress(double maxProgress)
-                                    {
-                                        this.maxProgress = maxProgress;
-                                    }
-
-                                    @Override
-                                    public void setProgress(double progress, String message)
-                                    {
-                                        if (monitor != null)
-                                        {
-                                            monitor.setProgress(blockProgress + progress / maxProgress, message);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void complete()
-                                    {
-                                        if (monitor != null)
-                                        {
-                                            monitor.setProgress(blockProgress + 1, "Block complete.");
-                                        }
-                                    }
-
-                                    @Override
-                                    public void fail(Throwable e)
-                                    {
-                                        if (monitor != null)
-                                        {
-                                            monitor.fail(e);
-                                        }
-                                    }
-                                }
+                                new OptimizationProgressMonitor(monitor, blockProgress)
                             );
 
                             // Fill holes in the weight map
@@ -393,7 +337,7 @@ public abstract class SpecularFitProcess
         }
     }
 
-    protected <ContextType extends Context<ContextType>> void optimizeTexSpaceFit(
+    protected final <ContextType extends Context<ContextType>> void optimizeTexSpaceFit(
         ReadonlyImageBasedGraphicsResources<ContextType> resources,
         TextureResolution resolution,
         OptimizationMethod<ContextType> optimizationMethod,
@@ -454,4 +398,93 @@ public abstract class SpecularFitProcess
     }
 
     protected abstract <ContextType extends Context<ContextType>> SpecularFitResourcesWrapper<ContextType> getResourcesWrapper();
+
+    private static final class BlockResourcesProgressMonitor extends DefaultProgressMonitor
+    {
+        private final ProgressMonitor monitor;
+        private double maxProgress;
+
+        private BlockResourcesProgressMonitor(ProgressMonitor monitor)
+        {
+            this.monitor = monitor;
+            maxProgress = 0.0;
+        }
+
+        @Override
+        public void allowUserCancellation() throws UserCancellationException
+        {
+            if (monitor != null)
+            {
+                monitor.allowUserCancellation();
+            }
+        }
+
+        @Override
+        public void setMaxProgress(double maxProgress)
+        {
+            this.maxProgress = maxProgress;
+        }
+
+        @Override
+        public void setProgress(double progress, String message)
+        {
+            LOG.info("[{}%] {}", new DecimalFormat("#.##").format(progress / maxProgress * 100), message);
+        }
+    }
+
+    private static final class OptimizationProgressMonitor extends DefaultProgressMonitor
+    {
+        private final ProgressMonitor monitor;
+        private final int blockProgress;
+        private double maxProgress;
+
+        private OptimizationProgressMonitor(ProgressMonitor monitor, int blockProgress)
+        {
+            this.monitor = monitor;
+            this.blockProgress = blockProgress;
+            maxProgress = 0.0;
+        }
+
+        @Override
+        public void allowUserCancellation() throws UserCancellationException
+        {
+            if (monitor != null)
+            {
+                monitor.allowUserCancellation();
+            }
+        }
+
+        @Override
+        public void setMaxProgress(double maxProgress)
+        {
+            this.maxProgress = maxProgress;
+        }
+
+        @Override
+        public void setProgress(double progress, String message)
+        {
+            if (monitor != null)
+            {
+                monitor.setProgress(blockProgress + progress / maxProgress, message);
+            }
+        }
+
+        @Override
+        public void complete()
+        {
+            if (monitor != null)
+            {
+                monitor.setProgress(blockProgress + 1, "Block complete.");
+            }
+        }
+
+        @Override
+        public void fail(Throwable e)
+        {
+            if (monitor != null)
+            {
+                monitor.fail(e);
+            }
+        }
+    }
 }

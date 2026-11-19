@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.modals.createnewproject;
@@ -40,13 +44,13 @@ public class MasksImportController
     private File fileChooserMasksDir; //represents the file chosen through file chooser, which may or may not be the final masks selection
 
     @Override
-    public Region getRootNode()
+    public final Region getRootNode()
     {
         return rootPane;
     }
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         masksDirectoryChooser = new DirectoryChooser();
 
@@ -55,7 +59,7 @@ public class MasksImportController
         toggleGroup.getToggles().add(customMasksDirButton);
         toggleGroup.getToggles().add(noMasksButton);
 
-        this.getCanAdvanceObservable().bind(toggleGroup.selectedToggleProperty().isNotNull());
+        getCanAdvanceObservable().bind(toggleGroup.selectedToggleProperty().isNotNull());
 
         customMasksDirButton.setOnAction(this::chooseMasksDir);
 
@@ -63,14 +67,14 @@ public class MasksImportController
     }
 
     @Override
-    public void refresh()
+    public final void refresh()
     {
         masksDirectoryChooser.setInitialDirectory(source.getInitialMasksDirectory());
         useProjectMasksButton.setDisable(!source.hasProjectMasks());
     }
 
     @Override
-    public boolean advance()
+    public final boolean tryAdvance()
     {
         if (customMasksDirButton.isSelected())
         {
@@ -86,7 +90,7 @@ public class MasksImportController
     }
 
     @Override
-    public boolean confirm()
+    public final boolean tryConfirm()
     {
         return source.confirm();
     }
@@ -110,8 +114,8 @@ public class MasksImportController
     }
 
     @Override
-    public void receiveData(ValidatedInputSource source)
+    public final void receiveData(ValidatedInputSource data)
     {
-        this.source = source;
+        source = data;
     }
 }

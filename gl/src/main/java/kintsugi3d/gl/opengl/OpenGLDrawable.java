@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.opengl;
@@ -31,7 +35,7 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
         void set();
     }
 
-    protected final OpenGLContext context;
+    private final OpenGLContext context;
 
     private final OpenGLProgramObject program;
     private final OpenGLVertexArray vao;
@@ -41,29 +45,29 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     {
         this.context = context;
         this.program = program;
-        this.vao = new OpenGLVertexArray(context);
-        this.settings = new TreeMap<>();
+        vao = new OpenGLVertexArray(context);
+        settings = new TreeMap<>();
     }
 
     @Override
-    public OpenGLContext getContext()
+    public final OpenGLContext getContext()
     {
-        return this.context;
+        return context;
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         vao.close();
     }
 
     @Override
-    public OpenGLProgramObject program()
+    public final OpenGLProgramObject program()
     {
-        return this.program;
+        return program;
     }
 
-    private static int getOpenGLPrimitiveModeConst(PrimitiveMode primitiveMode)
+    private static int getPrimitiveModeConst(PrimitiveMode primitiveMode)
     {
         switch(primitiveMode)
         {
@@ -83,7 +87,7 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     }
 
     @Override
-    public void draw(PrimitiveMode primitiveMode, Framebuffer<OpenGLContext> framebuffer)
+    public final void draw(PrimitiveMode primitiveMode, Framebuffer<OpenGLContext> framebuffer)
     {
         framebuffer.getDrawContents().bindForDraw();
         program.use(vao);
@@ -91,11 +95,11 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
         {
             s.set();
         }
-        vao.draw(getOpenGLPrimitiveModeConst(primitiveMode));
+        vao.draw(getPrimitiveModeConst(primitiveMode));
     }
 
     @Override
-    public void draw(PrimitiveMode primitiveMode, Framebuffer<OpenGLContext> framebuffer, int x, int y, int width, int height)
+    public final void draw(PrimitiveMode primitiveMode, Framebuffer<OpenGLContext> framebuffer, int x, int y, int width, int height)
     {
         framebuffer.getDrawContents().bindViewportForDraw(x, y, width, height);
         program.use(vao);
@@ -103,34 +107,29 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
         {
             s.set();
         }
-        vao.draw(getOpenGLPrimitiveModeConst(primitiveMode));
+        vao.draw(getPrimitiveModeConst(primitiveMode));
     }
 
     @Override
-    public void draw(PrimitiveMode primitiveMode, Framebuffer<OpenGLContext> framebuffer, int width, int height)
+    public final void draw(PrimitiveMode primitiveMode, Framebuffer<OpenGLContext> framebuffer, int width, int height)
     {
-        this.draw(primitiveMode, framebuffer, 0, 0, width, height);
+        draw(primitiveMode, framebuffer, 0, 0, width, height);
     }
 
     @Override
-    public void draw(PrimitiveMode primitiveMode)
+    public final void draw(PrimitiveMode primitiveMode)
     {
-        this.draw(primitiveMode, context.getDefaultFramebuffer());
+        draw(primitiveMode, context.getDefaultFramebuffer());
     }
 
     @Override
-    public boolean addVertexBuffer(int location, ReadonlyVertexBuffer<OpenGLContext> buffer)
+    public final void addVertexBuffer(int location, ReadonlyVertexBuffer<OpenGLContext> buffer)
     {
         if (buffer instanceof OpenGLVertexBuffer)
         {
             if (location >= 0)
             {
-                this.vao.addVertexBuffer(location, buffer);
-                return true;
-            }
-            else
-            {
-                return false;
+                vao.addVertexBuffer(location, buffer);
             }
         }
         else
@@ -140,13 +139,13 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     }
 
     @Override
-    public boolean addVertexBuffer(String name, ReadonlyVertexBuffer<OpenGLContext> buffer)
+    public final void addVertexBuffer(String name, ReadonlyVertexBuffer<OpenGLContext> buffer)
     {
-        return this.addVertexBuffer(program.getVertexAttribLocation(name), buffer);
+        addVertexBuffer(program.getVertexAttribLocation(name), buffer);
     }
 
     @Override
-    public boolean setVertexAttrib(int location, int value)
+    public final void setVertexAttrib(int location, int value)
     {
         if (location >= 0)
         {
@@ -155,16 +154,11 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
                 glVertexAttribI1i(location, value);
                 OpenGLContext.errorCheck();
             });
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setVertexAttrib(int location, IntVector2 value)
+    public final void setVertexAttrib(int location, IntVector2 value)
     {
         if (location >= 0)
         {
@@ -173,16 +167,11 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
                 glVertexAttribI2i(location, value.x, value.y);
                 OpenGLContext.errorCheck();
             });
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setVertexAttrib(int location, IntVector3 value)
+    public final void setVertexAttrib(int location, IntVector3 value)
     {
         if (location >= 0)
         {
@@ -191,16 +180,11 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
                 glVertexAttribI3i(location, value.x, value.y, value.z);
                 OpenGLContext.errorCheck();
             });
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setVertexAttrib(int location, IntVector4 value)
+    public final void setVertexAttrib(int location, IntVector4 value)
     {
         if (location >= 0)
         {
@@ -209,16 +193,11 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
                 glVertexAttribI4i(location, value.x, value.y, value.z, value.w);
                 OpenGLContext.errorCheck();
             });
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setVertexAttrib(int location, float value)
+    public final void setVertexAttrib(int location, float value)
     {
         if (location >= 0)
         {
@@ -227,16 +206,11 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
                 glVertexAttrib1f(location, value);
                 OpenGLContext.errorCheck();
             });
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setVertexAttrib(int location, Vector2 value)
+    public final void setVertexAttrib(int location, Vector2 value)
     {
         if (location >= 0)
         {
@@ -245,16 +219,11 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
                 glVertexAttrib2f(location, value.x, value.y);
                 OpenGLContext.errorCheck();
             });
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setVertexAttrib(int location, Vector3 value)
+    public final void setVertexAttrib(int location, Vector3 value)
     {
         if (location >= 0)
         {
@@ -263,16 +232,11 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
                 glVertexAttrib3f(location, value.x, value.y, value.z);
                 OpenGLContext.errorCheck();
             });
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setVertexAttrib(int location, Vector4 value)
+    public final void setVertexAttrib(int location, Vector4 value)
     {
         if (location >= 0)
         {
@@ -281,16 +245,11 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
                 glVertexAttrib4f(location, value.x, value.y, value.z, value.w);
                 OpenGLContext.errorCheck();
             });
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setVertexAttrib(int location, double value)
+    public final void setVertexAttrib(int location, double value)
     {
         if (location >= 0)
         {
@@ -299,16 +258,11 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
                 glVertexAttrib1d(location, value);
                 OpenGLContext.errorCheck();
             });
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setVertexAttrib(int location, DoubleVector2 value)
+    public final void setVertexAttrib(int location, DoubleVector2 value)
     {
         if (location >= 0)
         {
@@ -317,16 +271,11 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
                 glVertexAttrib2d(location, value.x, value.y);
                 OpenGLContext.errorCheck();
             });
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setVertexAttrib(int location, DoubleVector3 value)
+    public final void setVertexAttrib(int location, DoubleVector3 value)
     {
         if (location >= 0)
         {
@@ -335,16 +284,11 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
                 glVertexAttrib3d(location, value.x, value.y, value.z);
                 OpenGLContext.errorCheck();
             });
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setVertexAttrib(int location, DoubleVector4 value)
+    public final void setVertexAttrib(int location, DoubleVector4 value)
     {
         if (location >= 0)
         {
@@ -353,95 +297,90 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
                 glVertexAttrib4d(location, value.x, value.y, value.z, value.w);
                 OpenGLContext.errorCheck();
             });
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
     @Override
-    public boolean setVertexAttrib(String name, int value)
+    public final void setVertexAttrib(String name, int value)
     {
         int location = program.getVertexAttribLocation(name);
-        return this.setVertexAttrib(location, value);
+        setVertexAttrib(location, value);
     }
 
     @Override
-    public boolean setVertexAttrib(String name, IntVector2 value)
+    public final void setVertexAttrib(String name, IntVector2 value)
     {
         int location = program.getVertexAttribLocation(name);
-        return this.setVertexAttrib(location, value);
+        setVertexAttrib(location, value);
     }
 
     @Override
-    public boolean setVertexAttrib(String name, IntVector3 value)
+    public final void setVertexAttrib(String name, IntVector3 value)
     {
         int location = program.getVertexAttribLocation(name);
-        return this.setVertexAttrib(location, value);
+        setVertexAttrib(location, value);
     }
 
     @Override
-    public boolean setVertexAttrib(String name, IntVector4 value)
+    public final void setVertexAttrib(String name, IntVector4 value)
     {
         int location = program.getVertexAttribLocation(name);
-        return this.setVertexAttrib(location, value);
+        setVertexAttrib(location, value);
     }
 
     @Override
-    public boolean setVertexAttrib(String name, float value)
+    public final void setVertexAttrib(String name, float value)
     {
         int location = program.getVertexAttribLocation(name);
-        return this.setVertexAttrib(location, value);
+        setVertexAttrib(location, value);
     }
 
     @Override
-    public boolean setVertexAttrib(String name, Vector2 value)
+    public final void setVertexAttrib(String name, Vector2 value)
     {
         int location = program.getVertexAttribLocation(name);
-        return this.setVertexAttrib(location, value);
+        setVertexAttrib(location, value);
     }
 
     @Override
-    public boolean setVertexAttrib(String name, Vector3 value)
+    public final void setVertexAttrib(String name, Vector3 value)
     {
         int location = program.getVertexAttribLocation(name);
-        return this.setVertexAttrib(location, value);
+        setVertexAttrib(location, value);
     }
 
     @Override
-    public boolean setVertexAttrib(String name, Vector4 value)
+    public final void setVertexAttrib(String name, Vector4 value)
     {
         int location = program.getVertexAttribLocation(name);
-        return this.setVertexAttrib(location, value);
+        setVertexAttrib(location, value);
     }
 
     @Override
-    public boolean setVertexAttrib(String name, double value)
+    public final void setVertexAttrib(String name, double value)
     {
         int location = program.getVertexAttribLocation(name);
-        return this.setVertexAttrib(location, value);
+        setVertexAttrib(location, value);
     }
 
     @Override
-    public boolean setVertexAttrib(String name, DoubleVector2 value)
+    public final void setVertexAttrib(String name, DoubleVector2 value)
     {
         int location = program.getVertexAttribLocation(name);
-        return this.setVertexAttrib(location, value);
+        setVertexAttrib(location, value);
     }
 
     @Override
-    public boolean setVertexAttrib(String name, DoubleVector3 value)
+    public final void setVertexAttrib(String name, DoubleVector3 value)
     {
         int location = program.getVertexAttribLocation(name);
-        return this.setVertexAttrib(location, value);
+        setVertexAttrib(location, value);
     }
 
     @Override
-    public boolean setVertexAttrib(String name, DoubleVector4 value)
+    public final void setVertexAttrib(String name, DoubleVector4 value)
     {
         int location = program.getVertexAttribLocation(name);
-        return this.setVertexAttrib(location, value);
+        setVertexAttrib(location, value);
     }
 }

@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.multithread;
@@ -31,114 +35,114 @@ public class SynchronizedCameraModel extends ViewpointModelBase
     public SynchronizedCameraModel(ManipulableViewpointModel baseModel)
     {
         this.baseModel = baseModel;
-        this.target = SynchronizedValue.createFromFunctions(baseModel::getTarget, baseModel::setTarget);
-        this.azimuth = SynchronizedValue.createFromFunctions(baseModel::getAzimuth, baseModel::setAzimuth);
-        this.inclination = SynchronizedValue.createFromFunctions(baseModel::getInclination, baseModel::setInclination);
-        this.log10Distance = SynchronizedValue.createFromFunctions(baseModel::getLog10Distance, baseModel::setLog10Distance);
-        this.twist = SynchronizedValue.createFromFunctions(baseModel::getTwist, baseModel::setTwist);
-        this.horizontalFOV = SynchronizedValue.createFromFunctions(baseModel::getHorizontalFOV, baseModel::setHorizontalFOV);
-        this.focalLength = SynchronizedValue.createFromFunctions(baseModel::getFocalLength, baseModel::setFocalLength);
-        this.orthographic = SynchronizedValue.createFromFunctions(baseModel::isOrthographic, baseModel::setOrthographic);
+        target = SynchronizedValue.createFromFunctions(baseModel::getTarget, baseModel::setTarget);
+        azimuth = SynchronizedValue.createFromFunctions(baseModel::getAzimuth, baseModel::setAzimuth);
+        inclination = SynchronizedValue.createFromFunctions(baseModel::getInclination, baseModel::setInclination);
+        log10Distance = SynchronizedValue.createFromFunctions(baseModel::getLog10Distance, baseModel::setLog10Distance);
+        twist = SynchronizedValue.createFromFunctions(baseModel::getTwist, baseModel::setTwist);
+        horizontalFOV = SynchronizedValue.createFromFunctions(baseModel::getHorizontalFOV, baseModel::setHorizontalFOV);
+        focalLength = SynchronizedValue.createFromFunctions(baseModel::getFocalLength, baseModel::setFocalLength);
+        orthographic = SynchronizedValue.createFromFunctions(baseModel::isOrthographic, baseModel::setOrthographic);
     }
 
     @Override
-    public boolean isLocked()
+    public final boolean isLocked()
     {
         return baseModel.isLocked();
     }
 
     @Override
-    public Vector3 getTarget()
+    public final Vector3 getTarget()
     {
-        return this.target.getValue();
+        return target.getValue();
     }
 
     @Override
-    public void setTarget(Vector3 target)
+    public final void setTarget(Vector3 target)
     {
         this.target.setValue(target);
     }
 
     @Override
-    public boolean isOrthographic()
+    public final boolean isOrthographic()
     {
-        return this.orthographic.getValue();
+        return orthographic.getValue();
     }
 
     @Override
-    public void setOrthographic(boolean orthographic)
+    public final void setOrthographic(boolean orthographic)
     {
         this.orthographic.setValue(orthographic);
     }
 
     @Override
-    public float getHorizontalFOV()
+    public final float getHorizontalFOV()
     {
-        return this.horizontalFOV.getValue();
+        return horizontalFOV.getValue();
     }
 
     @Override
-    public void setHorizontalFOV(float fov)
+    public final void setHorizontalFOV(float fov)
     {
-        this.horizontalFOV.setValue(fov);
+        horizontalFOV.setValue(fov);
     }
 
     @Override
-    public float getLog10Distance()
+    public final float getLog10Distance()
     {
-        return this.log10Distance.getValue();
+        return log10Distance.getValue();
     }
 
     @Override
-    public void setLog10Distance(float log10Distance)
+    public final void setLog10Distance(float log10Distance)
     {
         this.log10Distance.setValue(log10Distance);
     }
 
     @Override
-    public float getTwist()
+    public final float getTwist()
     {
-        return this.twist.getValue();
+        return twist.getValue();
     }
 
     @Override
-    public void setTwist(float twist)
+    public final void setTwist(float twist)
     {
         this.twist.setValue(twist);
     }
 
     @Override
-    public float getAzimuth()
+    public final float getAzimuth()
     {
-        return this.azimuth.getValue();
+        return azimuth.getValue();
     }
 
     @Override
-    public void setAzimuth(float azimuth)
+    public final void setAzimuth(float azimuth)
     {
         this.azimuth.setValue(azimuth);
     }
 
     @Override
-    public float getInclination()
+    public final float getInclination()
     {
-        return this.inclination.getValue();
+        return inclination.getValue();
     }
 
     @Override
-    public void setInclination(float inclination)
+    public final void setInclination(float inclination)
     {
         this.inclination.setValue(inclination);
     }
 
     @Override
-    public float getFocalLength()
+    public final float getFocalLength()
     {
-        return this.focalLength.getValue();
+        return focalLength.getValue();
     }
 
     @Override
-    public void setFocalLength(float focalLength)
+    public final void setFocalLength(float focalLength)
     {
         this.focalLength.setValue(focalLength);
     }

@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.core;
@@ -53,6 +57,7 @@ import kintsugi3d.fx.gl.FramebufferView;
 import kintsugi3d.fx.internal.ObservableActiveShaderModel;
 import kintsugi3d.fx.internal.ObservableCardsModel;
 import kintsugi3d.fx.internal.ObservableProjectModel;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -87,7 +92,6 @@ public class MainWindowController
     @FXML private CheckMenuItem multiSamplingCheckMenuItem;
     @FXML private CheckMenuItem relightingCheckMenuItem;
     @FXML private CheckMenuItem sceneWindowCheckMenuItem;
-    @FXML private CheckMenuItem environmentMappingCheckMenuItem; //TODO imp. this
     @FXML private CheckMenuItem visibleLightsCheckMenuItem;
     @FXML private CheckMenuItem visibleLightWidgetsCheckMenuItem;
     @FXML private CheckMenuItem visibleCameraPoseCheckMenuItem;
@@ -102,9 +106,6 @@ public class MainWindowController
     @FXML private Menu weightmapMenu;
     @FXML private Menu paletteMaterialWeightedMenu;
     @FXML private Menu texturesMenu;
-
-    @FXML private MenuItem removeAllRefsCustMenuItem;
-    @FXML private MenuItem removeSomeRefsCustMenuItem;
 
     //pull this in so we can explicitly set shader to image-based upon load
     //without this, user could select a shader, load a project,
@@ -145,39 +146,39 @@ public class MainWindowController
     private Window window;
     private Runnable userDocumentationHandler;
 
-    public MainWindowController()
-    {
-        instance = this;
-    }
-
     static MainWindowController getInstance()
     {
+        //noinspection StaticVariableUsedBeforeInitialization
         return instance;
     }
 
-    public void init(Stage injectedStage, JavaFXState javaFXState, Runnable injectedUserDocumentationHandler)
+    public final void init(Stage injectedStage, @SuppressWarnings("ParameterHidesMemberVariable") JavaFXState javaFXState,
+                           Runnable injectedUserDocumentationHandler)
     {
-        this.window = injectedStage;
+        //noinspection AssignmentToStaticFieldFromInstanceMethod
+        instance = this;
 
-        this.framebufferView.registerKeyAndWindowEventsFromStage(injectedStage);
+        window = injectedStage;
+
+        framebufferView.registerKeyAndWindowEventsFromStage(injectedStage);
         WindowSynchronization.getInstance().addListener(framebufferView::closeCanvas);
 
-        ExperienceManager.getInstance().initialize(this.getWindow(), javaFXState);
+        ExperienceManager.getInstance().initialize(window, javaFXState);
 
         // remove camera view list from layout when invisible
-        this.cameraViewList.managedProperty().bind(this.cameraViewList.visibleProperty());
+        cameraViewList.managedProperty().bind(cameraViewList.visibleProperty());
 
         // only show camera view list when light calibration mode is active
         // TODO make this a separate property to allow it to be shown in other contexts
-        this.cameraViewList.visibleProperty().bind(javaFXState.getSettingsModel().getBooleanProperty("lightCalibrationMode"));
-        this.cameraViewListController.init(javaFXState.getCameraViewListModel());
+        cameraViewList.visibleProperty().bind(javaFXState.getSettingsModel().getBooleanProperty("lightCalibrationMode"));
+        cameraViewListController.init(javaFXState.getCameraViewListModel());
 
         this.javaFXState = javaFXState;
-        this.userDocumentationHandler = injectedUserDocumentationHandler;
+        userDocumentationHandler = injectedUserDocumentationHandler;
 
-        this.leftBarController.init(javaFXState.getTabModels());
-        this.rightBarController.init(javaFXState.getTabModels(), javaFXState.getUserShaderModel());
-        this.carouselController.init(javaFXState.getCarouselModel(), this);
+        leftBarController.init(javaFXState.getTabModels());
+        rightBarController.init(javaFXState.getTabModels(), javaFXState.getUserShaderModel());
+        carouselController.init(javaFXState.getCarouselModel(), this);
 
         initRenderExportMenu();
         initToggleGroups();
@@ -370,18 +371,18 @@ public class MainWindowController
             // Remove fallback menu items for MacOS and replace with custom menu items with tooltips.
             cleanRecentProjectsMenu.getItems().clear();
 
-            removeSomeRefsCustMenuItem = new CustomMenuItem(new Label("Clear Missing Projects"));
-            removeSomeRefsCustMenuItem.setOnAction(event -> RecentProjects.removeInvalidReferences());
+            CustomMenuItem removeSomeRefsCustMenuItem = new CustomMenuItem(new Label("Clear Missing Projects"));
+            removeSomeRefsCustMenuItem.setOnAction(event -> RecentProjects.getInstance().removeInvalidReferences());
 
-            Tooltip.install(((CustomMenuItem) removeSomeRefsCustMenuItem).getContent(),
+            Tooltip.install(removeSomeRefsCustMenuItem.getContent(),
                 new Tooltip("Remove references to items not found in file explorer. Will not modify your file system."));
 
             cleanRecentProjectsMenu.getItems().add(removeSomeRefsCustMenuItem);
 
-            removeAllRefsCustMenuItem = new CustomMenuItem(new Label("Clear All Projects"));
-            removeAllRefsCustMenuItem.setOnAction(event -> RecentProjects.removeInvalidReferences());
+            CustomMenuItem removeAllRefsCustMenuItem = new CustomMenuItem(new Label("Clear All Projects"));
+            removeAllRefsCustMenuItem.setOnAction(event -> RecentProjects.getInstance().removeAllReferences());
 
-            Tooltip.install(((CustomMenuItem)removeAllRefsCustMenuItem).getContent(),
+            Tooltip.install(removeAllRefsCustMenuItem.getContent(),
                 new Tooltip("Remove references to all recent projects. Will not modify your file system."));
 
             cleanRecentProjectsMenu.getItems().add(removeAllRefsCustMenuItem);
@@ -422,7 +423,7 @@ public class MainWindowController
      * Send menubar accelerators to another scene
      * @param scene
      */
-    public void initAccelerators(Scene scene)
+    public final void initAccelerators(Scene scene)
     {
         for (Menu menu : mainMenubar.getMenus())
         {
@@ -512,7 +513,7 @@ public class MainWindowController
         return item;
     }
 
-    public FramebufferView getFramebufferView()
+    public final FramebufferView getFramebufferView()
     {
         return framebufferView;
     }
@@ -542,7 +543,7 @@ public class MainWindowController
         Global.state().getUserShaderModel().setActiveShader(getUserShaderFromToggle(renderGroup.getSelectedToggle()));
     }
 
-    private static ShaderInfo getUserShaderFromToggle(Toggle newValue)
+    private static @Nullable ShaderInfo getUserShaderFromToggle(Toggle newValue)
     {
         if (newValue instanceof MenuItem && newValue.getUserData() instanceof String)
         {
@@ -585,42 +586,42 @@ public class MainWindowController
             javaFXState.getSettingsModel().getBooleanProperty("multisamplingEnabled"));
     }
 
-    @FXML public void createProject()
+    @FXML public final void createProject()
     {
         FrontendIO.createProject(window);
     }
 
-    @FXML public void openProject()
+    @FXML public final void openProject()
     {
         FrontendIO.getInstance().openProject(window);
     }
 
-    @FXML public void saveProject()
+    @FXML public final void saveProject()
     {
         FrontendIO.getInstance().saveProject(window);
     }
 
-    @FXML public void saveProjectAs()
+    @FXML public final void saveProjectAs()
     {
         FrontendIO.getInstance().saveProjectAs(window);
     }
 
-    @FXML public void closeProject()
+    @FXML public final void closeProject()
     {
         FrontendIO.closeProject();
     }
 
-    @FXML public void exit()
+    @FXML public final void exit()
     {
         WindowSynchronization.getInstance().quit();
     }
 
-    @FXML public void userManual()
+    @FXML public final void userManual()
     {
         userDocumentationHandler.run();
     }
 
-    @FXML public void openExperience(ActionEvent event)
+    @FXML public final void openExperience(ActionEvent event)
     {
         if (event.getSource() instanceof MenuItem)
         {
@@ -633,7 +634,7 @@ public class MainWindowController
         }
     }
 
-    @FXML public void lightCalibration()
+    @FXML public final void lightCalibration()
     {
         ExperienceManager.getInstance().getExperience(ExperienceManager.LIGHT_CALIBRATION).tryOpen();
     }
@@ -644,13 +645,13 @@ public class MainWindowController
         miniProgressPane.setManaged(value);
     }
 
-    @FXML public void showProgressBars()
+    @FXML public final void showProgressBars()
     {
         ProgressBarsController.getInstance().showStage();
         setMiniProgressPaneVisible(false);
     }
 
-    @FXML public void launchViewerApp()
+    @FXML public final void launchViewerApp()
     {
         try
         {
@@ -666,32 +667,27 @@ public class MainWindowController
         }
     }
 
-    @FXML public void removeInvalidReferences()
+    @FXML public final void removeInvalidReferences()
     {
-        RecentProjects.removeInvalidReferences();
+        RecentProjects.getInstance().removeInvalidReferences();
     }
 
-    @FXML public void removeAllReferences()
+    @FXML public final void removeAllReferences()
     {
-        RecentProjects.removeAllReferences();
+        RecentProjects.getInstance().removeAllReferences();
     }
 
-    public Menu getRecentProjectsMenu()
+    public final Menu getRecentProjectsMenu()
     {
         return recentProjectsMenu;
     }
 
-    public Menu getCleanRecentProjectsMenu()
+    public final Menu getCleanRecentProjectsMenu()
     {
         return cleanRecentProjectsMenu;
     }
 
-    public Window getWindow() // Useful for creating alerts in back-end classes
-    {
-        return window;
-    }
-
-    public void handleMiniProgressBar(MouseEvent event)
+    public final void handleMiniProgressBar(MouseEvent event)
     {
         double relX = event.getX() - swapControlsStackPane.getLayoutX();
         double relY = event.getY() - swapControlsStackPane.getLayoutY();
@@ -707,7 +703,7 @@ public class MainWindowController
         }
     }
 
-    public void resetMiniProgressBar(ObservableValue<Number> progressProperty, ObservableValue<String> labelProperty)
+    public final void resetMiniProgressBar(ObservableValue<Number> progressProperty, ObservableValue<String> labelProperty)
     {
         setMiniProgressPaneVisible(false);
         miniProgressBar.setVisible(true);
@@ -718,7 +714,7 @@ public class MainWindowController
         miniProgressLabel.textProperty().bind(labelProperty);
     }
 
-    public void mouseEnterMiniBar(MouseEvent event)
+    public final void mouseEnterMiniBar(MouseEvent event)
     {
         double relX;
         double relY;
@@ -757,7 +753,7 @@ public class MainWindowController
         }
     }
 
-    public void mouseExitMiniBar()
+    public final void mouseExitMiniBar()
     {
         if (ProgressBarsController.getInstance().isProcessing())
         {
@@ -796,34 +792,35 @@ public class MainWindowController
         miniProgressBar.lookup(".track").setStyle("-fx-background-color: #CECECE");
     }
 
-    public void showMiniProgressBar()
+    public final void showMiniProgressBar()
     {
         setMiniProgressPaneVisible(true);
     }
 
-    public void setReadyToDismissMiniProgBar()
+    public final void setReadyToDismissMiniProgBar()
     {
         setLighterMiniBar();
         miniProgressBar.setVisible(false);
         dismissButton.setVisible(true);
     }
 
-    public void dismissMiniProgressBarAsync()
+    public final void dismissMiniProgressBarAsync()
     {
         Platform.runLater(() -> setMiniProgressPaneVisible(false));
     }
 
-    public void hotSwap()
+    @FXML
+    public final void hotSwap()
     {
         FrontendIO.hotSwap(window);
     }
 
-    public double getRightTabWidth()
+    public final double getRightTabWidth()
     {
         return rightBarController.getTabWidth();
     }
 
-    public double getLeftTabWidth()
+    public final double getLeftTabWidth()
     {
         return leftBarController.getTabWidth();
     }

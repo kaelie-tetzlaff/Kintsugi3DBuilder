@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.renderexport.general;
@@ -54,7 +58,7 @@ abstract class RenderRequestBase implements ProgressMonitoredImageBasedGraphicsR
         private int width = 1024;
         private int height = 1024;
         private File vertexShader = TEX_SPACE_VERTEX_SHADER;
-        private Consumer<Program<? extends Context<?>>> shaderSetupCallback = null;
+        private Consumer<Program<? extends Context<?>>> shaderSetupCallback;
 
         BuilderBase( File fragmentShader, File outputDirectory)
         {
@@ -62,80 +66,81 @@ abstract class RenderRequestBase implements ProgressMonitoredImageBasedGraphicsR
             this.outputDirectory = outputDirectory;
         }
 
-        protected int getWidth()
+        protected final int getWidth()
         {
             return width;
         }
 
-        protected int getHeight()
+        protected final int getHeight()
         {
             return height;
         }
 
-        protected Consumer<Program<? extends Context<?>>> getShaderSetupCallback()
+        protected final Consumer<Program<? extends Context<?>>> getShaderSetupCallback()
         {
             return shaderSetupCallback;
         }
 
-        protected File getVertexShader()
+        protected final File getVertexShader()
         {
             return vertexShader;
         }
 
-        protected File getFragmentShader()
+        protected final File getFragmentShader()
         {
             return fragmentShader;
         }
 
-        protected File getOutputDirectory()
+        protected final File getOutputDirectory()
         {
             return outputDirectory;
         }
 
         @Override
-        public RenderRequestBuilder useTextureSpaceVertexShader()
+        public final RenderRequestBuilder useTextureSpaceVertexShader()
         {
-            this.vertexShader = TEX_SPACE_VERTEX_SHADER;
+            vertexShader = TEX_SPACE_VERTEX_SHADER;
             return this;
         }
 
         @Override
-        public RenderRequestBuilder useCameraSpaceVertexShader()
+        public final RenderRequestBuilder useCameraSpaceVertexShader()
         {
-            this.vertexShader = IMG_SPACE_VERTEX_SHADER;
+            vertexShader = IMG_SPACE_VERTEX_SHADER;
             return this;
         }
 
         @Override
-        public RenderRequestBuilder useCustomVertexShader(File vertexShader)
+        public final RenderRequestBuilder useCustomVertexShader(@SuppressWarnings("ParameterHidesMemberVariable") File vertexShader)
         {
             this.vertexShader = vertexShader;
             return this;
         }
 
         @Override
-        public RenderRequestBuilder setShaderSetupCallback(Consumer<Program<? extends Context<?>>> shaderSetupCallback)
+        public final RenderRequestBuilder setShaderSetupCallback(
+            @SuppressWarnings("ParameterHidesMemberVariable") Consumer<Program<? extends Context<?>>> shaderSetupCallback)
         {
             this.shaderSetupCallback = shaderSetupCallback;
             return this;
         }
 
         @Override
-        public RenderRequestBuilder setWidth(int width)
+        public final RenderRequestBuilder setWidth(@SuppressWarnings("ParameterHidesMemberVariable") int width)
         {
             this.width = width;
             return this;
         }
 
         @Override
-        public RenderRequestBuilder setHeight(int height)
+        public final RenderRequestBuilder setHeight(@SuppressWarnings("ParameterHidesMemberVariable") int height)
         {
             this.height = height;
             return this;
         }
     }
 
-    protected <ContextType extends Context<ContextType>> ProgramObject<ContextType> createProgram(
+    protected final <ContextType extends Context<ContextType>> ProgramObject<ContextType> createProgram(
         ShaderProgramFactory<ContextType> programFactory) throws IOException
     {
         GeneralSettingsModel settingsModel = Global.state().getSettingsModel();
@@ -156,7 +161,7 @@ abstract class RenderRequestBase implements ProgressMonitoredImageBasedGraphicsR
         return program;
     }
 
-    protected <ContextType extends Context<ContextType>> FramebufferObject<ContextType> createFramebuffer(ContextType context)
+    protected final <ContextType extends Context<ContextType>> FramebufferObject<ContextType> createFramebuffer(ContextType context)
     {
         return context.buildFramebufferObject(width, height)
             .addColorAttachment()
@@ -170,7 +175,7 @@ abstract class RenderRequestBase implements ProgressMonitoredImageBasedGraphicsR
         return resources.createDrawable(program);
     }
 
-    protected <ContextType extends Context<ContextType>> void render(Drawable<ContextType> drawable, Framebuffer<ContextType> framebuffer)
+    protected final <ContextType extends Context<ContextType>> void render(Drawable<ContextType> drawable, Framebuffer<ContextType> framebuffer)
     {
         drawable.getContext().getState().disableBackFaceCulling();
         framebuffer.clearColorBuffer(0, 0.0f, 0.0f, 0.0f, 0.0f);
@@ -181,7 +186,7 @@ abstract class RenderRequestBase implements ProgressMonitoredImageBasedGraphicsR
         drawable.draw(framebuffer);
     }
 
-    protected File getOutputDirectory()
+    protected final File getOutputDirectory()
     {
         return outputDirectory;
     }

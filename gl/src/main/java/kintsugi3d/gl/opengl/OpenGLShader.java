@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.opengl;
@@ -35,10 +39,10 @@ class OpenGLShader implements Shader<OpenGLContext>
     private static final Logger LOG = LoggerFactory.getLogger(OpenGLShader.class);
     private static final Pattern QUOTATION_MARK_PATTERN = Pattern.compile("['\"]");
     private static final Pattern WHITESPACE_PATTERN = Pattern.compile("\\s");
-    protected final OpenGLContext context;
+    private final OpenGLContext context;
 
     private int shaderId;
-    private boolean closed = false;
+    private boolean live = true;
 
     OpenGLShader(OpenGLContext context, int shaderType, File file, Map<String, Object> defines) throws IOException
     {
@@ -50,7 +54,7 @@ class OpenGLShader implements Shader<OpenGLContext>
         
         try
         {
-            this.init(shaderType, sb.toString());
+            init(shaderType, sb.toString());
         }
         catch (ShaderCompileFailureException e)
         {
@@ -81,27 +85,10 @@ class OpenGLShader implements Shader<OpenGLContext>
         }
     }
 
-    private static void handleLineContinuation(Scanner scanner, String finishedLine)
-    {
-        String currentLine = finishedLine;
-        while (currentLine.endsWith("\\") && scanner.hasNextLine())
-        {
-            currentLine = scanner.nextLine();
-        }
-
-        if (currentLine.endsWith("\\"))
-        {
-            while(scanner.hasNext())
-            {
-                scanner.next();
-            }
-        }
-    }
-
     private static void loadSource(File file, StringBuilder sb, Map<String, Object> defines) throws IOException
     {
         int lineCounter = 1;
-        boolean definesAdded = defines.isEmpty();
+        boolean needsDefines = !defines.isEmpty();
 
         // Sometimes the interrupted flag gets stuck on and needs to be reset or all File IO on the thread will fail.
         if (Thread.interrupted())
@@ -119,7 +106,7 @@ class OpenGLShader implements Shader<OpenGLContext>
 
                 String trimmedLine = nextLine.trim();
 
-                if (!definesAdded && !trimmedLine.isEmpty() && !trimmedLine.startsWith("#version") && !trimmedLine.startsWith("#extension"))
+                if (needsDefines && !trimmedLine.isEmpty() && !trimmedLine.startsWith("#version") && !trimmedLine.startsWith("#extension"))
                 {
                     for (Entry<String, Object> define : defines.entrySet())
                     {
@@ -161,15 +148,14 @@ class OpenGLShader implements Shader<OpenGLContext>
                             sb.append(" )");
                         }
 
-                        sb.append(System.lineSeparator());
+                        sb.append('\n');
                     }
 
                     sb.append("#line ");
                     sb.append(lineCounter);
-                    sb.append(" 0");
-                    sb.append(System.lineSeparator());
+                    sb.append(" 0\n");
 
-                    definesAdded = true;
+                    needsDefines = false;
                 }
 
                 if (trimmedLine.startsWith("#include"))
@@ -197,7 +183,7 @@ class OpenGLShader implements Shader<OpenGLContext>
                 else
                 {
                     sb.append(nextLine);
-                    sb.append(System.lineSeparator());
+                    sb.append('\n');
                 }
 
                 lineCounter++;
@@ -224,13 +210,13 @@ class OpenGLShader implements Shader<OpenGLContext>
     OpenGLShader(OpenGLContext context, int shaderType, CharSequence source)
     {
         this.context = context;
-        this.init(shaderType, source);
+        init(shaderType, source);
     }
 
     @Override
-    public OpenGLContext getContext()
+    public final OpenGLContext getContext()
     {
-        return this.context;
+        return context;
     }
 
     private void init(int shaderType, CharSequence source)
@@ -249,19 +235,19 @@ class OpenGLShader implements Shader<OpenGLContext>
         }
     }
 
-    int getShaderId()
+    final int getShaderId()
     {
         return shaderId;
     }
 
     @Override
-    public void close()
+    public final void close()
     {
-        if (!closed)
+        if (live)
         {
             glDeleteShader(shaderId);
             OpenGLContext.errorCheck();
-            closed = true;
+            live = false;
         }
     }
 }

@@ -1,15 +1,21 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.vecmath;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -50,110 +56,110 @@ public class DoubleVector2 implements Iterable<Double>
      * Construct a vector in two dimensions with the given values.
      * @param value Value of both dimensions.
      */
-    public DoubleVector2(double value)
+    public DoubleVector2(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") double value)
     {
         this(value, value);
     }
 
-    public DoubleVector3 asVector3()
+    public final DoubleVector3 asVector3()
     {
         return asVector3(0.0f);
     }
 
-    public DoubleVector3 asVector3(double z)
+    public final DoubleVector3 asVector3(double z)
     {
-        return new DoubleVector3(this.x, this.y, z);
+        return new DoubleVector3(x, y, z);
     }
 
-    public DoubleVector4 asPosition()
+    public final DoubleVector4 asPosition()
     {
         return asVector4(0.0f, 1.0f);
     }
 
-    public DoubleVector4 asDirection()
+    public final DoubleVector4 asDirection()
     {
         return asVector4(0.0f, 0.0f);
     }
 
-    public DoubleVector4 asVector4(double z, double w)
+    public final DoubleVector4 asVector4(double z, double w)
     {
-        return new DoubleVector4(this.x, this.y, z, w);
+        return new DoubleVector4(x, y, z, w);
     }
 
-    public IntVector2 rounded()
+    public final IntVector2 rounded()
     {
-        return new IntVector2((int)Math.round(this.x), (int)Math.round(this.y));
+        return new IntVector2((int)Math.round(x), (int)Math.round(y));
     }
 
-    public IntVector2 truncated()
+    public final IntVector2 truncated()
     {
-        return new IntVector2((int)this.x, (int)this.y);
+        return new IntVector2((int) x, (int) y);
     }
 
-    public Vector2 asSinglePrecision()
+    public final Vector2 asSinglePrecision()
     {
         return new Vector2((float)x, (float)y);
     }
 
-    public DoubleVector2 plus(DoubleVector2 other)
+    public final DoubleVector2 plus(DoubleVector2 other)
     {
         return new DoubleVector2(
-            this.x + other.x,
-            this.y + other.y
+            x + other.x,
+            y + other.y
         );
     }
 
-    public DoubleVector2 minus(DoubleVector2 other)
+    public final DoubleVector2 minus(DoubleVector2 other)
     {
         return new DoubleVector2(
-            this.x - other.x,
-            this.y - other.y
+            x - other.x,
+            y - other.y
         );
     }
 
-    public DoubleVector2 negated()
+    public final DoubleVector2 negated()
     {
-        return new DoubleVector2(-this.x, -this.y);
+        return new DoubleVector2(-x, -y);
     }
 
-    public DoubleVector2 times(double s)
+    public final DoubleVector2 times(double s)
     {
-        return new DoubleVector2(s*this.x, s*this.y);
+        return new DoubleVector2(s* x, s* y);
     }
 
-    public DoubleVector2 dividedBy(double s)
+    public final DoubleVector2 dividedBy(double s)
     {
-        return new DoubleVector2(this.x/s, this.y/s);
+        return new DoubleVector2(x/s, y/s);
     }
 
-    public DoubleVector2 times(DoubleVector2 other)
+    public final DoubleVector2 times(DoubleVector2 other)
     {
-        return new DoubleVector2(this.x * other.x, this.y * other.y);
+        return new DoubleVector2(x * other.x, y * other.y);
     }
 
-    public DoubleVector2 dividedBy(DoubleVector2 other)
+    public final DoubleVector2 dividedBy(DoubleVector2 other)
     {
-        return new DoubleVector2(this.x / other.x, this.y / other.y);
+        return new DoubleVector2(x / other.x, y / other.y);
     }
 
-    public double dot(DoubleVector2 other)
+    public final double dot(DoubleVector2 other)
     {
-        return this.x * other.x + this.y * other.y;
+        return x * other.x + y * other.y;
     }
 
-    public double length()
+    public final double length()
     {
-        return Math.sqrt(this.dot(this));
+        return Math.sqrt(dot(this));
     }
 
-    public double distance(DoubleVector2 other)
+    public final double distance(DoubleVector2 other)
     {
-        return this.minus(other).length();
+        return minus(other).length();
     }
 
-    public DoubleVector2 normalized()
+    public final DoubleVector2 normalized()
     {
-        return this.times(1.0 / this.length());
+        return times(1.0 / length());
     }
 
     /**
@@ -161,35 +167,32 @@ public class DoubleVector2 implements Iterable<Double>
      * magnitude (a length of 1.0).  If this vector has zero length, it will return itself.
      * @return A new vector equal to this vector divided by it's length except in cases of a zero-length vector.
      */
-    public DoubleVector2 normalizedSafe()
+    public final DoubleVector2 normalizedSafe()
     {
-        double l = this.length();
+        double l = length();
         if (l == 0.0f)
         {
             return this;
         }
         else
         {
-            return this.times(1.0f / l);
+            return times(1.0f / l);
         }
     }
 
-    public DoubleVector2 applyOperator(DoubleUnaryOperator operator)
+    public final DoubleVector2 applyOperator(DoubleUnaryOperator operator)
     {
         return new DoubleVector2(operator.applyAsDouble(x), operator.applyAsDouble(y));
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
-        return "DoubleVector2{" +
-            "x=" + x +
-            ", y=" + y +
-            '}';
+        return String.format("DoubleVector2{x=%s, y=%s}", x, y);
     }
 
     @Override
-    public Iterator<Double> iterator()
+    public final @NotNull Iterator<Double> iterator()
     {
         return Arrays.asList(x, y).iterator();
     }

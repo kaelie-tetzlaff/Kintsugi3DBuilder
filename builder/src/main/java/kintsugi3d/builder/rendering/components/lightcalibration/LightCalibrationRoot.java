@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering.components.lightcalibration;
@@ -23,49 +27,40 @@ import kintsugi3d.gl.core.FramebufferObject;
 
 public class LightCalibrationRoot<ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
-    private final ReadonlyImageBasedGraphicsResources<ContextType> resources;
-    private final SceneModel sceneModel;
-    private final SceneViewportModel sceneViewportModel;
-
     private ViewSnap<ContextType> viewSnapRoot;
 
     public LightCalibrationRoot(ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel,
                                 ViewSelection viewSelection, SceneViewportModel sceneViewportModel)
     {
-        this.resources = resources;
-        this.sceneModel = sceneModel;
-        this.sceneViewportModel = sceneViewportModel;
-
-        this.viewSnapRoot = new ViewSnap<>(sceneModel, viewSelection);
+        viewSnapRoot = new ViewSnap<>(sceneModel, viewSelection, new LightCalibrationContent<>(resources, sceneModel, sceneViewportModel));
     }
 
     @Override
-    public void initialize()
+    public final void initialize()
     {
-        viewSnapRoot.takeContentRoot(new LightCalibrationContent<>(resources, sceneModel, sceneViewportModel));
         viewSnapRoot.initialize();
     }
 
     @Override
-    public void update()
+    public final void update()
     {
         viewSnapRoot.update();
     }
 
     @Override
-    public void reloadShaders()
+    public final void reloadShaders()
     {
         viewSnapRoot.reloadShaders();
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         viewSnapRoot.draw(framebuffer, cameraViewport);
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (viewSnapRoot != null)
         {

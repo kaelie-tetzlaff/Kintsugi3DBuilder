@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.resources.project.texture;
@@ -55,7 +59,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     }
 
     @Override
-    public void deleteBasisMaterial(String materialName)
+    public final void deleteBasisMaterial(String materialName)
     {
         MutableBasisResources<ContextType> basisResources = getMutableBasisResources();
         if (basisResources != null)
@@ -70,7 +74,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     }
 
     @Override
-    public void disableBasisMaterials(Collection<String> materialNames)
+    public final void disableBasisMaterials(Collection<String> materialNames)
     {
         MutableBasisResources<ContextType> basisResources = getMutableBasisResources();
         if (basisResources != null)
@@ -85,7 +89,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     }
 
     @Override
-    public void enableBasisMaterials(Collection<String> materialNames)
+    public final void enableBasisMaterials(Collection<String> materialNames)
     {
         MutableBasisResources<ContextType> basisResources = getMutableBasisResources();
         if (basisResources != null)
@@ -100,7 +104,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     }
 
     @Override
-    public void toggleBasisMaterial(String materialName)
+    public final void toggleBasisMaterial(String materialName)
     {
         MutableBasisResources<ContextType> basisResources = getMutableBasisResources();
         if (basisResources != null)
@@ -115,7 +119,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     }
 
     @Override
-    public void replaceTextureWithDefaultFile(TextureInfo key, File parentDirectory) throws IOException
+    public final void replaceTextureWithDefaultFile(TextureInfo key, File parentDirectory) throws IOException
     {
         getTextures().get(key).load(new File(parentDirectory, String.format("%s.png", key.name)), true);
 
@@ -126,7 +130,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     }
 
     @Override
-    public void replaceTextureWithSpecificFile(TextureInfo key, File newTextureFile) throws IOException
+    public final void replaceTextureWithSpecificFile(TextureInfo key, File newTextureFile) throws IOException
     {
         getTextures().get(key).load(newTextureFile, true);
 
@@ -142,7 +146,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     }
 
     @Override
-    public void replaceWeightMapWithDefaultFile(BasisMaterialInfo material, File parentDirectory) throws IOException
+    public final void replaceWeightMapWithDefaultFile(BasisMaterialInfo material, File parentDirectory) throws IOException
     {
         getMutableBasisWeightResources().replaceWeightMapWithDefaultFile(material.getName(), parentDirectory);
 
@@ -154,7 +158,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     }
 
     @Override
-    public void replaceWeightMapWithSpecificFile(BasisMaterialInfo material, File newTextureFile) throws IOException
+    public final void replaceWeightMapWithSpecificFile(BasisMaterialInfo material, File newTextureFile) throws IOException
     {
         getMutableBasisWeightResources().replaceWeightMapWithSpecificFile(material.getName(), newTextureFile);
 
@@ -171,7 +175,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     }
 
     @Override
-    public void replaceAllTexturesWithDefaultFiles(File parentDirectory) throws IOException
+    public final void replaceAllTexturesWithDefaultFiles(File parentDirectory) throws IOException
     {
         // normal textures
         for (var texture : getTextures().entrySet())
@@ -219,7 +223,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     {
         if (destTex != null && srcTex != null)
         {
-            if (destTex.getWidth() == this.getWidth() && destTex.getHeight() == this.getHeight()
+            if (destTex.getWidth() == getWidth() && destTex.getHeight() == getHeight()
                 && srcTex.getWidth() == readSource.getWidth() && srcTex.getHeight() == readSource.getHeight())
             {
                 // dimensions match, so just do a normal blit
@@ -230,10 +234,10 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
             {
                 // dimensions do not match; try to remap rectangles to grab the same relative area in each
                 destTex.blitCroppedAndScaled(
-                    (int) Math.round((double) destX * destTex.getWidth() / this.getWidth()),
-                    (int) Math.round((double) destY * destTex.getHeight() / this.getHeight()),
-                    (int) Math.round((double) destWidth * destTex.getWidth() / this.getWidth()),
-                    (int) Math.round((double) destHeight * destTex.getHeight() / this.getHeight()),
+                    (int) Math.round((double) destX * destTex.getWidth() / getWidth()),
+                    (int) Math.round((double) destY * destTex.getHeight() / getHeight()),
+                    (int) Math.round((double) destWidth * destTex.getWidth() / getWidth()),
+                    (int) Math.round((double) destHeight * destTex.getHeight() / getHeight()),
                     srcTex,
                     (int) Math.round((double) srcX * srcTex.getWidth() / readSource.getWidth()),
                     (int) Math.round((double) srcY * srcTex.getHeight() / readSource.getHeight()),
@@ -260,7 +264,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
      * @param linearFiltering Whether or not to use linear filtering if the dimensions of the source and destination are not the same.
      */
     @Override
-    public void blitCroppedAndScaled(
+    public final void blitCroppedAndScaled(
         int destX, int destY, int destWidth, int destHeight,
         ReadonlyTextureResources<ContextType> readSource, int srcX, int srcY, int srcWidth, int srcHeight,
         boolean linearFiltering)
@@ -270,17 +274,17 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
         {
             if (readSource.getTextures().containsKey(texEntry.getKey())) // both source and destination must contain the texture to blit
             {
-                this.blitCroppedAndScaledSingle(texEntry.getValue(), destX, destY, destWidth, destHeight,
+                blitCroppedAndScaledSingle(texEntry.getValue(), destX, destY, destWidth, destHeight,
                     readSource, readSource.getTexture(texEntry.getKey()), srcX, srcY, srcWidth, srcHeight, linearFiltering);
             }
         }
 
         // Blit weight maps, weight mask -- handled separately
-        if (this.getBasisWeightResources() != null && readSource.getBasisWeightResources() != null)
+        if (getBasisWeightResources() != null && readSource.getBasisWeightResources() != null)
         {
-            blitCroppedAndScaledSingle(this.getMutableBasisWeightResources().getWeightMaps(), destX, destY, destWidth, destHeight,
+            blitCroppedAndScaledSingle(getMutableBasisWeightResources().getWeightMaps(), destX, destY, destWidth, destHeight,
                 readSource, readSource.getBasisWeightResources().getWeightMaps(), srcX, srcY, srcWidth, srcHeight, linearFiltering);
-            blitCroppedAndScaledSingle(this.getMutableBasisWeightResources().getWeightMask(), destX, destY, destWidth, destHeight,
+            blitCroppedAndScaledSingle(getMutableBasisWeightResources().getWeightMask(), destX, destY, destWidth, destHeight,
                 readSource, readSource.getBasisWeightResources().getWeightMask(), srcX, srcY, srcWidth, srcHeight, linearFiltering);
         }
 
@@ -299,13 +303,13 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     }
 
     @Override
-    public void setBasisObservable(Observable<MappedChange<String, BasisMaterialInfo>> basisObservable)
+    public final void setBasisObservable(Observable<MappedChange<String, BasisMaterialInfo>> basisObservable)
     {
         this.basisObservable = basisObservable;
     }
 
     @Override
-    public void setTexturesObservable(Observable<MappedChange<String, TextureInfo>> texturesObservable)
+    public final void setTexturesObservable(Observable<MappedChange<String, TextureInfo>> texturesObservable)
     {
         this.texturesObservable = texturesObservable;
     }

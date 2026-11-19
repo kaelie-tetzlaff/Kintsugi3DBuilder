@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.modals.workflow;
@@ -27,6 +31,7 @@ import kintsugi3d.builder.rendering.Rendering;
 import kintsugi3d.fx.controllers.modals.ProjectSettingsControllerBase;
 import kintsugi3d.fx.util.SquareResolution;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,13 +54,13 @@ public class ExportModelController extends ProjectSettingsControllerBase
     private final FileChooser objFileChooser = new FileChooser();
 
     @Override
-    public Region getRootNode()
+    public final Region getRootNode()
     {
         return root;
     }
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         StaticUtilities.makeSquareResolutionComboBox(minimumTextureResolutionComboBox);
 
@@ -73,21 +78,7 @@ public class ExportModelController extends ProjectSettingsControllerBase
         objFileChooser.getExtensionFilters().setAll(getLocalSettingsModel().get("exportType", ExportType.class).getFilter());
 
         // Friendly display name
-        exportTypeComboBox.setConverter(new StringConverter<>()
-        {
-            @Override
-            public String toString(ExportType type)
-            {
-                return (type != null) ? type.toString() : "";
-            }
-
-            @Override
-            public ExportType fromString(String string)
-            {
-                // Not strictly needed unless the ComboBox is editable
-                return null;
-            }
-        });
+        exportTypeComboBox.setConverter(new ExportTypeStringConverter());
 
         // Update extension filters based on the selected export type.
         exportTypeComboBox.valueProperty().addListener(
@@ -119,7 +110,7 @@ public class ExportModelController extends ProjectSettingsControllerBase
     }
 
     @Override
-    public boolean confirm()
+    public final boolean tryConfirm()
     {
         applySettings();
 
@@ -134,7 +125,7 @@ public class ExportModelController extends ProjectSettingsControllerBase
             exportLocationFile = objFileChooser.showSaveDialog(root.getScene().getWindow());
             if (exportLocationFile != null)
             {
-                Rendering.getRequestQueue().addGraphicsRequest(new ExportTexturesRequest(
+                Rendering.getRequestQueue().addImageBasedGraphicsRequest(new ExportTexturesRequest(
                     exportLocationFile,
                     () ->
                     {
@@ -172,6 +163,22 @@ public class ExportModelController extends ProjectSettingsControllerBase
         {
             objFileChooser.setInitialDirectory(currentDirectoryFile);
             objFileChooser.setInitialFileName(currentDirectoryFile.getName());
+        }
+    }
+
+    private static class ExportTypeStringConverter extends StringConverter<ExportType>
+    {
+        @Override
+        public final String toString(ExportType type)
+        {
+            return (type != null) ? type.toString() : "";
+        }
+
+        @Override
+        public final @Nullable ExportType fromString(String string)
+        {
+            // Not strictly needed unless the ComboBox is editable
+            return null;
         }
     }
 }

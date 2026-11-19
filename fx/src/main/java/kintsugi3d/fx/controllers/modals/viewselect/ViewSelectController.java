@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.modals.viewselect;
@@ -24,6 +28,7 @@ import kintsugi3d.builder.io.imageset.ImageSetInfo;
 import kintsugi3d.fx.controllers.paged.DataReceiverPageControllerBase;
 import kintsugi3d.fx.controllers.sidebar.SearchableTreeView;
 import kintsugi3d.fx.util.ScrollBarHelper;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.List;
@@ -31,6 +36,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.IntStream;
 
 public abstract class ViewSelectController extends DataReceiverPageControllerBase<ViewSelectable>
 {
@@ -63,18 +69,18 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
     protected abstract boolean canSelectNullView();
 
     @Override
-    public Region getRootNode()
+    public final Region getRootNode()
     {
         return hostPane;
     }
 
-    protected double getPrimaryViewRotation()
+    protected final double getPrimaryViewRotation()
     {
         return primaryImgView.getRotate();
     }
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         loadManager = new ImageSelectionLoadManager(
             imageName -> new ImageSelectionLoader(
@@ -93,10 +99,20 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
 
         setCanAdvance(true);
         ScrollBarHelper.scrollbarFix(chunkTreeView);
+
+        initCustom();
+    }
+
+    /**
+     * Override in a subclass to implement additional initialization.
+     */
+    @SuppressWarnings("NoopMethodInAbstractClass")
+    protected void initCustom()
+    {
     }
 
     @Override
-    public void refresh()
+    public final void refresh()
     {
         if (newData != null && !newData.equals(data))
         {
@@ -134,18 +150,14 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
     {
         // Set the initial selection to what is currently being used
         TreeItem<String> selectionItem = NONE_ITEM;
-        String viewName = getData().getViewSelection();
+        String viewName = data.getViewSelection();
         if (viewName != null)
         {
-            for (int i = 0; i < searchableTreeView.getTreeView().getExpandedItemCount(); i++)
-            {
-                TreeItem<String> item = searchableTreeView.getTreeView().getTreeItem(i);
-                if (Objects.equals(item.getValue(), viewName))
-                {
-                    selectionItem = item;
-                    break;
-                }
-            }
+            selectionItem = IntStream.range(0, searchableTreeView.getTreeView().getExpandedItemCount())
+                .mapToObj(searchableTreeView.getTreeView()::getTreeItem)
+                .filter(item -> Objects.equals(item.getValue(), viewName))
+                .findFirst()
+                .orElse(NONE_ITEM);
         }
 
         searchableTreeView.getTreeView().getSelectionModel().select(selectionItem);
@@ -226,7 +238,7 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
     }
 
     @FXML
-    public void selectImageInTreeView()
+    public final void selectImageInTreeView()
     {
         // selectedItem holds the cameraID associated with the image
         TreeItem<String> selectedItem = chunkTreeView.getSelectionModel().getSelectedItem();
@@ -255,10 +267,10 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
                 // Hide orientation controls
                 orientationControls.setVisible(false);
 
-                if (getData().getAdvanceLabelOverride() != null)
+                if (data.getAdvanceLabelOverride() != null)
                 {
                     // Set confirm button text
-                    setAdvanceLabelOverride(getData().getAdvanceLabelOverride());
+                    setAdvanceLabelOverride(data.getAdvanceLabelOverride());
                 }
 
                 imgViewText.setText("Keep model orientation as imported.");
@@ -316,7 +328,7 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
         primaryImgView.setRotate(rotation % 360);
     }
 
-    protected String getSelectedViewName()
+    protected final @Nullable String getSelectedViewName()
     {
         TreeItem<String> selection = chunkTreeView.getSelectionModel().getSelectedItem();
 
@@ -328,14 +340,14 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
         return null;
     }
 
-    @Override
-    public void receiveData(ViewSelectable dataReceived)
-    {
-        this.newData = dataReceived;
-    }
-
-    public ViewSelectable getData()
+    protected final ViewSelectable getData()
     {
         return data;
+    }
+
+    @Override
+    public final void receiveData(ViewSelectable dataReceived)
+    {
+        newData = dataReceived;
     }
 }

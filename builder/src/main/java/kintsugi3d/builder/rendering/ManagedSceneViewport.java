@@ -1,34 +1,39 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering;
 
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.Nullable;
 
 class ManagedSceneViewport implements SceneViewport
 {
-    private final RenderableManager<?> instanceManager;
+    private final RenderableManager<?> renderableManager;
 
-    ManagedSceneViewport(RenderableManager<?> instanceManager)
+    ManagedSceneViewport(RenderableManager<?> renderableManager)
     {
-        this.instanceManager = instanceManager;
+        this.renderableManager = renderableManager;
     }
 
     @Override
-    public Object getObjectAtCoordinates(double x, double y)
+    public final @Nullable Object getObjectAtCoordinates(double x, double y)
     {
-        if (instanceManager.getMainRenderable() != null)
+        if (renderableManager.getMainRenderable() != null)
         {
-            return instanceManager.getMainRenderable().getSceneViewport().getObjectAtCoordinates(x, y);
+            return renderableManager.getMainRenderable().getSceneViewport().getObjectAtCoordinates(x, y);
         }
         else
         {
@@ -37,11 +42,11 @@ class ManagedSceneViewport implements SceneViewport
     }
 
     @Override
-    public Vector3 get3DPositionAtCoordinates(double x, double y)
+    public final Vector3 get3DPositionAtCoordinates(double x, double y)
     {
-        if (instanceManager.getMainRenderable() != null)
+        if (renderableManager.getMainRenderable() != null)
         {
-            return instanceManager.getMainRenderable().getSceneViewport().get3DPositionAtCoordinates(x, y);
+            return renderableManager.getMainRenderable().getSceneViewport().get3DPositionAtCoordinates(x, y);
         }
         else
         {
@@ -50,11 +55,11 @@ class ManagedSceneViewport implements SceneViewport
     }
 
     @Override
-    public Vector3 getViewingDirection(double x, double y)
+    public final Vector3 getViewingDirection(double x, double y)
     {
-        if (instanceManager.getMainRenderable() != null)
+        if (renderableManager.getMainRenderable() != null)
         {
-            return instanceManager.getMainRenderable().getSceneViewport().getViewingDirection(x, y);
+            return renderableManager.getMainRenderable().getSceneViewport().getViewingDirection(x, y);
         }
         else
         {
@@ -63,11 +68,11 @@ class ManagedSceneViewport implements SceneViewport
     }
 
     @Override
-    public Vector3 getViewportCenter()
+    public final Vector3 getViewportCenter()
     {
-        if (instanceManager.getMainRenderable() != null)
+        if (renderableManager.getMainRenderable() != null)
         {
-            return instanceManager.getMainRenderable().getSceneViewport().getViewportCenter();
+            return renderableManager.getMainRenderable().getSceneViewport().getViewportCenter();
         }
         else
         {
@@ -76,11 +81,11 @@ class ManagedSceneViewport implements SceneViewport
     }
 
     @Override
-    public Vector2 projectPoint(Vector3 point)
+    public final Vector2 projectPoint(Vector3 point)
     {
-        if (instanceManager.getMainRenderable() != null)
+        if (renderableManager.getMainRenderable() != null)
         {
-            return instanceManager.getMainRenderable().getSceneViewport().projectPoint(point);
+            return renderableManager.getMainRenderable().getSceneViewport().projectPoint(point);
         }
         else
         {
@@ -89,11 +94,11 @@ class ManagedSceneViewport implements SceneViewport
     }
 
     @Override
-    public float getLightWidgetScale()
+    public final float getLightWidgetScale()
     {
-        if (instanceManager.getMainRenderable() != null)
+        if (renderableManager.getMainRenderable() != null)
         {
-            return instanceManager.getMainRenderable().getSceneViewport().getLightWidgetScale();
+            return renderableManager.getMainRenderable().getSceneViewport().getLightWidgetScale();
         }
         else
         {

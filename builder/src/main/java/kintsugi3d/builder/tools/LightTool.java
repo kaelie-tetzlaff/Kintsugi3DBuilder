@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.tools;
@@ -37,7 +41,7 @@ final class LightTool implements PickerTool
     private static class Builder extends ToolBuilderBase<LightTool>
     {
         @Override
-        public LightTool create()
+        public final LightTool create()
         {
             return new LightTool(getLightingEnvironmentModel(), getSceneViewport());
         }
@@ -55,7 +59,13 @@ final class LightTool implements PickerTool
     }
 
     @Override
-    public boolean mouseButtonPressed(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods)
+    public boolean isDragging()
+    {
+        return updateFunction != null;
+    }
+
+    @Override
+    public void mouseButtonPressed(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods)
     {
         if (buttonIndex == 0)
         {
@@ -74,10 +84,10 @@ final class LightTool implements PickerTool
                 String[] nameParts = clickedObjectName.split("\\.");
                 if ("Light".equals(nameParts[0]))
                 {
-                    this.lightIndex = Integer.parseInt(nameParts[1]);
+                    lightIndex = Integer.parseInt(nameParts[1]);
                     LightWidgetModel lightWidgetModel = lightingModel.getLightWidgetModel(lightIndex);
 
-                    lightingModel.setSelectedLightIndex(this.lightIndex);
+                    lightingModel.setSelectedLightIndex(lightIndex);
 
                     if (nameParts.length > 2)
                     {
@@ -139,12 +149,10 @@ final class LightTool implements PickerTool
 
             lightingModel.setLightWidgetsEthereal(true);
         }
-
-        return updateFunction != null;
     }
 
     @Override
-    public boolean mouseButtonReleased(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods)
+    public void mouseButtonReleased(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods)
     {
         if (buttonIndex == 0)
         {
@@ -161,8 +169,20 @@ final class LightTool implements PickerTool
 
             updateFunction = null;
         }
+    }
 
-        return updateFunction != null;
+    @Override
+    public void cursorMoved(Canvas3D<? extends Context<?>> canvas, double xPos, double yPos)
+    {
+        if (updateFunction == null)
+        {
+            updateForHoverState(canvas, xPos, yPos);
+        }
+        else
+        {
+            CanvasSize canvasSize = canvas.getSize();
+            updateFunction.accept(new DoubleVector2(xPos / canvasSize.width, yPos / canvasSize.height));
+        }
     }
 
     private void updateForHoverState(Canvas3D<? extends Context<?>> canvas, double xPos, double yPos)
@@ -227,14 +247,14 @@ final class LightTool implements PickerTool
             .plus(new Vector3(
                 0,
                 sceneViewport.getLightWidgetScale() *
-                    (float)Math.sin(lightingModel.getLight(lightIndex).getInclination() * Math.PI / 180),
+                    (float) StrictMath.sin(lightingModel.getLight(lightIndex).getInclination() * Math.PI / 180),
                 0));
 
         float t = (azimuthCenter.y - viewportCenter.y) / cursorDirection.y;
         Vector3 newAzimuthDirection = viewportCenter.plus(cursorDirection.times(t)).minus(azimuthCenter);
         Vector2 newAzimuthDirectionNormalized = new Vector2(newAzimuthDirection.x, newAzimuthDirection.z).normalized();
 
-        return (float)Math.atan2(-newAzimuthDirectionNormalized.x, newAzimuthDirectionNormalized.y);
+        return (float) StrictMath.atan2(-newAzimuthDirectionNormalized.x, newAzimuthDirectionNormalized.y);
     }
 
     private float getInclinationAtWindowPosition(DoubleVector2 normalizedPosition)
@@ -248,13 +268,13 @@ final class LightTool implements PickerTool
 
         double azimuth = lightingModel.getLight(lightIndex).getAzimuth() * Math.PI / 180;
 
-        Vector3 lightDirectionProjected = new Vector3(-(float)Math.sin(azimuth), 0, (float)Math.cos(azimuth));
+        Vector3 lightDirectionProjected = new Vector3(-(float) StrictMath.sin(azimuth), 0, (float) StrictMath.cos(azimuth));
         Vector3 inclinationAxis = new Vector3(-lightDisplacement.z, 0, lightDisplacement.x).normalized();
 
         float t = lightCenter.minus(viewportCenter).dot(inclinationAxis) / cursorDirection.dot(inclinationAxis);
         Vector3 newLightDirection = viewportCenter.plus(cursorDirection.times(t)).minus(lightCenter).normalized();
 
-        return (float)Math.atan2(newLightDirection.y, newLightDirection.dot(lightDirectionProjected));
+        return (float) StrictMath.atan2(newLightDirection.y, newLightDirection.dot(lightDirectionProjected));
     }
 
     private float getDistanceAtWindowPosition(DoubleVector2 normalizedPosition)
@@ -292,22 +312,6 @@ final class LightTool implements PickerTool
         if ("RenderingSubject".equals(sceneViewport.getObjectAtCoordinates(normalizedPosition.x, normalizedPosition.y)))
         {
             lightingModel.setLightCenter(lightIndex, sceneViewport.get3DPositionAtCoordinates(normalizedPosition.x, normalizedPosition.y));
-        }
-    }
-
-    @Override
-    public boolean cursorMoved(Canvas3D<? extends Context<?>> canvas, double xPos, double yPos)
-    {
-        if (updateFunction == null)
-        {
-            updateForHoverState(canvas, xPos, yPos);
-            return false;
-        }
-        else
-        {
-            CanvasSize canvasSize = canvas.getSize();
-            updateFunction.accept(new DoubleVector2(xPos / canvasSize.width, yPos / canvasSize.height));
-            return true;
         }
     }
 }

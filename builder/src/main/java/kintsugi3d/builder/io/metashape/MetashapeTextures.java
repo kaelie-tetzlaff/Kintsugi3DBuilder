@@ -1,17 +1,22 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.io.metashape;
 
 import kintsugi3d.builder.io.TextureSupplier;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -24,11 +29,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.AbstractMap.SimpleEntry;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.IntStream;
-
 public class MetashapeTextures implements TextureSupplier
 {
     private static final Logger LOG = LoggerFactory.getLogger(MetashapeTextures.class);
@@ -41,7 +43,7 @@ public class MetashapeTextures implements TextureSupplier
     }
 
     @Override
-    public Map<String, File> getTextures()
+    public final @Nullable Map<String, File> getTextures()
     {
         try
         {
@@ -56,23 +58,24 @@ public class MetashapeTextures implements TextureSupplier
             // Get all the textures
             NodeList textures = document.getElementsByTagName("texture");
 
-            return Map.ofEntries(IntStream.range(0, textures.getLength())
-                .<Entry<String, File>>mapToObj(i ->
+            Map<String, File> result = new HashMap<>(textures.getLength());
+            for (int i = 0; i < textures.getLength(); i++)
+            {
+                Element e = (Element) textures.item(i);
+
+                // Get some needed metadata
+                String texType = e.getAttribute("type");
+                String texName = ((Element) e.getElementsByTagName("page").item(0)).getAttribute("path");
+
+                if ("normals".equals(texType))
                 {
-                    Element e = (Element) textures.item(i);
+                    texType = "normal";
+                }
 
-                    // Get some needed metadata
-                    String texType = e.getAttribute("type");
-                    String texName = ((Element) e.getElementsByTagName("page").item(0)).getAttribute("path");
+                result.put(texType, new File(modelXMLFile.getParentFile(), texName));
+            }
 
-                    if ("normals".equals(texType))
-                    {
-                        texType = "normal";
-                    }
-
-                    return new SimpleEntry<>(texType, new File(modelXMLFile.getParentFile(), texName));
-                })
-                .toArray(length -> (Entry<String, File>[]) new Entry[length]));
+            return result;
         }
         catch (ParserConfigurationException | IOException | SAXException e)
         {
