@@ -10,10 +10,9 @@ profile:
   inspections:
     - group: ALL
       ignore:
-        - "scope#file:src/test/resources//*"
-        - "scope#file:target/generated-sources//*"
-        - "scope#file:target/generated-test-sources//*"
-        - "scope#file:*/target//*"
+        - "scope#file:*/src/test/resources//*"
+        - "scope#file:*/target//*"   # covers generated-sources & generated-test-sources everywhere
+        - "scope#file:*/assembly//*"
         - "scope#file[sjm-ply]:*//*"
         - "scope#file:lib//*"
         - "scope#file:gl/src/main/java/kintsugi3d/gl/util/RadianceImageLoader*"
