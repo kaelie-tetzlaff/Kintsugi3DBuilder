@@ -213,8 +213,12 @@
                 <!-- MacOS: Needs a Maven assembly for MacOS and then the disk image script -->
                 <plugins>
                     <plugin>
+                        <!-- maven assembly plugin causes warnings in Qodana and needs to be suppressed -->
+                        <!--suppress MavenModelInspection -->
                         <groupId>org.apache.maven.plugins</groupId>
+                        <!--suppress MavenModelInspection -->
                         <artifactId>maven-assembly-plugin</artifactId>
+                        <!--suppress MavenModelInspection -->
                         <version>3.3.0</version>
                         <executions>
                             <execution>
@@ -335,8 +339,12 @@
                         </executions>
                     </plugin>
                     <plugin>
+                        <!-- maven assembly plugin causes warnings in Qodana and needs to be suppressed -->
+                        <!--suppress MavenModelInspection -->
                         <groupId>org.apache.maven.plugins</groupId>
+                        <!--suppress MavenModelInspection -->
                         <artifactId>maven-assembly-plugin</artifactId>
+                        <!--suppress MavenModelInspection -->
                         <version>3.3.0</version>
                         <executions>
                             <execution>
