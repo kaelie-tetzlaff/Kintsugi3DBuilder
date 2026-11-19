@@ -15,3 +15,7 @@ profile:
         - "scope#file:*/target//*"
         - "scope#file[sjm-ply]:*//*"
         - "scope#file:lib//*"
+failureConditions:
+  severityThresholds:
+    critical: 0   # any Critical problem (ERROR) fails the build job
+    high: 0       # any High (WARNING) fails the build job
