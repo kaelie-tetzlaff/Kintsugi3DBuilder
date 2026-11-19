@@ -4,7 +4,6 @@
 
 version: "1.0"
 linter: qodana-jvm-community
-bootstrap: ./mvnw -q -ntp -DskipTests dependency:resolve-plugins
 profile:
   path: .idea/inspectionProfiles/Project_Default.xml
   inspections:
