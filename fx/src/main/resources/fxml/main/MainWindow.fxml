@@ -151,7 +151,6 @@
                     <MenuItem mnemonicParsing="false" text="Process Guides (UNFINISHED)" visible="false" />
                 </Menu>
                 <Menu mnemonicParsing="false" text="Lighting" visible="false">
-                    <CheckMenuItem fx:id="environmentMappingCheckMenuItem" mnemonicParsing="false" selected="true" text="Environment mapping" visible="false" />
                     <CheckMenuItem fx:id="visibleLightsCheckMenuItem" mnemonicParsing="false" selected="true" text="Show light sources" />
                     <CheckMenuItem fx:id="visibleCameraPoseCheckMenuItem" mnemonicParsing="false" text="Show camera poses for photographs" visible="false" />
                     <CheckMenuItem fx:id="visibleSavedCameraPoseCheckMenuItem" mnemonicParsing="false" text="Show saved camera poses" visible="false" />

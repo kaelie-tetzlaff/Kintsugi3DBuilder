@@ -92,7 +92,6 @@ public class MainWindowController
     @FXML private CheckMenuItem multiSamplingCheckMenuItem;
     @FXML private CheckMenuItem relightingCheckMenuItem;
     @FXML private CheckMenuItem sceneWindowCheckMenuItem;
-    @FXML private CheckMenuItem environmentMappingCheckMenuItem; //TODO imp. this
     @FXML private CheckMenuItem visibleLightsCheckMenuItem;
     @FXML private CheckMenuItem visibleLightWidgetsCheckMenuItem;
     @FXML private CheckMenuItem visibleCameraPoseCheckMenuItem;
