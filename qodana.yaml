@@ -4,6 +4,9 @@
 
 version: "1.0"
 linter: qodana-jvm-community
+plugins:
+  - id: org.jetbrains.plugins.javaFX
+bootstrap: mvn -q -DskipTests dependency:go-offline
 profile:
   path: .idea/inspectionProfiles/Project_Default.xml
   inspections:
