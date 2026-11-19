@@ -39,6 +39,7 @@ import java.util.regex.Pattern;
  * <a href="https://floyd.lbl.gov/radiance/refer/filefmts.pdf">...</a> (page 28)
  * <a href="http://paulbourke.net/dataformats/pic/">...</a>
  */
+@SuppressWarnings("ALL")
 public class RadianceImageLoader
 {
     private static final Pattern COMMON_RES = Pattern.compile("-Y (\\d+) \\+X (\\d+)");
