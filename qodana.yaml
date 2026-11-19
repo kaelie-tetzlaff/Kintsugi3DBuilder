@@ -5,6 +5,15 @@
 version: "1.0"
 linter: qodana-jvm
 profile:
-  name: qodana.recommended
+  path: .idea/inspectionProfiles/
 include:
   - name: CheckDependencyLicenses
+inspections:
+  - group: ALL
+    ignore:
+      - "scope#file:src/test/resources//*"
+      - "scope#file:target/generated-sources//*"
+      - "scope#file:target/generated-test-sources//*"
+      - "scope#file:*/target//*"
+      - "scope#file[sjm-ply]:*//*"
+      - "scope#file:lib//*"
