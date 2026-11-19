@@ -4,7 +4,7 @@
 
 version: "1.0"
 linter: qodana-jvm-community
-bootstrap: sed -i '/org.jetbrains.plugins.javaFX/d' /root/.config/idea/disabled_plugins.txt || true && mvn -q -DskipTests dependency:go-offline
+bootstrap: ./mvnw -q -ntp -DskipTests dependency:go-offline
 profile:
   path: .idea/inspectionProfiles/Project_Default.xml
   inspections:
