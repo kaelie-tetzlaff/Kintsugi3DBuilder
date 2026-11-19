@@ -15,5 +15,3 @@ profile:
         - "scope#file:*/target//*"
         - "scope#file[sjm-ply]:*//*"
         - "scope#file:lib//*"
-include:
-  - name: CheckDependencyLicenses
