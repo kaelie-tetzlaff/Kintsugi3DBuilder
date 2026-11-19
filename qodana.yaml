@@ -4,6 +4,7 @@
 
 version: "1.0"
 linter: qodana-jvm-community
+bootstrap: cp .qodana/misc.xml .idea/misc.xml
 profile:
   path: .idea/inspectionProfiles/Project_Default.xml
   inspections:
