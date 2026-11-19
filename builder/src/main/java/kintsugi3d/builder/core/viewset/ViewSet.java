@@ -1068,7 +1068,7 @@ public final class ViewSet implements ReadonlyViewSet
 
     public void removeViewByImageFilename(File image)
     {
-        View removed = null;
+        View removed;
 
         synchronized (views)
         {

@@ -29,7 +29,7 @@ public class ProjectDataCard
     private final String thumbnailPath;
     private final Map<String, String> textFields;
     private final Collection<? extends Map<String, Runnable>> actionGroups;
-    private boolean isEnabled = true;
+    private boolean isEnabled;
 
     public ProjectDataCard(
         String internalName, String title, String fullResImageFilePath, String thumbnailPath,

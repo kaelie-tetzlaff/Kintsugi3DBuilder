@@ -49,7 +49,7 @@ public final class ModelExporter
     private final GltfAssetV2 asset;
 
     private MaterialExporter materialExporter;
-    private int modelNodeIndex = 0;
+    private final int modelNodeIndex;
 
     private ModelExporter(GltfAssetV2 glTfAsset, int modelNodeIndex)
     {

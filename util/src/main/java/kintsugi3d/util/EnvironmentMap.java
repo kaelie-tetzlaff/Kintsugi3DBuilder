@@ -378,15 +378,13 @@ public final class EnvironmentMap
     public static float[] toPanorama(float[][] env, int side, int newWidth, int newHeight)
     {
         float[] pano = new float[newWidth * newHeight * 3];
-        DoubleVector3 dir = DoubleVector3.ZERO;
-        DoubleVector3 color = DoubleVector3.ZERO;
         for (int y = 0; y < newHeight; y++)
         {
             for (int x = 0; x < newWidth; x++)
             {
-                dir = toVectorFromPanorama(x, y, newWidth, newHeight);
+                DoubleVector3 dir = toVectorFromPanorama(x, y, newWidth, newHeight);
 
-                color = sample(env, side, dir);
+                DoubleVector3 color = sample(env, side, dir);
                 pano[y * newWidth * 3 + x * 3]     = (float) color.x;
                 pano[y * newWidth * 3 + x * 3 + 1] = (float) color.y;
                 pano[y * newWidth * 3 + x * 3 + 2] = (float) color.z;
@@ -422,7 +420,7 @@ public final class EnvironmentMap
         // that |ma| = 1
         float sc = 2.0f * (tx + 0.5f) / (float) side - 1.0f;
         float tc = 2.0f * (ty + 0.5f) / (float) side - 1.0f;
-        DoubleVector3 v = DoubleVector3.ZERO;
+        DoubleVector3 v;
         switch (face)
         {
             case PX: // px
@@ -863,7 +861,6 @@ public final class EnvironmentMap
     private static void convertPanorama(int side, float[][] env, HDRImage pano)
     {
         // assumes equirectangular projection
-        DoubleVector3 dir = DoubleVector3.ZERO;
         double[] p = new double[2];
         for (int i = 0; i < 6; i++)
         {
@@ -871,7 +868,7 @@ public final class EnvironmentMap
             {
                 for (int x = 0; x < side; x++)
                 {
-                    dir = toVectorFromCubeMap(i, x, y, side);
+                    DoubleVector3 dir = toVectorFromCubeMap(i, x, y, side);
                     // geographic lat/lon spherical coordinates uses elevation angle from xy plane
 
                     toPanoramaCoord(dir, pano.width, pano.height, p);
