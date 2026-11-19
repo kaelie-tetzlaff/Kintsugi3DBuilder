@@ -197,7 +197,7 @@ jobs:
 
       - name: Maven build and install (without tests)
         if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/releases/') || startsWith(github.ref, 'refs/tags/')))) }}
-        run: mvn --batch-mode --update-snapshots install -DskipTests -Dcompliance.skip=true
+        run: mvn --batch-mode --update-snapshots install "-DskipTests" "-Dcompliance.skip=true"
 
       - name: Maven build and install (with tests)
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/releases/') || startsWith(github.ref, 'refs/tags/')))
