@@ -9,17 +9,16 @@ on:
       - reopened
       - ready_for_review
   push:
-    branches: [ '**' ]
+    branches:
+      - main # The 'main' branch
+      - 'releases/*' # The release branches
     tags: [ 'v*.*.*' ]
 
 env:
   JAVA_VERSION: 11
-  RUN_TESTS: ${{ github.event_name != 'push' || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/releases/') || startsWith(github.ref, 'refs/tags/') }}
-
 jobs:
   build:
     name: Build ${{ matrix.os }} distributions
-    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
     runs-on: ${{ matrix.os }}
     permissions:
       contents: write
@@ -203,11 +202,14 @@ jobs:
           find "$MESA_PREFIX" -name 'libOSMesa*.dylib' -exec ls -l {} \;
 
       - name: Maven build and install (without tests)
-        if: env.RUN_TESTS != 'true'
         run: mvn --batch-mode --update-snapshots install "-DskipTests" "-Dcompliance.skip=true"
 
       - name: Maven build and install (with tests)
-        if: env.RUN_TESTS == 'true'
+        if: (github.event_name == 'pull_request' && !github.event.pull_request.draft) 
+          || github.event_name == 'workflow_dispatch' 
+          || (github.event_name == 'push' 
+          && (github.ref == 'refs/heads/main' 
+          || startsWith(github.ref, 'refs/heads/releases/') || startsWith(github.ref, 'refs/tags/')))
         run: mvn --batch-mode --update-snapshots install
 
       - name: Store build directory
