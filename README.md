@@ -90,8 +90,15 @@ Kintsugi 3D Builder is free software: you can redistribute it and/or modify it u
 Kintsugi 3D Builder is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 ## Build Requirements
+### Repository
+This project uses [Git LFS](https://git-lfs.com/), which is required to clone the repository.
+The repository is configured for [IntelliJ IDEA.](https://www.jetbrains.com/idea/)
+
+### Build
+Kintsugi 3D Builder can be compiled using the Maven build system (included in IntelliJ) with no additional external downloads.
+Several IntelliJ run configurations are included in the repository. 
+
 ### Package
-Kintsugi 3D Builder can be compiled using the maven build system with no external requirements.
 When packaging, an OpenJDK JRE will automatically be downloaded from Adoptium, 
 along with the latest build of Kintsugi 3D Viewer and any other required binaries, 
 all of which will be bundled in the packaged build.
