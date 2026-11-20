@@ -22,7 +22,10 @@ profile:
         - "scope#file[*]:*.fxml" # Suppress warnings about the XML namespace for FXML files.
     - inspection: MethodMayBeStatic
       ignore:
-        - "scope#src[fx]:kintsugi3d.fx.controllers.." # Suppress warnings about marking methods static for JavaFX controllers.
+        # Suppress warnings about marking methods static for JavaFX controllers.
+        - "scope#file[fx]:src/main/java/kintsugi3d/fx/controllers//*"
+        - "scope#file[fx]:src/main/java/kintsugi3d/fx/core/MainWindowController.java"
+        - "scope#file[fx]:src/main/java/kintsugi3d/fx/core/WelcomeWindowController.java"
 failureConditions:
   severityThresholds:
     critical: 0   # any Critical problem (ERROR) fails the build job
