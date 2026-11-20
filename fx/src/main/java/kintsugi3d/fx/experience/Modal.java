@@ -31,6 +31,7 @@ import kintsugi3d.fx.core.MainWindowController;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 
 /**
  * Creates a modal window.
@@ -84,7 +85,9 @@ public class Modal
         stage = new Stage();
         stage.getIcons().add(AppIcon.getImage());
         stage.setTitle(title);
-        stage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(Objects.requireNonNull(Modal.class.getResource("/fxml/kintsugi.css")).toExternalForm());
+        stage.setScene(scene);
         stage.initOwner(parentWindow);
         stage.setResizable(false);
         openProperty.bind(stage.showingProperty());

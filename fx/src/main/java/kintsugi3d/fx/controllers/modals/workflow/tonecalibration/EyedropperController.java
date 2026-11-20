@@ -26,6 +26,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.input.KeyEvent;
@@ -744,9 +745,10 @@ public class EyedropperController extends NonDataPageControllerBase
     {
         if (showMultiImageWarning)
         {
+            ButtonType cancel = new ButtonType("Cancel", ButtonData.LEFT);
             Alert alert = new Alert(AlertType.WARNING,
                 "Warning: using multiple images for tone calibration can result in inconsistencies in tone interpretation.  To be used for advanced workflows only.",
-                ButtonType.OK, ButtonType.CANCEL);
+                ButtonType.OK, cancel);
             alert.setGraphic(null);
             var result = alert.showAndWait();
             if (result.isEmpty() || !result.get().equals(ButtonType.OK))

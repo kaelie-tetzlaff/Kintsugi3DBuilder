@@ -42,7 +42,7 @@ public abstract class ProjectImportController extends DataSourcePageControllerBa
     {
         Collection<File> missingImgs = exception.getMissingImgs();
 
-        ButtonType cancel = new ButtonType("Cancel", ButtonData.OTHER);
+        ButtonType cancel = new ButtonType("Cancel", ButtonData.LEFT);
         ButtonType newDirectory = new ButtonType("Choose Different Image Directory", ButtonData.YES);
         ButtonType skipMissingCams = new ButtonType("Disable Missing Cameras", ButtonData.NO);
 

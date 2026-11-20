@@ -20,9 +20,13 @@ import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.TextFormatter.Change;
 import kintsugi3d.builder.core.Global;
+import kintsugi3d.fx.core.FrontendIO;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
@@ -31,6 +35,8 @@ import java.util.Objects;
  */
 public final class StaticUtilities
 {
+    private static final Logger LOG = LoggerFactory.getLogger(StaticUtilities.class);
+
 //    private static final Pattern NUMERIC_REGEX = Pattern.compile("-?(0|([1-9]\\d{0,7}))?(\\.\\d*)?");
 
     private StaticUtilities()
@@ -197,7 +203,7 @@ public final class StaticUtilities
     {
         if (Global.io().isProjectOpen()) // Might have closed the project in which case confirmation is irrelevant
         {
-            Alert alert = new Alert(AlertType.CONFIRMATION, "Settings will be reverted to their previous values.");
+            Dialog<ButtonType> alert = createConfirmDialog("Settings will be reverted to their previous values.");
             alert.setHeaderText("Discard changes?");
             var result = alert.showAndWait();
             return result.isPresent() && result.get().equals(ButtonType.OK);
@@ -206,5 +212,40 @@ public final class StaticUtilities
         {
             return true;
         }
+    }
+
+    /**
+     * Creates a confirm dialog according to Kintsugi style standards (i.e. Cancel button left-aligned)
+     * @param contentText
+     * @return
+     */
+    public static Dialog<ButtonType> createConfirmDialog(String contentText)
+    {
+        Dialog<ButtonType> confirm = new Alert(AlertType.CONFIRMATION, contentText);
+
+        // Try to left-align the cancel button.
+        try
+        {
+            Button cancelButton = (Button) confirm.getDialogPane().lookupButton(ButtonType.CANCEL);
+            if (cancelButton != null)
+            {
+                ButtonBar.setButtonData(cancelButton, ButtonData.LEFT);
+            }
+            else
+            {
+                LOG.error(FrontendIO.FAILED_TO_FIND_CANCEL_BUTTON);
+            }
+        }
+        catch (ClassCastException e)
+        {
+            LOG.error(FrontendIO.FAILED_TO_FIND_CANCEL_BUTTON, e);
+        }
+
+        return confirm;
+    }
+
+    public static Dialog<ButtonType> createConfirmDialog()
+    {
+        return createConfirmDialog("");
     }
 }

@@ -20,7 +20,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import kintsugi3d.renderexport.general.*?>
-<GridPane fx:id="root" styleClass="grid-pane" alignment="CENTER_LEFT" hgap="5.0" prefHeight="155.0" prefWidth="555.0" stylesheets="@../../../../../../../fx/src/main/resources/fxml/kintsugiStyling.css" vgap="10.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kintsugi3d.renderexport.general.GenericRenderRequestController">
+<GridPane fx:id="root" styleClass="grid-pane,content-root" alignment="CENTER_LEFT" hgap="5.0" prefHeight="155.0" prefWidth="555.0" vgap="10.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kintsugi3d.renderexport.general.GenericRenderRequestController">
     <padding>
         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
     </padding>

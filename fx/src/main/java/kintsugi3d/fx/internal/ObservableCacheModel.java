@@ -23,12 +23,12 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.state.CacheModelBase;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
+import kintsugi3d.fx.util.StaticUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -182,7 +182,7 @@ public class ObservableCacheModel extends CacheModelBase
     {
         Map<File, Consumer<File[]>> deleteMethods = getDeleteMethods();
 
-        Alert confirm = new Alert(AlertType.CONFIRMATION);
+        Dialog<ButtonType> confirm = StaticUtilities.createConfirmDialog();
         confirm.setTitle("Clear Cache");
         confirm.setHeaderText("Confirm cache clear?");
         confirm.setContentText(String.format("This will permanently remove all files in %s, including the ones for your current project, and cannot be undone.  Are you sure?",
@@ -211,7 +211,7 @@ public class ObservableCacheModel extends CacheModelBase
     {
         Map<File, Consumer<File[]>> deleteMethods = getDeleteMethods();
 
-        Alert confirm = new Alert(AlertType.CONFIRMATION);
+        Dialog<ButtonType> confirm = StaticUtilities.createConfirmDialog();
         confirm.setTitle("Clear Old Cache Files");
         confirm.setHeaderText("Confirm cache clean up?");
 

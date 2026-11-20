@@ -102,6 +102,30 @@
     -fx-background-color: #202020;
 }
 
+.stripped-radio-button > .radio,
+.right-stripped-radio-button > .radio {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0px;
+    -fx-padding: 0.0em; /* 4 8 4 8 */
+
+    -fx-min-width: 0;
+    -fx-pref-width: 0;
+    -fx-max-width: 0;
+}
+
+.stripped-radio-button:selected > .radio > .dot,
+.right-stripped-radio-button:selected > .radio > .dot {
+    -fx-background-color: transparent;
+}
+
+.right-stripped-radio-button {
+    -fx-background-insets:
+            1,
+            3,
+            5;
+}
+
 .button,
 .toggle-button,
 .color-picker .color-picker-label,
@@ -153,16 +177,153 @@
 .color-picker:pressed,
 .thumb:pressed,
 .titled-pane > .title:pressed,
-.split-menu-button:pressed > * {
-    -fx-background-color: #ADADAD;
+.split-menu-button:pressed > *,
+.button:pressed:hover,
+.toggle-button:pressed:hover,
+.scroll-bar .increment-button:pressed:hover,
+.scroll-bar .decrement-button:pressed:hover,
+.check-box:pressed:hover .box,
+.combo-box:pressed:hover,
+.color-picker:pressed:hover,
+.thumb:pressed:hover,
+.titled-pane > .title:pressed:hover,
+.split-menu-button:pressed:hover > * {
+    -fx-background-color:
+            #ADADAD,
+            #EEEEEE,
+            #EEEEEE;
 }
 
+.button:selected,
 .toggle-button:selected,
 .check-box:selected .box,
 .titled-pane > .title:selected {
-    -fx-background-color: #EEEEEE;
+    -fx-background-color:
+            #383838,
+            #CECECE,
+            #CECECE;
     -fx-font-weight:bold;
- }
+}
+
+/* Card Component */
+.card-background {
+    -fx-background-color:
+            #CECECE,
+            #CECECE,
+            #CECECE;
+    -fx-background-insets:
+            2,
+            4,
+            6;
+}
+
+.card-background:hover {
+    -fx-background-color:
+            #EEEEEE,
+            #EEEEEE,
+            #EEEEEE;
+}
+
+.card-background:disabled{
+    -fx-background-color: #ADADAD;
+}
+
+.card-background:disabled:hover {
+    -fx-background-color: #EEEEEE
+}
+
+.card-background:pressed {
+    -fx-background-color:
+            #383838,
+            #CECECE,
+            #CECECE;
+}
+
+.card-button, .tab-button {
+    -fx-background-radius: 0;
+    -fx-min-height: 32;
+    -fx-min-width: 184;
+    -fx-pref-width: 330;
+    -fx-padding: 8px 16px 8px 16px;
+    -fx-alignment: CENTER;
+}
+
+.card-button, .dark-button, .stripped-radio-button, .right-stripped-radio-button {
+    -fx-text-fill: #CECECE;
+    -fx-background-color:
+            #202020,
+            #202020,
+            #202020;
+}
+
+/*This card-button.activated is for future "selected" use. See Card Controller for more*/
+.card-button.activated,
+.card-button:selected,
+.card-button:pressed,
+.card-button:pressed:hover,
+.dark-button:selected,
+.dark-button:pressed,
+.dark-button:pressed:hover,
+.right-stripped-radio-button:pressed,
+.right-stripped-radio-button:selected,
+.right-stripped-radio-button:selected:hover,
+.right-stripped-radio-button:pressed:hover,
+.right-stripped-radio-button:selected:hover:focused,
+.right-stripped-radio-button:pressed:hover:focused {
+    -fx-text-fill: #EEEEEE;
+    -fx-background-color:
+            #ADADAD,
+            #383838,
+            #383838;
+}
+
+.card-button:hover,
+.dark-button:hover,
+.stripped-radio-button:selected,
+.stripped-radio-button:hover,
+.right-stripped-radio-button:hover,
+.card-button:hover:focused,
+.dark-button:hover:focused,
+.stripped-radio-button:hover:focused,
+.right-stripped-radio-button:hover:focused {
+    -fx-text-fill: #EEEEEE;
+    -fx-background-color:
+            #383838,
+            #383838,
+            #383838;
+}
+
+.card-button:disabled,
+.dark-button:disabled,
+.stripped-radio-button:disabled,
+.right-stripped-radio-button:disabled {
+    -fx-text-fill: #383838;
+    -fx-background-color:
+            #202020,
+            #202020,
+            #202020;
+}
+
+.tab-button {
+    -fx-background-color:
+            #CECECE,
+            #CECECE,
+            #CECECE;
+}
+
+.tab-button:hover {
+    -fx-background-color:
+            #EEEEEE,
+            #EEEEEE,
+            #EEEEEE;
+}
+
+.tab-button:pressed {
+    -fx-background-color:
+            #838383,
+            #CECECE,
+            #CECECE;
+}
 
 .check-box,
 .button:dark-button,
@@ -174,8 +335,6 @@
 .menu .label,
 .tab,
 .tab .tab-label,
-.stripped-radio-button,
-.right-stripped-radio-button,
 .text-field
 {
     -fx-text-fill: #CECECE;
@@ -313,6 +472,14 @@
 .table-row-cell:selected .cell,
 .tree-cell:selected {
     -fx-background-color:#EEEEEE;
+    -fx-text-fill: #383838;
+}
+
+.list-cell:selected .label,
+.table-view .cell:selected .label,
+.table-row-cell:selected .label,
+.table-row-cell:selected .cell .label,
+.tree-cell:selected .label {
     -fx-text-fill: #383838;
 }
 
@@ -521,114 +688,6 @@
     -fx-background-color: none;
 }
 
-/* Card Component */
-.card-background {
-    -fx-background-color:
-            #CECECE,
-            #CECECE,
-            #CECECE;
-    -fx-background-insets:
-            2,
-            4,
-            6;
-}
-
-.card-background:hover {
-    -fx-background-color:
-            #EEEEEE,
-            #EEEEEE,
-            #EEEEEE;
-}
-
-.card-background:disabled{
-    -fx-background-color: #ADADAD;
-}
-
-.card-background:disabled:hover {
-    -fx-background-color: #EEEEEE
-}
-
-.card-background:pressed {
-    -fx-background-color:
-            #838383,
-            #CECECE,
-            #CECECE;
-}
-
-.card-button, .tab-button {
-    -fx-background-radius: 0;
-    -fx-min-width: 184;
-    -fx-pref-width: 330;
-    -fx-min-height: 32;
-    -fx-background-insets:
-            1,
-            3,
-            5;
-    -fx-padding: 8px 16px 8px 16px;
-    -fx-alignment: CENTER;
-}
-
-.button:hover{
-    -fx-text-fill: #383838;
-    -fx-background-color:
-            #CECECE,
-            #CECECE,
-            #CECECE;
-}
-
-.button:pressed,
-.button:dark-button:pressed {
-    -fx-text-fill: #383838;
-    -fx-background-color:
-            #1A1A1A,
-            #ffffff,
-            #ffffff;
-}
-
-.card-button {
-    -fx-text-fill: #CECECE;
-    -fx-background-color:
-            #383838,
-            #383838,
-            #383838;
-}
-
-/*This card-button.activated is for future "selected" use. See Card Controller for more*/
-.card-button.activated {
-    -fx-background-color:
-            #1A1A1A,
-            #383838,
-            #383838;
-}
-.card-button.activated:hover {
-    -fx-text-fill: #383838;
-    -fx-background-color:
-            #1A1A1A,
-            #ffffff,
-            #ffffff;
-}
-
-.tab-button {
-    -fx-background-color:
-            #CECECE,
-            #CECECE,
-            #CECECE;
-}
-
-.tab-button:hover {
-    -fx-background-color:
-            #EEEEEE,
-            #EEEEEE,
-            #EEEEEE;
-}
-
-.tab-button:pressed {
-    -fx-background-color:
-            #838383,
-            #CECECE,
-            #CECECE;
-}
-
 .card-separator .line,
 .tab-separator .line {
     -fx-pref-height: 1;
@@ -647,39 +706,6 @@
     -fx-background-color: #080808;
     -fx-pref-height: 1;
     -fx-border-color: null ;
-}
-
-.stripped-radio-button > .radio,
-.right-stripped-radio-button > .radio {
-  -fx-background-color: transparent;
-  -fx-background-insets: 0;
-  -fx-background-radius: 0px;
-  -fx-padding: 0.0em; /* 4 8 4 8 */
-
-  -fx-min-width: 0;
-  -fx-pref-width: 0;
-  -fx-max-width: 0;
-}
-
-.stripped-radio-button:selected > .radio > .dot,
-.right-stripped-radio-button:selected > .radio > .dot {
-  -fx-background-color: transparent;
-}
-
-.stripped-radio-button {
-  -fx-background-color: #202020
-}
-
-.stripped-radio-button:selected {
-  -fx-background-color: #383838
-}
-
-.right-stripped-radio-button {
-    -fx-background-color: #383838
-
-}
-.right-stripped-radio-button:selected {
-    -fx-background-color: #202020
 }
 
 /* Styling for the scroll bar in left pane */

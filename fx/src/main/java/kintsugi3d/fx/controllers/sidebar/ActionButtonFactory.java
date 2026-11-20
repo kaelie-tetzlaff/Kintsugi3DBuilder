@@ -60,7 +60,7 @@ public final class ActionButtonFactory
                 button.setMnemonicParsing(false);
                 button.getStyleClass().add(buttonClass);
                 button.getStyleClass().add("wireframeBodyStrong");
-                button.getStylesheets().add("file:./kintsugiStyling.css");
+//                button.getStylesheets().add("file:../kintsugi.css");
                 button.setOnAction(event -> {
 
                     /*If uncommented will make it so after a button is clicked

@@ -20,7 +20,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
-<VBox fx:id="hostPane" styleClass="content-root" stylesheets="@../../kintsugiStyling.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kintsugi3d.fx.controllers.modals.viewselect.OrientationViewSelectController">
+<VBox fx:id="hostPane" styleClass="content-root" stylesheets="@../../kintsugi.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kintsugi3d.fx.controllers.modals.viewselect.OrientationViewSelectController">
    <StackPane>
       <Label fx:id="hintTextLabel" alignment="CENTER" styleClass="wireframeTitle" textAlignment="CENTER">
          Select model orientation view

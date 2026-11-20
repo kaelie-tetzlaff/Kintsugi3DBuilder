@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <AnchorPane
             xmlns="http://javafx.com/javafx"
-            stylesheets="@../kintsugiStyling.css"
+            stylesheets="@../kintsugi.css"
             style="-fx-background-color: transparent;"
             minWidth = "0"
             mouseTransparent="true"

@@ -22,8 +22,8 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<VBox fx:id="mainBox" styleClass="sidebar-root" stylesheets="@../../kintsugiStyling.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kintsugi3d.fx.controllers.sidebar.SideBarController" onMouseMoved="#mouseMoved" onMousePressed="#mousePressed" onMouseDragged="#mouseDragged" onMouseReleased="#mouseReleased">
-    <Separator prefWidth="200.0" styleClass="black-line" stylesheets="@../../kintsugiStyling.css" />
+<VBox fx:id="mainBox" styleClass="sidebar-root" stylesheets="@../../kintsugi.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kintsugi3d.fx.controllers.sidebar.SideBarController" onMouseMoved="#mouseMoved" onMousePressed="#mousePressed" onMouseDragged="#mouseDragged" onMouseReleased="#mouseReleased">
+    <Separator prefWidth="200.0" styleClass="black-line" stylesheets="@../../kintsugi.css" />
     <HBox fx:id = "workspaceBox" alignment="TOP_RIGHT" prefHeight="23.0" maxHeight="23" prefWidth="462.0" style="-fx-background-color: #383838;">
         <padding>
             <Insets fx:id = "inseters" bottom="4.0" left="8.0" right="4.0" top="4.0" />
@@ -46,7 +46,7 @@
                 style="-fx-padding: 0;"
                 onAction = "#toggleSideBar"/>
     </HBox>
-    <Separator prefWidth="200.0" styleClass="black-line" stylesheets="@../../kintsugiStyling.css" />
-    <HBox fx:id="buttonBox" styleClass="tabButtonBox" prefHeight="31.0" prefWidth="462.0" stylesheets="@../../kintsugiStyling.css" VBox.vgrow="NEVER">
+    <Separator prefWidth="200.0" styleClass="black-line" stylesheets="@../../kintsugi.css" />
+    <HBox fx:id="buttonBox" styleClass="tabButtonBox" prefHeight="31.0" prefWidth="462.0" stylesheets="@../../kintsugi.css" VBox.vgrow="NEVER">
     </HBox>
 </VBox>

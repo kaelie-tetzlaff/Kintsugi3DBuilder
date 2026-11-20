@@ -14,7 +14,8 @@
  */
 
 /*noinspection CssUnknownTarget*/
-@import url("com/sun/javafx/scene/control/skin/modena/modena.css");
+@import url("modena.css");
+@import url("kintsugi-modena-overrides.css");
 
 /*noinspection CssUnusedSymbol*/
 .label,

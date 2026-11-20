@@ -23,7 +23,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <VBox alignment="TOP_CENTER" fillWidth="false" spacing="16.0" styleClass="content-root"
-      stylesheets="@../../kintsugiStyling.css" xmlns="http://javafx.com/javafx/17.0.12"
+      stylesheets="@../../kintsugi.css" xmlns="http://javafx.com/javafx/17.0.12"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="kintsugi3d.fx.controllers.modals.systemsettings.SystemMemoryController">
     <CheckBox fx:id="maxMemCheckbox" mnemonicParsing="false" styleClass="wireframeBody" text="Limit Memory Usage"/>
