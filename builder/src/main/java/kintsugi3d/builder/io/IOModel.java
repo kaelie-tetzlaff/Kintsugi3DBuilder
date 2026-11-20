@@ -20,6 +20,8 @@ import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.fit.settings.ExportSettings;
+import kintsugi3d.builder.io.XMLHelper.ErrorLogger;
+import kintsugi3d.builder.io.XMLHelper.ErrorsAsWarningsLogger;
 import kintsugi3d.builder.io.events.*;
 import kintsugi3d.builder.io.metashape.MetashapeModel;
 import kintsugi3d.builder.io.metashape.MetashapeTextures;
@@ -43,9 +45,9 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -399,7 +401,8 @@ public class IOModel implements IO
     {
         try
         {
-            return new File(projectFile.getParent(), getViewSetFilenameFromXMLDocument(openProjectFileAsXMLDocument(projectFile)));
+            return new File(projectFile.getParent(),
+                getViewSetFilenameFromXMLDocument(openProjectFileAsXMLDocument(projectFile, new ErrorsAsWarningsLogger())));
         }
         catch (ParserConfigurationException | SAXException e)
         {
@@ -407,9 +410,16 @@ public class IOModel implements IO
         }
     }
 
-    private static Document openProjectFileAsXMLDocument(File projectFile) throws SAXException, IOException, ParserConfigurationException
+    private static Document openProjectFileAsXMLDocument(File projectFile, ErrorHandler errorHandler)
+        throws SAXException, IOException, ParserConfigurationException
     {
-        return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(projectFile);
+        return XMLHelper.getDocumentBuilder(errorHandler).parse(projectFile);
+    }
+
+    private static Document openProjectFileAsXMLDocument(File projectFile)
+        throws SAXException, IOException, ParserConfigurationException
+    {
+        return openProjectFileAsXMLDocument(projectFile, new ErrorLogger());
     }
 
     private static String getViewSetFilenameFromXMLDocument(Document document) throws IOException
@@ -756,4 +766,6 @@ public class IOModel implements IO
             }
         }
     }
+
+
 }
