@@ -1,0 +1,16 @@
+&lt;!--
+  ~ Extra licenses acceptable for Kintsugi3DBuilder dependencies, in addition
+  ~ to the built-in osi-widely-used set configured in pom.xml.
+  ~
+  ~ These are loaded via acceptableLicenseResourcesFilesPaths, because specifying
+  ~ &lt;acceptableLicenses&gt; in pom.xml would REPLACE (not extend) the built-in
+  ~ resource set and fail every Apache/MIT/BSD/etc. dependency.
+  --&gt;
+&lt;licenses&gt;
+    &lt;license&gt;
+        &lt;name&gt;(MIT X11 License)&lt;/name&gt;
+    &lt;/license&gt;
+    &lt;license&gt;
+        &lt;name&gt;(GPLv2\+CE)&lt;/name&gt;
+    &lt;/license&gt;
+&lt;/licenses&gt;
