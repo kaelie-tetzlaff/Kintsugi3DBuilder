@@ -16,7 +16,15 @@
 /*
  * Kintsugi-specific styling: custom style classes, brand colors, and the
  * app-wide overrides of the generic JavaFX look defined in
- * kintsugi-modena-overrides.css (which loads BEFORE this file).
+ * kintsugi-modena-overrides.css (which loads in the user-agent layer,
+ * BEFORE this file).
+ *
+ * NOTE: the menu-bar / menu / menu-item and tab / tab-pane rules at the
+ * bottom of this file use generic JavaFX selectors, but they are kept here
+ * on purpose: Modena's own selectors for these controls are more specific
+ * than bare class selectors, and rules in the user-agent layer cannot beat
+ * them by order alone. Rules in this file (scene/author layer) always win
+ * against the user-agent layer regardless of specificity.
  */
 
 .wireframeCaption {
@@ -147,17 +155,6 @@
     -fx-text-fill: #383838;
 }
 
-.button:selected,
-.toggle-button:selected,
-.check-box:selected .box,
-.titled-pane > .title:selected {
-    -fx-background-color:
-            #383838,
-            #CECECE,
-            #CECECE;
-    -fx-font-weight: bold;
-}
-
 /* Card Component */
 .card-background {
     -fx-background-color:
@@ -280,6 +277,13 @@
 
 .button:dark-button {
     -fx-text-fill: #CECECE;
+    -fx-background-radius: 0;
+    -fx-padding: 0 4 0 4;
+}
+
+.button:dark-button:hover {
+    -fx-text-fill: #CECECE;
+    -fx-background-color: #383838;
 }
 
 .content-root {
@@ -291,16 +295,6 @@
 }
 
 .sidebar-root {
-    -fx-background-color: #383838;
-}
-
-.button:dark-button {
-    -fx-background-radius: 0;
-    -fx-padding: 0 4 0 4;
-}
-
-.button:dark-button:hover {
-    -fx-text-fill: #CECECE;
     -fx-background-color: #383838;
 }
 
@@ -418,4 +412,82 @@
 
 .carousel-scroll-pane.hide-hbar .scroll-bar:horizontal {
     -fx-opacity: 1.0;
+}
+
+/********************************************************************************/
+
+/* Menu-bar / menu / menu-item styling.
+ * Kept in this author stylesheet (not in kintsugi-modena-overrides.css)
+ * so it always beats Modena's more specific user-agent selectors. */
+.menu .label,
+.tab,
+.tab .tab-label {
+    -fx-text-fill: #CECECE;
+}
+
+.menu {
+    -fx-background-color: #383838;
+    -fx-background-radius: 0 0 0 0;
+}
+
+.menu:hover {
+    -fx-background-color: #EEEEEE;
+}
+
+.menu:hover .label {
+    -fx-text-fill: #383838;
+}
+
+.menu-bar {
+    -fx-background-color: #383838;
+}
+
+.menu-item {
+    -fx-background-color: #202020;
+}
+
+.menu-item .label {
+    -fx-text-fill: #CECECE !important;
+}
+
+.menu-item:hover {
+    -fx-background-color: #EEEEEE;
+}
+
+.menu-item:hover .label {
+    -fx-text-fill: #383838 !important;
+}
+
+/* JavaFX TabPane tab styling.
+ * Kept in this author stylesheet (not in kintsugi-modena-overrides.css)
+ * so it always beats Modena's more specific user-agent selectors.
+ * Note: Kintsugi's own "tabs" in the left bar are buttons/containers
+ * (.tab-button, .left-bar) and are styled above; these rules are for the
+ * JavaFX TabPane control itself. */
+.tab {
+    -fx-background-color: #202020;
+    -fx-background-radius: 0;
+    -fx-padding: 8 16 8 16; /* top right bottom left */
+    -fx-effect: none;
+}
+
+.tab-pane {
+    -fx-focus-color: transparent;        /* removes blue focus line */
+    -fx-faint-focus-color: transparent;  /* removes faint glow when not fully focused */
+}
+
+.tab:selected {
+    -fx-background-color: #383838;
+}
+
+.tab:selected .tab-label {
+    -fx-text-fill: #EEEEEE;
+}
+
+.tab:hover {
+    -fx-background-color: #EEEEEE;
+}
+
+.tab:hover .tab-label {
+    -fx-text-fill: #383838;
 }

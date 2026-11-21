@@ -15,8 +15,9 @@
 
 /*
  * Generic, universal JavaFX (Modena) overrides.
+ * Loaded in the user-agent layer (via user-agent-*.css, after modena.css).
  * Anything custom or Kintsugi-specific belongs in fxml/kintsugi.css,
- * which always loads AFTER this file.
+ * which loads as a scene (author) stylesheet AFTER this file.
  */
 
 .context-menu,
@@ -156,14 +157,21 @@
 
 .button:selected,
 .toggle-button:selected,
+.check-box:selected .box,
+.titled-pane > .title:selected {
+    -fx-background-color:
+            #383838,
+            #CECECE,
+            #CECECE;
+    -fx-font-weight: bold;
+}
+
 .button:default:selected,
 .toggle-button:default:selected,
 .button:focused,
 .toggle-button:focused,
 .button:default:focused,
-.toggle-button:default:focused,
-.check-box:selected .box,
-.titled-pane > .title:selected {
+.toggle-button:default:focused {
     -fx-background-color:
             #ADADAD,
             #CECECE,
@@ -176,9 +184,6 @@
 .list-cell,
 .table-view .cell,
 .table-row-cell,
-.menu .label,
-.tab,
-.tab .tab-label,
 .text-field {
     -fx-text-fill: #CECECE;
 }
@@ -302,100 +307,6 @@
     -fx-background-insets: 0;
 }
 
-.menu {
-    -fx-background-color: #383838;
-    -fx-background-radius: 0 0 0 0;
-}
-
-.menu:hover {
-    -fx-background-color: #EEEEEE;
-}
-
-.menu:hover .label {
-    -fx-text-fill: #383838;
-}
-
-.menu-bar {
-    -fx-background-color: #383838;
-}
-
-.menu-item {
-    -fx-background-color: #202020;
-}
-
-.menu-item .label {
-    -fx-text-fill: #CECECE !important;
-}
-
-.menu-item:hover {
-    -fx-background-color: #EEEEEE;
-}
-
-.menu-item:hover .label {
-    -fx-text-fill: #383838 !important;
-}
-
-.separator:vertical .line {
-    -fx-border-color: #CECECE;
-    -fx-border-width: 0 1 0 0;
-}
-
-.split-menu-button {
-    -fx-background-insets: 0;
-    -fx-background-radius: 0;
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-}
-
-.split-menu-button * {
-    -fx-background-insets: 0;
-    -fx-background-radius: 0;
-    -fx-border-width: 0;
-    -fx-border-radius: 0;
-    -fx-border-color: transparent;
-}
-
-.split-menu-button .arrow-button {
-    -fx-border-width: 0 0 0 1;
-    -fx-border-color: #202020;
-}
-
-.split-menu-button .arrow {
-    -fx-background-color: #202020;
-}
-
-.slider .thumb .thumb-label .label {
-    -fx-text-fill: #FF0000;
-}
-
-.tab {
-    -fx-background-color: #202020;
-    -fx-background-radius: 0;
-    -fx-padding: 8 16 8 16; /* top right bottom left */
-    -fx-effect: none;
-}
-
-.tab-pane {
-    -fx-focus-color: transparent;        /* removes blue focus line */
-    -fx-faint-focus-color: transparent;  /* removes faint glow when not fully focused */
-}
-
-.tab:selected {
-    -fx-background-color: #383838;
-}
-
-.tab:selected .tab-label {
-    -fx-text-fill: #EEEEEE;
-}
-
-.tab:hover {
-    -fx-background-color: #EEEEEE;
-}
-
-.tab:hover .tab-label {
-    -fx-text-fill: #383838;
-}
-
 .list-cell:selected {
     -fx-background-color: #EEEEEE;
     -fx-text-fill: #383838;
@@ -439,10 +350,6 @@
 .titled-pane > .title {
     -fx-background-radius: 0;
     -fx-border-radius: 0;
-}
-
-.titled-pane > .title:selected {
-    -fx-font-weight: bold;
 }
 
 .titled-pane > .title > .arrow-button > .arrow {
