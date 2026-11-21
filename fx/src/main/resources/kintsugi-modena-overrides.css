@@ -491,3 +491,36 @@
     -fx-background: transparent;
     -fx-pick-on-bounds: false;
 }
+
+.separator:vertical .line {
+    -fx-border-color: #CECECE;
+    -fx-border-width: 0 1 0 0;
+}
+
+.split-menu-button {
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.split-menu-button * {
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-border-radius: 0;
+    -fx-border-color: transparent;
+}
+
+.split-menu-button .arrow-button {
+    -fx-border-width: 0 0 0 1;
+    -fx-border-color: #202020;
+}
+
+.split-menu-button .arrow {
+    -fx-background-color: #202020;
+}
+
+.slider .thumb .thumb-label .label {
+    -fx-text-fill: #FF0000;
+}
