@@ -13,6 +13,12 @@
  * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
+/*
+ * Generic, universal JavaFX (Modena) overrides.
+ * Anything custom or Kintsugi-specific belongs in fxml/kintsugi.css,
+ * which always loads AFTER this file.
+ */
+
 .context-menu,
 .tab-pane .tab-header-area .tab-header-background,
 .tool-bar,
@@ -49,7 +55,7 @@
     -fx-alignment: CENTER;
 }
 
-.dialog-pane{
+.dialog-pane {
     -fx-padding: 48 24 52 24; /* top right bottom left */
 }
 
@@ -66,7 +72,7 @@
 .toggle-button:default,
 .color-picker .color-picker-label,
 .split-menu-button .label,
-.titled-pane > .title{
+.titled-pane > .title {
     -fx-text-fill: #202020;
 }
 
@@ -75,7 +81,7 @@
 .button:default:disabled,
 .toggle-button:default:disabled,
 .split-menu-button:disabled .label:disabled,
-.titled-pane:disabled > .title{
+.titled-pane:disabled > .title {
     -fx-text-fill: #383838;
 }
 
@@ -114,7 +120,7 @@
 }
 
 .button:hover,
-.button:default:hover{
+.button:default:hover {
     -fx-text-fill: #383838;
 }
 
@@ -173,8 +179,7 @@
 .menu .label,
 .tab,
 .tab .tab-label,
-.text-field
-{
+.text-field {
     -fx-text-fill: #CECECE;
 }
 
@@ -201,8 +206,7 @@
 .button:default, .toggle-button:default,
 .button:default:focused, .toggle-button:default:focused,
 .button:default:selected, .toggle-button:default:selected,
-.button:disabled, .toggle-button:disabled
-{
+.button:disabled, .toggle-button:disabled {
     -fx-background-radius: 0;
     -fx-padding: 8 16 8 16; /* top right bottom left */
 }
@@ -218,19 +222,17 @@
 }
 
 .scroll-bar .increment-button:hover,
-.scroll-bar .decrement-button:hover
-{
+.scroll-bar .decrement-button:hover {
     -fx-border-color: #EEEEEE;
 }
 
 .scroll-bar .increment-button:pressed,
-.scroll-bar .decrement-button:pressed
-{
+.scroll-bar .decrement-button:pressed {
     -fx-border-color: #ADADAD;
 }
 
 .scroll-bar .increment-arrow,
-.scroll-bar .decrement-arrow{
+.scroll-bar .decrement-arrow {
     -fx-background-color: #202020;
     -fx-border-color: #202020;
 }
@@ -244,12 +246,12 @@
     -fx-background-radius: 0;
 }
 
-.color-picker{
+.color-picker {
     -fx-border-width: 0;
 }
 
-.choice-box{
-    -fx-background-color:#202020;
+.choice-box {
+    -fx-background-color: #202020;
 }
 
 .track {
@@ -263,8 +265,7 @@
 .list-view,
 .table-view,
 .table-view .column-header,
-.table-view .column-header-background .filler
-{
+.table-view .column-header-background .filler {
     -fx-background-color: #202020;
 }
 
@@ -285,44 +286,52 @@
 .table-row-cell:selected,
 .table-row-cell:selected .cell,
 .tree-cell:selected {
-    -fx-background-color:#EEEEEE;
+    -fx-background-color: #EEEEEE;
     -fx-text-fill: #383838;
 }
 
-.list-view:focused{
+.list-cell:selected .label,
+.table-view .cell:selected .label,
+.table-row-cell:selected .label,
+.table-row-cell:selected .cell .label,
+.tree-cell:selected .label {
+    -fx-text-fill: #383838;
+}
+
+.list-view:focused {
     -fx-background-insets: 0;
 }
 
-.menu{
+.menu {
     -fx-background-color: #383838;
     -fx-background-radius: 0 0 0 0;
 }
 
-.menu:hover{
+.menu:hover {
     -fx-background-color: #EEEEEE;
 }
 
-.menu:hover .label{
+.menu:hover .label {
     -fx-text-fill: #383838;
 }
 
-.menu-bar{
+.menu-bar {
     -fx-background-color: #383838;
 }
 
-.menu-item{
+.menu-item {
     -fx-background-color: #202020;
 }
 
-.menu-item .label{
+.menu-item .label {
     -fx-text-fill: #CECECE !important;
 }
 
-.menu-item:hover{
+.menu-item:hover {
     -fx-background-color: #EEEEEE;
 }
 
-.menu-item:hover .label{
+.menu-item:hover .label {
     -fx-text-fill: #383838 !important;
 }
 
@@ -355,11 +364,11 @@
     -fx-background-color: #202020;
 }
 
-.slider .thumb .thumb-label .label{
-    -fx-text-fill:#FF0000;
+.slider .thumb .thumb-label .label {
+    -fx-text-fill: #FF0000;
 }
 
-.tab{
+.tab {
     -fx-background-color: #202020;
     -fx-background-radius: 0;
     -fx-padding: 8 16 8 16; /* top right bottom left */
@@ -371,40 +380,40 @@
     -fx-faint-focus-color: transparent;  /* removes faint glow when not fully focused */
 }
 
-.tab:selected{
+.tab:selected {
     -fx-background-color: #383838;
 }
 
-.tab:selected .tab-label{
+.tab:selected .tab-label {
     -fx-text-fill: #EEEEEE;
 }
 
-.tab:hover{
+.tab:hover {
     -fx-background-color: #EEEEEE;
 }
 
-.tab:hover .tab-label{
+.tab:hover .tab-label {
     -fx-text-fill: #383838;
 }
 
-.list-cell:selected{
-    -fx-background-color:#EEEEEE;
+.list-cell:selected {
+    -fx-background-color: #EEEEEE;
     -fx-text-fill: #383838;
 }
 
-.list-view{
-    -fx-background-radius:0;
-    -fx-background-insets:0;
-    -fx-border-width:0;
+.list-view {
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-border-width: 0;
     -fx-border-color: transparent;
-    -fx-border-radius:0;
+    -fx-border-radius: 0;
 }
 
-.list-view:focused{
+.list-view:focused {
     -fx-background-insets: 0;
 }
 
-.table-view{
+.table-view {
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
     -fx-table-cell-border-color: #CECECE;
@@ -422,18 +431,18 @@
     -fx-background-insets: 0;
 }
 
-.text-field{
+.text-field {
     -fx-background-color: #383838;
     -fx-background-radius: 0;
 }
 
-.titled-pane > .title{
+.titled-pane > .title {
     -fx-background-radius: 0;
     -fx-border-radius: 0;
 }
 
 .titled-pane > .title:selected {
-    -fx-font-weight:bold;
+    -fx-font-weight: bold;
 }
 
 .titled-pane > .title > .arrow-button > .arrow {
@@ -442,42 +451,43 @@
     -fx-effect: none;
 }
 
-.tool-bar .button{
+.tool-bar .button {
     -fx-background-radius: 0;
 }
 
 .tooltip {
-    -fx-show-duration: indefinite; /* tooltips don't disappear until the user's mouse leaves the node*/
+    -fx-show-duration: indefinite; /* tooltips don't disappear until the user's mouse leaves the node */
 }
 
-/*Tree cell styling stolen from stack overflow --> https://stackoverflow.com/questions/30684308/javafx-treeview-css */
+/* Tree cell styling stolen from stack overflow --> https://stackoverflow.com/questions/30684308/javafx-treeview-css */
 .tree-view, .tree-cell {
-    -fx-text-fill: white ;
+    -fx-text-fill: white;
 }
 
-.tree-cell:empty{
+.tree-cell:empty {
     -fx-background-color: #202020;
 }
 
 .tree-cell:expanded, .tree-cell:sub-tree-item {
-    -fx-background-color: #383838 ;
+    -fx-background-color: #383838;
 }
 
 .tree-cell:selected {
-    -fx-font-weight: bold ;
+    -fx-font-weight: bold;
 }
 
 .tree-cell {
-    -fx-padding: 0.75em 0em 0.75em 0em ;
+    -fx-padding: 0.75em 0em 0.75em 0em;
 }
 
 .tree-cell:sub-tree-item {
-    -fx-padding: 0.25em ;
+    -fx-padding: 0.25em;
 }
 
-.tree-cell > .tree-disclosure-node > .arrow  {
+.tree-cell > .tree-disclosure-node > .arrow {
     -fx-background-color: none;
 }
+
 .tree-cell:expanded > .tree-disclosure-node > .arrow {
     -fx-background-color: none;
 }
@@ -485,6 +495,7 @@
 .scroll-pane .viewport {
     -fx-background-color: transparent;
 }
+
 /* 1. Base Horizontal ScrollBar Settings */
 .scroll-bar:horizontal {
     -fx-background-color: transparent;
@@ -519,7 +530,6 @@
 }
 
 /* 4. Remove and collapse the Arrow Buttons entirely */
-
 .scroll-bar .increment-button,
 .scroll-bar .decrement-button {
     -fx-background-color: transparent;
@@ -542,17 +552,20 @@
     -fx-max-width: 0px;
     -fx-max-height: 0px;
 }
+
 .scroll-bar:vertical {
     -fx-background-color: transparent;
     -fx-pref-width: 18px;
     -fx-min-width: 18px;
     -fx-max-width: 18px;
 }
+
 .scroll-bar:vertical .track {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-background-radius: 0px;
 }
+
 .scroll-bar:vertical .thumb {
     -fx-background-color: #ffffff;
     -fx-background-radius: 4px;
@@ -561,15 +574,19 @@
     -fx-border-width: 0px;
     -fx-background-insets: 0px 5px 0px 5px;
 }
+
 .scroll-bar:vertical .thumb:hover {
     -fx-background-color: #dcdcdc;
 }
+
 .corner {
     -fx-background-color: #202020;
 }
+
 .tree-view {
     -fx-background-color: #383838;
 }
+
 .scroll-pane, .scroll-pane > .viewport {
     -fx-background-color: transparent;
     -fx-background: transparent;

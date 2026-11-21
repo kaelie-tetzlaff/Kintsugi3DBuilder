@@ -13,6 +13,12 @@
  * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
+/*
+ * Kintsugi-specific styling: custom style classes, brand colors, and the
+ * app-wide overrides of the generic JavaFX look defined in
+ * kintsugi-modena-overrides.css (which loads BEFORE this file).
+ */
+
 .wireframeCaption {
     -fx-font-style: normal;
     -fx-font-size: 12px;
@@ -54,51 +60,58 @@
     -fx-font-size: 68px;
 }
 
-.kintsugi-3D-1{
+.kintsugi-3D-1 {
     -fx-fill: #FFE790; /* light yellow */
 }
-.kintsugi-3D-2{
+
+.kintsugi-3D-2 {
     -fx-fill: #EFCB5C; /* kintsugi yellow */
 }
-.kintsugi-3D-3{
+
+.kintsugi-3D-3 {
     -fx-fill: #383838; /* med gray */
-}
-.kintsugi-3D-4{
-    -fx-fill: #202020; /* dark gray */
-}
-.kintsugi-3D-5{
-    -fx-fill: #030305; /* off-black.*/
 }
 
-.kintsugi-3D-Wireframe-0{
-    -fx-fill: #EEEEEE; /* near-white */
-}
-.kintsugi-3D-Wireframe-1{
-    -fx-fill: #CECECE; /* off-white */
-}
-.kintsugi-3D-Wireframe-2{
-    -fx-fill: #ADADAD; /* light gray */
-}
-.kintsugi-3D-Wireframe-3{
-    -fx-fill: #383838; /* med gray */
-}
-.kintsugi-3D-Wireframe-4{
+.kintsugi-3D-4 {
     -fx-fill: #202020; /* dark gray */
 }
-.kintsugi-3D-Wireframe-5{
+
+.kintsugi-3D-5 {
+    -fx-fill: #030305; /* off-black. */
+}
+
+.kintsugi-3D-Wireframe-0 {
+    -fx-fill: #EEEEEE; /* near-white */
+}
+
+.kintsugi-3D-Wireframe-1 {
+    -fx-fill: #CECECE; /* off-white */
+}
+
+.kintsugi-3D-Wireframe-2 {
+    -fx-fill: #ADADAD; /* light gray */
+}
+
+.kintsugi-3D-Wireframe-3 {
+    -fx-fill: #383838; /* med gray */
+}
+
+.kintsugi-3D-Wireframe-4 {
+    -fx-fill: #202020; /* dark gray */
+}
+
+.kintsugi-3D-Wireframe-5 {
     -fx-fill: #030303; /* off-black */
 }
 
 /********************************************************************************/
 
+/* App-specific surfaces (generic .context-menu / .tool-bar cases live in
+ * kintsugi-modena-overrides.css) */
 .modal-root,
-.button:dark-button,
 .content-root,
 .cameraviewlist,
-.context-menu,
-.mainwindow-root,
-.tab-pane .tab-header-area .tab-header-background,
-.tool-bar{
+.mainwindow-root {
     -fx-background-color: #202020;
 }
 
@@ -126,72 +139,12 @@
             5;
 }
 
-.button,
-.toggle-button,
-.color-picker .color-picker-label,
-.card-background .label,
-.split-menu-button .label,
-.titled-pane > .title{
+.card-background .label {
     -fx-text-fill: #202020;
 }
 
-.button:disabled,
-.toggle-button:disabled,
-.card-background:disabled .label:disabled,
-.split-menu-button:disabled .label:disabled,
-.titled-pane:disabled > .title{
+.card-background:disabled .label:disabled {
     -fx-text-fill: #383838;
-}
-
-.button, .toggle-button,
-.scroll-bar .increment-button,
-.scroll-bar .decrement-button,
-.check-box .box,
-.combo-box,
-.color-picker,
-.thumb,
-.titled-pane > .title,
-.split-menu-button > * {
-    -fx-background-color: #CECECE;
-}
-
-.button:hover,
-.toggle-button:hover,
-.scroll-bar .increment-button:hover,
-.scroll-bar .decrement-button:hover,
-.check-box:hover .box,
-.combo-box:hover,
-.color-picker:hover,
-.thumb:hover,
-.titled-pane > .title:hover,
-.split-menu-button:hover > * {
-    -fx-background-color: #EEEEEE;
-}
-
-.button:pressed,
-.toggle-button:pressed,
-.scroll-bar .increment-button:pressed,
-.scroll-bar .decrement-button:pressed,
-.check-box:pressed .box,
-.combo-box:pressed,
-.color-picker:pressed,
-.thumb:pressed,
-.titled-pane > .title:pressed,
-.split-menu-button:pressed > *,
-.button:pressed:hover,
-.toggle-button:pressed:hover,
-.scroll-bar .increment-button:pressed:hover,
-.scroll-bar .decrement-button:pressed:hover,
-.check-box:pressed:hover .box,
-.combo-box:pressed:hover,
-.color-picker:pressed:hover,
-.thumb:pressed:hover,
-.titled-pane > .title:pressed:hover,
-.split-menu-button:pressed:hover > * {
-    -fx-background-color:
-            #ADADAD,
-            #EEEEEE,
-            #EEEEEE;
 }
 
 .button:selected,
@@ -202,7 +155,7 @@
             #383838,
             #CECECE,
             #CECECE;
-    -fx-font-weight:bold;
+    -fx-font-weight: bold;
 }
 
 /* Card Component */
@@ -224,12 +177,12 @@
             #EEEEEE;
 }
 
-.card-background:disabled{
+.card-background:disabled {
     -fx-background-color: #ADADAD;
 }
 
 .card-background:disabled:hover {
-    -fx-background-color: #EEEEEE
+    -fx-background-color: #EEEEEE;
 }
 
 .card-background:pressed {
@@ -256,7 +209,7 @@
             #202020;
 }
 
-/*This card-button.activated is for future "selected" use. See Card Controller for more*/
+/* This card-button.activated is for future "selected" use. See Card Controller for more */
 .card-button.activated,
 .card-button:selected,
 .card-button:pressed,
@@ -325,22 +278,11 @@
             #CECECE;
 }
 
-.check-box,
-.button:dark-button,
-.label,
-.list-view,
-.list-cell,
-.table-view .cell,
-.table-row-cell,
-.menu .label,
-.tab,
-.tab .tab-label,
-.text-field
-{
+.button:dark-button {
     -fx-text-fill: #CECECE;
 }
 
-.content-root{
+.content-root {
     -fx-padding: 48 24 52 24; /* top right bottom left */
 }
 
@@ -348,27 +290,8 @@
     -fx-padding: 24 24 16 24; /* top right bottom left */
 }
 
-.sidebar-root{
+.sidebar-root {
     -fx-background-color: #383838;
-}
-
-.accordion .content {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-}
-
-.titled-pane .content {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-}
-
-.scroll-pane {
-    -fx-background-color: transparent;
-}
-
-.button, .toggle-button {
-    -fx-background-radius: 0;
-    -fx-padding: 8 16 8 16; /* top right bottom left */
 }
 
 .button:dark-button {
@@ -381,317 +304,34 @@
     -fx-background-color: #383838;
 }
 
-.scroll-bar .increment-button,
-.scroll-bar .decrement-button {
-    -fx-background-insets: 0;
-    -fx-border-color: #CECECE;
-    -fx-background-radius: 0;
-    -fx-border-radius: 0;
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-}
-
-.scroll-bar .increment-button:hover,
-.scroll-bar .decrement-button:hover
-{
-    -fx-border-color: #EEEEEE;
-}
-
-.scroll-bar .increment-button:pressed,
-.scroll-bar .decrement-button:pressed
-{
-    -fx-border-color: #ADADAD;
-}
-
-.scroll-bar .increment-arrow,
-.scroll-bar .decrement-arrow{
-    -fx-background-color: #202020;
-    -fx-border-color: #202020;
-}
-
 .toggleButtonLarge {
     -fx-padding: 16 16 16 16; /* top right bottom left */
 }
 
-.cache-settings-root{
-      -fx-background-color: #383838;
- }
+.cache-settings-root {
+    -fx-background-color: #383838;
+}
 
-.cameraviewlist{
+.cameraviewlist {
     -fx-border-color: #202020;
 }
 
-.check-box .box {
-    -fx-background-insets: 0;
-    -fx-background-radius: 0;
+.progress-bar {
+    -fx-accent: #D4AA00; /* color of completed portion (Kintsugi yellow) */
 }
 
-.combo-box, .color-picker {
-    -fx-background-radius: 0;
+.progress-bar .track {
+    -fx-background-color: #CECECE; /* color of incomplete portion */
 }
 
-.color-picker{
-    -fx-border-width: 0;
-}
-
-.choice-box{
-    -fx-background-color:#202020;
-}
-
-.track {
-    -fx-background-color: #383838;
-}
-
-.axis {
-    -fx-tick-label-fill: #CECECE;
-}
-
-.list-view,
-.table-view,
-.table-view .column-header,
-.table-view .column-header-background .filler
-{
-    -fx-background-color: #202020;
-}
-
-.list-cell:even,
-.table-row-cell:even,
-.tree-cell:even {
-    -fx-background-color: #383838;
-}
-
-.list-cell:odd,
-.table-row-cell:odd,
-.tree-cell:odd {
-    -fx-background-color: #202020;
-}
-
-.list-cell:selected,
-.table-view .cell:selected,
-.table-row-cell:selected,
-.table-row-cell:selected .cell,
-.tree-cell:selected {
-    -fx-background-color:#EEEEEE;
-    -fx-text-fill: #383838;
-}
-
-.list-cell:selected .label,
-.table-view .cell:selected .label,
-.table-row-cell:selected .label,
-.table-row-cell:selected .cell .label,
-.tree-cell:selected .label {
-    -fx-text-fill: #383838;
-}
-
-.list-view:focused{
-    -fx-background-insets: 0;
-}
-
-.menu{
-    -fx-background-color: #383838;
-    -fx-background-radius: 0 0 0 0;
-}
-
-.menu:hover{
-    -fx-background-color: #EEEEEE;
-}
-
-.menu:hover .label{
-    -fx-text-fill: #383838;
-}
-
-.menu-bar{
-    -fx-background-color: #383838;
-}
-
-.menu-item{
-    -fx-background-color: #202020;
-}
-
-.menu-item .label{
-    -fx-text-fill: #CECECE !important;
-}
-
-.menu-item:hover{
-    -fx-background-color: #EEEEEE;
-}
-
-.menu-item:hover .label{
-    -fx-text-fill: #383838 !important;
-}
-
-.progress-bar{
-    -fx-accent: #D4AA00; /*color of completed portion (Kintsugi yellow)*/
-}
-
-.progress-bar .track{
-    -fx-background-color: #CECECE; /*color of incomplete portion*/
-}
-
-.desaturated-progress-bar{
-    -fx-accent: #383838; /*color of completed portion*/
-}
-
-.separator:vertical .line {
-    -fx-border-color: #CECECE;
-    -fx-border-width: 0 1 0 0;
-}
-
-.split-menu-button {
-    -fx-background-insets: 0;
-    -fx-background-radius: 0;
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-}
-
-.split-menu-button * {
-    -fx-background-insets: 0;
-    -fx-background-radius: 0;
-    -fx-border-width: 0;
-    -fx-border-radius: 0;
-    -fx-border-color: transparent;
-}
-
-.split-menu-button .arrow-button {
-    -fx-border-width: 0 0 0 1;
-    -fx-border-color: #202020;
-}
-
-.split-menu-button .arrow {
-    -fx-background-color: #202020;
-}
-
-.slider .thumb .thumb-label .label{
-    -fx-text-fill:#FF0000;
-}
-
-.tab{
-    -fx-background-color: #202020;
-    -fx-background-radius: 0;
-    -fx-padding: 8 16 8 16; /* top right bottom left */
-    -fx-effect: none;
-}
-
-.tab-pane {
-    -fx-focus-color: transparent;        /* removes blue focus line */
-    -fx-faint-focus-color: transparent;  /* removes faint glow when not fully focused */
-}
-
-.tab:selected{
-    -fx-background-color: #383838;
-}
-
-.tab:selected .tab-label{
-    -fx-text-fill: #EEEEEE;
-}
-
-.tab:hover{
-    -fx-background-color: #EEEEEE;
-}
-
-.tab:hover .tab-label{
-    -fx-text-fill: #383838;
-}
-
-.list-cell:selected{
-    -fx-background-color:#EEEEEE;
-    -fx-text-fill: #383838;
-}
-
-.list-view{
-    -fx-background-radius:0;
-    -fx-background-insets:0;
-    -fx-border-width:0;
-    -fx-border-color: transparent;
-    -fx-border-radius:0;
-}
-
-.list-view:focused{
-    -fx-background-insets: 0;
-}
-
-.table-view{
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-    -fx-table-cell-border-color: #CECECE;
-}
-
-.table-row-cell:focused {
-    -fx-border-color: transparent;
-}
-
-.table-view .cell:focused {
-    -fx-border-color: transparent;
-}
-
-.cell:empty:focused {
-    -fx-background-insets: 0;
-}
-
-.text-field{
-    -fx-background-color: #383838;
-    -fx-background-radius: 0;
-}
-
-.titled-pane > .title{
-    -fx-background-radius: 0;
-    -fx-border-radius: 0;
-}
-
-.titled-pane > .title:selected {
-    -fx-font-weight:bold;
-}
-
-.titled-pane > .title > .arrow-button > .arrow {
-    -fx-background-color: #202020;
-    -fx-background-insets: 0;
-    -fx-effect: none;
-}
-
-.tool-bar .button{
-    -fx-background-radius: 0;
-}
-
-.tooltip {
-    -fx-show-duration: indefinite; /* tooltips don't disappear until the user's mouse leaves the node*/
-}
-
-/*Tree cell styling stolen from stack overflow --> https://stackoverflow.com/questions/30684308/javafx-treeview-css */
-.tree-view, .tree-cell {
-    -fx-text-fill: white ;
-}
-
-.tree-cell:empty{
-    -fx-background-color: #202020;
-}
-
-.tree-cell:expanded, .tree-cell:sub-tree-item {
-    -fx-background-color: #383838 ;
-}
-
-.tree-cell:selected {
-    -fx-font-weight: bold ;
-}
-
-.tree-cell {
-    -fx-padding: 0.75em 0em 0.75em 0em ;
-}
-
-.tree-cell:sub-tree-item {
-    -fx-padding: 0.25em ;
-}
-
-.tree-cell > .tree-disclosure-node > .arrow  {
-    -fx-background-color: none;
-}
-.tree-cell:expanded > .tree-disclosure-node > .arrow {
-    -fx-background-color: none;
+.desaturated-progress-bar {
+    -fx-accent: #383838; /* color of completed portion */
 }
 
 .card-separator .line,
 .tab-separator .line {
     -fx-pref-height: 1;
-    -fx-border-color: null ;
+    -fx-border-color: null;
 }
 
 .card-separator .line {
@@ -705,7 +345,7 @@
 .black-line .line {
     -fx-background-color: #080808;
     -fx-pref-height: 1;
-    -fx-border-color: null ;
+    -fx-border-color: null;
 }
 
 /* Styling for the scroll bar in left pane */
@@ -713,11 +353,11 @@
     -fx-background-color: #202020;
 }
 
-.left-bar .scroll-bar:vertical{
-    -fx-background-color:transparent;
+.left-bar .scroll-bar:vertical {
+    -fx-background-color: transparent;
 }
 
-.left-bar .scroll-bar:vertical .track{
+.left-bar .scroll-bar:vertical .track {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-background-radius: 0em;
@@ -727,117 +367,28 @@
     -fx-background-color: white;
     -fx-background-radius: 5em;
 }
-.scroll-pane .viewport {
-    -fx-background-color: transparent;
-}
-/* 1. Base Horizontal ScrollBar Settings */
-.scroll-bar:horizontal {
-    -fx-background-color: transparent;
-    -fx-pref-height: 18px;
-    -fx-min-height: 18px;
-    -fx-max-height: 18px;
-}
 
-/* 2. The Scrollbar Track (Background) */
-.scroll-bar:horizontal .track {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-background-radius: 0px;
-}
-
-/* 3. The Thumb (The draggable white bar) */
-.scroll-bar:horizontal .thumb {
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 4px;
-    -fx-min-width: 40px;
-    -fx-border-color: transparent black transparent black; /* Change 'black' to match your app background if transparent acts up */
-    -fx-border-style: solid;
-    -fx-border-width: 5px 0px 5px 0px;
-
-    /* Ensures background color stays within the border boundaries */
-    -fx-background-insets: 5px 0px 5px 0px;
-}
-
-/* Change thumb color when hovering over it */
-.scroll-bar:horizontal .thumb:hover {
-    -fx-background-color: #dcdcdc; /* Slightly off-white on hover */
-}
-
-/* 4. Remove and collapse the Arrow Buttons entirely */
-
-.scroll-bar .increment-button,
-.scroll-bar .decrement-button {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0px;
-    -fx-border-color: transparent;
-    -fx-padding: 0px;
-    -fx-opacity: 0.0;
-    /* Forces the layout engine to collapse their size to absolute zero */
-    -fx-max-width: 0px;
-    -fx-max-height: 0px;
-    -fx-min-width: 0px;
-    -fx-min-height: 0px;
-}
-
-.scroll-bar .increment-arrow,
-.scroll-bar .decrement-arrow {
-    -fx-shape: "";
-    -fx-padding: 0px;
-    -fx-opacity: 0.0;
-    -fx-max-width: 0px;
-    -fx-max-height: 0px;
-}
-.scroll-bar:vertical {
-    -fx-background-color: transparent;
-    -fx-pref-width: 18px;
-    -fx-min-width: 18px;
-    -fx-max-width: 18px;
-}
-.scroll-bar:vertical .track {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-background-radius: 0px;
-}
-.scroll-bar:vertical .thumb {
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 4px;
-    -fx-min-height: 40px;
-    -fx-border-color: transparent;
-    -fx-border-width: 0px;
-    -fx-background-insets: 0px 5px 0px 5px;
-}
-.scroll-bar:vertical .thumb:hover {
-    -fx-background-color: #dcdcdc;
-}
-.corner {
-    -fx-background-color: #202020;
-}
-.tree-view {
-    -fx-background-color: #383838;
-}
 .black-line {
     -fx-background-color: black;
 }
+
 .black-line .line {
     -fx-border-color: #000000;
     -fx-border-style: solid;
     -fx-border-width: 1px;
     -fx-background-color: #000000;
 }
-.scroll-pane, .scroll-pane > .viewport {
-    -fx-background-color: transparent;
-    -fx-background: transparent;
-    -fx-pick-on-bounds: false;
-}
-.selectionBox {
-    -fx-padding: 0; /*Check Box padding*/
-    -fx-alignment: TOP_LEFT; /*Check Box Alignment*/
-    -fx-line-spacing: 0; /*Check Box spacing between elements*/
-}
-.selectionBox .box {
-    -fx-background-color: transparent; /*Check Box background*/
 
-    /*Check Box mark space*/
+.selectionBox {
+    -fx-padding: 0; /* Check Box padding */
+    -fx-alignment: TOP_LEFT; /* Check Box Alignment */
+    -fx-line-spacing: 0; /* Check Box spacing between elements */
+}
+
+.selectionBox .box {
+    -fx-background-color: transparent; /* Check Box background */
+
+    /* Check Box mark space */
     -fx-pref-width: 12px;
     -fx-pref-height: 12px;
     -fx-min-width: 12px;
@@ -845,23 +396,26 @@
     -fx-max-width: 12px;
     -fx-max-height: 12px;
 }
+
 .selectionBox .mark {
-    /*Check mark actual shape*/
+    /* Check mark actual shape */
     -fx-shape: "M 1 5.5 C 1 4.7, 1.7 4, 2.5 4 C 2.9 4, 3.3 4.2, 3.5 4.5 L 5 6 L 8.5 2.5 C 8.7 2.2, 9.1 2, 9.5 2 C 10.3 2, 11 2.7, 11 3.5 C 11 3.9, 10.8 4.3, 10.5 4.5 L 6 9 C 5.5 9.5, 4.5 9.5, 4 9 L 1.5 6.5 C 1.2 6.2, 1 5.9, 1 5.5 Z";
-    -fx-scale-x: .8; /*Check mark width scale*/
-    -fx-scale-y: .8; /*Check mark height scale*/
+    -fx-scale-x: .8; /* Check mark width scale */
+    -fx-scale-y: .8; /* Check mark height scale */
 
-    -fx-background-color: transparent; /*Check mark background when not selected*/
-    -fx-effect: null; /*Check mark outline when not selected*/
-
+    -fx-background-color: transparent; /* Check mark background when not selected */
+    -fx-effect: null; /* Check mark outline when not selected */
 }
+
 .selectionBox:selected .mark {
-    -fx-background-color: #CECECE; /*Check mark background when selected*/
-    -fx-effect: dropshadow(three-pass-box, black, .75, .75, 0, 0); /*Check mark black outline*/
+    -fx-background-color: #CECECE; /* Check mark background when selected */
+    -fx-effect: dropshadow(three-pass-box, black, .75, .75, 0, 0); /* Check mark black outline */
 }
+
 .carousel-scroll-pane .scroll-bar:horizontal {
     -fx-opacity: 0;
 }
+
 .carousel-scroll-pane.hide-hbar .scroll-bar:horizontal {
     -fx-opacity: 1.0;
 }
