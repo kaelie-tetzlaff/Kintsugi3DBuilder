@@ -14,6 +14,17 @@
  */
 
 /*
+ * Import the generic Modena overrides into the author layer so they are
+ * guaranteed to take precedence over everything in the user-agent layer,
+ * even where a rule would otherwise lose a specificity contest inside the
+ * user-agent layer. The same file is ALSO imported by user-agent-*.css so
+ * the overrides still apply wherever this author stylesheet is not loaded
+ * (e.g. dialogs or scenes that missed this stylesheet). Values in the two
+ * layers are identical, so doubling them does not change the cascade.
+ */
+@import "../kintsugi-modena-overrides.css";
+
+/*
  * Kintsugi-specific styling: custom style classes, brand colors, and the
  * app-wide overrides of the generic JavaFX look defined in
  * kintsugi-modena-overrides.css (which loads in the user-agent layer,
