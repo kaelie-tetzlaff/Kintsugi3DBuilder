@@ -16,6 +16,7 @@
 package kintsugi3d.builder.io.metashape;
 
 import kintsugi3d.builder.io.TextureSupplier;
+import kintsugi3d.builder.io.XMLHelper;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +25,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
@@ -47,12 +46,8 @@ public class MetashapeTextures implements TextureSupplier
     {
         try
         {
-            // Initialize document builder
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-
             // Create a new document from the doc.xml
-            Document document = builder.parse(modelXMLFile);
+            Document document = XMLHelper.getDocumentBuilder().parse(modelXMLFile);
             document.getDocumentElement().normalize();
 
             // Get all the textures

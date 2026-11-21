@@ -20,7 +20,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
@@ -29,6 +28,7 @@ import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.fx.controllers.paged.NonDataPageControllerBase;
 import kintsugi3d.fx.internal.ObservableProjectModel;
+import kintsugi3d.fx.util.StaticUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -149,7 +149,7 @@ public class SelectToneCalibrationImageController extends NonDataPageControllerB
         {
             if (viewSet.hasCustomLuminanceEncoding())
             {
-                Alert alert = new Alert(AlertType.CONFIRMATION, "This will clear any previous tone calibration values!");
+                Dialog<ButtonType> alert = StaticUtilities.createConfirmDialog("This will clear any previous tone calibration values!");
                 alert.setHeaderText("Change tone calibration image?");
                 Optional<ButtonType> confirmResult = alert.showAndWait();
                 if (confirmResult.isEmpty() || !Objects.equals(confirmResult.get(), ButtonType.OK))

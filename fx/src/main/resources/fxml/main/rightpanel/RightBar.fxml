@@ -18,8 +18,8 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox fx:id = "mainBox" styleClass="sidebar-root" stylesheets="@../../kintsugiStyling.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="kintsugi3d.fx.controllers.sidebar.RightBarController" onMouseMoved="#mouseMoved" onMouseDragged="#mouseDragged" onMouseReleased="#mouseReleased">
-    <Separator prefWidth="200.0" styleClass="black-line" stylesheets="@../../kintsugiStyling.css" />
+<VBox fx:id = "mainBox" styleClass="sidebar-root" stylesheets="@../../kintsugi.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="kintsugi3d.fx.controllers.sidebar.RightBarController" onMouseMoved="#mouseMoved" onMouseDragged="#mouseDragged" onMouseReleased="#mouseReleased">
+    <Separator prefWidth="200.0" styleClass="black-line" stylesheets="@../../kintsugi.css" />
     <HBox fx:id = "detailsBox" prefHeight="23.0" maxHeight="23" prefWidth="462.0" style="-fx-background-color: #383838;">
         <padding>
             <Insets bottom="4.0" left="4.0" right="8.0" top="4.0" />
@@ -37,7 +37,7 @@
             <Label fx:id = "detailsLabel" text="Details" />
         </StackPane>
     </HBox>
-    <Separator prefWidth="200.0" styleClass="black-line" stylesheets="@../../kintsugiStyling.css" />
+    <Separator prefWidth="200.0" styleClass="black-line" stylesheets="@../../kintsugi.css" />
     <StackPane VBox.vgrow="ALWAYS">
         <VBox.margin>
             <Insets left="5.0" />
@@ -48,7 +48,7 @@
                 <padding>
                     <Insets right="8.0" />
                 </padding>
-                <HBox fx:id = "textBox" prefHeight="31" stylesheets="@../../kintsugiStyling.css" VBox.vgrow="NEVER" alignment="CENTER_LEFT">
+                <HBox fx:id = "textBox" prefHeight="31" stylesheets="@../../kintsugi.css" VBox.vgrow="NEVER" alignment="CENTER_LEFT">
                     <padding>
                         <Insets left="8.0" top="8.0" />
                     </padding>

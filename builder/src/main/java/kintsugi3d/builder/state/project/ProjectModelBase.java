@@ -15,12 +15,12 @@
 
 package kintsugi3d.builder.state.project;
 
+import kintsugi3d.builder.io.XMLHelper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.util.List;
@@ -152,7 +152,7 @@ public abstract class ProjectModelBase<
     @Override
     public final Document toXMLDocument() throws ParserConfigurationException
     {
-        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+        Document document = XMLHelper.getDocumentBuilder().newDocument();
         Element rootElement = document.createElement("Project");
         document.appendChild(rootElement);
 

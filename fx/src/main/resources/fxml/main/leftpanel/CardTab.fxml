@@ -18,7 +18,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox fx:id="tab" style="-fx-background-color: #383838;" styleClass="left-bar" stylesheets="@../../kintsugiStyling.css"
+<VBox fx:id="tab" style="-fx-background-color: #383838;" styleClass="left-bar" stylesheets="@../../kintsugi.css"
       xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="kintsugi3d.fx.controllers.sidebar.CardTabController" VBox.vgrow="ALWAYS">
     <HBox fx:id = "filePathHBox" maxWidth="1.7976931348623157E308"  alignment="CENTER_LEFT" style = "-fx-padding: 10px">
@@ -44,7 +44,7 @@
         <padding>
             <Insets left="16.0" right="16.0" top="8.0" />
         </padding>
-        <TextField fx:id="searchbar" maxWidth="1.7976931348623157E308" promptText="Search" style="-fx-border-width: 0 0 1 0; -fx-border-color: #d9d9d9;" stylesheets="@../../kintsugiStyling.css" HBox.hgrow="ALWAYS" />
+        <TextField fx:id="searchbar" maxWidth="1.7976931348623157E308" promptText="Search" style="-fx-border-width: 0 0 1 0; -fx-border-color: #d9d9d9;" stylesheets="@../../kintsugi.css" HBox.hgrow="ALWAYS" />
         <VBox.margin>
             <Insets />
         </VBox.margin>

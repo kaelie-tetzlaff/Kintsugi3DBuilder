@@ -25,6 +25,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -36,6 +37,7 @@ import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.io.RecentProjects;
 import kintsugi3d.builder.io.ViewSetReaderFromVSET;
+import kintsugi3d.fx.util.StaticUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -132,7 +134,7 @@ public class WelcomeWindowController
             {
                 LOG.info("Cache size: {}GB", promptCacheSize);
 
-                Alert prompt = new Alert(AlertType.CONFIRMATION);
+                Dialog<ButtonType> prompt = StaticUtilities.createConfirmDialog();
                 prompt.setTitle("Clean Cache?");
                 prompt.setHeaderText("Clean up old cache files?");
                 prompt.setContentText(String.format("The cache for Kintsugi 3D Builder contains older files that can be removed to free up disk space. Currently, the total size of the cache is %.2fGB. Would you like to clean up the cache by removing older files?",

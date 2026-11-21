@@ -17,7 +17,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.VBox?>
-<VBox alignment="TOP_CENTER" fillWidth="false" styleClass="content-root" stylesheets="@../../kintsugiStyling.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kintsugi3d.fx.controllers.modals.systemsettings.PhotoLightingSettingsController">
+<VBox alignment="TOP_CENTER" fillWidth="false" styleClass="content-root" stylesheets="@../../kintsugi.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kintsugi3d.fx.controllers.modals.systemsettings.PhotoLightingSettingsController">
 <VBox spacing="16.0">
     <CheckBox fx:id="relightingCheckBox" mnemonicParsing="false" selected="true" styleClass="wireframeBody" text="Relighting" />
     <CheckBox fx:id="visibleLightWidgetsCheckBox" mnemonicParsing="false" selected="true" styleClass="wireframeBody" text="Show light widgets" />

@@ -19,7 +19,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.*?>
-<VBox fx:id="outerRoot" alignment="CENTER" styleClass="modal-root" stylesheets="@kintsugiStyling.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kintsugi3d.fx.controllers.paged.PageFrameController">
+<VBox fx:id="outerRoot" alignment="CENTER" styleClass="modal-root" stylesheets="@kintsugi.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kintsugi3d.fx.controllers.paged.PageFrameController">
     <StackPane fx:id="hostPane" />
     <VBox>
         <Separator/>

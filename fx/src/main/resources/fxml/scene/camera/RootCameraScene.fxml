@@ -17,7 +17,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox stylesheets="@../../kintsugiStyling.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kintsugi3d.fx.controllers.scene.camera.RootCameraSceneController">
+<VBox stylesheets="@../../kintsugi.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kintsugi3d.fx.controllers.scene.camera.RootCameraSceneController">
    <TitledPane animated="false" prefWidth="400.0" text="Cameras" VBox.vgrow="ALWAYS">
       <HBox prefHeight="0.0">
          <ListView fx:id="cameraListView" HBox.hgrow="ALWAYS" />

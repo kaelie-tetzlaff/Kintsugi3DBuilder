@@ -136,7 +136,7 @@ public class CardController
 
         // Style when selected
         borderBox.styleProperty().bind(Bindings.when(selected)
-            .then("-fx-border-color: black; -fx-border-width: 2px;")
+            .then("-fx-border-color: #ADADAD; -fx-border-width: 2px;")
             .otherwise(""));
         dataCardPane.styleProperty().bind(Bindings.when(selected)
             .then("-fx-padding: 2px;")
