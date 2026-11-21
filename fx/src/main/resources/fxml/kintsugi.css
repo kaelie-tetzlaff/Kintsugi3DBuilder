@@ -413,15 +413,32 @@
 
 /********************************************************************************/
 
-/* Selected-cell label styling.
- * Kept in this author stylesheet (not in kintsugi-modena-overrides.css)
- * so it always beats Modena's more specific (:filled etc.) user-agent
- * selectors, regardless of specificity. */
+/* List / table / tree cell selection styling.
+ * The selected-state rules must live in this author stylesheet (not only
+ * in kintsugi-modena-overrides.css): Modena defines higher-specificity
+ * selected-cell rules in the user-agent layer (.list-cell:filled:selected,
+ * .tree-cell:filled:selected, etc.) that beat same-value rules in the
+ * user-agent layer. Rules in this file always win against the user-agent
+ * layer regardless of specificity. */
+.list-cell:selected,
+.table-view .cell:selected,
+.table-row-cell:selected,
+.table-row-cell:selected .cell,
+.tree-cell:selected {
+    -fx-background-color: #EEEEEE;
+    -fx-text-fill: #383838;
+}
+
 .list-cell:selected .label,
 .table-view .cell:selected .label,
 .table-row-cell:selected .label,
 .table-row-cell:selected .cell .label,
 .tree-cell:selected .label {
+    -fx-text-fill: #383838;
+}
+
+.list-cell:selected {
+    -fx-background-color: #EEEEEE;
     -fx-text-fill: #383838;
 }
 
