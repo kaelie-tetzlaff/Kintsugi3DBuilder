@@ -295,14 +295,6 @@
     -fx-text-fill: #383838;
 }
 
-.list-cell:selected .label,
-.table-view .cell:selected .label,
-.table-row-cell:selected .label,
-.table-row-cell:selected .cell .label,
-.tree-cell:selected .label {
-    -fx-text-fill: #383838;
-}
-
 .list-view:focused {
     -fx-background-insets: 0;
 }

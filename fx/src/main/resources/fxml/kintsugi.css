@@ -19,12 +19,10 @@
  * kintsugi-modena-overrides.css (which loads in the user-agent layer,
  * BEFORE this file).
  *
- * NOTE: the menu-bar / menu / menu-item and tab / tab-pane rules at the
- * bottom of this file use generic JavaFX selectors, but they are kept here
- * on purpose: Modena's own selectors for these controls are more specific
- * than bare class selectors, and rules in the user-agent layer cannot beat
- * them by order alone. Rules in this file (scene/author layer) always win
- * against the user-agent layer regardless of specificity.
+ * NOTE: some rules below use generic JavaFX selectors, but are kept here
+ * on purpose: they live in this scene/author stylesheet so they always
+ * win against the user-agent layer regardless of specificity (rules in
+ * the user-agent layer must out-rank Modena on specificity instead).
  */
 
 .wireframeCaption {
@@ -114,9 +112,8 @@
 
 /********************************************************************************/
 
-/* App-specific surfaces (generic .context-menu / .tool-bar cases live in
- * kintsugi-modena-overrides.css) */
 .modal-root,
+.button:dark-button,
 .content-root,
 .cameraviewlist,
 .mainwindow-root {
@@ -393,7 +390,7 @@
 
 .selectionBox .mark {
     /* Check mark actual shape */
-    -fx-shape: "M 1 5.5 C 1 4.7, 1.7 4, 2.5 4 C 2.9 4, 3.3 4.2, 3.5 4.5 L 5 6 L 8.5 2.5 C 8.7 2.2, 9.1 2, 9.5 2 C 10.3 2, 11 2.7, 11 3.5 C 11 3.9, 10.8 4.3, 10.5 4.5 L 6 9 C 5.5 9.5, 4.5 9.5, 4 9 L 1.5 6.5 C 1.2 6.2, 1 5.9, 1 5.5 Z";
+    -fx-shape: "M 1 5.5 C 1 4.7, 1.7 4, 2.5 4 C 2.9 4, 3.3 4.2, 3.5 4.5 L 5 6 L 8.5 2.5 C 8.7 2.2, 9.1 2, 9.5 2 C 10.3 2, 11 2.7, 11 3.5 C 11 3.9, 10.8 4.3, 10.5 4.5 L 6 9 C 5.5 9.5, 4 9 L 1.5 6.5 C 1.2 6.2, 1 5.9, 1 5.5 Z";
     -fx-scale-x: .8; /* Check mark width scale */
     -fx-scale-y: .8; /* Check mark height scale */
 
@@ -415,6 +412,18 @@
 }
 
 /********************************************************************************/
+
+/* Selected-cell label styling.
+ * Kept in this author stylesheet (not in kintsugi-modena-overrides.css)
+ * so it always beats Modena's more specific (:filled etc.) user-agent
+ * selectors, regardless of specificity. */
+.list-cell:selected .label,
+.table-view .cell:selected .label,
+.table-row-cell:selected .label,
+.table-row-cell:selected .cell .label,
+.tree-cell:selected .label {
+    -fx-text-fill: #383838;
+}
 
 /* Menu-bar / menu / menu-item styling.
  * Kept in this author stylesheet (not in kintsugi-modena-overrides.css)
