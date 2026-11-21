@@ -413,6 +413,50 @@
 
 /********************************************************************************/
 
+/* List / table view backgrounds and focus-ring suppression.
+ * These MUST live in this author stylesheet: Modena paints a multi-layer
+ * border on .list-view (box-border) and .list-view:focused (focus ring)
+ * with higher-specificity selectors that beat the same rules in the
+ * user-agent layer. A single-layer opaque background declared here wins
+ * over the user-agent layer regardless of specificity and hides both. */
+.list-view,
+.table-view,
+.table-view .column-header,
+.table-view .column-header-background .filler {
+    -fx-background-color: #202020;
+}
+
+.list-view {
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-border-width: 0;
+    -fx-border-color: transparent;
+    -fx-border-radius: 0;
+}
+
+.list-view:focused {
+    -fx-background-color: #202020;
+    -fx-background-insets: 0;
+}
+
+.table-view {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-table-cell-border-color: #CECECE;
+}
+
+.table-row-cell:focused {
+    -fx-border-color: transparent;
+}
+
+.table-view .cell:focused {
+    -fx-border-color: transparent;
+}
+
+.cell:empty:focused {
+    -fx-background-insets: 0;
+}
+
 /* List / table / tree cell selection styling.
  * The selected-state rules must live in this author stylesheet (not only
  * in kintsugi-modena-overrides.css): Modena defines higher-specificity
@@ -440,21 +484,6 @@
 .list-cell:selected {
     -fx-background-color: #EEEEEE;
     -fx-text-fill: #383838;
-}
-
-/* List-view focus border suppression.
- * Modena draws a focus border on .list-view:focused; these author-layer
- * rules neutralize it (originally in this file before the CSS split). */
-.list-view {
-    -fx-background-radius: 0;
-    -fx-background-insets: 0;
-    -fx-border-width: 0;
-    -fx-border-color: transparent;
-    -fx-border-radius: 0;
-}
-
-.list-view:focused {
-    -fx-background-insets: 0;
 }
 
 /* Menu-bar / menu / menu-item styling.
