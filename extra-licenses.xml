@@ -1,0 +1,17 @@
+<!-- Any dependency with a license in the OSI widely-used set (including
+     Apache-2.0, which log4j declares via SPDX id) will be accepted. The
+     <acceptableLicenses> block is removed because in license-maven-plugin
+     0.0.6 specifying any acceptableLicenses REPLACES the built-in resource
+     set instead of extending it, leaving only "MIT X11 License" and
+     "GPLv2+CE" as the sole acceptable licenses and failing every other
+     dependency (e.g., org.apache.logging.log4j:log4j-api:2.25.5).
+     The two extra names now live in extra-licenses.xml, loaded additively
+     via acceptableLicenseResourcesFilesPaths. -->
+<licenses>
+    <license>
+        <name>(MIT X11 License)</name>
+    </license>
+    <license>
+        <name>(GPLv2\+CE)</name>
+    </license>
+</licenses>
