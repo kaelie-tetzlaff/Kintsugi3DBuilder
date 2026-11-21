@@ -18,6 +18,11 @@
  * Loaded in the user-agent layer (via user-agent-*.css, after modena.css).
  * Anything custom or Kintsugi-specific belongs in fxml/kintsugi.css,
  * which loads as a scene (author) stylesheet AFTER this file.
+ *
+ * NOTE: list / tree / table styling deliberately lives in fxml/kintsugi.css
+ * (author layer), because Modena styles these controls with more specific
+ * multi-layer background rules in the user-agent layer that our same-layer
+ * rules cannot reliably beat on specificity alone.
  */
 
 .context-menu,
@@ -180,10 +185,6 @@
 
 .check-box,
 .label,
-.list-view,
-.list-cell,
-.table-view .cell,
-.table-row-cell,
 .text-field {
     -fx-text-fill: #CECECE;
 }
@@ -267,73 +268,6 @@
     -fx-tick-label-fill: #CECECE;
 }
 
-.list-view,
-.table-view,
-.table-view .column-header,
-.table-view .column-header-background .filler {
-    -fx-background-color: #202020;
-}
-
-.list-cell:even,
-.table-row-cell:even,
-.tree-cell:even {
-    -fx-background-color: #383838;
-}
-
-.list-cell:odd,
-.table-row-cell:odd,
-.tree-cell:odd {
-    -fx-background-color: #202020;
-}
-
-.list-cell:selected,
-.table-view .cell:selected,
-.table-row-cell:selected,
-.table-row-cell:selected .cell,
-.tree-cell:selected {
-    -fx-background-color: #EEEEEE;
-    -fx-text-fill: #383838;
-}
-
-.list-view:focused {
-    -fx-background-insets: 0;
-}
-
-.list-cell:selected {
-    -fx-background-color: #EEEEEE;
-    -fx-text-fill: #383838;
-}
-
-.list-view {
-    -fx-background-radius: 0;
-    -fx-background-insets: 0;
-    -fx-border-width: 0;
-    -fx-border-color: transparent;
-    -fx-border-radius: 0;
-}
-
-.list-view:focused {
-    -fx-background-insets: 0;
-}
-
-.table-view {
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-    -fx-table-cell-border-color: #CECECE;
-}
-
-.table-row-cell:focused {
-    -fx-border-color: transparent;
-}
-
-.table-view .cell:focused {
-    -fx-border-color: transparent;
-}
-
-.cell:empty:focused {
-    -fx-background-insets: 0;
-}
-
 .text-field {
     -fx-background-color: #383838;
     -fx-background-radius: 0;
@@ -356,39 +290,6 @@
 
 .tooltip {
     -fx-show-duration: indefinite; /* tooltips don't disappear until the user's mouse leaves the node */
-}
-
-/* Tree cell styling stolen from stack overflow --> https://stackoverflow.com/questions/30684308/javafx-treeview-css */
-.tree-view, .tree-cell {
-    -fx-text-fill: white;
-}
-
-.tree-cell:empty {
-    -fx-background-color: #202020;
-}
-
-.tree-cell:expanded, .tree-cell:sub-tree-item {
-    -fx-background-color: #383838;
-}
-
-.tree-cell:selected {
-    -fx-font-weight: bold;
-}
-
-.tree-cell {
-    -fx-padding: 0.75em 0em 0.75em 0em;
-}
-
-.tree-cell:sub-tree-item {
-    -fx-padding: 0.25em;
-}
-
-.tree-cell > .tree-disclosure-node > .arrow {
-    -fx-background-color: none;
-}
-
-.tree-cell:expanded > .tree-disclosure-node > .arrow {
-    -fx-background-color: none;
 }
 
 .scroll-pane .viewport {
@@ -480,10 +381,6 @@
 
 .corner {
     -fx-background-color: #202020;
-}
-
-.tree-view {
-    -fx-background-color: #383838;
 }
 
 .scroll-pane, .scroll-pane > .viewport {

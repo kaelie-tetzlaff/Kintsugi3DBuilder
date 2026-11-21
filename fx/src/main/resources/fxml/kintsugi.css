@@ -413,12 +413,15 @@
 
 /********************************************************************************/
 
-/* List / table view backgrounds and focus-ring suppression.
- * These MUST live in this author stylesheet: Modena paints a multi-layer
- * border on .list-view (box-border) and .list-view:focused (focus ring)
- * with higher-specificity selectors that beat the same rules in the
- * user-agent layer. A single-layer opaque background declared here wins
- * over the user-agent layer regardless of specificity and hides both. */
+/* List / tree / table view styling.
+ * This whole section MUST live in this author stylesheet (not in
+ * kintsugi-modena-overrides.css): Modena paints borders and focus rings
+ * on these controls with higher-specificity multi-layer
+ * -fx-background-color rules (box-border, focus-color, :filled:selected
+ * families) that same-layer rules cannot reliably beat. Author-layer
+ * rules always win against the user-agent layer regardless of
+ * specificity. */
+
 .list-view,
 .table-view,
 .table-view .column-header,
@@ -439,6 +442,45 @@
     -fx-background-insets: 0;
 }
 
+.list-view, .list-cell,
+.table-view .cell, .table-row-cell {
+    -fx-text-fill: #CECECE;
+}
+
+.list-cell:even,
+.table-row-cell:even,
+.tree-cell:even {
+    -fx-background-color: #383838;
+}
+
+.list-cell:odd,
+.table-row-cell:odd,
+.tree-cell:odd {
+    -fx-background-color: #202020;
+}
+
+.list-cell:selected,
+.table-view .cell:selected,
+.table-row-cell:selected,
+.table-row-cell:selected .cell,
+.tree-cell:selected {
+    -fx-background-color: #EEEEEE;
+    -fx-text-fill: #383838;
+}
+
+.list-cell:selected {
+    -fx-background-color: #EEEEEE;
+    -fx-text-fill: #383838;
+}
+
+.list-cell:selected .label,
+.table-view .cell:selected .label,
+.table-row-cell:selected .label,
+.table-row-cell:selected .cell .label,
+.tree-cell:selected .label {
+    -fx-text-fill: #383838;
+}
+
 .table-view {
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
@@ -457,33 +499,41 @@
     -fx-background-insets: 0;
 }
 
-/* List / table / tree cell selection styling.
- * The selected-state rules must live in this author stylesheet (not only
- * in kintsugi-modena-overrides.css): Modena defines higher-specificity
- * selected-cell rules in the user-agent layer (.list-cell:filled:selected,
- * .tree-cell:filled:selected, etc.) that beat same-value rules in the
- * user-agent layer. Rules in this file always win against the user-agent
- * layer regardless of specificity. */
-.list-cell:selected,
-.table-view .cell:selected,
-.table-row-cell:selected,
-.table-row-cell:selected .cell,
+/* Tree cell styling stolen from stack overflow --> https://stackoverflow.com/questions/30684308/javafx-treeview-css */
+.tree-view, .tree-cell {
+    -fx-text-fill: white;
+}
+
+.tree-view {
+    -fx-background-color: #383838;
+}
+
+.tree-cell:empty {
+    -fx-background-color: #202020;
+}
+
+.tree-cell:expanded, .tree-cell:sub-tree-item {
+    -fx-background-color: #383838;
+}
+
 .tree-cell:selected {
-    -fx-background-color: #EEEEEE;
-    -fx-text-fill: #383838;
+    -fx-font-weight: bold;
 }
 
-.list-cell:selected .label,
-.table-view .cell:selected .label,
-.table-row-cell:selected .label,
-.table-row-cell:selected .cell .label,
-.tree-cell:selected .label {
-    -fx-text-fill: #383838;
+.tree-cell {
+    -fx-padding: 0.75em 0em 0.75em 0em;
 }
 
-.list-cell:selected {
-    -fx-background-color: #EEEEEE;
-    -fx-text-fill: #383838;
+.tree-cell:sub-tree-item {
+    -fx-padding: 0.25em;
+}
+
+.tree-cell > .tree-disclosure-node > .arrow {
+    -fx-background-color: none;
+}
+
+.tree-cell:expanded > .tree-disclosure-node > .arrow {
+    -fx-background-color: none;
 }
 
 /* Menu-bar / menu / menu-item styling.
