@@ -442,6 +442,21 @@
     -fx-text-fill: #383838;
 }
 
+/* List-view focus border suppression.
+ * Modena draws a focus border on .list-view:focused; these author-layer
+ * rules neutralize it (originally in this file before the CSS split). */
+.list-view {
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-border-width: 0;
+    -fx-border-color: transparent;
+    -fx-border-radius: 0;
+}
+
+.list-view:focused {
+    -fx-background-insets: 0;
+}
+
 /* Menu-bar / menu / menu-item styling.
  * Kept in this author stylesheet (not in kintsugi-modena-overrides.css)
  * so it always beats Modena's more specific user-agent selectors. */
