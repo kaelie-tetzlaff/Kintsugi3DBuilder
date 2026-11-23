@@ -1,17 +1,20 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.modals;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -21,7 +24,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.util.Callback;
 import kintsugi3d.builder.util.logging.LogMessage;
 import kintsugi3d.fx.util.ScrollBarHelper;
@@ -37,6 +39,7 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class LoggerController implements Initializable
@@ -46,57 +49,48 @@ public class LoggerController implements Initializable
     @FXML private ToggleButton toggleButtonPause;
     @FXML private ToggleButton toggleButtonError;
     @FXML private ToggleButton toggleButtonInfo;
-    @FXML private ToggleButton toggleButtonDebug;
-    @FXML private ToggleButton toggleButtonTrace;
     @FXML private ToggleButton toggleButtonWarn;
     @FXML private ListView<LogMessage> messageListView;
-    @FXML private Pane cornerPatch;
 
-    private RecentLogMessageAppender logMessages;
+    private FXLogMessageAppender logMessages;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources)
+    public final void initialize(URL location, ResourceBundle resources)
     {
-        logMessages = RecentLogMessageAppender.getInstance();
+        logMessages = FXLogMessageAppender.getInstance();
 
         messageListView.setCellFactory(new LogMessageCellFactory());
         messageListView.setItems(logMessages.getMessages().filtered(this::doesLogMessagePassFilter));
         messageListView.scrollTo(messageListView.getItems().size() - 1);
 
         // If the logger cannot log a level, disable a filter button
-        if (! RecentLogMessageAppender.isLevelAvailable(Level.ERROR))
+        if (logMessages.isLevelDisabled(Level.ERROR))
         {
             toggleButtonError.setSelected(false);
             toggleButtonError.setDisable(true);
         }
-        if (! RecentLogMessageAppender.isLevelAvailable(Level.WARN))
+
+        if (logMessages.isLevelDisabled(Level.WARN))
         {
             toggleButtonWarn.setSelected(false);
             toggleButtonWarn.setDisable(true);
         }
-        if (! RecentLogMessageAppender.isLevelAvailable(Level.INFO))
+
+        if (logMessages.isLevelDisabled(Level.INFO))
         {
             toggleButtonInfo.setSelected(false);
             toggleButtonInfo.setDisable(true);
         }
-        if (! RecentLogMessageAppender.isLevelAvailable(Level.DEBUG))
-        {
-            toggleButtonDebug.setSelected(false);
-            toggleButtonDebug.setDisable(true);
-        }
-        if (! RecentLogMessageAppender.isLevelAvailable(Level.TRACE))
-        {
-            toggleButtonTrace.setSelected(false);
-            toggleButtonTrace.setDisable(true);
-        }
+
         ScrollBarHelper.scrollbarFix(messageListView);
     }
 
     @FXML
-    public void buttonOpenLogDir(ActionEvent actionEvent)
+    public final void buttonOpenLogDir(ActionEvent actionEvent)
     {
         try
         {
+            @SuppressWarnings("AccessOfSystemProperties")
             File logDir = new File(System.getProperty("Kintsugi3D.logDir"));
             Desktop.getDesktop().open(logDir);
         }
@@ -107,7 +101,7 @@ public class LoggerController implements Initializable
     }
 
     @FXML
-    public void buttonChangeLogLevel(ActionEvent actionEvent)
+    public final void buttonChangeLogLevel(ActionEvent actionEvent)
     {
         FilteredList<LogMessage> filteredList = (FilteredList<LogMessage>) messageListView.getItems();
         if (filteredList != null)
@@ -116,20 +110,22 @@ public class LoggerController implements Initializable
         }
     }
 
-    public void buttonUpdatePaused(ActionEvent event)
+    public final void buttonUpdatePaused(ActionEvent event)
     {
         ObservableList<LogMessage> items;
+
+        ObservableList<LogMessage> messages = logMessages.getMessages();
 
         if (toggleButtonPause.isSelected())
         {
             synchronized (logMessages.getMessages())
             {
-                items = FXCollections.observableArrayList(logMessages.getMessages());
+                items = FXCollections.observableArrayList(messages);
             }
         }
         else
         {
-            items = logMessages.getMessages();
+            items = messages;
         }
 
         messageListView.setItems(items.filtered(this::doesLogMessagePassFilter));
@@ -157,18 +153,9 @@ public class LoggerController implements Initializable
                     return false;
                 }
                 break;
-            case DEBUG:
-                if (! toggleButtonDebug.isSelected())
-                {
-                    return false;
-                }
-                break;
-            case TRACE:
-                if (! toggleButtonTrace.isSelected())
-                {
-                    return false;
-                }
-                break;
+            default:
+                // Suppress debug, trace.
+                return false;
         }
 
         return true;
@@ -177,71 +164,9 @@ public class LoggerController implements Initializable
     private static class LogMessageCellFactory implements Callback<ListView<LogMessage>, ListCell<LogMessage>>
     {
         @Override
-        public ListCell<LogMessage> call(ListView<LogMessage> logMessageListView)
+        public final ListCell<LogMessage> call(ListView<LogMessage> logMessageListView)
         {
-            return new ListCell<>()
-            {
-                @Override
-                public void updateItem(LogMessage message, boolean empty)
-                {
-                    Platform.runLater(() ->
-                    {
-                        super.updateItem(message, empty);
-                        if (empty || message == null)
-                        {
-                            setText(null);
-                            setGraphic(null);
-                            setStyle(null);
-                        } else
-                        {
-                            setText(null);
-
-                            Label levelLabel = new Label(message.getLogLevel().toString());
-                            levelLabel.setPrefWidth(40);
-
-                            StringBuilder labelText = new StringBuilder(message.getMessage());
-
-                            if (message.getThrown() != null)
-                            {
-                                if (this.isSelected())
-                                {
-                                    labelText.append('\n');
-                                    labelText.append(strStackTrace(message.getThrown()));
-                                }
-                                else
-                                {
-                                    labelText.append("... (Click for more)");
-                                }
-                            }
-
-                            Label messageLabel = new Label(labelText.toString());
-
-                            HBox box = new HBox(levelLabel, messageLabel);
-
-                            box.setSpacing(10);
-
-                            Tooltip.install(box, new Tooltip(formatTooltip(message)));
-
-                            if (message.getLogLevel() == Level.ERROR)
-                            {
-                                setStyle("-fx-background-color: #fa6d6d");
-                                //TODO: MAKE TEXT BLACK
-                            }
-                            else if (message.getLogLevel() == Level.WARN)
-                            {
-                                setStyle("-fx-background-color: #fab66d");
-                                //TODO: MAKE TEXT BLACK
-                            }
-                            else
-                            {
-                                setStyle(null);
-                            }
-
-                            setGraphic(box);
-                        }
-                    });
-                }
-            };
+            return new LogMessageCell();
         }
 
         private static String strStackTrace(Throwable thrown)
@@ -262,9 +187,73 @@ public class LoggerController implements Initializable
             StringBuilder sb = new StringBuilder("Logged by ");
             sb.append(message.getSourceClassName());
             sb.append(" at ");
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyy hh:mm:ss").withZone(ZoneId.systemDefault());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyy hh:mm:ss", Locale.ROOT).withZone(ZoneId.systemDefault());
             sb.append(formatter.format(message.getTimestamp()));
             return sb.toString();
+        }
+
+        private static class LogMessageCell extends ListCell<LogMessage>
+        {
+            @Override
+            public final void updateItem(LogMessage message, boolean empty)
+            {
+                super.updateItem(message, empty);
+                if (empty || message == null)
+                {
+                    setText(null);
+                    setGraphic(null);
+                    setStyle(null);
+                }
+                else
+                {
+                    setText(null);
+
+                    Label levelLabel = new Label(message.getLogLevel().toString());
+                    levelLabel.setPrefWidth(40);
+
+                    StringBuilder labelText = new StringBuilder(message.getMessage());
+
+                    if (message.getThrown() != null)
+                    {
+                        if (isSelected())
+                        {
+                            labelText.append('\n');
+                            labelText.append(strStackTrace(message.getThrown()));
+                        }
+                        else
+                        {
+                            labelText.append("... (Click for more)");
+                        }
+                    }
+
+                    Label messageLabel = new Label(labelText.toString());
+
+                    HBox box = new HBox(levelLabel, messageLabel);
+
+                    box.setSpacing(10);
+
+                    Tooltip.install(box, new Tooltip(formatTooltip(message)));
+
+                    if (message.getLogLevel() == Level.ERROR)
+                    {
+                        setStyle("-fx-background-color: #fa6d6d");
+                        levelLabel.setStyle("-fx-text-fill: #202020");
+                        messageLabel.setStyle("-fx-text-fill: #202020");
+                    }
+                    else if (message.getLogLevel() == Level.WARN)
+                    {
+                        setStyle("-fx-background-color: #fab66d");
+                        levelLabel.setStyle("-fx-text-fill: #202020");
+                        messageLabel.setStyle("-fx-text-fill: #202020");
+                    }
+                    else
+                    {
+                        setStyle(null);
+                    }
+
+                    setGraphic(box);
+                }
+            }
         }
     }
 }

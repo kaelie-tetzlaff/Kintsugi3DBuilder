@@ -275,11 +275,11 @@ FunctionEnd
 ; Init function, read previous installation directory
 Function .onInit
 
-	SetRegView 64
-	ClearErrors
-	ReadRegStr $0 HKLM "Software\Kintsugi3DBuilder" "Install_Dir"
+    SetRegView 64
+    ClearErrors
+    ReadRegStr $0 HKLM "Software\Kintsugi3DBuilder" "Install_Dir"
 
-	${If} ${Errors}
+    ${If} ${Errors}
     ${Else}
          StrCpy $INSTDIR $0
     ${EndIf}

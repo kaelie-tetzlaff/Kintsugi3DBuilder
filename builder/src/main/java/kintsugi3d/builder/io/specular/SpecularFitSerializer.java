@@ -1,18 +1,23 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.io.specular;
 
 import kintsugi3d.builder.fit.decomposition.*;
 import kintsugi3d.gl.vecmath.DoubleVector3;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -165,7 +170,7 @@ public final class SpecularFitSerializer
      * @param priorSolutionDirectory
      * @return An object containing the red, green, and blue basis functions.
      */
-    public static MutableMaterialBasis deserializeBasisFunctions(File priorSolutionDirectory)
+    public static @Nullable MutableMaterialBasis deserializeBasisFunctions(File priorSolutionDirectory)
         throws IOException
     {
         File basisFile = new File(priorSolutionDirectory, BasisResources.getBasisFunctionsFilename());
@@ -173,23 +178,7 @@ public final class SpecularFitSerializer
         if (basisFile.exists())
         {
             // Test to figure out the resolution
-            int numElements; // Technically this is "microfacetDistributionResolution + 1" the way it's defined elsewhere
-            try (Scanner in = new Scanner(basisFile, StandardCharsets.UTF_8))
-            {
-                in.useLocale(Locale.ROOT);
-                String testLine = in.nextLine();
-                String[] elements = CSV_PATTERN.split(testLine);
-                if (elements[elements.length - 1].isBlank()) // detect trailing comma
-                {
-                    // Don't count the blank element after the trailing comma, or the leading identifier on each line.
-                    numElements = elements.length - 2;
-                }
-                else
-                {
-                    // Don't count the leading identifier on each line.
-                    numElements = elements.length - 1;
-                }
-            }
+            int numElements = getNumElements(basisFile);
 
             // Now actually parse the file
             try (Scanner in = new Scanner(basisFile, StandardCharsets.UTF_8))
@@ -334,6 +323,28 @@ public final class SpecularFitSerializer
         {
             return null;
         }
+    }
+
+    private static int getNumElements(File basisFile) throws IOException
+    {
+        int numElements; // Technically this is "microfacetDistributionResolution + 1" the way it's defined elsewhere
+        try (Scanner in = new Scanner(basisFile, StandardCharsets.UTF_8))
+        {
+            in.useLocale(Locale.ROOT);
+            String testLine = in.nextLine();
+            String[] elements = CSV_PATTERN.split(testLine);
+            if (elements[elements.length - 1].isBlank()) // detect trailing comma
+            {
+                // Don't count the blank element after the trailing comma, or the leading identifier on each line.
+                numElements = elements.length - 2;
+            }
+            else
+            {
+                // Don't count the leading identifier on each line.
+                numElements = elements.length - 1;
+            }
+        }
+        return numElements;
     }
 
     private static double[] readBasisLine(Scanner in, int numElements)

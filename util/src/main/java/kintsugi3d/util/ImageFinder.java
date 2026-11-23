@@ -1,16 +1,21 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.util;
 
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,19 +33,13 @@ public final class ImageFinder
 {
     private static final Logger LOG = LoggerFactory.getLogger(ImageFinder.class);
 
-    private static final ImageFinder INSTANCE = new ImageFinder();
     private static final Set<String> IMG_FORMATS = Set.of( "png", "PNG", "jpg", "JPG", "jpeg", "JPEG", "tif", "TIF", "tiff", "TIFF");
-
-    public static ImageFinder getInstance()
-    {
-        return INSTANCE;
-    }
 
     private ImageFinder()
     {
     }
 
-    public Set<String> getSupportedImgFormats()
+    public static Set<String> getSupportedImgFormats()
     {
         return IMG_FORMATS;
     }
@@ -56,7 +55,7 @@ public final class ImageFinder
      * @param extension The desired extension
      * @return The image file's name with the requested extension.
      */
-    public String getImageFileNameWithExtension(String imageFileName, String extension)
+    public static String getImageFileNameWithExtension(String imageFileName, String extension)
     {
         if (imageFileName.endsWith(extension))
         {
@@ -87,7 +86,7 @@ public final class ImageFinder
         LOG.debug("Search for '{}'; found: {}", requestedFile.getName(), actualFile);
     }
 
-    public File findImageFile(File requestedFile, String... suffixes) throws FileNotFoundException
+    public static File findImageFile(File requestedFile, String... suffixes) throws FileNotFoundException
     {
         if (requestedFile.exists())
         {
@@ -170,18 +169,13 @@ public final class ImageFinder
         }
     }
 
-    public File findImageFile(File requestedFile) throws FileNotFoundException
-    {
-        return findImageFile(requestedFile, (String[]) null);
-    }
-
     /**
      *
      * @param requestedFile
      * @param suffixes
      * @return The file, or null if not found.
      */
-    public File tryFindImageFile(File requestedFile, String... suffixes)
+    public static @Nullable File tryFindImageFile(File requestedFile, String... suffixes)
     {
         try
         {
@@ -191,15 +185,5 @@ public final class ImageFinder
         {
             return null;
         }
-    }
-
-    /**
-     *
-     * @param requestedFile
-     * @return The file, or null if not found.
-     */
-    public File tryFindImageFile(File requestedFile)
-    {
-        return tryFindImageFile(requestedFile, (String[]) null);
     }
 }

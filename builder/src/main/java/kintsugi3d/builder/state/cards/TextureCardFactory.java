@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.state.cards;
@@ -26,6 +30,7 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.gl.vecmath.IntVector2;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,13 +56,13 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
     }
 
     @Override
-    public List<? extends Map<String, Runnable>> getGlobalActions()
+    public final List<? extends Map<String, Runnable>> getGlobalActions()
     {
         return List.of(Map.of("Refresh All", this::refreshAll));
     }
 
     @Override
-    public Class<TextureInfo> getDataClass()
+    public final Class<TextureInfo> getDataClass()
     {
         return TextureInfo.class;
     }
@@ -70,7 +75,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
      * @return projectDataCard
      */
     @Override
-    public ProjectDataCard createCard(TextureInfo texture)
+    public final @Nullable ProjectDataCard createCard(TextureInfo texture)
     {
         // Base Location where the .pngs and thumbnails folder are.
         File baseDirectory = getViewSet().getSupportingFilesDirectory();
@@ -97,7 +102,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
 
                 try
                 {
-                    thumbnailPath = ImageFinder.getInstance().findImageFile(newTextureImage).toString();
+                    thumbnailPath = ImageFinder.findImageFile(newTextureImage).toString();
                 }
                 catch (FileNotFoundException e)
                 {
@@ -108,14 +113,13 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
                 IntVector2 dimensions = ImageHelper.dimensionsOf(textureImage);
                 String res = String.format("%dx%d", dimensions.x, dimensions.y);
 
-                return new ShaderDataCard(texture.name, texture.getVisualizationShader(), thumbnailPath, textureImage.getPath(),
-                    new LinkedHashMap<>()
-                    {{
-                        put("File Name", textureImage.getName());
-                        put("Resolution", res);
-                        put("Size", (int) (((double) textureImage.length() / (1024.0 * 1024.0)) * 1000.0) + " KB");
-                        put("Purpose", texture.purpose);
-                    }},
+                LinkedHashMap<String, String> fields = new LinkedHashMap<>(4);
+                fields.put("File Name", textureImage.getName());
+                fields.put("Resolution", res);
+                fields.put("Size", (int) (((double) textureImage.length() / (1024.0 * 1024.0)) * 1000.0) + " KB");
+                fields.put("Purpose", texture.purpose);
+
+                return new ShaderDataCard(texture.name, texture.getVisualizationShader(), thumbnailPath, textureImage.getPath(), fields,
                     List.of(Map.of(
                         "Refresh Texture", () -> refreshTexture(texture),
                         "Replace Texture...", () -> replaceTexture(texture)
@@ -142,7 +146,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
      * @return
      */
     @Override
-    public List<ProjectDataCard> createAllCards()
+    public final List<ProjectDataCard> createAllCards()
     {
         List<ProjectDataCard> textureCards = new ArrayList<>(8);
         ReadonlyImageBasedGraphicsResources<? extends Context<?>> resources = getInstance().getResources();
@@ -153,14 +157,11 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
             var textures = texResources.getTextures();
             if (textures != null)
             {
-                for (var entry : textures.entrySet().stream().sorted(Comparator.comparing(Entry::getKey)).collect(Collectors.toList()))
-                {
-                    ProjectDataCard card = createCard(entry.getKey());
-                    if (card != null)
-                    {
-                        textureCards.add(card);
-                    }
-                }
+                textureCards = textures.entrySet().stream()
+                    .sorted(Comparator.comparing(Entry::getKey))
+                    .map(entry -> createCard(entry.getKey()))
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
             }
 
             ReadonlyBasisResources<? extends Context<?>> basisResources = texResources.getBasisResources();

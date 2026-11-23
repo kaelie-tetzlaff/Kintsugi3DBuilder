@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.optimization.function;
@@ -87,7 +91,7 @@ public class GeneralizedSmoothStepBasis extends AbstractBasisFunctions
     }
 
     @Override
-    protected int getFirstFunctionIndexForDomainValue(int value)
+    protected final int getFirstFunctionIndexForDomainValue(int value)
     {
 //        return 0;
         // ^^ would be a more conservative implementation if there are issues
@@ -99,7 +103,7 @@ public class GeneralizedSmoothStepBasis extends AbstractBasisFunctions
     }
 
     @Override
-    protected int getLastFunctionIndexForDomainValue(int value)
+    protected final int getLastFunctionIndexForDomainValue(int value)
     {
         return functionCount - 1;
 
@@ -120,7 +124,7 @@ public class GeneralizedSmoothStepBasis extends AbstractBasisFunctions
     }
 
     @Override
-    public double evaluate(int functionIndex, int value)
+    public final double evaluate(int functionIndex, int value)
     {
         // at functionIndex = 0, should be the same with or without remapping
         // at functionIndex = functionCount - 1, should be as if at resolution - minSmoothstepWidth without remapping
@@ -162,13 +166,13 @@ public class GeneralizedSmoothStepBasis extends AbstractBasisFunctions
     }
 
     @Override
-    public int getFunctionCount()
+    public final int getFunctionCount()
     {
         return functionCount;
     }
 
     @Override
-    public int getOptimizedDomainSize()
+    public final int getOptimizedDomainSize()
     {
         return resolution;
     }

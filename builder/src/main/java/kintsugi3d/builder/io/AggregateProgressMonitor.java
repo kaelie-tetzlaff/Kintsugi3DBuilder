@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.io;
@@ -21,13 +25,13 @@ class AggregateProgressMonitor implements ProgressMonitor
 {
     private final Collection<ProgressMonitor> subMonitors = new ArrayList<>(8);
 
-    void addSubMonitor(ProgressMonitor monitor)
+    final void addSubMonitor(ProgressMonitor monitor)
     {
         subMonitors.add(monitor);
     }
 
     @Override
-    public void allowUserCancellation() throws UserCancellationException
+    public final void allowUserCancellation() throws UserCancellationException
     {
         for (ProgressMonitor monitor : subMonitors)
         {
@@ -36,7 +40,7 @@ class AggregateProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void cancelComplete(UserCancellationException e)
+    public final void cancelComplete(UserCancellationException e)
     {
         for (ProgressMonitor monitor : subMonitors)
         {
@@ -45,7 +49,7 @@ class AggregateProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void start()
+    public final void start()
     {
         for (ProgressMonitor monitor : subMonitors)
         {
@@ -54,7 +58,7 @@ class AggregateProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void setProcessName(String processName)
+    public final void setProcessName(String processName)
     {
         for (ProgressMonitor monitor : subMonitors)
         {
@@ -63,7 +67,7 @@ class AggregateProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void setStageCount(int count)
+    public final void setStageCount(int count)
     {
         for (ProgressMonitor monitor : subMonitors)
         {
@@ -72,7 +76,7 @@ class AggregateProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void setStage(int stage, String message)
+    public final void setStage(int stage, String message)
     {
         for (ProgressMonitor monitor : subMonitors)
         {
@@ -81,7 +85,7 @@ class AggregateProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void advanceStage(String message)
+    public final void advanceStage(String message)
     {
         for (ProgressMonitor monitor : subMonitors)
         {
@@ -90,7 +94,7 @@ class AggregateProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void setMaxProgress(double maxProgress)
+    public final void setMaxProgress(double maxProgress)
     {
         for (ProgressMonitor monitor : subMonitors)
         {
@@ -99,7 +103,7 @@ class AggregateProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void setProgress(double progress, String message)
+    public final void setProgress(double progress, String message)
     {
         for (ProgressMonitor monitor : subMonitors)
         {
@@ -108,7 +112,7 @@ class AggregateProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void complete()
+    public final void complete()
     {
         for (ProgressMonitor monitor : subMonitors)
         {
@@ -117,7 +121,7 @@ class AggregateProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void fail(Throwable e)
+    public final void fail(Throwable e)
     {
         for (ProgressMonitor monitor : subMonitors)
         {
@@ -126,7 +130,7 @@ class AggregateProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public void warn(Throwable e)
+    public final void warn(Throwable e)
     {
         for (ProgressMonitor monitor : subMonitors)
         {
@@ -135,7 +139,7 @@ class AggregateProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public boolean isConflictingProcess()
+    public final boolean isConflictingProcess()
     {
         boolean processing = false;
         for (ProgressMonitor monitor : subMonitors)

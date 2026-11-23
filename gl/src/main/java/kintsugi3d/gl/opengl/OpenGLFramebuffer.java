@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.opengl;
@@ -22,7 +26,7 @@ import static org.lwjgl.opengl.GL30.*;
 
 abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
 {
-    protected final OpenGLContext context;
+    private final OpenGLContext context;
 
     OpenGLFramebuffer(OpenGLContext context)
     {
@@ -30,37 +34,37 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     }
 
     @Override
-    public OpenGLContext getContext()
+    public final OpenGLContext getContext()
     {
-        return this.context;
+        return context;
     }
 
-    abstract class ContentsBase implements FramebufferDrawContents<OpenGLContext>, FramebufferReadContents<OpenGLContext>
+    abstract static class Contents implements FramebufferDrawContents<OpenGLContext>, FramebufferReadContents<OpenGLContext>
     {
-        private final OpenGLContext context;
+        private final OpenGLFramebuffer framebuffer;
 
-        protected ContentsBase()
+        Contents(OpenGLFramebuffer framebuffer)
         {
-            this.context = OpenGLFramebuffer.this.context;
+            this.framebuffer = framebuffer;
         }
 
         abstract int getId();
 
         @Override
-        public OpenGLContext getContext()
+        public final OpenGLContext getContext()
         {
-            return context;
+            return framebuffer.context;
         }
 
         @Override
-        public FramebufferSize getSize()
+        public final FramebufferSize getSize()
         {
-            return OpenGLFramebuffer.this.getSize();
+            return framebuffer.getSize();
         }
 
         private void bindForDrawCommon(int x, int y, int width, int height)
         {
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this.getId());
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, getId());
             OpenGLContext.errorCheck();
 
             if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -74,17 +78,17 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
         }
 
         @Override
-        public void bindViewportForDraw(int x, int y, int width, int height)
+        public final void bindViewportForDraw(int x, int y, int width, int height)
         {
             bindForDrawCommon(x, y, width, height);
             useAllColorDestinationsForDraw();
         }
 
         @Override
-        public void bindForDraw()
+        public final void bindForDraw()
         {
-            FramebufferSize size = OpenGLFramebuffer.this.getSize();
-            this.bindViewportForDraw(0, 0, size.width, size.height);
+            FramebufferSize size = framebuffer.getSize();
+            bindViewportForDraw(0, 0, size.width, size.height);
         }
 
         /**
@@ -99,26 +103,26 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
         abstract void useAllColorDestinationsForDraw();
 
         @Override
-        public void bindSingleAttachmentForDraw(int attachmentIndex)
+        public final void bindSingleAttachmentForDraw(int attachmentIndex)
         {
-            FramebufferSize size = OpenGLFramebuffer.this.getSize();
-            this.bindForDrawCommon(0, 0, size.width, size.height);
+            FramebufferSize size = framebuffer.getSize();
+            bindForDrawCommon(0, 0, size.width, size.height);
 
             selectColorDestinationForDraw(attachmentIndex);
         }
 
         @Override
-        public void bindNonColorAttachmentsForDraw()
+        public final void bindNonColorAttachmentsForDraw()
         {
-            FramebufferSize size = OpenGLFramebuffer.this.getSize();
-            this.bindForDrawCommon(0, 0, size.width, size.height);
+            FramebufferSize size = framebuffer.getSize();
+            bindForDrawCommon(0, 0, size.width, size.height);
         }
 
         abstract void selectColorSourceForRead(int index);
 
         private void bindForReadCommon()
         {
-            glBindFramebuffer(GL_READ_FRAMEBUFFER, this.getId());
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, getId());
             OpenGLContext.errorCheck();
 
             if(glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -129,29 +133,29 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
         }
 
         @Override
-        public void bindForRead(int attachmentIndex)
+        public final void bindForRead(int attachmentIndex)
         {
             bindForReadCommon();
             selectColorSourceForRead(attachmentIndex);
         }
 
         @Override
-        public void bindNonColorAttachmentForRead()
+        public final void bindNonColorAttachmentForRead()
         {
             bindForReadCommon();
         }
     }
 
     @Override
-    public FramebufferDrawContents<OpenGLContext> getDrawContents()
+    public final FramebufferDrawContents<OpenGLContext> getDrawContents()
     {
         return getContents();
     }
 
-    protected abstract ContentsBase getContents();
+    abstract Contents getContents();
 
     @Override
-    public void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a)
+    public final void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a)
     {
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, getContents().getId());
         OpenGLContext.errorCheck();
@@ -173,7 +177,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     }
 
     @Override
-    public void clearIntegerColorBuffer(int attachmentIndex, int r, int g, int b, int a)
+    public final void clearIntegerColorBuffer(int attachmentIndex, int r, int g, int b, int a)
     {
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, getContents().getId());
         OpenGLContext.errorCheck();
@@ -195,7 +199,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     }
 
     @Override
-    public void clearDepthBuffer(float depth)
+    public final void clearDepthBuffer(float depth)
     {
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, getContents().getId());
         OpenGLContext.errorCheck();
@@ -214,7 +218,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     }
 
     @Override
-    public void clearStencilBuffer(int stencilIndex)
+    public final void clearStencilBuffer(int stencilIndex)
     {
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, getContents().getId());
         OpenGLContext.errorCheck();
@@ -233,13 +237,13 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     }
 
     @Override
-    public void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a, int x, int y, int width, int height)
+    public final void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a, int x, int y, int clearWidth, int clearHeight)
     {
         // Use scissor test to only clear the rectangle specified.
         glEnable(GL_SCISSOR_TEST);
         OpenGLContext.errorCheck();
 
-        glScissor(x, y, width, height);
+        glScissor(x, y, clearWidth, clearHeight);
         OpenGLContext.errorCheck();
 
         clearColorBuffer(attachmentIndex, r, g, b, a);
@@ -249,13 +253,13 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     }
 
     @Override
-    public void clearIntegerColorBuffer(int attachmentIndex, int r, int g, int b, int a, int x, int y, int width, int height)
+    public final void clearIntegerColorBuffer(int attachmentIndex, int r, int g, int b, int a, int x, int y, int clearWidth, int clearHeight)
     {
         // Use scissor test to only clear the rectangle specified.
         glEnable(GL_SCISSOR_TEST);
         OpenGLContext.errorCheck();
 
-        glScissor(x, y, width, height);
+        glScissor(x, y, clearWidth, clearHeight);
         OpenGLContext.errorCheck();
 
         clearIntegerColorBuffer(attachmentIndex, r, g, b, a);
@@ -265,13 +269,13 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     }
 
     @Override
-    public void clearDepthBuffer(float depth, int x, int y, int width, int height)
+    public final void clearDepthBuffer(float depth, int x, int y, int clearWidth, int clearHeight)
     {
         // Use scissor test to only clear the rectangle specified.
         glEnable(GL_SCISSOR_TEST);
         OpenGLContext.errorCheck();
 
-        glScissor(x, y, width, height);
+        glScissor(x, y, clearWidth, clearHeight);
         OpenGLContext.errorCheck();
 
         clearDepthBuffer(depth);
@@ -281,13 +285,13 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     }
 
     @Override
-    public void clearStencilBuffer(int stencilIndex, int x, int y, int width, int height)
+    public final void clearStencilBuffer(int stencilIndex, int x, int y, int clearWidth, int clearHeight)
     {
         // Use scissor test to only clear the rectangle specified.
         glEnable(GL_SCISSOR_TEST);
         OpenGLContext.errorCheck();
 
-        glScissor(x, y, width, height);
+        glScissor(x, y, clearWidth, clearHeight);
         OpenGLContext.errorCheck();
 
         clearStencilBuffer(stencilIndex);
@@ -297,11 +301,11 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     }
 
     @Override
-    public void blitColorAttachmentFromFramebufferViewport(
+    public final void blitColorAttachmentFromFramebufferViewport(
         int drawAttachmentIndex, int destX, int destY, int destWidth, int destHeight,
-        ReadableFramebufferViewport<OpenGLContext> readFramebuffer, int readAttachmentIndex, boolean linearFiltering)
+        FramebufferViewport<OpenGLContext> readFramebuffer, int readAttachmentIndex, boolean linearFiltering)
     {
-        this.getDrawContents().bindSingleAttachmentForDraw(drawAttachmentIndex);
+        getDrawContents().bindSingleAttachmentForDraw(drawAttachmentIndex);
         readFramebuffer.getReadContents().bindForRead(readAttachmentIndex);
 
         IntVector2 srcOffset = readFramebuffer.getOffset();
@@ -313,10 +317,10 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     }
 
     @Override
-    public void blitDepthAttachmentFromFramebufferViewport(int destX, int destY, int destWidth, int destHeight,
-        ReadableFramebufferViewport<OpenGLContext> readFramebuffer)
+    public final void blitDepthAttachmentFromFramebufferViewport(
+        int destX, int destY, int destWidth, int destHeight, FramebufferViewport<OpenGLContext> readFramebuffer)
     {
-        this.getDrawContents().bindNonColorAttachmentsForDraw();
+        getDrawContents().bindNonColorAttachmentsForDraw();
         readFramebuffer.getReadContents().bindNonColorAttachmentForRead();
 
         IntVector2 srcOffset = readFramebuffer.getOffset();
@@ -328,10 +332,10 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     }
 
     @Override
-    public void blitStencilAttachmentFromFramebufferViewport(int destX, int destY, int destWidth, int destHeight,
-        ReadableFramebufferViewport<OpenGLContext> readFramebuffer)
+    public final void blitStencilAttachmentFromFramebufferViewport(
+        int destX, int destY, int destWidth, int destHeight, FramebufferViewport<OpenGLContext> readFramebuffer)
     {
-        this.getDrawContents().bindNonColorAttachmentsForDraw();
+        getDrawContents().bindNonColorAttachmentsForDraw();
         readFramebuffer.getReadContents().bindNonColorAttachmentForRead();
 
         IntVector2 srcOffset = readFramebuffer.getOffset();
@@ -343,10 +347,10 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     }
 
     @Override
-    public void blitDepthStencilAttachmentFromFramebufferViewport(int destX, int destY, int destWidth, int destHeight,
-        ReadableFramebufferViewport<OpenGLContext> readFramebuffer)
+    public final void blitDepthStencilAttachmentFromFramebufferViewport(
+        int destX, int destY, int destWidth, int destHeight, FramebufferViewport<OpenGLContext> readFramebuffer)
     {
-        this.getDrawContents().bindNonColorAttachmentsForDraw();
+        getDrawContents().bindNonColorAttachmentsForDraw();
         readFramebuffer.getReadContents().bindNonColorAttachmentForRead();
 
         IntVector2 srcOffset = readFramebuffer.getOffset();

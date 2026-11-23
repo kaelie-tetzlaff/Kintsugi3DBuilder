@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.builders.base;
@@ -22,9 +26,9 @@ import java.util.List;
 
 public abstract class FramebufferObjectBuilderBase<ContextType extends Context<ContextType>> implements FramebufferObjectBuilder<ContextType>
 {
-    protected final ContextType context;
-    protected final int width;
-    protected final int height;
+    private final ContextType context;
+    private final int width;
+    private final int height;
 
     private final List<TextureBuilder<ContextType, ? extends ReadonlyTexture2D<ContextType>>> colorAttachmentFormats = new ArrayList<>(8);
 
@@ -32,44 +36,44 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     private TextureBuilder<? super ContextType, ? extends ReadonlyTexture2D<? super ContextType>> stencilAttachmentBuilder;
     private TextureBuilder<? super ContextType, ? extends ReadonlyTexture2D<? super ContextType>> depthStencilAttachmentBuilder;
 
-    protected int getColorAttachmentCount()
+    protected final int getColorAttachmentCount()
     {
         return colorAttachmentFormats.size();
     }
 
-    protected TextureBuilder<? super ContextType, ? extends ReadonlyTexture2D<? super ContextType>> getColorAttachmentBuilder(int index)
+    protected final TextureBuilder<? super ContextType, ? extends ReadonlyTexture2D<? super ContextType>> getColorAttachmentBuilder(int index)
     {
         return colorAttachmentFormats.get(index);
     }
 
-    protected boolean hasDepthAttachment()
+    protected final boolean hasDepthAttachment()
     {
-        return this.depthAttachmentBuilder != null;
+        return depthAttachmentBuilder != null;
     }
 
-    protected boolean hasStencilAttachment()
+    protected final boolean hasStencilAttachment()
     {
-        return this.stencilAttachmentBuilder != null;
+        return stencilAttachmentBuilder != null;
     }
 
-    protected boolean hasCombinedDepthStencilAttachment()
+    protected final boolean hasCombinedDepthStencilAttachment()
     {
-        return this.depthStencilAttachmentBuilder != null;
+        return depthStencilAttachmentBuilder != null;
     }
 
-    protected TextureBuilder<? super ContextType, ? extends ReadonlyTexture2D<? super ContextType>> getDepthAttachmentBuilder()
+    protected final TextureBuilder<? super ContextType, ? extends ReadonlyTexture2D<? super ContextType>> getDepthAttachmentBuilder()
     {
-        return this.depthAttachmentBuilder;
+        return depthAttachmentBuilder;
     }
 
-    protected TextureBuilder<? super ContextType, ? extends ReadonlyTexture2D<? super ContextType>> getStencilAttachmentBuilder()
+    protected final TextureBuilder<? super ContextType, ? extends ReadonlyTexture2D<? super ContextType>> getStencilAttachmentBuilder()
     {
-        return this.stencilAttachmentBuilder;
+        return stencilAttachmentBuilder;
     }
 
-    protected TextureBuilder<? super ContextType, ? extends ReadonlyTexture2D<? super ContextType>> getDepthStencilAttachmentBuilder()
+    protected final TextureBuilder<? super ContextType, ? extends ReadonlyTexture2D<? super ContextType>> getDepthStencilAttachmentBuilder()
     {
-        return this.depthStencilAttachmentBuilder;
+        return depthStencilAttachmentBuilder;
     }
 
     protected FramebufferObjectBuilderBase(ContextType context, int width, int height)
@@ -80,37 +84,37 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     }
 
     @Override
-    public FramebufferObjectBuilder<ContextType> addEmptyColorAttachment()
+    public final FramebufferObjectBuilder<ContextType> addEmptyColorAttachment()
     {
-        this.colorAttachmentFormats.add(null);
+        colorAttachmentFormats.add(null);
         return this;
     }
 
     @Override
-    public FramebufferObjectBuilder<ContextType> addColorAttachment()
+    public final FramebufferObjectBuilder<ContextType> addColorAttachment()
     {
-        return this.addColorAttachment(ColorFormat.RGBA8);
+        return addColorAttachment(ColorFormat.RGBA8);
     }
 
     @Override
-    public FramebufferObjectBuilder<ContextType> addColorAttachment(ColorFormat format)
+    public final FramebufferObjectBuilder<ContextType> addColorAttachment(ColorFormat format)
     {
         if (format == null)
         {
-            this.colorAttachmentFormats.add(null);
+            colorAttachmentFormats.add(null);
         }
         else
         {
-            this.colorAttachmentFormats.add(context.getTextureFactory().build2DColorTexture(this.width, this.height).setInternalFormat(format));
+            colorAttachmentFormats.add(context.getTextureFactory().build2DColorTexture(width, height).setInternalFormat(format));
         }
         return this;
     }
 
     @Override
-    public FramebufferObjectBuilder<ContextType> addColorAttachment(ColorAttachmentSpec builder)
+    public final FramebufferObjectBuilder<ContextType> addColorAttachment(ColorAttachmentSpec builder)
     {
-        this.colorAttachmentFormats.add(context.getTextureFactory().build2DColorTexture(width, height)
-                .setInternalFormat(builder.internalFormat)
+        colorAttachmentFormats.add(context.getTextureFactory().build2DColorTexture(width, height)
+                .setInternalFormat(builder.getInternalFormat())
                 .setMultisamples(builder.getMultisamples(), builder.areMultisampleLocationsFixed())
                 .setMipmapsEnabled(builder.areMipmapsEnabled())
                 .setLinearFilteringEnabled(builder.isLinearFilteringEnabled()));
@@ -118,57 +122,57 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     }
 
     @Override
-    public FramebufferObjectBuilder<ContextType> addEmptyColorAttachments(int count)
+    public final FramebufferObjectBuilder<ContextType> addEmptyColorAttachments(int count)
     {
         for (int i = 0; i < count; i++)
         {
-            this.addEmptyColorAttachment();
+            addEmptyColorAttachment();
         }
         return this;
     }
 
     @Override
-    public FramebufferObjectBuilder<ContextType> addColorAttachments(int count)
+    public final FramebufferObjectBuilder<ContextType> addColorAttachments(int count)
     {
-        return this.addColorAttachments(ColorFormat.RGBA8, count);
+        return addColorAttachments(ColorFormat.RGBA8, count);
     }
 
     @Override
-    public FramebufferObjectBuilder<ContextType> addColorAttachments(ColorFormat format, int count)
+    public final FramebufferObjectBuilder<ContextType> addColorAttachments(ColorFormat format, int count)
     {
         for (int i = 0; i < count; i++)
         {
-            this.addColorAttachment(format);
+            addColorAttachment(format);
         }
         return this;
     }
 
     @Override
-    public FramebufferObjectBuilder<ContextType> addColorAttachments(ColorAttachmentSpec builder, int count)
+    public final FramebufferObjectBuilder<ContextType> addColorAttachments(ColorAttachmentSpec builder, int count)
     {
         for (int i = 0; i < count; i++)
         {
-            this.addColorAttachment(builder);
+            addColorAttachment(builder);
         }
         return this;
     }
 
     @Override
-    public FramebufferObjectBuilder<ContextType> addDepthAttachment()
+    public final FramebufferObjectBuilder<ContextType> addDepthAttachment()
     {
-        return this.addDepthAttachment(16, false);
+        return addDepthAttachment(16, false);
     }
 
     @Override
-    public FramebufferObjectBuilder<ContextType> addDepthAttachment(int precision, boolean floatingPoint)
+    public final FramebufferObjectBuilder<ContextType> addDepthAttachment(int precision, boolean floatingPoint)
     {
-        if (this.hasDepthAttachment())
+        if (hasDepthAttachment())
         {
             throw new IllegalStateException("A depth attachment already exists.");
         }
         else
         {
-            this.depthAttachmentBuilder = context.getTextureFactory().build2DDepthTexture(this.width, this.height)
+            depthAttachmentBuilder = context.getTextureFactory().build2DDepthTexture(width, height)
                 .setInternalPrecision(precision)
                 .setFloatingPointEnabled(floatingPoint);
             return this;
@@ -176,11 +180,11 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     }
 
     @Override
-    public FramebufferObjectBuilder<ContextType> addDepthAttachment(DepthAttachmentSpec builder)
+    public final FramebufferObjectBuilder<ContextType> addDepthAttachment(DepthAttachmentSpec builder)
     {
-        if (!this.hasDepthAttachment() && !this.hasCombinedDepthStencilAttachment())
+        if (!hasDepthAttachment() && !hasCombinedDepthStencilAttachment())
         {
-            this.depthAttachmentBuilder = context.getTextureFactory().build2DDepthTexture(this.width, this.height)
+            depthAttachmentBuilder = context.getTextureFactory().build2DDepthTexture(width, height)
                                             .setInternalPrecision(builder.precision)
                                             .setFloatingPointEnabled(builder.floatingPoint)
                                             .setMultisamples(builder.getMultisamples(), builder.areMultisampleLocationsFixed())
@@ -195,17 +199,17 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     }
 
     @Override
-    public FramebufferObjectBuilder<ContextType> addStencilAttachment()
+    public final FramebufferObjectBuilder<ContextType> addStencilAttachment()
     {
-        return this.addStencilAttachment(8);
+        return addStencilAttachment(8);
     }
 
     @Override
-    public FramebufferObjectBuilder<ContextType> addStencilAttachment(int precision)
+    public final FramebufferObjectBuilder<ContextType> addStencilAttachment(int precision)
     {
-        if (!this.hasStencilAttachment() && !this.hasCombinedDepthStencilAttachment())
+        if (!hasStencilAttachment() && !hasCombinedDepthStencilAttachment())
         {
-            this.stencilAttachmentBuilder = context.getTextureFactory().build2DStencilTexture(this.width, this.height).setInternalPrecision(precision);
+            stencilAttachmentBuilder = context.getTextureFactory().build2DStencilTexture(width, height).setInternalPrecision(precision);
             return this;
         }
         else
@@ -215,11 +219,11 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     }
 
     @Override
-    public FramebufferObjectBuilder<ContextType> addStencilAttachment(StencilAttachmentSpec builder)
+    public final FramebufferObjectBuilder<ContextType> addStencilAttachment(StencilAttachmentSpec builder)
     {
-        if (!this.hasStencilAttachment() && !this.hasCombinedDepthStencilAttachment())
+        if (!hasStencilAttachment() && !hasCombinedDepthStencilAttachment())
         {
-            this.stencilAttachmentBuilder = context.getTextureFactory().build2DStencilTexture(this.width, this.height)
+            stencilAttachmentBuilder = context.getTextureFactory().build2DStencilTexture(width, height)
                                                 .setInternalPrecision(builder.precision)
                                                 .setMultisamples(builder.getMultisamples(), builder.areMultisampleLocationsFixed())
                                                 .setMipmapsEnabled(builder.areMipmapsEnabled())
@@ -233,11 +237,11 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     }
 
     @Override
-    public FramebufferObjectBuilder<ContextType> addCombinedDepthStencilAttachment()
+    public final FramebufferObjectBuilder<ContextType> addCombinedDepthStencilAttachment()
     {
-        if (!this.hasDepthAttachment() && !this.hasStencilAttachment() && !this.hasCombinedDepthStencilAttachment())
+        if (!hasDepthAttachment() && !hasStencilAttachment() && !hasCombinedDepthStencilAttachment())
         {
-            this.depthStencilAttachmentBuilder = context.getTextureFactory().build2DDepthStencilTexture(this.width, this.height);
+            depthStencilAttachmentBuilder = context.getTextureFactory().build2DDepthStencilTexture(width, height);
             return this;
         }
         else
@@ -247,11 +251,11 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     }
 
     @Override
-    public FramebufferObjectBuilder<ContextType> addCombinedDepthStencilAttachment(boolean floatingPointDepth)
+    public final FramebufferObjectBuilder<ContextType> addCombinedDepthStencilAttachment(boolean floatingPointDepth)
     {
-        if (!this.hasDepthAttachment() && !this.hasStencilAttachment() && !this.hasCombinedDepthStencilAttachment())
+        if (!hasDepthAttachment() && !hasStencilAttachment() && !hasCombinedDepthStencilAttachment())
         {
-            this.depthStencilAttachmentBuilder = context.getTextureFactory().build2DDepthStencilTexture(this.width, this.height)
+            depthStencilAttachmentBuilder = context.getTextureFactory().build2DDepthStencilTexture(width, height)
                 .setFloatingPointDepthEnabled(floatingPointDepth);
             return this;
         }
@@ -262,11 +266,11 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     }
 
     @Override
-    public FramebufferObjectBuilder<ContextType> addCombinedDepthStencilAttachment(DepthStencilAttachmentSpec builder)
+    public final FramebufferObjectBuilder<ContextType> addCombinedDepthStencilAttachment(DepthStencilAttachmentSpec builder)
     {
-        if (!this.hasDepthAttachment() && !this.hasStencilAttachment() && !this.hasCombinedDepthStencilAttachment())
+        if (!hasDepthAttachment() && !hasStencilAttachment() && !hasCombinedDepthStencilAttachment())
         {
-            this.depthStencilAttachmentBuilder = context.getTextureFactory().build2DDepthStencilTexture(this.width, this.height)
+            depthStencilAttachmentBuilder = context.getTextureFactory().build2DDepthStencilTexture(width, height)
                                                     .setFloatingPointDepthEnabled(builder.floatingPointDepth)
                                                     .setMultisamples(builder.getMultisamples(), builder.areMultisampleLocationsFixed())
                                                     .setMipmapsEnabled(builder.areMipmapsEnabled())
@@ -277,5 +281,20 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
         {
             throw new IllegalStateException("A depth or stencil attachment already exists.");
         }
+    }
+
+    protected final ContextType getContext()
+    {
+        return context;
+    }
+
+    protected final int getWidth()
+    {
+        return width;
+    }
+
+    protected final int getHeight()
+    {
+        return height;
     }
 }

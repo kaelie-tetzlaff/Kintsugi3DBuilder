@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.state.cards;
@@ -30,7 +34,6 @@ import java.io.FileNotFoundException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -42,7 +45,7 @@ public class MaterialCardFactory extends ProjectDataCardFactoryBase<BasisMateria
     }
 
     @Override
-    public List<? extends Map<String, Runnable>> getGlobalActions()
+    public final List<? extends Map<String, Runnable>> getGlobalActions()
     {
         return List.of(Map.of(
             "Disable All", () ->
@@ -78,20 +81,20 @@ public class MaterialCardFactory extends ProjectDataCardFactoryBase<BasisMateria
     }
 
     @Override
-    public Class<BasisMaterialInfo> getDataClass()
+    public final Class<BasisMaterialInfo> getDataClass()
     {
         return BasisMaterialInfo.class;
     }
 
     @Override
-    public ProjectDataCard createCard(BasisMaterialInfo material)
+    public final ProjectDataCard createCard(BasisMaterialInfo material)
     {
         String name = material.getName();
 
         String thumbnailPath;
         try
         {
-            thumbnailPath = ImageFinder.getInstance().findImageFile(
+            thumbnailPath = ImageFinder.findImageFile(
                 new File(getViewSet().getThumbnailImageDirectory(),
                     BasisImageCreator.getBasisImageFilename(name))).toString();
         }
@@ -150,7 +153,7 @@ public class MaterialCardFactory extends ProjectDataCardFactoryBase<BasisMateria
     }
 
     @Override
-    public List<ProjectDataCard> createAllCards()
+    public final List<ProjectDataCard> createAllCards()
     {
         ReadonlyBasisResources<? extends Context<?>> basisResources =
             getInstance().getResources().getTextureResources().getBasisResources();
@@ -158,7 +161,6 @@ public class MaterialCardFactory extends ProjectDataCardFactoryBase<BasisMateria
         {
             return basisResources.getBasis().getMaterials().stream()
                 .map(this::createCard)
-                .filter(Objects::nonNull)
                 .sorted(Comparator.comparing(ProjectDataCard::getInternalName))
                 .collect(Collectors.toUnmodifiableList());
         }

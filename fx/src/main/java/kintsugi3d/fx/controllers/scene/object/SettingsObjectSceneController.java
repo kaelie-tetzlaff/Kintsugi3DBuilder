@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.scene.object;
@@ -58,7 +62,7 @@ public class SettingsObjectSceneController implements Initializable
     private final ObjectOrientationReferenceView referenceViewExperience = new ObjectOrientationReferenceView();
 
     @Override
-    public void initialize(URL location, ResourceBundle resources)
+    public final void initialize(URL location, ResourceBundle resources)
     {
         StaticUtilities.makeWrapAroundNumeric(-180, 180, rotateYTextField);
         StaticUtilities.makeClampedNumeric(-90, 90, rotateXTextField);
@@ -87,31 +91,36 @@ public class SettingsObjectSceneController implements Initializable
         });
     }
 
-    public final ChangeListener<ObservableObjectPoseSettings> changeListener =
+    private final ChangeListener<ObservableObjectPoseSettings> changeListener =
         (observable, oldValue, newValue) ->
+    {
+        if (oldValue != null)
         {
-            if (oldValue != null)
-            {
-                unbind(oldValue);
-            }
+            unbind(oldValue);
+        }
 
-            if (newValue != null)
-            {
-                bind(newValue);
-                setDisabled(newValue.isLocked());
-            }
-            if (newValue == null)
-            {
-                setDisabled(true);
-            }
-        };
+        if (newValue != null)
+        {
+            bind(newValue);
+            setDisabled(newValue.isLocked());
+        }
+        if (newValue == null)
+        {
+            setDisabled(true);
+        }
+    };
 
-    public void setDisabled(Boolean disabled)
+    public final ChangeListener<ObservableObjectPoseSettings> getChangeListener()
+    {
+        return changeListener;
+    }
+
+    public final void setDisabled(Boolean disabled)
     {
         root.setDisable(disabled);
     }
 
-    public void bind(ObservableObjectPoseSettings objectPose)
+    public final void bind(ObservableObjectPoseSettings objectPose)
     {
         xCenterTextField.textProperty().bindBidirectional(objectPose.centerXProperty(), converter);
         yCenterTextField.textProperty().bindBidirectional(objectPose.centerYProperty(), converter);
@@ -133,7 +142,7 @@ public class SettingsObjectSceneController implements Initializable
         scaleSlider.valueProperty().bindBidirectional(objectPose.scaleProperty());
     }
 
-    public void unbind(ObservableObjectPoseSettings objectPose)
+    public final void unbind(ObservableObjectPoseSettings objectPose)
     {
 
         xCenterTextField.textProperty().unbindBidirectional(objectPose.centerXProperty());
@@ -153,12 +162,12 @@ public class SettingsObjectSceneController implements Initializable
         scaleSlider.valueProperty().unbindBidirectional(objectPose.scaleProperty());
     }
 
-    public void setOnActionSelectPoint(EventHandler<ActionEvent> actionEventEventHandler)
+    public final void setOnActionSelectPoint(EventHandler<ActionEvent> actionEventEventHandler)
     {
         selectPointButton.setOnAction(actionEventEventHandler);
     }
 
-    public void onUpdateOrientationView()
+    public final void onUpdateOrientationView()
     {
         if (!referenceViewExperience.isInitialized())
         {

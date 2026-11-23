@@ -1,21 +1,25 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.resources.project;
 
 import kintsugi3d.builder.core.texture.StandardTexture;
+import kintsugi3d.builder.io.TextureLoadOptions;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.material.ImportedMaterial;
 import kintsugi3d.gl.material.ReadonlyImportedMaterial;
-import kintsugi3d.gl.material.TextureLoadOptions;
 import kintsugi3d.util.ImageFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,11 +72,9 @@ public final class ImportedMaterialResources<ContextType extends Context<Context
     {
         this.context = context;
 
-        ImageFinder finder = ImageFinder.getInstance();
-
         try
         {
-            File diffuseFile = finder.findImageFile(new File(textureDirectory, material.getDiffuseMap().getMapName()));
+            File diffuseFile = ImageFinder.findImageFile(new File(textureDirectory, material.getDiffuseMap().getMapName()));
             LOG.info("Diffuse texture found.");
             Texture2D<ContextType> diffuseTex = context.getTextureFactory().build2DColorTextureFromFile(diffuseFile, true)
                 .setInternalFormat(ColorFormat.RGB8)
@@ -91,7 +93,7 @@ public final class ImportedMaterialResources<ContextType extends Context<Context
 
         try
         {
-            File normalFile = finder.findImageFile(new File(textureDirectory, material.getNormalMap().getMapName()));
+            File normalFile = ImageFinder.findImageFile(new File(textureDirectory, material.getNormalMap().getMapName()));
             LOG.info("Normal texture found.");
             textures.put(StandardTexture.NORMAL_MAP,
                 context.getTextureFactory().build2DColorTextureFromFile(normalFile, true)
@@ -107,7 +109,7 @@ public final class ImportedMaterialResources<ContextType extends Context<Context
 
         try
         {
-            File specularFile = finder.findImageFile(new File(textureDirectory, material.getSpecularMap().getMapName()));
+            File specularFile = ImageFinder.findImageFile(new File(textureDirectory, material.getSpecularMap().getMapName()));
             LOG.info("Specular texture found.");
             textures.put(StandardTexture.SPECULAR_COLOR,
                 context.getTextureFactory().build2DColorTextureFromFile(specularFile, true)
@@ -123,7 +125,7 @@ public final class ImportedMaterialResources<ContextType extends Context<Context
 
         try
         {
-            File roughnessFile = finder.findImageFile(new File(textureDirectory, material.getRoughnessMap().getMapName()));
+            File roughnessFile = ImageFinder.findImageFile(new File(textureDirectory, material.getRoughnessMap().getMapName()));
             LOG.info("Roughness texture found.");
             textures.put(StandardTexture.ROUGHNESS,
                 context.getTextureFactory().build2DColorTextureFromFile(roughnessFile, true)
@@ -139,7 +141,7 @@ public final class ImportedMaterialResources<ContextType extends Context<Context
 
         try
         {
-            File occlusionFile = finder.findImageFile(new File(textureDirectory, material.getAmbientOcclusionMap().getMapName()));
+            File occlusionFile = ImageFinder.findImageFile(new File(textureDirectory, material.getAmbientOcclusionMap().getMapName()));
             LOG.info("Occlusion texture found.");
             textures.put(StandardTexture.OCCLUSION,
                 context.getTextureFactory().build2DColorTextureFromFile(occlusionFile, true)

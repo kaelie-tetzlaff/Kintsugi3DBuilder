@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.sidebar;
@@ -18,6 +22,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
@@ -26,11 +31,10 @@ public final class SearchableTreeView extends SearchableView
     private final TreeView<String> treeView;
     private TreeItem<String> backupRoot;
 
-    private SearchableTreeView(TreeView<String> tree, TextInputControl textInput, CheckBox regexMode)
+    private SearchableTreeView(@NotNull TreeView<String> treeView, @NotNull TextInputControl searchTextInput, @NotNull CheckBox regexMode)
     {
-        this.treeView = tree;
-        this.textInput = textInput;
-        this.regexMode = regexMode;
+        super(searchTextInput, regexMode);
+        this.treeView = treeView;
     }
 
     @Override
@@ -38,12 +42,14 @@ public final class SearchableTreeView extends SearchableView
     {
         backupRoot = deepCopy(treeView.getRoot());
 
-        textInput.textProperty().addListener((obs, oldText, newText) -> updateView());
+        getSearchTextInput().textProperty().addListener((obs, oldText, newText) -> updateView());
 
+        CheckBox regexMode = getRegexMode();
         if (regexMode != null)
         {
             regexMode.selectedProperty().addListener((obs, oldVal, newVal) -> updateView());
         }
+
         return this;
     }
 
@@ -52,17 +58,12 @@ public final class SearchableTreeView extends SearchableView
         return new SearchableTreeView(tree, textInput, regexMode);
     }
 
-    public static SearchableTreeView createUnboundInstance(TreeView<String> tree, TextInputControl textInput)
-    {
-        return new SearchableTreeView(tree, textInput, null);
-    }
-
     @Override
     protected void updateView()
     {
         treeView.setRoot(deepCopy(backupRoot));
 
-        String searchTxt = textInput.getText().trim();
+        String searchTxt = getSearchTextInput().getText().trim();
         if (searchTxt.isBlank())
         {
             treeView.getRoot().setExpanded(true);
@@ -72,16 +73,21 @@ public final class SearchableTreeView extends SearchableView
         ObservableList<TreeItem<String>> leaves = getTreeViewLeaves(backupRoot);
         FilteredList<TreeItem<String>> filteredLeaves = new FilteredList<>(leaves, visibility -> true);
 
-        filteredLeaves.setPredicate(regexMode != null && regexMode.isSelected() ?
-            leaf -> leaf.getValue().matches(".*" + searchTxt + ".*") :
-            leaf -> leaf.getValue().contains(searchTxt));
-
+        CheckBox regexMode = getRegexMode();
+        if (regexMode != null && regexMode.isSelected())
+        {
+            filteredLeaves.setPredicate(leaf -> leaf.getValue().matches(String.format(".*%s.*", searchTxt)));
+        }
+        else
+        {
+            filteredLeaves.setPredicate(leaf -> leaf.getValue().contains(searchTxt));
+        }
 
         for (TreeItem<String> leaf : leaves)
         {
             if (!filteredLeaves.contains(leaf))
             {
-                removeLeaf(treeView, leaf);
+                removeNonRootItem(treeView, leaf.getValue());
             }
         }
 
@@ -91,33 +97,30 @@ public final class SearchableTreeView extends SearchableView
         }
     }
 
-    private static void removeLeaf(TreeView<String> treeView, TreeItem<String> toRemove)
+    private static void removeNonRootItem(TreeView<String> treeView, String toRemove)
     {
-        removeLeafRec(treeView.getRoot().getChildren().iterator(), toRemove);
+        removeNonRootItemRecursive(treeView.getRoot().getChildren().iterator(), toRemove);
     }
 
-    private static void removeLeafRec(Iterator<TreeItem<String>> curr, TreeItem<String> toRemove)
+    private static boolean removeNonRootItemRecursive(Iterator<TreeItem<String>> current, String toRemove)
     {
-        TreeItem<String> currItem = curr.next();
-
-        if (currItem.getValue().equals(toRemove.getValue()))
+        while (current.hasNext()) // Iterate to search sibling nodes if needed
         {
-            curr.remove();
-            return;
+            TreeItem<String> currentItem = current.next();
+
+            if (currentItem.getValue().equals(toRemove))
+            {
+                current.remove();
+                return true;
+            }
+            // Search child nodes with recursion if needed
+            else if (removeNonRootItemRecursive(currentItem.getChildren().iterator(), toRemove))
+            {
+                return true;
+            }
         }
 
-        //search child nodes if needed
-        if (!currItem.getChildren().isEmpty())
-        {
-            Iterator<TreeItem<String>> childrenIter = currItem.getChildren().iterator();
-            removeLeafRec(childrenIter, toRemove);
-        }
-
-        //search sibling nodes if needed
-        if (curr.hasNext())
-        {
-            removeLeafRec(curr, toRemove);
-        }
+        return false;
     }
 
     private static TreeItem<String> deepCopy(TreeItem<String> item)
@@ -174,6 +177,6 @@ public final class SearchableTreeView extends SearchableView
 
     public TreeView<String> getTreeView()
     {
-        return this.treeView;
+        return treeView;
     }
 }

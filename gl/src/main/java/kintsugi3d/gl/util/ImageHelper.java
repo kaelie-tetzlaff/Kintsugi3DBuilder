@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.util;
@@ -122,12 +126,10 @@ public final class ImageHelper
         int width = image.getWidth();
         int height = image.getHeight();
 
-        BufferedImage source = mask.getBufferedImage();
-        BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
         int[] imagePixels = image.getRGB(0, 0, width, height, null, 0, width);
-        int[] maskPixels = source.getRGB(0, 0, width, height, null, 0, width);
+        int[] maskPixels = mask.image.getRGB(0, 0, width, height, null, 0, width);
 
+        BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         int[] resultPixels = result.getRGB(0, 0, width, height, null, 0, width);
 
         for (int i = 0; i < imagePixels.length; i++)
@@ -182,6 +184,7 @@ public final class ImageHelper
 
     public ImageHelper scaledBy(double factorX, double factorY)
     {
+        //noinspection FloatingPointEquality
         if (factorX == 1.0 && factorY == 1.0)
         {
             return this;
@@ -192,7 +195,7 @@ public final class ImageHelper
         }
     }
 
-    public ImageHelper scaledBy(double factor)
+    public ImageHelper scaledBy(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") double factor)
     {
         return scaledBy(factor, factor);
     }
@@ -305,7 +308,7 @@ public final class ImageHelper
 
     public ImageHelper save(String format, File file) throws IOException
     {
-        ImageIO.write(this.image, format, file);
+        ImageIO.write(image, format, file);
         return this;
     }
 

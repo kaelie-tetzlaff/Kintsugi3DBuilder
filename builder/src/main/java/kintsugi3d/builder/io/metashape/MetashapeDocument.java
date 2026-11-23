@@ -1,16 +1,21 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.io.metashape;
 
+import kintsugi3d.builder.io.XMLHelper;
 import kintsugi3d.builder.util.UnzipHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +25,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +45,7 @@ public class MetashapeDocument
 
     public MetashapeDocument(String path)
     {
-        this.psxFilePath = path;
+        psxFilePath = path;
 
         if (!isValidPSXFilePath(psxFilePath))
         {
@@ -51,13 +54,8 @@ public class MetashapeDocument
 
         try
         {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            //TODO: MAY BE PRONE TO XXE ATTACKS
-
-            DocumentBuilder builder = factory.newDocumentBuilder();
-
             //Get Document from .psx file
-            Document psxDocument = builder.parse(new File(psxFilePath));
+            Document psxDocument = XMLHelper.getDocumentBuilder().parse(new File(psxFilePath));
 
             //get the path attribute from the document tag
             NodeList nodes = psxDocument.getElementsByTagName("document");
@@ -101,7 +99,7 @@ public class MetashapeDocument
         }
     }
 
-    public String getChunkNameFromID(int id)
+    public final String getChunkNameFromID(int id)
     {
         Optional<MetashapeChunk> chunk = chunks.stream()
             .filter(c -> c.getID() == id)
@@ -114,7 +112,7 @@ public class MetashapeDocument
         return "";
     }
 
-    String getPSXPathBase()
+    final String getPSXPathBase()
     {
         return psxFilePath.substring(0, psxFilePath.length() - 4);
     }
@@ -141,7 +139,7 @@ public class MetashapeDocument
         }
     }
 
-    public Integer getActiveChunkID()
+    public final Integer getActiveChunkID()
     {
         return activeChunkID;
     }
@@ -152,22 +150,22 @@ public class MetashapeDocument
         return file.exists() && file.getAbsolutePath().endsWith(".psx");
     }
 
-    public File getPsxFile()
+    public final File getPsxFile()
     {
         return new File(psxFilePath);
     }
 
-    public String getPsxFilePath()
+    public final String getPsxFilePath()
     {
         return psxFilePath;
     }
 
-    public List<MetashapeChunk> getChunks()
+    public final List<MetashapeChunk> getChunks()
     {
         return Collections.unmodifiableList(chunks);
     }
 
-    public void selectChunk(String selectedChunkLabel)
+    public final void selectChunk(String selectedChunkLabel)
     {
         Optional<MetashapeChunk> selectedChunk = chunks.stream()
             .filter(chunk -> chunk.getLabel().equals(selectedChunkLabel))
@@ -178,10 +176,10 @@ public class MetashapeDocument
             return;
         }
 
-        this.activeChunkID = selectedChunk.get().getID();
+        activeChunkID = selectedChunk.get().getID();
     }
 
-    public MetashapeChunk getSelectedChunk()
+    public final MetashapeChunk getSelectedChunk()
     {
         return chunks.stream()
             .filter(chunk -> chunk.getID() == activeChunkID)

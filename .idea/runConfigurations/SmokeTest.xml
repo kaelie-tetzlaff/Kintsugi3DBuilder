@@ -1,6 +1,9 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="SmokeTest" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
     <module name="app" />
+    <envs>
+      <env name="KINTSUGI3D_LOG_LEVEL" value="debug" />
+    </envs>
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="kintsugi3d.app.test.*" />

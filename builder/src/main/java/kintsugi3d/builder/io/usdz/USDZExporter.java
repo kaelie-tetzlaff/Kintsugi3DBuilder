@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.io.usdz;
@@ -21,10 +25,7 @@ import kintsugi3d.builder.util.OperatingSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -32,19 +33,14 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 public abstract class USDZExporter extends MaterialExporter
 {
     private static final Logger LOG = LoggerFactory.getLogger(USDZExporter.class);
     private static final Path BIN_LOCATION = ApplicationFolders.getAdditionalBinDirectory();
 
-    private File outputPath;
-    private File tempPath;
-
-    protected final File getTempPath()
-    {
-        return tempPath;
-    }
+    private File modelOutputDirectory;
 
     @SuppressWarnings("NoopMethodInAbstractClass")
     @StandardTextureExport(StandardTexture.NORMAL_MAP)
@@ -58,10 +54,10 @@ public abstract class USDZExporter extends MaterialExporter
     {
     }
 
-    protected abstract void addCommands(List<String> commandList);
+    protected abstract void addCommands(File outputDirectory, List<String> commandList);
 
     @Override
-    protected void postExport()
+    protected final void postExport(File outputDirectory)
     {
         // Command list for the ProcessBuilder
         List<String> command = new ArrayList<>(8);
@@ -83,7 +79,7 @@ public abstract class USDZExporter extends MaterialExporter
                 break;
 
             default:
-                throw new RuntimeException(String.format("OS environment not supported: %s", OperatingSystem.getCurrentOS()));
+                throw new UnsupportedOperationException(String.format("OS environment not supported: %s", OperatingSystem.getCurrentOS()));
         }
 
         // Attempt to realize path for the exporter application
@@ -91,16 +87,19 @@ public abstract class USDZExporter extends MaterialExporter
         {
             Path path = stream.iterator().next();
 
-            if (!Files.exists(path))
+            if (Files.exists(path))
             {
-                throw new IOException(String.format("Could not find USDZ exporter binary: %s", path));
+                command.add(path.toString());
+            }
+            else
+            {
+                throw new UncheckedIOException(new IOException(String.format("Could not find USDZ exporter binary: %s", path)));
             }
 
-            command.add(path.toString());
         }
         catch (IOException e)
         {
-            throw new RuntimeException(e.getMessage(), e);
+            throw new UncheckedIOException(e);
         }
 
         command.add("--model");
@@ -108,16 +107,18 @@ public abstract class USDZExporter extends MaterialExporter
         command.add("--format");
         command.add(getTextureFileFormat());
         command.add("--normal");
-        command.add(new File(tempPath, getTextureFilename(StandardTexture.NORMAL_MAP.details.name, getTextureFileFormat())).getPath());
+        command.add(new File(outputDirectory, getTextureFilename(StandardTexture.NORMAL_MAP.getDetails().name, getTextureFileFormat())).getPath());
         command.add("--roughness");
-        command.add(new File(tempPath, getTextureFilename(StandardTexture.ROUGHNESS.details.name, getTextureFileFormat())).getPath());
+        command.add(new File(outputDirectory, getTextureFilename(StandardTexture.ROUGHNESS.getDetails().name, getTextureFileFormat())).getPath());
         // Add inheritance specified commands
-        addCommands(command);
+        addCommands(outputDirectory, command);
 
-        ProcessBuilder pb = new ProcessBuilder(command);
+        LOG.info("USDZ export command: {}", String.join(" ", command));
 
-        // Change the working directory of the exporter to the output path
-        pb.directory(outputPath);
+        @SuppressWarnings("UseOfProcessBuilder") ProcessBuilder pb = new ProcessBuilder(command);
+
+        // Change the working directory of the exporter to the model's output path
+        pb.directory(modelOutputDirectory);
         pb.redirectErrorStream(true);
         try
         {
@@ -128,14 +129,15 @@ public abstract class USDZExporter extends MaterialExporter
             reader.lines().forEachOrdered(LOG::info);
 
             // If the exporter didn't exit with a 0, an error occurred
-            if (process.waitFor() != 0)
+            int errorCode = process.waitFor();
+            if (errorCode != 0)
             {
-                throw new RuntimeException("Passed files don't match requirements.");
+                throw new IllegalStateException(String.format("An error occurred while exporting USDZ.  Error code: %d", errorCode));
             }
         }
         catch (IOException e)
         {
-            throw new RuntimeException("Couldn't open the USDZ exporter.", e);
+            throw new UncheckedIOException("Couldn't open the USDZ exporter.", e);
         }
         catch (InterruptedException e)
         {
@@ -146,7 +148,10 @@ public abstract class USDZExporter extends MaterialExporter
         // Cleanup temp files
         try
         {
-            Files.walk(tempPath.toPath()).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+            try (Stream<Path> stream = Files.walk(outputDirectory.toPath()))
+            {
+                stream.sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+            }
         }
         catch (IOException e)
         {
@@ -156,10 +161,9 @@ public abstract class USDZExporter extends MaterialExporter
 
     // Grab the output directory and redirect the save to a temporary directory
     @Override
-    public void saveTextures(File outputDirectory)
+    public final File redirectOutputDirectory(File outputDirectory)
     {
-        outputPath = outputDirectory;
-        tempPath = new File(Global.io().getLoadedViewSetOrThrow().getSupportingFilesDirectory(), "temp");
-        super.saveTextures(tempPath);
+        modelOutputDirectory = outputDirectory;
+        return new File(Global.io().getLoadedViewSetOrThrow().getSupportingFilesDirectory(), "temp");
     }
 }

@@ -1,15 +1,21 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.vecmath;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -40,48 +46,48 @@ public class IntVector3 implements Iterable<Integer>
      * Construct a vector in three dimensions with the given values.
      * @param value Value of all three dimensions.
      */
-    public IntVector3(int value)
+    public IntVector3(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") int value)
     {
         this(value, value, value);
     }
 
-    public IntVector4 asVector4(int w)
+    public final IntVector4 asVector4(int w)
     {
-        return new IntVector4(this.x, this.y, this.z, w);
+        return new IntVector4(x, y, z, w);
     }
 
-    public Vector3 asFloatingPoint()
+    public final Vector3 asFloatingPoint()
     {
         return new Vector3(x, y, z);
     }
 
-    public Vector3 asFloatingPointNormalized()
+    public final Vector3 asFloatingPointNormalized()
     {
         return new Vector3(x / 255.0f, y / 255.0f, z / 255.0f);
     }
 
-    public DoubleVector3 asDoubleFloatingPoint()
+    public final DoubleVector3 asDoubleFloatingPoint()
     {
         return new DoubleVector3(x, y, z);
     }
 
-    public DoubleVector3 asDoubleFloatingPointNormalized()
+    public final DoubleVector3 asDoubleFloatingPointNormalized()
     {
         return new DoubleVector3(x / 255.0, y / 255.0, z / 255.0);
     }
 
-    public IntVector2 getXY()
+    public final IntVector2 getXY()
     {
-        return new IntVector2(this.x, this.y);
+        return new IntVector2(x, y);
     }
 
     @Override
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         if (obj instanceof IntVector3)
         {
             IntVector3 other = (IntVector3) obj;
-            return other.x == this.x && other.y == this.y && other.z == this.z;
+            return other.x == x && other.y == y && other.z == z;
         }
         else
         {
@@ -90,85 +96,81 @@ public class IntVector3 implements Iterable<Integer>
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return 31 * (31 * (31 + x) + y) + z;
     }
 
-    public IntVector3 plus(IntVector3 other)
+    public final IntVector3 plus(IntVector3 other)
     {
         return new IntVector3(
-            this.x + other.x,
-            this.y + other.y,
-            this.z + other.z
+            x + other.x,
+            y + other.y,
+            z + other.z
         );
     }
 
-    public IntVector3 minus(IntVector3 other)
+    public final IntVector3 minus(IntVector3 other)
     {
         return new IntVector3(
-            this.x - other.x,
-            this.y - other.y,
-            this.z - other.z
+            x - other.x,
+            y - other.y,
+            z - other.z
         );
     }
 
-    public IntVector3 negated()
+    public final IntVector3 negated()
     {
-        return new IntVector3(-this.x, -this.y, -this.z);
+        return new IntVector3(-x, -y, -z);
     }
 
-    public IntVector3 times(int s)
+    public final IntVector3 times(int s)
     {
-        return new IntVector3(s*this.x, s*this.y, s*this.z);
+        return new IntVector3(s* x, s* y, s* z);
     }
 
-    public IntVector3 dividedBy(int s)
+    public final IntVector3 dividedBy(int s)
     {
-        return new IntVector3(this.x/s, this.y/s, this.z/s);
+        return new IntVector3(x/s, y/s, z/s);
     }
 
-    public int dot(IntVector3 other)
+    public final int dot(IntVector3 other)
     {
-        return this.x * other.x + this.y * other.y + this.z * other.z;
+        return x * other.x + y * other.y + z * other.z;
     }
 
-    public IntVector3 cross(IntVector3 other)
+    public final IntVector3 cross(IntVector3 other)
     {
         return new IntVector3(
-            this.y * other.z - this.z * other.y,
-            this.z * other.x - this.x * other.z,
-            this.x * other.y - this.y * other.x
+            y * other.z - z * other.y,
+            z * other.x - x * other.z,
+            x * other.y - y * other.x
         );
     }
 
-    public double length()
+    public final double length()
     {
-        return Math.sqrt(this.dot(this));
+        return Math.sqrt(dot(this));
     }
 
-    public double distance(IntVector3 other)
+    public final double distance(IntVector3 other)
     {
-        return this.minus(other).length();
+        return minus(other).length();
     }
 
-    public IntVector3 applyOperator(IntUnaryOperator operator)
+    public final IntVector3 applyOperator(IntUnaryOperator operator)
     {
         return new IntVector3(operator.applyAsInt(x), operator.applyAsInt(y), operator.applyAsInt(z));
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
-        return "IntVector3{" +
-            "x=" + x +
-            ", y=" + y +
-            ", z=" + z +
-            '}';
+        return String.format("IntVector3{x=%d, y=%d, z=%d}", x, y, z);
     }
 
     @Override
-    public Iterator<Integer> iterator()
+    public final @NotNull Iterator<Integer> iterator()
     {
         return Arrays.asList(x, y, z).iterator();
     }

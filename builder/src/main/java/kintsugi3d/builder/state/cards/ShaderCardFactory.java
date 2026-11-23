@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.state.cards;
@@ -39,7 +43,7 @@ public class ShaderCardFactory extends ProjectDataCardFactoryBase<ShaderInfo>
     }
 
     @Override
-    public Class<ShaderInfo> getDataClass()
+    public final Class<ShaderInfo> getDataClass()
     {
         return ShaderInfo.class;
     }
@@ -64,7 +68,7 @@ public class ShaderCardFactory extends ProjectDataCardFactoryBase<ShaderInfo>
      * @return ProjectDataCard of the shader (single card).
      */
     @Override
-    public ProjectDataCard createCard(ShaderInfo shader)
+    public final ProjectDataCard createCard(ShaderInfo shader)
     {
         return new ShaderDataCard(shader.getFilename(), shader, AppIcon.PATH, null, Map.of(), List.of(), true);
     }
@@ -76,7 +80,7 @@ public class ShaderCardFactory extends ProjectDataCardFactoryBase<ShaderInfo>
      @return
      */
     @Override
-    public List<ProjectDataCard> createAllCards()
+    public final List<ProjectDataCard> createAllCards()
     {
         // shaderDataCards is an arraylist that will hold all shaders user can use
         List<ProjectDataCard> shaderDataCards = new ArrayList<>(9);

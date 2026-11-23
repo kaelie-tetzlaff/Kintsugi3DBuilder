@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.vecmath;
@@ -14,6 +18,8 @@ package kintsugi3d.gl.vecmath;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public final class Matrix4
 {
@@ -94,9 +100,9 @@ public final class Matrix4
     public Matrix3 getUpperLeft3x3()
     {
         return Matrix3.fromRows(
-                new Vector3(this.get(0,0), this.get(0,1), this.get(0,2)),
-                new Vector3(this.get(1,0), this.get(1,1), this.get(1,2)),
-                new Vector3(this.get(2,0), this.get(2,1), this.get(2,2)) );
+                new Vector3(get(0,0), get(0,1), get(0,2)),
+                new Vector3(get(1,0), get(1,1), get(1,2)),
+                new Vector3(get(2,0), get(2,1), get(2,2)) );
     }
 
     public static Matrix4 fromDoublePrecision(DoubleMatrix4 m4)
@@ -130,7 +136,7 @@ public final class Matrix4
         return scale(s.x, s.y, s.z);
     }
 
-    public static Matrix4 scale(float s)
+    public static Matrix4 scale(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") float s)
     {
         return scale(s, s, s);
     }
@@ -172,7 +178,7 @@ public final class Matrix4
 
     public static Matrix4 perspective(float fovy, float aspect, float near, float far)
     {
-        float f = 1.0f / (float)Math.tan(fovy / 2);
+        float f = 1.0f / (float) StrictMath.tan(fovy / 2);
         return new Matrix4(
             f / aspect,  0.0f,  0.0f,                         0.0f,
             0.0f,        f,     0.0f,                         0.0f,
@@ -239,72 +245,72 @@ public final class Matrix4
     public Matrix4 plus(Matrix4 other)
     {
         return new Matrix4(
-            this.m[0][0] + other.m[0][0],    this.m[0][1] + other.m[0][1], this.m[0][2] + other.m[0][2], this.m[0][3] + other.m[0][3],
-            this.m[1][0] + other.m[1][0],    this.m[1][1] + other.m[1][1], this.m[1][2] + other.m[1][2], this.m[1][3] + other.m[1][3],
-            this.m[2][0] + other.m[2][0],    this.m[2][1] + other.m[2][1], this.m[2][2] + other.m[2][2], this.m[2][3] + other.m[2][3],
-            this.m[3][0] + other.m[3][0],    this.m[3][1] + other.m[3][1], this.m[3][2] + other.m[3][2], this.m[3][3] + other.m[3][3]
+            m[0][0] + other.m[0][0],    m[0][1] + other.m[0][1], m[0][2] + other.m[0][2], m[0][3] + other.m[0][3],
+            m[1][0] + other.m[1][0],    m[1][1] + other.m[1][1], m[1][2] + other.m[1][2], m[1][3] + other.m[1][3],
+            m[2][0] + other.m[2][0],    m[2][1] + other.m[2][1], m[2][2] + other.m[2][2], m[2][3] + other.m[2][3],
+            m[3][0] + other.m[3][0],    m[3][1] + other.m[3][1], m[3][2] + other.m[3][2], m[3][3] + other.m[3][3]
         );
     }
 
     public Matrix4 minus(Matrix4 other)
     {
         return new Matrix4(
-            this.m[0][0] - other.m[0][0],    this.m[0][1] - other.m[0][1], this.m[0][2] - other.m[0][2], this.m[0][3] - other.m[0][3],
-            this.m[1][0] - other.m[1][0],    this.m[1][1] - other.m[1][1], this.m[1][2] - other.m[1][2], this.m[1][3] - other.m[1][3],
-            this.m[2][0] - other.m[2][0],    this.m[2][1] - other.m[2][1], this.m[2][2] - other.m[2][2], this.m[2][3] - other.m[2][3],
-            this.m[3][0] - other.m[3][0],    this.m[3][1] - other.m[3][1], this.m[3][2] - other.m[3][2], this.m[3][3] - other.m[3][3]
+            m[0][0] - other.m[0][0],    m[0][1] - other.m[0][1], m[0][2] - other.m[0][2], m[0][3] - other.m[0][3],
+            m[1][0] - other.m[1][0],    m[1][1] - other.m[1][1], m[1][2] - other.m[1][2], m[1][3] - other.m[1][3],
+            m[2][0] - other.m[2][0],    m[2][1] - other.m[2][1], m[2][2] - other.m[2][2], m[2][3] - other.m[2][3],
+            m[3][0] - other.m[3][0],    m[3][1] - other.m[3][1], m[3][2] - other.m[3][2], m[3][3] - other.m[3][3]
         );
     }
 
     public Matrix4 times(Matrix4 other)
     {
         return new Matrix4(
-            this.m[0][0] * other.m[0][0] + this.m[0][1] * other.m[1][0] + this.m[0][2] * other.m[2][0] + this.m[0][3] * other.m[3][0],
-            this.m[0][0] * other.m[0][1] + this.m[0][1] * other.m[1][1] + this.m[0][2] * other.m[2][1] + this.m[0][3] * other.m[3][1],
-            this.m[0][0] * other.m[0][2] + this.m[0][1] * other.m[1][2] + this.m[0][2] * other.m[2][2] + this.m[0][3] * other.m[3][2],
-            this.m[0][0] * other.m[0][3] + this.m[0][1] * other.m[1][3] + this.m[0][2] * other.m[2][3] + this.m[0][3] * other.m[3][3],
-            this.m[1][0] * other.m[0][0] + this.m[1][1] * other.m[1][0] + this.m[1][2] * other.m[2][0] + this.m[1][3] * other.m[3][0],
-            this.m[1][0] * other.m[0][1] + this.m[1][1] * other.m[1][1] + this.m[1][2] * other.m[2][1] + this.m[1][3] * other.m[3][1],
-            this.m[1][0] * other.m[0][2] + this.m[1][1] * other.m[1][2] + this.m[1][2] * other.m[2][2] + this.m[1][3] * other.m[3][2],
-            this.m[1][0] * other.m[0][3] + this.m[1][1] * other.m[1][3] + this.m[1][2] * other.m[2][3] + this.m[1][3] * other.m[3][3],
-            this.m[2][0] * other.m[0][0] + this.m[2][1] * other.m[1][0] + this.m[2][2] * other.m[2][0] + this.m[2][3] * other.m[3][0],
-            this.m[2][0] * other.m[0][1] + this.m[2][1] * other.m[1][1] + this.m[2][2] * other.m[2][1] + this.m[2][3] * other.m[3][1],
-            this.m[2][0] * other.m[0][2] + this.m[2][1] * other.m[1][2] + this.m[2][2] * other.m[2][2] + this.m[2][3] * other.m[3][2],
-            this.m[2][0] * other.m[0][3] + this.m[2][1] * other.m[1][3] + this.m[2][2] * other.m[2][3] + this.m[2][3] * other.m[3][3],
-            this.m[3][0] * other.m[0][0] + this.m[3][1] * other.m[1][0] + this.m[3][2] * other.m[2][0] + this.m[3][3] * other.m[3][0],
-            this.m[3][0] * other.m[0][1] + this.m[3][1] * other.m[1][1] + this.m[3][2] * other.m[2][1] + this.m[3][3] * other.m[3][1],
-            this.m[3][0] * other.m[0][2] + this.m[3][1] * other.m[1][2] + this.m[3][2] * other.m[2][2] + this.m[3][3] * other.m[3][2],
-            this.m[3][0] * other.m[0][3] + this.m[3][1] * other.m[1][3] + this.m[3][2] * other.m[2][3] + this.m[3][3] * other.m[3][3]
+            m[0][0] * other.m[0][0] + m[0][1] * other.m[1][0] + m[0][2] * other.m[2][0] + m[0][3] * other.m[3][0],
+            m[0][0] * other.m[0][1] + m[0][1] * other.m[1][1] + m[0][2] * other.m[2][1] + m[0][3] * other.m[3][1],
+            m[0][0] * other.m[0][2] + m[0][1] * other.m[1][2] + m[0][2] * other.m[2][2] + m[0][3] * other.m[3][2],
+            m[0][0] * other.m[0][3] + m[0][1] * other.m[1][3] + m[0][2] * other.m[2][3] + m[0][3] * other.m[3][3],
+            m[1][0] * other.m[0][0] + m[1][1] * other.m[1][0] + m[1][2] * other.m[2][0] + m[1][3] * other.m[3][0],
+            m[1][0] * other.m[0][1] + m[1][1] * other.m[1][1] + m[1][2] * other.m[2][1] + m[1][3] * other.m[3][1],
+            m[1][0] * other.m[0][2] + m[1][1] * other.m[1][2] + m[1][2] * other.m[2][2] + m[1][3] * other.m[3][2],
+            m[1][0] * other.m[0][3] + m[1][1] * other.m[1][3] + m[1][2] * other.m[2][3] + m[1][3] * other.m[3][3],
+            m[2][0] * other.m[0][0] + m[2][1] * other.m[1][0] + m[2][2] * other.m[2][0] + m[2][3] * other.m[3][0],
+            m[2][0] * other.m[0][1] + m[2][1] * other.m[1][1] + m[2][2] * other.m[2][1] + m[2][3] * other.m[3][1],
+            m[2][0] * other.m[0][2] + m[2][1] * other.m[1][2] + m[2][2] * other.m[2][2] + m[2][3] * other.m[3][2],
+            m[2][0] * other.m[0][3] + m[2][1] * other.m[1][3] + m[2][2] * other.m[2][3] + m[2][3] * other.m[3][3],
+            m[3][0] * other.m[0][0] + m[3][1] * other.m[1][0] + m[3][2] * other.m[2][0] + m[3][3] * other.m[3][0],
+            m[3][0] * other.m[0][1] + m[3][1] * other.m[1][1] + m[3][2] * other.m[2][1] + m[3][3] * other.m[3][1],
+            m[3][0] * other.m[0][2] + m[3][1] * other.m[1][2] + m[3][2] * other.m[2][2] + m[3][3] * other.m[3][2],
+            m[3][0] * other.m[0][3] + m[3][1] * other.m[1][3] + m[3][2] * other.m[2][3] + m[3][3] * other.m[3][3]
         );
     }
 
     public Vector4 times(Vector4 vector)
     {
         return new Vector4(
-            this.m[0][0] * vector.x + this.m[0][1] * vector.y + this.m[0][2] * vector.z + this.m[0][3] * vector.w,
-            this.m[1][0] * vector.x + this.m[1][1] * vector.y + this.m[1][2] * vector.z + this.m[1][3] * vector.w,
-            this.m[2][0] * vector.x + this.m[2][1] * vector.y + this.m[2][2] * vector.z + this.m[2][3] * vector.w,
-            this.m[3][0] * vector.x + this.m[3][1] * vector.y + this.m[3][2] * vector.z + this.m[3][3] * vector.w
+            m[0][0] * vector.x + m[0][1] * vector.y + m[0][2] * vector.z + m[0][3] * vector.w,
+            m[1][0] * vector.x + m[1][1] * vector.y + m[1][2] * vector.z + m[1][3] * vector.w,
+            m[2][0] * vector.x + m[2][1] * vector.y + m[2][2] * vector.z + m[2][3] * vector.w,
+            m[3][0] * vector.x + m[3][1] * vector.y + m[3][2] * vector.z + m[3][3] * vector.w
         );
     }
 
     public Matrix4 negate()
     {
         return new Matrix4(
-            -this.m[0][0], -this.m[0][1], -this.m[0][2], -this.m[0][3],
-            -this.m[1][0], -this.m[1][1], -this.m[1][2], -this.m[1][3],
-            -this.m[2][0], -this.m[2][1], -this.m[2][2], -this.m[2][3],
-            -this.m[3][0], -this.m[3][1], -this.m[3][2], -this.m[3][3]
+            -m[0][0], -m[0][1], -m[0][2], -m[0][3],
+            -m[1][0], -m[1][1], -m[1][2], -m[1][3],
+            -m[2][0], -m[2][1], -m[2][2], -m[2][3],
+            -m[3][0], -m[3][1], -m[3][2], -m[3][3]
         );
     }
 
     public Matrix4 transpose()
     {
         return new Matrix4(
-            this.m[0][0], this.m[1][0], this.m[2][0], this.m[3][0],
-            this.m[0][1], this.m[1][1], this.m[2][1], this.m[3][1],
-            this.m[0][2], this.m[1][2], this.m[2][2], this.m[3][2],
-            this.m[0][3], this.m[1][3], this.m[2][3], this.m[3][3]
+            m[0][0], m[1][0], m[2][0], m[3][0],
+            m[0][1], m[1][1], m[2][1], m[3][1],
+            m[0][2], m[1][2], m[2][2], m[3][2],
+            m[0][3], m[1][3], m[2][3], m[3][3]
         );
     }
 
@@ -316,15 +322,15 @@ public final class Matrix4
      */
     public Matrix4 quickInverse(float tolerance)
     {
-        Matrix3 rotationScale = this.getUpperLeft3x3();
-        float scaleSquared = (float)Math.pow(rotationScale.determinant(), 2.0 / 3.0);
+        Matrix3 rotationScale = getUpperLeft3x3();
+        float scaleSquared = (float) StrictMath.pow(rotationScale.determinant(), 2.0 / 3.0);
 
         Matrix4 invCandidate = rotationScale.transpose().times(1.0f / scaleSquared).asMatrix4()
-                .times(translate(this.getColumn(3).getXYZ().negated()));
+                .times(translate(getColumn(3).getXYZ().negated()));
 
-        Matrix4 identityCandidate = this.times(invCandidate);
+        Matrix4 identityCandidate = times(invCandidate);
 
-        float translationScale = this.getColumn(3).getXYZ().length();
+        float translationScale = getColumn(3).getXYZ().length();
 
         if (Math.abs(identityCandidate.get(0, 0) - 1.0f) > tolerance ||
             Math.abs(identityCandidate.get(1, 1) - 1.0f) > tolerance ||
@@ -351,32 +357,27 @@ public final class Matrix4
 
     public float get(int row, int col)
     {
-        return this.m[row][col];
+        return m[row][col];
     }
 
     public Vector4 getRow(int row)
     {
-        return new Vector4(this.m[row][0], this.m[row][1], this.m[row][2], this.m[row][3]);
+        return new Vector4(m[row][0], m[row][1], m[row][2], m[row][3]);
     }
 
     public Vector4 getColumn(int col)
     {
-        return new Vector4(this.m[0][col], this.m[1][col], this.m[2][col], this.m[3][col]);
+        return new Vector4(m[0][col], m[1][col], m[2][col], m[3][col]);
     }
 
     public FloatBuffer asFloatBuffer()
     {
-        return this.buffer.asReadOnlyBuffer();
+        return buffer.asReadOnlyBuffer();
     }
 
     @Override
     public String toString()
     {
-        StringBuilder s = new StringBuilder();
-        for (int i = 0; i < 4; i++)
-        {
-            s.append(getRow(i)).append('\n');
-        }
-        return s.toString();
+        return IntStream.range(0, 4).mapToObj(i -> String.format("%s\n", getRow(i))).collect(Collectors.joining());
     }
 }

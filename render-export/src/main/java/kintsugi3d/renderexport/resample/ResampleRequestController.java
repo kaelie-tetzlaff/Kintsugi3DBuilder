@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.renderexport.resample;
@@ -38,63 +42,63 @@ public class ResampleRequestController
     @FXML
     private void exportDirectoryButtonAction()
     {
-        this.directoryChooser.setTitle("Choose an export directory");
+        directoryChooser.setTitle("Choose an export directory");
         if (exportDirectoryField.getText().isEmpty())
         {
-            this.directoryChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+            directoryChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         }
         else
         {
             File currentValue = new File(exportDirectoryField.getText());
-            this.directoryChooser.setInitialDirectory(currentValue);
+            directoryChooser.setInitialDirectory(currentValue);
         }
-        File file = this.directoryChooser.showDialog(root.getScene().getWindow());
+        File file = directoryChooser.showDialog(root.getScene().getWindow());
         if (file != null)
         {
             exportDirectoryField.setText(file.toString());
-            RecentProjects.setMostRecentDirectory(file);
+            RecentProjects.getInstance().setMostRecentDirectory(file);
         }
     }
 
     @FXML
     private void targetVSetFileButtonAction()
     {
-        this.fileChooser.setTitle("Choose a target view set file");
-        this.fileChooser.getExtensionFilters().clear();
-        this.fileChooser.getExtensionFilters().add(new ExtensionFilter("View set files", "*.vset"));
+        fileChooser.setTitle("Choose a target view set file");
+        fileChooser.getExtensionFilters().clear();
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("View set files", "*.vset"));
         if (targetVSetFileField.getText().isEmpty())
         {
-            this.fileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+            fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         }
         else
         {
             File currentValue = new File(targetVSetFileField.getText());
-            this.fileChooser.setInitialDirectory(currentValue.getParentFile());
-            this.fileChooser.setInitialFileName(currentValue.getName());
+            fileChooser.setInitialDirectory(currentValue.getParentFile());
+            fileChooser.setInitialFileName(currentValue.getName());
         }
-        File file = this.fileChooser.showOpenDialog(root.getScene().getWindow());
+        File file = fileChooser.showOpenDialog(root.getScene().getWindow());
         if (file != null)
         {
             targetVSetFileField.setText(file.toString());
-            RecentProjects.setMostRecentDirectory(file.getParentFile());
+            RecentProjects.getInstance().setMostRecentDirectory(file.getParentFile());
         }
     }
 
     @FXML
-    public void cancel()
+    public final void cancel()
     {
         FXWindowHelper.requestClose(root);
     }
 
     @FXML
-    public void run()
+    public final void run()
     {
         if (Global.io().getAggregateProgressMonitor().isConflictingProcess())
         {
             return;
         }
 
-        Rendering.getRequestQueue().addGraphicsRequest(
+        Rendering.getRequestQueue().addImageBasedGraphicsRequest(
             new ResampleRequest(
                 Integer.parseInt(widthTextField.getText()),
                 Integer.parseInt(heightTextField.getText()),

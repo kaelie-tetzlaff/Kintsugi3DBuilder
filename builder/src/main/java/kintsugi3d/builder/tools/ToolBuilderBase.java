@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.tools;
@@ -30,61 +34,61 @@ abstract class ToolBuilderBase<ToolType> implements ToolBuilder<ToolType>
     }
 
     @Override
-    public ToolBuilder<ToolType> setCameraModel(ManipulableViewpointModel cameraModel)
+    public final ToolBuilder<ToolType> setCameraModel(@SuppressWarnings("ParameterHidesMemberVariable") ManipulableViewpointModel cameraModel)
     {
         this.cameraModel = cameraModel;
         return this;
     }
 
     @Override
-    public ToolBuilder<ToolType> setLightingEnvironmentModel(ManipulableLightingEnvironmentModel lightingModel)
+    public final ToolBuilder<ToolType> setLightingEnvironmentModel(ManipulableLightingEnvironmentModel lightingModel)
     {
-        this.lightingEnvironmentModel = lightingModel;
+        lightingEnvironmentModel = lightingModel;
         return this;
     }
 
     @Override
-    public ToolBuilder<ToolType> setObjectModel(ManipulableObjectPoseModel objectModel)
+    public final ToolBuilder<ToolType> setObjectModel(@SuppressWarnings("ParameterHidesMemberVariable") ManipulableObjectPoseModel objectModel)
     {
         this.objectModel = objectModel;
         return this;
     }
 
     @Override
-    public ToolBuilder<ToolType> setSceneViewport(SceneViewport sceneViewport)
+    public final ToolBuilder<ToolType> setSceneViewport(@SuppressWarnings("ParameterHidesMemberVariable") SceneViewport sceneViewport)
     {
         this.sceneViewport = sceneViewport;
         return this;
     }
 
     @Override
-    public ToolBuilder<ToolType> setSettingsModel(GeneralSettingsModel settingsModel)
+    public final ToolBuilder<ToolType> setSettingsModel(@SuppressWarnings("ParameterHidesMemberVariable") GeneralSettingsModel settingsModel)
     {
         this.settingsModel = settingsModel;
         return this;
     }
 
-    ManipulableViewpointModel getCameraModel()
+    final ManipulableViewpointModel getCameraModel()
     {
         return cameraModel;
     }
 
-    ManipulableLightingEnvironmentModel getLightingEnvironmentModel()
+    final ManipulableLightingEnvironmentModel getLightingEnvironmentModel()
     {
         return lightingEnvironmentModel;
     }
 
-    ManipulableObjectPoseModel getObjectModel()
+    final ManipulableObjectPoseModel getObjectModel()
     {
         return objectModel;
     }
 
-    SceneViewport getSceneViewport()
+    final SceneViewport getSceneViewport()
     {
         return sceneViewport;
     }
 
-    GeneralSettingsModel getSettingsModel()
+    final GeneralSettingsModel getSettingsModel()
     {
         return settingsModel;
     }

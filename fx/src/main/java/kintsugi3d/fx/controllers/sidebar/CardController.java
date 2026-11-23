@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.sidebar;
@@ -63,11 +67,11 @@ public class CardController
     private File currentPreviewImageFile;
     private File loadedPreviewImageFile;
 
-    public void init(ObservableCardsModel<?> cardsModel, ProjectDataCard dataCard)
+    public final void init(@SuppressWarnings("ParameterHidesMemberVariable") ObservableCardsModel<?> cardsModel, ProjectDataCard dataCard)
     {
         this.cardsModel = cardsModel;
 
-        this.setCardVisibility(false);
+        setCardVisibility(false);
 
         if (dataCard.getFullResImageFilePath() == null) //if file path is null it disables the checkboxes for the icons
         {
@@ -100,9 +104,9 @@ public class CardController
         }
     }
 
-    public void refresh(ProjectDataCard refreshedDataCard)
+    public final void refresh(ProjectDataCard refreshedDataCard)
     {
-        this.cardId = refreshedDataCard.getCardId();
+        cardId = refreshedDataCard.getCardId();
 
         if (refreshedDataCard.isEnabled())
         {
@@ -132,7 +136,7 @@ public class CardController
 
         // Style when selected
         borderBox.styleProperty().bind(Bindings.when(selected)
-            .then("-fx-border-color: black; -fx-border-width: 2px;")
+            .then("-fx-border-color: #ADADAD; -fx-border-width: 2px;")
             .otherwise(""));
         dataCardPane.styleProperty().bind(Bindings.when(selected)
             .then("-fx-padding: 2px;")
@@ -179,18 +183,18 @@ public class CardController
         createBindings(cardIcon, hoverRectangle);//easy method to bind Rectangle to ImageView
     }
 
-    public void setCardVisibility(boolean visibility)
+    public final void setCardVisibility(boolean visibility)
     {
         dataCardPane.setVisible(visibility);
     }
 
-    public boolean doesTitleContainString(String str)
+    public final boolean doesTitleContainString(String str)
     {
         return cardTitle.getText().toLowerCase(Locale.ROOT).contains(str.toLowerCase(Locale.ROOT));
     }
 
     @FXML
-    public void cardClicked()
+    public final void cardClicked()
     {
         if (cardsModel.isExpanded(cardId))
         {
@@ -203,13 +207,13 @@ public class CardController
     }
 
     @FXML
-    public void expansionToggleClicked(MouseEvent e)
+    public final void expansionToggleClicked(MouseEvent e)
     {
         cardClicked();
         e.consume();
     }
 
-    public VBox getCard()
+    public final VBox getCard()
     {
         return dataCardPane;
     }
@@ -219,7 +223,7 @@ public class CardController
      * This method does addSelected to global tab models.
      */
     @FXML
-    public void select()
+    public final void select()
     {
         if (cardsModel.isSelected(cardId))
         {
@@ -293,7 +297,7 @@ public class CardController
      * These methods don't activate if selectionBox is hidden/disbled (filePath == null)
      */
     @FXML
-    public void hoverStart()
+    public final void hoverStart()
     {
         hoverRectangle.setVisible(true);
     }
@@ -303,7 +307,7 @@ public class CardController
      * of hoverRectangle to false (which makes the icon go back to normal)
      */
     @FXML
-    public void hoverEnd()
+    public final void hoverEnd()
     {
         hoverRectangle.setVisible(false);
     }
@@ -311,7 +315,7 @@ public class CardController
     /**
      * Sets the selectionBox state to false
      */
-    public void updateCheckBox()
+    public final void updateCheckBox()
     {
         selectionBox.setSelected(false);
     }

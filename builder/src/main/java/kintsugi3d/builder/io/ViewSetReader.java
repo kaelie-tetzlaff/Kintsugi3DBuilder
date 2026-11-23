@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.io;
@@ -41,7 +45,7 @@ public interface ViewSetReader
     {
         try (InputStream stream = new FileInputStream(cameraFile))
         {
-            directories.projectRoot = cameraFile.getParentFile();
+            directories.setProjectRoot(cameraFile.getParentFile());
             return readFromStream(stream, directories);
         }
     }
@@ -56,30 +60,26 @@ public interface ViewSetReader
      */
     default ViewSetBuilder readFromFile(File cameraFile, ViewSetLoadOptions loadOptions) throws Exception
     {
-        ViewSetBuilder builder = this.readFromFile(cameraFile, loadOptions.mainDirectories);
+        ViewSetBuilder builder = readFromFile(cameraFile, loadOptions.getMainDirectories())
+            .removeViewsByImageFilename(loadOptions.getDisabledImages());
 
-        if (loadOptions.disabledImages != null)
+        if (loadOptions.getGeometryFile() != null)
         {
-            builder.removeViewsByImageFilename(loadOptions.disabledImages);
+            builder.setGeometryFile(loadOptions.getGeometryFile());
         }
 
-        if (loadOptions.geometryFile != null)
+        if (loadOptions.getMasksDirectory() != null)
         {
-            builder.setGeometryFile(loadOptions.geometryFile);
-        }
-
-        if (loadOptions.masksDirectory != null)
-        {
-            builder.setMasksDirectory(loadOptions.masksDirectory);
+            builder.setMasksDirectory(loadOptions.getMasksDirectory());
         }
 
         // Set even if orientationViewName is null (to use default orientation in that case).
-        builder.setOrientationViewByName(loadOptions.orientationViewName)
-            .setOrientationViewRotation(loadOptions.orientationViewRotation);
+        builder.setOrientationViewByName(loadOptions.getOrientationViewName())
+            .setOrientationViewRotation(loadOptions.getOrientationViewRotation());
 
-        if (loadOptions.uuid != null)
+        if (loadOptions.getUUID() != null)
         {
-            builder.setUUID(loadOptions.uuid);
+            builder.setUUID(loadOptions.getUUID());
         }
 
         return builder;

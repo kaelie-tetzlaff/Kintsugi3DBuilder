@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.resources.project;
@@ -65,7 +69,7 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
         File imageFile = view.findFullResImageFile();
 
         // Read the images from a file
-        if (loadOptions.areColorImagesRequested() && imageFile != null)
+        if (loadOptions.areColorImagesRequested())
         {
             File mask = view.getMaskFile();
             var colorTextureBuilder = mask == null ?
@@ -95,9 +99,9 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
 
         if (geometryResources.isNull() || colorTexture == null || !loadOptions.areDepthImagesRequested())
         {
-            this.depthTexture = null;
-            this.shadowTexture = null;
-            this.shadowMatrix = null;
+            depthTexture = null;
+            shadowTexture = null;
+            shadowMatrix = null;
         }
         else
         {
@@ -112,7 +116,7 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
             {
 
                 // Build depth texture
-                this.depthTexture = context.getTextureFactory()
+                depthTexture = context.getTextureFactory()
                     .build2DDepthTexture(colorTexture.getWidth(), colorTexture.getHeight())
                     .createTexture();
 
@@ -120,12 +124,12 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
                 depthMapGenerator.generateDepthMap(view, depthRenderingFBO);
 
                 // Build shadow texture
-                this.shadowTexture = context.getTextureFactory()
+                shadowTexture = context.getTextureFactory()
                     .build2DDepthTexture(colorTexture.getWidth(), colorTexture.getHeight())
                     .createTexture();
 
                 depthRenderingFBO.setDepthAttachment(shadowTexture);
-                this.shadowMatrix = depthMapGenerator.generateShadowMap(view, depthRenderingFBO);
+                shadowMatrix = depthMapGenerator.generateShadowMap(view, depthRenderingFBO);
             }
         }
     }
@@ -144,23 +148,23 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
         return builder;
     }
 
-    public void setupShaderProgram(Program<ContextType> program)
+    public final void setupShaderProgram(Program<ContextType> program)
     {
         view.getContainingViewSet().setupShaderProgram(program);
 
-        if (this.colorTexture != null)
+        if (colorTexture != null)
         {
             program.setTexture("viewImage", colorTexture);
         }
 
-        if (this.depthTexture != null)
+        if (depthTexture != null)
         {
             program.setTexture("depthImage", depthTexture);
 
-            if (this.shadowTexture != null)
+            if (shadowTexture != null)
             {
                 program.setTexture("shadowImage", shadowTexture);
-                program.setUniform("shadowMatrix", this.shadowMatrix);
+                program.setUniform("shadowMatrix", shadowMatrix);
             }
         }
 
@@ -175,13 +179,13 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
      * @param program The program to use to construct the Drawable.
      * @return A Drawable for rendering this instance using the specified shader program.
      */
-    public Drawable<ContextType> createDrawable(Program<ContextType> program)
+    public final Drawable<ContextType> createDrawable(Program<ContextType> program)
     {
         return geometryResources.createDrawable(program);
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (geometryResources != null && geometryResourcesOwned)
         {

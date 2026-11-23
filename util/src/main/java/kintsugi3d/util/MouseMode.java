@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.util;
@@ -44,47 +48,47 @@ public class MouseMode
             new ModifierKeys()
             {
                 @Override
-                public boolean getShiftModifier()
+                public boolean isShiftModifierActive()
                 {
                     return (ordinal & 1) != 0;
                 }
 
                 @Override
-                public boolean getControlModifier()
+                public boolean isControlModifierActive()
                 {
                     return (ordinal & 2) != 0;
                 }
 
                 @Override
-                public boolean getAltModifier()
+                public boolean isAltModifierActive()
                 {
                     return (ordinal & 4) != 0;
                 }
 
                 @Override
-                public boolean getSuperModifier()
+                public boolean isSuperModifierActive()
                 {
                     return (ordinal & 8) != 0;
                 }
             });
     }
 
-    public int getOrdinal()
+    public final int getOrdinal()
     {
-        return  (modifierKeys.getShiftModifier()   ? 1 : 0) |
-                (modifierKeys.getControlModifier() ? 2 : 0) |
-                (modifierKeys.getAltModifier()     ? 4 : 0) |
-                (modifierKeys.getSuperModifier()   ? 8 : 0) |
+        return  (modifierKeys.isShiftModifierActive()   ? 1 : 0) |
+                (modifierKeys.isControlModifierActive() ? 2 : 0) |
+                (modifierKeys.isAltModifierActive()     ? 4 : 0) |
+                (modifierKeys.isSuperModifierActive()   ? 8 : 0) |
                 (buttonIndex << 4);
     }
 
     @Override
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         if (obj instanceof MouseMode)
         {
             MouseMode otherMapping = (MouseMode)obj;
-            return otherMapping.buttonIndex == this.buttonIndex && Objects.equals(otherMapping.modifierKeys, this.modifierKeys);
+            return otherMapping.buttonIndex == buttonIndex && Objects.equals(otherMapping.modifierKeys, modifierKeys);
         }
         else
         {
@@ -93,32 +97,32 @@ public class MouseMode
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
-        return this.getOrdinal();
+        return getOrdinal();
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         StringBuilder builder = new StringBuilder(25);
 
-        if (modifierKeys.getShiftModifier())
+        if (modifierKeys.isShiftModifierActive())
         {
             builder.append("SHIFT-");
         }
 
-        if (modifierKeys.getSuperModifier())
+        if (modifierKeys.isSuperModifierActive())
         {
             builder.append("SUPER-");
         }
 
-        if (modifierKeys.getControlModifier())
+        if (modifierKeys.isControlModifierActive())
         {
             builder.append("CTRL-");
         }
 
-        if (modifierKeys.getAltModifier())
+        if (modifierKeys.isAltModifierActive())
         {
             builder.append("ALT-");
         }

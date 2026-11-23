@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.resources.project.stream;
@@ -67,19 +71,19 @@ public class ParallelViewRenderStream<ContextType extends Context<ContextType>> 
     }
 
     @Override
-    public GraphicsStream<ColorList[]> sequential()
+    public final GraphicsStream<ColorList[]> sequential()
     {
         return new SequentialViewRenderStream<>(views, drawable, framebuffer, attachmentCount);
     }
 
     @Override
-    public GraphicsStream<ColorList[]> parallel()
+    public final GraphicsStream<ColorList[]> parallel()
     {
         return this;
     }
 
     @Override
-    public GraphicsStream<ColorList[]> parallel(int maxRunningThreads)
+    public final GraphicsStream<ColorList[]> parallel(@SuppressWarnings("ParameterHidesMemberVariable") int maxRunningThreads)
     {
         if (maxRunningThreads == this.maxRunningThreads)
         {
@@ -92,13 +96,13 @@ public class ParallelViewRenderStream<ContextType extends Context<ContextType>> 
     }
 
     @Override
-    public int getCount()
+    public final int getCount()
     {
         return views.size();
     }
 
     @Override
-    public void forEach(Consumer<? super ColorList[]> action)
+    public final void forEach(Consumer<? super ColorList[]> action)
     {
         for (View view : views)
         {
@@ -136,7 +140,7 @@ public class ParallelViewRenderStream<ContextType extends Context<ContextType>> 
 
 
             // Copy framebuffer from GPU to main memory.
-            IntStream.range(0, attachmentCount).forEach(i -> framebuffer.getTextureReaderForColorAttachment(i).readFloatingPointRGBA(colorBuffers[i].buffer));
+            IntStream.range(0, attachmentCount).forEach(i -> framebuffer.getTextureReaderForColorAttachment(i).readFloatingPointRGBA(colorBuffers[i].getBuffer()));
 
             synchronized (threadsRunningLock)
             {

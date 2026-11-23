@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.app;
@@ -42,6 +46,7 @@ import kintsugi3d.fx.core.*;
 import kintsugi3d.fx.internal.ObservableCameraModel;
 import kintsugi3d.fx.internal.ObservableCarouselModel;
 import kintsugi3d.fx.internal.ObservableGeneralSettingsModel;
+import kintsugi3d.fx.util.StaticUtilities;
 import kintsugi3d.gl.window.FramebufferCanvas;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +66,7 @@ public class JavaFXApplication extends Application
 
     private static JavaFXState state;
 
+    @SuppressWarnings("MismatchedReadAndWriteOfArray")
     private static String[] arguments;
 
     private static boolean initialized = false;
@@ -83,7 +89,7 @@ public class JavaFXApplication extends Application
 
     public static void setArgs(String[] args)
     {
-        arguments = args;
+        arguments = args.clone();
     }
 
     public static boolean isInitialized()
@@ -97,23 +103,23 @@ public class JavaFXApplication extends Application
 
         StageSynchronization(Stage sceneStage)
         {
-            this.stage = sceneStage;
+            stage = sceneStage;
         }
 
         @Override
-        public boolean isFocused()
+        public final boolean isFocused()
         {
             return stage.isFocused();
         }
 
         @Override
-        public void focus()
+        public final void focus()
         {
             stage.toFront();
         }
 
         @Override
-        public void quit()
+        public final void quit()
         {
             // Commit the current user preferences to disk
             try
@@ -134,11 +140,11 @@ public class JavaFXApplication extends Application
         }
 
         @Override
-        public boolean confirmQuit()
+        public final boolean confirmQuit()
         {
             FutureTask<Boolean> confirmationTask = new FutureTask<>(() ->
             {
-                Dialog<ButtonType> confirmation = new Alert(AlertType.CONFIRMATION, "If you click OK, any unsaved changes will be lost.");
+                Dialog<ButtonType> confirmation = StaticUtilities.createConfirmDialog("If you click OK, any unsaved changes will be lost.");
                 confirmation.setTitle("Exit?");
                 confirmation.setHeaderText("Are you sure you want to exit?");
                 return confirmation.showAndWait()
@@ -161,6 +167,7 @@ public class JavaFXApplication extends Application
         }
     }
 
+    @SuppressWarnings("StaticCollection")
     private static final Collection<Consumer<Stage>> START_LISTENERS = new ArrayList<>(1);
 
     public static void addStartListener(Consumer<Stage> startListener)
@@ -169,11 +176,14 @@ public class JavaFXApplication extends Application
     }
 
     @Override
-    public void start(Stage primaryStage) throws IOException
+    public final void start(Stage primaryStage) throws IOException
     {
         //noinspection AssignmentToStaticFieldFromInstanceMethod
         state = JavaFXState.create();
+
+        //noinspection AssignmentToStaticFieldFromInstanceMethod
         initialized = true;
+
         // Inject dependency for global state.
         MultithreadState multithreadState = MultithreadState.getInstance();
         GlobalBootstrap.initialize(multithreadState, multithreadState.getLoadOptionsModel());
@@ -192,10 +202,15 @@ public class JavaFXApplication extends Application
             // MacOS compatible fonts
             setUserAgentStylesheet("user-agent-macos.css");
         }
-        else
+        else if (OperatingSystem.WINDOWS == OperatingSystem.getCurrentOS())
         {
             // Windows compatible fonts
             setUserAgentStylesheet("user-agent-windows.css");
+        }
+        else
+        {
+            // Default fonts but include other overrides.
+            setUserAgentStylesheet("user-agent-generic.css");
         }
 
         primaryStage.getIcons().add(AppIcon.getImage());
@@ -231,7 +246,10 @@ public class JavaFXApplication extends Application
 
         //load Controllers
         RootSceneController sceneController = sceneFXMLLoader.getController();
+
+        //noinspection AssignmentToStaticFieldFromInstanceMethod
         mainWindowController = mainWindowFXMLLoader.getController();
+
         WelcomeWindowController welcomeWindowController = welcomeWindowFXMLLoader.getController();
         ProgressBarsController progressBarsController = progressBarsFXMLLoader.getController();
 
@@ -295,7 +313,7 @@ public class JavaFXApplication extends Application
         if (GlobalUserPreferencesManager.getInstance().hasStartupFailures())
         {
             ButtonType ok = new ButtonType("OK", ButtonData.OK_DONE);
-            ButtonType showLog = new ButtonType("Show Log", ButtonData.YES);
+            ButtonType showLog = new ButtonType("Show Log", ButtonData.LEFT);
             Alert alert = new Alert(AlertType.WARNING, "An error occurred loading your user preferences, and they may have been reverted to their defaults. No action is needed.\nCheck the log for more info.", ok, showLog);
             ((ButtonBase) alert.getDialogPane().lookupButton(showLog)).setOnAction(
                 event -> ExperienceManager.getInstance().getExperience(ExperienceManager.LOG).tryOpen());
@@ -321,7 +339,7 @@ public class JavaFXApplication extends Application
             () -> getHostServices().showDocument("https://kaelie-tetzlaff.github.io/Kintsugi3DBuilder/Kintsugi3DDocumentation.pdf"));
 
         // Register JavaFX recent projects helper with the backend recent projects utility class.
-        RecentProjects.addRecentProjectsChangedListener(() -> Platform.runLater(RecentProjectsHelper::updateAllControlStructures));
+        RecentProjects.getInstance().addRecentProjectsChangedListener(() -> Platform.runLater(RecentProjectsHelper::updateAllControlStructures));
 
         Accelerators.initForScene(welcomeStage.getScene());
         Accelerators.initForScene(progressBarsStage.getScene());
@@ -403,7 +421,11 @@ public class JavaFXApplication extends Application
         });
     }
 
-    public static void launchWrapper(String args)
+    /**
+     * Allows launching the application from another class (launch itself fails when called from another class)
+     * @param args
+     */
+    public static void launchExternal(String args)
     {
         launch(args);
     }

@@ -1,15 +1,21 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.vecmath;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -63,84 +69,84 @@ public class DoubleVector4 implements Iterable<Double>
         this.w = w;
     }
 
-    public DoubleVector4 (double value)
+    public DoubleVector4 (@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") double value)
     {
         this(value, value, value, value);
     }
 
-    public DoubleVector2 getXY()
+    public final DoubleVector2 getXY()
     {
-        return new DoubleVector2(this.x, this.y);
+        return new DoubleVector2(x, y);
     }
 
-    public DoubleVector3 getXYZ()
+    public final DoubleVector3 getXYZ()
     {
-        return new DoubleVector3(this.x, this.y, this.z);
+        return new DoubleVector3(x, y, z);
     }
 
-    public IntVector4 rounded()
+    public final IntVector4 rounded()
     {
-        return new IntVector4((int)Math.round(this.x), (int)Math.round(this.y), (int)Math.round(this.z), (int)Math.round(this.w));
+        return new IntVector4((int)Math.round(x), (int)Math.round(y), (int)Math.round(z), (int)Math.round(w));
     }
 
-    public IntVector4 truncated()
+    public final IntVector4 truncated()
     {
-        return new IntVector4((int)this.x, (int)this.y, (int)this.z, (int)this.w);
+        return new IntVector4((int) x, (int) y, (int) z, (int) w);
     }
 
-    public Vector4 asSinglePrecision()
+    public final Vector4 asSinglePrecision()
     {
         return new Vector4((float)x, (float)y, (float)z, (float)w);
     }
 
-    public DoubleVector4 plus(DoubleVector4 other)
+    public final DoubleVector4 plus(DoubleVector4 other)
     {
         return new DoubleVector4(
-            this.x + other.x,
-            this.y + other.y,
-            this.z + other.z,
-            this.w + other.w
+            x + other.x,
+            y + other.y,
+            z + other.z,
+            w + other.w
         );
     }
 
-    public DoubleVector4 minus(DoubleVector4 other)
+    public final DoubleVector4 minus(DoubleVector4 other)
     {
         return new DoubleVector4(
-            this.x - other.x,
-            this.y - other.y,
-            this.z - other.z,
-            this.w - other.w
+            x - other.x,
+            y - other.y,
+            z - other.z,
+            w - other.w
         );
     }
 
-    public DoubleVector4 negated()
+    public final DoubleVector4 negated()
     {
-        return new DoubleVector4(-this.x, -this.y, -this.z, -this.w);
+        return new DoubleVector4(-x, -y, -z, -w);
     }
 
-    public DoubleVector4 times(double s)
+    public final DoubleVector4 times(double s)
     {
-        return new DoubleVector4(s*this.x, s*this.y, s*this.z, s*this.w);
+        return new DoubleVector4(s* x, s* y, s* z, s* w);
     }
 
-    public DoubleVector4 dividedBy(double s)
+    public final DoubleVector4 dividedBy(double s)
     {
-        return new DoubleVector4(this.x/s, this.y/s, this.z/s, this.w/s);
+        return new DoubleVector4(x/s, y/s, z/s, w/s);
     }
 
-    public DoubleVector4 times(DoubleVector4 other)
+    public final DoubleVector4 times(DoubleVector4 other)
     {
-        return new DoubleVector4(this.x * other.x, this.y * other.y, this.z * other.z, this.w * other.w);
+        return new DoubleVector4(x * other.x, y * other.y, z * other.z, w * other.w);
     }
 
-    public DoubleVector4 dividedBy(DoubleVector4 other)
+    public final DoubleVector4 dividedBy(DoubleVector4 other)
     {
-        return new DoubleVector4(this.x / other.x, this.y / other.y, this.z / other.z, this.w * other.w);
+        return new DoubleVector4(x / other.x, y / other.y, z / other.z, w * other.w);
     }
 
-    public double dot(DoubleVector4 other)
+    public final double dot(DoubleVector4 other)
     {
-        return this.x * other.x + this.y * other.y + this.z * other.z + this.w * other.w;
+        return x * other.x + y * other.y + z * other.z + w * other.w;
     }
 
     /**
@@ -148,49 +154,49 @@ public class DoubleVector4 implements Iterable<Double>
      * @param other The vector to use when computing the outer product.
      * @return The matrix that is the outer product of the vectors.
      */
-    public DoubleMatrix4 outerProduct(DoubleVector4 other)
+    public final DoubleMatrix4 outerProduct(DoubleVector4 other)
     {
         return DoubleMatrix4.fromColumns(
-            new DoubleVector4(this.x * other.x, this.y * other.x, this.z * other.x, this.w * other.x),
-            new DoubleVector4(this.x * other.y, this.y * other.y, this.z * other.y, this.w * other.y),
-            new DoubleVector4(this.x * other.z, this.y * other.z, this.z * other.z, this.w * other.z),
-            new DoubleVector4(this.x * other.w, this.y * other.w, this.z * other.w, this.w * other.w)
+            new DoubleVector4(x * other.x, y * other.x, z * other.x, w * other.x),
+            new DoubleVector4(x * other.y, y * other.y, z * other.y, w * other.y),
+            new DoubleVector4(x * other.z, y * other.z, z * other.z, w * other.z),
+            new DoubleVector4(x * other.w, y * other.w, z * other.w, w * other.w)
         );
     }
 
-    public double length()
+    public final double length()
     {
-        return Math.sqrt(this.dot(this));
+        return Math.sqrt(dot(this));
     }
 
-    public double distance(DoubleVector4 other)
+    public final double distance(DoubleVector4 other)
     {
-        return this.minus(other).length();
+        return minus(other).length();
     }
 
-    public DoubleVector4 normalized()
+    public final DoubleVector4 normalized()
     {
-        return this.times(1.0 / this.length());
+        return times(1.0 / length());
     }
     /**
      * Create a new vector with the same direction as this one but with unit
      * magnitude (a length of 1.0).  If this vector has zero length, it will return itself.
      * @return A new vector equal to this vector divided by it's length except in cases of a zero-length vector.
      */
-    public DoubleVector4 normalizedSafe()
+    public final DoubleVector4 normalizedSafe()
     {
-        double l = this.length();
+        double l = length();
         if (l == 0.0f)
         {
             return this;
         }
         else
         {
-            return this.times(1.0f / l);
+            return times(1.0f / l);
         }
     }
 
-    public DoubleVector4 applyOperator(DoubleUnaryOperator operator)
+    public final DoubleVector4 applyOperator(DoubleUnaryOperator operator)
     {
         return new DoubleVector4(operator.applyAsDouble(x), operator.applyAsDouble(y), operator.applyAsDouble(z), operator.applyAsDouble(w));
     }
@@ -200,24 +206,19 @@ public class DoubleVector4 implements Iterable<Double>
      * @param operator
      * @return
      */
-    public DoubleVector4 applyOperatorXYZ(DoubleUnaryOperator operator)
+    public final DoubleVector4 applyOperatorXYZ(DoubleUnaryOperator operator)
     {
         return new DoubleVector4(operator.applyAsDouble(x), operator.applyAsDouble(y), operator.applyAsDouble(z), w);
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
-        return "DoubleVector4{" +
-            "x=" + x +
-            ", y=" + y +
-            ", z=" + z +
-            ", w=" + w +
-            '}';
+        return String.format("DoubleVector4{x=%s, y=%s, z=%s, w=%s}", x, y, z, w);
     }
 
     @Override
-    public Iterator<Double> iterator()
+    public final @NotNull Iterator<Double> iterator()
     {
         return Arrays.asList(x, y, z, w).iterator();
     }

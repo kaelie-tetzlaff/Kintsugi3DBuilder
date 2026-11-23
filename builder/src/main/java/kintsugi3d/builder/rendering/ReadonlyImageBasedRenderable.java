@@ -13,7 +13,7 @@ package kintsugi3d.builder.rendering;
 
 import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.fit.settings.ExportSettings;
-import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
+import kintsugi3d.builder.resources.project.ReadonlyGraphicsResourcesImageSpace;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Framebuffer;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
@@ -74,7 +74,7 @@ public interface ReadonlyImageBasedRenderable<ContextType extends Context<Contex
      * The resources are automatically destroyed when this implementation closes.
      * @return The project resources.
      */
-    ReadonlyImageBasedGraphicsResources<ContextType> getResources();
+    ReadonlyGraphicsResourcesImageSpace<ContextType> getResources();
 
     /**
      * Gets the scene model (object, camera, and lights)

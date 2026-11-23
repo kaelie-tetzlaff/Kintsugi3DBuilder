@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.resources.project;
@@ -17,6 +21,7 @@ import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.fit.SpecularFitFinal;
 import kintsugi3d.builder.fit.decomposition.BasisMaterialInfo;
 import kintsugi3d.builder.fit.decomposition.ReadonlyBasisWeightResources;
+import kintsugi3d.builder.io.TextureLoadOptions;
 import kintsugi3d.builder.io.events.ProjectProcessedEvent;
 import kintsugi3d.builder.io.events.ProjectProcessedListener;
 import kintsugi3d.builder.rendering.Rendering;
@@ -31,7 +36,10 @@ import kintsugi3d.gl.core.Program;
 import kintsugi3d.gl.core.UniformBuffer;
 import kintsugi3d.gl.geometry.GeometryResources;
 import kintsugi3d.gl.geometry.VertexGeometry;
-import kintsugi3d.gl.material.*;
+import kintsugi3d.gl.material.ImportedMaterial;
+import kintsugi3d.gl.material.MaterialColorMap;
+import kintsugi3d.gl.material.MaterialScalarMap;
+import kintsugi3d.gl.material.MaterialTextureMap;
 import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
 import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
 import kintsugi3d.gl.vecmath.IntVector2;
@@ -116,7 +124,8 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         if (viewSet != null && viewSet.getCameraPoseData() != null)
         {
             // Create the uniform buffer
-            cameraPoseBuffer = context.createUniformBuffer().setData(viewSet.getCameraPoseData());
+            cameraPoseBuffer = context.createUniformBuffer();
+            cameraPoseBuffer.setData(viewSet.getCameraPoseData());
         }
         else
         {
@@ -127,7 +136,8 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         if (viewSet != null && viewSet.getLightPositionData() != null)
         {
             // Create the uniform buffer
-            lightPositionBuffer = context.createUniformBuffer().setData(viewSet.getLightPositionData());
+            lightPositionBuffer = context.createUniformBuffer();
+            lightPositionBuffer.setData(viewSet.getLightPositionData());
         }
         else
         {
@@ -138,7 +148,8 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         if (viewSet != null && viewSet.getLightIntensityData() != null)
         {
             // Create the uniform buffer
-            lightIntensityBuffer = context.createUniformBuffer().setData(viewSet.getLightIntensityData());
+            lightIntensityBuffer = context.createUniformBuffer();
+            lightIntensityBuffer.setData(viewSet.getLightIntensityData());
         }
         else
         {
@@ -148,7 +159,8 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         // Store the light indices in a uniform buffer
         if (viewSet != null && viewSet.getLightIndexData() != null)
         {
-            lightIndexBuffer = context.createUniformBuffer().setData(viewSet.getLightIndexData());
+            lightIndexBuffer = context.createUniformBuffer();
+            lightIndexBuffer.setData(viewSet.getLightIndexData());
         }
         else
         {
@@ -158,7 +170,8 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         // Store the view indices in a uniform buffer
         if (viewSet != null && viewSet.getViewIndexData() != null)
         {
-            viewIndexBuffer = context.createUniformBuffer().setData(viewSet.getViewIndexData());
+            viewIndexBuffer = context.createUniformBuffer();
+            viewIndexBuffer.setData(viewSet.getViewIndexData());
         }
         else
         {
@@ -181,8 +194,8 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
             if (viewSet != null)
             {
-                this.viewWeightBuffer = context.createUniformBuffer(); // prereq for computeViewWeights
-                this.viewWeights = computeViewWeights();
+                viewWeightBuffer = context.createUniformBuffer(); // prereq for computeViewWeights
+                viewWeights = computeViewWeights();
 
                 ImportedMaterial material = geometry.getMaterial();
                 String geometryFileName = viewSet.getGeometryFileName();
@@ -246,7 +259,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
                     TextureLoadOptions mtlLoadOptions = new TextureLoadOptions();
                     mtlLoadOptions.setCompressionRequested(loadOptions.isCompressionRequested());
                     mtlLoadOptions.setMipmapsRequested(loadOptions.areMipmapsRequested());
-                    this.textureResources = ImportedMaterialResourcesWrapper.wrap(
+                    textureResources = ImportedMaterialResourcesWrapper.wrap(
                         () ->
                         {
                             try
@@ -264,26 +277,26 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
                 else
                 {
                     // Neither a texture fit or an OBJ material: material is null
-                    this.textureResources = TextureResources.makeNull(context);
+                    textureResources = TextureResources.makeNull(context);
                 }
             }
             else
             {
-                this.viewWeights = null;
-                this.viewWeightBuffer = null;
-                this.textureResources = TextureResources.makeNull(context);
+                viewWeights = null;
+                viewWeightBuffer = null;
+                textureResources = TextureResources.makeNull(context);
             }
         }
         else
         {
-            this.geometryResources = GeometryResources.createNullResources();
-            this.viewWeights = null;
-            this.viewWeightBuffer = null;
-            this.textureResources = TextureResources.makeNull(context);
+            geometryResources = GeometryResources.createNullResources();
+            viewWeights = null;
+            viewWeightBuffer = null;
+            textureResources = TextureResources.makeNull(context);
         }
 
-        this.textureResources.setBasisObservable(basisObservable);
-        this.textureResources.setTexturesObservable(texturesObservable);
+        textureResources.setBasisObservable(basisObservable);
+        textureResources.setTexturesObservable(texturesObservable);
     }
 
     private float[] computeViewWeights()
@@ -305,38 +318,21 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
         // Find the view with the greatest distance from any other view.
         // Directions that are further from any view than distance will be ignored in the view weight calculation.
-        double maxMinDistance = 0.0;
-        for (int i = 0; i < viewDirections.length; i++)
-        {
-            Vector3 viewI = viewDirections[i];
-            if (viewI != null)
-            {
-                double minDistance = Double.MAX_VALUE;
-                for (int j = 0; j < viewDirections.length; j++)
-                {
-                    Vector3 viewJ = viewDirections[j];
-                    if (viewJ != null && i != j)
-                    {
-                        minDistance = Math.min(minDistance, Math.acos(Math.max(-1.0, Math.min(1.0f, viewI.dot(viewJ)))));
-                    }
-                }
-                maxMinDistance = Math.max(maxMinDistance, minDistance);
-            }
-        }
+        double maxMinDistance = findMaxMinDistance(viewDirections);
 
         int actualSampleCount = 0;
 
         for (int i = 0; i < sampleRows; i++)
         {
-            double r = Math.sin(Math.PI * (double)i / (double)(sampleRows-1));
+            double r = StrictMath.sin(Math.PI * (double)i / (double)(sampleRows-1));
             int sampleColumns = Math.max(1, (int)Math.ceil(densityFactor * r));
 
             for (int j = 0; j < sampleColumns; j++)
             {
                 Vector3 sampleDirection = new Vector3(
-                        (float)(r * Math.cos(2 * Math.PI * (double)j / (double)sampleColumns)),
-                        (float) Math.cos(Math.PI * (double)i / (double)(sampleRows-1)),
-                        (float)(r * Math.sin(2 * Math.PI * (double)j / (double)sampleColumns)));
+                        (float)(r * StrictMath.cos(2 * Math.PI * (double)j / (double)sampleColumns)),
+                        (float) StrictMath.cos(Math.PI * (double)i / (double)(sampleRows-1)),
+                        (float)(r * StrictMath.sin(2 * Math.PI * (double)j / (double)sampleColumns)));
 
                 double minDistance = maxMinDistance;
                 int minDirectionIndex = -1;
@@ -345,7 +341,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
                     Vector3 viewK = viewDirections[k];
                     if (viewK != null)
                     {
-                        double distance = Math.acos(Math.max(-1.0, Math.min(1.0f, sampleDirection.dot(viewK))));
+                        double distance = StrictMath.acos(Math.max(-1.0, Math.min(1.0f, sampleDirection.dot(viewK))));
                         if (distance < minDistance)
                         {
                             minDistance = distance;
@@ -365,7 +361,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
         LOG.info("View weights:");
 
-        this.viewWeights = new float[viewSet.getGPUBufferSize()];
+        viewWeights = new float[viewSet.getGPUBufferSize()];
 
         if (actualSampleCount > 0) // avoid divide by zero
         {
@@ -377,10 +373,33 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
             }
         }
 
-        this.viewWeightBuffer.setData(NativeVectorBufferFactory.getInstance().createFromFloatArray(
-            1, viewSet.getGPUBufferSize(), this.viewWeights));
+        viewWeightBuffer.setData(NativeVectorBufferFactory.createFromFloatArray(
+            1, viewSet.getGPUBufferSize(), viewWeights));
 
         return viewWeights;
+    }
+
+    private static double findMaxMinDistance(Vector3[] viewDirections)
+    {
+        double maxMinDistance = 0.0;
+        for (int i = 0; i < viewDirections.length; i++)
+        {
+            Vector3 viewI = viewDirections[i];
+            if (viewI != null)
+            {
+                double minDistance = Double.MAX_VALUE;
+                for (int j = 0; j < viewDirections.length; j++)
+                {
+                    Vector3 viewJ = viewDirections[j];
+                    if (viewJ != null && i != j)
+                    {
+                        minDistance = Math.min(minDistance, StrictMath.acos(Math.max(-1.0, Math.min(1.0f, viewI.dot(viewJ)))));
+                    }
+                }
+                maxMinDistance = Math.max(maxMinDistance, minDistance);
+            }
+        }
+        return maxMinDistance;
     }
 
     public ContextType getContext()
@@ -395,9 +414,9 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
     public float getViewWeight(int index)
     {
-        if (this.viewWeights != null)
+        if (viewWeights != null)
         {
-            return this.viewWeights[index];
+            return viewWeights[index];
         }
         else
         {
@@ -407,7 +426,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
     public List<Float> getViewWeights()
     {
-        if (this.viewWeights != null)
+        if (viewWeights != null)
         {
             return Collections.unmodifiableList(new AbstractList<>()
             {
@@ -466,17 +485,17 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
     private void updateLightData()
     {
         // Store the light positions in a uniform buffer
-        if (lightPositionBuffer != null && getViewSet().getLightPositionData() != null)
+        if (lightPositionBuffer != null && viewSet.getLightPositionData() != null)
         {
             // Create the uniform buffer
-            lightPositionBuffer.setData(getViewSet().getLightPositionData());
+            lightPositionBuffer.setData(viewSet.getLightPositionData());
         }
 
         // Store the light positions in a uniform buffer
-        if (lightIntensityBuffer != null && getViewSet().getLightIntensityData() != null)
+        if (lightIntensityBuffer != null && viewSet.getLightIntensityData() != null)
         {
             // Create the uniform buffer
-            lightIntensityBuffer.setData(getViewSet().getLightIntensityData());
+            lightIntensityBuffer.setData(viewSet.getLightIntensityData());
         }
     }
 
@@ -524,8 +543,8 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
     public void replaceTextureResources(TextureResources<ContextType> newTextureResources)
     {
-        this.textureResources.close();
-        this.textureResources = newTextureResources == null ? TextureResources.makeNull(context) : newTextureResources;
+        textureResources.close();
+        textureResources = newTextureResources == null ? TextureResources.makeNull(context) : newTextureResources;
 
         if (hasProcessedWeightMaps())
         {
@@ -568,7 +587,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         for (var entry : textureResources.getTextures().entrySet())
         {
             builder.define(
-                String.format("TEXTURE_%s", entry.getKey().name.toUpperCase(Locale.ROOT).replaceAll("[^A-Z0-9]+", "_")),
+                String.format("TEXTURE_%s", textureResources.sanitizeTextureName(entry.getKey().name.toUpperCase(Locale.ROOT))),
                 entry.getValue() != null);
         }
 
@@ -591,43 +610,43 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
     {
         viewSet.setupShaderProgram(program);
 
-        if (this.viewWeightBuffer != null)
+        if (viewWeightBuffer != null)
         {
-            program.setUniformBuffer("CameraWeights", this.viewWeightBuffer);
+            program.setUniformBuffer("CameraWeights", viewWeightBuffer);
         }
 
-        if (this.cameraPoseBuffer != null)
+        if (cameraPoseBuffer != null)
         {
-            program.setUniformBuffer("CameraPoses", this.cameraPoseBuffer);
+            program.setUniformBuffer("CameraPoses", cameraPoseBuffer);
         }
 
-        if (this.lightPositionBuffer != null && this.lightIntensityBuffer != null && this.lightIndexBuffer != null)
+        if (lightPositionBuffer != null && lightIntensityBuffer != null && lightIndexBuffer != null)
         {
-            program.setUniformBuffer("LightPositions", this.lightPositionBuffer);
-            program.setUniformBuffer("LightIntensities", this.lightIntensityBuffer);
-            program.setUniformBuffer("LightIndices", this.lightIndexBuffer);
+            program.setUniformBuffer("LightPositions", lightPositionBuffer);
+            program.setUniformBuffer("LightIntensities", lightIntensityBuffer);
+            program.setUniformBuffer("LightIndices", lightIndexBuffer);
         }
 
-        if (this.viewIndexBuffer != null)
+        if (viewIndexBuffer != null)
         {
-            program.setUniformBuffer("ViewIndices", this.viewIndexBuffer);
+            program.setUniformBuffer("ViewIndices", viewIndexBuffer);
         }
 
-        getLuminanceMapResources().setupShaderProgram(program);
-        getTextureResources().setupShaderProgram(program);
+        luminanceMapResources.setupShaderProgram(program);
+        textureResources.setupShaderProgram(program);
     }
 
     public void close()
     {
-        this.viewWeightBuffer.close();
-        this.cameraPoseBuffer.close();
-        this.lightPositionBuffer.close();
-        this.lightIntensityBuffer.close();
-        this.lightIndexBuffer.close();
-        this.geometryResources.close();
-        this.textureResources.close();
-        this.luminanceMapResources.close();
-        this.viewIndexBuffer.close();
+        viewWeightBuffer.close();
+        cameraPoseBuffer.close();
+        lightPositionBuffer.close();
+        lightIntensityBuffer.close();
+        lightIndexBuffer.close();
+        geometryResources.close();
+        textureResources.close();
+        luminanceMapResources.close();
+        viewIndexBuffer.close();
     }
 
     public EventListeners<Observer<MappedChange<String, BasisMaterialInfo>>> basisListeners()

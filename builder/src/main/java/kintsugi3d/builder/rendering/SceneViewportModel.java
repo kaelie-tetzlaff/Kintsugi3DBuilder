@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering;
@@ -18,6 +22,7 @@ import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 
 import java.nio.IntBuffer;
@@ -42,13 +47,13 @@ public class SceneViewportModel implements SceneViewport
     {
         this.sceneModel = sceneModel;
 
-        this.sceneObjectNameList = new ArrayList<>(32);
-        this.sceneObjectIDLookup = new HashMap<>(32);
+        sceneObjectNameList = new ArrayList<>(32);
+        sceneObjectIDLookup = new HashMap<>(32);
 
-        this.sceneObjectNameList.add(null); // 0
+        sceneObjectNameList.add(null); // 0
     }
 
-    public void addSceneObjectType(String sceneObjectTag)
+    public final void addSceneObjectType(String sceneObjectTag)
     {
         sceneObjectNameList.add(sceneObjectTag);
 
@@ -56,15 +61,15 @@ public class SceneViewportModel implements SceneViewport
         sceneObjectIDLookup.put(sceneObjectTag, sceneObjectNameList.size() - 1);
     }
 
-    public int lookupSceneObjectID(String sceneObjectTag)
+    public final int lookupSceneObjectID(String sceneObjectTag)
     {
-        return this.sceneObjectIDLookup.get(sceneObjectTag);
+        return sceneObjectIDLookup.get(sceneObjectTag);
     }
 
-    public <ContextType extends Context<ContextType>> void refreshBuffers(Matrix4 newProjection, ReadableFramebuffer<ContextType> offscreenFBO)
+    public final <ContextType extends Context<ContextType>> void refreshBuffers(Matrix4 newProjection, ReadableFramebuffer<ContextType> offscreenFBO)
     {
-        this.projection = newProjection;
-        this.fboSize = offscreenFBO.getSizeForRead();
+        projection = newProjection;
+        fboSize = offscreenFBO.getSizeForRead();
 
         if (pixelObjectIDBuffer == null || pixelObjectIDBuffer.capacity() != 4 * fboSize.width * fboSize.height)
         {
@@ -89,7 +94,7 @@ public class SceneViewportModel implements SceneViewport
     }
 
     @Override
-    public Object getObjectAtCoordinates(double x, double y)
+    public final @Nullable Object getObjectAtCoordinates(double x, double y)
     {
         if (pixelObjectIDBuffer != null)
         {
@@ -124,7 +129,7 @@ public class SceneViewportModel implements SceneViewport
     }
 
     @Override
-    public Vector3 get3DPositionAtCoordinates(double x, double y)
+    public final @Nullable Vector3 get3DPositionAtCoordinates(double x, double y)
     {
         if (pixelDepthBuffer != null)
         {
@@ -153,7 +158,7 @@ public class SceneViewportModel implements SceneViewport
     }
 
     @Override
-    public Vector3 getViewingDirection(double x, double y)
+    public final Vector3 getViewingDirection(double x, double y)
     {
         Matrix4 projectionInverse = getProjectionInverse();
 
@@ -170,7 +175,7 @@ public class SceneViewportModel implements SceneViewport
     }
 
     @Override
-    public Vector3 getViewportCenter()
+    public final Vector3 getViewportCenter()
     {
         return sceneModel.getCurrentViewMatrix().quickInverse(0.01f)
                 .getColumn(3)
@@ -178,7 +183,7 @@ public class SceneViewportModel implements SceneViewport
     }
 
     @Override
-    public Vector2 projectPoint(Vector3 point)
+    public final Vector2 projectPoint(Vector3 point)
     {
         Vector4 projectedPoint =
             projection.times(sceneModel.getCurrentViewMatrix())
@@ -194,7 +199,7 @@ public class SceneViewportModel implements SceneViewport
      * @param size
      * @return
      */
-    public float computeRawLightWidgetScale(Matrix4 viewMatrix, FramebufferSize size)
+    public final float computeRawLightWidgetScale(Matrix4 viewMatrix, FramebufferSize size)
     {
         float cameraDistance = viewMatrix
                 .times(sceneModel.getCameraModel().getTarget().times(sceneModel.getScale()).asPosition())
@@ -203,7 +208,7 @@ public class SceneViewportModel implements SceneViewport
     }
 
     @Override
-    public float getLightWidgetScale()
+    public final float getLightWidgetScale()
     {
         return computeRawLightWidgetScale(sceneModel.getCurrentViewMatrix(), fboSize) / sceneModel.getScale();
     }

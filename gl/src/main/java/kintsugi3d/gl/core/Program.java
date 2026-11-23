@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.core;
@@ -54,102 +58,82 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      *
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setUniform(String name, boolean value);
+    void setUniform(String name, boolean value);
 
     /**
      * Sets a uniform variable by its shader name.
      *
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setUniform(String name, Vector4 value);
+    void setUniform(String name, Vector4 value);
 
     /**
      * Sets a uniform variable by its shader name.
      *
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setUniform(String name, Vector3 value);
+    void setUniform(String name, Vector3 value);
 
     /**
      * Sets a uniform variable by its shader name.
      *
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setUniform(String name, Vector2 value);
+    void setUniform(String name, Vector2 value);
 
     /**
      * Sets a uniform variable by its shader name.
      *
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setUniform(String name, float value);
+    void setUniform(String name, float value);
 
     /**
      * Sets a uniform variable by its shader name.
      *
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setUniform(String name, IntVector4 value);
+    void setUniform(String name, IntVector4 value);
 
     /**
      * Sets a uniform variable by its shader name.
      *
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setUniform(String name, IntVector3 value);
+    void setUniform(String name, IntVector3 value);
 
     /**
      * Sets a uniform variable by its shader name.
      *
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setUniform(String name, IntVector2 value);
+    void setUniform(String name, IntVector2 value);
 
     /**
      * Sets a uniform variable by its shader name.
      *
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setUniform(String name, int value);
+    void setUniform(String name, int value);
 
     /**
      * Sets a uniform variable by its shader name.
      *
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    default boolean setUniform(String name, IntLike value)
+    default void setUniform(String name, IntLike value)
     {
-        return setUniform(name, value.getIntValue());
+        setUniform(name, value.getIntValue());
     }
 
     /**
@@ -157,112 +141,90 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      *
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setUniform(String name, Matrix4 value);
+    void setUniform(String name, Matrix4 value);
 
     /**
      * Sets a uniform variable at a particular location in this shader program.
      *
      * @param location The location of the uniform variable to set.
      * @param value    The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable exists at the specified location in this shader program.
      */
-    boolean setUniform(int location, boolean value);
+    void setUniform(int location, boolean value);
 
     /**
      * Sets a uniform variable at a particular location in this shader program.
      *
      * @param location The location of the uniform variable to set.
      * @param value    The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable exists at the specified location in this shader program.
      */
-    boolean setUniform(int location, Vector4 value);
+    void setUniform(int location, Vector4 value);
 
     /**
      * Sets a uniform variable at a particular location in this shader program.
      *
      * @param location The location of the uniform variable to set.
      * @param value    The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable exists at the specified location in this shader program.
      */
-    boolean setUniform(int location, Vector3 value);
+    void setUniform(int location, Vector3 value);
 
     /**
      * Sets a uniform variable at a particular location in this shader program.
      *
      * @param location The location of the uniform variable to set.
      * @param value    The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable exists at the specified location in this shader program.
      */
-    boolean setUniform(int location, Vector2 value);
+    void setUniform(int location, Vector2 value);
 
     /**
      * Sets a uniform variable at a particular location in this shader program.
      *
      * @param location The location of the uniform variable to set.
      * @param value    The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable exists at the specified location in this shader program.
      */
-    boolean setUniform(int location, float value);
+    void setUniform(int location, float value);
 
     /**
      * Sets a uniform variable at a particular location in this shader program.
      *
      * @param location The location of the uniform variable to set.
      * @param value    The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable exists at the specified location in this shader program.
      */
-    boolean setUniform(int location, IntVector4 value);
+    void setUniform(int location, IntVector4 value);
 
     /**
      * Sets a uniform variable at a particular location in this shader program.
      *
      * @param location The location of the uniform variable to set.
      * @param value    The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable exists at the specified location in this shader program.
      */
-    boolean setUniform(int location, IntVector3 value);
+    void setUniform(int location, IntVector3 value);
 
     /**
      * Sets a uniform variable at a particular location in this shader program.
      *
      * @param location The location of the uniform variable to set.
      * @param value    The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable exists at the specified location in this shader program.
      */
-    boolean setUniform(int location, IntVector2 value);
+    void setUniform(int location, IntVector2 value);
 
     /**
      * Sets a uniform variable at a particular location in this shader program.
      *
      * @param location The location of the uniform variable to set.
      * @param value    The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable exists at the specified location in this shader program.
      */
-    boolean setUniform(int location, int value);
+    void setUniform(int location, int value);
 
     /**
      * Sets a uniform variable at a particular location in this shader program.
      *
      * @param location The location of the uniform variable to set.
      * @param value    The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable exists at the specified location in this shader program.
      */
-    default boolean setUniform(int location, IntLike value)
+    default void setUniform(int location, IntLike value)
     {
-        return setUniform(location, value.getIntValue());
+        setUniform(location, value.getIntValue());
     }
 
     /**
@@ -270,10 +232,8 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      *
      * @param location The location of the uniform variable to set.
      * @param value    The value to set the uniform variable to.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable exists at the specified location in this shader program.
      */
-    boolean setUniform(int location, Matrix4 value);
+    void setUniform(int location, Matrix4 value);
 
     /**
      * Gets the location of a uniform variable with a particular name within this shader program.
@@ -298,10 +258,8 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      *
      * @param location The location of the uniform variable to set.
      * @param texture  The texture to use as this uniform variable.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable exists at the specified location in this shader program.
      */
-    boolean setTexture(int location, Texture<ContextType> texture);
+    void setTexture(int location, Texture<ContextType> texture);
 
     /**
      * Designates a texture to be used as the uniform variable with a particular shader name.
@@ -310,10 +268,8 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      *
      * @param name    The name used to reference the variable within the shaders.
      * @param texture The texture to use as this uniform variable.
-     * @return true if the uniform variable was successfully set;
-     * false if the variable was not set because no variable with the specified name exists in any of this program's shaders.
      */
-    boolean setTexture(String name, Texture<ContextType> texture);
+    void setTexture(String name, Texture<ContextType> texture);
 
     /**
      * Designates a uniform buffer to be used at a particular uniform block index in this shader program.
@@ -322,10 +278,8 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      *
      * @param index  The index of the uniform block to set.
      * @param buffer The uniform buffer to use.
-     * @return true if the uniform block was successfully set;
-     * false if the uniform block was not set because no uniform block exists at the specified index in this shader program.
      */
-    boolean setUniformBuffer(int index, UniformBuffer<ContextType> buffer);
+    void setUniformBuffer(int index, UniformBuffer<ContextType> buffer);
 
     /**
      * Designates a uniform buffer to be used at a particular uniform block index in this shader program.
@@ -334,10 +288,8 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      *
      * @param name   The name used to reference the uniform block within the shaders.
      * @param buffer The uniform buffer to use.
-     * @return true if the uniform block was successfully set;
-     * false if the uniform block was not set because no uniform block with the specified name exists in any of this program's shaders.
      */
-    boolean setUniformBuffer(String name, UniformBuffer<ContextType> buffer);
+    void setUniformBuffer(String name, UniformBuffer<ContextType> buffer);
 
     /**
      * Gets the index of a uniform block with a particular name within this shader program.

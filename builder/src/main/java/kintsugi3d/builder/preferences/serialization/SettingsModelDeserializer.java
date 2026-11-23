@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.preferences.serialization;
@@ -24,12 +28,11 @@ import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
 
 public class SettingsModelDeserializer extends StdDeserializer<GeneralSettingsModel>
 {
+    private static final long serialVersionUID = -1523438983297165818L;
+
     public SettingsModelDeserializer()
     {
         this(null);
@@ -41,22 +44,20 @@ public class SettingsModelDeserializer extends StdDeserializer<GeneralSettingsMo
     }
 
     @Override
-    public GeneralSettingsModel deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException
+    public final GeneralSettingsModel deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException
     {
         GeneralSettingsModel outputModel = new SimpleGeneralSettingsModel();
         ObjectMapper mapper = new ObjectMapper();
 
         SimpleModule module = new SimpleModule();
-        module.addDeserializer(Vector2.class, new VectorDeserializer.Vector2Deserializer());
-        module.addDeserializer(Vector3.class, new VectorDeserializer.Vector3Deserializer());
-        module.addDeserializer(Vector4.class, new VectorDeserializer.Vector4Deserializer());
+        module.addDeserializer(Vector2.class, new Vector2Deserializer());
+        module.addDeserializer(Vector3.class, new Vector3Deserializer());
+        module.addDeserializer(Vector4.class, new Vector4Deserializer());
         mapper.registerModule(module);
 
-
         JsonNode rootNode = jsonParser.getCodec().readTree(jsonParser);
-        for (Iterator<Entry<String, JsonNode>> it = rootNode.fields(); it.hasNext(); )
+        for (var entry : rootNode.properties())
         {
-            Map.Entry<String, JsonNode> entry = it.next();
             JsonNode node = entry.getValue();
 
             switch (node.getNodeType())

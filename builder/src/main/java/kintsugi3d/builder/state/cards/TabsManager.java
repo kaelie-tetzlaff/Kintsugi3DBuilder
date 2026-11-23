@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.state.cards;
@@ -40,7 +44,7 @@ public class TabsManager
         factories.add(new TabInfo(SHADERS, new ShaderCardFactory(instance), null));
     }
 
-    public void rebuildTabs()
+    public final void rebuildTabs()
     {
         TabsModel tabsModel = Global.state().getTabModels();
         tabsModel.clearTabs();
@@ -51,7 +55,7 @@ public class TabsManager
         }
     }
 
-    public void refreshAllTabs()
+    public final void refreshAllTabs()
     {
         TabsModel tabsModel = Global.state().getTabModels();
         int index = 0;
@@ -70,7 +74,7 @@ public class TabsManager
         }
     }
 
-    public void refreshTab(String tabName)
+    public final void refreshTab(String tabName)
     {
         TabsModel tabsModel = Global.state().getTabModels();
 

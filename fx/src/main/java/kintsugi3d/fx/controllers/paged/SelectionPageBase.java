@@ -1,19 +1,27 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.paged;
 
 import javafx.fxml.FXMLLoader;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 
 public abstract class SelectionPageBase<T, ControllerType extends SelectionPageController<T>>
     extends PageBase<T, T, ControllerType> implements SelectionPage<T>
@@ -27,32 +35,32 @@ public abstract class SelectionPageBase<T, ControllerType extends SelectionPageC
     }
 
     @Override
-    public String getPrompt()
+    public final String getPrompt()
     {
         return prompt;
     }
 
     @Override
-    public void setPrompt(String prompt)
+    public final void setPrompt(String prompt)
     {
         this.prompt = prompt;
     }
 
     @Override
-    public void initController()
+    public final void initController()
     {
-        this.getController().setPage(this);
-        this.getController().initPage();
+        getController().setPage(this);
+        getController().initPage();
     }
 
     @Override
-    public Page<? super T, ?> getChoicePage(String choiceLabel)
+    public final Page<? super T, ?> getChoicePage(String choiceLabel)
     {
         return choicePages.get(choiceLabel);
     }
 
     @Override
-    public void addChoice(String choiceLabel, Page<? super T, ?> page)
+    public final void addChoice(String choiceLabel, Page<? super T, ?> page)
     {
         choicePages.put(choiceLabel, page);
 
@@ -64,13 +72,13 @@ public abstract class SelectionPageBase<T, ControllerType extends SelectionPageC
     }
 
     @Override
-    public void selectChoice(String choiceLabel)
+    public final void selectChoice(String choiceLabel)
     {
         setNextPage(getChoicePage(choiceLabel));
     }
 
     @Override
-    public Set<Map.Entry<String, Page<? super T, ?>>> getChoices()
+    public final Set<Entry<String, Page<? super T, ?>>> getChoices()
     {
         return Collections.unmodifiableSet(choicePages.entrySet());
     }

@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.core;
@@ -50,7 +54,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      */
     default void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a)
     {
-        FramebufferSize size = this.getSize();
+        FramebufferSize size = getSize();
         clearColorBuffer(attachmentIndex, r, g, b, a, 0, 0, size.width, size.height);
     }
 
@@ -64,7 +68,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      */
     default void clearIntegerColorBuffer(int attachmentIndex, int r, int g, int b, int a)
     {
-        FramebufferSize size = this.getSize();
+        FramebufferSize size = getSize();
         clearIntegerColorBuffer(attachmentIndex, r, g, b, a, 0, 0, size.width, size.height);
     }
 
@@ -74,7 +78,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      */
     default void clearDepthBuffer(float depth)
     {
-        FramebufferSize size = this.getSize();
+        FramebufferSize size = getSize();
         clearDepthBuffer(depth, 0, 0, size.width, size.height);
     }
 
@@ -83,7 +87,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      */
     default void clearDepthBuffer()
     {
-        this.clearDepthBuffer(1.0f);
+        clearDepthBuffer(1.0f);
     }
 
     /**
@@ -92,7 +96,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      */
     default void clearStencilBuffer(int stencilIndex)
     {
-        FramebufferSize size = this.getSize();
+        FramebufferSize size = getSize();
         clearStencilBuffer(stencilIndex, 0, 0, size.width, size.height);
     }
 
@@ -104,7 +108,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * @param b The blue component of the clear color.
      * @param a The alpha component of the clear color.
      */
-    void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a, int x, int y, int width, int height);
+    void clearColorBuffer(int attachmentIndex, float r, float g, float b, float a, int x, int y, int clearWidth, int clearHeight);
 
     /**
      * Clears a rectangle within one of the framebuffer's color attachments.
@@ -114,31 +118,31 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * @param b The blue component of the clear color.
      * @param a The alpha component of the clear color.
      */
-    void clearIntegerColorBuffer(int attachmentIndex, int r, int g, int b, int a, int x, int y, int width, int height);
+    void clearIntegerColorBuffer(int attachmentIndex, int r, int g, int b, int a, int x, int y, int clearWidth, int clearHeight);
 
     /**
      * Clears a rectangle within the framebuffer's depth attachment.
      * @param depth The depth to assign to the entire framebuffer.
      */
-    void clearDepthBuffer(float depth, int x, int y, int width, int height);
+    void clearDepthBuffer(float depth, int x, int y, int clearWidth, int clearHeight);
 
     /**
      * Clears a rectangle within the framebuffer's stencil buffer.
      * @param stencilIndex The stencil index with which to clear.
      */
-    void clearStencilBuffer(int stencilIndex, int x, int y, int width, int height);
+    void clearStencilBuffer(int stencilIndex, int x, int y, int clearWidth, int clearHeight);
 
     /**
      * Gets an object that encapsulates a viewport within this framebuffer that can be drawn to.
      * @param x The left edge of the viewport
      * @param y The bottom edge of the viewport
-     * @param width The width of the viewport
-     * @param height The height of the viewport
+     * @param viewportWidth The width of the viewport
+     * @param viewportHeight The height of the viewport
      * @return
      */
-    default FramebufferViewport<ContextType> getViewport(int x, int y, int width, int height)
+    default Framebuffer<ContextType> getViewport(int x, int y, int viewportWidth, int viewportHeight)
     {
-        return new FramebufferViewport<>(this, new IntVector2(x, y), new FramebufferSize(width, height));
+        return new NonReadableFramebufferViewport<>(this, new IntVector2(x, y), new FramebufferSize(viewportWidth, viewportHeight));
     }
 
     /**
@@ -152,8 +156,9 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * @param readAttachmentIndex The index of the attachment within the read framebuffer to copy from.
      * @param linearFiltering Whether or not to use linear filtering if the dimensions of the source and destination are not the same.
      */
-    void blitColorAttachmentFromFramebufferViewport(int drawAttachmentIndex, int destX, int destY, int destWidth, int destHeight,
-        ReadableFramebufferViewport<ContextType> readFramebuffer, int readAttachmentIndex, boolean linearFiltering);
+    void blitColorAttachmentFromFramebufferViewport(
+        int drawAttachmentIndex, int destX, int destY, int destWidth, int destHeight,
+        FramebufferViewport<ContextType> readFramebuffer, int readAttachmentIndex, boolean linearFiltering);
 
     /**
      * Copies pixels from one framebuffer to another.
@@ -179,7 +184,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
     default void blitColorAttachmentFromFramebuffer(int drawAttachmentIndex, int x, int y, ReadableFramebuffer<ContextType> readFramebuffer, int readAttachmentIndex)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
-        FramebufferSize drawSize = this.getSize();
+        FramebufferSize drawSize = getSize();
         blitColorAttachmentFromFramebufferViewport(drawAttachmentIndex, x, y, drawSize.width, drawSize.height,
             readFramebuffer.getViewport(0, 0, readSize.width, readSize.height), readAttachmentIndex, false);
     }
@@ -196,7 +201,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
         int drawAttachmentIndex, ReadableFramebuffer<ContextType> readFramebuffer, int readAttachmentIndex, boolean linearFiltering)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
-        FramebufferSize drawSize = this.getSize();
+        FramebufferSize drawSize = getSize();
         blitColorAttachmentFromFramebufferViewport(drawAttachmentIndex, 0, 0, drawSize.width, drawSize.height,
             readFramebuffer.getViewport(0, 0, readSize.width, readSize.height), readAttachmentIndex, linearFiltering);
     }
@@ -210,8 +215,8 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * @param destHeight The height of the rectangle to copy into within this framebuffer.
      * @param readFramebuffer A viewport into the framebuffer to copy from.
      */
-    void blitDepthAttachmentFromFramebufferViewport(int destX, int destY, int destWidth, int destHeight,
-        ReadableFramebufferViewport<ContextType> readFramebuffer);
+    void blitDepthAttachmentFromFramebufferViewport(
+        int destX, int destY, int destWidth, int destHeight, FramebufferViewport<ContextType> readFramebuffer);
 
     /**
      * Copies pixels from one framebuffer depth attachment to another.
@@ -233,7 +238,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
     default void blitDepthAttachmentFromFramebuffer(int x, int y, ReadableFramebuffer<ContextType> readFramebuffer)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
-        FramebufferSize drawSize = this.getSize();
+        FramebufferSize drawSize = getSize();
         blitDepthAttachmentFromFramebufferViewport(x, y, drawSize.width, drawSize.height,
             readFramebuffer.getViewport(0, 0, readSize.width, readSize.height));
     }
@@ -247,7 +252,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
     default void blitScaledDepthAttachmentFromFramebuffer(ReadableFramebuffer<ContextType> readFramebuffer)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
-        FramebufferSize drawSize = this.getSize();
+        FramebufferSize drawSize = getSize();
         blitDepthAttachmentFromFramebufferViewport(0, 0, drawSize.width, drawSize.height,
             readFramebuffer.getViewport(0, 0, readSize.width, readSize.height));
     }
@@ -261,8 +266,8 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * @param destHeight The height of the rectangle to copy into within this framebuffer.
      * @param readFramebuffer A viewport into the framebuffer to copy from.
      */
-    void blitStencilAttachmentFromFramebufferViewport(int destX, int destY, int destWidth, int destHeight,
-        ReadableFramebufferViewport<ContextType> readFramebuffer);
+    void blitStencilAttachmentFromFramebufferViewport(
+        int destX, int destY, int destWidth, int destHeight, FramebufferViewport<ContextType> readFramebuffer);
 
     /**
      * Copies pixels from one framebuffer stencil attachment to another.
@@ -284,7 +289,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
     default void blitStencilAttachmentFromFramebuffer(int x, int y, ReadableFramebuffer<ContextType> readFramebuffer)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
-        FramebufferSize drawSize = this.getSize();
+        FramebufferSize drawSize = getSize();
         blitStencilAttachmentFromFramebufferViewport(x, y, drawSize.width, drawSize.height,
             readFramebuffer.getViewport(0, 0, readSize.width, readSize.height));
     }
@@ -298,7 +303,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
     default void blitScaledStencilAttachmentFromFramebuffer(ReadableFramebuffer<ContextType> readFramebuffer)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
-        FramebufferSize drawSize = this.getSize();
+        FramebufferSize drawSize = getSize();
         blitStencilAttachmentFromFramebufferViewport(0, 0, drawSize.width, drawSize.height,
             readFramebuffer.getViewport(0, 0, readSize.width, readSize.height));
     }
@@ -312,8 +317,8 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * @param destHeight The height of the rectangle to copy into within this framebuffer.
      * @param readFramebuffer A viewport into the framebuffer to copy from.
      */
-    void blitDepthStencilAttachmentFromFramebufferViewport(int destX, int destY, int destWidth, int destHeight,
-        ReadableFramebufferViewport<ContextType> readFramebuffer);
+    void blitDepthStencilAttachmentFromFramebufferViewport(
+        int destX, int destY, int destWidth, int destHeight, FramebufferViewport<ContextType> readFramebuffer);
 
     /**
      * Copies pixels from one framebuffer's depth and stencil attachments to another.
@@ -335,7 +340,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
     default void blitDepthStencilAttachmentFromFramebuffer(int x, int y, ReadableFramebuffer<ContextType> readFramebuffer)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
-        FramebufferSize drawSize = this.getSize();
+        FramebufferSize drawSize = getSize();
         blitDepthStencilAttachmentFromFramebufferViewport(x, y, drawSize.width, drawSize.height,
             readFramebuffer.getViewport(0, 0, readSize.width, readSize.height));
     }
@@ -349,7 +354,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
     default void blitScaledDepthStencilAttachmentFromFramebuffer(ReadableFramebuffer<ContextType> readFramebuffer)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
-        FramebufferSize drawSize = this.getSize();
+        FramebufferSize drawSize = getSize();
         blitDepthStencilAttachmentFromFramebufferViewport(0, 0, drawSize.width, drawSize.height,
             readFramebuffer.getViewport(0, 0, readSize.width, readSize.height));
     }

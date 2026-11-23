@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.paged;
@@ -16,6 +20,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -28,21 +33,21 @@ abstract class PageBase<InType, OutType, ControllerType extends PageController<?
 
     private final ObjectProperty<Page<? super OutType, ?>> nextPageProperty = new SimpleObjectProperty<>(null);
 
-    private Page<?, ? extends InType> prevPage = null;
+    private Page<?, ? extends InType> prevPage;
 
-    private final Map<String, Page<? super OutType,?>> fallbackPages = new LinkedHashMap<>();
+    private final Map<String, Page<? super OutType,?>> fallbackPages = new LinkedHashMap<>(1);
 
-    protected PageBase(FXMLLoader loader)
+    PageBase(FXMLLoader loader)
     {
         if (loader == null)
         {
-            this.controller = null;
-            this.root = null;
+            controller = null;
+            root = null;
         }
         else
         {
-            this.controller = loader.getController();
-            this.root = loader.getRoot();
+            controller = loader.getController();
+            root = loader.getRoot();
         }
     }
 
@@ -76,6 +81,7 @@ abstract class PageBase<InType, OutType, ControllerType extends PageController<?
         return nextPageProperty.isNotNull().get();
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public void setNextPage(Page<? super OutType, ?> page)
     {
@@ -89,19 +95,19 @@ abstract class PageBase<InType, OutType, ControllerType extends PageController<?
     }
 
     @Override
-    public Map<String, Page<? super OutType, ?>> getFallbackPages()
+    public final Map<String, Page<? super OutType, ?>> getFallbackPages()
     {
-        return fallbackPages;
+        return Collections.unmodifiableMap(fallbackPages);
     }
 
     @Override
-    public boolean hasFallbackPage()
+    public final boolean hasFallbackPage()
     {
         return !fallbackPages.isEmpty();
     }
 
     @Override
-    public void addFallbackPage(String fallbackName, Page<? super OutType, ?> page)
+    public final void addFallbackPage(String fallbackName, Page<? super OutType, ?> page)
     {
         fallbackPages.put(fallbackName, page);
     }
@@ -119,29 +125,28 @@ abstract class PageBase<InType, OutType, ControllerType extends PageController<?
     }
 
     @Override
-    public void setPrevPage(Page<?, ? extends InType> page)
+    public final void setPrevPage(Page<?, ? extends InType> page)
     {
-        this.prevPage = page;
+        prevPage = page;
     }
 
     @Override
-    public void linkBackFromNextPage()
+    public final void linkBackFromNextPage()
     {
-        this.nextPageProperty.get().setPrevPage(this);
+        nextPageProperty.get().setPrevPage(this);
     }
 
-    @Override
-    public void receiveData(InType data)
+    final void sendDataToController(InType data)
     {
-        this.controller.receiveData(data);
+        controller.receiveData(data);
     }
 
     @Override
     public final void sendOutData()
     {
-        if (this.hasNextPage())
+        if (hasNextPage())
         {
-            this.getNextPage().receiveData(this.getOutData());
+            getNextPage().receiveData(getOutData());
         }
     }
 }

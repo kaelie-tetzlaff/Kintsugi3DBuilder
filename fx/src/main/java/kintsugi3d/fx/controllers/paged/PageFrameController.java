@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.paged;
@@ -15,6 +19,7 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringBinding;
+import javafx.beans.binding.StringExpression;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -34,6 +39,7 @@ import javafx.stage.WindowEvent;
 import kintsugi3d.builder.util.FXWindowHelper;
 import kintsugi3d.fx.core.JavaFXState;
 
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -52,26 +58,26 @@ public class PageFrameController
     private Window window;
     private JavaFXState state;
 
-    public Window getWindow()
+    public final Window getWindow()
     {
         return window;
     }
 
-    public JavaFXState getState()
+    public final JavaFXState getState()
     {
         return state;
     }
 
-    public void setState(JavaFXState state)
+    public final void setState(JavaFXState state)
     {
         this.state = state;
     }
 
-    private boolean isConfirmed = false;
+    private boolean isIncomplete = true;
 
-    public void init()
+    private void init()
     {
-        this.window = outerRoot.getScene().getWindow();
+        window = outerRoot.getScene().getWindow();
 
         Platform.runLater(window::requestFocus);
         window.setOnCloseRequest(this::onCloseRequest);
@@ -101,13 +107,13 @@ public class PageFrameController
         setButtonShortcuts(currentPage.get().getController());
     }
 
-    public PageFrameController setMinContentWidth(double width)
+    public final PageFrameController setMinContentWidth(double width)
     {
         hostPane.setMinWidth(width);
         return this;
     }
 
-    public PageFrameController setMinContentHeight(double height)
+    public final PageFrameController setMinContentHeight(double height)
     {
         hostPane.setMinHeight(height);
         return this;
@@ -132,13 +138,13 @@ public class PageFrameController
     {
         // If confirmed, do nothing.
         // Otherwise, try to close the current page, but if it's overridden, consume the event to prevent the modal from closing.
-        if (!isConfirmed && !currentPage.get().getController().cancel())
+        if (isIncomplete && !currentPage.get().getController().tryCancel())
         {
             windowEvent.consume();
         }
     }
 
-    public void setPageFactory(Function<FXMLLoader, FXMLLoader> pageFactory)
+    public final void setPageFactory(Function<FXMLLoader, FXMLLoader> pageFactory)
     {
         this.pageFactory = pageFactory;
     }
@@ -153,9 +159,9 @@ public class PageFrameController
      * @param <PageType>
      * @param <ControllerType>
      */
-    <PageType extends Page<?, ?>, ControllerType extends PageController<?>>
+    final <PageType extends Page<?, ?>, ControllerType extends PageController<?>>
     PageType createPage(String fxmlPath, Function<FXMLLoader, PageType> pageConstructor,
-        Supplier<ControllerType> controllerConstructorOverride)
+                        Supplier<ControllerType> controllerConstructorOverride)
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
 
@@ -170,35 +176,16 @@ public class PageFrameController
         PageController<?> controller = page.getController();
         controller.setPageFrameController(this);
 
-        BooleanBinding advanceLabelOverrideNotNull = controller.getAdvanceLabelOverrideObservable().isNotNull();
+        StringExpression advanceLabelOverride = controller.getAdvanceLabelOverrideObservable();
         BooleanBinding shouldConfirm = page.getNextPageObservable().isNull().and(controller.getCanConfirmObservable());
 
         currentPage.addListener(obs ->
         {
             // if the current page is changed to the page just created, bind it to button attributes as needed
-            if (currentPage.get() == page)
+            if (Objects.equals(currentPage.get(), page))
             {
                 nextButton.textProperty().unbind();
-                nextButton.textProperty().bind(new ObjectBinding<>()
-                {
-                    {
-                        bind(advanceLabelOverrideNotNull);
-                        bind(shouldConfirm);
-                    }
-
-                    @Override
-                    protected String computeValue()
-                    {
-                        if (advanceLabelOverrideNotNull.get())
-                        {
-                            return controller.getAdvanceLabelOverrideObservable().get();
-                        }
-                        else
-                        {
-                            return shouldConfirm.get() ? "Confirm" : "Next";
-                        }
-                    }
-                });
+                nextButton.textProperty().bind(new NextButtonTextBinding(shouldConfirm, advanceLabelOverride));
 
                 nextButton.disableProperty().unbind();
                 nextButton.disableProperty().bind(
@@ -210,7 +197,7 @@ public class PageFrameController
 
         controller.getCanConfirmObservable().addListener(observable ->
         {
-            if (currentPage == page) // only should apply if on the page just created
+            if (Objects.equals(currentPage.get(), page)) // only should apply if on the page just created
             {
                 nextButton.setFont(Font.font(
                     nextButton.getFont().getFamily(),
@@ -223,34 +210,34 @@ public class PageFrameController
         return page;
     }
 
-    public NonDataPageBuilder<PageFrameController> buildPage(Runnable callback)
+    public final NonDataPageBuilder<PageFrameController> buildPage(Runnable callback)
     {
-        return new NonDataSentinelPageBuilder(this,
+        return NonDataSentinelPageBuilder.of(this,
             () ->
             {
-                PageFrameController.this.init();
+                init();
                 callback.run();
-                return PageFrameController.this;
+                return this;
             });
     }
 
-    public <T> SimplePageBuilder<Object, T, PageFrameController> buildPage(Runnable callback, T data)
+    public final <T> SimplePageBuilder<Object, T, PageFrameController> buildPage(Runnable callback, T data)
     {
-        return new DataSentinelPageBuilder<>(this,
+        return DataSentinelPageBuilder.of(this,
             () ->
             {
-                PageFrameController.this.init();
+                init();
                 callback.run();
-                return PageFrameController.this;
+                return this;
             },
             data);
     }
 
-    public void prevPage()
+    public final void prevPage()
     {
         if (currentPage.get().hasPrevPage())
         {
-            if (currentPage.get().getController().cancel()) // Cancel the current page, could be overridden.
+            if (currentPage.get().getController().tryCancel()) // Cancel the current page, could be overridden.
             {
                 currentPage.set(currentPage.get().getPrevPage());
                 initControllerAndUpdatePanel();
@@ -262,11 +249,12 @@ public class PageFrameController
         }
     }
 
-    public void advancePage()
+    @FXML
+    public final void advancePage()
     {
         if (currentPage.get().getController().canAdvance())
         {
-            if (currentPage.get().getController().advance()) // Finishes up on the current page
+            if (currentPage.get().getController().tryAdvance()) // Finishes up on the current page
             {
                 if (currentPage.get().hasNextPage()) // next page exists
                 {
@@ -285,9 +273,9 @@ public class PageFrameController
                 }
                 else if (currentPage.get().getController().canConfirm()) // no next page but can submit
                 {
-                    if (currentPage.get().getController().confirm())
+                    if (currentPage.get().getController().tryConfirm())
                     {
-                        isConfirmed = true;
+                        isIncomplete = false;
                         close();
                     }
                 }
@@ -295,7 +283,7 @@ public class PageFrameController
         }
     }
 
-    public void fallbackPage(String pageName)
+    public final void fallbackPage(String pageName)
     {
         Page<?,?> fallbackPage = currentPage.get().getFallbackPages().get(pageName);
         if (fallbackPage != null)
@@ -322,13 +310,43 @@ public class PageFrameController
         outerRoot.getScene().getWindow().sizeToScene();
     }
 
-    public Page<?,?> getCurrentPage()
+    public final Page<?,?> getCurrentPage()
     {
         return currentPage.get();
     }
 
-    public void setCurrentPage(Page<?, ?> page)
+    public final void setCurrentPage(Page<?, ?> page)
     {
         currentPage.set(page);
+    }
+
+    private static final class NextButtonTextBinding extends ObjectBinding<String>
+    {
+        private final BooleanBinding shouldConfirm;
+        private final StringExpression advanceLabelOverride;
+        private final BooleanBinding advanceLabelOverrideNotNull;
+
+        private NextButtonTextBinding(BooleanBinding shouldConfirm, StringExpression advanceLabelOverride)
+        {
+            this.shouldConfirm = shouldConfirm;
+            this.advanceLabelOverride = advanceLabelOverride;
+            advanceLabelOverrideNotNull = advanceLabelOverride.isNotNull();
+
+            bind(shouldConfirm);
+            bind(advanceLabelOverrideNotNull);
+        }
+
+        @Override
+        protected String computeValue()
+        {
+            if (advanceLabelOverrideNotNull.get())
+            {
+                return advanceLabelOverride.get();
+            }
+            else
+            {
+                return shouldConfirm.get() ? "Confirm" : "Next";
+            }
+        }
     }
 }

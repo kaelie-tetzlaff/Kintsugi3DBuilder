@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit.decomposition;
@@ -34,17 +38,17 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
 
     SimpleMaterialBasis(DoubleVector3[] diffuseColors, List<double[]> redBasis, List<double[]> greenBasis, List<double[]> blueBasis)
     {
-        this.enabledMaterialCount = redBasis.size();
-        this.specularResolution = redBasis.get(0).length - 1;
+        enabledMaterialCount = redBasis.size();
+        specularResolution = redBasis.get(0).length - 1;
 
-        this.basis = new LinkedHashMap<>(enabledMaterialCount);
+        basis = new LinkedHashMap<>(enabledMaterialCount);
 
         // If we're creating a new basis without disabled materials, just use b as GPU index.
         for (int b = 0; b < enabledMaterialCount; b++)
         {
             String name = String.format("%02d", b);
             String friendlyName = String.format("Material %d", b);
-            this.basis.put(name, MutableBasisMaterialInfo.create(
+            basis.put(name, MutableBasisMaterialInfo.create(
                 name, b, friendlyName, diffuseColors[b], redBasis.get(b), greenBasis.get(b), blueBasis.get(b)));
         }
     }
@@ -52,8 +56,8 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
     private SimpleMaterialBasis(LinkedHashMap<String, MutableBasisMaterialInfo> basis)
     {
         this.basis = basis;
-        this.specularResolution = basis.values().stream().findAny().orElseThrow().getResolution();
-        this.enabledMaterialCount = (int)basis.values().stream().filter(BasisMaterialInfo::isEnabled).count();
+        specularResolution = basis.values().stream().findAny().orElseThrow().getResolution();
+        enabledMaterialCount = (int)basis.values().stream().filter(BasisMaterialInfo::isEnabled).count();
     }
 
     /**
@@ -70,10 +74,10 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
         Map<KeyType, String> names, Map<KeyType, String> disabledNames, Map<KeyType, DoubleVector3> diffuseColors,
         Map<KeyType, double[]> redBasis, Map<KeyType, double[]> greenBasis, Map<KeyType, double[]> blueBasis)
     {
-        this.enabledMaterialCount = names.size();
-        this.specularResolution = redBasis.values().stream().findAny().orElseThrow().length - 1;
+        enabledMaterialCount = names.size();
+        specularResolution = redBasis.values().stream().findAny().orElseThrow().length - 1;
 
-        this.basis = new LinkedHashMap<>(enabledMaterialCount + disabledNames.size());
+        basis = new LinkedHashMap<>(enabledMaterialCount + disabledNames.size());
 
         int gpuIndex = 0;
         for (Entry<KeyType, String> entry : names.entrySet())
@@ -112,13 +116,13 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
     }
 
     @Override
-    public Collection<? extends IndexAssignableBasisMaterialInfo> getMaterials()
+    public final Collection<? extends IndexAssignableBasisMaterialInfo> getMaterials()
     {
         return basis.values();
     }
 
     @Override
-    public List<BasisMaterialInfo> getIndexableMaterialList()
+    public final List<BasisMaterialInfo> getIndexableMaterialList()
     {
         BasisMaterialInfo[] result = new BasisMaterialInfo[basis.size()];
         for (BasisMaterialInfo material : basis.values())
@@ -130,31 +134,31 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
     }
 
     @Override
-    public BasisMaterialInfo getMaterial(String materialName)
+    public final BasisMaterialInfo getMaterial(String materialName)
     {
         return basis.get(materialName);
     }
 
     @Override
-    public int getMaterialCount()
+    public final int getMaterialCount()
     {
         return basis.size();
     }
 
     @Override
-    public int getEnabledMaterialCount()
+    public final int getEnabledMaterialCount()
     {
         return enabledMaterialCount;
     }
 
     @Override
-    public int getSpecularResolution()
+    public final int getSpecularResolution()
     {
         return specularResolution;
     }
 
     @Override
-    public IndexAssignableBasisMaterialInfo deleteMaterial(String name)
+    public final IndexAssignableBasisMaterialInfo deleteMaterial(String name)
     {
         MutableBasisMaterialInfo removed = basis.remove(name);
         if (removed != null)
@@ -177,7 +181,7 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
     }
 
     @Override
-    public void save(File outputDirectory, String filenameOverride)
+    public final void save(File outputDirectory, String filenameOverride)
     {
         SpecularFitSerializer.serializeBasisFunctions(specularResolution, this, outputDirectory, filenameOverride);
     }
@@ -187,7 +191,7 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
      * @return
      */
     @Override
-    public MutableMaterialBasis copy()
+    public final MutableMaterialBasis copy()
     {
         LinkedHashMap<String, MutableBasisMaterialInfo> copy = new LinkedHashMap<>(basis.size());
         for (var entry : basis.entrySet())
@@ -199,7 +203,7 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
     }
 
     @Override
-    public BasisMaterialInfo disableMaterial(String name)
+    public final BasisMaterialInfo disableMaterial(String name)
     {
         MutableBasisMaterialInfo material = basis.get(name);
 
@@ -225,7 +229,7 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
     }
 
     @Override
-    public BasisMaterialInfo enableMaterial(String name)
+    public final BasisMaterialInfo enableMaterial(String name)
     {
         MutableBasisMaterialInfo material = basis.get(name);
 
@@ -251,7 +255,7 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
     }
 
     @Override
-    public boolean isMaterialEnabled(String name)
+    public final boolean isMaterialEnabled(String name)
     {
         return basis.get(name).isEnabled();
     }

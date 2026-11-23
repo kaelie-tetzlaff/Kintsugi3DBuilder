@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.core;
@@ -31,25 +35,25 @@ public enum ShaderType
 
     /**
      * A shader that governs the processing of primitives.
-     * For more information, see: https://www.opengl.org/wiki/Geometry_Shader
+     * For more information, see: <a href="https://www.opengl.org/wiki/Geometry_Shader">Geometry Shader</a>
      */
     GEOMETRY,
 
     /**
      * A shader used for tessellation that controls how much tessellation occurs.
-     * For more information, see: https://www.opengl.org/wiki/Tessellation_Control_Shader
+     * For more information, see: <a href="https://www.opengl.org/wiki/Tessellation_Control_Shader">Tessellation Control Shader</a>
      */
     TESSELATION_CONTROL,
 
     /**
      * A shader used for tesselation that evaluates interpolated per-vertex data.
-     * For more information, see: https://www.opengl.org/wiki/Tessellation_Evaluation_Shader
+     * For more information, see: <a href="https://www.opengl.org/wiki/Tessellation_Evaluation_Shader">Tessellation Evaluation Shader</a>
      */
     TESSELATION_EVALUATION,
 
     /**
      * A shader for arbitrary, general-purpose computation.
-     * For more information, see: https://www.opengl.org/wiki/Compute_Shader
+     * For more information, see: <a href="https://www.opengl.org/wiki/Compute_Shader">Compute Shader</a>
      */
     COMPUTE
 }

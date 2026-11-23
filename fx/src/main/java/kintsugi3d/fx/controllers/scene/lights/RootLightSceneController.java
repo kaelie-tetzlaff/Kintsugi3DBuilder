@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.scene.lights;
@@ -23,12 +27,12 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.layout.VBox;
 import kintsugi3d.builder.rendering.SceneViewport;
 import kintsugi3d.fx.internal.ObservableLightingEnvironmentModel;
 import kintsugi3d.fx.internal.ObservableProjectModel;
+import kintsugi3d.fx.util.StaticUtilities;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
 import org.slf4j.Logger;
@@ -58,7 +62,7 @@ public class RootLightSceneController implements Initializable
 
     @SuppressWarnings("rawtypes")
     @Override
-    public void initialize(URL location, ResourceBundle resources)
+    public final void initialize(URL location, ResourceBundle resources)
     {
         //columns
         TableColumn<ObservableLightGroupSettings, String> nameCol = new TableColumn<>("Name");
@@ -134,7 +138,7 @@ public class RootLightSceneController implements Initializable
         tableView.setSortPolicy(param -> false);
         tableView.setColumnResizePolicy(param -> false);
 
-        selectedLight.addListener(settingsController.changeListener);
+        selectedLight.addListener(settingsController.getChangeListener());
     }
 
     private InvalidationListener generateLightChangeListener(ObservableLightGroupSettings lightGroup)
@@ -151,11 +155,11 @@ public class RootLightSceneController implements Initializable
         };
     }
 
-    public void injectDependencies(ObservableLightingEnvironmentModel lightingModel,
-                                   ObservableProjectModel injectedProjectModel, SceneViewport injectedSceneViewport)
+    public final void injectDependencies(ObservableLightingEnvironmentModel lightingModel,
+                                         ObservableProjectModel injectedProjectModel, SceneViewport injectedSceneViewport)
     {
-        this.projectModel = injectedProjectModel;
-        this.sceneViewport = injectedSceneViewport;
+        projectModel = injectedProjectModel;
+        sceneViewport = injectedSceneViewport;
 
         ObservableList<ObservableLightGroupSettings> lightGroupList = projectModel.getLightGroupList();
         tableView.setItems(lightGroupList);
@@ -322,7 +326,7 @@ public class RootLightSceneController implements Initializable
 
         if (lightGroupList.size() > selectedRow && selectedRow >= 0)
         {
-            Dialog<ButtonType> confirmation = new Alert(AlertType.CONFIRMATION, "This action cannot be reversed.");
+            Dialog<ButtonType> confirmation = StaticUtilities.createConfirmDialog("This action cannot be reversed.");
             confirmation.setHeaderText(String.format("Are you sure you want to delete the following light group: %s?",
                 lightGroupList.get(selectedRow).getName()));
             confirmation.setTitle("Delete?");
@@ -416,7 +420,7 @@ public class RootLightSceneController implements Initializable
         ObservableLightGroupSettings selectedLightGroup = getSelectedLightGroup();
         if (selectedLightGroup != null && lastSelectedIndex >= 0 && lastSelectedIndex < selectedLightGroup.getLightCount())
         {
-            Dialog<ButtonType> confirmation = new Alert(AlertType.CONFIRMATION, "This action cannot be reversed.");
+            Dialog<ButtonType> confirmation = StaticUtilities.createConfirmDialog("This action cannot be reversed.");
             confirmation.setHeaderText(String.format("Are you sure you want to delete light %d from the following group: %s?",
                 lastSelectedIndex + 1, selectedLightGroup.getName()));
             confirmation.setTitle("Delete?");

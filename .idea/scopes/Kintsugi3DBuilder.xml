@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Kintsugi3DBuilder" pattern="!file[*]:src/test/resources//*&amp;&amp;!file[*]:target//*&amp;&amp;!file[sjm-ply]:*//*&amp;&amp;!file[gl]:src/main/java/kintsugi3d/gl/util/RadianceImageLoader*&amp;&amp;!lib:*..*" />
+</component>

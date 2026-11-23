@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.util;
@@ -35,35 +39,35 @@ public class SquareResolution
         this.size.set(size.intValue());
     }
 
-    public int getSize()
+    public final int getSize()
     {
         return size.get();
     }
 
-    public void setSize(int size)
+    public final void setSize(int size)
     {
         this.size.set(size);
     }
 
-    public IntegerProperty sizeProperty()
+    public final IntegerProperty sizeProperty()
     {
         return size;
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return Integer.hashCode(getSize());
     }
 
     @Override
-    public boolean equals(Object other)
+    public final boolean equals(Object other)
     {
-        return other instanceof SquareResolution && this.getSize() == ((SquareResolution)other).getSize();
+        return other instanceof SquareResolution && getSize() == ((SquareResolution)other).getSize();
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return String.format("%dx%d", getSize(), getSize());
     }

@@ -1,19 +1,22 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering;
 
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.texture.TextureInfo;
-import kintsugi3d.builder.core.viewset.SampledLuminanceEncoding;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.fit.decomposition.BasisMaterialInfo;
@@ -53,9 +56,9 @@ import kintsugi3d.gl.geometry.VertexGeometry;
 import kintsugi3d.gl.interactive.*;
 import kintsugi3d.gl.vecmath.IntVector2;
 import kintsugi3d.gl.vecmath.Matrix4;
-import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.window.FramebufferCanvas;
 import kintsugi3d.util.EncodableColorImage;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +68,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.DoubleUnaryOperator;
 import java.util.function.Function;
 
 public class ImageBasedRenderableManager<ContextType extends Context<ContextType>>
@@ -80,6 +82,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     private final Map<ShaderInfo, RenderRefreshable<ContextType, ImageBasedRenderingEngine<ContextType>>> renderViewMap
         = new HashMap<>(8);
 
+    @SuppressWarnings("ThisEscapedInObjectConstruction")
     private final SceneViewport sceneViewport = new ManagedSceneViewport(this);
 
     private volatile ViewSet loadedViewSet;
@@ -124,36 +127,36 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public EventListeners<ProjectLoadedListener> projectLoadedListeners()
+    public final EventListeners<ProjectLoadedListener> projectLoadedListeners()
     {
         return projectLoaded;
     }
 
     @Override
-    public EventListeners<ProjectProcessedListener> projectProcessedListeners()
+    public final EventListeners<ProjectProcessedListener> projectProcessedListeners()
     {
         return projectProcessed;
     }
 
     @Override
-    public boolean isRenderableLoaded()
+    public final boolean isRenderableLoaded()
     {
         return renderableInstance != null;
     }
 
     @Override
-    public ViewSet getLoadedViewSet()
+    public final ViewSet getLoadedViewSet()
     {
         return loadedViewSet;
     }
 
     @Override
-    public VertexGeometry getLoadedGeometry()
+    public final VertexGeometry getLoadedGeometry()
     {
         return loadedGeometry;
     }
 
-    public SceneViewport getSceneViewport()
+    public final SceneViewport getSceneViewport()
     {
         return sceneViewport;
     }
@@ -165,7 +168,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
      * @param callback to add
      */
     @Override
-    public void addMainRenderableLoadCallback(Consumer<ImageBasedRenderable<?>> callback)
+    public final void addMainRenderableLoadCallback(Consumer<ImageBasedRenderable<?>> callback)
     {
         synchronized (instanceLoadCallbacks)
         {
@@ -241,10 +244,10 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
 
         // Create the instance (will be initialized on the graphics thread)
         ImageBasedRenderable<ContextType> newInstance = new ImageBasedRenderingEngine<>(internalName, context, builder);
-        newInstance.setOwningApp(this.getOwningApp());
+        newInstance.setOwningApp(getOwningApp());
 
         SceneModel newInstanceSceneModel = newInstance.getSceneModel();
-        newInstanceSceneModel.setCameraModel(this.cameraModel);
+        newInstanceSceneModel.setCameraModel(cameraModel);
         initializeSceneModel(newInstanceSceneModel);
 
         newInstance.setProgressMonitor(new BackendProgressMonitor(newInstance, progressMonitor));
@@ -295,7 +298,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                 }
 
                 // Notify listeners that project has loaded
-                projectLoaded.notify(new ProjectLoadedEvent(getLoadedGeometry().getBoundingBoxSize()));
+                projectLoaded.notify(new ProjectLoadedEvent(loadedGeometry.getBoundingBoxSize()));
 
                 if (resources.hasProcessedWeightMaps())
                 {
@@ -343,16 +346,16 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         {
             CardsModel<V> texturesTab = Global.state().getTabModels().getTab(tabName, dataClass);
 
-            switch (change.changeType)
+            switch (change.getType())
             {
                 case ADDED:
                     tabsManager.refreshTab(tabName); // TODO implement support for adding individual card without rebuilding
                     break;
                 case REMOVED:
-                    texturesTab.deleteCards(card -> change.changeMap.get(keyConstructor.apply(card.getInternalName())) != null);
+                    texturesTab.deleteCards(card -> change.getMap().get(keyConstructor.apply(card.getInternalName())) != null);
                     break;
                 case MODIFIED:
-                    texturesTab.refreshCards(card -> change.changeMap.get(keyConstructor.apply(card.getInternalName())));
+                    texturesTab.refreshCards(card -> change.getMap().get(keyConstructor.apply(card.getInternalName())));
                     break;
             }
         };
@@ -370,32 +373,32 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
      */
     private void initializeSceneModel(SceneModel sceneModel)
     {
-        sceneModel.setObjectModel(this.objectModel);
-        sceneModel.setLightingModel(this.lightingModel);
-        sceneModel.setSettingsModel(this.settingsModel);
-        sceneModel.setCameraViewListModel(this.viewListModel);
+        sceneModel.setObjectModel(objectModel);
+        sceneModel.setLightingModel(lightingModel);
+        sceneModel.setSettingsModel(settingsModel);
+        sceneModel.setCameraViewListModel(viewListModel);
     }
 
     @Override
-    public void loadFromVSETFile(
+    public final void loadFromVSETFile(
         String internalName, File vsetFile, File supportingFilesDirectory, ReadonlyLoadOptionsModel loadOptions)
         throws UserCancellationException, MeshImportException, IOException
     {
-        if (this.progressMonitor.isConflictingProcess())
+        if (progressMonitor.isConflictingProcess())
         {
             return;
         }
 
-        this.progressMonitor.start();
-        this.progressMonitor.setProcessName("Load from File");
+        progressMonitor.start();
+        progressMonitor.setProcessName("Load from File");
 
         try
         {
             Builder<ContextType> builder;
             try
             {
-                builder = GraphicsResourcesImageSpace.getBuilderForContext(this.context)
-                    .setProgressMonitor(this.progressMonitor)
+                builder = GraphicsResourcesImageSpace.getBuilderForContext(context)
+                    .setProgressMonitor(progressMonitor)
                     .setImageLoadOptions(loadOptions)
                     .loadVSETFile(vsetFile, supportingFilesDirectory);
             }
@@ -420,17 +423,17 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void loadFromMetashapeModel(File newProjectFile, MetashapeModel model, ReadonlyLoadOptionsModel loadOptionsModel)
+    public final void loadFromMetashapeModel(File newProjectFile, MetashapeModel model, ReadonlyLoadOptionsModel loadOptionsModel)
         throws UserCancellationException, MissingImagesException, MeshImportException, IOException, XMLStreamException
     {
 
-        if (this.progressMonitor.isConflictingProcess())
+        if (progressMonitor.isConflictingProcess())
         {
             return;
         }
 
-        this.progressMonitor.start();
-        this.progressMonitor.setProcessName("Load from Agisoft Project");
+        progressMonitor.start();
+        progressMonitor.setProcessName("Load from Agisoft Project");
 
         MetashapeChunk parentChunk = model.getChunk();
 
@@ -442,8 +445,8 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                 String orientationView = model.getLoadPreferences().getOrientationViewName();
                 double rotation = model.getLoadPreferences().getOrientationViewRotateDegrees();
 
-                builder = GraphicsResourcesImageSpace.getBuilderForContext(this.context)
-                    .setProgressMonitor(this.progressMonitor)
+                builder = GraphicsResourcesImageSpace.getBuilderForContext(context)
+                    .setProgressMonitor(progressMonitor)
                     .setImageLoadOptions(loadOptionsModel)
                     .loadFromMetashapeModel(model)
                     .setOrientationView(orientationView, rotation);
@@ -469,24 +472,24 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void loadFromLooseFiles(File newProjectFile, String internalName, File xmlFile,
-                                   ViewSetLoadOptions viewSetLoadOptions, ReadonlyLoadOptionsModel imageLoadOptions)
+    public final void loadFromLooseFiles(File newProjectFile, String internalName, File xmlFile,
+                                         ViewSetLoadOptions viewSetLoadOptions, ReadonlyLoadOptionsModel imageLoadOptions)
         throws Exception
     {
-        if (this.progressMonitor.isConflictingProcess())
+        if (progressMonitor.isConflictingProcess())
         {
             return;
         }
-        this.progressMonitor.start();
-        this.progressMonitor.setProcessName("Load from loose files");
+        progressMonitor.start();
+        progressMonitor.setProcessName("Load from loose files");
 
         try
         {
             Builder<ContextType> builder;
             try
             {
-                builder = GraphicsResourcesImageSpace.getBuilderForContext(this.context)
-                    .setProgressMonitor(this.progressMonitor)
+                builder = GraphicsResourcesImageSpace.getBuilderForContext(context)
+                    .setProgressMonitor(progressMonitor)
                     .setImageLoadOptions(imageLoadOptions)
                     .loadLooseFiles(xmlFile, viewSetLoadOptions);
             }
@@ -508,15 +511,15 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
     }
 
-    public RefreshableCollection<RenderRefreshable<ContextType, ImageBasedRenderingEngine<ContextType>>> getRenderViews()
+    public final RefreshableCollection<RenderRefreshable<ContextType, ImageBasedRenderingEngine<ContextType>>> getRenderViews()
     {
         return renderViews;
     }
 
     @Override
-    public void addRenderView(ShaderInfo shader, FramebufferSize viewSize,
-                              int safeLeftPadding, int safeTopPadding, int safeRightPadding, int safeBottomPadding,
-                              Consumer<FramebufferCanvas<?>> framebufferCallback)
+    public final void addRenderView(ShaderInfo shader, FramebufferSize viewSize,
+                                    int safeLeftPadding, int safeTopPadding, int safeRightPadding, int safeBottomPadding,
+                                    Consumer<FramebufferCanvas<?>> framebufferCallback)
     {
         if (renderableInstance != null)
         {
@@ -571,13 +574,13 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public ImageBasedRenderingEngine<ContextType> getRenderableForShader(ShaderInfo shader)
+    public final ImageBasedRenderingEngine<ContextType> getRenderableForShader(ShaderInfo shader)
     {
         return renderViewMap.get(shader).getRenderable();
     }
 
     @Override
-    public void removeRenderView(ShaderInfo shader)
+    public final void removeRenderView(ShaderInfo shader)
     {
         var renderViewToRemove = renderViewMap.get(shader);
 
@@ -597,69 +600,18 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public ImageBasedRenderable<ContextType> getMainRenderable()
+    public final ImageBasedRenderable<ContextType> getMainRenderable()
     {
         return renderableInstance;
     }
 
     @Override
-    public void setProgressMonitor(ProgressMonitor progressMonitor)
+    public final void setProgressMonitor(ProgressMonitor progressMonitor)
     {
         this.progressMonitor = progressMonitor;
     }
 
-    @Override
-    public DoubleUnaryOperator getLuminanceEncodingFunction()
-    {
-        if (renderableInstance != null)
-        {
-            return renderableInstance.getViewSet().getLuminanceEncoding().encodeFunction;
-        }
-        else
-        {
-            // Default if no instance is loaded.
-            return new SampledLuminanceEncoding().encodeFunction;
-        }
-    }
-
-    @Override
-    public void setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
-    {
-        if (renderableInstance != null)
-        {
-            renderableInstance.getDynamicResourceManager().setTonemapping(linearLuminanceValues, encodedLuminanceValues);
-        }
-    }
-
-    @Override
-    public void clearTonemapping()
-    {
-        if (renderableInstance != null)
-        {
-            renderableInstance.getDynamicResourceManager().clearTonemapping();
-        }
-    }
-
-    @Override
-    public void requestLightIntensityCalibration()
-    {
-        if (renderableInstance != null)
-        {
-            Rendering.runLater(() -> renderableInstance.getResources().calibrateLightIntensities());
-        }
-    }
-
-    @Override
-    public void applyLightCalibration()
-    {
-        if (renderableInstance != null)
-        {
-            renderableInstance.getDynamicResourceManager().setLightCalibration(
-                renderableInstance.getSceneModel().getSettingsModel().get("currentLightCalibration", Vector2.class).asVector3());
-        }
-    }
-
-    public void setCameraViewListModel(SelectableViewListModel viewListModel)
+    public final void setCameraViewListModel(SelectableViewListModel viewListModel)
     {
         this.viewListModel = viewListModel;
         if (renderableInstance != null)
@@ -668,7 +620,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
     }
 
-    public void setObjectModel(ReadonlyObjectPoseModel objectModel)
+    public final void setObjectModel(ReadonlyObjectPoseModel objectModel)
     {
         this.objectModel = objectModel;
         if (renderableInstance != null)
@@ -677,7 +629,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
     }
 
-    public void setCameraModel(ReadonlyViewpointModel cameraModel)
+    public final void setCameraModel(ReadonlyViewpointModel cameraModel)
     {
         this.cameraModel = cameraModel;
         if (renderableInstance != null)
@@ -686,7 +638,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
     }
 
-    public void setLightingModel(ReadonlyLightingEnvironmentModel lightingModel)
+    public final void setLightingModel(ReadonlyLightingEnvironmentModel lightingModel)
     {
         this.lightingModel = lightingModel;
         if (renderableInstance != null)
@@ -695,12 +647,12 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
     }
 
-    public void setUserShaderModel(ReadonlyActiveShaderModel userShaderModel)
+    public final void setUserShaderModel(ReadonlyActiveShaderModel userShaderModel)
     {
         userShaderModel.registerHandler(this::requestFragmentShader);
     }
 
-    public void setSettingsModel(ReadonlyGeneralSettingsModel settingsModel)
+    public final void setSettingsModel(ReadonlyGeneralSettingsModel settingsModel)
     {
         this.settingsModel = settingsModel;
         if (renderableInstance != null)
@@ -710,7 +662,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public Optional<EncodableColorImage> loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException
+    public final @Nullable EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException
     {
         if (renderableInstance != null)
         {
@@ -718,12 +670,12 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
         else
         {
-            return Optional.empty();
+            return null;
         }
     }
 
     @Override
-    public void loadBackplate(File backplateFile) throws FileNotFoundException
+    public final void loadBackplate(File backplateFile) throws FileNotFoundException
     {
         if (renderableInstance != null)
         {
@@ -732,13 +684,13 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void saveToVSETFile(File vsetFile) throws IOException
+    public final void saveToVSETFile(File vsetFile) throws IOException
     {
         ViewSetWriterToVSET.getInstance().writeToFile(loadedViewSet, vsetFile);
     }
 
     @Override
-    public void saveAllMaterialFiles(File materialDirectory, Runnable finishedCallback)
+    public final void saveAllMaterialFiles(File materialDirectory, Runnable finishedCallback)
     {
         if (renderableInstance == null || renderableInstance.getResources() == null
             || renderableInstance.getResources().getTextureResources() == null)
@@ -763,7 +715,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void saveGLTF(File outputDirectory, ExportSettings settings)
+    public final void saveGLTF(File outputDirectory, ExportSettings settings)
     {
         if (renderableInstance != null)
         {
@@ -772,7 +724,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void unload(Runnable onUnloadComplete)
+    public final void unload(Runnable onUnloadComplete)
     {
         // Use the runLater system so that the rendering loop knows that an operation that might take longer is queued.
         Rendering.runLater(() ->
@@ -798,7 +750,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void initialize() throws InitializationException
+    public final void initialize() throws InitializationException
     {
         if (renderableInstance != null)
         {
@@ -807,7 +759,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void update()
+    public final void update()
     {
         if (renderableInstance != null)
         {
@@ -816,7 +768,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void draw(Framebuffer<ContextType> framebuffer)
+    public final void draw(Framebuffer<ContextType> framebuffer)
     {
         if (renderableInstance != null)
         {
@@ -825,7 +777,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (renderableInstance != null)
         {
@@ -836,9 +788,9 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     /**
      * Work around for use in testing only
      */
-    public void setLoadedViewSet(ViewSet viewSet)
+    public final void setLoadedViewSet(ViewSet viewSet)
     {
-        this.loadedViewSet = viewSet;
+        loadedViewSet = viewSet;
     }
 
     private static final class RenderViewCameraModel implements ReadonlyCameraModel
@@ -898,10 +850,10 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
 
         void setPadding(int left, int top, int right, int bottom)
         {
-            this.paddingLeft = left;
-            this.paddingTop = top;
-            this.paddingRight = right;
-            this.paddingBottom = bottom;
+            paddingLeft = left;
+            paddingTop = top;
+            paddingRight = right;
+            paddingBottom = bottom;
         }
     }
 }

@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.opengl;
@@ -46,81 +50,84 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
     OpenGLContext(long handle)
     {
         super(handle);
-        this.state = new OpenGLContextState(this);
-        this.textureFactory = new OpenGLTextureFactory(this);
-        this.textureBindings = new HashMap<>(48);
-        this.uniformBufferBindings = new HashMap<>(24);
+        state = new OpenGLContextState();
+
+        //noinspection ThisEscapedInObjectConstruction
+        textureFactory = new OpenGLTextureFactory(this);
+
+        textureBindings = new HashMap<>(48);
+        uniformBufferBindings = new HashMap<>(24);
     }
 
     @Override
-    public void flush()
+    public final void flush()
     {
         glFlush();
         errorCheck();
     }
 
     @Override
-    public void finish()
+    public final void finish()
     {
         glFinish();
         errorCheck();
     }
 
     @Override
-    public OpenGLContextState getState()
+    public final OpenGLContextState getState()
     {
-        return this.state;
+        return state;
     }
 
     @Override
-    public Shader<OpenGLContext> createShader(ShaderType type, String source)
+    public final Shader<OpenGLContext> createShader(ShaderType type, String source)
     {
-        return new OpenGLShader(this, getOpenGLShaderType(type), source);
+        return new OpenGLShader(this, getShaderType(type), source);
     }
 
     @Override
-    public Shader<OpenGLContext> createShader(ShaderType type, File file, Map<String, Object> defines) throws IOException
+    public final Shader<OpenGLContext> createShader(ShaderType type, File file, Map<String, Object> defines) throws IOException
     {
-        return new OpenGLShader(this, getOpenGLShaderType(type), file, defines);
+        return new OpenGLShader(this, getShaderType(type), file, defines);
     }
 
     @Override
-    public ProgramBuilder<OpenGLContext> getShaderProgramBuilder()
+    public final ProgramBuilder<OpenGLContext> getShaderProgramBuilder()
     {
         return new OpenGLProgramBuilder(this);
     }
 
     @Override
-    public DoubleFramebuffer<OpenGLContext> getDefaultFramebuffer()
+    public final DoubleFramebuffer<OpenGLContext> getDefaultFramebuffer()
     {
-        return this.defaultFramebuffer;
+        return defaultFramebuffer;
     }
 
-    void setDefaultFramebuffer(DoubleFramebuffer<OpenGLContext> defaultFramebuffer)
+    final void setDefaultFramebuffer(DoubleFramebuffer<OpenGLContext> defaultFramebuffer)
     {
         this.defaultFramebuffer = defaultFramebuffer;
     }
 
     @Override
-    public VertexBuffer<OpenGLContext> createVertexBuffer()
+    public final VertexBuffer<OpenGLContext> createVertexBuffer()
     {
         return new OpenGLVertexBuffer(this);
     }
 
     @Override
-    public IndexBuffer<OpenGLContext> createIndexBuffer()
+    public final IndexBuffer<OpenGLContext> createIndexBuffer()
     {
         return new OpenGLIndexBuffer(this);
     }
 
     @Override
-    public UniformBuffer<OpenGLContext> createUniformBuffer()
+    public final UniformBuffer<OpenGLContext> createUniformBuffer()
     {
         return new OpenGLUniformBuffer(this);
     }
 
     @Override
-    public Drawable<OpenGLContext> createDrawable(Program<OpenGLContext> program)
+    public final Drawable<OpenGLContext> createDrawable(Program<OpenGLContext> program)
     {
         if (program instanceof OpenGLProgramObject)
         {
@@ -133,51 +140,15 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
     }
 
     @Override
-    public FramebufferObjectBuilder<OpenGLContext> buildFramebufferObject(int width, int height)
+    public final FramebufferObjectBuilder<OpenGLContext> buildFramebufferObject(int width, int height)
     {
         return new OpenGLFramebufferObjectBuilder(this, width, height);
     }
 
     @Override
-    public TextureFactory<OpenGLContext> getTextureFactory()
+    public final TextureFactory<OpenGLContext> getTextureFactory()
     {
-        return this.textureFactory;
-    }
-
-    static int getPixelDataFormatFromDimensions(int dimensions, boolean integer)
-    {
-        if (integer)
-        {
-            switch (dimensions)
-            {
-                case 1:
-                    return GL_RED_INTEGER;
-                case 2:
-                    return GL_RG_INTEGER;
-                case 3:
-                    return GL_RGB_INTEGER;
-                case 4:
-                    return GL_RGBA_INTEGER;
-                default:
-                    throw new IllegalArgumentException("Data must be a vertex list of no more than 4 dimensions.");
-            }
-        }
-        else
-        {
-            switch (dimensions)
-            {
-                case 1:
-                    return GL_RED;
-                case 2:
-                    return GL_RG;
-                case 3:
-                    return GL_RGB;
-                case 4:
-                    return GL_RGBA;
-                default:
-                    throw new IllegalArgumentException("Data must be a vertex list of no more than 4 dimensions.");
-            }
-        }
+        return textureFactory;
     }
 
     static int getDataTypeConstant(NativeDataType dataType)
@@ -223,18 +194,18 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         }
     }
 
-    void bindTextureToUnit(int textureUnitIndex, OpenGLTexture texture)
+    final void bindTextureToUnit(int textureUnitIndex, OpenGLTexture texture)
     {
         glActiveTexture(GL_TEXTURE0 + textureUnitIndex);
         errorCheck();
 
-        glBindTexture(texture.getOpenGLTextureTarget(), texture.getTextureId());
+        glBindTexture(texture.getTextureTarget(), texture.getTextureId());
         errorCheck();
 
         textureBindings.put(textureUnitIndex, texture);
     }
 
-    void bindUniformBufferToIndex(int bufferBindingIndex, OpenGLUniformBuffer buffer)
+    final void bindUniformBufferToIndex(int bufferBindingIndex, OpenGLUniformBuffer buffer)
     {
         if (buffer.hasData())
         {
@@ -250,7 +221,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         }
     }
 
-    private static <T> void updateBindingsGeneric(Map<Integer, T> oldBindings, List<Optional<T>> newBindings,
+    private static <T> void updateBindingsGeneric(Map<Integer, T> oldBindings, List<T> newBindings,
         BiPredicate<T, T> needsUnbindPredicate, BiConsumer<Integer, T> unbindFunction, BiConsumer<Integer, T> bindFunction)
     {
         // Iterate through all of the previous bindings and unbind any that will not be overwritten otherwise.
@@ -260,9 +231,9 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
             Entry<Integer, T> oldBinding = iterator.next();
             int bindingIndex = oldBinding.getKey();
             T objectToUnbind = oldBinding.getValue();
-            Optional<? extends T> newObjectToBind = newBindings.get(bindingIndex);
+            T newObjectToBind = newBindings.get(bindingIndex);
 
-            if (newObjectToBind.isEmpty() || needsUnbindPredicate.test(objectToUnbind, newObjectToBind.get()))
+            if (newObjectToBind == null || needsUnbindPredicate.test(objectToUnbind, newObjectToBind))
             {
                 unbindFunction.accept(bindingIndex, objectToUnbind);
                 iterator.remove();
@@ -271,9 +242,9 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
 
         for (int i = 0; i < newBindings.size(); i++)
         {
-            if (newBindings.get(i).isPresent())
+            if (newBindings.get(i) != null)
             {
-                T newObjectToBind = newBindings.get(i).get();
+                T newObjectToBind = newBindings.get(i);
 
                 if (!oldBindings.containsKey(i) || !Objects.equals(oldBindings.get(i), newObjectToBind))
                 {
@@ -283,22 +254,22 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         }
     }
 
-    void updateTextureBindings(List<Optional<OpenGLTexture>> newTextureBindings)
+    final void updateTextureBindings(List<OpenGLTexture> newTextureBindings)
     {
         updateBindingsGeneric(textureBindings, newTextureBindings,
-            (oldTexture, newTexture) -> oldTexture.getOpenGLTextureTarget() != newTexture.getOpenGLTextureTarget(),
+            (oldTexture, newTexture) -> oldTexture.getTextureTarget() != newTexture.getTextureTarget(),
             (textureUnitIndex, textureToUnbind) ->
             {
                 glActiveTexture(GL_TEXTURE0 + textureUnitIndex);
                 errorCheck();
 
-                glBindTexture(textureToUnbind.getOpenGLTextureTarget(), 0);
+                glBindTexture(textureToUnbind.getTextureTarget(), 0);
                 errorCheck();
             },
             (textureUnitIndex, textureToBind) -> textureToBind.bindToTextureUnit(textureUnitIndex));
     }
 
-    void updateUniformBufferBindings(List<Optional<OpenGLUniformBuffer>> newUniformBufferBindings)
+    final void updateUniformBufferBindings(List<OpenGLUniformBuffer> newUniformBufferBindings)
     {
         updateBindingsGeneric(uniformBufferBindings, newUniformBufferBindings,
             (oldBuffer, newBuffer) -> oldBuffer.getBufferTarget() != newBuffer.getBufferTarget(),
@@ -310,7 +281,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
             (bindingIndex, bufferToBind) -> bufferToBind.bindToIndex(bindingIndex));
     }
 
-    protected static int getOpenGLInternalColorFormat(ColorFormat format)
+    protected static int getInternalColorFormat(ColorFormat format)
     {
         if (format.alphaBits > 0)
         {
@@ -376,7 +347,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
                 {
                     return GL_RGBA4;
                 }
-                else if (format.redBits <= 5 && format.greenBits <= 5 && format.blueBits <= 5 && format.alphaBits <= 1)
+                else if (format.redBits <= 5 && format.greenBits <= 5 && format.blueBits <= 5 && format.alphaBits == 1)
                 {
                     return GL_RGB5_A1;
                 }
@@ -614,7 +585,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         }
     }
 
-    protected static int getOpenGLCompressionFormat(CompressionFormat format)
+    protected static int getCompressionFormat(CompressionFormat format)
     {
         switch(format)
         {
@@ -632,43 +603,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         }
     }
 
-    protected static int getOpenGLInternalDepthFormat(int precision)
-    {
-        if (precision <= 16)
-        {
-            return GL_DEPTH_COMPONENT16;
-        }
-        else if (precision <= 24)
-        {
-            return GL_DEPTH_COMPONENT24;
-        }
-        else
-        {
-            return GL_DEPTH_COMPONENT32;
-        }
-    }
-
-    protected static int getOpenGLInternalStencilFormat(int precision)
-    {
-        if (precision == 1)
-        {
-            return GL_STENCIL_INDEX1;
-        }
-        if (precision <= 4)
-        {
-            return GL_STENCIL_INDEX4;
-        }
-        else if (precision <= 8)
-        {
-            return GL_STENCIL_INDEX8;
-        }
-        else
-        {
-            return GL_STENCIL_INDEX16;
-        }
-    }
-
-    protected static int getOpenGLShaderType(ShaderType type)
+    private static int getShaderType(ShaderType type)
     {
         switch(type)
         {
@@ -683,51 +618,90 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         return 0;
     }
 
-    protected static int getOpenGLBufferUsage(BufferAccessType accessType, BufferAccessFrequency accessFreq)
+    protected static int getBufferUsage(BufferAccessType accessType, BufferAccessFrequency accessFreq)
     {
         switch(accessFreq)
         {
-        case STREAM:
-            switch(accessType)
-            {
-            case DRAW: return GL_STREAM_DRAW;
-            case READ: return GL_STREAM_READ;
-            case COPY: return GL_STREAM_COPY;
-            }
-        case STATIC:
-            switch(accessType)
-            {
-            case DRAW: return GL_STATIC_DRAW;
-            case READ: return GL_STATIC_READ;
-            case COPY: return GL_STATIC_COPY;
-            }
-        case DYNAMIC:
-            switch(accessType)
-            {
-            case DRAW: return GL_DYNAMIC_DRAW;
-            case READ: return GL_DYNAMIC_READ;
-            case COPY: return GL_DYNAMIC_COPY;
-            }
+            case STREAM:
+                return getStreamBufferUsage(accessType);
+            case STATIC:
+                return getStaticBufferUsage(accessType);
+            case DYNAMIC:
+                return getDynamicBufferUsage(accessType);
+            default:
+                return 0;
         }
-
-        return 0;
     }
 
-    protected static String getFramebufferStatusString(String framebufferName, int statusID)
+    private static int getStreamBufferUsage(BufferAccessType accessType)
+    {
+        switch(accessType)
+        {
+            case DRAW:
+                return GL_STREAM_DRAW;
+            case READ:
+                return GL_STREAM_READ;
+            case COPY:
+                return GL_STREAM_COPY;
+            default:
+                return 0;
+        }
+    }
+
+
+    private static int getStaticBufferUsage(BufferAccessType accessType)
+    {
+        switch(accessType)
+        {
+            case DRAW:
+                return GL_STATIC_DRAW;
+            case READ:
+                return GL_STATIC_READ;
+            case COPY:
+                return GL_STATIC_COPY;
+            default:
+                return 0;
+        }
+    }
+
+    private static int getDynamicBufferUsage(BufferAccessType accessType)
+    {
+        switch(accessType)
+        {
+            case DRAW:
+                return GL_DYNAMIC_DRAW;
+            case READ:
+                return GL_DYNAMIC_READ;
+            case COPY:
+                return GL_DYNAMIC_COPY;
+            default:
+                return 0;
+        }
+    }
+
+    private static String getFramebufferStatusString(String framebufferName, int statusID)
     {
         switch(statusID)
         {
-        case GL_FRAMEBUFFER_COMPLETE: return framebufferName + " is framebuffer complete (no errors).";
-        case GL_FRAMEBUFFER_UNDEFINED: return framebufferName + " is the default framebuffer, but the default framebuffer does not exist.";
-        case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT: return framebufferName + " has attachment points that are framebuffer incomplete.";
-        case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: return framebufferName + " does not have at least one image attached to it.";
+        case GL_FRAMEBUFFER_COMPLETE:
+            return String.format("%s is framebuffer complete (no errors).", framebufferName);
+        case GL_FRAMEBUFFER_UNDEFINED:
+            return String.format("%s is the default framebuffer, but the default framebuffer does not exist.", framebufferName);
+        case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+            return String.format("%s has attachment points that are framebuffer incomplete.", framebufferName);
+        case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+            return String.format("%s does not have at least one image attached to it.", framebufferName);
         case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
-        case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER: return framebufferName + " has a color attachment point without an attached image.";
-        case GL_FRAMEBUFFER_UNSUPPORTED: return framebufferName + " has attached images with a combination of internal formats that violates an implementation-dependent set of restrictions.";
-        case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE: return framebufferName + " has attachments with different multisample parameters.";
-        case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS: return framebufferName + " has a layered attachment and a populated non-layered attachment, or all populated color attachments are not from textures of the same target.";
-        case 0: return framebufferName + " has an unknown completeness status because an error has occurred.";
-        default: return framebufferName + " has failed an unrecognized completeness check.";
+        case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
+            return String.format("%s has a color attachment point without an attached image.", framebufferName);
+        case GL_FRAMEBUFFER_UNSUPPORTED:
+            return String.format("%s has attached images with a combination of internal formats that violates an implementation-dependent set of restrictions.", framebufferName);
+        case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
+            return String.format("%s has attachments with different multisample parameters.", framebufferName);
+        case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS:
+            return String.format("%s has a layered attachment and a populated non-layered attachment, or all populated color attachments are not from textures of the same target.", framebufferName);
+        case 0: return String.format("%s has an unknown completeness status because an error has occurred.", framebufferName);
+        default: return String.format("%s has failed an unrecognized completeness check.", framebufferName);
         }
     }
 

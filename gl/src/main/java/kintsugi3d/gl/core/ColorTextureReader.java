@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.core;
@@ -78,7 +82,7 @@ public interface ColorTextureReader
      */
     default void readARGB(ByteBuffer destination)
     {
-        this.readARGB(destination, 0, 0, getWidth(), getHeight());
+        readARGB(destination, 0, 0, getWidth(), getHeight());
     }
 
     /**
@@ -88,7 +92,7 @@ public interface ColorTextureReader
      */
     default void readFloatingPointRGBA(FloatBuffer destination)
     {
-        this.readFloatingPointRGBA(destination, 0, 0, getWidth(), getHeight());
+        readFloatingPointRGBA(destination, 0, 0, getWidth(), getHeight());
     }
 
     /**
@@ -98,7 +102,7 @@ public interface ColorTextureReader
      */
     default void readIntegerRGBA(IntBuffer destination)
     {
-        this.readIntegerRGBA(destination, 0, 0, getWidth(), getHeight());
+        readIntegerRGBA(destination, 0, 0, getWidth(), getHeight());
     }
 
     /**
@@ -109,7 +113,7 @@ public interface ColorTextureReader
      */
     default int[] readARGB()
     {
-        return this.readARGB(0, 0, getWidth(), getHeight());
+        return readARGB(0, 0, getWidth(), getHeight());
     }
 
     /**
@@ -117,23 +121,23 @@ public interface ColorTextureReader
      * Only a rectangular subset of the pixels will be read.
      * @param x The column at which to begin reading.
      * @param y The row at which to begin reading.
-     * @param width The number of columns to read.
-     * @param height The number of rows to read.
+     * @param readWidth The number of columns to read.
+     * @param readHeight The number of rows to read.
      * @return An array containing the pixels.
      * Each entry is encoded as a 32-bit integer using 8-bytes each for the alpha, red, green, and blue channels, respectively, from highest order byte to lowest.
      */
-    int[] readARGB(int x, int y, int width, int height);
+    int[] readARGB(int x, int y, int readWidth, int readHeight);
 
     /**
      * Reads the pixels from the texture as floating point numbers.
      * Only a rectangular subset of the pixels will be read.
      * @param x The column at which to begin reading.
      * @param y The row at which to begin reading.
-     * @param width The number of columns to read.
-     * @param height The number of rows to read.
+     * @param readWidth The number of columns to read.
+     * @param readHeight The number of rows to read.
      * @return An array containing the pixels as floating point numbers.
      */
-    float[] readFloatingPointRGBA(int x, int y, int width, int height);
+    float[] readFloatingPointRGBA(int x, int y, int readWidth, int readHeight);
 
     /**
      * Reads the pixels from the texture as floating point numbers.
@@ -142,7 +146,7 @@ public interface ColorTextureReader
      */
     default float[] readFloatingPointRGBA()
     {
-        return this.readFloatingPointRGBA(0, 0, getWidth(), getHeight());
+        return readFloatingPointRGBA(0, 0, getWidth(), getHeight());
     }
 
     /**
@@ -150,10 +154,10 @@ public interface ColorTextureReader
      * The entire framebuffer will be read.
      * @return An array containing the pixels as floating point numbers.
      */
-    default ColorList readColorListRGBA(int x, int y, int width, int height)
+    default ColorList readColorListRGBA(int x, int y, int readWidth, int readHeight)
     {
-        ColorNativeBufferList list = new ColorNativeBufferList(width * height);
-        readFloatingPointRGBA(list.buffer, x, y, width, height);
+        ColorNativeBufferList list = new ColorNativeBufferList(readWidth * readHeight);
+        readFloatingPointRGBA(list.getBuffer(), x, y, readWidth, readHeight);
         return list;
     }
 
@@ -165,7 +169,7 @@ public interface ColorTextureReader
     default ColorList readColorListRGBA()
     {
         ColorNativeBufferList list = new ColorNativeBufferList(getWidth() * getHeight());
-        readFloatingPointRGBA(list.buffer);
+        readFloatingPointRGBA(list.getBuffer());
         return list;
     }
 
@@ -174,11 +178,11 @@ public interface ColorTextureReader
      * Only a rectangular subset of the pixels will be read.
      * @param x The column at which to begin reading.
      * @param y The row at which to begin reading.
-     * @param width The number of columns to read.
-     * @param height The number of rows to read.
+     * @param readWidth The number of columns to read.
+     * @param readHeight The number of rows to read.
      * @return An array containing the pixels as floating point numbers.
      */
-    int[] readIntegerRGBA(int x, int y, int width, int height);
+    int[] readIntegerRGBA(int x, int y, int readWidth, int readHeight);
 
     /**
      * Reads the pixels from the texture as 32-bit integers.
@@ -187,7 +191,7 @@ public interface ColorTextureReader
      */
     default int[] readIntegerRGBA()
     {
-        return this.readIntegerRGBA(0, 0, getWidth(), getHeight());
+        return readIntegerRGBA(0, 0, getWidth(), getHeight());
     }
 
     /**

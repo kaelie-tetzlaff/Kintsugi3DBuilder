@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+  ~ Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+  ~                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
   ~ Copyright (c) 2019 The Regents of the University of Minnesota
   ~
   ~ Licensed under GPLv3
   ~ ( http://www.gnu.org/licenses/gpl-3.0.html )
   ~
-  ~ This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-  ~ This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+  ~ This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+  ~
+  ~ This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+  ~ of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   -->
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox fx:id = "mainBox" styleClass="sidebar-root" stylesheets="@../../kintsugiStyling.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="kintsugi3d.fx.controllers.sidebar.RightBarController" onMouseMoved="#mouseMoved" onMouseDragged="#mouseDragged" onMouseReleased="#mouseReleased">
-    <Separator prefWidth="200.0" styleClass="black-line" stylesheets="@../../kintsugiStyling.css" />
-    <HBox fx:id = "detailsBox" alignment="TOP_LEFT" prefHeight="23.0" maxHeight="23" prefWidth="462.0" style="-fx-background-color: #383838;">
+<VBox fx:id = "mainBox" styleClass="sidebar-root" stylesheets="@../../kintsugi.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="kintsugi3d.fx.controllers.sidebar.RightBarController" onMouseMoved="#mouseMoved" onMouseDragged="#mouseDragged" onMouseReleased="#mouseReleased">
+    <Separator prefWidth="200.0" styleClass="black-line" stylesheets="@../../kintsugi.css" />
+    <HBox fx:id = "detailsBox" prefHeight="23.0" maxHeight="23" prefWidth="462.0" style="-fx-background-color: #383838;">
         <padding>
             <Insets bottom="4.0" left="4.0" right="8.0" top="4.0" />
         </padding>
@@ -33,7 +37,7 @@
             <Label fx:id = "detailsLabel" text="Details" />
         </StackPane>
     </HBox>
-    <Separator prefWidth="200.0" styleClass="black-line" stylesheets="@../../kintsugiStyling.css" />
+    <Separator prefWidth="200.0" styleClass="black-line" stylesheets="@../../kintsugi.css" />
     <StackPane VBox.vgrow="ALWAYS">
         <VBox.margin>
             <Insets left="5.0" />
@@ -44,12 +48,12 @@
                 <padding>
                     <Insets right="8.0" />
                 </padding>
-                <HBox fx:id = "textBox" prefHeight="31" stylesheets="@../../kintsugiStyling.css" VBox.vgrow="NEVER" alignment="CENTER_LEFT">
+                <HBox fx:id = "textBox" prefHeight="31" stylesheets="@../../kintsugi.css" VBox.vgrow="NEVER" alignment="CENTER_LEFT">
                     <padding>
-                        <Insets bottom="0.0" left="8.0" right="0.0" top="8.0" />
+                        <Insets left="8.0" top="8.0" />
                     </padding>
                     <Label fx:id = "imageNameSpace" text = "Image Name: " style = "-fx-font-weight: bold;" visible="false"/>
-                    <Label fx:id = "imageName" text = ""/>
+                    <Label fx:id = "imageName"/>
                 </HBox>
                 <StackPane alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
                     <padding>

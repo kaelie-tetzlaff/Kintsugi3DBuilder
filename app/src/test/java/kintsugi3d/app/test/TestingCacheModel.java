@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.app.test;
@@ -29,39 +33,39 @@ public class TestingCacheModel extends CacheModelBase
     private final List<DoubleConsumer> cacheSizeChangedCallbacks = new ArrayList<>(1);
 
     @Override
-    public long getCacheSizeBytes()
+    public final long getCacheSizeBytes()
     {
         return cacheSize;
     }
 
     @Override
-    public double getCacheSizeGB()
+    public final double getCacheSizeGB()
     {
         return cacheSize * BYTES_TO_GB;
     }
 
     @Override
-    public Map<String, Long> getProjectSizes()
+    public final Map<String, Long> getProjectSizes()
     {
         //noinspection AssignmentOrReturnOfFieldWithMutableType
         return projectSizes;
     }
 
     @Override
-    public boolean isCacheSizeCalcInProgress()
+    public final boolean isCacheSizeCalcInProgress()
     {
         return cacheSizeCalcInProgress;
     }
 
     @Override
-    protected void updateCacheSize(long newCacheSize, Map<String, Long> newProjectSizes, Runnable onCompleteCallback)
+    protected final void updateCacheSize(long newCacheSize, Map<String, Long> newProjectSizes, Runnable onCompleteCallback)
     {
         try
         {
             synchronizedCacheSizeCalcComplete(() ->
             {
-                this.projectSizes = Collections.unmodifiableMap(newProjectSizes);
-                this.cacheSize = newCacheSize;
+                projectSizes = Collections.unmodifiableMap(newProjectSizes);
+                cacheSize = newCacheSize;
 
                 Collection<DoubleConsumer> callbacks;
                 synchronized (cacheSizeChangedCallbacks)
@@ -98,13 +102,13 @@ public class TestingCacheModel extends CacheModelBase
     }
 
     @Override
-    protected void setCacheSizeCalcInProgress(boolean cacheSizeCalcInProgress)
+    protected final void setCacheSizeCalcInProgress(boolean cacheSizeCalcInProgress)
     {
         this.cacheSizeCalcInProgress = cacheSizeCalcInProgress;
     }
 
     @Override
-    protected void addCacheSizeChangeCallback(DoubleConsumer cacheSizeChangeCallback)
+    protected final void addCacheSizeChangeCallback(DoubleConsumer cacheSizeChangeCallback)
     {
         if (cacheSizeChangeCallback != null)
         {
@@ -116,7 +120,7 @@ public class TestingCacheModel extends CacheModelBase
     }
 
     @Override
-    protected void removeAllCacheSizeChangeCallbacks()
+    protected final void removeAllCacheSizeChangeCallbacks()
     {
         synchronized (cacheSizeChangedCallbacks)
         {

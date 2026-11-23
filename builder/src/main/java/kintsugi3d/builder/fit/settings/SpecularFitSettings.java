@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit.settings;
@@ -40,7 +44,7 @@ public class SpecularFitSettings implements ReadonlySpecularFitSettings
      */
     public SpecularFitSettings(int width, int height, int sampledSize, int subdivSize)
     {
-        this.textureResolution = new TextureResolution(width, height);
+        textureResolution = new TextureResolution(width, height);
 
         imageCacheSettings.setTextureWidth(textureResolution.width);
         imageCacheSettings.setTextureHeight(textureResolution.height);
@@ -50,39 +54,39 @@ public class SpecularFitSettings implements ReadonlySpecularFitSettings
     }
 
     @Override
-    public TextureResolution getTextureResolution()
+    public final TextureResolution getTextureResolution()
     {
         return textureResolution;
     }
 
     @Override
-    public NormalOptimizationSettings getNormalOptimizationSettings()
+    public final NormalOptimizationSettings getNormalOptimizationSettings()
     {
         return normalOptimizationSettings;
     }
 
     @Override
-    public ImageCacheSettings getImageCacheSettings()
+    public final ImageCacheSettings getImageCacheSettings()
     {
         return imageCacheSettings;
     }
 
     @Override
-    public ReconstructionSettings getReconstructionSettings()
+    public final ReconstructionSettings getReconstructionSettings()
     {
         return reconstructionSettings;
     }
 
     @Override
-    public ExportSettings getExportSettings()
+    public final ExportSettings getExportSettings()
     {
         return exportSettings;
     }
 
     @Override
-    public double getConvergenceTolerance()
+    public final double getConvergenceTolerance()
     {
-        return this.convergenceTolerance;
+        return convergenceTolerance;
     }
 
     /**
@@ -90,7 +94,7 @@ public class SpecularFitSettings implements ReadonlySpecularFitSettings
      * the normal map has converged.
      * @param convergenceTolerance
      */
-    public void setConvergenceTolerance(double convergenceTolerance)
+    public final void setConvergenceTolerance(double convergenceTolerance)
     {
         if (convergenceTolerance < 0)
         {
@@ -101,9 +105,9 @@ public class SpecularFitSettings implements ReadonlySpecularFitSettings
     }
 
     @Override
-    public double getPreliminaryConvergenceTolerance()
+    public final double getPreliminaryConvergenceTolerance()
     {
-        return this.preliminaryConvergenceTolerance;
+        return preliminaryConvergenceTolerance;
     }
 
     /**
@@ -111,7 +115,7 @@ public class SpecularFitSettings implements ReadonlySpecularFitSettings
      * the normal map has converged.
      * @param preliminaryConvergenceTolerance
      */
-    public void setPreliminaryConvergenceTolerance(double preliminaryConvergenceTolerance)
+    public final void setPreliminaryConvergenceTolerance(double preliminaryConvergenceTolerance)
     {
         if (preliminaryConvergenceTolerance < 0)
         {
@@ -122,7 +126,7 @@ public class SpecularFitSettings implements ReadonlySpecularFitSettings
     }
 
     @Override
-    public boolean isSmithMaskingShadowingEnabled()
+    public final boolean isSmithMaskingShadowingEnabled()
     {
         return smithMaskingShadowingEnabled;
     }
@@ -131,24 +135,24 @@ public class SpecularFitSettings implements ReadonlySpecularFitSettings
      * Whether or not to use height-correlated Smith for masking / shadowing.  Default is true.
      * @param smithMaskingShadowingEnabled
      */
-    public void setSmithMaskingShadowingEnabled(boolean smithMaskingShadowingEnabled)
+    public final void setSmithMaskingShadowingEnabled(boolean smithMaskingShadowingEnabled)
     {
         this.smithMaskingShadowingEnabled = smithMaskingShadowingEnabled;
     }
 
     @Override
-    public boolean shouldIncludeConstantTerm()
+    public final boolean shouldIncludeConstantTerm()
     {
         return shouldIncludeConstantTerm;
     }
 
-    public void setShouldIncludeConstantTerm(boolean shouldIncludeConstantTerm)
+    public final void setShouldIncludeConstantTerm(boolean shouldIncludeConstantTerm)
     {
         this.shouldIncludeConstantTerm = shouldIncludeConstantTerm;
     }
 
     @Override
-    public File getPriorSolutionDirectory()
+    public final File getPriorSolutionDirectory()
     {
         return priorSolutionDirectory;
     }
@@ -157,7 +161,7 @@ public class SpecularFitSettings implements ReadonlySpecularFitSettings
      * Sets the directory from which to load a prior solution
      * @param priorSolutionDirectory
      */
-    public void setPriorSolutionDirectory(File priorSolutionDirectory)
+    public final void setPriorSolutionDirectory(File priorSolutionDirectory)
     {
         this.priorSolutionDirectory = priorSolutionDirectory;
     }

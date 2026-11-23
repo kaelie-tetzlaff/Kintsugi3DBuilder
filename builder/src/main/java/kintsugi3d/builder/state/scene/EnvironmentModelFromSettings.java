@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.state.scene;
@@ -22,23 +26,23 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Optional;
 
 public abstract class EnvironmentModelFromSettings implements EnvironmentModel
 {
     private static final Logger LOG = LoggerFactory.getLogger(EnvironmentModelFromSettings.class);
 
-    protected long lastEnvironmentMapTime;
-    protected long lastBackplateTime;
-    private boolean environmentMapLoaded = false;
-    private boolean backplateLoaded = false;
+    private long lastEnvironmentMapTime;
+    private long lastBackplateTime;
+
+    private volatile boolean environmentMapLoaded = false;
+    private volatile boolean backplateLoaded = false;
 
     protected abstract EnvironmentSettings getEnvironmentSettings();
 
     protected abstract void onEnvironmentMapImageLoaded(EncodableColorImage environmentMapImage);
 
     @Override
-    public Vector3 getEnvironmentColor()
+    public final Vector3 getEnvironmentColor()
     {
         if (isEnabled())
         {
@@ -65,7 +69,7 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     }
 
     @Override
-    public Vector3 getBackgroundColor()
+    public final Vector3 getBackgroundColor()
     {
         if (isEnabled())
         {
@@ -102,7 +106,7 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
         }
     }
 
-    public void loadEnvironmentMap(File newFile)
+    public final void loadEnvironmentMap(File newFile)
     {
         environmentMapLoaded = false;
         long lastModified = newFile.lastModified();
@@ -112,8 +116,8 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
             try
             {
                 LOG.info("Loading environment map file {}", newFile.getName());
-                Optional<EncodableColorImage> environmentMapImage = Global.io().loadEnvironmentMap(newFile);
-                onEnvironmentMapImageLoaded(environmentMapImage.orElse(null));
+                EncodableColorImage environmentMapImage = Global.io().loadEnvironmentMap(newFile);
+                onEnvironmentMapImageLoaded(environmentMapImage);
             }
             catch (FileNotFoundException e)
             {
@@ -131,7 +135,7 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
         }).start();
     }
 
-    public void loadBackplate(File newFile)
+    public final void loadBackplate(File newFile)
     {
         backplateLoaded = false;
         lastBackplateTime = newFile.lastModified();
@@ -158,10 +162,10 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     }
 
     @Override
-    public BackgroundMode getBackgroundMode()
+    public final BackgroundMode getBackgroundMode()
     {
         EnvironmentSettings selectedEnvironment = getEnvironmentSettings();
-        if (this.backplateLoaded && isEnabled() && selectedEnvironment.isBackplateImageEnabled())
+        if (backplateLoaded && isEnabled() && selectedEnvironment.isBackplateImageEnabled())
         {
             return BackgroundMode.IMAGE;
         }
@@ -180,13 +184,13 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     }
 
     @Override
-    public boolean isEnvironmentMappingEnabled()
+    public final boolean isEnvironmentMappingEnabled()
     {
-        return this.environmentMapLoaded && isEnabled() && getEnvironmentSettings().isEnvironmentImageEnabled();
+        return environmentMapLoaded && isEnabled() && getEnvironmentSettings().isEnvironmentImageEnabled();
     }
 
     @Override
-    public Matrix4 getEnvironmentMapMatrix()
+    public final Matrix4 getEnvironmentMapMatrix()
     {
         if (isEnabled())
         {
@@ -200,19 +204,19 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     }
 
     @Override
-    public float getEnvironmentMapFilteringBias()
+    public final float getEnvironmentMapFilteringBias()
     {
         return isEnabled() ? (float)getEnvironmentSettings().getEnvironmentFilteringBias() : 0;
     }
 
     @Override
-    public float getEnvironmentRotation()
+    public final float getEnvironmentRotation()
     {
         return isEnabled() ? (float)(getEnvironmentSettings().getEnvironmentRotation() * Math.PI / 180) : 0.0f;
     }
 
     @Override
-    public void setEnvironmentRotation(float environmentRotation)
+    public final void setEnvironmentRotation(float environmentRotation)
     {
         if (isEnabled() && !getEnvironmentSettings().isLocked())
         {
@@ -221,13 +225,13 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     }
 
     @Override
-    public float getEnvironmentIntensity()
+    public final float getEnvironmentIntensity()
     {
         return isEnabled() ? (float)getEnvironmentSettings().getEnvironmentColorIntensity() : 0.0f;
     }
 
     @Override
-    public void setEnvironmentIntensity(float environmentIntensity)
+    public final void setEnvironmentIntensity(float environmentIntensity)
     {
         if (isEnabled() && !getEnvironmentSettings().isLocked())
         {
@@ -236,13 +240,13 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     }
 
     @Override
-    public float getBackgroundIntensity()
+    public final float getBackgroundIntensity()
     {
         return isEnabled() ? (float)getEnvironmentSettings().getBackgroundIntensity() : 0.0f;
     }
 
     @Override
-    public void setBackgroundIntensity(float backgroundIntensity)
+    public final void setBackgroundIntensity(float backgroundIntensity)
     {
         if (isEnabled() && !getEnvironmentSettings().isLocked())
         {
@@ -251,13 +255,13 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     }
 
     @Override
-    public boolean isGroundPlaneEnabled()
+    public final boolean isGroundPlaneEnabled()
     {
         return isEnabled() && getEnvironmentSettings().isGroundPlaneEnabled();
     }
 
     @Override
-    public Vector3 getGroundPlaneColor()
+    public final Vector3 getGroundPlaneColor()
     {
         if (isEnabled())
         {
@@ -272,14 +276,34 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     }
 
     @Override
-    public float getGroundPlaneHeight()
+    public final float getGroundPlaneHeight()
     {
         return isEnabled() ? (float)getEnvironmentSettings().getGroundPlaneHeight() : 0.0f;
     }
 
     @Override
-    public float getGroundPlaneSize()
+    public final float getGroundPlaneSize()
     {
         return isEnabled() ? (float)getEnvironmentSettings().getGroundPlaneSize() : 1.0f;
+    }
+
+    protected final long getLastEnvironmentMapTime()
+    {
+        return lastEnvironmentMapTime;
+    }
+
+    protected final void setLastEnvironmentMapTime(long lastEnvironmentMapTime)
+    {
+        this.lastEnvironmentMapTime = lastEnvironmentMapTime;
+    }
+
+    protected final long getLastBackplateTime()
+    {
+        return lastBackplateTime;
+    }
+
+    protected final void setLastBackplateTime(long lastBackplateTime)
+    {
+        this.lastBackplateTime = lastBackplateTime;
     }
 }

@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit.decomposition;
@@ -79,13 +83,13 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
      */
     private BasisWeightResources(Texture3D<ContextType> weightMaps, Texture2D<ContextType> weightMask, MaterialBasis basis)
     {
-        this.context = weightMaps.getContext();
-        this.width = weightMaps.getWidth();
-        this.height = weightMaps.getHeight();
+        context = weightMaps.getContext();
+        width = weightMaps.getWidth();
+        height = weightMaps.getHeight();
         this.basis = basis;
         this.weightMaps = weightMaps;
         this.weightMask = weightMask;
-        this.weightMaps.setTextureWrap(TextureWrapMode.None, TextureWrapMode.None, TextureWrapMode.None);
+        this.weightMaps.setTextureWrap(TextureWrapMode.NONE, TextureWrapMode.NONE, TextureWrapMode.NONE);
 
         for (BasisMaterialInfo material : basis.getMaterials())
         {
@@ -97,42 +101,41 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public ContextType getContext()
+    public final ContextType getContext()
     {
         return context;
     }
 
     @Override
-    public int getMaterialCount()
+    public final int getMaterialCount()
     {
         return basis.getMaterialCount();
     }
 
     @Override
-    public int getActiveMaterialCount()
+    public final int getActiveMaterialCount()
     {
         return basis.getEnabledMaterialCount();
     }
 
     @Override
-    public Texture3D<ContextType> getWeightMaps()
+    public final Texture3D<ContextType> getWeightMaps()
     {
         return weightMaps;
     }
 
     @Override
-    public Texture2D<ContextType> getWeightMask()
+    public final Texture2D<ContextType> getWeightMask()
     {
         return weightMask;
     }
 
-    public void updateFromSolution(SpecularDecomposition solution)
+    public final void updateFromSolution(SpecularDecomposition solution)
     {
         weightMapLocations.clear();
 
-        NativeVectorBufferFactory factory = NativeVectorBufferFactory.getInstance();
-        NativeVectorBuffer buffer = factory.createEmpty(NativeDataType.FLOAT, 1,
-            width * height);
+        NativeVectorBuffer buffer =
+            NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 1, width * height);
 
         // Load weight mask first.
         for (int p = 0; p < width * height; p++)
@@ -181,7 +184,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
 
         try
         {
-            return ImageFinder.getInstance().findImageFile(file);
+            return ImageFinder.findImageFile(file);
         }
         catch (FileNotFoundException e)
         {
@@ -189,7 +192,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
             {
                 // Fallback for loading older projects that may not have had zero-padding in basisFunctions.csv
                 int index = Integer.parseInt(materialName);
-                File altFile = ImageFinder.getInstance().tryFindImageFile(
+                File altFile = ImageFinder.tryFindImageFile(
                     new File(solutionDirectory, getUnpackedWeightMapFilename(String.format("%02d", index))));
 
                 if (altFile != null)
@@ -223,7 +226,6 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
             throws IOException
     {
         String testImageName = basis.getMaterials().stream()
-            .filter(BasisMaterialInfo::isEnabled)
             .findAny().orElseThrow()
             .getName();
 
@@ -235,7 +237,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
         BasisWeightResources<ContextType> resources = new BasisWeightResources<>(context, width, height, basis);
 
         // Fill trivial weight mask.
-        NativeVectorBuffer weightMaskBuffer = NativeVectorBufferFactory.getInstance().createEmpty(NativeDataType.FLOAT, 1,
+        NativeVectorBuffer weightMaskBuffer = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 1,
             width * height);
         for (int p = 0; p < width * height; p++)
         {
@@ -264,7 +266,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public void savePacked(int weightsPerImage, String format, File outputDirectory, IntFunction<String> filenameGenerator)
+    public final void savePacked(int weightsPerImage, String format, File outputDirectory, IntFunction<String> filenameGenerator)
     {
         // Save the packed weight maps for used by external viewer
         try
@@ -279,7 +281,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public void saveUnpacked(String format, File outputDirectory, String filenamePrefix)
+    public final void saveUnpacked(String format, File outputDirectory, String filenamePrefix)
     {
         List<? extends BasisMaterialInfo> materialList = basis.getIndexableMaterialList();
 
@@ -302,7 +304,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
     {
         // Save the unpacked weight maps for reloading the project in the future
         try (WeightImageWriter<ContextType> weightImageWriter =
-                 new WeightImageWriter<>(getContext(), TextureResolution.of(weightMaps), weightsPerImage))
+                 new WeightImageWriter<>(context, TextureResolution.of(weightMaps), weightsPerImage))
         {
             int fileCount = (materialCount + weightsPerImage - 1) / weightsPerImage;
             weightImageWriter.saveImages(this, materialCount, format, outputDirectory,
@@ -313,7 +315,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public void useWithShaderProgram(Program<ContextType> program)
+    public final void useWithShaderProgram(Program<ContextType> program)
     {
         program.setTexture("weightMaps", weightMaps);
         program.setTexture("weightMask", weightMask);
@@ -322,7 +324,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
     /**
      * Updates
      */
-    void refreshWeightMapOrdering()
+    final void refreshWeightMapOrdering()
     {
         Collection<? extends BasisMaterialInfo> materials = basis.getIndexableMaterialList();
 
@@ -357,7 +359,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public BasisWeightResources<ContextType> crop(int x, int y, int cropWidth, int cropHeight)
+    public final BasisWeightResources<ContextType> crop(int x, int y, int cropWidth, int cropHeight)
     {
         return new BasisWeightResources<>(
             weightMaps.crop(x, y, cropWidth, cropHeight), weightMask.crop(x, y, cropWidth, cropHeight), basis);
@@ -368,7 +370,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
      * @param materialName
      * @param parentDirectory
      */
-    public void replaceWeightMapWithDefaultFile(String materialName, File parentDirectory) throws IOException
+    public final void replaceWeightMapWithDefaultFile(String materialName, File parentDirectory) throws IOException
     {
         replaceWeightMapWithSpecificFile(materialName, findWeightmap(parentDirectory, materialName));
     }
@@ -378,13 +380,13 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
      * @param materialName
      * @param newTextureFile
      */
-    public void replaceWeightMapWithSpecificFile(String materialName, File newTextureFile) throws IOException
+    public final void replaceWeightMapWithSpecificFile(String materialName, File newTextureFile) throws IOException
     {
         weightMaps.loadLayer(basis.getMaterial(materialName).getGPUIndex(), newTextureFile, true);
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         weightMaps.close();
         weightMask.close();

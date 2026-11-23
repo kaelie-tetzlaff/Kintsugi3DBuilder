@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering.components;
@@ -14,6 +18,7 @@ package kintsugi3d.builder.rendering.components;
 import kintsugi3d.builder.rendering.RenderedComponent;
 import kintsugi3d.builder.rendering.SceneViewportModel;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,45 +74,55 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
     }
 
     @Override
-    public void initialize()
+    public final void initialize()
     {
-        this.vertexBuffers = createVertexBuffers();
+        vertexBuffers = createVertexBuffers();
         reloadShaders();
+        onInitialize();
+    }
+
+    /**
+     * Override to specify behavior that should happen immediately after initialization
+     * (i.e. after vertex buffer construction and shader compilation).
+     */
+    @SuppressWarnings("NoopMethodInAbstractClass")
+    protected void onInitialize()
+    {
     }
 
     @Override
-    public void reloadShaders()
+    public final void reloadShaders()
     {
         try
         {
             ProgramObject<ContextType> newProgram = createProgram();
 
-            if (this.program != null)
+            if (program != null)
             {
-                this.program.close();
+                program.close();
             }
 
-            this.program = newProgram;
+            program = newProgram;
 
-            if (this.sceneViewportModel != null && this.sceneObjectTag != null)
+            if (sceneViewportModel != null && sceneObjectTag != null)
             {
-                this.program.setUniform("objectID", sceneViewportModel.lookupSceneObjectID(sceneObjectTag));
+                program.setUniform("objectID", sceneViewportModel.lookupSceneObjectID(sceneObjectTag));
             }
             else
             {
-                this.program.setUniform("objectID", 0);
+                program.setUniform("objectID", 0);
             }
 
-            if (this.drawable != null)
+            if (drawable != null)
             {
-                this.drawable.close();
+                drawable.close();
             }
 
-            this.drawable = createDrawable(this.program);
+            drawable = createDrawable(program);
 
             for (var entry : vertexBuffers.entrySet())
             {
-                this.drawable.addVertexBuffer(entry.getKey(), entry.getValue());
+                drawable.addVertexBuffer(entry.getKey(), entry.getValue());
             }
         }
         catch (IOException | RuntimeException e)
@@ -117,7 +132,7 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (program != null)
         {
@@ -142,17 +157,17 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
         }
     }
 
-    public ContextType getContext()
+    public final ContextType getContext()
     {
         return context;
     }
 
-    public Drawable<ContextType> getDrawable()
+    public final Drawable<ContextType> getDrawable()
     {
         return drawable;
     }
 
-    public Program<ContextType> getProgram()
+    public final Program<ContextType> getProgram()
     {
         return drawable.program();
     }
@@ -174,14 +189,15 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
     /**
      * Override to customize drawable creation.
      */
-    protected Drawable<ContextType> createDrawable(Program<ContextType> drawableProgram)
+    @SuppressWarnings("DesignForExtension")
+    protected @NotNull Drawable<ContextType> createDrawable(Program<ContextType> drawableProgram)
     {
         return context.createDrawable(drawableProgram);
     }
 
-    protected <ResourceType extends ManagedResource> ResourceType resource(ResourceType resource)
+    protected final <ResourceType extends ManagedResource> ResourceType resource(ResourceType resource)
     {
-        this.otherManagedResources.add(resource);
+        otherManagedResources.add(resource);
         return resource;
     }
 }

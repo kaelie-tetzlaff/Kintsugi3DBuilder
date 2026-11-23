@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.scene.environment;
@@ -17,10 +21,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.VBox;
 import kintsugi3d.fx.internal.ObservableEnvironmentModel;
 import kintsugi3d.fx.internal.ObservableProjectModel;
+import kintsugi3d.fx.util.StaticUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,12 +51,12 @@ public class RootEnvironmentSceneController
 
     private ObservableProjectModel projectModel;
 
-    public void injectDependencies(ObservableEnvironmentModel environmentMapModel, ObservableProjectModel injectedProjectModel)
+    public final void injectDependencies(ObservableEnvironmentModel environmentMapModel, ObservableProjectModel injectedProjectModel)
     {
-        this.projectModel = injectedProjectModel;
+        projectModel = injectedProjectModel;
 
         environmentListView.setItems(projectModel.getEnvironmentList());
-        environmentListView.getSelectionModel().selectedItemProperty().addListener(settingsController.changeListener);
+        environmentListView.getSelectionModel().selectedItemProperty().addListener(settingsController.getChangeListener());
 
         settingsController.setEnvironmentMapModel(environmentMapModel);
 
@@ -110,7 +114,7 @@ public class RootEnvironmentSceneController
     private void saveEnvButton()
     {
         //TODO
-        LOG.debug("TODO: saved " + environmentListView.getSelectionModel().getSelectedItem() + " to the library.");
+        LOG.debug("TODO: saved {} to the library.", environmentListView.getSelectionModel().getSelectedItem());
     }
 
     @FXML
@@ -180,7 +184,7 @@ public class RootEnvironmentSceneController
     }
 
     @FXML
-    void moveDOWNButton()
+    final void moveDOWNButton()
     {
         int selectedIndex = environmentListView.getSelectionModel().getSelectedIndex();
         if (selectedIndex != 0)
@@ -195,7 +199,7 @@ public class RootEnvironmentSceneController
     }
 
     @FXML
-    void lockEnvButton()
+    final void lockEnvButton()
     {
         ObservableEnvironmentSettings selectedEnvironment = environmentListView.getSelectionModel().getSelectedItem();
         if (!Objects.equals(selectedEnvironment, projectModel.getNoEnvironment()))
@@ -208,15 +212,15 @@ public class RootEnvironmentSceneController
     }
 
     @FXML
-    void deleteEnvButton()
+    final void deleteEnvButton()
     {
         MultipleSelectionModel<ObservableEnvironmentSettings> selectionModel = environmentListView.getSelectionModel();
         ObservableEnvironmentSettings selectedEnvironment = selectionModel.getSelectedItem();
 
         if (!Objects.equals(selectedEnvironment, projectModel.getNoEnvironment()))
         {
-            Dialog<ButtonType> confirmation = new Alert(AlertType.CONFIRMATION, "This action cannot be reversed.");
-            confirmation.setHeaderText("Are you sure you want to delete the following environment: " + selectedEnvironment.getName() + '?');
+            Dialog<ButtonType> confirmation = StaticUtilities.createConfirmDialog("This action cannot be reversed.");
+            confirmation.setHeaderText(String.format("Are you sure you want to delete the following environment: %s?", selectedEnvironment.getName()));
             confirmation.setTitle("Delete?");
 
             confirmation.showAndWait()

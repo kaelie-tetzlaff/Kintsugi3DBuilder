@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.scene.object;
@@ -34,15 +38,15 @@ public class ObservableObjectPoseSettings extends SerializableObjectPoseSettings
 
     public ObservableObjectPoseSettings(String name)
     {
-        this.setName(name);
+        this.name.set(name);
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         if (locked.getValue())
         {
-            return "(L) " + name.getValue();
+            return String.format("(L) %s", name.getValue());
         }
         else
         {
@@ -50,166 +54,166 @@ public class ObservableObjectPoseSettings extends SerializableObjectPoseSettings
         }
     }
 
-    public ObservableObjectPoseSettings duplicate()
+    public final ObservableObjectPoseSettings duplicate()
     {
         ObservableObjectPoseSettings copy = new ObservableObjectPoseSettings();
 
-        copy.setCenterX(this.getCenterX());
-        copy.setCenterY(this.getCenterY());
-        copy.setCenterZ(this.getCenterZ());
+        copy.setCenterX(getCenterX());
+        copy.setCenterY(getCenterY());
+        copy.setCenterZ(getCenterZ());
 
-        copy.setRotateY(this.getRotateY());
-        copy.setRotateX(this.getRotateX());
-        copy.setRotateZ(this.getRotateZ());
+        copy.setRotateY(getRotateY());
+        copy.setRotateX(getRotateX());
+        copy.setRotateZ(getRotateZ());
 
-        copy.setLocked(this.isLocked());
-        copy.setScale(this.getScale());
-        copy.setName(this.getName() + " copy");
+        copy.setLocked(isLocked());
+        copy.setScale(getScale());
+        copy.setName(String.format("%s copy", getName()));
 
         return copy;
     }
 
     @Override
-    public double getCenterX()
+    public final double getCenterX()
     {
         return centerX.get();
     }
 
-    public DoubleProperty centerXProperty()
+    public final DoubleProperty centerXProperty()
     {
         return centerX;
     }
 
     @Override
-    public void setCenterX(double centerX)
+    public final void setCenterX(double centerX)
     {
         this.centerX.set(centerX);
     }
 
     @Override
-    public double getCenterY()
+    public final double getCenterY()
     {
         return centerY.get();
     }
 
-    public DoubleProperty centerYProperty()
+    public final DoubleProperty centerYProperty()
     {
         return centerY;
     }
 
     @Override
-    public void setCenterY(double centerY)
+    public final void setCenterY(double centerY)
     {
         this.centerY.set(centerY);
     }
 
     @Override
-    public double getCenterZ()
+    public final double getCenterZ()
     {
         return centerZ.get();
     }
 
-    public DoubleProperty centerZProperty()
+    public final DoubleProperty centerZProperty()
     {
         return centerZ;
     }
 
     @Override
-    public void setCenterZ(double centerZ)
+    public final void setCenterZ(double centerZ)
     {
         this.centerZ.set(centerZ);
     }
 
     @Override
-    public double getRotateY()
+    public final double getRotateY()
     {
         return rotateY.get();
     }
 
-    public DoubleProperty rotateYProperty()
+    public final DoubleProperty rotateYProperty()
     {
         return rotateY;
     }
 
     @Override
-    public void setRotateY(double rotateY)
+    public final void setRotateY(double rotateY)
     {
         this.rotateY.set(rotateY);
     }
 
     @Override
-    public double getRotateX()
+    public final double getRotateX()
     {
         return rotateX.get();
     }
 
-    public DoubleProperty rotateXProperty()
+    public final DoubleProperty rotateXProperty()
     {
         return rotateX;
     }
 
     @Override
-    public void setRotateX(double rotateX)
+    public final void setRotateX(double rotateX)
     {
         this.rotateX.set(rotateX);
     }
 
     @Override
-    public double getRotateZ()
+    public final double getRotateZ()
     {
         return rotateZ.get();
     }
 
-    public DoubleProperty rotateZProperty()
+    public final DoubleProperty rotateZProperty()
     {
         return rotateZ;
     }
 
     @Override
-    public void setRotateZ(double rotateZ)
+    public final void setRotateZ(double rotateZ)
     {
         this.rotateZ.set(rotateZ);
     }
 
     @Override
-    public boolean isLocked()
+    public final boolean isLocked()
     {
         return locked.get();
     }
 
-    public BooleanProperty lockedProperty()
+    public final BooleanProperty lockedProperty()
     {
         return locked;
     }
 
     @Override
-    public void setLocked(boolean locked)
+    public final void setLocked(boolean locked)
     {
         this.locked.set(locked);
     }
 
-    public DoubleProperty scaleProperty(){return scale;}
+    public final DoubleProperty scaleProperty(){return scale;}
 
     @Override
-    public double getScale(){return Math.pow(10, scale.get());}
+    public final double getScale(){return StrictMath.pow(10, scale.get());}
         //scale.get() returns the slider value before it has been adjusted to a logarithmic scale
 
     @Override
-    public void setScale(double scale){this.scale.set(scale);}
+    public final void setScale(double scale){this.scale.set(scale);}
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return name.get();
     }
 
-    public StringProperty nameProperty()
+    public final StringProperty nameProperty()
     {
         return name;
     }
 
     @Override
-    public void setName(String name)
+    public final void setName(String name)
     {
         this.name.set(name);
     }

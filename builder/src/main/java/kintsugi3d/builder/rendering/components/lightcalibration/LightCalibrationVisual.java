@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering.components.lightcalibration;
@@ -46,11 +50,9 @@ public class LightCalibrationVisual<ContextType extends Context<ContextType>> ex
     }
 
     @Override
-    public void initialize()
+    protected final void onInitialize()
     {
-        super.initialize();
-
-        this.lightTexture = resource(new RadialTextureGenerator<>(getContext()).buildBloomTexture(64)
+        lightTexture = resource(new RadialTextureGenerator<>(getContext()).buildBloomTexture(64)
             .setInternalFormat(ColorFormat.R8)
             .setLinearFilteringEnabled(true)
             .setMipmapsEnabled(true)
@@ -58,7 +60,7 @@ public class LightCalibrationVisual<ContextType extends Context<ContextType>> ex
     }
 
     @Override
-    protected ProgramObject<ContextType> createProgram() throws IOException
+    protected final ProgramObject<ContextType> createProgram() throws IOException
     {
         return getContext().getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File(new File(new File("shaders"), "common"), "imgspace.vert"))
@@ -67,23 +69,21 @@ public class LightCalibrationVisual<ContextType extends Context<ContextType>> ex
     }
 
     @Override
-    protected Map<String, VertexBuffer<ContextType>> createVertexBuffers()
+    protected final Map<String, VertexBuffer<ContextType>> createVertexBuffers()
     {
         return Map.of("position", getContext().createRectangle());
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
-        FramebufferSize size = framebuffer.getSize();
+        getContext().getState().disableDepthWrite();
 
-        this.getContext().getState().disableDepthWrite();
+        getContext().getState().setBlendFunction(new BlendFunction(Weight.ONE, Weight.ONE));
+        getContext().getState().enableDepthTest();
 
-        this.getContext().getState().setBlendFunction(new BlendFunction(Weight.ONE, Weight.ONE));
-        this.getContext().getState().enableDepthTest();
-
-        this.getContext().getState().setBlendFunction(new BlendFunction(Weight.ONE, Weight.ONE));
-        this.getDrawable().program().setUniform("color", new Vector3((float)Math.PI));
+        getContext().getState().setBlendFunction(new BlendFunction(Weight.ONE, Weight.ONE));
+        getDrawable().program().setUniform("color", new Vector3((float)Math.PI));
 
         // Calculate world space light position.
         Matrix4 snapView = viewSelection.getSelectedMatrix();
@@ -95,23 +95,23 @@ public class LightCalibrationVisual<ContextType extends Context<ContextType>> ex
         Vector3 lightPosWorldSpace = lightView.getUpperLeft3x3().transpose().times(lightView.getColumn(3).getXYZ().negated());
         Vector3 lightPosCamSpace = cameraViewport.getView().times(lightPosWorldSpace.asPosition()).getXYZ();
 
-        this.getDrawable().program().setUniform("model_view", Matrix4.translate(lightPosCamSpace)
+        getDrawable().program().setUniform("model_view", Matrix4.translate(lightPosCamSpace)
                 .times(Matrix4.scale(-lightPosCamSpace.z / 32.0f, -lightPosCamSpace.z / 32.0f, 1.0f)));
-        this.getDrawable().program().setUniform("projection", cameraViewport.getViewportProjection());
-        this.getDrawable().program().setTexture("grayscaleTex", this.lightTexture);
-        this.getDrawable().draw(PrimitiveMode.TRIANGLE_FAN, cameraViewport.ofFramebuffer(framebuffer));
+        getDrawable().program().setUniform("projection", cameraViewport.getViewportProjection());
+        getDrawable().program().setTexture("grayscaleTex", lightTexture);
+        getDrawable().draw(PrimitiveMode.TRIANGLE_FAN, cameraViewport.ofFramebuffer(framebuffer));
 
-        this.getContext().getState().disableBlending();
-        this.getContext().getState().enableDepthWrite();
-        this.getContext().getState().enableDepthTest();
+        getContext().getState().disableBlending();
+        getContext().getState().enableDepthWrite();
+        getContext().getState().enableDepthTest();
     }
 
-    public ViewSelection getViewSelection()
+    public final ViewSelection getViewSelection()
     {
         return viewSelection;
     }
 
-    public void setViewSelection(ViewSelection viewSelection)
+    public final void setViewSelection(ViewSelection viewSelection)
     {
         this.viewSelection = viewSelection;
     }

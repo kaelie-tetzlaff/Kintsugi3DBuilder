@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.internal;
@@ -53,37 +57,37 @@ public class ObservableCarouselModel implements CarouselModel
      * @return
      */
     @Override
-    public ObservableList<CarouselItem> getCarouselItems()
+    public final ObservableList<CarouselItem> getCarouselItems()
     {
-        return carouselItems;
+        return FXCollections.unmodifiableObservableList(carouselItems);
     }
 
-    public double getCarouselHeight()
+    public final double getCarouselHeight()
     {
         return carouselHeight.get();
     }
 
-    public DoubleProperty carouselHeightProperty()
+    public final DoubleProperty carouselHeightProperty()
     {
         return carouselHeight;
     }
 
-    public double getCarouselCardHeight()
+    public final double getCarouselCardHeight()
     {
         return carouselCardHeight.get();
     }
 
-    public DoubleProperty carouselCardHeightProperty()
+    public final DoubleProperty carouselCardHeightProperty()
     {
         return carouselCardHeight;
     }
 
-    public double getCarouselCardWidth()
+    public final double getCarouselCardWidth()
     {
         return carouselCardWidth.get();
     }
 
-    public DoubleBinding carouselCardWidthProperty()
+    public final DoubleBinding carouselCardWidthProperty()
     {
         return carouselCardWidth;
     }
@@ -95,7 +99,7 @@ public class ObservableCarouselModel implements CarouselModel
      * @param shader
      */
     @Override
-    public void addToCarousel(ShaderInfo shader)
+    public final void addToCarousel(ShaderInfo shader)
     {
         // Prevents duplicate shaders in carousel
         // If the shaders don't match then shader is sent to carousel
@@ -130,7 +134,7 @@ public class ObservableCarouselModel implements CarouselModel
      * @param shader
      */
     @Override
-    public void removeFromCarousel(ShaderInfo shader)
+    public final void removeFromCarousel(ShaderInfo shader)
     {
         if (carouselItems.stream().anyMatch(item -> Objects.equals(item.getShader(), shader)))
         {
@@ -145,7 +149,7 @@ public class ObservableCarouselModel implements CarouselModel
      * Clears all the shaders in carouselItems list.
      */
     @Override
-    public void clearCarousel()
+    public final void clearCarousel()
     {
         if (!carouselItems.isEmpty())
         {
@@ -187,19 +191,14 @@ public class ObservableCarouselModel implements CarouselModel
 
     private CarouselItem findCardByShader(ShaderInfo shader)
     {
-        for(CarouselItem item : carouselItems)
-        {
-            // Check if the current item's shader matches this card.
-            if (shader.equals(item.getShader()))
-            {
-                return item;
-            }
-        }
+        // Check if the current item's shader matches this card.
+        return carouselItems.stream()
+            .filter(item -> shader.equals(item.getShader()))
+            .findFirst().orElse(null);
 
-        return null;
     }
 
-    public void moveCardLeft(CarouselCardController card)
+    public final void moveCardLeft(CarouselCardController card)
     {
         CarouselItem moveCard = findCardByShader(card.getShader());
         CarouselController carouselController = card.getCarouselController();
@@ -214,7 +213,7 @@ public class ObservableCarouselModel implements CarouselModel
         }
     }
 
-    public void moveCardRight(CarouselCardController card)
+    public final void moveCardRight(CarouselCardController card)
     {
         CarouselItem moveCard = findCardByShader(card.getShader());
         CarouselController carouselController = card.getCarouselController();

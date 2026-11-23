@@ -1,16 +1,21 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.core;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
@@ -27,13 +32,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.DecimalFormat;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ProgressBarsController
 {
     private static final Logger LOG = LoggerFactory.getLogger(ProgressBarsController.class);
-    private static ProgressBarsController INSTANCE;
+
+    private static ProgressBarsController instance;
+
+    private Stage stage;
 
     @FXML private Label localElapsedTimeLabel;
     @FXML private Label localEstimTimeRemainingLabel;
@@ -53,22 +63,66 @@ public class ProgressBarsController
     private Stopwatch overallStopwatch;
     private Stopwatch localStopwatch;
 
-    private String defaultLocalText;
-    private String defaultOverallText;
-    private String defaultTotalTimeElapsedText;
-    private String defaultEstimLocalTimeRemainingTxt;
     private String defaultTitle;
 
-    private Stage stage;
+    /**
+     * Typically something like "Working..."
+     */
+    private String defaultOverallText;
+
+    /**
+     * Typically something like "(--:--:-- Lapsed)"
+     */
+    private String defaultTotalTimeElapsedText;
+
+    /**
+     * Typically something like "Please wait.."
+     */
+    private String defaultLocalText;
+
+    /**
+     * Typically something like "Calculating remaining time... "
+     */
+    private String defaultEstimLocalTimeRemainingTxt;
+
+    /**
+     * Typically something like "(--:--:-- Lapsed)"
+     */
     private String defaultOverallElapsedTimeTxt;
+
     private final BooleanProperty processingProperty = new SimpleBooleanProperty(false);
+
+    /**
+     * Source of truth for the countdown timer - stores the remaining duration
+     */
+    private final ObjectProperty<Duration> estimatedRemainingDuration = new SimpleObjectProperty<>(null);
+
+    /**
+     * Holds manual text overrides (e.g., "Calculating remaining time...") when set explicitly.
+     * Null means no override (show the countdown). An empty string is a valid override that displays nothing.
+     */
+    private final StringProperty estimatedRemainingOverride = new SimpleStringProperty(null);
+
+    private final AtomicBoolean cancelRequested = new AtomicBoolean(false);
+
+    /**
+     * Target expiry instant for the countdown — the moment when the countdown reaches zero.
+     * Null means no active countdown.
+     */
+    private Instant countdownExpiry;
+
+    /**
+     * Periodic timer for updating elapsed time and ticking down the countdown.
+     */
+    private PauseTransition timer;
 
     static ProgressBarsController getInstance()
     {
-        return INSTANCE;
+        //noinspection StaticVariableUsedBeforeInitialization
+        return instance;
     }
 
-    public void init(Stage stage)
+    public final void init(@SuppressWarnings("ParameterHidesMemberVariable") Stage stage)
     {
         this.stage = stage;
         defaultOverallText = overallTextLabel.getText();
@@ -80,20 +134,38 @@ public class ProgressBarsController
 
         defaultTitle = stage.getTitle();
 
-        //remove estimated times from view if not processing (would just be 00:00:00/otherwise useless anyway)
+        localEstimTimeRemainingLabel.textProperty().bind(
+            Bindings.when(estimatedRemainingOverride.isNotNull())
+                .then(estimatedRemainingOverride)
+                .otherwise(
+                    Bindings.createStringBinding(() ->
+                    {
+                        Duration duration = estimatedRemainingDuration.get();
+
+                        if (duration == null || duration.isZero() || duration.isNegative())
+                        {
+                            return "Almost done...";
+                        }
+                        else
+                        {
+                            return String.format("%02d:%02d:%02d Remaining", duration.toHours(), duration.toMinutesPart(), duration.toSecondsPart());
+                        }
+                    },
+                    estimatedRemainingDuration)));
+
+        // remove estimated times from view if not processing
         localEstimTimeRemainingLabel.managedProperty().bind(processingProperty);
         localEstimTimeRemainingLabel.visibleProperty().bind(processingProperty);
 
         overallStopwatch = new Stopwatch();
         localStopwatch = new Stopwatch();
 
-        processingProperty.bind(overallStopwatch.isRunningProperty());
+        processingProperty.bind(overallStopwatch.runningProperty());
 
         localProgressBar.getScene().getWindow().setOnCloseRequest(
             event -> MainWindowController.getInstance().showMiniProgressBar());
 
         // Keep track of whether cancellation was requested.
-        AtomicBoolean cancelRequested = new AtomicBoolean(false);
         cancelButton.setOnAction(event ->
         {
             cancelRequested.set(true);
@@ -105,13 +177,13 @@ public class ProgressBarsController
         cancelButton.disableProperty().bind(getProcessingProperty().not());
         doneButton.disableProperty().bind(getProcessingProperty());
 
-        Global.io().addProgressMonitor(
-            new Monitor(cancelRequested, localProgressBar, overallProgressBar, overallTextLabel, localTextLabel, cancelButton));
+        Global.io().addProgressMonitor(new Monitor());
 
-        INSTANCE = this;
+        //noinspection AssignmentToStaticFieldFromInstanceMethod
+        instance = this;
     }
 
-    public Stage getStage()
+    public final Stage getStage()
     {
         return stage;
     }
@@ -124,12 +196,14 @@ public class ProgressBarsController
         totalElapsedTimeLabel.setText(defaultTotalTimeElapsedText);
         localElapsedTimeLabel.setText(defaultOverallElapsedTimeTxt);
 
-        localEstimTimeRemainingLabel.setText(defaultEstimLocalTimeRemainingTxt);
+        estimatedRemainingOverride.set(defaultEstimLocalTimeRemainingTxt);
+        estimatedRemainingDuration.setValue(null);
+        countdownExpiry = null;
 
         stage.setTitle(defaultTitle);
     }
 
-    public void showStage()
+    public final void showStage()
     {
         stage.show();
     }
@@ -144,68 +218,73 @@ public class ProgressBarsController
         overallStopwatch.start();
         localStopwatch.start();
 
-        // Don't start the thread until the stopwatches have started or it will stop right away.
-        new Thread(() ->
+        // Use a PauseTransition to periodically update elapsed time and tick down the countdown.
+        // Runs on the JavaFX application thread, so no Platform.runLater is needed.
+        // Cycle count is 1; playFromStart() in onFinished handles repetition while processing.
+        timer = new PauseTransition(javafx.util.Duration.millis(1000));
+        timer.setCycleCount(1);
+        timer.setOnFinished(event ->
         {
-            while (isProcessing())
+            tickTimer();
+            if (isProcessing())
             {
-                try
-                {
-                    Thread.sleep(200);
-
-                    if (isProcessing())
-                    {
-                        updateElapsedTime();
-                    }
-
-                    Thread.sleep(800);
-
-                    tickDownRemainingTime();
-                }
-                catch (InterruptedException e)
-                {
-                    break;
-                }
+                timer.playFromStart();
             }
-        }).start();
+        });
+        timer.playFromStart();
 
         saturateProgressBars();
     }
 
-    private void tickDownRemainingTime()
+    private void tickTimer()
     {
-        String remainingTimeStr = localEstimTimeRemainingLabel.getText();
-        if (remainingTimeStr.matches("[A-Za-z].*"))
+        // Update elapsed time labels
+        long totalElapsedTime = overallStopwatch.getElapsedTime();
+        long localElapsedTime = localStopwatch.getElapsedTime();
+
+        String totalTimeTxt = nanosecToFormatTime(totalElapsedTime, true);
+        String localTimeTxt = nanosecToFormatTime(localElapsedTime, true);
+
+        totalElapsedTimeLabel.setText(String.format("%s Lapsed", totalTimeTxt));
+        localElapsedTimeLabel.setText(String.format("(%s Lapsed)", localTimeTxt));
+
+        // Tick down the countdown, if active (null override means no override, empty string is a valid override)
+        if (estimatedRemainingOverride.getValue() == null && countdownExpiry != null)
         {
-            //text is "Almost done..." or some other manually entered message
-            return;
+            // Calculate remaining duration from the target expiry timestamp
+            Duration remaining = Duration.between(Instant.now(), countdownExpiry);
+
+            if (remaining.isZero() || remaining.isNegative())
+            {
+                estimatedRemainingDuration.setValue(Duration.ZERO);
+                countdownExpiry = null;
+            }
+            else
+            {
+                estimatedRemainingDuration.setValue(remaining);
+            }
         }
-
-        int hours = Integer.parseInt(remainingTimeStr.substring(0, 2));
-        int minutes = Integer.parseInt(remainingTimeStr.substring(3, 5));
-        int seconds = Integer.parseInt(remainingTimeStr.substring(6, 8));
-
-        long estimatedRemaining = TimeUnit.HOURS.toNanos(hours) +
-            TimeUnit.MINUTES.toNanos(minutes) +
-            TimeUnit.SECONDS.toNanos(seconds);
-
-        estimatedRemaining -= TimeUnit.SECONDS.toNanos(1);
-
-        updateTimeEstimationLabel(estimatedRemaining);
     }
 
     private void updateTimeEstimationLabel(long estimatedRemaining)
     {
         long secondsRemaining = TimeUnit.NANOSECONDS.toSeconds(estimatedRemaining);
 
+        // Clear any manual override when updating the estimate
+        estimatedRemainingOverride.set(null);
+
         if (secondsRemaining > 0)
         {
-            String timeTxt = nanosecToFormatTime(estimatedRemaining, true);
-            Platform.runLater(() -> localEstimTimeRemainingLabel.setText(String.format("%s Remaining", timeTxt)));
+            Duration duration = Duration.ofSeconds(secondsRemaining);
+            estimatedRemainingDuration.setValue(duration);
+
+            // Set the target expiry timestamp so tickTimer uses real time
+            countdownExpiry = Instant.now().plus(duration);
         }
         else
         {
-            Platform.runLater(() -> localEstimTimeRemainingLabel.setText("Almost done..."));
+            estimatedRemainingDuration.setValue(Duration.ZERO);
+            countdownExpiry = null;
         }
     }
 
@@ -213,6 +292,9 @@ public class ProgressBarsController
     {
         Platform.runLater(() ->
         {
+            // Set manual text to default, so the binding shows the default message
+            estimatedRemainingOverride.set(defaultEstimLocalTimeRemainingTxt);
+
             overallStopwatch.click();
             localStopwatch.click();
             updateLocalRemainingTime(progress, maximum);
@@ -228,22 +310,6 @@ public class ProgressBarsController
         long estimatedRemaining = Math.max(0, (long) (avgDif * remainingProcesses));
 
         updateTimeEstimationLabel(estimatedRemaining);
-    }
-
-
-    private void updateElapsedTime()
-    {
-        long totalElapsedTime = overallStopwatch.getElapsedTime();
-        long localElapsedTime = localStopwatch.getElapsedTime();
-
-        String totalTimeTxt = nanosecToFormatTime(totalElapsedTime, true);
-        String localTimeTxt = nanosecToFormatTime(localElapsedTime, true);
-
-        if (isProcessing())
-        {
-            Platform.runLater(() -> totalElapsedTimeLabel.setText(String.format("%s Lapsed", totalTimeTxt)));
-            Platform.runLater(() -> localElapsedTimeLabel.setText(String.format("(%s Lapsed)", localTimeTxt)));
-        }
     }
 
     private static String nanosecToFormatTime(long nanoTime, boolean useSeconds)
@@ -265,6 +331,12 @@ public class ProgressBarsController
     {
         Platform.runLater(() ->
         {
+            // Stop the periodic timer first
+            if (timer != null)
+            {
+                timer.stop();
+            }
+
             overallStopwatch.stop();
             localStopwatch.stop();
 
@@ -294,18 +366,18 @@ public class ProgressBarsController
         localProgressBar.getStyleClass().add("progress-bar");
     }
 
-    public void stopAndClose()
+    public final void stopAndClose()
     {
         endStopwatches();
         hideStage();
     }
 
-    public boolean isProcessing()
+    public final boolean isProcessing()
     {
         return processingProperty.getValue();
     }
 
-    public ReadOnlyBooleanProperty getProcessingProperty()
+    public final ReadOnlyBooleanProperty getProcessingProperty()
     {
         return processingProperty;
     }
@@ -318,40 +390,20 @@ public class ProgressBarsController
 
     private class Monitor implements ProgressMonitor
     {
-        private final AtomicBoolean cancelRequested;
-        private final ProgressBar localProgressBar;
-        private final ProgressBar overallProgressBar;
-        private final Label overallTextLabel;
-        private final Label localTextLabel;
-        private final Button cancelButton;
-        private double maximum;
-        private double localProgress;
+        private double maximum = 0.0;
+        private double localProgress = 0.0;
 
         // Updated instantly whereas stageCountProperty is updated asynchronously.
         private int currentStage;
 
-        private final IntegerProperty stageCountProperty;
-        private final IntegerProperty currentStageProperty;
+        private final IntegerProperty stageCountProperty = new SimpleIntegerProperty(0);
+        private final IntegerProperty currentStageProperty = new SimpleIntegerProperty(0);
 
         private String localText; //when process is finishing up, store last msg into here while displaying "Finishing up..."
         private String finishingUpText;
 
-        Monitor(AtomicBoolean cancelRequested, ProgressBar localProgressBar, ProgressBar overallProgressBar, Label overallTextLabel, Label localTextLabel, Button cancelButton)
-        {
-            this.cancelRequested = cancelRequested;
-            this.localProgressBar = localProgressBar;
-            this.overallProgressBar = overallProgressBar;
-            this.overallTextLabel = overallTextLabel;
-            this.localTextLabel = localTextLabel;
-            this.cancelButton = cancelButton;
-            maximum = 0.0;
-            localProgress = 0.0;
-            stageCountProperty = new SimpleIntegerProperty(0);
-            currentStageProperty = new SimpleIntegerProperty(0);
-        }
-
         @Override
-        public void allowUserCancellation() throws UserCancellationException
+        public final void allowUserCancellation() throws UserCancellationException
         {
             if (cancelRequested.get())
             {
@@ -368,14 +420,14 @@ public class ProgressBarsController
         }
 
         @Override
-        public void cancelComplete(UserCancellationException e)
+        public final void cancelComplete(UserCancellationException e)
         {
             complete();
             hideAllProgress();
         }
 
         @Override
-        public void start()
+        public final void start()
         {
             cancelRequested.set(false);
 
@@ -421,13 +473,13 @@ public class ProgressBarsController
         }
 
         @Override
-        public void setProcessName(String processName)
+        public final void setProcessName(String processName)
         {
             Platform.runLater(() ->  ((Stage) overallProgressBar.getScene().getWindow()).setTitle(processName));
         }
 
         @Override
-        public void setStageCount(int count)
+        public final void setStageCount(int count)
         {
             Platform.runLater(() ->
             {
@@ -437,13 +489,13 @@ public class ProgressBarsController
         }
 
         @Override
-        public void setStage(int stage, String message)
+        public final void setStage(int stage, String message)
         {
-            this.localProgress = 0.0;
+            localProgress = 0.0;
             currentStage = stage + 1; //index from 1, copy so we can update currentStageProperty w/ Platform.runLater to avoid threading issue
 
             // Reset text that displays when finishing up for a new stage
-            finishingUpText = ProgressMonitor.FINISHING_UP;
+            finishingUpText = FINISHING_UP_DEFAULT;
 
             Platform.runLater(() ->
             {
@@ -456,7 +508,7 @@ public class ProgressBarsController
                     LOG.info("[Finishing up] {}", message);
                 }
 
-                this.currentStageProperty.setValue(currentStage);
+                currentStageProperty.setValue(currentStage);
                 localProgressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
                 overallTextLabel.setText(message);
                 localTextLabel.setText(DEFAULT_MESSAGE);
@@ -473,13 +525,13 @@ public class ProgressBarsController
         }
 
         @Override
-        public void advanceStage(String message)
+        public final void advanceStage(String message)
         {
             setStage(currentStage + 1, message);
         }
 
         @Override
-        public void setFinishingUpText(String finishingUpText)
+        public final void setFinishingUpText(String finishingUpText)
         {
             this.finishingUpText = finishingUpText;
             Platform.runLater(this::refreshLocalText);
@@ -489,7 +541,7 @@ public class ProgressBarsController
         {
             if(currentStageProperty.get() > stageCountProperty.get())
             {
-                localTextLabel.setText(this.finishingUpText);
+                localTextLabel.setText(finishingUpText);
             }
         }
 
@@ -506,23 +558,23 @@ public class ProgressBarsController
         }
 
         @Override
-        public void setMaxProgress(double maxProgress)
+        public final void setMaxProgress(double maxProgress)
         {
-            this.maximum = maxProgress;
+            maximum = maxProgress;
             Platform.runLater(this::refreshLocalProgress);
         }
 
         @Override
-        public void setProgress(double progress, String message)
+        public final void setProgress(double progress, String message)
         {
-            this.localProgress = progress;
+            localProgress = progress;
 
             LOG.info("[{}%] {}", new DecimalFormat("#.##").format(localProgress / maximum * 100), message);
 
             //remove stage/stageCount from txt if it wouldn't make sense for it to be there (ex. Stage 0/0)
             //useful for simple exports like orbit animation
             boolean removeStageNums = stageCountProperty.getValue() <= 1 || currentStageProperty.getValue() == 0;
-            this.localText = removeStageNums ? message :
+            localText = removeStageNums ? message :
                 String.format("Stage %s/%s -- %s", currentStageProperty.getValue(), stageCountProperty.getValue(), message);
 
             Platform.runLater(() ->
@@ -545,9 +597,9 @@ public class ProgressBarsController
         }
 
         @Override
-        public void complete()
+        public final void complete()
         {
-            this.maximum = 0.0;
+            maximum = 0.0;
             endStopwatches();
 
             MainWindowController mainWindow = MainWindowController.getInstance();
@@ -560,34 +612,37 @@ public class ProgressBarsController
 
             Platform.runLater(() ->
             {
-                if (overallProgressBar.getProgress() == ProgressIndicator.INDETERMINATE_PROGRESS)
+                if (overallProgressBar.isIndeterminate())
                 {
                     overallProgressBar.setProgress(1.0);
                 }
 
-                if (localProgressBar.getProgress() == ProgressIndicator.INDETERMINATE_PROGRESS)
+                if (localProgressBar.isIndeterminate())
                 {
                     localProgressBar.setProgress(1.0);
                 }
 
                 //only revert text for processes which are not lightweight
-                if (localTextLabel.getText().equals(FINISHING_UP))
+                if (localTextLabel.getText().equals(FINISHING_UP_DEFAULT))
                 {
                     localTextLabel.setText(localText);
                 }
+
+                // Clear countdown state on complete
+                estimatedRemainingDuration.setValue(null);
 
                 cancelButton.setText("Cancel");
             });
         }
 
         @Override
-        public void fail(Throwable e)
+        public final void fail(Throwable e)
         {
             complete();
         }
 
         @Override
-        public boolean isConflictingProcess()
+        public final boolean isConflictingProcess()
         {
             if (!isProcessing())
             {
@@ -598,9 +653,9 @@ public class ProgressBarsController
             {
                 ButtonType ok = new ButtonType("OK", ButtonData.OK_DONE);
                 //ButtonType stopProcess = new ButtonType("Start New Process", ButtonBar.ButtonData.YES);
-                Alert alert = new Alert(AlertType.NONE, "Cannot run multiple tasks at the same time.\n" +
-                    "Either wait for the current task to complete or cancel it." /*+
-                        "Press OK to finish the current process."*/, ok/*, stopProcess*/);
+                Alert alert = new Alert(AlertType.NONE,
+                    "Cannot run multiple tasks at the same time.\nEither wait for the current task to complete or cancel it."
+                    /*+ "Press OK to finish the current process."*/, ok/*, stopProcess*/);
                 alert.setHeaderText("Conflicting Tasks");
 
 //                    //continue current process, don't start a new one

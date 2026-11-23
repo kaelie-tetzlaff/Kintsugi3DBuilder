@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.state;
@@ -96,7 +100,7 @@ public abstract class CacheModelBase implements CacheModel
     }
 
     @Override
-    public void requestClearCache()
+    public final void requestClearCache()
     {
         Global.state().getProjectModel().confirmClose(
             "Deleting the entire cache requires the current project to be closed.  Are you sure you want to close the current project?",
@@ -340,28 +344,17 @@ public abstract class CacheModelBase implements CacheModel
     }
 
     @Override
-    public void requestCleanUpBothCaches(Map<File, Consumer<File[]>> deleteMethods)
+    public final void requestCleanUpBothCaches(Map<File, Consumer<File[]>> deleteMethods)
     {
-        new Thread(() ->
-        {
-            try
-            {
-                cleanCacheSubDirs(deleteMethods);
-            }
-            catch (IOException e)
-            {
-                handleCacheCleanupError(e);
-            }
-        }, "Clean Up Cache").start();
+        new Thread(() -> cleanCacheSubDirs(deleteMethods), "Clean Up Cache").start();
     }
 
     /**
      * Cleans up the cache based on user settings, and then refreshes the cache size.
      *
      * @param deleteMethods
-     * @throws IOException
      */
-    private void cleanCacheSubDirs(Map<File, Consumer<File[]>> deleteMethods) throws IOException
+    private void cleanCacheSubDirs(Map<File, Consumer<File[]>> deleteMethods)
     {
         if (cacheCleanupInProgress.compareAndSet(false, true))
         {
@@ -492,26 +485,7 @@ public abstract class CacheModelBase implements CacheModel
 
     private void cleanUpBySizeLimit()
     {
-        Map<String, Collection<File>> cleanableCacheProjects = new HashMap<>(getNumCachedProjects());
-
-        // Build a mapping from project IDs to all cache directories associated with that project.
-        // This is necessary since a project might have one cache for a project but not another,
-        // but all need to be cleaned up when cleaning down to a size limit.
-        for (File directory : getDeleteMethods().keySet())
-        {
-            for (File projectCacheDir : Objects.requireNonNull(directory.listFiles()))
-            {
-                // The project cache directory name should be the same regardless of which cache (i.e. preview or fit) is being cleaned.
-                String projectID = projectCacheDir.getName();
-                // i.e. a list that will contain the fit and preview directories for a given project
-                Collection<File> projectDirList = cleanableCacheProjects.computeIfAbsent(
-                    // Create the ArrayList if not already in the map.
-                    projectID, id -> new ArrayList<>(getCleanableCacheDirectories().size()));
-
-                // Add the current directory to the list
-                projectDirList.add(projectCacheDir);
-            }
-        }
+        Map<String, Collection<File>> cleanableCacheProjects = getCleanableCacheProjects();
 
         List<String> retainedProjectIDs =
             cleanableCacheProjects.entrySet().stream()
@@ -582,9 +556,34 @@ public abstract class CacheModelBase implements CacheModel
         }
     }
 
+    private static Map<String, Collection<File>> getCleanableCacheProjects()
+    {
+        Map<String, Collection<File>> cleanableCacheProjects = new HashMap<>(getNumCachedProjects());
+
+        // Build a mapping from project IDs to all cache directories associated with that project.
+        // This is necessary since a project might have one cache for a project but not another,
+        // but all need to be cleaned up when cleaning down to a size limit.
+        for (File directory : getDeleteMethods().keySet())
+        {
+            for (File projectCacheDir : Objects.requireNonNull(directory.listFiles()))
+            {
+                // The project cache directory name should be the same regardless of which cache (i.e. preview or fit) is being cleaned.
+                String projectID = projectCacheDir.getName();
+                // i.e. a list that will contain the fit and preview directories for a given project
+                Collection<File> projectDirList = cleanableCacheProjects.computeIfAbsent(
+                    // Create the ArrayList if not already in the map.
+                    projectID, id -> new ArrayList<>(getCleanableCacheDirectories().size()));
+
+                // Add the current directory to the list
+                projectDirList.add(projectCacheDir);
+            }
+        }
+        return cleanableCacheProjects;
+    }
+
     private static List<UUID> getRecentUUIDs(int numProjectsToKeep)
     {
-        List<String> recentProjects = RecentProjects.getRecentProjectFilenames().stream().limit(numProjectsToKeep).collect(Collectors.toList());
+        List<String> recentProjects = RecentProjects.getInstance().getRecentProjectFilenames().stream().limit(numProjectsToKeep).collect(Collectors.toList());
         // Load view sets of recent projects to get their UUID.
         List<UUID> recentUUIDs = new ArrayList<>(recentProjects.size());
         for (String recentProject : recentProjects)
@@ -636,14 +635,7 @@ public abstract class CacheModelBase implements CacheModel
                 }
                 else
                 {
-                    if (projectID == null)
-                    {
-                        length += getDirectorySize(file, newProjectSizes, file.getName());
-                    }
-                    else
-                    {
-                        length += getDirectorySize(file, newProjectSizes, projectID);
-                    }
+                    length += getDirectorySize(file, newProjectSizes, Objects.requireNonNullElse(projectID, file.getName()));
                 }
             }
         }
@@ -656,7 +648,7 @@ public abstract class CacheModelBase implements CacheModel
      * If a request is already running when this method is invoked, another request will not be started.
      */
     @Override
-    public void requestCacheSizeRefresh()
+    public final void requestCacheSizeRefresh()
     {
         requestCacheSizeRefresh(null, null);
     }
@@ -674,7 +666,7 @@ public abstract class CacheModelBase implements CacheModel
      * @param cacheSizeChangeCallback Runs only if the cache size changed.
      * @param onCompleteCallback      Always runs regardless of whether the cache size changed.  Also runs on the JavaFX thread.
      */
-    protected void requestCacheSizeRefresh(DoubleConsumer cacheSizeChangeCallback, Runnable onCompleteCallback)
+    protected final void requestCacheSizeRefresh(DoubleConsumer cacheSizeChangeCallback, Runnable onCompleteCallback)
     {
         synchronized (cacheSizeCalcThreadLock)
         {
@@ -729,7 +721,7 @@ public abstract class CacheModelBase implements CacheModel
      * @param postNewCacheSizes Handles actually posting the new cache size and individual project sizes,
      *                          guaranteed to be invoked from a synchronized context.
      */
-    protected void synchronizedCacheSizeCalcComplete(Runnable postNewCacheSizes)
+    protected final void synchronizedCacheSizeCalcComplete(Runnable postNewCacheSizes)
     {
         // prevent race condition if another call to requestCacheSizeRefresh comes in
         // while updating and cleaning up listeners.

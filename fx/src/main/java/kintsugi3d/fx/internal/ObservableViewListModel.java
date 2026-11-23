@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.internal;
@@ -29,67 +33,67 @@ public class ObservableViewListModel implements SelectableViewListModel
     private BooleanProperty cameraViewSnapEnabledProperty;
 
     @Override
-    public View getSelectedView()
+    public final View getSelectedView()
     {
         return selectedCameraViewModel.getSelectedItem();
     }
 
     @Override
-    public void setSelectedView(View cameraView)
+    public final void setSelectedView(View cameraView)
     {
         selectedCameraViewModel.select(cameraView);
     }
 
     @Override
-    public List<View> getViewList()
+    public final List<View> getViewList()
     {
         return Collections.unmodifiableList(cameraViewListProperty.getValue());
     }
 
     @Override
-    public void setViewList(List<View> cameraViewList)
+    public final void setViewList(List<View> cameraViewList)
     {
         cameraViewListProperty.setValue(FXCollections.observableList(cameraViewList));
     }
 
     @Override
-    public boolean isViewSnapEnabled()
+    public final boolean isViewSnapEnabled()
     {
         return cameraViewSnapEnabledProperty.get();
     }
 
     @Override
-    public void setViewSnapEnabled(boolean cameraViewSnapEnabled)
+    public final void setViewSnapEnabled(boolean cameraViewSnapEnabled)
     {
-        this.cameraViewSnapEnabledProperty.set(cameraViewSnapEnabled);
+        cameraViewSnapEnabledProperty.set(cameraViewSnapEnabled);
     }
 
-    public BooleanProperty getCameraViewSnapEnabledProperty()
+    public final BooleanProperty getCameraViewSnapEnabledProperty()
     {
         return cameraViewSnapEnabledProperty;
     }
 
-    public MultipleSelectionModel<View> getSelectedCameraViewModel()
+    public final MultipleSelectionModel<View> getSelectedCameraViewModel()
     {
         return selectedCameraViewModel;
     }
 
-    public Property<ObservableList<View>> getCameraViewListProperty()
+    public final Property<ObservableList<View>> getCameraViewListProperty()
     {
         return cameraViewListProperty;
     }
 
-    public void setSelectedCameraViewModel(MultipleSelectionModel<View> selectedCameraViewModel)
+    public final void setSelectedCameraViewModel(MultipleSelectionModel<View> selectedCameraViewModel)
     {
         this.selectedCameraViewModel = selectedCameraViewModel;
     }
 
-    public void setCameraViewListProperty(Property<ObservableList<View>> cameraViewListProperty)
+    public final void setCameraViewListProperty(Property<ObservableList<View>> cameraViewListProperty)
     {
         this.cameraViewListProperty = cameraViewListProperty;
     }
 
-    public void setCameraViewSnapEnabledProperty(BooleanProperty cameraViewSnapEnabledProperty)
+    public final void setCameraViewSnapEnabledProperty(BooleanProperty cameraViewSnapEnabledProperty)
     {
         this.cameraViewSnapEnabledProperty = cameraViewSnapEnabledProperty;
     }

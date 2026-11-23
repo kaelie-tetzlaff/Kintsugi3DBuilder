@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.core.viewset;
@@ -29,13 +33,13 @@ import java.util.stream.IntStream;
 
 public class SampledLuminanceEncoding 
 {
-    public final DoubleUnaryOperator decodeFunction;
-    public final DoubleUnaryOperator encodeFunction;
+    private final DoubleUnaryOperator decodeFunction;
+    private final DoubleUnaryOperator encodeFunction;
 
     public SampledLuminanceEncoding()
     {
-        this.decodeFunction = encoded -> SRGB.toLinear(encoded / 255.0);
-        this.encodeFunction = decoded -> SRGB.fromLinear(decoded) * 255.0;
+        decodeFunction = encoded -> SRGB.toLinear(encoded / 255.0);
+        encodeFunction = decoded -> SRGB.fromLinear(decoded) * 255.0;
     }
 
     public SampledLuminanceEncoding(double[] linear, byte[] encoded)
@@ -75,7 +79,7 @@ public class SampledLuminanceEncoding
         // Fill intermediate values.
         for (int i = 0; i < encoded.length; i++)
         {
-            x[k] = (double)(0xFF & (int)encoded[i]);
+            x[k] = 0xFF & (int)encoded[i];
             y[k] = SRGB.fromLinear(linear[i]);
             k++;
         }
@@ -87,14 +91,14 @@ public class SampledLuminanceEncoding
             y[y.length - 1] = y[y.length - 2] * 255.0 / x[x.length - 2]; // Extrapolate linearly in sRGB color space
         }
 
-        this.decodeFunction = new CubicHermiteSpline(x, y, true).andThen(SRGB::toLinear);
+        decodeFunction = new CubicHermiteSpline(x, y, true).andThen(SRGB::toLinear);
 
         // Sample decode function to ensure that the round-trip encode(decode(x)) == x is more accurate
         double[] xSampled = IntStream.range(0, 256).mapToDouble(i -> i).toArray();
         double[] ySampled = IntStream.range(0, 256).mapToDouble(i -> SRGB.fromLinear(decodeFunction.applyAsDouble(i))).toArray();
 
         //noinspection SuspiciousNameCombination [x and y intentionally inverted]
-        this.encodeFunction = new CubicHermiteSpline(ySampled, xSampled, true).compose(SRGB::fromLinear);
+        encodeFunction = new CubicHermiteSpline(ySampled, xSampled, true).compose(SRGB::fromLinear);
     }
 
     public SampledLuminanceEncoding(DoubleUnaryOperator decodeFunction, DoubleUnaryOperator encodeFunction)
@@ -103,9 +107,9 @@ public class SampledLuminanceEncoding
         this.encodeFunction = encodeFunction;
     }
 
-    public ReadonlyNativeVectorBuffer sampleDecodeFunction()
+    private ReadonlyNativeVectorBuffer sampleDecodeFunction()
     {
-        NativeVectorBuffer sampledDecodeFunction = NativeVectorBufferFactory.getInstance().createEmpty(NativeDataType.FLOAT, 1, 256);
+        NativeVectorBuffer sampledDecodeFunction = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 1, 256);
         for (int i = 0; i < 256; i++)
         {
             sampledDecodeFunction.set(i, 0, (float)decodeFunction.applyAsDouble(i));
@@ -114,9 +118,9 @@ public class SampledLuminanceEncoding
         return sampledDecodeFunction;
     }
 
-    public ReadonlyNativeVectorBuffer sampleEncodeFunction()
+    private ReadonlyNativeVectorBuffer sampleEncodeFunction()
     {
-        NativeVectorBuffer sampledEncodeFunction = NativeVectorBufferFactory.getInstance().createEmpty(NativeDataType.FLOAT, 1, 256);
+        NativeVectorBuffer sampledEncodeFunction = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 1, 256);
         for (int i = 0; i < 256; i++)
         {
             sampledEncodeFunction.set(i, 0, (float)encodeFunction.applyAsDouble((double)i / 255.0 * decodeFunction.applyAsDouble(255.0)) / 255.0f);
@@ -125,7 +129,7 @@ public class SampledLuminanceEncoding
         return sampledEncodeFunction;
     }
 
-    public DoubleVector3 encode(DoubleVector3 decoded)
+    public final DoubleVector3 encode(DoubleVector3 decoded)
     {
         if (decoded.x <= 0.0 && decoded.y <= 0.0 && decoded.z <= 0.0)
         {
@@ -161,13 +165,13 @@ public class SampledLuminanceEncoding
         }
     }
 
-    public DoubleVector4 encode(DoubleVector4 decoded)
+    public final DoubleVector4 encode(DoubleVector4 decoded)
     {
         // Leave alpha unchanged other than normalization.
         return encode(decoded.getXYZ()).asVector4(decoded.w * 255.0);
     }
 
-    public DoubleVector3 decode(DoubleVector3 encoded)
+    public final DoubleVector3 decode(DoubleVector3 encoded)
     {
         if (encoded.x <= 0.0 && encoded.y <= 0.0 && encoded.z <= 0.0)
         {
@@ -202,13 +206,13 @@ public class SampledLuminanceEncoding
         }
     }
 
-    public DoubleVector4 decode(DoubleVector4 encoded)
+    public final DoubleVector4 decode(DoubleVector4 encoded)
     {
         // Leave alpha unchanged other than normalization.
         return decode(encoded.getXYZ()).asVector4(encoded.w / 255.0);
     }
 
-    public <ContextType extends Context<ContextType>> Texture1D<ContextType> createLuminanceMap(ContextType context)
+    public final <ContextType extends Context<ContextType>> Texture1D<ContextType> createLuminanceMap(ContextType context)
     {
         return context.getTextureFactory().build1DColorTexture(sampleDecodeFunction())
                 .setInternalFormat(ColorFormat.R32F)
@@ -216,7 +220,7 @@ public class SampledLuminanceEncoding
                 .createTexture();
     }
 
-    public <ContextType extends Context<ContextType>> Texture1D<ContextType> createInverseLuminanceMap(ContextType context)
+    public final <ContextType extends Context<ContextType>> Texture1D<ContextType> createInverseLuminanceMap(ContextType context)
     {
         return context.getTextureFactory().build1DColorTexture(sampleEncodeFunction())
                 .setInternalFormat(ColorFormat.R32F)
@@ -224,8 +228,18 @@ public class SampledLuminanceEncoding
                 .createTexture();
     }
 
-    public <ContextType extends Context<ContextType>>LuminanceMapResources<ContextType> createResources(ContextType context)
+    public final <ContextType extends Context<ContextType>>LuminanceMapResources<ContextType> createResources(ContextType context)
     {
         return LuminanceMapResources.createFromEncoding(context, this);
+    }
+
+    public final DoubleUnaryOperator getDecodeFunction()
+    {
+        return decodeFunction;
+    }
+
+    public final DoubleUnaryOperator getEncodeFunction()
+    {
+        return encodeFunction;
     }
 }

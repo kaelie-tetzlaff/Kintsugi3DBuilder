@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.app;
@@ -16,6 +20,7 @@ import kintsugi3d.builder.preferences.GlobalUserPreferencesManager;
 import kintsugi3d.builder.util.ApplicationFolders;
 import kintsugi3d.builder.util.OperatingSystem;
 import kintsugi3d.gl.interactive.InitializationException;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.system.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +74,7 @@ public final class Kintsugi3DBuilder
         File logDirectory = ApplicationFolders.getLogFileDirectory().toAbsolutePath().toFile();
         File stderrFileName = new File(logDirectory,
             String.format("Kintsugi3DBuilder-%s-standard-error.log",
-                DateTimeFormatter.ofPattern("yyyy-MM-dd-HHmmss").format(LocalDateTime.now())));
+                DateTimeFormatter.ofPattern("yyyy-MM-dd-HHmmss", Locale.ROOT).format(LocalDateTime.now())));
 
         logDirectory.mkdirs();
 
@@ -95,12 +100,14 @@ public final class Kintsugi3DBuilder
             {
                 System.setErr(err);
 
-                JavaFXApplication.addStartListener(stage -> RenderingBootstrap.startRenderThread(stage, args));
+                JavaFXApplication.addStartListener(
+                    stage -> RenderingBootstrap.startRenderThread(new JavaFXRenderingUI(stage), args));
 
                 log.info("Starting JavaFX UI");
-                JavaFXApplication.launchWrapper("");
+                JavaFXApplication.launchExternal("");
             }
 
+            //noinspection CallToSystemExit
             System.exit(0);
         }
     }
@@ -112,7 +119,7 @@ public final class Kintsugi3DBuilder
 
         private TeeErrorStream(OutputStream redirect)
         {
-            this.original = System.err;
+            original = System.err;
             this.redirect = redirect;
         }
 
@@ -124,7 +131,7 @@ public final class Kintsugi3DBuilder
         }
 
         @Override
-        public void write(byte[] b, int off, int len) throws IOException
+        public void write(byte @NotNull [] b, int off, int len) throws IOException
         {
             original.write(b, off, len);
             redirect.write(b, off, len);
@@ -140,7 +147,7 @@ public final class Kintsugi3DBuilder
         @Override
         public void close() throws IOException
         {
-            System.setErr(this.original);
+            System.setErr(original);
             redirect.close();
         }
     }

@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.core.viewset;
@@ -122,7 +126,7 @@ public final class ViewSetBuilder
         View currentView = new View(cameraPose, cameraPose.quickInverse(0.002f),
             cameraProjectionIndex, lightIndex, result.getGPUBufferSize(),
             imageFile, maskFile, new ViewRMSE(), result);
-        currentView.isEnabled = enabled;
+        currentView.setEnabled(enabled);
         result.addView(currentView);
 
         // Reset maskFile to null for the next camera pose.
@@ -157,11 +161,6 @@ public final class ViewSetBuilder
     {
         result.addLight(position, intensity);
         return this;
-    }
-
-    public int getNextLightIndex()
-    {
-        return result.getLightCount();
     }
 
     public ViewSetBuilder setUUID(UUID uuid)
@@ -276,16 +275,16 @@ public final class ViewSetBuilder
     public ViewSetBuilder setOrientationViewByIndex(int viewIndex)
     {
         // Defer application until all views have been loaded.
-        this.orientationViewIndex = viewIndex;
-        this.orientationViewName = null;
+        orientationViewIndex = viewIndex;
+        orientationViewName = null;
         return this;
     }
 
     public ViewSetBuilder setOrientationViewByName(String viewName)
     {
         // Defer application until all views have been loaded.
-        this.orientationViewName = viewName;
-        this.orientationViewIndex = -1;
+        orientationViewName = viewName;
+        orientationViewIndex = -1;
         return this;
     }
 
@@ -327,7 +326,7 @@ public final class ViewSetBuilder
 
     public ViewSetBuilder applySettings(ReadonlyGeneralSettingsModel settings)
     {
-        result.getProjectSettings().copyFrom(settings);
+        result.getProjectSettings().copyAllFrom(settings);
         return this;
     }
 
@@ -369,7 +368,7 @@ public final class ViewSetBuilder
         }
 
         // Fill with default lights if not specified
-        int maxLightIndex = views.stream().mapToInt(data -> data.lightIndex).max().orElse(1);
+        int maxLightIndex = views.stream().mapToInt(View::getLightIndex).max().orElse(1);
         for (int i = getNextLightIndex(); i <= maxLightIndex; i = getNextLightIndex())
         {
             result.addLight(Vector3.ZERO, Vector3.ZERO);
@@ -386,9 +385,14 @@ public final class ViewSetBuilder
             result.getSupportingFilesDirectory().mkdirs();
         }
 
-        result.setHasUnsupportedCorrections(this.hasUnsupportedCorrections);
+        result.setHasUnsupportedCorrections(hasUnsupportedCorrections);
 
         return result;
+    }
+
+    private int getNextLightIndex()
+    {
+        return result.getLightCount();
     }
 
     /**
@@ -409,7 +413,7 @@ public final class ViewSetBuilder
 
         for (View view : viewSetDataList)
         {
-            Vector4 position = view.cameraPoseInverse.getColumn(3);
+            Vector4 position = view.getCameraPoseInverse().getColumn(3);
             minX = Math.min(minX, position.x);
             minY = Math.min(minY, position.y);
             minZ = Math.min(minZ, position.z);

@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.modals.createnewproject.inputsources;
@@ -14,8 +18,10 @@ package kintsugi3d.fx.controllers.modals.createnewproject.inputsources;
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.io.imageset.MetashapeImageSetInfo;
 import kintsugi3d.builder.io.metashape.MetashapeModel;
+import kintsugi3d.builder.resources.project.MissingImagesException;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.function.Supplier;
 
 public class MetashapeProjectInputSource extends NonValidatedInputSourceBase
@@ -28,13 +34,13 @@ public class MetashapeProjectInputSource extends NonValidatedInputSourceBase
     }
 
     @Override
-    public File getMasksDirectory()
+    public final File getMasksDirectory()
     {
         return model.getChunk().getMasksDirectory();
     }
 
     @Override
-    public File getInitialMasksDirectory()
+    public final File getInitialMasksDirectory()
     {
         File masksDir = model.getChunk().getMasksDirectory();
         //TODO: might change this because it dumps the user deep into metashape project structure
@@ -42,49 +48,70 @@ public class MetashapeProjectInputSource extends NonValidatedInputSourceBase
     }
 
     @Override
-    public boolean hasProjectMasks()
+    public final boolean hasProjectMasks()
     {
         return model.getChunk().getMasksDirectory() != null;
     }
 
     @Override
-    public void setMasksDirectory(File file)
+    public final void setMasksDirectory(File file)
     {
         model.getChunk().setMasksDirectoryOverride(file);
     }
 
-    public MetashapeProjectInputSource setMetashapeModel(MetashapeModel model)
+    public final MetashapeProjectInputSource setMetashapeModel(MetashapeModel model)
     {
         this.model = model;
         return this;
     }
 
     @Override
-    public File getInitialPhotosDirectory()
+    public final File getInitialPhotosDirectory()
     {
         return new File(model.getChunk().getParentDocument().getPsxFilePath()).getParentFile();
     }
 
     @Override
-    public MetashapeProjectInputSource overrideFullResImageDirectory(File directory)
+    public final MetashapeProjectInputSource overrideFullResImageDirectory(File directory)
     {
         model.getLoadPreferences().setFullResOverride(directory);
         return this;
     }
 
     @Override
-    public ValidatedInputSource validate() throws Exception
+    public final ValidatedInputSource validate() throws FileNotFoundException, MissingImagesException
     {
-        return new ValidatedInputSourceBase(this, new MetashapeImageSetInfo(model, getDisabledImages()))
+        return new ValidatedMetashapeProjectInputSource(this);
+    }
+
+    private static class ValidatedMetashapeProjectInputSource extends ValidatedInputSourceBase
+    {
+        private final MetashapeProjectInputSource original;
+
+        ValidatedMetashapeProjectInputSource(MetashapeProjectInputSource original)
+            throws FileNotFoundException, MissingImagesException
         {
-            @Override
-            public void confirm(File projectFileToSave)
+            super(original, new MetashapeImageSetInfo(original.model, original.getDisabledImages()));
+            this.original = original;
+        }
+
+        @Override
+        public final boolean confirm()
+        {
+            File projectFileToSave = specifyProjectFileToSave();
+
+            if (projectFileToSave != null)
             {
-                model.getLoadPreferences().setOrientationViewName(getViewSelection());
-                model.getLoadPreferences().setOrientationViewRotateDegrees(getViewRotation());
-                model.getLoadPreferences().setDisabledImageFiles(getDisabledImages());
-                Global.io().loadFromMetashapeModel(projectFileToSave, model);
+                original.model.getLoadPreferences().setOrientationViewName(getViewSelection());
+                original.model.getLoadPreferences().setOrientationViewRotateDegrees(getViewRotation());
+                original.model.getLoadPreferences().setDisabledImageFiles(getDisabledImages());
+                Global.io().loadFromMetashapeModel(projectFileToSave, original.model);
+                return true;
             }
-        };
+            else
+            {
+                return false;
+            }
+        }
     }
 }

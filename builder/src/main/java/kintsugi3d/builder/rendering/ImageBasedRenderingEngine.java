@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering;
@@ -63,7 +67,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     private final ContextType context;
 
     private volatile ProgressMonitor progressMonitor;
-    private boolean suppressErrors = false;
+    private boolean logErrors = true;
 
     private final Builder<ContextType> resourceBuilder;
     private GraphicsResourcesImageSpace<ContextType> resources;
@@ -101,9 +105,9 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         this.internalName = internalName;
         this.context = context;
         this.resourceBuilder = resourceBuilder;
-        this.managedResources = true;
-        this.sceneModel = new SceneModel();
-        this.sceneViewportModel = createSceneViewportModel(this.sceneModel);
+        managedResources = true;
+        sceneModel = new SceneModel();
+        sceneViewportModel = createSceneViewportModel(sceneModel);
     }
 
     ImageBasedRenderingEngine(String internalName, ContextType context, GraphicsResourcesImageSpace<ContextType> resources)
@@ -111,10 +115,15 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         this.internalName = internalName;
         this.context = context;
         this.resources = resources;
-        this.resourceBuilder = null;
-        this.managedResources = false;
-        this.sceneModel = new SceneModel();
-        this.sceneViewportModel = createSceneViewportModel(this.sceneModel);
+        resourceBuilder = null;
+        managedResources = false;
+        sceneModel = new SceneModel();
+        sceneViewportModel = createSceneViewportModel(sceneModel);
+    }
+
+    public final boolean isLoaded()
+    {
+        return loaded;
     }
 
     private static SceneViewportModel createSceneViewportModel(SceneModel sceneModel)
@@ -125,85 +134,82 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public String getInternalName()
+    public final String getInternalName()
     {
         return internalName;
     }
 
-    public EventListeners<ProjectLoadedListener> projectLoadedListeners()
+    public final EventListeners<ProjectLoadedListener> projectLoadedListeners()
     {
         return projectLoaded;
     }
 
-    public RenderingSubject<ContextType> getSubject()
+    public final RenderingSubject<ContextType> getSubject()
     {
         return subject;
     }
 
     @Override
-    public GraphicsResourcesImageSpace<ContextType> getResources()
+    public final GraphicsResourcesImageSpace<ContextType> getResources()
     {
-        return this.resources;
+        return resources;
     }
 
     @Override
-    public DynamicResourceManager getDynamicResourceManager()
+    public final DynamicResourceManager getDynamicResourceManager()
     {
-        return this.dynamicResourceLoader;
+        return dynamicResourceLoader;
     }
 
-
     @Override
-    public void initialize() throws InitializationException
+    public final void initialize() throws InitializationException
     {
         try
         {
-            this.simpleTexProgram = context.getShaderProgramBuilder()
+            simpleTexProgram = context.getShaderProgramBuilder()
                     .addShader(ShaderType.VERTEX, new File(new File(new File("shaders"), "common"), "texture.vert"))
                     .addShader(ShaderType.FRAGMENT, new File(new File(new File("shaders"), "common"), "texture.frag"))
                     .createProgram();
 
-            this.rectangleVertices = context.createRectangle();
+            rectangleVertices = context.createRectangle();
 
             if (resourceBuilder != null)
             {
-                this.resources = resourceBuilder
-                    .setProgressMonitor(this.progressMonitor) // Use the progress monitor that offsets the stage count if generating preview images
+                resources = resourceBuilder
+                    .setProgressMonitor(progressMonitor) // Use the progress monitor that offsets the stage count if generating preview images
 //                .generateUndistortedPreviewImages()
                     .create();
 
                 context.flush();
             }
 
-            this.simpleTexDrawable = context.createDrawable(simpleTexProgram);
-            this.simpleTexDrawable.addVertexBuffer("position", this.rectangleVertices);
+            simpleTexDrawable = context.createDrawable(simpleTexProgram);
+            simpleTexDrawable.addVertexBuffer("position", rectangleVertices);
 
             ViewSelection viewSelection = new ViewSelectionImpl(getViewSet(), sceneModel);
 
             lightCalibration = new LightCalibrationRoot<>(resources, sceneModel, viewSelection, sceneViewportModel);
             lightCalibration.initialize();
 
-            litRoot = new LitRoot<>(context, sceneModel);
             StandardScene<ContextType> scene = new StandardScene<>(resources, sceneModel, sceneViewportModel);
 //            scene.setLightVisualsEnabled(true); // Enable light visuals when not in light calibration mode
-            litRoot.takeLitContentRoot(scene);
+            litRoot = new LitRoot<>(context, sceneModel, scene);
             litRoot.initialize();
             litRoot.setShadowCaster(resources.getGeometryResources().getPositionBuffer());
 
-            lightCalibration3DRoot = new LitRoot<>(context, sceneModel);
             LightCalibration3DScene<ContextType> lightCalibScene =
                 new LightCalibration3DScene<>(resources, sceneModel, sceneViewportModel, viewSelection);
-            lightCalibration3DRoot.takeLitContentRoot(lightCalibScene);
+            lightCalibration3DRoot = new LitRoot<>(context, sceneModel, lightCalibScene);
             lightCalibration3DRoot.initialize();
             lightCalibration3DRoot.setShadowCaster(resources.getGeometryResources().getPositionBuffer());
 
             lightCalibrationSplitScreen = new SplitScreenComponent<>(lightCalibration, lightCalibration3DRoot);
 
-            this.subject = scene.getSubject();
-            this.dynamicResourceLoader = new DynamicResourceLoader<>(progressMonitor,
-                resources, subject, litRoot.getLightingResources());
+            subject = scene.getSubject();
+            dynamicResourceLoader = new DynamicResourceLoader<>(progressMonitor,
+                context, subject, litRoot.getLightingResources());
 
-            this.updateWorldSpaceDefinition();
+            updateWorldSpaceDefinition();
 
             FramebufferSize framebufferSize = context.getDefaultFramebuffer().getSize();
             FramebufferObject<ContextType> firstShadingFBO =
@@ -226,27 +232,27 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         catch (UserCancellationException e)
         {
             LOG.info("User cancelled operation while initializing ProjectRenderingEngine:", e);
-            this.close();
-            if (this.progressMonitor != null)
+            close();
+            if (progressMonitor != null)
             {
-                this.progressMonitor.cancelComplete(e);
+                progressMonitor.cancelComplete(e);
             }
             throw new InitializationException(e);
         }
         catch (RuntimeException|IOException e)
         {
             LOG.error("Error occurred initializing ProjectRenderingEngine:", e);
-            this.close();
-            if (this.progressMonitor != null)
+            close();
+            if (progressMonitor != null)
             {
-                this.progressMonitor.fail(e);
+                progressMonitor.fail(e);
             }
             throw new InitializationException(e);
         }
     }
 
     @Override
-    public void update()
+    public final void update()
     {
         try
         {
@@ -260,7 +266,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
             LOG.error("Error occurred during update:", e);
         }
 
-        this.updateWorldSpaceDefinition();
+        updateWorldSpaceDefinition();
     }
 
     private void updateWorldSpaceDefinition()
@@ -273,6 +279,8 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
             {
                 View orientationView = viewSet.getOrientationView();
 
+                // Inspection suppressed for now; remove suppression once scale handling has been investigated more.
+                //noinspection IfStatementWithIdenticalBranches
                 if (orientationView == null) // check for override
                 {
                     // Imported orientation and object center if no override
@@ -327,7 +335,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
     private Vector3 calculateClearColor()
     {
-        float maxLuminance = (float) SRGB.fromLinear(resources.getViewSet().getLuminanceEncoding().decodeFunction.applyAsDouble(255.0));
+        float maxLuminance = (float) SRGB.fromLinear(resources.getViewSet().getLuminanceEncoding().getDecodeFunction().applyAsDouble(255.0));
         return new Vector3(
                 sceneModel.getLightingModel().getBackgroundColor().x / maxLuminance,
                 sceneModel.getLightingModel().getBackgroundColor().y / maxLuminance,
@@ -335,12 +343,12 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public void draw(Framebuffer<ContextType> framebuffer, Matrix4 modelViewOverride, Matrix4 projectionOverride,
-                     int subdivWidth, int subdivHeight)
+    public final void draw(Framebuffer<ContextType> framebuffer, Matrix4 modelViewOverride, Matrix4 projectionOverride,
+                           int subdivWidth, int subdivHeight)
     {
         try
         {
-            if(this.sceneModel.getSettingsModel().getBoolean("multisamplingEnabled"))
+            if(sceneModel.getSettingsModel().getBoolean("multisamplingEnabled"))
             {
                 context.getState().enableMultisampling();
             }
@@ -422,7 +430,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
                 // for components that reference it (like environment & backplate)
                 Vector3 clearColor = calculateClearColor();
                 offscreenFBO.clearColorBuffer(0, clearColor.x, clearColor.y, clearColor.z, 1.0f);
-                this.sceneModel.setClearColor(clearColor);
+                sceneModel.setClearColor(clearColor);
 
                 Matrix4 view = modelViewOverride != null ? sceneModel.getViewFromModelViewMatrix(modelViewOverride)
                         : sceneModel.getCurrentViewMatrix();
@@ -453,19 +461,19 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
                     projectLoaded.notify(new ProjectLoadedEvent(getGeometry().getBoundingBoxSize()));
 
-                    if (this.progressMonitor != null)
+                    if (progressMonitor != null)
                     {
-                        this.progressMonitor.complete();
+                        progressMonitor.complete();
                     }
                 }
             }
         }
         catch(RuntimeException e)
         {
-            if (!suppressErrors)
+            if (logErrors)
             {
                 LOG.error("Error during draw call", e);
-                suppressErrors = true; // Prevent excessive errors
+                logErrors = false; // Prevent excessive errors
             }
         }
         catch (Error e)
@@ -477,7 +485,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         try
         {
@@ -537,33 +545,33 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public void setProgressMonitor(ProgressMonitor progressMonitor)
+    public final void setProgressMonitor(ProgressMonitor progressMonitor)
     {
         this.progressMonitor = progressMonitor;
     }
 
     @Override
-    public ReadonlyVertexGeometry getGeometry()
+    public final ReadonlyVertexGeometry getGeometry()
     {
-        return this.resources.getGeometry();
+        return resources.getGeometry();
     }
 
     @Override
-    public ViewSet getViewSet()
+    public final ViewSet getViewSet()
     {
-        return this.resources.getViewSet();
+        return resources.getViewSet();
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
-        return this.internalName.length() > 32
-                ? String.format("...%s", this.internalName.substring(this.internalName.length() - 31))
-                : this.internalName;
+        return internalName.length() > 32
+                ? String.format("...%s", internalName.substring(internalName.length() - 31))
+                : internalName;
     }
 
     @Override
-    public void reloadShaders()
+    public final void reloadShaders()
     {
         try
         {
@@ -571,7 +579,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
             lightCalibration.reloadShaders();
             lightCalibration3DRoot.reloadShaders();
 
-            suppressErrors = false;
+            logErrors = true;
         }
         catch (RuntimeException e)
         {
@@ -580,20 +588,20 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public SceneViewport getSceneViewport()
+    public final SceneViewport getSceneViewport()
     {
         return sceneViewportModel;
     }
 
 
     @Override
-    public SceneModel getSceneModel()
+    public final SceneModel getSceneModel()
     {
         return sceneModel;
     }
 
     @Override
-    public void saveGLTF(File outputDirectory, String filename, ExportSettings settings, Runnable finishedCallback)
+    public final void saveGLTF(File outputDirectory, String filename, ExportSettings settings, Runnable finishedCallback)
     {
         if (outputDirectory != null)
         {
@@ -610,7 +618,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
             try
             {
-                this.updateWorldSpaceDefinition();
+                updateWorldSpaceDefinition();
 
                 Matrix4 transform = sceneModel.getFullModelMatrix();
 

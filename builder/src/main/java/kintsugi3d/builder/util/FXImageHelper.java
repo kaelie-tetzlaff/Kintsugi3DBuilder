@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.util;
@@ -14,6 +18,7 @@ package kintsugi3d.builder.util;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import kintsugi3d.gl.util.ImageHelper;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +48,7 @@ public final class FXImageHelper
         return loadFXImage(new StreamSource(imageStream), imageFileName);
     }
 
-    private static Image loadFXImage(Source source, String imageFileName)
+    private static @Nullable Image loadFXImage(Source source, String imageFileName)
     {
         // convert tiff image if necessary
         if (TIFF_PATTERN.matcher(imageFileName.toLowerCase(Locale.ROOT)).matches())
@@ -96,7 +101,7 @@ public final class FXImageHelper
          * @return
          */
         @Override
-        public Image getStandardImage()
+        public final Image getStandardImage()
         {
             return new Image(file.toURI().toString());
         }
@@ -108,7 +113,7 @@ public final class FXImageHelper
          * @throws IOException
          */
         @Override
-        public ImageHelper getImageHelper() throws IOException
+        public final ImageHelper getImageHelper() throws IOException
         {
             return ImageHelper.read(file);
         }
@@ -129,7 +134,7 @@ public final class FXImageHelper
          * @return
          */
         @Override
-        public Image getStandardImage()
+        public final Image getStandardImage()
         {
             return new Image(inputStream);
         }
@@ -141,7 +146,7 @@ public final class FXImageHelper
          * @throws IOException
          */
         @Override
-        public ImageHelper getImageHelper() throws IOException
+        public final ImageHelper getImageHelper() throws IOException
         {
             return ImageHelper.read(inputStream);
         }

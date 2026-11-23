@@ -1,0 +1,624 @@
+/*
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 The Regents of the University of Minnesota
+ *
+ * Licensed under GPLv3
+ * ( http://www.gnu.org/licenses/gpl-3.0.html )
+ *
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ */
+
+/*
+ * Import the generic Modena overrides into the author layer so they are
+ * guaranteed to take precedence over everything in the user-agent layer,
+ * even where a rule would otherwise lose a specificity contest inside the
+ * user-agent layer. The same file is ALSO imported by user-agent-*.css so
+ * the overrides still apply wherever this author stylesheet is not loaded
+ * (e.g. dialogs or scenes that missed this stylesheet). Values in the two
+ * layers are identical, so doubling them does not change the cascade.
+ */
+@import "../kintsugi-modena-overrides.css";
+
+/*
+ * Kintsugi-specific styling: custom style classes, brand colors, and the
+ * app-wide overrides of the generic JavaFX look defined in
+ * kintsugi-modena-overrides.css (which loads in the user-agent layer,
+ * BEFORE this file).
+ *
+ * NOTE: some rules below use generic JavaFX selectors, but are kept here
+ * on purpose: they live in this scene/author stylesheet so they always
+ * win against the user-agent layer regardless of specificity (rules in
+ * the user-agent layer must out-rank Modena on specificity instead).
+ */
+
+.wireframeCaption {
+    -fx-font-style: normal;
+    -fx-font-size: 12px;
+}
+
+.wireframeBody {
+    -fx-font-style: normal;
+    -fx-font-size: 14px;
+}
+
+.wireframeBodyStrong {
+    -fx-font-style: normal;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+.wireframeBodyLarge {
+    -fx-font-style: normal;
+    -fx-font-size: 18px;
+}
+
+.wireframeSubtitle {
+    -fx-font-style: normal;
+    -fx-font-size: 20px;
+}
+
+.wireframeTitle {
+    -fx-font-style: normal;
+    -fx-font-size: 28px;
+}
+
+.wireframeTitleLarge {
+    -fx-font-style: normal;
+    -fx-font-size: 40px;
+}
+
+.wireframeDisplay {
+    -fx-font-style: normal;
+    -fx-font-size: 68px;
+}
+
+.kintsugi-3D-1 {
+    -fx-fill: #FFE790; /* light yellow */
+}
+
+.kintsugi-3D-2 {
+    -fx-fill: #EFCB5C; /* kintsugi yellow */
+}
+
+.kintsugi-3D-3 {
+    -fx-fill: #383838; /* med gray */
+}
+
+.kintsugi-3D-4 {
+    -fx-fill: #202020; /* dark gray */
+}
+
+.kintsugi-3D-5 {
+    -fx-fill: #030305; /* off-black. */
+}
+
+.kintsugi-3D-Wireframe-0 {
+    -fx-fill: #EEEEEE; /* near-white */
+}
+
+.kintsugi-3D-Wireframe-1 {
+    -fx-fill: #CECECE; /* off-white */
+}
+
+.kintsugi-3D-Wireframe-2 {
+    -fx-fill: #ADADAD; /* light gray */
+}
+
+.kintsugi-3D-Wireframe-3 {
+    -fx-fill: #383838; /* med gray */
+}
+
+.kintsugi-3D-Wireframe-4 {
+    -fx-fill: #202020; /* dark gray */
+}
+
+.kintsugi-3D-Wireframe-5 {
+    -fx-fill: #030303; /* off-black */
+}
+
+/********************************************************************************/
+
+.modal-root,
+.button:dark-button,
+.content-root,
+.cameraviewlist,
+.mainwindow-root {
+    -fx-background-color: #202020;
+}
+
+.stripped-radio-button > .radio,
+.right-stripped-radio-button > .radio {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0px;
+    -fx-padding: 0.0em; /* 4 8 4 8 */
+
+    -fx-min-width: 0;
+    -fx-pref-width: 0;
+    -fx-max-width: 0;
+}
+
+.stripped-radio-button:selected > .radio > .dot,
+.right-stripped-radio-button:selected > .radio > .dot {
+    -fx-background-color: transparent;
+}
+
+.right-stripped-radio-button {
+    -fx-background-insets:
+            1,
+            3,
+            5;
+}
+
+.card-background .label {
+    -fx-text-fill: #202020;
+}
+
+.card-background:disabled .label:disabled {
+    -fx-text-fill: #383838;
+}
+
+/* Card Component */
+.card-background {
+    -fx-background-color:
+            #CECECE,
+            #CECECE,
+            #CECECE;
+    -fx-background-insets:
+            2,
+            4,
+            6;
+}
+
+.card-background:hover {
+    -fx-background-color:
+            #EEEEEE,
+            #EEEEEE,
+            #EEEEEE;
+}
+
+.card-background:disabled {
+    -fx-background-color: #ADADAD;
+}
+
+.card-background:disabled:hover {
+    -fx-background-color: #EEEEEE;
+}
+
+.card-background:pressed {
+    -fx-background-color:
+            #383838,
+            #CECECE,
+            #CECECE;
+}
+
+.card-button, .tab-button {
+    -fx-background-radius: 0;
+    -fx-min-height: 32;
+    -fx-min-width: 184;
+    -fx-pref-width: 330;
+    -fx-padding: 8px 16px 8px 16px;
+    -fx-alignment: CENTER;
+}
+
+.card-button, .dark-button, .stripped-radio-button, .right-stripped-radio-button {
+    -fx-text-fill: #CECECE;
+    -fx-background-color:
+            #202020,
+            #202020,
+            #202020;
+}
+
+/* This card-button.activated is for future "selected" use. See Card Controller for more */
+.card-button.activated,
+.card-button:selected,
+.card-button:pressed,
+.card-button:pressed:hover,
+.dark-button:selected,
+.dark-button:pressed,
+.dark-button:pressed:hover,
+.right-stripped-radio-button:pressed,
+.right-stripped-radio-button:selected,
+.right-stripped-radio-button:selected:hover,
+.right-stripped-radio-button:pressed:hover,
+.right-stripped-radio-button:selected:hover:focused,
+.right-stripped-radio-button:pressed:hover:focused {
+    -fx-text-fill: #EEEEEE;
+    -fx-background-color:
+            #ADADAD,
+            #383838,
+            #383838;
+}
+
+.card-button:hover,
+.dark-button:hover,
+.stripped-radio-button:selected,
+.stripped-radio-button:hover,
+.right-stripped-radio-button:hover,
+.card-button:hover:focused,
+.dark-button:hover:focused,
+.stripped-radio-button:hover:focused,
+.right-stripped-radio-button:hover:focused {
+    -fx-text-fill: #EEEEEE;
+    -fx-background-color:
+            #383838,
+            #383838,
+            #383838;
+}
+
+.card-button:disabled,
+.dark-button:disabled,
+.stripped-radio-button:disabled,
+.right-stripped-radio-button:disabled {
+    -fx-text-fill: #383838;
+    -fx-background-color:
+            #202020,
+            #202020,
+            #202020;
+}
+
+.tab-button {
+    -fx-background-color:
+            #CECECE,
+            #CECECE,
+            #CECECE;
+}
+
+.tab-button:hover {
+    -fx-background-color:
+            #EEEEEE,
+            #EEEEEE,
+            #EEEEEE;
+}
+
+.tab-button:pressed {
+    -fx-background-color:
+            #838383,
+            #CECECE,
+            #CECECE;
+}
+
+.button:dark-button {
+    -fx-text-fill: #CECECE;
+    -fx-background-radius: 0;
+    -fx-padding: 0 4 0 4;
+}
+
+.button:dark-button:hover {
+    -fx-text-fill: #CECECE;
+    -fx-background-color: #383838;
+}
+
+.content-root {
+    -fx-padding: 48 24 52 24; /* top right bottom left */
+}
+
+.accordion .content-root {
+    -fx-padding: 24 24 16 24; /* top right bottom left */
+}
+
+.sidebar-root {
+    -fx-background-color: #383838;
+}
+
+.toggleButtonLarge {
+    -fx-padding: 16 16 16 16; /* top right bottom left */
+}
+
+.cache-settings-root {
+    -fx-background-color: #383838;
+}
+
+.cameraviewlist {
+    -fx-border-color: #202020;
+}
+
+.progress-bar {
+    -fx-accent: #D4AA00; /* color of completed portion (Kintsugi yellow) */
+}
+
+.progress-bar .track {
+    -fx-background-color: #CECECE; /* color of incomplete portion */
+}
+
+.desaturated-progress-bar {
+    -fx-accent: #383838; /* color of completed portion */
+}
+
+.card-separator .line,
+.tab-separator .line {
+    -fx-pref-height: 1;
+    -fx-border-color: null;
+}
+
+.card-separator .line {
+    -fx-background-color: #383838;
+}
+
+.tab-separator .line {
+    -fx-background-color: #CECECE;
+}
+
+.black-line .line {
+    -fx-background-color: #080808;
+    -fx-pref-height: 1;
+    -fx-border-color: null;
+}
+
+/* Styling for the scroll bar in left pane */
+.left-bar > scroll-pane {
+    -fx-background-color: #202020;
+}
+
+.left-bar .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.left-bar .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+}
+
+.left-bar .scroll-bar:vertical .thumb {
+    -fx-background-color: white;
+    -fx-background-radius: 5em;
+}
+
+.black-line {
+    -fx-background-color: black;
+}
+
+.black-line .line {
+    -fx-border-color: #000000;
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
+    -fx-background-color: #000000;
+}
+
+.selectionBox {
+    -fx-padding: 0; /* Check Box padding */
+    -fx-alignment: TOP_LEFT; /* Check Box Alignment */
+    -fx-line-spacing: 0; /* Check Box spacing between elements */
+}
+
+.selectionBox .box {
+    -fx-background-color: transparent; /* Check Box background */
+
+    /* Check Box mark space */
+    -fx-pref-width: 12px;
+    -fx-pref-height: 12px;
+    -fx-min-width: 12px;
+    -fx-min-height: 12px;
+    -fx-max-width: 12px;
+    -fx-max-height: 12px;
+}
+
+.selectionBox .mark {
+    /* Check mark actual shape */
+    -fx-shape: "M 1 5.5 C 1 4.7, 1.7 4, 2.5 4 C 2.9 4, 3.3 4.2, 3.5 4.5 L 5 6 L 8.5 2.5 C 8.7 2.2, 9.1 2, 9.5 2 C 10.3 2, 11 2.7, 11 3.5 C 11 3.9, 10.8 4.3, 10.5 4.5 L 6 9 C 5.5 9.5, 4.5 9.5, 4 9 L 1.5 6.5 C 1.2 6.2, 1 5.9, 1 5.5 Z";
+    -fx-scale-x: .8; /* Check mark width scale */
+    -fx-scale-y: .8; /* Check mark height scale */
+
+    -fx-background-color: transparent; /* Check mark background when not selected */
+    -fx-effect: null; /* Check mark outline when not selected */
+}
+
+.selectionBox:selected .mark {
+    -fx-background-color: #CECECE; /* Check mark background when selected */
+    -fx-effect: dropshadow(three-pass-box, black, .75, .75, 0, 0); /* Check mark black outline */
+}
+
+.carousel-scroll-pane .scroll-bar:horizontal {
+    -fx-opacity: 0;
+}
+
+.carousel-scroll-pane.hide-hbar .scroll-bar:horizontal {
+    -fx-opacity: 1.0;
+}
+
+/********************************************************************************/
+
+/* List / tree / table view styling.
+ * This whole section MUST live in this author stylesheet (not in
+ * kintsugi-modena-overrides.css): Modena paints borders and focus rings
+ * on these controls with higher-specificity multi-layer
+ * -fx-background-color rules (box-border, focus-color, :filled:selected
+ * families) that same-layer rules cannot reliably beat. Author-layer
+ * rules always win against the user-agent layer regardless of
+ * specificity. */
+
+.list-view,
+.table-view,
+.table-view .column-header,
+.table-view .column-header-background .filler {
+    -fx-background-color: #202020;
+}
+
+.list-view {
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-border-width: 0;
+    -fx-border-color: transparent;
+    -fx-border-radius: 0;
+}
+
+.list-view:focused {
+    -fx-background-color: #202020;
+    -fx-background-insets: 0;
+}
+
+.list-view, .list-cell,
+.table-view .cell, .table-row-cell {
+    -fx-text-fill: #CECECE;
+}
+
+.list-cell:even,
+.table-row-cell:even,
+.tree-cell:even {
+    -fx-background-color: #383838;
+}
+
+.list-cell:odd,
+.table-row-cell:odd,
+.tree-cell:odd {
+    -fx-background-color: #202020;
+}
+
+.list-cell:selected,
+.table-view .cell:selected,
+.table-row-cell:selected,
+.table-row-cell:selected .cell,
+.tree-cell:selected {
+    -fx-background-color: #EEEEEE;
+    -fx-text-fill: #383838;
+}
+
+.list-cell:selected {
+    -fx-background-color: #EEEEEE;
+    -fx-text-fill: #383838;
+}
+
+.list-cell:selected .label,
+.table-view .cell:selected .label,
+.table-row-cell:selected .label,
+.table-row-cell:selected .cell .label,
+.tree-cell:selected .label {
+    -fx-text-fill: #383838;
+}
+
+.table-view {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-table-cell-border-color: #CECECE;
+}
+
+.table-row-cell:focused {
+    -fx-border-color: transparent;
+}
+
+.table-view .cell:focused {
+    -fx-border-color: transparent;
+}
+
+.cell:empty:focused {
+    -fx-background-insets: 0;
+}
+
+/* Tree cell styling stolen from stack overflow --> https://stackoverflow.com/questions/30684308/javafx-treeview-css */
+.tree-view, .tree-cell {
+    -fx-text-fill: white;
+}
+
+.tree-view {
+    -fx-background-color: #383838;
+}
+
+.tree-cell:empty {
+    -fx-background-color: #202020;
+}
+
+.tree-cell:expanded, .tree-cell:sub-tree-item {
+    -fx-background-color: #383838;
+}
+
+.tree-cell:selected {
+    -fx-font-weight: bold;
+}
+
+.tree-cell {
+    -fx-padding: 0.75em 0em 0.75em 0em;
+}
+
+.tree-cell:sub-tree-item {
+    -fx-padding: 0.25em;
+}
+
+.tree-cell > .tree-disclosure-node > .arrow {
+    -fx-background-color: none;
+}
+
+.tree-cell:expanded > .tree-disclosure-node > .arrow {
+    -fx-background-color: none;
+}
+
+/* Menu-bar / menu / menu-item styling.
+ * Kept in this author stylesheet (not in kintsugi-modena-overrides.css)
+ * so it always beats Modena's more specific user-agent selectors. */
+.menu .label,
+.tab,
+.tab .tab-label {
+    -fx-text-fill: #CECECE;
+}
+
+.menu {
+    -fx-background-color: #383838;
+    -fx-background-radius: 0 0 0 0;
+}
+
+.menu:hover {
+    -fx-background-color: #EEEEEE;
+}
+
+.menu:hover .label {
+    -fx-text-fill: #383838;
+}
+
+.menu-bar {
+    -fx-background-color: #383838;
+}
+
+.menu-item {
+    -fx-background-color: #202020;
+}
+
+.menu-item .label {
+    -fx-text-fill: #CECECE !important;
+}
+
+.menu-item:hover {
+    -fx-background-color: #EEEEEE;
+}
+
+.menu-item:hover .label {
+    -fx-text-fill: #383838 !important;
+}
+
+/* JavaFX TabPane tab styling.
+ * Kept in this author stylesheet (not in kintsugi-modena-overrides.css)
+ * so it always beats Modena's more specific user-agent selectors.
+ * Note: Kintsugi's own "tabs" in the left bar are buttons/containers
+ * (.tab-button, .left-bar) and are styled above; these rules are for the
+ * JavaFX TabPane control itself. */
+.tab {
+    -fx-background-color: #202020;
+    -fx-background-radius: 0;
+    -fx-padding: 8 16 8 16; /* top right bottom left */
+    -fx-effect: none;
+}
+
+.tab-pane {
+    -fx-focus-color: transparent;        /* removes blue focus line */
+    -fx-faint-focus-color: transparent;  /* removes faint glow when not fully focused */
+}
+
+.tab:selected {
+    -fx-background-color: #383838;
+}
+
+.tab:selected .tab-label {
+    -fx-text-fill: #EEEEEE;
+}
+
+.tab:hover {
+    -fx-background-color: #EEEEEE;
+}
+
+.tab:hover .tab-label {
+    -fx-text-fill: #383838;
+}

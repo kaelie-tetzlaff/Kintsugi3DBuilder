@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering;
@@ -17,7 +21,11 @@ import kintsugi3d.gl.interactive.UserCancellationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Objects;
+import java.util.Queue;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GraphicsRequestManager<ContextType extends Context<ContextType>> implements GraphicsRequestQueue
 {
@@ -28,30 +36,41 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
 
     private final ContextType context;
     private final Queue<Runnable> requestList;
-    private final Collection<Runnable> requestAddedListeners = new ArrayList<>(1);
-    private RenderableManager<ContextType> renderableManager;
-    private ProgressMonitor progressMonitor;
+    private final Collection<Runnable> requestAddedListeners = new CopyOnWriteArrayList<>();
+    private volatile RenderableManager<ContextType> renderableManager;
+    private volatile ProgressMonitor progressMonitor;
 
     public GraphicsRequestManager(ContextType context)
     {
         this.context = context;
-        this.requestList = new LinkedList<>();
+        requestList = new LinkedList<>();
     }
 
-    @Override
-    public boolean isEmpty()
-    {
-        return requestList.isEmpty();
-    }
-
-    public void setRenderableManager(RenderableManager<ContextType> renderableManager)
+    /**
+     * Should be called once by Rendering.
+     * @param renderableManager
+     */
+    final void setRenderableManager(RenderableManager<ContextType> renderableManager)
     {
         this.renderableManager = renderableManager;
     }
 
-    public void setProgressMonitor(ProgressMonitor progressMonitor)
+    /**
+     * Should be called once by Rendering.
+     * @param progressMonitor
+     */
+    final void setProgressMonitor(ProgressMonitor progressMonitor)
     {
         this.progressMonitor = progressMonitor;
+    }
+
+    @Override
+    public final boolean isEmpty()
+    {
+        // Intentionally not synchronized to prevent blocking just for a simple isEmpty check.
+        // If isEmpty is called concurrently with a request being added,
+        // we'll just catch the next time through the rendering loop.
+        return requestList.isEmpty();
     }
 
     private static void logCancellation(Throwable e)
@@ -101,30 +120,30 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public void addRequestAddedListener(Runnable listener)
+    public final void addRequestAddedListener(Runnable listener)
     {
         requestAddedListeners.add(listener);
     }
 
     @Override
-    public void addBackgroundGraphicsRequest(ImageBasedGraphicsRequest request)
+    public final void addBackgroundImageBasedGraphicsRequest(ImageBasedGraphicsRequest request)
     {
         if (renderableManager.getMainRenderable() == null)
         {
             // Instance is currently null, wait for a load and then call this function again (recursive-ish)
-            renderableManager.addMainRenderableLoadCallback(instance -> addBackgroundGraphicsRequest(request));
+            renderableManager.addMainRenderableLoadCallback(instance -> addBackgroundImageBasedGraphicsRequest(request));
         }
         else
         {
             synchronized (requestList)
             {
-                this.requestList.add(() ->
+                requestList.add(() ->
                 {
                     // Check again for null, just in case
                     if (renderableManager.getMainRenderable() == null)
                     {
                         // Instance is currently null, wait for a load and then call this function again (recursive-ish)
-                        renderableManager.addMainRenderableLoadCallback(instance -> addBackgroundGraphicsRequest(request));
+                        renderableManager.addMainRenderableLoadCallback(instance -> addBackgroundImageBasedGraphicsRequest(request));
                     }
                     else
                     {
@@ -156,9 +175,9 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public void addGraphicsRequest(ProgressMonitoredImageBasedGraphicsRequest request)
+    public final void addImageBasedGraphicsRequest(ProgressMonitoredImageBasedGraphicsRequest request)
     {
-        if (this.progressMonitor.isConflictingProcess())
+        if (progressMonitor.isConflictingProcess())
         {
             return;
         }
@@ -166,13 +185,13 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
         if (renderableManager.getMainRenderable() == null)
         {
             // Instance is currently null, wait for a load and then call this function again (recursive-ish)
-            renderableManager.addMainRenderableLoadCallback(instance -> addGraphicsRequest(request));
+            renderableManager.addMainRenderableLoadCallback(instance -> addImageBasedGraphicsRequest(request));
         }
         else
         {
             synchronized (requestList)
             {
-                this.requestList.add(() ->
+                requestList.add(() ->
                 {
                     if (progressMonitor != null)
                     {
@@ -183,7 +202,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
                     if (renderableManager.getMainRenderable() == null)
                     {
                         // Instance is currently null, wait for a load and then call this function again (recursive-ish)
-                        renderableManager.addMainRenderableLoadCallback(instance -> addGraphicsRequest(request));
+                        renderableManager.addMainRenderableLoadCallback(instance -> addImageBasedGraphicsRequest(request));
                     }
                     else
                     {
@@ -225,11 +244,11 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
      * @param request
      */
     @Override
-    public void addBackgroundGraphicsRequest(GraphicsRequest request)
+    public final void addBackgroundGraphicsRequest(GraphicsRequest request)
     {
         synchronized (requestList)
         {
-            this.requestList.add(() ->
+            requestList.add(() ->
             {
                 // Suppress warning about catching and not rethrowing AssertionError.
                 // The request should effectively be regarded a "sandbox" where a critical logic error should not result in the application terminating.
@@ -257,15 +276,15 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public void addGraphicsRequest(ProgressMonitoredGraphicsRequest request)
+    public final void addGraphicsRequest(ProgressMonitoredGraphicsRequest request)
     {
         synchronized (requestList)
         {
-            this.requestList.add(() ->
+            requestList.add(() ->
             {
                 if (progressMonitor != null)
                 {
-                    if (this.progressMonitor.isConflictingProcess())
+                    if (progressMonitor.isConflictingProcess())
                     {
                         return;
                     }
@@ -304,7 +323,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public void clear()
+    public final void clear()
     {
         synchronized (requestList)
         {
@@ -312,7 +331,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
         }
     }
 
-    public void executeQueue()
+    public final void executeQueue()
     {
         context.makeContextCurrent();
 

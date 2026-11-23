@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.renderexport.screenshot;
@@ -19,7 +23,6 @@ import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.io.RecentProjects;
 import kintsugi3d.builder.rendering.Rendering;
 import kintsugi3d.builder.util.FXWindowHelper;
-import kintsugi3d.renderexport.screenshot.ScreenshotRequest.Builder;
 
 import java.io.File;
 
@@ -35,40 +38,40 @@ public class ScreenshotController
     @FXML
     private void exportFileButtonAction()
     {
-        this.fileChooser.setTitle("Choose an export file");
+        fileChooser.setTitle("Choose an export file");
         if (exportFileField.getText().isEmpty())
         {
-            this.fileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+            fileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         }
         else
         {
             File currentValue = new File(exportFileField.getText());
-            this.fileChooser.setInitialDirectory(currentValue);
+            fileChooser.setInitialDirectory(currentValue);
         }
-        File file = this.fileChooser.showSaveDialog(root.getScene().getWindow());
+        File file = fileChooser.showSaveDialog(root.getScene().getWindow());
         if (file != null)
         {
             exportFileField.setText(file.toString());
-            RecentProjects.setMostRecentDirectory(file);
+            RecentProjects.getInstance().setMostRecentDirectory(file);
         }
     }
 
     @FXML
-    public void cancel()
+    public final void cancel()
     {
         FXWindowHelper.requestClose(root);
     }
 
     @FXML
-    public void run()
+    public final void run()
     {
         if(Global.io().getAggregateProgressMonitor().isConflictingProcess())
         {
             return;
         }
 
-        Rendering.getRequestQueue().addGraphicsRequest(
-            new Builder()
+        Rendering.getRequestQueue().addImageBasedGraphicsRequest(
+            ScreenshotRequest.getBuilder()
                 .setWidth(Integer.parseInt(widthTextField.getText()))
                 .setHeight(Integer.parseInt(heightTextField.getText()))
                 .setExportFile(new File(exportFileField.getText()))

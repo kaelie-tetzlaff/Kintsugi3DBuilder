@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.builders.base;
@@ -15,9 +19,14 @@ import kintsugi3d.gl.builders.TextureBuilder;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Texture;
 
-public abstract class TextureBuilderBase<ContextType extends Context<ContextType>, TextureType extends Texture<ContextType>> implements TextureBuilder<ContextType, TextureType>
+/**
+ * Internal base class for various other texture builder base classes.
+ * @param <ContextType>
+ * @param <TextureType>
+ */
+abstract class TextureBuilderBase<ContextType extends Context<ContextType>, TextureType extends Texture<ContextType>> implements TextureBuilder<ContextType, TextureType>
 {
-    protected final ContextType context;
+    private final ContextType context;
     private int multisamples = 1;
     private boolean fixedMultisampleLocations = true;
     private boolean mipmapsEnabled = false;
@@ -25,41 +34,42 @@ public abstract class TextureBuilderBase<ContextType extends Context<ContextType
     private boolean linearFilteringEnabled = false;
     private float maxAnisotropy = 1.0f;
 
-    protected int getMultisamples()
+    protected final int getMultisamples()
     {
         return multisamples;
     }
 
-    protected boolean areMultisampleLocationsFixed()
+    protected final boolean areMultisampleLocationsFixed()
     {
         return fixedMultisampleLocations;
     }
 
-    protected boolean areMipmapsEnabled()
+    protected final boolean areMipmapsEnabled()
     {
         return mipmapsEnabled;
     }
 
-    protected int getMaxMipmapLevel()
+    protected final int getMaxMipmapLevel()
     {
         return maxMipmapLevel;
     }
 
-    protected boolean isLinearFilteringEnabled()
+    protected final boolean isLinearFilteringEnabled()
     {
         return linearFilteringEnabled;
     }
 
-    protected float getMaxAnisotropy()
+    protected final float getMaxAnisotropy()
     {
         return maxAnisotropy;
     }
 
-    protected TextureBuilderBase(ContextType context)
+    TextureBuilderBase(ContextType context)
     {
         this.context = context;
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public TextureBuilder<ContextType, TextureType> setMultisamples(int samples, boolean fixedSampleLocations)
     {
@@ -68,6 +78,7 @@ public abstract class TextureBuilderBase<ContextType extends Context<ContextType
         return this;
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public TextureBuilder<ContextType, TextureType> setMipmapsEnabled(boolean enabled)
     {
@@ -75,13 +86,15 @@ public abstract class TextureBuilderBase<ContextType extends Context<ContextType
         return this;
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
-    public TextureBuilder<ContextType, TextureType> setMaxMipmapLevel(int maxMipmapLevel)
+    public TextureBuilder<ContextType, TextureType> setMaxMipmapLevel(@SuppressWarnings("ParameterHidesMemberVariable") int maxMipmapLevel)
     {
         this.maxMipmapLevel = maxMipmapLevel;
         return this;
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public TextureBuilder<ContextType, TextureType> setLinearFilteringEnabled(boolean enabled)
     {
@@ -89,10 +102,16 @@ public abstract class TextureBuilderBase<ContextType extends Context<ContextType
         return this;
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
-    public TextureBuilder<ContextType, TextureType> setMaxAnisotropy(float maxAnisotropy)
+    public TextureBuilder<ContextType, TextureType> setMaxAnisotropy(@SuppressWarnings("ParameterHidesMemberVariable") float maxAnisotropy)
     {
         this.maxAnisotropy = maxAnisotropy;
         return this;
+    }
+
+    public final ContextType getContext()
+    {
+        return context;
     }
 }

@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+  ~ Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+  ~                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
   ~ Copyright (c) 2019 The Regents of the University of Minnesota
   ~
   ~ Licensed under GPLv3
   ~ ( http://www.gnu.org/licenses/gpl-3.0.html )
   ~
-  ~ This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-  ~ This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+  ~ This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+  ~
+  ~ This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+  ~ of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   -->
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<VBox stylesheets="@../../kintsugiStyling.css" fx:id="root" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kintsugi3d.fx.controllers.scene.environment.SettingsEnvironmentSceneController">
+<VBox stylesheets="@../../kintsugi.css" fx:id="root" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kintsugi3d.fx.controllers.scene.environment.SettingsEnvironmentSceneController">
    <Accordion expandedPane="$lightingPane">
      <panes>
+         <!--suppress JavaFxUnresolvedFxIdReference -->
          <TitledPane fx:id="lightingPane" animated="false" text="Lighting">
              <GridPane  alignment="CENTER_LEFT" hgap="5.0" vgap="10.0">
                  <padding>
@@ -70,7 +75,8 @@
                          GridPane.rowIndex="1"/>
              </GridPane>
          </TitledPane>
-         <TitledPane fx:id="backgroundPane" animated="false" expanded="false"
+         <!-- Background pane -->
+         <TitledPane animated="false" expanded="false"
                      text="Background">
              <GridPane alignment="CENTER_LEFT" hgap="5.0" vgap="10.0">
                  <padding>

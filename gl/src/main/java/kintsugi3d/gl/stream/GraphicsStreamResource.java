@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.stream;
@@ -40,7 +44,7 @@ public class GraphicsStreamResource<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         program.close();
         framebuffer.close();
@@ -50,7 +54,7 @@ public class GraphicsStreamResource<ContextType extends Context<ContextType>> im
      * Retrieves the program managed by this graphics stream resource.
      * @return The shader program.
      */
-    public Program<ContextType> getProgram()
+    public final Program<ContextType> getProgram()
     {
         return program;
     }
@@ -59,49 +63,49 @@ public class GraphicsStreamResource<ContextType extends Context<ContextType>> im
      * Retrieves the framebuffer managed by this graphics stream resource.
      * @return The framebuffer.
      */
-    public Framebuffer<ContextType> getFramebuffer()
+    public final Framebuffer<ContextType> getFramebuffer()
     {
         return framebuffer;
     }
 
     @Override
-    public GraphicsStream<ColorList[]> sequential()
+    public final GraphicsStream<ColorList[]> sequential()
     {
         return base.sequential();
     }
 
     @Override
-    public GraphicsStream<ColorList[]> parallel()
+    public final GraphicsStream<ColorList[]> parallel()
     {
         return base.parallel();
     }
 
     @Override
-    public GraphicsStream<ColorList[]> parallel(int maxRunningThreads)
+    public final GraphicsStream<ColorList[]> parallel(int maxRunningThreads)
     {
         return base.parallel(maxRunningThreads);
     }
 
     @Override
-    public int getCount()
+    public final int getCount()
     {
         return base.getCount();
     }
 
     @Override
-    public void forEach(Consumer<? super ColorList[]> action)
+    public final void forEach(Consumer<? super ColorList[]> action)
     {
         base.forEach(action);
     }
 
     @Override
-    public <R> GraphicsStream<R> map(Function<ColorList[], ? extends R> mapper)
+    public final <R> GraphicsStream<R> map(Function<ColorList[], ? extends R> mapper)
     {
         return base.map(mapper);
     }
 
     @Override
-    public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super ColorList[]> accumulator)
+    public final <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super ColorList[]> accumulator)
     {
         return base.collect(supplier, accumulator);
     }

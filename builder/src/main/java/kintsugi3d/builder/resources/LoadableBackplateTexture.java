@@ -1,0 +1,71 @@
+/*
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 The Regents of the University of Minnesota
+ *
+ * Licensed under GPLv3
+ * ( http://www.gnu.org/licenses/gpl-3.0.html )
+ *
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ */
+
+package kintsugi3d.builder.resources;
+
+import kintsugi3d.gl.core.CompressionFormat;
+import kintsugi3d.gl.core.Context;
+import kintsugi3d.gl.core.Texture2D;
+import kintsugi3d.gl.util.ImageHelper;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+class LoadableBackplateTexture<ContextType extends Context<ContextType>> implements LoadableResource<BufferedImage, Texture2D<ContextType>>
+{
+    private final ContextType context;
+    private final LightingResources<ContextType> lightingResources;
+
+    LoadableBackplateTexture(ContextType context, LightingResources<ContextType> lightingResources)
+    {
+        this.context = context;
+        this.lightingResources = lightingResources;
+    }
+
+    @Override
+    public final String getProcessName()
+    {
+        return "Load Backplate";
+    }
+
+    @Override
+    public final BufferedImage loadCPU(File file) throws IOException
+    {
+        return ImageHelper.read(file).getBufferedImage();
+    }
+
+    @Override
+    public final Texture2D<ContextType> loadGPU(BufferedImage data)
+    {
+        return context.getTextureFactory().build2DColorTextureFromImage(data, true)
+            .setInternalFormat(CompressionFormat.RGB_PUNCHTHROUGH_ALPHA1_4BPP)
+            .setLinearFilteringEnabled(true)
+            .setMipmapsEnabled(true)
+            .createTexture();
+    }
+
+    @Override
+    public final void consume(Texture2D<ContextType> resource)
+    {
+        lightingResources.takeBackplateTexture(resource);
+    }
+
+    @Override
+    public final boolean isLoaded()
+    {
+        return lightingResources.getBackplateTexture() != null;
+    }
+}

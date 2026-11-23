@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.util;
@@ -18,14 +22,30 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 @SuppressWarnings({"AccessOfSystemProperties", "CallToSystemGetenv"})
 public final class ApplicationFolders
 {
-    private static final Logger LOG = LoggerFactory.getLogger(ApplicationFolders.class);
-
+    // Initialize OS and app folder name first, so the static block below can compute the log directory.
     private static final OperatingSystem OS = OperatingSystem.getCurrentOS();
     public static final String APP_FOLDER_NAME = "Kintsugi3DBuilder";
+
+    // Set the log directory system property before the static Logger field below triggers
+    // Log4j2 auto-initialization, so Log4j2 reads the correct path from its config.
+    // GlobalUserPreferencesManager does not have a static Logger, so getLogFileDirectory() can be
+    // called here safely and will respect user preferences for the log directory.
+    static
+    {
+        if (System.getProperty("Kintsugi3D.logDir") == null)
+        {
+            System.setProperty("Kintsugi3D.logDir", getLogFileDirectory().toAbsolutePath().toString());
+        }
+
+        LOG = LoggerFactory.getLogger(ApplicationFolders.class);
+    }
+
+    private static final Logger LOG;
 
     private ApplicationFolders()
     {
@@ -142,54 +162,30 @@ public final class ApplicationFolders
 
     public static Path getPreviewImagesRootDirectory()
     {
-        Path preferred = GlobalUserPreferencesManager.getInstance().getPreferences().getDirectoryPreferences().getPreviewImagesDirectory();
-        if (preferred != null)
-        {
-            return preferred;
-        }
-        else
-        {
-            return getUserCacheDirectory().resolve("preview");
-        }
+        return Objects.requireNonNullElseGet(
+            GlobalUserPreferencesManager.getInstance().getPreferences().getDirectoryPreferences().getPreviewImagesDirectory(),
+            () -> getUserCacheDirectory().resolve("preview"));
     }
 
     public static Path getFitCacheRootDirectory()
     {
-        Path preferred = GlobalUserPreferencesManager.getInstance().getPreferences().getDirectoryPreferences().getFitCacheDirectory();
-        if (preferred != null)
-        {
-            return preferred;
-        }
-        else
-        {
-            return getUserCacheDirectory().resolve("fit");
-        }
+        return Objects.requireNonNullElseGet(
+            GlobalUserPreferencesManager.getInstance().getPreferences().getDirectoryPreferences().getFitCacheDirectory(),
+            () -> getUserCacheDirectory().resolve("fit"));
     }
 
     public static Path getExtensionDirectory()
     {
-        Path preferred = GlobalUserPreferencesManager.getInstance().getPreferences().getDirectoryPreferences().getExtensionDirectory();
-        if (preferred != null)
-        {
-            return preferred;
-        }
-        else
-        {
-            return getUserCacheDirectory().resolve("ext");
-        }
+        return Objects.requireNonNullElseGet(
+            GlobalUserPreferencesManager.getInstance().getPreferences().getDirectoryPreferences().getExtensionDirectory(),
+            () -> getUserCacheDirectory().resolve("ext"));
     }
 
     public static Path getLogFileDirectory()
     {
-        Path preferred = GlobalUserPreferencesManager.getInstance().getPreferences().getDirectoryPreferences().getLogFileDirectory();
-        if (preferred != null)
-        {
-            return preferred;
-        }
-        else
-        {
-            return getUserAppDirectory().resolve("logs");
-        }
+        return Objects.requireNonNullElseGet(
+            GlobalUserPreferencesManager.getInstance().getPreferences().getDirectoryPreferences().getLogFileDirectory(),
+            () -> getUserAppDirectory().resolve("logs"));
     }
 
     public static void makeLogDirectorySystemProperty()

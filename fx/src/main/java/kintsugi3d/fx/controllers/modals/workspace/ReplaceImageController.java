@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.modals.workspace;
@@ -45,10 +49,10 @@ public class ReplaceImageController extends DataReceiverPageControllerBase<Image
     private ImageReplacer data;
 
     @Override
-    public Region getRootNode() { return root; }
+    public final Region getRootNode() { return root; }
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         newFileButton.pseudoClassStateChanged(PseudoClass.getPseudoClass("dark-button"), true);
 
@@ -66,7 +70,7 @@ public class ReplaceImageController extends DataReceiverPageControllerBase<Image
     }
 
     @Override
-    public boolean confirm()
+    public final boolean tryConfirm()
     {
         // Texture replacement must happen on graphics thread.
         Rendering.runLater(() ->
@@ -115,9 +119,9 @@ public class ReplaceImageController extends DataReceiverPageControllerBase<Image
     }
 
     @Override
-    public void receiveData(ImageReplacer newData)
+    public final void receiveData(ImageReplacer newData)
     {
-        this.data = newData;
+        data = newData;
 
         currentImage = new Image(data.getCurrentImage().toURI().toString(), 72, 72, false, false);
         currentImageView.setImage(currentImage);
@@ -126,7 +130,7 @@ public class ReplaceImageController extends DataReceiverPageControllerBase<Image
     }
 
     @FXML
-    public void openFileBrowser()
+    public final void openFileBrowser()
     {
         data.setNewImage(replacementFileChooser.showOpenDialog(root.getScene().getWindow()));
         updateNewTexture();

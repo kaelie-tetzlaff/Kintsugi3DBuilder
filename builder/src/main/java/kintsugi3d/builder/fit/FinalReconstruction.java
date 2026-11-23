@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit;
@@ -21,6 +25,7 @@ import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,10 +47,10 @@ public class FinalReconstruction<ContextType extends Context<ContextType>>
         this.reconstructionSettings = reconstructionSettings;
     }
 
-    public List<Map<String, ReadonlyColorAppearanceRMSE>> reconstruct(ReadonlyTextureResources<ContextType> specularFit,
-                                                                      Map<String, ProgramBuilder<ContextType>> reconstructionProgramBuilders,
-                                                                      ProgramBuilder<ContextType> incidentRadianceProgramBuilder,
-                                                                      File debugDirectory, File groundTruthDirectory)
+    public final @Nullable List<Map<String, ReadonlyColorAppearanceRMSE>> reconstruct(ReadonlyTextureResources<ContextType> specularFit,
+                                                                                      Map<String, ProgramBuilder<ContextType>> reconstructionProgramBuilders,
+                                                                                      ProgramBuilder<ContextType> incidentRadianceProgramBuilder,
+                                                                                      File debugDirectory, File groundTruthDirectory)
     {
         if (debugDirectory != null)
         {
@@ -132,15 +137,7 @@ public class FinalReconstruction<ContextType extends Context<ContextType>>
 
     private void saveImageToFile(File outputDirectory, int k, ReadableFramebuffer<ContextType> framebuffer)
     {
-        try
-        {
-            String filename = String.format("%04d.png", k);
-            framebuffer.getTextureReaderForColorAttachment(0).saveToFile("PNG", new File(outputDirectory, filename));
-        }
-        catch (IOException e)
-        {
-            LOG.error("An error occurred while saving image:", e);
-        }
+        saveImageToFile(outputDirectory, String.format("%04d.png", k), framebuffer);
     }
 
     private void saveImageToFile(File outputDirectory, String filename, ReadableFramebuffer<ContextType> framebuffer)

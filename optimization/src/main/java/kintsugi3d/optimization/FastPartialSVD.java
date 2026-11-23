@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.optimization;
@@ -25,6 +29,7 @@ import static org.ejml.dense.row.CommonOps_FDRM.*;
  * Fast SVD using power iterations for when only a few singular values are needed.
  * Fairly standard algorithm; implemented using the appendix of Chen et al., "Light Field Mapping" for reference.
  */
+@SuppressWarnings("unused")
 public final class FastPartialSVD
 {
     private final SimpleMatrix matrix;
@@ -62,7 +67,7 @@ public final class FastPartialSVD
 
     public SimpleMatrix getError()
     {
-        return this.matrix;
+        return matrix;
     }
 
     public float[] getSingularValues()
@@ -72,7 +77,7 @@ public final class FastPartialSVD
 
     private FastPartialSVD(SimpleMatrix matrix, int singularValueCount, float tolerance, int maxIterations, int maxAttempts)
     {
-        this.transpose = matrix.numCols() > matrix.numRows();
+        transpose = matrix.numCols() > matrix.numRows();
 
         this.matrix = matrix;
 
@@ -81,14 +86,14 @@ public final class FastPartialSVD
         this.maxIterations = maxIterations;
         this.maxAttempts = maxAttempts;
 
-        this.u = new SimpleMatrix(this.transpose ? this.matrix.numCols() : this.matrix.numRows(), singularValueCount, FMatrixRMaj.class);
-        this.v = new SimpleMatrix(this.transpose ? this.matrix.numRows() : this.matrix.numCols(), singularValueCount, FMatrixRMaj.class);
-        this.singularValues = new float[singularValueCount];
+        u = new SimpleMatrix(transpose ? this.matrix.numCols() : this.matrix.numRows(), singularValueCount, FMatrixRMaj.class);
+        v = new SimpleMatrix(transpose ? this.matrix.numRows() : this.matrix.numCols(), singularValueCount, FMatrixRMaj.class);
+        singularValues = new float[singularValueCount];
     }
 
     private void compute()
     {
-        if (this.matrix != null)
+        if (matrix != null)
         {
             Random random = new SecureRandom();
             //SimpleMatrix a = new SimpleMatrix(this.matrix.numCols(), this.matrix.numCols(), FMatrixRMaj.class);
@@ -99,7 +104,7 @@ public final class FastPartialSVD
 
             for (int k = 0; k < singularValueCount; k++)
             {
-                SimpleMatrix vk = SimpleMatrix.random32(this.v.numRows(), 1, -1, 1, random);
+                SimpleMatrix vk = SimpleMatrix.random32(v.numRows(), 1, -1, 1, random);
                 divide(vk.getMatrix(), (float)vk.normF());
 
                 double ev;
@@ -107,8 +112,8 @@ public final class FastPartialSVD
                 int numIterations;
                 int numAttempts = 0;
 
-                SimpleMatrix vkLast = new SimpleMatrix(this.v.numRows(), 1, FMatrixRMaj.class);
-                SimpleMatrix diff = new SimpleMatrix(this.v.numRows(), 1, FMatrixRMaj.class);
+                SimpleMatrix vkLast = new SimpleMatrix(v.numRows(), 1, FMatrixRMaj.class);
+                SimpleMatrix diff = new SimpleMatrix(v.numRows(), 1, FMatrixRMaj.class);
                 SimpleMatrix intermediateProduct = new SimpleMatrix(u.numRows(), 1, FMatrix.class);
 
                 do
@@ -123,13 +128,13 @@ public final class FastPartialSVD
 
                         if (transpose)
                         {
-                            multTransA(this.matrix.getMatrix(), vkLast.getMatrix(), intermediateProduct.getMatrix());
-                            mult(this.matrix.getMatrix(), intermediateProduct.getMatrix(), vk.getMatrix());
+                            multTransA(matrix.getMatrix(), vkLast.getMatrix(), intermediateProduct.getMatrix());
+                            mult(matrix.getMatrix(), intermediateProduct.getMatrix(), vk.getMatrix());
                         }
                         else
                         {
-                            mult(this.matrix.getMatrix(), vkLast.getMatrix(), intermediateProduct.getMatrix());
-                            multTransA(this.matrix.getMatrix(), intermediateProduct.getMatrix(), vk.getMatrix());
+                            mult(matrix.getMatrix(), vkLast.getMatrix(), intermediateProduct.getMatrix());
+                            multTransA(matrix.getMatrix(), intermediateProduct.getMatrix(), vk.getMatrix());
                         }
 
                         //vk = a.mult(vkLast);
@@ -153,14 +158,15 @@ public final class FastPartialSVD
                 }
                 else if (sqError > toleranceSq)
                 {
-                    throw new RuntimeException("Max iterations exceeded. (Squared error: " + sqError + ')');
+                    throw new DecompositionFailureException
+                        (String.format("Max iterations exceeded. (Squared error: %s)", sqError));
                 }
                 else
                 {
                     float sv = (float)Math.sqrt(ev);
                     singularValues[k] = sv;
 
-                    SimpleMatrix uk = new SimpleMatrix(this.u.numRows(), 1, FMatrixRMaj.class);
+                    SimpleMatrix uk = new SimpleMatrix(u.numRows(), 1, FMatrixRMaj.class);
 
                     if (transpose)
                     {
@@ -183,7 +189,7 @@ public final class FastPartialSVD
                         v.set(i, k, vk.get(i));
                     }
 
-                    FMatrixRMaj matrixTransposeTimesUk = new FMatrixRMaj(this.v.numRows(), 1);
+                    FMatrixRMaj matrixTransposeTimesUk = new FMatrixRMaj(v.numRows(), 1);
 
                     if (transpose)
                     {

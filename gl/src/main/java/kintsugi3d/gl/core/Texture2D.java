@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.core;
@@ -16,10 +20,6 @@ import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
 
 /**
  * An interface for a two-dimensional texture.
@@ -89,89 +89,13 @@ public interface Texture2D<ContextType extends Context<ContextType>>
     @Override
     default ColorTextureReader getColorTextureReader()
     {
-        return new ColorTextureReaderBase()
-        {
-            @Override
-            public int getWidth()
-            {
-                return Texture2D.this.getWidth();
-            }
-
-            @Override
-            public int getHeight()
-            {
-                return Texture2D.this.getHeight();
-            }
-
-            @Override
-            public void readARGB(ByteBuffer destination, int x, int y, int readWidth, int readHeight)
-            {
-                try(FramebufferObject<ContextType> fbo = getContext()
-                    .buildFramebufferObject(this.getWidth(), this.getHeight())
-                    .addEmptyColorAttachment()
-                    .createFramebufferObject())
-                {
-                    fbo.setColorAttachment(0, Texture2D.this);
-                    fbo.getTextureReaderForColorAttachment(0).readARGB(destination, x, y, readWidth, readHeight);
-                }
-            }
-
-            @Override
-            public void readFloatingPointRGBA(FloatBuffer destination, int x, int y, int readWidth, int readHeight)
-            {
-                try(FramebufferObject<ContextType> fbo = getContext()
-                    .buildFramebufferObject(this.getWidth(), this.getHeight())
-                    .addEmptyColorAttachment()
-                    .createFramebufferObject())
-                {
-                    fbo.setColorAttachment(0, Texture2D.this);
-                    fbo.getTextureReaderForColorAttachment(0).readFloatingPointRGBA(destination, x, y, readWidth, readHeight);
-                }
-            }
-
-            @Override
-            public void readIntegerRGBA(IntBuffer destination, int x, int y, int readWidth, int readHeight)
-            {
-                try(FramebufferObject<ContextType> fbo = getContext()
-                    .buildFramebufferObject(this.getWidth(), this.getHeight())
-                    .addEmptyColorAttachment()
-                    .createFramebufferObject())
-                {
-                    fbo.setColorAttachment(0, Texture2D.this);
-                    fbo.getTextureReaderForColorAttachment(0).readIntegerRGBA(destination, x, y, readWidth, readHeight);
-                }
-            }
-        };
+        return new ColorTextureReader2D<>(this);
     }
 
     @Override
     default DepthTextureReader getDepthTextureReader()
     {
-        return new DepthTextureReaderBase()
-        {
-            @Override
-            public int getWidth()
-            {
-                return Texture2D.this.getWidth();
-            }
-
-            @Override
-            public int getHeight()
-            {
-                return Texture2D.this.getHeight();
-            }
-
-            @Override
-            public void read(ShortBuffer destination, int x, int y, int width, int height)
-            {
-                try(FramebufferObject<ContextType> fbo = getContext()
-                    .buildFramebufferObject(this.getWidth(), this.getHeight())
-                    .createFramebufferObject())
-                {
-                    fbo.setDepthAttachment(Texture2D.this);
-                    fbo.getTextureReaderForDepthAttachment().read(destination, x, y, width, height);
-                }
-            }
-        };
+        return new DepthTextureReader2D<>(this);
     }
+
 }

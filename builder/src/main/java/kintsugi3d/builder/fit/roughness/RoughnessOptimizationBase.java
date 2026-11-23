@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit.roughness;
@@ -16,22 +20,23 @@ import kintsugi3d.builder.fit.decomposition.ReadonlyBasisResources;
 import kintsugi3d.builder.fit.decomposition.ReadonlyBasisWeightResources;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 
-public abstract class RoughnessOptimizationBase<ContextType extends Context<ContextType>>
+abstract class RoughnessOptimizationBase<ContextType extends Context<ContextType>>
         implements RoughnessOptimization<ContextType>
 {
     private static final Logger LOG = LoggerFactory.getLogger(RoughnessOptimizationBase.class);
 
     private final ProgramObject<ContextType> specularRoughnessFitProgram;
-    protected final VertexBuffer<ContextType> rect;
+    private final VertexBuffer<ContextType> rect;
     private final Drawable<ContextType> specularRoughnessFitDrawable;
 
-    protected RoughnessOptimizationBase(ReadonlyBasisResources<ContextType> basisResources)
+    RoughnessOptimizationBase(ReadonlyBasisResources<ContextType> basisResources)
         throws IOException
     {
         // Fit specular parameters from weighted basis functions
@@ -57,6 +62,11 @@ public abstract class RoughnessOptimizationBase<ContextType extends Context<Cont
 
     }
 
+    final VertexBuffer<ContextType> getRect()
+    {
+        return rect;
+    }
+
     @Override
     public final void setInputWeights(ReadonlyBasisWeightResources<ContextType> weightResources)
     {
@@ -67,7 +77,7 @@ public abstract class RoughnessOptimizationBase<ContextType extends Context<Cont
     }
 
     @Override
-    public void clear()
+    public final void clear()
     {
         // Set initial assumption for reflectivity / roughness
         getFramebuffer().clearColorBuffer(0, 0.0f, 0.0f, 0.0f, 1.0f);
@@ -77,19 +87,18 @@ public abstract class RoughnessOptimizationBase<ContextType extends Context<Cont
     protected abstract FramebufferObject<ContextType> getFramebuffer();
 
     @Override
-    public Texture2D<ContextType> getReflectivityTexture()
+    public final @Nullable Texture2D<ContextType> getReflectivityTexture()
     {
         return getFramebuffer() == null ? null : getFramebuffer().getColorAttachmentTexture(0);
     }
 
     @Override
-    public Texture2D<ContextType> getRoughnessTexture()
+    public final @Nullable Texture2D<ContextType> getRoughnessTexture()
     {
         return getFramebuffer() == null ? null : getFramebuffer().getColorAttachmentTexture(1);
     }
 
-    @Override
-    public void execute()
+    final void estimateRoughnessMap()
     {
         // Fit specular so that we have a roughness estimate for masking/shadowing.
         getFramebuffer().clearColorBuffer(0, 0.0f, 0.0f, 0.0f, 0.0f);
@@ -98,7 +107,7 @@ public abstract class RoughnessOptimizationBase<ContextType extends Context<Cont
     }
 
     @Override
-    public void saveTextures(File outputDirectory)
+    public final void saveTextures(File outputDirectory)
     {
         try
         {
@@ -113,6 +122,7 @@ public abstract class RoughnessOptimizationBase<ContextType extends Context<Cont
         }
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
     public void close()
     {

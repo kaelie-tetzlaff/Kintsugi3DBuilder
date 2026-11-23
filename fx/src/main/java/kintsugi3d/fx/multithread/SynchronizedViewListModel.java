@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.multithread;
@@ -25,9 +29,9 @@ public class SynchronizedViewListModel implements SelectableViewListModel
 
     public SynchronizedViewListModel(SelectableViewListModel baseModel)
     {
-        this.selectedCameraView = SynchronizedValue.createFromFunctions(baseModel::getSelectedView, baseModel::setSelectedView);
-        this.cameraViewList = SynchronizedValue.createFromFunctions(baseModel::getViewList, baseModel::setViewList);
-        this.cameraViewSnapEnabled = SynchronizedValue.createFromFunctions(baseModel::isViewSnapEnabled, baseModel::setViewSnapEnabled);
+        selectedCameraView = SynchronizedValue.createFromFunctions(baseModel::getSelectedView, baseModel::setSelectedView);
+        cameraViewList = SynchronizedValue.createFromFunctions(baseModel::getViewList, baseModel::setViewList);
+        cameraViewSnapEnabled = SynchronizedValue.createFromFunctions(baseModel::isViewSnapEnabled, baseModel::setViewSnapEnabled);
         this.baseModel = baseModel;
     }
 
@@ -36,39 +40,39 @@ public class SynchronizedViewListModel implements SelectableViewListModel
      * @return
      */
     @Override
-    public View getSelectedView()
+    public final View getSelectedView()
     {
         // Not synchronized; should be fine -- worst case scenario it's just out-of-sync with the view index and/or view list model.
         return baseModel.getSelectedView();
     }
 
     @Override
-    public void setSelectedView(View cameraView)
+    public final void setSelectedView(View cameraView)
     {
-        this.selectedCameraView.setValue(cameraView);
+        selectedCameraView.setValue(cameraView);
     }
 
     @Override
-    public List<View> getViewList()
+    public final List<View> getViewList()
     {
         return cameraViewList.getValue();
     }
 
     @Override
-    public void setViewList(List<View> cameraViewList)
+    public final void setViewList(List<View> cameraViewList)
     {
         // Need to run on JavaFX thread as this will completely change the backend model for the list view.
         this.cameraViewList.setValue(cameraViewList);
     }
 
     @Override
-    public boolean isViewSnapEnabled()
+    public final boolean isViewSnapEnabled()
     {
         return cameraViewSnapEnabled.getValue();
     }
 
     @Override
-    public void setViewSnapEnabled(boolean cameraViewSnapEnabled)
+    public final void setViewSnapEnabled(boolean cameraViewSnapEnabled)
     {
         this.cameraViewSnapEnabled.setValue(cameraViewSnapEnabled);
     }

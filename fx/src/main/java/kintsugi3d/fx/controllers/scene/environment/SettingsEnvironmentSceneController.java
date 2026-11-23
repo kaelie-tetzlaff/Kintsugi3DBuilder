@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.scene.environment;
@@ -85,7 +89,8 @@ public class SettingsEnvironmentSceneController implements Initializable
 
     private ObservableEnvironmentModel environmentMapModel;
 
-    final ChangeListener<ObservableEnvironmentSettings> changeListener = (observable, oldValue, newValue) ->
+    private final ChangeListener<ObservableEnvironmentSettings> changeListener =
+        (observable, oldValue, newValue) ->
     {
         if (oldValue != null)
         {
@@ -103,7 +108,7 @@ public class SettingsEnvironmentSceneController implements Initializable
         }
     };
 
-    public void setDisabled(boolean value)
+    public final void setDisabled(boolean value)
     {
         root.setDisable(value);
     }
@@ -173,12 +178,12 @@ public class SettingsEnvironmentSceneController implements Initializable
         @Override
         public String toString(Double value)
         {
-            return super.toString(Math.pow(10, value));
+            return super.toString(StrictMath.pow(10, value));
         }
     };
 
     @Override
-    public void initialize(URL location, ResourceBundle resources)
+    public final void initialize(URL location, ResourceBundle resources)
     {
         StaticUtilities.makeWrapAroundNumeric(-180, 180, envRotationTextField);
         StaticUtilities.makeClampedNumeric(0, Double.MAX_VALUE, envIntensityTextField);
@@ -240,7 +245,7 @@ public class SettingsEnvironmentSceneController implements Initializable
         setDisabled(true);
     }
 
-    void updateEnvironmentMapImage(EncodableColorImage environmentMapImage)
+    final void updateEnvironmentMapImage(EncodableColorImage environmentMapImage)
     {
         if (environmentMapImage == null)
         {
@@ -255,7 +260,7 @@ public class SettingsEnvironmentSceneController implements Initializable
     @FXML
     private void pickEnvImageFile()
     {
-        envImageFileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+        envImageFileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         File newFile = envImageFileChooser.showOpenDialog(root.getScene().getWindow());
         if (newFile != null)
         {
@@ -264,14 +269,14 @@ public class SettingsEnvironmentSceneController implements Initializable
             envImageFileChooser.initialDirectoryProperty().set(newFile.getParentFile());
             envImageFileChooser.initialFileNameProperty().set(newFile.getName());
 
-            RecentProjects.setMostRecentDirectory(newFile.getParentFile());
+            RecentProjects.getInstance().setMostRecentDirectory(newFile.getParentFile());
         }
     }
 
     @FXML
     private void pickBPImageFile()
     {
-        bpImageFileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+        bpImageFileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
         File newFile = bpImageFileChooser.showOpenDialog(root.getScene().getWindow());
         if (newFile != null)
         {
@@ -280,7 +285,7 @@ public class SettingsEnvironmentSceneController implements Initializable
             bpImageFileChooser.initialDirectoryProperty().set(newFile.getParentFile());
             bpImageFileChooser.initialFileNameProperty().set(newFile.getName());
 
-            RecentProjects.setMostRecentDirectory(newFile.getParentFile());
+            RecentProjects.getInstance().setMostRecentDirectory(newFile.getParentFile());
         }
     }
 
@@ -297,9 +302,14 @@ public class SettingsEnvironmentSceneController implements Initializable
         bpImageView.setImage(new Image(localBPImageFile.getValue().toURI().toString()));
     }
 
-    public void setEnvironmentMapModel(ObservableEnvironmentModel environmentMapModel)
+    public final void setEnvironmentMapModel(ObservableEnvironmentModel environmentMapModel)
     {
         this.environmentMapModel = environmentMapModel;
+    }
+
+    public final ChangeListener<ObservableEnvironmentSettings> getChangeListener()
+    {
+        return changeListener;
     }
 }
 

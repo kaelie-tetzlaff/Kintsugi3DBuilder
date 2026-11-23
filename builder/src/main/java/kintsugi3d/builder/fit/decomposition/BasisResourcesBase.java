@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit.decomposition;
@@ -34,8 +38,8 @@ public abstract class BasisResourcesBase<ContextType extends Context<ContextType
         this.basisResolution = basisResolution;
 
         this.context = context;
-        this.diffuseUniformBuffer = context.createUniformBuffer();
-        this.basisMaps = createBasisMaps(context, materialCount, basisResolution);
+        diffuseUniformBuffer = context.createUniformBuffer();
+        basisMaps = createBasisMaps(context, materialCount, basisResolution);
     }
 
     private static <ContextType extends Context<ContextType>>
@@ -47,30 +51,30 @@ public abstract class BasisResourcesBase<ContextType extends Context<ContextType
             .setLinearFilteringEnabled(true)
             .setMipmapsEnabled(false)
             .createTexture();
-        basisMaps.setTextureWrap(TextureWrapMode.None, TextureWrapMode.None);
+        basisMaps.setTextureWrap(TextureWrapMode.NONE, TextureWrapMode.NONE);
         return basisMaps;
     }
 
     @Override
-    public ContextType getContext()
+    public final ContextType getContext()
     {
         return context;
     }
 
     @Override
-    public int getMaterialCount()
+    public final int getMaterialCount()
     {
         return getBasis().getMaterialCount();
     }
 
     @Override
-    public int getActiveMaterialCount()
+    public final int getActiveMaterialCount()
     {
         return getBasis().getEnabledMaterialCount();
     }
 
     @Override
-    public int getBasisResolution()
+    public final int getBasisResolution()
     {
         return basisResolution;
     }
@@ -78,11 +82,10 @@ public abstract class BasisResourcesBase<ContextType extends Context<ContextType
     @Override
     public final void refreshGraphicsResources()
     {
-        NativeVectorBufferFactory factory = NativeVectorBufferFactory.getInstance();
-        NativeVectorBuffer basisMapBuffer = factory.createEmpty(NativeDataType.FLOAT, 3,
-            getMaterialCount() * (basisResolution + 1));
+        NativeVectorBuffer basisMapBuffer = NativeVectorBufferFactory.createEmpty(
+            NativeDataType.FLOAT, 3, getMaterialCount() * (basisResolution + 1));
         NativeVectorBuffer diffuseNativeBuffer =
-            factory.createEmpty(NativeDataType.FLOAT, 4, getMaterialCount());
+            NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 4, getMaterialCount());
 
         // Assumes that GPU indices have already been assigned.
         // Include disabled materials for visualization shaders.
@@ -121,13 +124,13 @@ public abstract class BasisResourcesBase<ContextType extends Context<ContextType
     }
 
     @Override
-    public void save(File outputDirectory, String filenameOverride)
+    public final void save(File outputDirectory, String filenameOverride)
     {
         getBasis().save(outputDirectory,
             filenameOverride != null ? filenameOverride : BasisResources.getBasisFunctionsFilename());
 
         // Save basis image visualization for cards
-        try (BasisImageCreator<ContextType> basisImageCreator = new BasisImageCreator<>(getContext(), basisResolution))
+        try (BasisImageCreator<ContextType> basisImageCreator = new BasisImageCreator<>(context, basisResolution))
         {
             basisImageCreator.createImages(this, Global.io().getLoadedViewSetOrThrow().getThumbnailImageDirectory());
         }
@@ -138,14 +141,14 @@ public abstract class BasisResourcesBase<ContextType extends Context<ContextType
     }
 
     @Override
-    public void useWithShaderProgram(Program<ContextType> program)
+    public final void useWithShaderProgram(Program<ContextType> program)
     {
         program.setTexture("basisFunctions", basisMaps);
         program.setUniformBuffer("DiffuseColors", diffuseUniformBuffer);
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         basisMaps.close();
         diffuseUniformBuffer.close();

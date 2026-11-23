@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.state.shader;
@@ -31,41 +35,41 @@ public class WeightmapOverlayShaderInfo implements ShaderInfo
     }
 
     @Override
-    public String getFriendlyName()
+    public final String getFriendlyName()
     {
         return baseShader.getFriendlyName();
     }
 
     @Override
-    public String getFullName()
+    public final String getFullName()
     {
         return String.format("%s [%s]", baseShader.getFullName(), weightmapMaterial.getFriendlyName());
     }
 
     @Override
-    public String getFilename()
+    public final String getFilename()
     {
         return baseShader.getFilename();
     }
 
     @Override
-    public File getFile()
+    public final File getFile()
     {
         return baseShader.getFile();
     }
 
-    public ShaderInfo getBaseShader()
+    public final ShaderInfo getBaseShader()
     {
         return baseShader;
     }
 
-    public BasisMaterialInfo getWeightmapMaterial()
+    public final BasisMaterialInfo getWeightmapMaterial()
     {
         return weightmapMaterial;
     }
 
     @Override
-    public Map<String, Optional<Object>> getDefines()
+    public final Map<String, Optional<Object>> getDefines()
     {
         Map<String, Optional<Object>> defines = new HashMap<>(baseShader.getDefines());
         defines.put("OVERLAY_MODE", Optional.of("OVERLAY_MODE_WEIGHTMAP"));
@@ -74,13 +78,13 @@ public class WeightmapOverlayShaderInfo implements ShaderInfo
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return Objects.hash(baseShader.hashCode(), weightmapMaterial.getName());
     }
 
     @Override
-    public boolean equals(Object obj)
+    public final boolean equals(Object obj)
     {
         if (obj instanceof WeightmapOverlayShaderInfo)
         {

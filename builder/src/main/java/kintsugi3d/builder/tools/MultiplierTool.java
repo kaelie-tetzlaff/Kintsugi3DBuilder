@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.tools;
@@ -38,6 +42,11 @@ public final class MultiplierTool implements KeyPressTool
         {
             this.factor = factor;
         }
+
+        float getFactor()
+        {
+            return factor;
+        }
     }
 
     private static class Builder implements ToolBuilder<MultiplierTool>
@@ -51,41 +60,41 @@ public final class MultiplierTool implements KeyPressTool
         {
             this.getter = getter;
             this.setter = setter;
-            this.factor = type.factor;
+            factor = type.getFactor();
         }
 
         @Override
-        public ToolBuilder<MultiplierTool> setCameraModel(ManipulableViewpointModel cameraModel)
+        public final ToolBuilder<MultiplierTool> setCameraModel(ManipulableViewpointModel cameraModel)
         {
             return this;
         }
 
         @Override
-        public ToolBuilder<MultiplierTool> setLightingEnvironmentModel(ManipulableLightingEnvironmentModel lightingModel)
+        public final ToolBuilder<MultiplierTool> setLightingEnvironmentModel(ManipulableLightingEnvironmentModel lightingModel)
         {
             return this;
         }
 
         @Override
-        public ToolBuilder<MultiplierTool> setObjectModel(ManipulableObjectPoseModel lightingModel)
+        public final ToolBuilder<MultiplierTool> setObjectModel(ManipulableObjectPoseModel objectModel)
         {
             return this;
         }
 
         @Override
-        public ToolBuilder<MultiplierTool> setSceneViewport(SceneViewport sceneViewport)
+        public final ToolBuilder<MultiplierTool> setSceneViewport(SceneViewport sceneViewport)
         {
             return this;
         }
 
         @Override
-        public ToolBuilder<MultiplierTool> setSettingsModel(GeneralSettingsModel settingsModel)
+        public final ToolBuilder<MultiplierTool> setSettingsModel(GeneralSettingsModel settingsModel)
         {
             return this;
         }
 
         @Override
-        public MultiplierTool create()
+        public final MultiplierTool create()
         {
             return new MultiplierTool(getter, setter, factor);
         }
@@ -110,6 +119,6 @@ public final class MultiplierTool implements KeyPressTool
     @Override
     public void keyPressed()
     {
-        setter.accept(getter.getAsDouble() * this.factor);
+        setter.accept(getter.getAsDouble() * factor);
     }
 }

@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.optimization.function;
@@ -115,17 +119,17 @@ public class MatrixBuilderSums
         Arrays.setAll(weightedAnalyticTimesObservedBlended, i -> new SimpleMatrix(instanceCount, 1, DMatrixRMaj.class));
     }
 
-    public void accept(MatrixBuilderSample sample)
+    public final void accept(MatrixBuilderSample sample)
     {
         int instanceCount = weightedAnalyticCumulative.numRows();
 
         for (int b1 = 0; b1 < instanceCount; b1++)
         {
-            double singleWeightedAnalyticSample = sample.analytic * sample.weightByInstance.applyAsDouble(b1) * sample.sampleWeight;
+            double singleWeightedAnalyticSample = sample.analytic * sample.getWeightForInstance(b1) * sample.sampleWeight;
 
             for (int i = 0; i < weightedAnalyticTimesObservedCumulative.length; i++)
             {
-                double weightedAnalyticTimesObservedSample = singleWeightedAnalyticSample * sample.observed[i];
+                double weightedAnalyticTimesObservedSample = singleWeightedAnalyticSample * sample.getObserved(i);
                 addWeightedAnalyticTimesObserved(i, b1, weightedAnalyticTimesObservedSample);
                 addWeightedAnalyticTimesObservedBlended(i, b1, sample.blendingWeight * weightedAnalyticTimesObservedSample);
             }
@@ -133,18 +137,18 @@ public class MatrixBuilderSums
             for (int b2 = 0; b2 < instanceCount; b2++)
             {
                 // Update non-squared totals without blending weight.
-                double weightedAnalyticSample = singleWeightedAnalyticSample * sample.weightByInstance.applyAsDouble(b2);
+                double weightedAnalyticSample = singleWeightedAnalyticSample * sample.getWeightForInstance(b2);
                 addWeightedAnalytic(b1, b2, weightedAnalyticSample);
 
                 // Update non-squared total with blending weight.
                 addWeightedAnalyticBlended(b1, b2, sample.blendingWeight * weightedAnalyticSample);
 
                 // Update squared totals without blending weight.
-                double weightedAnalyticSquared = weightedAnalyticSample * sample.analytic;
-                addWeightedAnalyticSquared(b1, b2, weightedAnalyticSquared);
+                double weightedAnalyticSquaredSample = weightedAnalyticSample * sample.analytic;
+                addWeightedAnalyticSquared(b1, b2, weightedAnalyticSquaredSample);
 
                 // Update squared total with blending weight.
-                double weightedAnalyticSquaredBlendedSample = sample.blendingWeight * weightedAnalyticSquared;
+                double weightedAnalyticSquaredBlendedSample = sample.blendingWeight * weightedAnalyticSquaredSample;
                 addWeightedAnalyticSquaredBlended(b1, b2, weightedAnalyticSquaredBlendedSample);
 
                 // Update squared total with blending weight squared.
@@ -158,7 +162,7 @@ public class MatrixBuilderSums
      * This should be done whenever the interpolation endpoints change and all the non-cumulative sums are used to
      * update the fitting matrix being built, whereas the cumulative sums continue to accumulate after that occurs.
      */
-    public void clearNonCumulativeSums()
+    public final void clearNonCumulativeSums()
     {
         weightedAnalytic.zero();
         weightedAnalyticBlended.zero();
@@ -175,52 +179,52 @@ public class MatrixBuilderSums
         }
     }
 
-    public double getWeightedAnalyticCumulative(int row, int column)
+    public final double getWeightedAnalyticCumulative(int row, int column)
     {
         return weightedAnalyticCumulative.get(row, column);
     }
 
-    public double getWeightedAnalytic(int row, int column)
+    public final double getWeightedAnalytic(int row, int column)
     {
         return weightedAnalytic.get(row, column);
     }
 
-    public double getWeightedAnalyticBlended(int row, int column)
+    public final double getWeightedAnalyticBlended(int row, int column)
     {
         return weightedAnalyticBlended.get(row, column);
     }
 
-    public double getWeightedAnalyticSquaredCumulative(int row, int column)
+    public final double getWeightedAnalyticSquaredCumulative(int row, int column)
     {
         return weightedAnalyticSquaredCumulative.get(row, column);
     }
 
-    public double getWeightedAnalyticSquared(int row, int column)
+    public final double getWeightedAnalyticSquared(int row, int column)
     {
         return weightedAnalyticSquared.get(row, column);
     }
 
-    public double getWeightedAnalyticSquaredBlended(int row, int column)
+    public final double getWeightedAnalyticSquaredBlended(int row, int column)
     {
         return weightedAnalyticSquaredBlended.get(row, column);
     }
 
-    public double getWeightedAnalyticSquaredBlendedSquared(int row, int column)
+    public final double getWeightedAnalyticSquaredBlendedSquared(int row, int column)
     {
         return weightedAnalyticSquaredBlendedSquared.get(row, column);
     }
 
-    public double getWeightedAnalyticTimesObservedCumulative(int observationIndex, int instanceIndex)
+    public final double getWeightedAnalyticTimesObservedCumulative(int observationIndex, int instanceIndex)
     {
         return weightedAnalyticTimesObservedCumulative[observationIndex].get(instanceIndex, 0);
     }
 
-    public double getWeightedAnalyticTimesObserved(int observationIndex, int instanceIndex)
+    public final double getWeightedAnalyticTimesObserved(int observationIndex, int instanceIndex)
     {
         return weightedAnalyticTimesObserved[observationIndex].get(instanceIndex, 0);
     }
 
-    public double getWeightedAnalyticTimesObservedBlended(int observationIndex, int instanceIndex)
+    public final double getWeightedAnalyticTimesObservedBlended(int observationIndex, int instanceIndex)
     {
         return weightedAnalyticTimesObservedBlended[observationIndex].get(instanceIndex, 0);
     }
@@ -270,7 +274,7 @@ public class MatrixBuilderSums
      * @param instanceIndex
      * @param amount
      */
-    public void addWeightedAnalyticTimesObserved(int observationIndex, int instanceIndex, double amount)
+    public final void addWeightedAnalyticTimesObserved(int observationIndex, int instanceIndex, double amount)
     {
         weightedAnalyticTimesObserved[observationIndex].set(instanceIndex, 0,
             weightedAnalyticTimesObserved[observationIndex].get(instanceIndex, 0) + amount);
@@ -278,7 +282,7 @@ public class MatrixBuilderSums
             weightedAnalyticTimesObservedCumulative[observationIndex].get(instanceIndex, 0) + amount);
     }
 
-    public void addWeightedAnalyticTimesObservedBlended(int observationIndex, int instanceIndex, double amount)
+    public final void addWeightedAnalyticTimesObservedBlended(int observationIndex, int instanceIndex, double amount)
     {
         weightedAnalyticTimesObservedBlended[observationIndex].set(instanceIndex, 0,
             weightedAnalyticTimesObservedBlended[observationIndex].get(instanceIndex, 0) + amount);

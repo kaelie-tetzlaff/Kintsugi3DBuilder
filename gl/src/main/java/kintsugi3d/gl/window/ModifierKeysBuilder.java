@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.window;
@@ -23,43 +27,43 @@ public class ModifierKeysBuilder
         return new ModifierKeysBuilder();
     }
 
-    public ModifierKeysBuilder shift()
+    public final ModifierKeysBuilder shift()
     {
-        this.shiftModifier = true;
+        shiftModifier = true;
         return this;
     }
 
-    public ModifierKeysBuilder control()
+    public final ModifierKeysBuilder control()
     {
-        this.controlModifier = true;
+        controlModifier = true;
         return this;
     }
 
-    public ModifierKeysBuilder alt()
+    public final ModifierKeysBuilder alt()
     {
-        this.altModifier = true;
+        altModifier = true;
         return this;
     }
 
-    public ModifierKeysBuilder superKey()
+    public final ModifierKeysBuilder superKey()
     {
-        this.superModifier = true;
+        superModifier = true;
         return this;
     }
 
-    public ModifierKeys end()
+    public final ModifierKeys end()
     {
-        return new ModifierKeysImplementation(shiftModifier, controlModifier, altModifier, superModifier);
+        return new SimpleModifierKeys(shiftModifier, controlModifier, altModifier, superModifier);
     }
 
-    private static final class ModifierKeysImplementation extends ModifierKeysBase
+    private static final class SimpleModifierKeys extends ModifierKeysBase
     {
         private final boolean shiftModifier;
         private final boolean controlModifier;
         private final boolean altModifier;
         private final boolean superModifier;
 
-        private ModifierKeysImplementation(boolean shiftModifier, boolean controlModifier, boolean altModifier, boolean superModifier)
+        private SimpleModifierKeys(boolean shiftModifier, boolean controlModifier, boolean altModifier, boolean superModifier)
         {
             this.shiftModifier = shiftModifier;
             this.controlModifier = controlModifier;
@@ -68,25 +72,25 @@ public class ModifierKeysBuilder
         }
 
         @Override
-        public boolean getShiftModifier()
+        public boolean isShiftModifierActive()
         {
             return shiftModifier;
         }
 
         @Override
-        public boolean getControlModifier()
+        public boolean isControlModifierActive()
         {
             return controlModifier;
         }
 
         @Override
-        public boolean getAltModifier()
+        public boolean isAltModifierActive()
         {
             return altModifier;
         }
 
         @Override
-        public boolean getSuperModifier()
+        public boolean isSuperModifierActive()
         {
             return superModifier;
         }

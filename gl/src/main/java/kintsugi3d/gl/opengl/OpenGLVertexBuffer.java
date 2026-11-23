@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.opengl;
@@ -26,7 +30,7 @@ class OpenGLVertexBuffer extends OpenGLBuffer implements VertexBuffer<OpenGLCont
     OpenGLVertexBuffer(OpenGLContext context, int usage)
     {
         super(context, usage);
-        this.count = 0;
+        count = 0;
     }
 
     OpenGLVertexBuffer(OpenGLContext context)
@@ -35,41 +39,42 @@ class OpenGLVertexBuffer extends OpenGLBuffer implements VertexBuffer<OpenGLCont
     }
 
     @Override
-    protected int getBufferTarget()
+    protected final int getBufferTarget()
     {
         return GL_ARRAY_BUFFER;
     }
 
     @Override
-    public int count()
+    public final int count()
     {
-        return this.count;
+        return count;
     }
 
     @Override
-    public OpenGLVertexBuffer setData(ReadonlyNativeVectorBuffer data, boolean normalize)
+    public final OpenGLVertexBuffer setData(
+        ReadonlyNativeVectorBuffer data, @SuppressWarnings("ParameterHidesMemberVariable") boolean normalize)
     {
-        super.setData(data.getBuffer());
-        this.count = data.getCount();
-        this.vertexSize = data.getDimensions();
-        this.vertexType = OpenGLContext.getDataTypeConstant(data.getDataType());
+        setData(data.getBuffer());
+        count = data.getCount();
+        vertexSize = data.getDimensions();
+        vertexType = OpenGLContext.getDataTypeConstant(data.getDataType());
         this.normalize = normalize;
         return this;
     }
 
-    void useAsVertexAttribute(int attribIndex)
+    final void useAsVertexAttribute(int attribIndex)
     {
-        this.bind();
+        bind();
         glEnableVertexAttribArray(attribIndex);
         OpenGLContext.errorCheck();
-        if (this.vertexType == GL_FLOAT || this.vertexType == GL_DOUBLE)
+        if (vertexType == GL_FLOAT || vertexType == GL_DOUBLE)
         {
-            glVertexAttribPointer(attribIndex, this.vertexSize, this.vertexType, this.normalize, 0, 0);
+            glVertexAttribPointer(attribIndex, vertexSize, vertexType, normalize, 0, 0);
             OpenGLContext.errorCheck();
         }
         else
         {
-            glVertexAttribIPointer(attribIndex, this.vertexSize, this.vertexType, 0, 0);
+            glVertexAttribIPointer(attribIndex, vertexSize, vertexType, 0, 0);
             OpenGLContext.errorCheck();
         }
     }

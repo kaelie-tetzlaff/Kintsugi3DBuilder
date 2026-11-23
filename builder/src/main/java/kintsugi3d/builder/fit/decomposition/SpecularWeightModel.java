@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit.decomposition;
@@ -34,28 +38,28 @@ public class SpecularWeightModel implements LeastSquaresModel<ReflectanceData, D
     }
 
     @Override
-    public boolean isValid(ReflectanceData sampleData, int systemIndex)
+    public final boolean isValid(ReflectanceData sampleData, int systemIndex)
     {
         // Visibility test
         return sampleData.getVisibility(systemIndex) > 0;
     }
 
     @Override
-    public double getSampleWeight(ReflectanceData sampleData, int systemIndex)
+    public final double getSampleWeight(ReflectanceData sampleData, int systemIndex)
     {
         // Don't multiply by n dot l when optimizing reflectance (rather than radiance)
         return sampleData.getAdditionalWeight(systemIndex);
     }
 
     @Override
-    public DoubleVector3 getSamples(ReflectanceData sampleData, int systemIndex)
+    public final DoubleVector3 getSamples(ReflectanceData sampleData, int systemIndex)
     {
         // Sampler (ground truth data)
         return new DoubleVector3(sampleData.getRed(systemIndex), sampleData.getGreen(systemIndex), sampleData.getBlue(systemIndex));
     }
 
     @Override
-    public IntFunction<DoubleVector3> getBasisFunctions(ReflectanceData sampleData, int systemIndex)
+    public final IntFunction<DoubleVector3> getBasisFunctions(ReflectanceData sampleData, int systemIndex)
     {
         // Precompute values that will be reused; captured by the lambda expression.
         float halfwayIndex = sampleData.getHalfwayIndex(systemIndex);
@@ -106,14 +110,14 @@ public class SpecularWeightModel implements LeastSquaresModel<ReflectanceData, D
     }
 
     @Override
-    public int getBasisFunctionCount()
+    public final int getBasisFunctionCount()
     {
         // Only need enabled materials during optimization.
         return solution.getMaterialBasis().getEnabledMaterialCount();
     }
 
     @Override
-    public double innerProduct(DoubleVector3 t1, DoubleVector3 t2)
+    public final double innerProduct(DoubleVector3 t1, DoubleVector3 t2)
     {
         return t1.dot(t2);
     }

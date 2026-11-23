@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit.settings;
@@ -32,84 +36,84 @@ public class ExportSettings implements ReadonlyExportSettings
     private boolean openViewerOnceComplete = false;
 
     @Override
-    public boolean shouldSaveTextures()
+    public final boolean shouldSaveTextures()
     {
         return exportTextures;
     }
 
-    public void setShouldSaveTextures(boolean exportTextures)
+    public final void setShouldSaveTextures(boolean exportTextures)
     {
         this.exportTextures = exportTextures;
     }
 
     @Override
-    public boolean shouldAppendModelNameToTextures()
+    public final boolean shouldAppendModelNameToTextures()
     {
         return appendModelNameToTextures;
     }
 
-    public void setShouldAppendModelNameToTextures(boolean appendModelNameToTextures)
+    public final void setShouldAppendModelNameToTextures(boolean appendModelNameToTextures)
     {
         this.appendModelNameToTextures = appendModelNameToTextures;
     }
 
     @Override
-    public String getTextureFormat()
+    public final String getTextureFormat()
     {
         return textureFormat;
     }
 
-    public void setTextureFormat(String textureFormat)
+    public final void setTextureFormat(String textureFormat)
     {
         this.textureFormat = textureFormat;
     }
 
     @Override
-    public boolean shouldGenerateLowResTextures()
+    public final boolean shouldGenerateLowResTextures()
     {
         return generateLowResTextures;
     }
 
-    public void setShouldGenerateLowResTextures(boolean generateLowResTextures)
+    public final void setShouldGenerateLowResTextures(boolean generateLowResTextures)
     {
         this.generateLowResTextures = generateLowResTextures;
     }
 
     @Override
-    public int getMinimumTextureResolution()
+    public final int getMinimumTextureResolution()
     {
         return minimumTextureResolution;
     }
 
-    public void setMinimumTextureResolution(int minimumTextureResolution)
+    public final void setMinimumTextureResolution(int minimumTextureResolution)
     {
         this.minimumTextureResolution = minimumTextureResolution;
     }
 
     @Override
-    public boolean shouldOpenViewerOnceComplete()
+    public final boolean shouldOpenViewerOnceComplete()
     {
         return openViewerOnceComplete;
     }
 
-    public void setShouldOpenViewerOnceComplete(boolean openViewerOnceComplete)
+    public final void setShouldOpenViewerOnceComplete(boolean openViewerOnceComplete)
     {
         this.openViewerOnceComplete = openViewerOnceComplete;
     }
 
     @Override
-    public MaterialExporterFactory getExporterFactory()
+    public final MaterialExporterFactory getExporterFactory()
     {
         return exporterFactory;
     }
 
-    public void setExporterFactory(MaterialExporterFactory exporterFactory)
+    public final void setExporterFactory(MaterialExporterFactory exporterFactory)
     {
         this.exporterFactory = exporterFactory;
     }
 
     @Override
-    public void applyToExporter(ModelExporter exporter, ReadonlyTextureResources<? extends Context<?>> textureResources, String filename)
+    public final void applyToExporter(ModelExporter exporter, ReadonlyTextureResources<? extends Context<?>> textureResources, String filename)
     {
         MaterialExporter materialExporter = exporterFactory.getExporter(textureResources);
         exporter.setMaterialExporter(materialExporter);

@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.optimization.function;
@@ -28,7 +32,7 @@ import java.util.stream.Stream;
  */
 public class MatrixBuilder
 {
-    private MatrixBuilderSample samplePrevious = null;
+    private MatrixBuilderSample samplePrevious;
 
     /**
      * The number of "instances" being optimized in the fitting system.
@@ -92,7 +96,7 @@ public class MatrixBuilder
      * Gets the number of "instances" being optimized in the fitting system.
      * @return The number of instances being optimized.
      */
-    public int getInstanceCount()
+    public final int getInstanceCount()
     {
         return instanceCount;
     }
@@ -101,7 +105,7 @@ public class MatrixBuilder
      * Gets the number of RHS observations per sample, i.e. the number of channels (like R,G,B for color).
      * @return The number of observations per sample.
      */
-    public int getObservationCount()
+    public final int getObservationCount()
     {
         return observationCount;
     }
@@ -110,7 +114,7 @@ public class MatrixBuilder
      * Gets the underlying basis of "library" functions used to construct the actual functions being optimized.
      * @return The basis function library.
      */
-    public BasisFunctions getBasisLibrary()
+    public final BasisFunctions getBasisLibrary()
     {
         return basisLibrary;
     }
@@ -122,7 +126,7 @@ public class MatrixBuilder
      * A function that is 0% metallicy uses no analytic factor for the constant term (just a simple constant).
      * @return The metallicity being assumed.
      */
-    public double getMetallicity()
+    public final double getMetallicity()
     {
         return metallicity;
     }
@@ -143,7 +147,7 @@ public class MatrixBuilder
      * This function should only be called once per instance of this class.
      * @param samples The stream of samples to process.
      */
-    public void build(Stream<MatrixBuilderSample> samples)
+    public final void build(Stream<MatrixBuilderSample> samples)
     {
         // Sort samples so that we avoid repeating the same additions over and over again
         // Should sort ascending to visit low values first
@@ -197,8 +201,8 @@ public class MatrixBuilder
             // Update to ATy
             for (int i = 0; i < observationCount; i++)
             {
-                contribution.addToRHS(b1, i, sample.weightByInstance.applyAsDouble(b1)
-                        * sample.sampleWeight * sample.observed[i] * constantTerm);
+                contribution.addToRHS(b1, i, sample.getWeightForInstance(b1)
+                        * sample.sampleWeight * sample.getObserved(i) * constantTerm);
             }
 
             for (int b2 = 0; b2 < instanceCount; b2++)
@@ -206,8 +210,8 @@ public class MatrixBuilder
                 // Updates to ATA
                 // Top left partition of the matrix: row and column both correspond to constant-term coefficients
                 // (i.e. diffuse for reflectance)
-                double weightProduct = sample.weightByInstance.applyAsDouble(b1)
-                        * sample.weightByInstance.applyAsDouble(b2) * sample.sampleWeight;
+                double weightProduct = sample.getWeightForInstance(b1)
+                        * sample.getWeightForInstance(b2) * sample.sampleWeight;
                 contribution.addToLHS(b1, b2, weightProduct * constantTermSquared);
             }
         }

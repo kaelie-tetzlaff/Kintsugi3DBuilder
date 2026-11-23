@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.resources.project;
@@ -88,22 +92,22 @@ class PreviewImages
         }
     }
 
-    boolean fullResImageExists()
+    final boolean doesFullResImageExist()
     {
         return fullResImage != null;
     }
 
-    boolean hasMissingFiles()
+    final boolean hasMissingFiles()
     {
         return missingPreview || missingThumbnail;
     }
 
-    boolean needsUndistortion()
+    final boolean needsUndistortion()
     {
         return view.getCameraProjection() instanceof DistortionProjection;
     }
 
-    <ContextType extends Context<ContextType>> void tryGenerateUndistortedPreviewImage(ContextType context)
+    final <ContextType extends Context<ContextType>> void tryGenerateUndistortedPreviewImage(ContextType context)
     {
         try
         {
@@ -136,7 +140,7 @@ class PreviewImages
     /**
      * Uses graphics context to undistort if necessary, and resizes and saves as necessary.
      */
-    <ContextType extends Context<ContextType>> void tryCreateMissingFiles(ContextType context)
+    final <ContextType extends Context<ContextType>> void tryCreateMissingFiles(ContextType context)
     {
         if (needsUndistortion() && missingPreview && undistortedPreviewImage == null)
         {
@@ -149,7 +153,7 @@ class PreviewImages
     /**
      * Resizes and saves as necessary, but cannot undistort without graphics context
      */
-    void tryCreateMissingFiles()
+    final void tryCreateMissingFiles()
     {
         try
         {
@@ -210,7 +214,8 @@ class PreviewImages
         int fullWidth = fullResImage.getBufferedImage().getWidth();
         int fullHeight = fullResImage.getBufferedImage().getHeight();
 
-        int thumbnailWidth, thumbnailHeight;
+        int thumbnailWidth;
+        int thumbnailHeight;
         if (fullWidth > fullHeight)
         {
             // Landscape: thumbnail size limited by width
@@ -226,7 +231,7 @@ class PreviewImages
         return new Resolution(thumbnailWidth, thumbnailHeight);
     }
 
-    void tryCreateMissingFilesNoUndistortion()
+    final void tryCreateMissingFilesNoUndistortion()
     {
         try
         {

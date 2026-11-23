@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.util;
@@ -28,26 +32,26 @@ public class ArrayBackedColorImage implements EncodableColorImage
     }
 
     @Override
-    public int getWidth()
+    public final int getWidth()
     {
         return width;
     }
 
     @Override
-    public int getHeight()
+    public final int getHeight()
     {
         return height;
     }
 
     @Override
-    public Vector4 getRawRGBA(int x, int y)
+    public final Vector4 getRawRGBA(int x, int y)
     {
         int k = (height - 1 - y) * width + x;
         return new Vector4(pixels[3 * k], pixels[3 * k + 1], pixels[3 * k + 2], 1.0f);
     }
 
     @Override
-    public Vector4 getSRGBEncodedRGBA(int x, int y)
+    public final Vector4 getSRGBEncodedRGBA(int x, int y)
     {
         int k = (height - 1 - y) * width + x;
         return SRGB.fromLinear(new Vector4(pixels[3 * k], pixels[3 * k + 1], pixels[3 * k + 2], 1.0f));

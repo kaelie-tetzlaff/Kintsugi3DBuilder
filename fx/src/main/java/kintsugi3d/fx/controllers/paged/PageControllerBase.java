@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.paged;
@@ -18,7 +22,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.ButtonType;
 import kintsugi3d.builder.util.FXWindowHelper;
@@ -26,6 +31,7 @@ import kintsugi3d.fx.core.JavaFXState;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * Internal base class that is extended for the public-facing classes
@@ -43,26 +49,26 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
     private volatile boolean alertShown = false;
 
     @Override
-    public PageFrameController getPageFrameController()
+    public final PageFrameController getPageFrameController()
     {
         return pageFrameController;
     }
 
     @Override
-    public final void setPageFrameController(PageFrameController frameController)
+    public final void setPageFrameController(PageFrameController pageFrameController)
     {
-        this.pageFrameController = frameController;
+        this.pageFrameController = pageFrameController;
     }
 
     protected final JavaFXState getState()
     {
-        return this.pageFrameController.getState();
+        return pageFrameController.getState();
     }
 
     @Override
     public final PageType getPage()
     {
-        return this.page;
+        return page;
     }
 
     public final void setPage(PageType page)
@@ -73,7 +79,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
     @Override
     public final boolean canAdvance()
     {
-        return getCanAdvanceObservable().get();
+        return canAdvanceProperty.get();
     }
 
     @Override
@@ -96,7 +102,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
     @Override
     public final String getAdvanceLabelOverride()
     {
-        return getAdvanceLabelOverrideObservable().get();
+        return advanceLabelOverrideProperty.get();
     }
 
     protected final void setAdvanceLabelOverride(String advanceLabelOverride)
@@ -104,39 +110,54 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
         advanceLabelOverrideProperty.set(advanceLabelOverride);
     }
 
+    /**
+     * Whether or not this page can "confirm", ending the user workflow.
+     * @return
+     */
     @Override
     public final BooleanProperty getCanConfirmObservable()
     {
         return canConfirmProperty;
     }
 
+    /**
+     * Gets whether or not this page can "confirm", ending the user workflow.
+     * @return
+     */
     @Override
     public final boolean canConfirm()
     {
         return canConfirmProperty.get();
     }
 
+    /**
+     * Sets whether or not this page can "confirm", ending the user workflow.
+     * @param canConfirm
+     */
     protected final void setCanConfirm(boolean canConfirm)
     {
         canConfirmProperty.set(canConfirm);
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
-    public boolean advance()
+    public boolean tryAdvance()
     {
         // By default, advance without any additional logic other than what page has been assigned as nextPage.
         return true;
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
-    public boolean confirm()
+    public boolean tryConfirm()
     {
         // Allow silent exit by default if no confirmation is implemented.
         return true;
     }
 
+    @SuppressWarnings("DesignForExtension")
     @Override
-    public boolean cancel()
+    public boolean tryCancel()
     {
         // Close without any additional logic by default.
         return true;
@@ -144,7 +165,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
 
     private void close()
     {
-        FXWindowHelper.requestClose(getPageFrameController().getWindow());
+        FXWindowHelper.requestClose(pageFrameController.getWindow());
     }
 
     private void alert(String title, String message, boolean allowContinue)
@@ -157,32 +178,29 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
         alertShown = true;
         Platform.runLater(() ->
         {
-            if (getPage().hasFallbackPage())
+            if (page.hasFallbackPage())
             {
                 // "Cancel" closes the modal entirely
-                ButtonType cancel = new ButtonType("Cancel", ButtonBar.ButtonData.LEFT);
+                ButtonType cancel = new ButtonType("Cancel", ButtonData.LEFT);
 
                 // "Fallback" buttons navigate to a different page.
-                Collection<ButtonType> fallbackButtons = new ArrayList<>(getPage().getFallbackPages().size());
-                for (var fallback : getPage().getFallbackPages().entrySet())
-                {
-                    String fallbackName = fallback.getKey();
-                    fallbackButtons.add(new ButtonType(fallbackName));
-                }
+                Collection<ButtonType> fallbackButtons = page.getFallbackPages().keySet().stream()
+                    .map(ButtonType::new)
+                    .collect(Collectors.toList());
 
                 Collection<ButtonType> allButtons = new ArrayList<>(fallbackButtons.size() + 2);
-                allButtons.add(cancel);
+                allButtons.add(new ButtonType("Cancel", ButtonData.LEFT));
                 allButtons.addAll(fallbackButtons);
 
                 // If allowed, "Continue" just continues as if nothing happened (only allowed for warnings)
                 ButtonType continueButton = null;
                 if (allowContinue)
                 {
-                    continueButton = new ButtonType("Continue", ButtonBar.ButtonData.RIGHT);
+                    continueButton = new ButtonType("Continue", ButtonData.RIGHT);
                     allButtons.add(continueButton);
                 }
 
-                Alert alert = new Alert(Alert.AlertType.NONE, message, allButtons.toArray(ButtonType[]::new));
+                Alert alert = new Alert(AlertType.NONE, message, allButtons.toArray(ButtonType[]::new));
 
                 // Force the window back to the correct size in case of race conditions with the OS (esp. on Linux)
                 ChangeListener<? super Number> forceSize =
@@ -201,7 +219,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
                 {
                     ((ButtonBase) alert.getDialogPane().lookupButton(button)).setOnAction(event ->
                     {
-                        getPageFrameController().fallbackPage(button.getText());
+                        pageFrameController.fallbackPage(button.getText());
                         alertShown = false;
                     });
                 }
@@ -216,8 +234,8 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
             }
             else
             {
-                ButtonType ok = new ButtonType("OK", ButtonBar.ButtonData.CANCEL_CLOSE);
-                Alert alert = new Alert(Alert.AlertType.NONE, message, ok);
+                ButtonType ok = new ButtonType("OK", ButtonData.CANCEL_CLOSE);
+                Alert alert = new Alert(AlertType.NONE, message, ok);
                 ((ButtonBase) alert.getDialogPane().lookupButton(ok)).setOnAction(event ->
                 {
                     close();
@@ -229,12 +247,12 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
         });
     }
 
-    protected void error(String title, String message)
+    protected final void error(String title, String message)
     {
         alert(title, message, false);
     }
 
-    protected void warning(String title, String message)
+    protected final void warning(String title, String message)
     {
         alert(title, message, true);
     }

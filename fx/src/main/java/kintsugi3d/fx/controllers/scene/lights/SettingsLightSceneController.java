@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.scene.lights;
@@ -24,6 +28,7 @@ import javafx.util.StringConverter;
 import kintsugi3d.fx.util.SafeLogScaleNumberStringConverter;
 import kintsugi3d.fx.util.SafeNumberStringConverter;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -31,7 +36,7 @@ import java.util.ResourceBundle;
 public class SettingsLightSceneController implements Initializable
 {
     @Override
-    public void initialize(URL location, ResourceBundle resources)
+    public final void initialize(URL location, ResourceBundle resources)
     {
         setDisabled(true);
 
@@ -47,7 +52,7 @@ public class SettingsLightSceneController implements Initializable
             }
 
             @Override
-            public Double fromString(String string) {
+            public @Nullable Double fromString(String string) {
                 return null;
             }
         };
@@ -97,7 +102,8 @@ public class SettingsLightSceneController implements Initializable
     private final SafeNumberStringConverter numberStringConverter = new SafeNumberStringConverter(0);
     private final SafeLogScaleNumberStringConverter logScaleNumberStringConverter = new SafeLogScaleNumberStringConverter(1);
 
-    public final ChangeListener<ObservableLightSettings> changeListener = (observable, oldValue, newValue) ->
+    private final ChangeListener<ObservableLightSettings> changeListener =
+        (observable, oldValue, newValue) ->
     {
         if (oldValue != null)
         {
@@ -115,7 +121,12 @@ public class SettingsLightSceneController implements Initializable
         }
     };
 
-    public void setDisabled(Boolean disabled)
+    public final ChangeListener<ObservableLightSettings> getChangeListener()
+    {
+        return changeListener;
+    }
+
+    public final void setDisabled(Boolean disabled)
     {
         root.setDisable(disabled);
     }

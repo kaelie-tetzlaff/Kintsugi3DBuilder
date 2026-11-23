@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.resources.project.texture;
@@ -20,11 +24,14 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<ContextType>>
     implements ReadonlyTextureResources<ContextType>
 {
     protected static final Logger LOG = LoggerFactory.getLogger(ReadonlyTextureResourcesBase.class);
+
+    private static final Pattern TEXTURE_NAME_PROBLEM_CHARS = Pattern.compile("[^A-Za-z0-9]+");
 
     private static <ContextType extends Context<ContextType>> void useTextureSafe(
         Program<ContextType> program, String textureName, Texture<ContextType> texture)
@@ -40,30 +47,36 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
     }
 
     @Override
-    public void setupShaderProgram(Program<ContextType> program)
+    public final String sanitizeTextureName(CharSequence name)
     {
-        for (var entry : this.getTextures().entrySet())
+        return TEXTURE_NAME_PROBLEM_CHARS.matcher(name).replaceAll("_");
+    }
+
+    @Override
+    public final void setupShaderProgram(Program<ContextType> program)
+    {
+        for (var entry : getTextures().entrySet())
         {
             useTextureSafe(program,
                 // Sanitize texture names when being used as shader variables:
                 // replace one or more non-alphanumeric characters with underscore.
-                String.format("tex_%s", entry.getKey().name.replaceAll("[^A-Za-z0-9]+", "_")),
+                String.format("tex_%s", sanitizeTextureName(entry.getKey().name)),
                 entry.getValue());
         }
 
-        if (this.getBasisResources() != null)
+        if (getBasisResources() != null)
         {
-            this.getBasisResources().useWithShaderProgram(program);
+            getBasisResources().useWithShaderProgram(program);
         }
 
-        if (this.getBasisWeightResources() != null)
+        if (getBasisWeightResources() != null)
         {
-            this.getBasisWeightResources().useWithShaderProgram(program);
+            getBasisWeightResources().useWithShaderProgram(program);
         }
     }
 
     @Override
-    public void saveTexture(String texName, String format, File outputDirectory, String filenameOverride)
+    public final void saveTexture(String texName, String format, File outputDirectory, String filenameOverride)
     {
         try
         {
@@ -81,7 +94,7 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
     }
 
     @Override
-    public void savePackedWeightMaps(String format, File outputDirectory, String filenamePrefix)
+    public final void savePackedWeightMaps(String format, File outputDirectory, String filenamePrefix)
     {
         ReadonlyBasisWeightResources<ContextType> weightResources = getBasisWeightResources();
         if (weightResources != null)
@@ -92,7 +105,7 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
     }
 
     @Override
-    public void saveUnpackedWeightMaps(String format, File outputDirectory, String filenamePrefix)
+    public final void saveUnpackedWeightMaps(String format, File outputDirectory, String filenamePrefix)
     {
         ReadonlyBasisWeightResources<ContextType> weightResources = getBasisWeightResources();
         if (weightResources != null)
@@ -102,7 +115,7 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
     }
 
     @Override
-    public void saveUnpackedWeightMaps(String format, File outputDirectory)
+    public final void saveUnpackedWeightMaps(String format, File outputDirectory)
     {
         ReadonlyBasisWeightResources<ContextType> weightResources = getBasisWeightResources();
         if (weightResources != null)
@@ -112,7 +125,7 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
     }
 
     @Override
-    public void saveBasisFunctions(File outputDirectory, String filenameOverride)
+    public final void saveBasisFunctions(File outputDirectory, String filenameOverride)
     {
         ReadonlyBasisResources<ContextType> basisResources = getBasisResources();
         if (basisResources != null)

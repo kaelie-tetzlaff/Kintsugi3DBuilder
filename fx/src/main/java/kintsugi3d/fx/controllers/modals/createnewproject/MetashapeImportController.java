@@ -1,16 +1,19 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.modals.createnewproject;
-
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -31,10 +34,11 @@ import kintsugi3d.builder.io.metashape.MetashapeDocument;
 import kintsugi3d.builder.io.metashape.MetashapeModel;
 import kintsugi3d.fx.controllers.modals.createnewproject.inputsources.MetashapeProjectInputSource;
 import kintsugi3d.fx.core.FrontendIO;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 public class MetashapeImportController extends ProjectImportController
 {
@@ -54,24 +58,24 @@ public class MetashapeImportController extends ProjectImportController
     @FXML private FileChooser psxFileChooser;
 
     @Override
-    public Region getRootNode()
+    public final Region getRootNode()
     {
         return rootPane;
     }
 
     @Override
-    public void initPage()
+    public final void initPage()
     {
         psxFileChooser = new FileChooser();
         psxFileChooser.setTitle("Choose .psx file");
         psxFileChooser.getExtensionFilters().add(new ExtensionFilter("Metashape files (*.psx)", "*.psx"));
-        psxFileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+        psxFileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
 
         setCanConfirm(true);
     }
 
     @Override
-    public void refresh()
+    public final void refresh()
     {
         updateLoadedIndicators();
         //need to do Platform.runLater so updateModelSelectionChoiceBox can pull info from chunkSelectionChoiceBox
@@ -88,29 +92,29 @@ public class MetashapeImportController extends ProjectImportController
 
             String name = getModelNameFromSelection(selection);
             String id = getModelIDFromSelection(selection);
-            Optional<Integer> optId = id != null ? Optional.of(Integer.parseInt(id)) : Optional.empty();
+            Integer optId = id != null ? Integer.parseInt(id) : null;
 
             for (MetashapeModel model : metashapeDocument.getSelectedChunk().getModels())
             {
                 if (name.equals(model.getLabel()) &&
-                    optId.equals(model.getId()))
+                    Objects.equals(optId, model.getId()))
                 {
                     metashapeDocument.getSelectedChunk().selectModel(model);
                 }
             }
         });
 
-        psxFileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+        psxFileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
     }
 
     @Override
-    protected MetashapeProjectInputSource getData()
+    protected final MetashapeProjectInputSource getData()
     {
         return new MetashapeProjectInputSource(() -> FrontendIO.getInstance().showSaveProjectDialog(getPageFrameController().getWindow()))
             .setMetashapeModel(metashapeDocument.getSelectedChunk().getSelectedModel());
     }
 
-    private static String getModelIDFromSelection(String selectionAsString)
+    private static @Nullable String getModelIDFromSelection(String selectionAsString)
     {
         //TODO: need to revisit this when formatting of model selection choice box changes
         if (selectionAsString == null || selectionAsString.startsWith(NO_MODEL_ID_MSG))
@@ -142,8 +146,8 @@ public class MetashapeImportController extends ProjectImportController
 
         if (file != null)
         {
-            RecentProjects.setMostRecentDirectory(file.getParentFile());
-            psxFileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+            RecentProjects.getInstance().setMostRecentDirectory(file.getParentFile());
+            psxFileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
 
             fileNameTxtField.setText(file.getName());
             updateChoiceBoxes(file);
@@ -169,7 +173,7 @@ public class MetashapeImportController extends ProjectImportController
 
         for (MetashapeModel model : metashapeDocument.getSelectedChunk().getModels())
         {
-            String modelID = model.getId().isPresent() ? String.valueOf(model.getId().get()) : NO_MODEL_ID_MSG;
+            String modelID = model.getId() != null ? String.valueOf(model.getId()) : NO_MODEL_ID_MSG;
             String modelName = model.getLabel().isBlank() ? NO_MODEL_NAME_MSG : model.getLabel();
             modelSelectionChoiceBox.getItems().add(String.format("%s%s%s", modelID, SPACER, modelName));
         }
@@ -187,24 +191,25 @@ public class MetashapeImportController extends ProjectImportController
         modelSelectionChoiceBox.setValue(modelSelectionChoiceBox.getItems().get(0));
         modelSelectionChoiceBox.setDisable(false);
 
-        if (metashapeDocument.getSelectedChunk().getDefaultModelID().isEmpty())
+        Integer defaultModelID = metashapeDocument.getSelectedChunk().getDefaultModelID();
+        if (defaultModelID != null)
         {
-            return;
-        }
-
-        for (int i = 0; i < modelSelectionChoiceBox.getItems().size(); ++i)
-        {
-            String obj = modelSelectionChoiceBox.getItems().get(i);
-            String modelID = getModelIDFromSelection(obj);
-            if (modelID != null)
-            {
-                int id = Integer.parseInt(modelID);
-                if (metashapeDocument.getSelectedChunk().getDefaultModelID().get().equals(id))
+            modelSelectionChoiceBox.getItems().stream()
+                .filter(obj ->
                 {
-                    modelSelectionChoiceBox.setValue(obj);
-                    break;
-                }
-            }
+                    String modelID = getModelIDFromSelection(obj);
+                    if (modelID != null)
+                    {
+                        int id = Integer.parseInt(modelID);
+                        return defaultModelID.equals(id);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                })
+                .findFirst()
+                .ifPresent(modelSelectionChoiceBox::setValue);
         }
     }
 

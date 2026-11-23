@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.modals.createnewproject.inputsources;
@@ -39,79 +43,44 @@ public class ManualInputSource extends NonValidatedInputSourceBase
         super(specifyProjectFileToSave);
     }
 
-    public File getCameraFile()
+    public final File getCameraFile()
     {
-        return this.cameraFile;
+        return cameraFile;
     }
 
-    public ManualInputSource setCameraFile(File cameraFile)
+    public final ManualInputSource setCameraFile(File cameraFile)
     {
         this.cameraFile = cameraFile;
         return this;
     }
 
-    public File getMeshFile()
+    public final File getMeshFile()
     {
-        return this.meshFile;
+        return meshFile;
     }
 
-    public ManualInputSource setMeshFile(File meshFile)
+    public final ManualInputSource setMeshFile(File meshFile)
     {
         this.meshFile = meshFile;
         return this;
     }
 
-    public File getPhotosDir()
+    public final File getPhotosDir()
     {
-        return this.photosDir;
+        return photosDir;
     }
 
     @Override
-    public ManualInputSource overrideFullResImageDirectory(File directory)
+    public final ManualInputSource overrideFullResImageDirectory(File directory)
     {
-        this.photosDir = directory;
+        photosDir = directory;
         return this;
     }
 
     @Override
-    public ValidatedInputSource validate() throws Exception
+    public final ValidatedInputSource validate() throws Exception
     {
-        return new ValidatedInputSourceBase(this, loadImageSetInfo())
-        {
-            @Override
-            public boolean confirm()
-            {
-                if (hotSwap)
-                {
-                    Global.io().hotSwapLooseFiles(cameraFile.getPath(), cameraFile, getViewSetLoadOptions());
-                    return true;
-                }
-                else
-                {
-                    return super.confirm();
-                }
-            }
-
-            @Override
-            public void confirm(File projectFileToSave)
-            {
-                Global.io().loadFromLooseFiles(projectFileToSave, cameraFile.getPath(), cameraFile, getViewSetLoadOptions());
-            }
-
-            private ViewSetLoadOptions getViewSetLoadOptions()
-            {
-                ViewSetLoadOptions loadOptions = new ViewSetLoadOptions();
-                loadOptions.mainDirectories.projectRoot = cameraFile.getParentFile();
-                loadOptions.geometryFile = meshFile;
-                loadOptions.masksDirectory = masksDir;
-                loadOptions.mainDirectories.fullResImageDirectory = photosDir;
-                loadOptions.mainDirectories.fullResImagesNeedUndistort = needsUndistort;
-                loadOptions.orientationViewName = getViewSelection();
-                loadOptions.orientationViewRotation = getViewRotation();
-                loadOptions.disabledImages = getDisabledImages();
-                return loadOptions;
-            }
-        };
+        return new ValidatedManualInputSource(this);
     }
 
     private ImageSetInfo loadImageSetInfo() throws Exception
@@ -123,9 +92,9 @@ public class ManualInputSource extends NonValidatedInputSourceBase
         else if (cameraFile.getName().endsWith(".csv")) // RealityCapture
         {
             ViewSetDirectories directories = new ViewSetDirectories();
-            directories.projectRoot = cameraFile.getParentFile();
-            directories.fullResImageDirectory = photosDir;
-            directories.fullResImagesNeedUndistort = needsUndistort;
+            directories.setProjectRoot(cameraFile.getParentFile());
+            directories.setFullResImageDirectory(photosDir);
+            directories.setFullResImagesNeedUndistort(needsUndistort);
 
             ViewSet viewSet = ViewSetReaderFromRealityCaptureCSV.getInstance()
                 .readFromFile(cameraFile, directories)
@@ -142,50 +111,99 @@ public class ManualInputSource extends NonValidatedInputSourceBase
         }
     }
 
-    public ManualInputSource setNeedsUndistort(boolean needsUndistort)
+    public final ManualInputSource setNeedsUndistort(boolean needsUndistort)
     {
         this.needsUndistort = needsUndistort;
         return this;
     }
 
-    public boolean shouldHotSwap()
+    public final boolean shouldHotSwap()
     {
         return hotSwap;
     }
 
-    public ManualInputSource setHotSwap(boolean hotSwap)
+    public final ManualInputSource setHotSwap(boolean hotSwap)
     {
         this.hotSwap = hotSwap;
         return this;
     }
 
     @Override
-    public File getInitialPhotosDirectory()
+    public final File getInitialPhotosDirectory()
     {
         return photosDir != null ? photosDir : cameraFile.getParentFile();
     }
 
     @Override
-    public File getMasksDirectory()
+    public final File getMasksDirectory()
     {
         return masksDir;
     }
 
     @Override
-    public File getInitialMasksDirectory()
+    public final File getInitialMasksDirectory()
     {
         return masksDir != null ? masksDir : cameraFile.getParentFile();
     }
 
     @Override
-    public boolean hasProjectMasks()
+    public final boolean hasProjectMasks()
     {
         return false;
     }
 
     @Override
-    public void setMasksDirectory(File file)
+    public final void setMasksDirectory(File file)
     {
         masksDir = file;
+    }
+
+    private static class ValidatedManualInputSource extends ValidatedInputSourceBase
+    {
+        ManualInputSource original;
+
+        ValidatedManualInputSource(ManualInputSource original) throws Exception
+        {
+            super(original, original.loadImageSetInfo());
+            this.original = original;
+        }
+
+        @Override
+        public final boolean confirm()
+        {
+            if (original.hotSwap)
+            {
+                Global.io().hotSwapLooseFiles(original.cameraFile.getPath(), original.cameraFile, getViewSetLoadOptions());
+                return true;
+            }
+            else
+            {
+                File projectFileToSave = specifyProjectFileToSave();
+
+                if (projectFileToSave != null)
+                {
+                    Global.io().loadFromLooseFiles(projectFileToSave, original.cameraFile.getPath(), original.cameraFile, getViewSetLoadOptions());
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        private ViewSetLoadOptions getViewSetLoadOptions()
+        {
+            ViewSetLoadOptions loadOptions = new ViewSetLoadOptions();
+            loadOptions.getMainDirectories().setProjectRoot(original.cameraFile.getParentFile());
+            loadOptions.setGeometryFile(original.meshFile);
+            loadOptions.setMasksDirectory(original.masksDir);
+            loadOptions.getMainDirectories().setFullResImageDirectory(original.photosDir);
+            loadOptions.getMainDirectories().setFullResImagesNeedUndistort(original.needsUndistort);
+            loadOptions.setOrientationViewName(getViewSelection());
+            loadOptions.setOrientationViewRotation(getViewRotation());
+            loadOptions.setDisabledImages(getDisabledImages());
+            return loadOptions;
+        }
     }
 }

@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.util;
@@ -30,10 +34,10 @@ public class RadialTextureGenerator<ContextType extends Context<ContextType>>
         this.context = context;
     }
 
-    public ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>> buildRadialTexture(
+    public final ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>> buildRadialTexture(
         int size, DoubleUnaryOperator radialFunction)
     {
-        NativeVectorBuffer textureData = NativeVectorBufferFactory.getInstance()
+        NativeVectorBuffer textureData = NativeVectorBufferFactory
             .createEmpty(NativeDataType.FLOAT, 1, size * size);
 
         int k = 0;
@@ -56,12 +60,12 @@ public class RadialTextureGenerator<ContextType extends Context<ContextType>>
             .setInternalFormat(ColorFormat.R8);
     }
 
-    public ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>> buildBloomTexture(int size)
+    public final ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>> buildBloomTexture(int size)
     {
-        return buildRadialTexture(64, rSq -> (Math.cos(Math.min(Math.sqrt(rSq), 1.0) * Math.PI) + 1.0) * 0.5);
+        return buildRadialTexture(64, rSq -> (StrictMath.cos(Math.min(Math.sqrt(rSq), 1.0) * Math.PI) + 1.0) * 0.5);
     }
 
-    public ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>> buildCircleTexture(int size)
+    public final ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>> buildCircleTexture(int size)
     {
         return buildRadialTexture(64, rSq -> rSq <= 1.0 ? 1.0 : 0.0);
     }

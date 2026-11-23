@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.io.metashape;
@@ -27,6 +31,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 public final class MetashapeChunk
@@ -41,19 +47,19 @@ public final class MetashapeChunk
     private Document frameXML;
 
     private List<MetashapeModel> models = new ArrayList<>(8);
-    private Optional<Integer> defaultModelID;
-    private MetashapeModel currModel;
+    private Integer defaultModelID;
+    private MetashapeModel currentModel;
     private File thumbnailsDir;
-    private File masksDir = null;
-    private File masksDirOverride = null;
+    private File masksDir;
+    private File masksDirOverride;
 
     public static MetashapeChunk parseFromElement(MetashapeDocument document, Element chunkElement) throws IOException
     {
-        Optional<Integer> chunkID = Optional.empty();
+        Integer chunkID = null;
         String tempChunkID = chunkElement.getAttribute("id");
         if (!tempChunkID.isBlank())
         {
-            chunkID = Optional.of(Integer.parseInt(tempChunkID));
+            chunkID = Integer.parseInt(tempChunkID);
         }
 
         String chunkZipPath = chunkElement.getAttribute("path"); //gives xx/chunk.zip where xx is a number
@@ -65,11 +71,15 @@ public final class MetashapeChunk
         Document fullChunkDocument = UnzipHelper.unzipToDocument(new File(chunkZipPath));
 
         //get default model id if the chunk has one
-        Optional<Integer> defaultModelID = Optional.empty();
+        Integer defaultModelID = null;
+
+        // TODO Figure out why NullPointException would be thrown, change to explicit null check,
+        //  and remove inspection suppression.
+        //noinspection ProhibitedExceptionCaught
         try
         {
             Element modelsElem = (Element) fullChunkDocument.getElementsByTagName("models").item(0);
-            defaultModelID = Optional.of(Integer.parseInt(modelsElem.getAttribute("active_id")));
+            defaultModelID = Integer.parseInt(modelsElem.getAttribute("active_id"));
         }
         catch (NumberFormatException | NullPointerException e)
         {
@@ -151,7 +161,7 @@ public final class MetashapeChunk
                 if (modelElem != null)
                 {
                     MetashapeModel model = MetashapeModel.parseFromElement(returned, modelElem);
-                    returned.currModel = model;
+                    returned.currentModel = model;
                     models.add(model);
                 }
             }
@@ -162,9 +172,9 @@ public final class MetashapeChunk
         {
             Element elem = (Element) modelList.item(i);
             MetashapeModel model = MetashapeModel.parseFromElement(returned, elem);
-            if (model.getId().isPresent() && model.getId().equals(defaultModelID))
+            if (model.getId() != null && model.getId().equals(defaultModelID))
             {
-                returned.currModel = model;
+                returned.currentModel = model;
                 defaultIdNotFound = false;
             }
             models.add(model);
@@ -172,7 +182,7 @@ public final class MetashapeChunk
 
         if (defaultIdNotFound && !models.isEmpty())
         {
-            returned.currModel = models.get(0);
+            returned.currentModel = models.get(0);
         }
 
         returned.models = models;
@@ -180,33 +190,23 @@ public final class MetashapeChunk
         return returned;
     }
 
-    private void setMasksDir(File masksDir)
-    {
-        this.masksDir = masksDir;
-    }
-
     public boolean hasModels()
     {
         return !models.isEmpty();
     }
 
-    private void setThumbnailsDir(File thumbnailsDir)
-    {
-        this.thumbnailsDir = thumbnailsDir;
-    }
-
     public void selectModel(MetashapeModel model)
     {
-        currModel = model;
+        currentModel = model;
     }
 
-    private MetashapeChunk setChunkID(Optional<Integer> chunkID)
+    private MetashapeChunk setChunkID(Integer chunkID)
     {
-        this.id = chunkID.orElse(-1);
+        id = Objects.requireNonNullElse(chunkID, -1);
         return this;
     }
 
-    private MetashapeChunk setDefaultModelID(Optional<Integer> defaultModelID)
+    private MetashapeChunk setDefaultModelID(Integer defaultModelID)
     {
         this.defaultModelID = defaultModelID;
         return this;
@@ -220,13 +220,8 @@ public final class MetashapeChunk
 
     private MetashapeChunk setChunkXml(Document doc)
     {
-        this.chunkXML = doc;
+        chunkXML = doc;
         return this;
-    }
-
-    private void setModels(List<MetashapeModel> models)
-    {
-        this.models = models;
     }
 
     public Document getFrameXML()
@@ -236,7 +231,7 @@ public final class MetashapeChunk
 
     public String getChunkDirectoryPath()
     {
-        String psxFilePath = this.metashapeDocument.getPsxFilePath();
+        String psxFilePath = metashapeDocument.getPsxFilePath();
         String psxPathBase = psxFilePath.substring(0, psxFilePath.length() - 4); //remove ".psx" from path
         return new File(new File(psxPathBase + ".files"), Integer.toString(id)).getPath();
     }
@@ -255,7 +250,7 @@ public final class MetashapeChunk
     private MetashapeChunk(String label, MetashapeDocument parentDocument)
     {
         this.label = label;
-        this.metashapeDocument = parentDocument;
+        metashapeDocument = parentDocument;
     }
 
     public Integer getID()
@@ -265,7 +260,7 @@ public final class MetashapeChunk
 
     public MetashapeModel getSelectedModel()
     {
-        return currModel;
+        return currentModel;
     }
 
     public Map<Integer, Image> loadThumbnailImageList()
@@ -273,19 +268,14 @@ public final class MetashapeChunk
         return UnzipHelper.unzipImagesToMap(thumbnailsDir);
     }
 
-    public List<Element> findChunkXmlCameras()
+    private List<Element> findChunkXmlCameras()
     {
-        NodeList cams = this.chunkXML.getElementsByTagName("camera");
-        List<Element> cameras = new ArrayList<>(cams.getLength());
-        for (int i = 0; i < cams.getLength(); ++i)
-        {
-            Node camera = cams.item(i);
-            if (camera.getNodeType() == Node.ELEMENT_NODE)
-            {
-                cameras.add((Element) camera);
-            }
-        }
-        return cameras;
+        NodeList cams = chunkXML.getElementsByTagName("camera");
+        return IntStream.range(0, cams.getLength())
+            .mapToObj(cams::item)
+            .filter(camera -> camera.getNodeType() == Node.ELEMENT_NODE)
+            .map(camera -> (Element) camera)
+            .collect(Collectors.toList());
     }
 
     public List<Element> findEnabledCameras()
@@ -310,7 +300,7 @@ public final class MetashapeChunk
     public Map<Integer, String> buildCameraPathsMap(boolean useRelativePaths, Collection<File> disabledImageFiles)
         throws FileNotFoundException, MissingImagesException
     {
-        File rootDirectory = new File(getParentDocument().getPsxFilePath()).getParentFile();
+        File rootDirectory = new File(metashapeDocument.getPsxFilePath()).getParentFile();
         if (!rootDirectory.exists())
         {
             throw new FileNotFoundException(MessageFormat.format("Root directory does not exist: {0}", rootDirectory));
@@ -329,12 +319,12 @@ public final class MetashapeChunk
             .getElementsByTagName("camera");
 
         List<File> missingFiles = new ArrayList<>(8);
-        File fullResOverride = this.getSelectedModel().getLoadPreferences().getFullResOverride();
-        File fullResSearchDirectory = fullResOverride == null ?
-            //full res image paths in frame.xml are relative to the frame document itself
-            new File(getFramePath()).getParentFile() :
-            fullResOverride;
 
+        // full res image paths in frame.xml are relative to the frame document itself
+        File defaultFullResSearchDirectory = new File(getFramePath()).getParentFile();
+
+        // Override is used in place of defaultFullResSearchDirectory, if present.
+        File fullResOverride = currentModel.getLoadPreferences().getFullResOverride();
 
         File exceptionFolder = null;
 
@@ -358,8 +348,8 @@ public final class MetashapeChunk
             if (fullResOverride != null)
             {
                 String pathAttributeName = new File(pathAttribute).getName();
-                imageFile = new File(fullResSearchDirectory, pathAttributeName);
-                File foundImageFile = ImageFinder.getInstance().tryFindImageFile(imageFile);
+                imageFile = new File(fullResOverride, pathAttributeName);
+                File foundImageFile = ImageFinder.tryFindImageFile(imageFile);
                 if (foundImageFile != null)
                 {
                     path = foundImageFile.getName();
@@ -367,8 +357,8 @@ public final class MetashapeChunk
             }
             else
             {
-                imageFile = new File(fullResSearchDirectory, pathAttribute);
-                File foundImageFile = ImageFinder.getInstance().tryFindImageFile(imageFile);
+                imageFile = new File(defaultFullResSearchDirectory, pathAttribute);
+                File foundImageFile = ImageFinder.tryFindImageFile(imageFile);
                 if (foundImageFile != null)
                 {
                     path = rootDirectory.toPath().toAbsolutePath().relativize(foundImageFile.toPath().toAbsolutePath()).toString();
@@ -402,7 +392,7 @@ public final class MetashapeChunk
 
     public String getCurrentModelPath()
     {
-        return currModel.getPath();
+        return currentModel.getPath();
     }
 
     public List<MetashapeModel> getModels()
@@ -412,17 +402,21 @@ public final class MetashapeChunk
 
     public String getLabel()
     {
-        return this.label;
+        return label;
     }
 
-    public Optional<Integer> getDefaultModelID()
+    /**
+     * May be null.
+     * @return
+     */
+    public Integer getDefaultModelID()
     {
         return defaultModelID;
     }
 
-    public int getCurrModelID()
+    public int getCurrentModelID()
     {
-        return currModel.getId().orElse(-1);
+        return Objects.requireNonNullElse(currentModel.getId(), -1);
     }
 
     public File getPsxFile()
@@ -432,17 +426,17 @@ public final class MetashapeChunk
 
     public MetashapeDocument getParentDocument()
     {
-        return this.metashapeDocument;
+        return metashapeDocument;
     }
 
     public File getMasksDirectory()
     {
-        return this.masksDirOverride == null ? this.masksDir : this.masksDirOverride;
+        return masksDirOverride == null ? masksDir : masksDirOverride;
     }
 
     public void setMasksDirectoryOverride(File dir)
     {
-        this.masksDirOverride = dir;
+        masksDirOverride = dir;
     }
 
     @Override
@@ -459,8 +453,8 @@ public final class MetashapeChunk
         //psx path is the same
         //selected models are equal
 
-        return this.label.equals(other.label) &&
-            this.metashapeDocument.getPsxFilePath().equals(other.metashapeDocument.getPsxFilePath());
+        return label.equals(other.label) &&
+            metashapeDocument.getPsxFilePath().equals(other.metashapeDocument.getPsxFilePath());
     }
 
     @Override

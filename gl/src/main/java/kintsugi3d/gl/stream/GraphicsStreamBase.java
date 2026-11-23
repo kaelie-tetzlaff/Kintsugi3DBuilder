@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.gl.stream;
@@ -25,17 +29,17 @@ import java.util.function.Supplier;
 public abstract class GraphicsStreamBase<T> implements GraphicsStream<T>
 {
     @Override
-    public <R> GraphicsStream<R> map(Function<T, ? extends R> mapper)
+    public final <R> GraphicsStream<R> map(Function<T, ? extends R> mapper)
     {
         return new Mapped<>(this, mapper);
     }
 
     @Override
-    public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super T> accumulator)
+    public final <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super T> accumulator)
     {
         R result = supplier.get();
 
-        this.forEach(contribution ->
+        forEach(contribution ->
         {
             // Add the contribution into the main result.
             synchronized (result)
@@ -47,7 +51,6 @@ public abstract class GraphicsStreamBase<T> implements GraphicsStream<T>
         return result;
     }
 
-    @SuppressWarnings("AccessingNonPublicFieldOfAnotherObject")
     private static class Mapped<S, T> extends GraphicsStreamBase<T>
     {
         private final GraphicsStream<S> base;
@@ -60,37 +63,31 @@ public abstract class GraphicsStreamBase<T> implements GraphicsStream<T>
         }
 
         @Override
-        public GraphicsStream<T> sequential()
+        public final GraphicsStream<T> sequential()
         {
             return new Mapped<>(base.sequential(), mapper);
         }
 
         @Override
-        public GraphicsStream<T> parallel()
+        public final GraphicsStream<T> parallel()
         {
             return new Mapped<>(base.parallel(), mapper);
         }
 
         @Override
-        public GraphicsStream<T> parallel(int maxRunningThreads)
+        public final GraphicsStream<T> parallel(int maxRunningThreads)
         {
             return new Mapped<>(base.parallel(maxRunningThreads), mapper);
         }
 
         @Override
-        public int getCount()
+        public final int getCount()
         {
             return base.getCount();
         }
 
         @Override
-        public <R> GraphicsStream<R> map(Function<T, ? extends R> mapper)
-        {
-            return new Mapped<>(this, mapper);
-        }
-
-        @Override
-        public void forEach(Consumer<? super T> action)
+        public final void forEach(Consumer<? super T> action)
         {
             // Apply the current mapping before executing the action.
             base.forEach(source -> action.accept(mapper.apply(source)));

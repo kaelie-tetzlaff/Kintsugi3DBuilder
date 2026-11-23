@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit.roughness;
@@ -32,6 +36,7 @@ import java.util.stream.IntStream;
  * TODO: sketched out but not fully functional; may not be needed
  * @param <ContextType>
  */
+@SuppressWarnings("unused")
 public class RoughnessOptimizationIterative<ContextType extends Context<ContextType>>
         extends RoughnessOptimizationBase<ContextType>
 {
@@ -76,7 +81,7 @@ public class RoughnessOptimizationIterative<ContextType extends Context<ContextT
             program -> // Just use the rectangle as geometry
             {
                 Drawable<ContextType> drawable = basisResources.getContext().createDrawable(program);
-                drawable.addVertexBuffer("position", rect);
+                drawable.addVertexBuffer("position", getRect());
                 drawable.setDefaultPrimitiveMode(PrimitiveMode.TRIANGLE_FAN);
                 return drawable;
             });
@@ -103,24 +108,24 @@ public class RoughnessOptimizationIterative<ContextType extends Context<ContextT
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         roughnessOptimization.close();
 //        errorCalcProgram.close();
     }
 
     @Override
-    protected FramebufferObject<ContextType> getFramebuffer()
+    protected final FramebufferObject<ContextType> getFramebuffer()
     {
         return roughnessOptimization.getFrontFramebuffer();
     }
 
     @Override
-    public void execute()
+    public final void execute()
     {
         // Generate initial estimate
         // Renders directly into "front" framebuffer which is fine for the first pass since then we don't have to swap
-        super.execute();
+        estimateRoughnessMap();
 
         // Set damping factor to 1.0 initially at each position.
         roughnessOptimization.getFrontFramebuffer().clearColorBuffer(2, 1.0f, 1.0f, 1.0f, 1.0f);
@@ -150,12 +155,12 @@ public class RoughnessOptimizationIterative<ContextType extends Context<ContextT
             .addShader(ShaderType.FRAGMENT, new File("shaders/specularfit/optimizeRoughness.frag"));
     }
 
-    private static <ContextType extends Context<ContextType>>
-    Program<ContextType> createErrorCalcProgram(ContextType context) throws IOException
-    {
-        return context.getShaderProgramBuilder()
-            .addShader(ShaderType.VERTEX, new File("shaders/common/texture.vert"))
-            .addShader(ShaderType.FRAGMENT, new File("shaders/specularfit/basisToGGXErrorCalc.frag"))
-            .createProgram();
-    }
+//    private static <ContextType extends Context<ContextType>>
+//    Program<ContextType> createErrorCalcProgram(ContextType context) throws IOException
+//    {
+//        return context.getShaderProgramBuilder()
+//            .addShader(ShaderType.VERTEX, new File("shaders/common/texture.vert"))
+//            .addShader(ShaderType.FRAGMENT, new File("shaders/specularfit/basisToGGXErrorCalc.frag"))
+//            .createProgram();
+//    }
 }

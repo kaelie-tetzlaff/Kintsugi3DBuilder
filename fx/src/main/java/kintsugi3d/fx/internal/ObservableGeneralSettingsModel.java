@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.internal;
@@ -19,6 +23,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import kintsugi3d.builder.state.settings.GeneralSettingsModelBase;
+import kintsugi3d.builder.state.settings.Setting;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,25 +34,25 @@ import java.util.NoSuchElementException;
 
 public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase implements ReadonlyObservableGeneralSettingsModel
 {
-    private static class TypedProperty implements Property<Object>
+    private static final class TypedProperty implements Property<Object>
     {
-        protected final ObjectProperty<Object> base;
-        protected final Class<?> type;
-        protected final boolean serialize;
+        private final ObjectProperty<Object> base;
+        private final Class<?> type;
+        private final boolean serialize;
 
         private TypedProperty(Object initialValue, Class<?> type, boolean serialize)
         {
-            this.base = new SimpleObjectProperty<>(initialValue);
+            base = new SimpleObjectProperty<>(initialValue);
             this.type = type;
             this.serialize = serialize;
         }
 
-        public Class<?> getType()
+        Class<?> getType()
         {
-            return this.type;
+            return type;
         }
 
-        public boolean shouldSerialize()
+        boolean shouldSerialize()
         {
             return serialize;
         }
@@ -142,46 +148,46 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
         }
 
         @Override
-        public String getName()
+        public final String getName()
         {
             return nextEntry.getKey();
         }
 
         @Override
-        public Class<?> getType()
+        public final Class<?> getType()
         {
             return nextEntry.getValue().getType();
         }
 
         @Override
-        public Object getValue()
+        public final Object getValue()
         {
             return nextEntry.getValue().getValue();
         }
 
         @Override
-        public boolean shouldSerialize()
+        public final boolean shouldSerialize()
         {
             return nextEntry.getValue().shouldSerialize();
         }
     }
 
     @Override
-    protected Object getUnchecked(String name)
+    protected final Object getUnchecked(String name)
     {
         return settingsMap.get(name).getValue();
     }
 
     @Override
-    protected void setUnchecked(String name, Object value)
+    protected final void setUnchecked(String name, Object value)
     {
         settingsMap.get(name).setValue(value);
     }
 
     @Override
-    public Class<?> getType(String name)
+    public final Class<?> getType(String name)
     {
-        if (this.exists(name))
+        if (exists(name))
         {
             return settingsMap.get(name).getType();
         }
@@ -192,13 +198,13 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
     }
 
     @Override
-    public boolean exists(String name)
+    public final boolean exists(String name)
     {
         return settingsMap.containsKey(name);
     }
 
     @Override
-    public boolean shouldSerialize(String name)
+    public final boolean shouldSerialize(String name)
     {
         if (exists(name))
         {
@@ -209,49 +215,32 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
     }
 
     @Override
-    public Iterator<Setting> iterator()
+    public final @NotNull Iterator<Setting> iterator()
     {
-        return new Iterator<>()
-        {
-            private final Iterator<Entry<String, TypedProperty>> innerIterator = settingsMap.entrySet().iterator();
-
-            @Override
-            public boolean hasNext()
-            {
-                return innerIterator.hasNext();
-            }
-
-            @Override
-            public Setting next()
-            {
-                Entry<String, TypedProperty> nextEntry = innerIterator.next();
-
-                return new ObservableSetting(nextEntry);
-            }
-        };
+        return new SettingsIterator(settingsMap.entrySet().iterator());
     }
 
     @Override
-    public Observable getObservable(String name)
+    public final Observable getObservable(String name)
     {
         return getObjectProperty(name, Object.class);
     }
 
     @Override
-    public Property<Boolean> getBooleanProperty(String name)
+    public final Property<Boolean> getBooleanProperty(String name)
     {
         return getObjectProperty(name, Boolean.class);
     }
 
     @Override
-    public Property<Number> getNumericProperty(String name)
+    public final Property<Number> getNumericProperty(String name)
     {
         return getObjectProperty(name, Number.class);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> Property<T> getObjectProperty(String name, Class<T> settingType)
+    public final <T> Property<T> getObjectProperty(String name, Class<T> settingType)
     {
         if (settingsMap.containsKey(name))
         {
@@ -266,21 +255,45 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
     }
 
     @Override
-    public void createSetting(String name, Class<?> settingType, Object initialValue, boolean serialize)
+    public final void createSetting(String name, Class<?> type, Object initialValue, boolean serialize)
     {
         if(settingsMap.containsKey(name))
         {
             // Set value to new initialValue if it already exists.
             // Note: this will not change whether serialize was set.
             TypedProperty entry = settingsMap.get(name);
-            if (settingType.isAssignableFrom(entry.getType()))
+            if (type.isAssignableFrom(entry.getType()))
             {
                 setUnchecked(name, initialValue);
             }
         }
         else
         {
-            settingsMap.put(name, new TypedProperty(initialValue, settingType, serialize));
+            settingsMap.put(name, new TypedProperty(initialValue, type, serialize));
+        }
+    }
+
+    private static class SettingsIterator implements Iterator<Setting>
+    {
+        private final Iterator<Entry<String, TypedProperty>> innerIterator;
+
+        SettingsIterator(Iterator<Entry<String, TypedProperty>> innerIterator)
+        {
+            this.innerIterator = innerIterator;
+        }
+
+        @Override
+        public final boolean hasNext()
+        {
+            return innerIterator.hasNext();
+        }
+
+        @Override
+        public final Setting next()
+        {
+            Entry<String, TypedProperty> nextEntry = innerIterator.next();
+
+            return new ObservableSetting(nextEntry);
         }
     }
 }

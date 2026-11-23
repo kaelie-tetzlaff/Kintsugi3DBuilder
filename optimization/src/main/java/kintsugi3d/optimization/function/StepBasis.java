@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.optimization.function;
@@ -28,32 +32,32 @@ public class StepBasis implements BasisFunctions
     }
 
     @Override
-    public double evaluate(int functionIndex, int value)
+    public final double evaluate(int functionIndex, int value)
     {
         return value <= functionIndex ? 1.0 : 0.0;
     }
 
     @Override
-    public int getFunctionCount()
+    public final int getFunctionCount()
     {
         return resolution;
     }
 
     @Override
-    public int getOptimizedDomainSize()
+    public final int getOptimizedDomainSize()
     {
         return resolution;
     }
 
     @Override
-    public double getMetallicity()
+    public final double getMetallicity()
     {
-        return this.metallicity;
+        return metallicity;
     }
 
     @Override
-    public void contributeToFittingSystem(int valueCurrent, int valueNext, int instanceCount,
-                                          MatrixBuilderSums sums, MatrixSystem fittingSystem)
+    public final void contributeToFittingSystem(int valueCurrent, int valueNext, int instanceCount,
+                                                MatrixBuilderSums sums, MatrixSystem fittingSystem)
     {
         // Add the running total to elements of the ATA matrix and the ATy vector corresponding to the next value
         // as well as any values skipped over.
@@ -154,7 +158,7 @@ public class StepBasis implements BasisFunctions
     }
 
     @Override
-    public void evaluateSolution(double constantTerm, IntToDoubleFunction nonConstantSolution, ObjIntConsumer<Double> functionConsumer)
+    public final void evaluateSolution(double constantTerm, IntToDoubleFunction nonConstantSolution, ObjIntConsumer<Double> functionConsumer)
     {
         // Constant term
         double currentValue = constantTerm * metallicity;

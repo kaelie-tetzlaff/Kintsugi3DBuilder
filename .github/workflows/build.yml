@@ -2,15 +2,20 @@ name: Build
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ '**' ]
-    tags: [ 'v*.*.*' ]
   pull_request:
-    branches: [ 'main' ]
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+  push:
+    branches:
+      - main # The 'main' branch
+      - 'releases/*' # The release branches
+    tags: [ 'v*.*.*' ]
 
 env:
-  java-version: 11
-
+  JAVA_VERSION: 11
 jobs:
   build:
     name: Build ${{ matrix.os }} distributions
@@ -33,10 +38,10 @@ jobs:
           ref: ${{ github.sha }}
           lfs: true
 
-      - name: Set up JDK ${{ env.java-version }}
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v5
         with:
-          java-version: '${{ env.java-version }}'
+          java-version: '${{ env.JAVA_VERSION }}'
           distribution: 'temurin'
           cache: 'maven'
 
@@ -197,11 +202,14 @@ jobs:
           find "$MESA_PREFIX" -name 'libOSMesa*.dylib' -exec ls -l {} \;
 
       - name: Maven build and install (without tests)
-        if: ${{ !(github.event_name == 'pull_request' || (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/'))) }}
-        run: mvn --batch-mode --update-snapshots install -DskipTests
+        run: mvn --batch-mode --update-snapshots install "-DskipTests" "-Dcompliance.skip=true"
 
       - name: Maven build and install (with tests)
-        if: github.event_name == 'pull_request' || (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/'))
+        if: (github.event_name == 'pull_request' && !github.event.pull_request.draft) 
+          || github.event_name == 'workflow_dispatch' 
+          || (github.event_name == 'push' 
+          && (github.ref == 'refs/heads/main' 
+          || startsWith(github.ref, 'refs/heads/releases/') || startsWith(github.ref, 'refs/tags/')))
         run: mvn --batch-mode --update-snapshots install
 
       - name: Store build directory

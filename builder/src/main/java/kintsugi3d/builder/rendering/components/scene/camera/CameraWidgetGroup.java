@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering.components.scene.camera;
@@ -43,7 +47,7 @@ public class CameraWidgetGroup<ContextType extends Context<ContextType>> impleme
         ViewSelection selection = new ViewSelectionImpl(resources.getViewSet(), sceneModel)
         {
             @Override
-            public View getSelectedView()
+            public View getSelectedViewOverride()
             {
                 return currentView;
             }
@@ -56,21 +60,21 @@ public class CameraWidgetGroup<ContextType extends Context<ContextType>> impleme
     }
 
     @Override
-    public void initialize()
+    public final void initialize()
     {
         cameraVisual.initialize();
         cameraFrustum.initialize();
     }
 
     @Override
-    public void reloadShaders()
+    public final void reloadShaders()
     {
         cameraVisual.reloadShaders();
         cameraFrustum.reloadShaders();
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         if (sceneModel.getSettingsModel().getBoolean("isCameraVisualEnabled"))
         {
@@ -89,7 +93,7 @@ public class CameraWidgetGroup<ContextType extends Context<ContextType>> impleme
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         cameraVisual.close();
         cameraFrustum.close();

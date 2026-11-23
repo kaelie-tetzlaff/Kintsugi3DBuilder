@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.fit;
@@ -57,14 +61,14 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
         if (basisResources != null)
         {
             // Specular roughness / reflectivity module that manages its own resources
-            this.roughnessOptimization =
+            roughnessOptimization =
                 new RoughnessOptimizationSimple<>(basisResources, basisWeightResources, textureResolution);
             //new RoughnessOptimizationIterative<>(context, basisResources, this::getDiffuseMap, settings);
-            this.roughnessOptimization.clear();
+            roughnessOptimization.clear();
         }
         else
         {
-            this.roughnessOptimization = null;
+            roughnessOptimization = null;
         }
     }
 
@@ -85,7 +89,7 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
         if (basisResources != null)
         {
             // Specular roughness / reflectivity module that manages its own resources
-            this.roughnessOptimization =
+            roughnessOptimization =
                 new RoughnessOptimizationSimple<>(basisResources, basisWeightResources, priorSolutionDirectory);
             //new RoughnessOptimizationIterative<>(context, basisResources, this::getDiffuseMap, settings);
             // Don't clear it since the roughness and specular textures will be storing the images loaded from disk
@@ -97,27 +101,27 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public ContextType getContext()
+    public final ContextType getContext()
     {
         return context;
     }
 
     @Override
-    public int getWidth()
+    public final int getWidth()
     {
         return basisWeightResources == null || basisWeightResources.getWeightMaps() == null ?
             0 : basisWeightResources.getWeightMaps().getWidth();
     }
 
     @Override
-    public int getHeight()
+    public final int getHeight()
     {
         return basisWeightResources == null || basisWeightResources.getWeightMaps() == null ?
             0 : basisWeightResources.getWeightMaps().getHeight();
     }
 
     @Override
-    public void close()
+    public final void close()
     {
         if (basisResources != null)
         {
@@ -130,14 +134,14 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
         }
     }
 
-    protected int getSpecularTextureCount()
+    protected final int getSpecularTextureCount()
     {
         //noinspection VariableNotUsedInsideIf
         return (roughnessOptimization == null) ? 0 : 2;
     }
 
     @Override
-    public Map<StandardTexture, Texture2D<ContextType>> getStandardTextures()
+    public final Map<StandardTexture, Texture2D<ContextType>> getStandardTextures()
     {
         return roughnessOptimization == null ? Map.of() :
             Map.of(StandardTexture.SPECULAR_COLOR, roughnessOptimization.getReflectivityTexture(),
@@ -145,7 +149,7 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public Map<TextureInfo, Texture2D<ContextType>> getTextures()
+    public final Map<TextureInfo, Texture2D<ContextType>> getTextures()
     {
         return StandardTexture.convertEnumMapToObjectMap(getStandardTextures());
     }
@@ -159,7 +163,7 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public ReadonlyBasisResources<ContextType> getBasisResources()
+    public final ReadonlyBasisResources<ContextType> getBasisResources()
     {
         return basisResources;
     }
@@ -168,7 +172,7 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
      * Basis weights (originally calculated on the CPU)
      */
     @Override
-    public BasisWeightResources<ContextType> getBasisWeightResources()
+    public final BasisWeightResources<ContextType> getBasisWeightResources()
     {
         return basisWeightResources;
     }

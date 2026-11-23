@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.internal;
@@ -31,7 +35,7 @@ public class ObservableEnvironmentModel extends EnvironmentModelFromSettings
     private final Property<EncodableColorImage> loadedEnvironmentMapImage = new SimpleObjectProperty<>();
 
     @Override
-    protected EnvironmentSettings getEnvironmentSettings()
+    protected final EnvironmentSettings getEnvironmentSettings()
     {
         if (selected == null || selected.getValue() == null)
         {
@@ -43,25 +47,25 @@ public class ObservableEnvironmentModel extends EnvironmentModelFromSettings
         }
     }
 
-    public void setSelected(ObservableValue<ObservableEnvironmentSettings> selected)
+    public final void setSelected(ObservableValue<ObservableEnvironmentSettings> selected)
     {
         this.selected = selected;
         this.selected.addListener(settingChange);
     }
 
     @Override
-    public boolean isEnabled()
+    public final boolean isEnabled()
     {
         return selected != null && selected.getValue() != null;
     }
 
     @Override
-    protected void onEnvironmentMapImageLoaded(EncodableColorImage environmentMapImage)
+    protected final void onEnvironmentMapImageLoaded(EncodableColorImage environmentMapImage)
     {
         loadedEnvironmentMapImage.setValue(environmentMapImage);
     }
 
-    public ObservableValue<EncodableColorImage> loadedEnvironmentMapImageProperty()
+    public final ObservableValue<EncodableColorImage> loadedEnvironmentMapImageProperty()
     {
         return loadedEnvironmentMapImage;
     }
@@ -71,9 +75,9 @@ public class ObservableEnvironmentModel extends EnvironmentModelFromSettings
         if (newFile == null)
         {
             loadedEnvironmentMapImage.setValue(null);
-            lastEnvironmentMapTime = 0;
+            setLastEnvironmentMapTime(0);
         }
-        else if (!Objects.equals(oldFile, newFile) || newFile.lastModified() != lastEnvironmentMapTime)
+        else if (!Objects.equals(oldFile, newFile) || newFile.lastModified() != getLastEnvironmentMapTime())
         {
             loadEnvironmentMap(newFile);
         }
@@ -81,7 +85,7 @@ public class ObservableEnvironmentModel extends EnvironmentModelFromSettings
 
     private final ChangeListener<File> bpFileChange = (observable, oldFile, newFile) ->
     {
-        if (newFile != null && (!Objects.equals(oldFile, newFile) || newFile.lastModified() != lastBackplateTime))
+        if (newFile != null && (!Objects.equals(oldFile, newFile) || newFile.lastModified() != getLastBackplateTime()))
         {
             loadBackplate(newFile);
         }

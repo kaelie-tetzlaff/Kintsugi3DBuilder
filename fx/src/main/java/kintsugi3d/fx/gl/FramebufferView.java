@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.gl;
@@ -28,6 +32,7 @@ import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Duration;
 import javafx.util.converter.CharacterStringConverter;
 import kintsugi3d.gl.core.FramebufferSize;
@@ -48,11 +53,12 @@ public final class FramebufferView extends Region
 
     private WritableImage frontImage;
     private WritableImage backImage;
-    private boolean copyThreadRunning = false;
+
+    private volatile boolean copyThreadRunning = false;
     private Thread nextCopyThread;
     private final Object nextCopyThreadLock = new Object();
-    private volatile boolean frontImagePending = false;
 
+    private volatile boolean frontImagePending = false;
     private volatile ByteBuffer frontCopyBuffer;
 
     private ByteBuffer backCopyBuffer;
@@ -61,6 +67,7 @@ public final class FramebufferView extends Region
 
     private boolean copyBufferSwapReady = false;
 
+    @SuppressWarnings("unused")
     private static class ModifierKeysInstance extends ModifierKeysBase
     {
         private final boolean shiftModifier;
@@ -77,25 +84,25 @@ public final class FramebufferView extends Region
         }
 
         @Override
-        public boolean getShiftModifier()
+        public final boolean isShiftModifierActive()
         {
             return shiftModifier;
         }
 
         @Override
-        public boolean getControlModifier()
+        public final boolean isControlModifierActive()
         {
             return controlModifier;
         }
 
         @Override
-        public boolean getAltModifier()
+        public final boolean isAltModifierActive()
         {
             return altModifier;
         }
 
         @Override
-        public boolean getSuperModifier()
+        public final boolean isSuperModifierActive()
         {
             return superModifier;
         }
@@ -103,15 +110,15 @@ public final class FramebufferView extends Region
 
     public FramebufferView()
     {
-        this.imageView = new ImageView();
+        imageView = new ImageView();
 
         // Allows the image view to be the default focused element.
         // This prevents something that we don't want to be default-focused from taking it, like the search box, etc.
-        this.imageView.setFocusTraversable(true);
+        imageView.setFocusTraversable(true);
 
-        this.getChildren().add(imageView);
-        this.widthProperty().addListener(width -> imageView.setFitWidth(this.getWidth()));
-        this.heightProperty().addListener(height -> imageView.setFitHeight(this.getHeight()));
+        getChildren().add(imageView);
+        widthProperty().addListener(width -> imageView.setFitWidth(getWidth()));
+        heightProperty().addListener(height -> imageView.setFitHeight(getHeight()));
 
         // use timeline to set up 60Hz refresh cycle for onscreen framebuffer
         Timeline refresh = new Timeline();
@@ -202,8 +209,8 @@ public final class FramebufferView extends Region
             }
         });
 
-        this.widthProperty().addListener((event, oldValue, newValue) -> handleWindowEvent());
-        this.heightProperty().addListener((event, oldValue, newValue) -> handleWindowEvent());
+        widthProperty().addListener((event, oldValue, newValue) -> handleWindowEvent());
+        heightProperty().addListener((event, oldValue, newValue) -> handleWindowEvent());
     }
 
     /**
@@ -259,7 +266,7 @@ public final class FramebufferView extends Region
             }
         });
 
-        javafx.stage.Window owner = stage.getOwner();
+        Window owner = stage.getOwner();
         Stage primaryStage = owner instanceof Stage ? (Stage) owner : stage;
         primaryStage.iconifiedProperty().addListener((event1, oldValue, newValue) ->
         {
@@ -279,7 +286,7 @@ public final class FramebufferView extends Region
 
     public PollableCanvas3D<?> getCanvas()
     {
-        return this.canvas;
+        return canvas;
     }
 
     public void setCanvas(FramebufferCanvas<?> canvas)
@@ -490,7 +497,7 @@ public final class FramebufferView extends Region
     {
         try
         {
-            Point2D localEventPosition = this.getLocalToSceneTransform().inverseTransform(new Point2D(event.getSceneX(), event.getSceneY()));
+            Point2D localEventPosition = getLocalToSceneTransform().inverseTransform(new Point2D(event.getSceneX(), event.getSceneY()));
             return new CursorPosition((int)Math.round(localEventPosition.getX()), (int)Math.round(localEventPosition.getY()));
         }
         catch (NonInvertibleTransformException e)

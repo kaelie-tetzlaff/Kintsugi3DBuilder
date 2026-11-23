@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.internal;
@@ -33,13 +37,13 @@ public class ObservableCameraModel extends CameraModelFromSettings
         sentinel.setLocked(true);
     }
 
-    public void setSelectedCameraSetting(ObservableValue<ObservableCameraSettings> selectedCameraSetting)
+    public final void setSelectedCameraSetting(ObservableValue<ObservableCameraSettings> selectedCameraSetting)
     {
         this.selectedCameraSetting = selectedCameraSetting;
     }
 
     @Override
-    protected SerializableCameraSettings getCameraSettings()
+    protected final SerializableCameraSettings getCameraSettings()
     {
         if (selectedCameraSetting == null || selectedCameraSetting.getValue() == null)
         {
@@ -52,69 +56,69 @@ public class ObservableCameraModel extends CameraModelFromSettings
     }
 
     @Override
-    public int getPaddingLeft()
+    public final int getPaddingLeft()
     {
         return paddingLeft.get();
     }
 
-    public IntegerProperty paddingLeftProperty()
+    public final IntegerProperty paddingLeftProperty()
     {
         return paddingLeft;
     }
 
     @Override
-    public int getPaddingRight()
+    public final int getPaddingRight()
     {
         return paddingRight.get();
     }
 
-    public IntegerProperty paddingRightProperty()
+    public final IntegerProperty paddingRightProperty()
     {
         return paddingRight;
     }
 
     @Override
-    public int getPaddingTop()
+    public final int getPaddingTop()
     {
         return paddingTop.get();
     }
 
-    public IntegerProperty paddingTopProperty()
+    public final IntegerProperty paddingTopProperty()
     {
         return paddingTop;
     }
 
     @Override
-    public int getPaddingBottom()
+    public final int getPaddingBottom()
     {
         return paddingBottom.get();
     }
 
-    public IntegerProperty paddingBottomProperty()
+    public final IntegerProperty paddingBottomProperty()
     {
         return paddingBottom;
     }
 
     @Override
-    public void setPaddingLeft(int paddingLeft)
+    public final void setPaddingLeft(int paddingLeft)
     {
         this.paddingLeft.set(paddingLeft);
     }
 
     @Override
-    public void setPaddingRight(int paddingRight)
+    public final void setPaddingRight(int paddingRight)
     {
         this.paddingRight.set(paddingRight);
     }
 
     @Override
-    public void setPaddingTop(int paddingTop)
+    public final void setPaddingTop(int paddingTop)
     {
         this.paddingTop.set(paddingTop);
     }
 
     @Override
-    public void setPaddingBottom(int paddingBottom)
+    public final void setPaddingBottom(int paddingBottom)
     {
         this.paddingBottom.set(paddingBottom);
     }

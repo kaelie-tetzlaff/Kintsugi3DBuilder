@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.optimization;
@@ -16,12 +20,12 @@ import kintsugi3d.util.Counter;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.simple.SimpleMatrix;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.IntConsumer;
 import java.util.function.IntFunction;
 import java.util.function.IntToDoubleFunction;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -64,7 +68,7 @@ public class LeastSquaresMatrixBuilder
     {
         this.systemCount = systemCount;
         this.weightCount = weightCount;
-        this.constraintCount = constraintWeights.size();
+        constraintCount = constraintWeights.size();
 
         weightsQTQAugmented = IntStream.range(0, systemCount)
             .mapToObj(p ->
@@ -135,14 +139,14 @@ public class LeastSquaresMatrixBuilder
      *            components.  Alternatively, if it is desired for each dimension to be solved for separately, each one
      *            should be its own system and the definition of a "system index" can be redefined accordingly.
      */
-    public <S, T> void buildMatrices(GraphicsStream<S> viewStream, LeastSquaresModel<S, T> leastSquaresModel,
-                                     IntConsumer sampleValidator)
+    public final <S, T> void buildMatrices(GraphicsStream<S> viewStream, LeastSquaresModel<S, T> leastSquaresModel,
+                                           IntConsumer sampleValidator)
     {
         buildMatrices(viewStream, leastSquaresModel, sampleValidator, 0, systemCount);
     }
 
-    public <S, T> void buildMatrices(GraphicsStream<S> viewStream, LeastSquaresModel<S, T> leastSquaresModel,
-        IntConsumer sampleValidator, int rangeStart, int rangeEnd)
+    public final <S, T> void buildMatrices(GraphicsStream<S> viewStream, LeastSquaresModel<S, T> leastSquaresModel,
+                                           IntConsumer sampleValidator, int rangeStart, int rangeEnd)
     {
         Counter counter = new Counter();
 
@@ -182,13 +186,11 @@ public class LeastSquaresMatrixBuilder
                     // Evaluate the "basisCalculator" to get another function that can provide the actual basis function values.
                     IntFunction<T> basisFunctions = leastSquaresModel.getBasisFunctions(reflectanceData, p);
 
-                    ArrayList<T> basisEval = new ArrayList<T>(weightCount);
+                    List<T> basisEval = IntStream.range(0, weightCount)
+                        .mapToObj(basisFunctions)
+                        .collect(Collectors.toList());
 
-                    for (int b = 0; b < weightCount; b++)
-                    {
-                        // Evaluate the basis function.
-                        basisEval.add(basisFunctions.apply(b));
-                    }
+                    // Evaluate the basis function.
 
                     for (int b1 = 0; b1 < weightCount; b1++)
                     {
@@ -217,7 +219,7 @@ public class LeastSquaresMatrixBuilder
         });
     }
 
-    public int getViewCount()
+    public final int getViewCount()
     {
         return viewCount;
     }

@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.controllers.modals.systemsettings;
@@ -40,33 +44,33 @@ public class ObjectVisualsController implements SystemSettingsControllerBase
     @FXML private CheckBox reduceViewportResCheckBox;
 
     @Override
-    public void initializePage(Window parentWindow, JavaFXState state)
+    public final void initializePage(Window parentWindow, JavaFXState state)
     {
         // Disable width / height fields for depth maps if they are disabled.
         depthWidthTxtField.disableProperty().bind(preloadVisibilityEtcCheckBox.selectedProperty().not());
         depthHeightTxtField.disableProperty().bind(preloadVisibilityEtcCheckBox.selectedProperty().not());
 
         imageCompressionCheckBox.selectedProperty().bindBidirectional(
-            state.getLoadOptionsModel().compression);
+            state.getLoadOptionsModel().compressionRequestedProperty());
 
         setupTxtFieldProperties(previewWidthIntProperty, previewWidthTxtField);
         setupTxtFieldProperties(previewHeightIntProperty, previewHeightTxtField);
         setupTxtFieldProperties(depthWidthIntProperty, depthWidthTxtField);
         setupTxtFieldProperties(depthHeightIntProperty, depthHeightTxtField);
 
-        previewWidthIntProperty.bindBidirectional(state.getLoadOptionsModel().previewWidth);
-        previewHeightIntProperty.bindBidirectional(state.getLoadOptionsModel().previewHeight);
+        previewWidthIntProperty.bindBidirectional(state.getLoadOptionsModel().previewImageWidthProperty());
+        previewHeightIntProperty.bindBidirectional(state.getLoadOptionsModel().previewImageHeightProperty());
 
         depthWidthTxtField.disableProperty().bind(preloadVisibilityEtcCheckBox.selectedProperty().not());
         depthHeightTxtField.disableProperty().bind(preloadVisibilityEtcCheckBox.selectedProperty().not());
 
         preloadVisibilityEtcCheckBox.selectedProperty().bindBidirectional(
-            state.getLoadOptionsModel().depthImages);
+            state.getLoadOptionsModel().depthImagesRequestedProperty());
 
-        depthWidthIntProperty.bindBidirectional(state.getLoadOptionsModel().depthWidth);
-        depthHeightIntProperty.bindBidirectional(state.getLoadOptionsModel().depthHeight);
+        depthWidthIntProperty.bindBidirectional(state.getLoadOptionsModel().depthImageWidthProperty());
+        depthHeightIntProperty.bindBidirectional(state.getLoadOptionsModel().depthImageHeightProperty());
 
-        mipmapCheckBox.selectedProperty().bindBidirectional(state.getLoadOptionsModel().mipmaps);
+        mipmapCheckBox.selectedProperty().bindBidirectional(state.getLoadOptionsModel().mipmapsRequestedProperty());
         reduceViewportResCheckBox.selectedProperty().bindBidirectional(
             state.getSettingsModel().getBooleanProperty("halfResolutionEnabled"));
     }
@@ -103,14 +107,17 @@ public class ObjectVisualsController implements SystemSettingsControllerBase
                 }
             }
         };
+
         txtField.textProperty().bindBidirectional(integerProperty, numberStringConverter);
+
         txtField.focusedProperty().addListener((ob, o, n) ->
         {
             if (o && !n)
             {
-                txtField.setText(integerProperty.getValue().toString());
+                txtField.setText(String.format("%d", integerProperty.getValue()));
             }
         });
+
         integerProperty.addListener((ob, o, n) ->
         {
             if (n.intValue() < 1)

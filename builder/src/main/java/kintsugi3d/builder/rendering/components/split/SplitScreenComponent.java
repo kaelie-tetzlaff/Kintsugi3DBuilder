@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.builder.rendering.components.split;
@@ -61,8 +65,8 @@ public class SplitScreenComponent<ContextType extends Context<ContextType>> impl
     }
 
     @Override
-    public void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight,
-                                   CameraViewport cameraViewport)
+    public final void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight,
+                                         CameraViewport cameraViewport)
     {
         for (int x = cameraViewport.getX(); x < cameraViewport.getWidth(); x += subdivWidth)
         {
@@ -73,7 +77,7 @@ public class SplitScreenComponent<ContextType extends Context<ContextType>> impl
                 {
                     // Scale y-axis to adjust aspect ratio to split.
                     Matrix4 leftFullProj =
-                        Matrix4.scale(1.0f, (float) splitPercentage, 1.0f).times(cameraViewport.getFullProjection());
+                        Matrix4.scale(1.0f, splitPercentage, 1.0f).times(cameraViewport.getFullProjection());
 
                     // Viewport crop matrix will be different for each half.
                     int effectiveWidth = Math.min(subdivWidth, splitPixel - x);
@@ -96,7 +100,7 @@ public class SplitScreenComponent<ContextType extends Context<ContextType>> impl
                 {
                     // Scale y-axis to adjust aspect ratio to split.
                     Matrix4 rightFullProj =
-                        Matrix4.scale(1.0f, (float) (1 - splitPercentage), 1.0f).times(cameraViewport.getFullProjection());
+                        Matrix4.scale(1.0f, 1 - splitPercentage, 1.0f).times(cameraViewport.getFullProjection());
 
                     // Viewport crop matrix will be different for each half.
                     effectiveWidth = Math.min(effectiveWidth, x + subdivWidth - splitPixel); // adjust for case when subdiv spans both halves of the split.
@@ -119,9 +123,9 @@ public class SplitScreenComponent<ContextType extends Context<ContextType>> impl
     }
 
     @Override
-    public void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
-        this.drawInSubdivisions(framebuffer, cameraViewport.getWidth(), cameraViewport.getHeight(), cameraViewport);
+        drawInSubdivisions(framebuffer, cameraViewport.getWidth(), cameraViewport.getHeight(), cameraViewport);
     }
 
     /**
@@ -136,7 +140,7 @@ public class SplitScreenComponent<ContextType extends Context<ContextType>> impl
      * Gets the percentage of the full viewport where the split between the left and right content occurs.
      * @return
      */
-    public float getSplitPercentage()
+    public final float getSplitPercentage()
     {
         return splitPercentage;
     }
@@ -145,7 +149,7 @@ public class SplitScreenComponent<ContextType extends Context<ContextType>> impl
      * Gets the pixel x-coordinate where the split between the left and right content occurs.
      * @return
      */
-    public double getSplitPixel()
+    public final double getSplitPixel()
     {
         return splitPixel;
     }
@@ -155,9 +159,9 @@ public class SplitScreenComponent<ContextType extends Context<ContextType>> impl
      * @param splitPercentage
      * @param fullViewportWidth Used to determine the pixel x-coordinate where the split occurs.
      */
-    public void setSplit(float splitPercentage, int fullViewportWidth)
+    public final void setSplit(float splitPercentage, int fullViewportWidth)
     {
         this.splitPercentage = splitPercentage;
-        this.splitPixel = (int)Math.round(fullViewportWidth * splitPercentage);
+        splitPixel = Math.round(fullViewportWidth * splitPercentage);
     }
 }

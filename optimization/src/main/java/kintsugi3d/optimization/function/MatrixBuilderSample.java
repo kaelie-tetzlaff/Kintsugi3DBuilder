@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.optimization.function;
@@ -61,21 +65,22 @@ public class MatrixBuilderSample
     /**
      * The weight of each basis function to be optimized for the current sample.
      */
-    public final IntToDoubleFunction weightByInstance;
+    private final IntToDoubleFunction weightByInstance;
 
     /**
      * The observations at the current sample (i.e. an RGB color).
      */
-    public final double[] observed;
+    private final double[] observed;
 
+    @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     public MatrixBuilderSample(double actual, BasisFunctions basisLibrary, double analytic, double sampleWeight,
                                IntToDoubleFunction weightByInstance, double... observed)
     {
         this.actual = actual;
 
         // Calculate which discretized element the current sample belongs to.
-        this.floor = Math.min(basisLibrary.getOptimizedDomainSize() - 1, (int) Math.floor(actual));
-        this.inOptimizedDomain = (actual < basisLibrary.getOptimizedDomainSize());
+        floor = Math.min(basisLibrary.getOptimizedDomainSize() - 1, (int) Math.floor(actual));
+        inOptimizedDomain = actual < basisLibrary.getOptimizedDomainSize();
 
         this.analytic = analytic;
         this.sampleWeight = sampleWeight;
@@ -83,9 +88,19 @@ public class MatrixBuilderSample
         // When floor and actual are the same, t = 1.0.
         // When actual is almost a whole increment greater than floor, t approaches 0.0.
         // If mFloor is clamped to the domain size - 1, then mExact will be much larger, so t = 0.0.
-        this.blendingWeight = Math.max(0.0, 1.0 + this.floor - this.actual);
+        blendingWeight = Math.max(0.0, 1.0 + floor - this.actual);
 
         this.weightByInstance = weightByInstance;
         this.observed = observed;
+    }
+
+    public final double getWeightForInstance(int instance)
+    {
+        return weightByInstance.applyAsDouble(instance);
+    }
+
+    public final double getObserved(int index)
+    {
+        return observed[index];
     }
 }

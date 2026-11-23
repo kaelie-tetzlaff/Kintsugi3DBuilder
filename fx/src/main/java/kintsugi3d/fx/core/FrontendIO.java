@@ -1,12 +1,16 @@
 /*
- * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch, Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
+ * Copyright (c) 2019 - 2026 Seth Berrier, Kaelie Tetzlaff, Jacob Buelow, Luke Denney, Ian Anderson, Zoe Cuthrell, Blane Suess, Isaac Tesch,
+ *                           Nathaniel Willius, Atlas Collins, Simon Cao, Joe Luther, Jakob Schmucki, Nathan Sunday, Joseph O'Connor
  * Copyright (c) 2019 The Regents of the University of Minnesota
  *
  * Licensed under GPLv3
  * ( http://www.gnu.org/licenses/gpl-3.0.html )
  *
- * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * This code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
 package kintsugi3d.fx.core;
@@ -23,17 +27,21 @@ import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.io.IO;
 import kintsugi3d.builder.io.RecentProjects;
 import kintsugi3d.fx.experience.CreateProject;
+import kintsugi3d.fx.util.StaticUtilities;
 import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
 public final class FrontendIO
 {
     private static final FrontendIO INSTANCE = new FrontendIO();
+    public static final String FAILED_TO_FIND_CANCEL_BUTTON = "Failed to find cancel button.";
 
     private FileChooser projectFileChooser;
 
@@ -45,7 +53,7 @@ public final class FrontendIO
     public static void initialize()
     {
         // Try to initialize file chooser in advance of when it will be needed.
-        Platform.runLater(getInstance()::getProjectFileChooserSafe);
+        Platform.runLater(INSTANCE::getProjectFileChooserSafe);
 
         // Register progress monitor.
         Global.io().addProgressMonitor(new DefaultProgressMonitor()
@@ -83,7 +91,7 @@ public final class FrontendIO
             projectFileChooser = new FileChooser();
         }
 
-        projectFileChooser.setInitialDirectory(RecentProjects.getMostRecentDirectory());
+        projectFileChooser.setInitialDirectory(RecentProjects.getInstance().getMostRecentDirectory());
 
         return projectFileChooser;
     }
@@ -96,7 +104,7 @@ public final class FrontendIO
     {
         if (Global.io().isProjectOpen())
         {
-            Dialog<ButtonType> confirmation = new Alert(AlertType.CONFIRMATION,
+            Dialog<ButtonType> confirmation = StaticUtilities.createConfirmDialog(
                 "If you click OK, any unsaved changes to the current project will be lost.");
             confirmation.setTitle("Close Project?");
             confirmation.setHeaderText(text);
@@ -240,34 +248,31 @@ public final class FrontendIO
             fileChooser.setInitialDirectory(vsetFile.getParentFile());
         }
 
-        var fileContainer = new Object()
-        {
-            volatile boolean complete = false;
-            volatile File selectedFile;
-        };
+        AtomicBoolean complete = new AtomicBoolean(false);
+        AtomicReference<File> selectedFile = new AtomicReference<>(null);
 
         if (Platform.isFxApplicationThread())
         {
             // If already on the JavaFX application thread, just open the dialog here to avoid deadlock
-            fileContainer.selectedFile = fileChooser.showSaveDialog(parentWindow);
-            fileContainer.complete = true;
+            selectedFile.set(fileChooser.showSaveDialog(parentWindow));
+            complete.set(true);
         }
         else
         {
             // On MacOS, the save dialog needs to run on JavaFX thread, so use Platform.runLater if not already on that thread.
             Platform.runLater(() ->
             {
-                fileContainer.selectedFile = fileChooser.showSaveDialog(parentWindow);
-                fileContainer.complete = true;
+                selectedFile.set(fileChooser.showSaveDialog(parentWindow));
+                complete.set(true);
             });
 
-            while (!fileContainer.complete)
+            while (!complete.get())
             {
                 Thread.onSpinWait();
             }
         }
 
-        return fileContainer.selectedFile;
+        return selectedFile.get();
     }
 
     /**
