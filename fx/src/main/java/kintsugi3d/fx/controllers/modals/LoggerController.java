@@ -237,12 +237,14 @@ public class LoggerController implements Initializable
                     if (message.getLogLevel() == Level.ERROR)
                     {
                         setStyle("-fx-background-color: #fa6d6d");
-                        //TODO: MAKE TEXT BLACK
+                        levelLabel.setStyle("-fx-text-fill: #202020");
+                        messageLabel.setStyle("-fx-text-fill: #202020");
                     }
                     else if (message.getLogLevel() == Level.WARN)
                     {
                         setStyle("-fx-background-color: #fab66d");
-                        //TODO: MAKE TEXT BLACK
+                        levelLabel.setStyle("-fx-text-fill: #202020");
+                        messageLabel.setStyle("-fx-text-fill: #202020");
                     }
                     else
                     {

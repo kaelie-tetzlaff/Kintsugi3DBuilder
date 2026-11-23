@@ -189,7 +189,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
                     .collect(Collectors.toList());
 
                 Collection<ButtonType> allButtons = new ArrayList<>(fallbackButtons.size() + 2);
-                allButtons.add(cancel);
+                allButtons.add(new ButtonType("Cancel", ButtonData.LEFT));
                 allButtons.addAll(fallbackButtons);
 
                 // If allowed, "Continue" just continues as if nothing happened (only allowed for warnings)

@@ -16,6 +16,7 @@
 package kintsugi3d.builder.io.imageset;
 
 import javafx.scene.image.Image;
+import kintsugi3d.builder.io.XMLHelper;
 import kintsugi3d.builder.io.metashape.MetashapeChunk;
 import kintsugi3d.builder.io.metashape.MetashapeModel;
 import kintsugi3d.builder.resources.project.MissingImagesException;
@@ -28,8 +29,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -55,11 +54,8 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
             throws ParserConfigurationException, IOException, SAXException, MissingImagesException
     {
         this.fullResSearchDir = fullResSearchDir;
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder;
-        builder = factory.newDocumentBuilder();
 
-        Document cameraDocument = builder.parse(cameraFile);
+        Document cameraDocument = XMLHelper.getDocumentBuilder().parse(cameraFile);
 
         //get chunk name
         Element chunkElem = (Element) cameraDocument.getElementsByTagName("chunk").item(0);

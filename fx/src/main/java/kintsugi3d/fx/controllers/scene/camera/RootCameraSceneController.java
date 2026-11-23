@@ -21,10 +21,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.VBox;
 import kintsugi3d.fx.internal.ObservableCameraModel;
 import kintsugi3d.fx.internal.ObservableProjectModel;
+import kintsugi3d.fx.util.StaticUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -203,7 +203,7 @@ public class RootCameraSceneController
         int selectedIndex = getCameraSelectionModel().getSelectedIndex();
         if (selectedIndex != 0)
         {
-            Dialog<ButtonType> confirmation = new Alert(AlertType.CONFIRMATION, "This action cannot be reversed.");
+            Dialog<ButtonType> confirmation = StaticUtilities.createConfirmDialog("This action cannot be reversed.");
             confirmation.setHeaderText(String.format("Are you sure you want to delete the following camera: %s?",
                 projectModel.getCameraList().get(selectedIndex).getName()));
             confirmation.setTitle("Delete?");

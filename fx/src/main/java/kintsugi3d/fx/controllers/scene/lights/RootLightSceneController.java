@@ -27,12 +27,12 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.layout.VBox;
 import kintsugi3d.builder.rendering.SceneViewport;
 import kintsugi3d.fx.internal.ObservableLightingEnvironmentModel;
 import kintsugi3d.fx.internal.ObservableProjectModel;
+import kintsugi3d.fx.util.StaticUtilities;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
 import org.slf4j.Logger;
@@ -326,7 +326,7 @@ public class RootLightSceneController implements Initializable
 
         if (lightGroupList.size() > selectedRow && selectedRow >= 0)
         {
-            Dialog<ButtonType> confirmation = new Alert(AlertType.CONFIRMATION, "This action cannot be reversed.");
+            Dialog<ButtonType> confirmation = StaticUtilities.createConfirmDialog("This action cannot be reversed.");
             confirmation.setHeaderText(String.format("Are you sure you want to delete the following light group: %s?",
                 lightGroupList.get(selectedRow).getName()));
             confirmation.setTitle("Delete?");
@@ -420,7 +420,7 @@ public class RootLightSceneController implements Initializable
         ObservableLightGroupSettings selectedLightGroup = getSelectedLightGroup();
         if (selectedLightGroup != null && lastSelectedIndex >= 0 && lastSelectedIndex < selectedLightGroup.getLightCount())
         {
-            Dialog<ButtonType> confirmation = new Alert(AlertType.CONFIRMATION, "This action cannot be reversed.");
+            Dialog<ButtonType> confirmation = StaticUtilities.createConfirmDialog("This action cannot be reversed.");
             confirmation.setHeaderText(String.format("Are you sure you want to delete light %d from the following group: %s?",
                 lastSelectedIndex + 1, selectedLightGroup.getName()));
             confirmation.setTitle("Delete?");

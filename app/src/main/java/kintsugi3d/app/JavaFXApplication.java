@@ -47,6 +47,7 @@ import kintsugi3d.fx.controllers.scene.RootSceneController;
 import kintsugi3d.fx.core.*;
 import kintsugi3d.fx.internal.ObservableCarouselModel;
 import kintsugi3d.fx.internal.ObservableGeneralSettingsModel;
+import kintsugi3d.fx.util.StaticUtilities;
 import kintsugi3d.gl.window.FramebufferCanvas;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -144,7 +145,7 @@ public class JavaFXApplication extends Application
         {
             FutureTask<Boolean> confirmationTask = new FutureTask<>(() ->
             {
-                Dialog<ButtonType> confirmation = new Alert(AlertType.CONFIRMATION, "If you click OK, any unsaved changes will be lost.");
+                Dialog<ButtonType> confirmation = StaticUtilities.createConfirmDialog("If you click OK, any unsaved changes will be lost.");
                 confirmation.setTitle("Exit?");
                 confirmation.setHeaderText("Are you sure you want to exit?");
                 return confirmation.showAndWait()
@@ -202,10 +203,15 @@ public class JavaFXApplication extends Application
             // MacOS compatible fonts
             setUserAgentStylesheet("user-agent-macos.css");
         }
-        else
+        else if (OperatingSystem.WINDOWS == OperatingSystem.getCurrentOS())
         {
             // Windows compatible fonts
             setUserAgentStylesheet("user-agent-windows.css");
+        }
+        else
+        {
+            // Default fonts but include other overrides.
+            setUserAgentStylesheet("user-agent-generic.css");
         }
 
         primaryStage.getIcons().add(AppIcon.getImage());
@@ -308,7 +314,7 @@ public class JavaFXApplication extends Application
         if (GlobalUserPreferencesManager.getInstance().hasStartupFailures())
         {
             ButtonType ok = new ButtonType("OK", ButtonData.OK_DONE);
-            ButtonType showLog = new ButtonType("Show Log", ButtonData.YES);
+            ButtonType showLog = new ButtonType("Show Log", ButtonData.LEFT);
             Alert alert = new Alert(AlertType.WARNING, "An error occurred loading your user preferences, and they may have been reverted to their defaults. No action is needed.\nCheck the log for more info.", ok, showLog);
             ((ButtonBase) alert.getDialogPane().lookupButton(showLog)).setOnAction(
                 event -> ExperienceManager.getInstance().getExperience(ExperienceManager.LOG).tryOpen());

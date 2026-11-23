@@ -16,6 +16,7 @@
 package kintsugi3d.builder.util;
 
 import javafx.scene.image.Image;
+import kintsugi3d.builder.io.XMLHelper;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -26,8 +27,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -136,12 +135,9 @@ public final class UnzipHelper
 
     private static @Nullable Document convertStringToDocument(String xmlStr)
     {
-        //Taken from https://www.digitalocean.com/community/tutorials/java-convert-string-to-xml-document-and-xml-document-to-string
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try
         {
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            return builder.parse(new InputSource(new StringReader(xmlStr)));
+            return XMLHelper.getDocumentBuilder().parse(new InputSource(new StringReader(xmlStr)));
         }
         catch (RuntimeException | IOException | ParserConfigurationException | SAXException e)
         {

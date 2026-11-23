@@ -18,7 +18,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox alignment="TOP_CENTER" fillWidth="false" styleClass="content-root" stylesheets="@../../kintsugiStyling.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kintsugi3d.fx.controllers.modals.systemsettings.ObjectVisualsController">
+<VBox alignment="TOP_CENTER" fillWidth="false" styleClass="content-root" stylesheets="@../../kintsugi.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kintsugi3d.fx.controllers.modals.systemsettings.ObjectVisualsController">
     <VBox spacing="16.0">
         <HBox alignment="CENTER_LEFT" spacing="16.0">
             <HBox alignment="CENTER_LEFT">

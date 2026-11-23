@@ -51,7 +51,7 @@ public final class ExceptionHandling
             Platform.runLater(() ->
             {
             ButtonType ok = new ButtonType("OK", ButtonData.CANCEL_CLOSE);
-            ButtonType showLog = new ButtonType("Show Log", ButtonData.YES);
+            ButtonType showLog = new ButtonType("Show Log", ButtonData.LEFT);
                 Alert alert = new Alert(AlertType.NONE,
                     String.format("%s:\n%s\nSee the log for more info.", message, e.getMessage()), ok, showLog);
                 ((ButtonBase) alert.getDialogPane().lookupButton(showLog)).setOnAction(

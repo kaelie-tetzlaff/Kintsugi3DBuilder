@@ -15,13 +15,13 @@
 
 package kintsugi3d.fx.controllers.modals.workflow.tonecalibration;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.fx.controllers.modals.viewselect.ViewSelectController;
+import kintsugi3d.fx.util.StaticUtilities;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -48,7 +48,7 @@ public class ToneCalibrationViewSelectController extends ViewSelectController
 
         if (viewSet.hasCustomLuminanceEncoding())
         {
-            Alert alert = new Alert(AlertType.CONFIRMATION, "This will clear any previous tone calibration values!");
+            Dialog<ButtonType> alert = StaticUtilities.createConfirmDialog("This will clear any previous tone calibration values!");
             alert.setHeaderText("Change tone calibration view?");
             Optional<ButtonType> confirmResult = alert.showAndWait();
             if (confirmResult.isEmpty() || !confirmResult.get().equals(ButtonType.OK))

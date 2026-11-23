@@ -18,7 +18,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
-<VBox fx:id="root" alignment="CENTER" spacing="32.0" styleClass="content-root" stylesheets="@../../kintsugiStyling.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kintsugi3d.fx.controllers.modals.createnewproject.ManualImportController">
+<VBox fx:id="root" alignment="CENTER" spacing="32.0" styleClass="content-root" stylesheets="@../../kintsugi.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kintsugi3d.fx.controllers.modals.createnewproject.ManualImportController">
    <GridPane alignment="CENTER" hgap="16.0" styleClass="grid-pane" vgap="32.0" VBox.vgrow="NEVER">
       <columnConstraints>
          <ColumnConstraints percentWidth="34" />

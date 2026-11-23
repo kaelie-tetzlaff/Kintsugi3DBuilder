@@ -15,6 +15,7 @@
 
 package kintsugi3d.builder.io.metashape;
 
+import kintsugi3d.builder.io.XMLHelper;
 import kintsugi3d.builder.util.UnzipHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +25,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
@@ -55,13 +54,8 @@ public class MetashapeDocument
 
         try
         {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            //TODO: MAY BE PRONE TO XXE ATTACKS
-
-            DocumentBuilder builder = factory.newDocumentBuilder();
-
             //Get Document from .psx file
-            Document psxDocument = builder.parse(new File(psxFilePath));
+            Document psxDocument = XMLHelper.getDocumentBuilder().parse(new File(psxFilePath));
 
             //get the path attribute from the document tag
             NodeList nodes = psxDocument.getElementsByTagName("document");

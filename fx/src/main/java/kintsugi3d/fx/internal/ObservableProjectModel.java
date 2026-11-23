@@ -26,6 +26,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.texture.ImageReplacer;
 import kintsugi3d.builder.io.IOModel;
@@ -39,6 +40,7 @@ import kintsugi3d.fx.core.ExceptionHandling;
 import kintsugi3d.fx.core.ExperienceManager;
 import kintsugi3d.fx.core.FrontendIO;
 import kintsugi3d.fx.experience.ReplaceImage;
+import kintsugi3d.fx.util.StaticUtilities;
 import kintsugi3d.gl.vecmath.Vector3;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -286,7 +288,7 @@ public class ObservableProjectModel extends ProjectModelBase<
     public final void confirm(String title, String header, String message, Runnable onConfirm)
     {
         // Temp solution -- will eventually create a custom modal.
-        Alert alert = new Alert(AlertType.CONFIRMATION, message);
+        Dialog<ButtonType> alert = StaticUtilities.createConfirmDialog(message);
         alert.setTitle(title);
         alert.setHeaderText(header);
         var result = alert.showAndWait();

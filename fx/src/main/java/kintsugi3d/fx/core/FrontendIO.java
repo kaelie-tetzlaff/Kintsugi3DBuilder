@@ -27,6 +27,7 @@ import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.io.IOModel;
 import kintsugi3d.builder.io.RecentProjects;
 import kintsugi3d.fx.experience.CreateProject;
+import kintsugi3d.fx.util.StaticUtilities;
 import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 
@@ -40,6 +41,7 @@ import java.util.function.Predicate;
 public final class FrontendIO
 {
     private static final FrontendIO INSTANCE = new FrontendIO();
+    public static final String FAILED_TO_FIND_CANCEL_BUTTON = "Failed to find cancel button.";
 
     private FileChooser projectFileChooser;
 
@@ -102,7 +104,7 @@ public final class FrontendIO
     {
         if (Global.io().isProjectOpen())
         {
-            Dialog<ButtonType> confirmation = new Alert(AlertType.CONFIRMATION,
+            Dialog<ButtonType> confirmation = StaticUtilities.createConfirmDialog(
                 "If you click OK, any unsaved changes to the current project will be lost.");
             confirmation.setTitle("Close Project?");
             confirmation.setHeaderText(text);
