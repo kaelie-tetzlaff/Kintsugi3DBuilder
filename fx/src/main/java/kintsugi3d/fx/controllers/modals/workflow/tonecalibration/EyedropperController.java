@@ -46,13 +46,11 @@ import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.io.IO;
 import kintsugi3d.builder.io.RecentProjects;
-import kintsugi3d.builder.rendering.Rendering;
 import kintsugi3d.fx.controllers.modals.LiveProjectSettingsManager;
 import kintsugi3d.fx.controllers.paged.NonDataPageControllerBase;
 import kintsugi3d.fx.controllers.sidebar.ImageDetailsController;
 import kintsugi3d.fx.util.StaticUtilities;
 import kintsugi3d.fx.util.ZoomSafeImageView;
-import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.SRGB;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -287,8 +285,8 @@ public class EyedropperController extends NonDataPageControllerBase
         {
             projectSettingsManager.cancel(); // for flatfield setting
 
-            // in case "infinite light sources" was toggled
-            recalibrateLightIntensity();
+            // Light intensity recalibration on toggle of "infinite light sources" happens automatically
+            // via listener registration in GraphicsResourcesImageSpace.
 
             // revert the tone calibration to what it was when the page was opened.
             if (prevEncodedLuminanceValues != null)
@@ -306,16 +304,6 @@ public class EyedropperController extends NonDataPageControllerBase
         {
             return false;
         }
-    }
-
-    private static void recalibrateLightIntensity()
-    {
-        Rendering.runLater(() ->
-        {
-            IO io = Global.io();
-            Vector3 lightIntensity = io.getMainRenderable().getResources().determineGlobalLightIntensity();
-            io.getLoadedViewSetOrThrow().setAllLightIntensities(lightIntensity);
-        });
     }
 
     private void registerToneWidget(Button button, TextField textField, Rectangle rectangle)
@@ -655,8 +643,8 @@ public class EyedropperController extends NonDataPageControllerBase
     @FXML
     private void apply()
     {
-        // light intensities depend on whether inverse-square attenuation is enabled
-        recalibrateLightIntensity();
+        // Note: light intensities automatically recalculated via listener in GraphicsResourcesImageSpace
+        // when "infiniteLightSources" changes.
 
         if (useCurveCheckbox.selectedProperty().get())
         {
