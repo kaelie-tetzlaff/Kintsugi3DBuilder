@@ -441,8 +441,11 @@ public final class FramebufferView extends Region
 
     public void closeCanvas()
     {
-        canvas.close();
-        canvas = null;
+        if (canvas != null)
+        {
+            canvas.close();
+            canvas = null;
+        }
     }
 
     private void handleWindowEvent()

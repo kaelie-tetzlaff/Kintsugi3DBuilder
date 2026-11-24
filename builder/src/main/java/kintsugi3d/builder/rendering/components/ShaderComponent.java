@@ -166,12 +166,17 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
 
     public final @NotNull DrawableResource<ContextType> getDrawable()
     {
-        return Objects.requireNonNull(drawable);
+        return Objects.requireNonNull(drawable, "Shader component does not have a valid drawable.");
+    }
+
+    public final @Nullable DrawableResource<ContextType> getDrawableOrNull()
+    {
+        return drawable;
     }
 
     public final Program<ContextType> getProgram()
     {
-        return Objects.requireNonNull(drawable).program();
+        return getDrawable().program();
     }
 
     /**

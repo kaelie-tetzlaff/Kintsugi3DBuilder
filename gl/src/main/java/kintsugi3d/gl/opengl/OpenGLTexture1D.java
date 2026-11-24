@@ -57,28 +57,29 @@ final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLCon
             {
                 return new OpenGLTexture1D(
                     getContext(),
-                        textureTarget,
-                        getInternalCompressionFormat(),
-                        width,
-                        bundleTextureData(dimensions, false, type, buffer),
-                        isLinearFilteringEnabled(),
-                        areMipmapsEnabled(),
-                        getMaxMipmapLevel(),
-                        getMaxAnisotropy());
+                    textureTarget,
+                    getInternalCompressionFormat(),
+                    width,
+                    bundleTextureData(dimensions, false, type, buffer),
+                    isLinearFilteringEnabled(),
+                    areMipmapsEnabled(),
+                    getMaxMipmapLevel(),
+                    getMaxAnisotropy());
             }
             else
             {
-                return new OpenGLTexture1D(
-                    getContext(),
-                        textureTarget,
-                        getInternalColorFormat(),
-                        width,
-                        bundleTextureData(
-                            dimensions, getInternalColorFormat().isInteger(), type, buffer),
-                        isLinearFilteringEnabled(),
-                        areMipmapsEnabled(),
-                        getMaxMipmapLevel(),
-                        getMaxAnisotropy());
+                ColorFormat internalColorFormat = getInternalColorFormat();
+                assert internalColorFormat != null;
+
+                return new OpenGLTexture1D(getContext(),
+                    textureTarget,
+                    internalColorFormat,
+                    width,
+                    bundleTextureData(dimensions, internalColorFormat.isInteger(), type, buffer),
+                    isLinearFilteringEnabled(),
+                    areMipmapsEnabled(),
+                    getMaxMipmapLevel(),
+                    getMaxAnisotropy());
             }
         }
     }

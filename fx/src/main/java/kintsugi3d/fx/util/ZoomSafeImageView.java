@@ -52,7 +52,7 @@ public class ZoomSafeImageView
         logicalViewport.addListener(
             (observable, oldValue, newValue) ->
         {
-            if (!cropBounds.contains(newValue)
+            if (cropBounds == null || !cropBounds.contains(newValue)
                 || getEffectiveRenderWidth() > MAX_CROP_SCREEN_PIXELS
                 || getEffectiveRenderHeight() > MAX_CROP_SCREEN_PIXELS)
             {

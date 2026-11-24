@@ -33,6 +33,7 @@ import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace;
 import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace.Builder;
 import kintsugi3d.builder.resources.project.MeshImportException;
 import kintsugi3d.builder.resources.project.MissingImagesException;
+import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.builder.state.SelectableViewListModel;
 import kintsugi3d.builder.state.scene.ReadonlyCameraModel;
 import kintsugi3d.builder.state.scene.ReadonlyLightingEnvironmentModel;
@@ -178,16 +179,19 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     private void loadInstance(File newProjectFile, String internalName, Builder<ContextType> builder)
         throws UserCancellationException
     {
-        loadedViewSet = builder.getViewSet();
-        loadedGeometry = builder.getGeometry();
+        ViewSet viewSet = Objects.requireNonNull(builder.getViewSet(), "Builder must have a view set assigned.");
+        loadedViewSet = viewSet;
 
-        int gpuBufferSize = loadedViewSet.getGPUBufferSize();
+        VertexGeometry geometry = Objects.requireNonNull(builder.getGeometry(), "Builder must have geometry assigned.");
+        loadedGeometry = geometry;
+
+        int gpuBufferSize = viewSet.getGPUBufferSize();
         if (gpuBufferSize > 1024 && progressMonitor != null)
         {
             IOException e = new IOException(String.format("Dataset has %d cameras, which exceeds 1024 and may fail on many graphics cards.", gpuBufferSize));
             progressMonitor.warn(e);
         }
-        boolean hasUnsupportedCorrections = loadedViewSet.hasUnsupportedCorrections();
+        boolean hasUnsupportedCorrections = viewSet.hasUnsupportedCorrections();
         if (hasUnsupportedCorrections && progressMonitor != null)
         {
             IOException e = new IOException("This project uses 'Fit additional corrections' which are not supported.");
@@ -198,7 +202,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         // Grab all views (not just enabled) for light calibration
         // TODO this is for the light calibration sidebar and should probably be migrated to a newer system
         // TODO   for managing the list of photos (like the photos tab)
-        Global.state().getViewListModel().setViewList(loadedViewSet.getViewsSorted());
+        Global.state().getViewListModel().setViewList(viewSet.getViewsSorted());
 
         if (newProjectFile != null)
         {
@@ -254,9 +258,10 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                 newInstance.initialize();
 
                 // Check for an old instance just to be safe
-                if (renderableInstance != null)
+                ImageBasedRenderingEngine<ContextType> oldInstance = renderableInstance;
+                if (oldInstance != null)
                 {
-                    renderableInstance.close();
+                    oldInstance.close();
                 }
 
                 // Use the new instance as the active instance if initialization was successful
@@ -275,9 +280,10 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                 }
 
                 // Notify listeners that project has loaded
-                projectLoaded.notify(new ProjectLoadedEvent(loadedGeometry.getBoundingBoxSize()));
+                projectLoaded.notify(new ProjectLoadedEvent(geometry.getBoundingBoxSize()));
 
-                GraphicsResourcesImageSpace<ContextType> resources = newInstance.getResources();
+                GraphicsResourcesImageSpace<ContextType> resources =
+                    Objects.requireNonNull(newInstance.getResources(), "Builder did not yield a valid renderable instance.");
                 if (resources.hasProcessedWeightMaps())
                 {
                     // Project has been processed previously; notify listeners
@@ -471,12 +477,13 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                                     int safeLeftPadding, int safeTopPadding, int safeRightPadding, int safeBottomPadding,
                                     Consumer<FramebufferCanvas<?>> framebufferCallback)
     {
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
             // Create a new rendering engine instance that references the same resources as the main rendering engine.
             // This can run on any thread, but initialization needs to run on the graphics thread.
             ImageBasedRenderingEngine<ContextType> renderView =
-                new ImageBasedRenderingEngine<>(renderableInstance.getInternalName(), context, renderableInstance.getResources());
+                new ImageBasedRenderingEngine<>(currentInstance.getInternalName(), context, currentInstance.getResources());
 
             RenderViewCameraModel renderViewCameraModel = new RenderViewCameraModel(cameraModel);
             renderViewCameraModel.setPadding(safeLeftPadding, safeTopPadding, safeRightPadding, safeBottomPadding);
@@ -543,9 +550,10 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
 
     private void requestFragmentShader(ShaderInfo shaderInfo)
     {
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.getDynamicResourceManager().requestFragmentShader(shaderInfo.getFile(), shaderInfo::getDefines);
+            currentInstance.getDynamicResourceManager().requestFragmentShader(shaderInfo.getFile(), shaderInfo::getDefines);
         }
     }
 
@@ -564,36 +572,40 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     public final void setCameraViewListModel(SelectableViewListModel viewListModel)
     {
         this.viewListModel = viewListModel;
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.getSceneModel().setCameraViewListModel(viewListModel);
+            currentInstance.getSceneModel().setCameraViewListModel(viewListModel);
         }
     }
 
     public final void setObjectModel(ReadonlyObjectPoseModel objectModel)
     {
         this.objectModel = objectModel;
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.getSceneModel().setObjectModel(objectModel);
+            currentInstance.getSceneModel().setObjectModel(objectModel);
         }
     }
 
     public final void setCameraModel(ReadonlyViewpointModel cameraModel)
     {
         this.cameraModel = cameraModel;
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.getSceneModel().setCameraModel(cameraModel);
+            currentInstance.getSceneModel().setCameraModel(cameraModel);
         }
     }
 
     public final void setLightingModel(ReadonlyLightingEnvironmentModel lightingModel)
     {
         this.lightingModel = lightingModel;
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.getSceneModel().setLightingModel(lightingModel);
+            currentInstance.getSceneModel().setLightingModel(lightingModel);
         }
     }
 
@@ -605,18 +617,20 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     public final void setSettingsModel(ReadonlyGeneralSettingsModel settingsModel)
     {
         this.settingsModel = settingsModel;
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.getSceneModel().setSettingsModel(settingsModel);
+            currentInstance.getSceneModel().setSettingsModel(settingsModel);
         }
     }
 
     @Override
     public final @Nullable EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException
     {
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            return renderableInstance.getDynamicResourceManager().loadEnvironmentMap(environmentMapFile);
+            return currentInstance.getDynamicResourceManager().loadEnvironmentMap(environmentMapFile);
         }
         else
         {
@@ -627,23 +641,24 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     @Override
     public final void loadBackplate(File backplateFile) throws FileNotFoundException
     {
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.getDynamicResourceManager().loadBackplate(backplateFile);
+            currentInstance.getDynamicResourceManager().loadBackplate(backplateFile);
         }
     }
 
     @Override
     public final void saveToVSETFile(File vsetFile) throws IOException
     {
-        ViewSetWriterToVSET.getInstance().writeToFile(loadedViewSet, vsetFile);
+        ViewSetWriterToVSET.getInstance().writeToFile(Objects.requireNonNull(loadedViewSet, "No view set is currently loaded."), vsetFile);
     }
 
     @Override
     public final void saveAllMaterialFiles(File materialDirectory, Runnable finishedCallback)
     {
-        if (renderableInstance == null || renderableInstance.getResources() == null
-            || renderableInstance.getResources().getTextureResources() == null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance == null || currentInstance.getResourcesOrNull() == null)
         {
             if (finishedCallback != null)
             {
@@ -652,24 +667,36 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
         else
         {
-            Rendering.runLater(() ->
+            TextureResources<ContextType> textureResources = currentInstance.getResources().getTextureResources();
+            if (textureResources == null)
             {
-                renderableInstance.getResources().getTextureResources().saveAll(materialDirectory);
-
                 if (finishedCallback != null)
                 {
                     finishedCallback.run();
                 }
-            });
+            }
+            else
+            {
+                Rendering.runLater(() ->
+                {
+                    textureResources.saveAll(materialDirectory);
+
+                    if (finishedCallback != null)
+                    {
+                        finishedCallback.run();
+                    }
+                });
+            }
         }
     }
 
     @Override
     public final void saveGLTF(File outputDirectory, ExportSettings settings)
     {
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.saveGLTF(outputDirectory, settings);
+            currentInstance.saveGLTF(outputDirectory, settings);
         }
     }
 
@@ -679,7 +706,8 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         // Use the runLater system so that the rendering loop knows that an operation that might take longer is queued.
         Rendering.runLater(() ->
         {
-            if (renderableInstance != null)
+            ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+            if (currentInstance != null)
             {
                 // Empty sidebar; will be repopulated when another project is opened.
                 // TODO rework this; might be a race condition and also isn't the best dependency
@@ -689,7 +717,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                 renderViewMap.clear();
                 renderViews.clear();
 
-                renderableInstance.close();
+                currentInstance.close();
                 renderableInstance = null;
                 loadedViewSet = null;
                 loadedGeometry = null;
@@ -702,36 +730,40 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     @Override
     public final void initialize() throws InitializationException
     {
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.initialize();
+            currentInstance.initialize();
         }
     }
 
     @Override
     public final void update()
     {
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.update();
+            currentInstance.update();
         }
     }
 
     @Override
     public final void draw(Framebuffer<ContextType> framebuffer)
     {
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.draw(framebuffer);
+            currentInstance.draw(framebuffer);
         }
     }
 
     @Override
     public final void close()
     {
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.close();
+            currentInstance.close();
         }
     }
 

@@ -102,7 +102,7 @@ class ImageSelectionLoadManager
                 runningImageLoader.stopThread();
             }
 
-            if (queuedImageLoader != null)
+            if (queuedImageLoader != null && queuedThread != null)
             {
                 // Stop any previously queued image loader before it starts
                 queuedImageLoader.stopThread();

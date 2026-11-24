@@ -19,17 +19,20 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 abstract class PageBase<InType, OutType, ControllerType extends PageController<? super InType>>
     implements Page<InType, OutType>
 {
-    private final @Nullable ControllerType controller;
+    public static final String SENTINEL_MESSAGE = "Attempt to access a sentinel page.";
 
+    private final @Nullable ControllerType controller;
     private final @Nullable Parent root;
 
     private final ObjectProperty<Page<? super OutType, ?>> nextPageProperty = new SimpleObjectProperty<>(null);
@@ -53,15 +56,15 @@ abstract class PageBase<InType, OutType, ControllerType extends PageController<?
     }
 
     @Override
-    public final @Nullable ControllerType getController()
+    public final @NotNull ControllerType getController()
     {
-        return controller;
+        return Objects.requireNonNull(controller, SENTINEL_MESSAGE);
     }
 
     @Override
-    public final @Nullable Parent getRoot()
+    public final @NotNull Parent getRoot()
     {
-        return root;
+        return Objects.requireNonNull(root, SENTINEL_MESSAGE);
     }
 
     @Override
@@ -139,7 +142,7 @@ abstract class PageBase<InType, OutType, ControllerType extends PageController<?
 
     final void sendDataToController(InType data)
     {
-        controller.receiveData(data);
+        getController().receiveData(data);
     }
 
     @Override

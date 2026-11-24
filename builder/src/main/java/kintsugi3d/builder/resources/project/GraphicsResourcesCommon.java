@@ -49,6 +49,7 @@ import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
 import kintsugi3d.gl.vecmath.IntVector2;
 import kintsugi3d.gl.vecmath.Vector3;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,7 +107,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
     private final ViewSet viewSet;
 
-    private float @Nullable [] viewWeights;
+    private float @Nullable @Unmodifiable [] viewWeights;
 
     private final EventDispatcher<ProjectProcessedListener, ProjectProcessedEvent> projectProcessed
         = new EventDispatcher<>(ProjectProcessedListener::onProjectProcessed);
@@ -204,7 +205,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
             if (viewSet != null)
             {
                 viewWeightBuffer = context.createUniformBuffer(); // prereq for computeViewWeights
-                viewWeights = computeViewWeights();
+                computeViewWeights();
 
                 ImportedMaterial material = geometry.getMaterial();
                 String geometryFileName = viewSet.getGeometryFileName();
@@ -308,7 +309,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         textureResources.setTexturesObservable(texturesObservable);
     }
 
-    private float[] computeViewWeights()
+    private void computeViewWeights()
     {
         // getViews makes a copy; save it here since we'll need it a couple times.
         Collection<View> views = viewSet.getEnabledViews();
@@ -370,22 +371,25 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
         LOG.info("View weights:");
 
-        viewWeights = new float[viewSet.getGPUBufferSize()];
+        float[] newWeights = new float[viewSet.getGPUBufferSize()];
 
         if (actualSampleCount > 0) // avoid divide by zero
         {
             for (View view : views)
             {
                 int index = view.getGPUViewIndex();
-                viewWeights[index] = (float) totals[index] / (float) actualSampleCount;
-                LOG.info("{}\t{}", view, viewWeights[index]);
+                newWeights[index] = (float) totals[index] / (float) actualSampleCount;
+                LOG.info("{}\t{}", view, newWeights[index]);
             }
         }
 
-        viewWeightBuffer.setData(NativeVectorBufferFactory.createFromFloatArray(
-            1, viewSet.getGPUBufferSize(), viewWeights));
+        viewWeights = newWeights;
 
-        return viewWeights;
+        if (viewWeightBuffer != null)
+        {
+            viewWeightBuffer.setData(NativeVectorBufferFactory.createFromFloatArray(
+                1, viewSet.getGPUBufferSize(), viewWeights));
+        }
     }
 
     private static double findMaxMinDistance(Vector3[] viewDirections)
@@ -435,22 +439,10 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
     public List<Float> getViewWeights()
     {
-        if (viewWeights != null)
+        float[] currentViewWeights = viewWeights;
+        if (currentViewWeights != null)
         {
-            return Collections.unmodifiableList(new AbstractList<>()
-            {
-                @Override
-                public int size()
-                {
-                    return viewWeights.length;
-                }
-
-                @Override
-                public Float get(int index)
-                {
-                    return viewWeights[index];
-                }
-            });
+            return new ViewWeightListWrapper(currentViewWeights);
         }
         else
         {
@@ -723,5 +715,27 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
     public EventListeners<Observer<MappedChange<String, TextureInfo>>> texturesListeners()
     {
         return texturesObservable;
+    }
+
+    private static final class ViewWeightListWrapper extends AbstractList<Float>
+    {
+        private final float[] viewWeights;
+
+        private ViewWeightListWrapper(float[] viewWeights)
+        {
+            this.viewWeights = viewWeights;
+        }
+
+        @Override
+        public int size()
+        {
+            return viewWeights.length;
+        }
+
+        @Override
+        public Float get(int index)
+        {
+            return viewWeights[index];
+        }
     }
 }

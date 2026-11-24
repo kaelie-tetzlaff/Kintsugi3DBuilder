@@ -865,29 +865,31 @@ public class SmokeTest
             origLightIntensities.add(viewSet.getLightIntensity(i));
         }
 
-        boolean hadCustomEncoding =
-            viewSet.hasCustomLuminanceEncoding();
+        boolean hadCustomEncoding = viewSet.hasCustomLuminanceEncoding();
 
         double[] origLinear = null;
         byte[] origEncoded = null;
 
         if(hadCustomEncoding)
         {
-            origLinear =
-                viewSet.getLinearLuminanceValues();
+            origLinear = viewSet.getLinearLuminanceValues();
 
-            origEncoded =
-                viewSet.getEncodedLuminanceValues();
+            origEncoded = viewSet.getEncodedLuminanceValues();
 
-            double[] modLinear =
-                origLinear.clone();
-
-            for (int i = 0; i < modLinear.length; i++)
+            if (origLinear != null)
             {
-                modLinear[i] *= 1.05;
-            }
+                double[] modLinear = origLinear.clone();
 
-            viewSet.setLuminanceEncoding(modLinear, origEncoded);
+                for (int i = 0; i < modLinear.length; i++)
+                {
+                    modLinear[i] *= 1.05;
+                }
+
+                if (origEncoded != null)
+                {
+                    viewSet.setLuminanceEncoding(modLinear, origEncoded);
+                }
+            }
         }
         else
         {

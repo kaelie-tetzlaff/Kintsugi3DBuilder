@@ -326,7 +326,6 @@ public abstract class SpecularFitProcess
                             blockOptimization.getDiffuseOptimization().execute(blockOptimization);
 
                             // Fit specular textures after filling holes
-                            assert blockOptimization.getRoughnessOptimization() != null;
                             blockOptimization.getRoughnessOptimization().execute();
 
                             // Copy partial solution into the full solution.

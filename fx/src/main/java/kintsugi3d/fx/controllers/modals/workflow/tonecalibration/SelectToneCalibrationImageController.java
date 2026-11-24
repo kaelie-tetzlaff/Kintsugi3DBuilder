@@ -130,13 +130,21 @@ public class SelectToneCalibrationImageController extends NonDataPageControllerB
         if (Objects.equals(buttonGroup.getSelectedToggle(), primaryViewImageButton))
         {
             View primaryView = viewSet.getPrimaryView();
-            try
+            if (primaryView != null)
             {
-                imageFile = primaryView.findFullResImageFile();
+                try
+                {
+                    imageFile = primaryView.findFullResImageFile();
+                }
+                catch (FileNotFoundException e)
+                {
+                    error("File not found", String.format("Could not find file: %s", primaryView.getFullResImageFile()));
+                    return false;
+                }
             }
-            catch (FileNotFoundException e)
+            else
             {
-                error("File not found", String.format("Could not find file: %s", primaryView.getFullResImageFile()));
+                error("No primary view selected", "No primary view selected.");
                 return false;
             }
         }

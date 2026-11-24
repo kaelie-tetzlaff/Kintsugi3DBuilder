@@ -16,16 +16,20 @@
 package kintsugi3d.gl.geometry;
 
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class GeometryResources<ContextType extends Context<ContextType>>
     implements ReadonlyGeometryResources<ContextType>, ManagedResource
 {
     private static final Logger LOG = LoggerFactory.getLogger(GeometryResources.class);
+
+    private static final String NULL_MESSAGE = "Geometry resources are null.";
 
     private final @Nullable ContextType context;
 
@@ -107,15 +111,15 @@ public class GeometryResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final @Nullable ContextType getContext()
+    public final @NotNull ContextType getContext()
     {
-        return context;
+        return Objects.requireNonNull(context, NULL_MESSAGE);
     }
 
     @Override
-    public final @Nullable ReadonlyVertexGeometry getGeometry()
+    public final @NotNull ReadonlyVertexGeometry getGeometry()
     {
-        return geometry;
+        return Objects.requireNonNull(geometry, NULL_MESSAGE);
     }
 
     @Override

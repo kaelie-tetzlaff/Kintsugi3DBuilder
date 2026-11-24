@@ -105,11 +105,11 @@ final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGLContext
         @Override
         public final OpenGLCubemap createTexture()
         {
+            ColorFormat internalColorFormat = getInternalColorFormat();
             for (int i = 0; i < 6; i++)
             {
-                if(!isInternalFormatCompressed() &&
-                        (getInternalColorFormat().dataType == DataType.SIGNED_INTEGER
-                            || getInternalColorFormat().dataType == DataType.UNSIGNED_INTEGER))
+                if (internalColorFormat != null &&
+                    (internalColorFormat.dataType == DataType.SIGNED_INTEGER || internalColorFormat.dataType == DataType.UNSIGNED_INTEGER))
                 {
                     if (faces[i].format == 0)
                     {
@@ -143,21 +143,11 @@ final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGLContext
 
             if (isInternalFormatCompressed())
             {
-                return new OpenGLCubemap(
-                    getContext(),
-                        textureTarget,
-                        getInternalCompressionFormat(),
-                        faceSize,
-                        opt);
+                return new OpenGLCubemap(getContext(), textureTarget, getInternalCompressionFormat(), faceSize, opt);
             }
             else
             {
-                return new OpenGLCubemap(
-                    getContext(),
-                        textureTarget,
-                        getInternalColorFormat(),
-                        faceSize,
-                        opt);
+                return new OpenGLCubemap(getContext(), textureTarget, internalColorFormat, faceSize, opt);
             }
         }
     }

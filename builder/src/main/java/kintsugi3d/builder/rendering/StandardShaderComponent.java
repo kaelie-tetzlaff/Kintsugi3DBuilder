@@ -79,7 +79,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
     @Override
     public final void update()
     {
-        if (getDrawable() != null && getDrawable().program() != null)
+        if (getDrawableOrNull() != null && getDrawable().program() != null)
         {
             Map<String, Optional<Object>> settingsDefines = getPreprocessorDefines();
             Map<String, Object> resourceDefines = resources.getShaderProgramBuilder().getDefines();

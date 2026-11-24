@@ -27,12 +27,14 @@ import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResourcesBase
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.ManagedResource;
 import kintsugi3d.gl.core.Texture2D;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 
 public class SpecularFitBase<ContextType extends Context<ContextType>>
     extends ReadonlyTextureResourcesBase<ContextType> implements ManagedResource
@@ -158,9 +160,9 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
     /**
      * Estimated specular reflectivity and roughness
      */
-    public final @Nullable RoughnessOptimization<ContextType> getRoughnessOptimization()
+    public final @NotNull RoughnessOptimization<ContextType> getRoughnessOptimization()
     {
-        return roughnessOptimization;
+        return Objects.requireNonNull(roughnessOptimization, "Roughness optimization not available.");
     }
 
     @Override

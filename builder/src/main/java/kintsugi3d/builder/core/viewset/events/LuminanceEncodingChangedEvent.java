@@ -53,13 +53,13 @@ public class LuminanceEncodingChangedEvent
         }
     }
 
-    public final double[] getLinearLuminanceValues()
+    public final double @Nullable [] getLinearLuminanceValues()
     {
-        return linearLuminanceValues.clone();
+        return linearLuminanceValues != null ? linearLuminanceValues.clone() : null;
     }
 
-    public final byte[] getEncodedLuminanceValues()
+    public final byte @Nullable [] getEncodedLuminanceValues()
     {
-        return encodedLuminanceValues.clone();
+        return encodedLuminanceValues != null ? encodedLuminanceValues.clone() : null;
     }
 }

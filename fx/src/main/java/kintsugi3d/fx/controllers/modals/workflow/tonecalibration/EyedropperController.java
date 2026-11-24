@@ -224,6 +224,10 @@ public class EyedropperController extends NonDataPageControllerBase
                     // If somehow a trivial encoding was previously stored, this could be considered a bit of "housekeeping"
                     // as that encoding has no effect and could have a small impact on memory usage / performance
                     double[] prevLinearLuminanceValues = viewSet.getLinearLuminanceValues();
+
+                    assert prevEncodedLuminanceValues != null;
+                    assert prevLinearLuminanceValues != null;
+
                     //noinspection FloatingPointEquality
                     if (prevEncodedLuminanceValues.length == 1 && prevLinearLuminanceValues[0] == 1.0 && (0x00FF & prevEncodedLuminanceValues[0]) == 255)
                     {
@@ -259,7 +263,7 @@ public class EyedropperController extends NonDataPageControllerBase
         autoApply();
     }
 
-    private File getColorCheckerFile()
+    private @Nullable File getColorCheckerFile()
     {
         File colorCheckerFile = getState().getProjectModel().getColorCheckerFile();
 
@@ -269,8 +273,8 @@ public class EyedropperController extends NonDataPageControllerBase
         }
         else
         {
-            ViewSet viewSet = Global.io().getLoadedViewSetOrThrow();
-            return viewSet.getPrimaryView().tryFindFullResImageFile();
+            View primaryView = Global.io().getLoadedViewSetOrThrow().getPrimaryView();
+            return primaryView == null ? null : primaryView.tryFindFullResImageFile();
         }
     }
 

@@ -30,6 +30,8 @@ import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 public class LightCalibrationContent <ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
     private final ContextType context;
@@ -48,6 +50,11 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
         this.sceneViewportModel = sceneViewportModel;
     }
 
+    private RenderingSubject<ContextType> validateRenderingSubject()
+    {
+        return Objects.requireNonNull(renderingSubject, "Rendered component has not been initialized.");
+    }
+
     @Override
     public final void initialize()
     {
@@ -61,13 +68,13 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
     @Override
     public final void reloadShaders()
     {
-        renderingSubject.reloadShaders();
+        validateRenderingSubject().reloadShaders();
     }
 
     @Override
     public final void update()
     {
-        renderingSubject.update();
+        validateRenderingSubject().update();
     }
 
     @Override
@@ -79,7 +86,8 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
         // Only draw the rendering subject for light calibration, no other components like backplate, grid, ground plane, etc.
 
         // Hole fill color depends on whether in light calibration mode or not.
-        renderingSubject.getProgram().setUniform("holeFillColor", new Vector3(0.5f));
+        RenderingSubject<ContextType> validatedRenderingSubject = validateRenderingSubject();
+        validatedRenderingSubject.getProgram().setUniform("holeFillColor", new Vector3(0.5f));
 
         Matrix4 lightView = lightTransform.times(cameraViewport.getView());
         Vector3 lightPosWorldSpace = lightView.getUpperLeft3x3().transpose().times(lightView.getColumn(3).getXYZ().negated());
@@ -98,10 +106,10 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
             viewIndexBuffer.setData(NativeVectorBufferFactory
                 .createFromIntArray(false, 4, 1,
                     selectedCameraViewIndex, selectedCameraViewIndex, selectedCameraViewIndex, selectedCameraViewIndex));
-            renderingSubject.setViewIndexBufferOverride(viewIndexBuffer);
+            validatedRenderingSubject.setViewIndexBufferOverride(viewIndexBuffer);
 
             // Draw the actual object, without model transformation for light calibration
-            renderingSubject.draw(framebuffer, cameraViewport.copyForView(lookAt));
+            validatedRenderingSubject.draw(framebuffer, cameraViewport.copyForView(lookAt));
         }
 
         context.flush();

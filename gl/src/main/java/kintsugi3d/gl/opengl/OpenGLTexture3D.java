@@ -82,15 +82,17 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
             }
             else
             {
+                ColorFormat internalColorFormat = getInternalColorFormat();
+                assert internalColorFormat != null;
                 return new OpenGLTexture3D(
                     getContext(),
                     textureTarget,
                     getMultisamples(),
-                    getInternalColorFormat(),
+                    internalColorFormat,
                     width,
                     height,
                     depth,
-                    getInternalColorFormat().isInteger() ? GL_RGBA_INTEGER : GL_RGBA,
+                    internalColorFormat.isInteger() ? GL_RGBA_INTEGER : GL_RGBA,
                     areMultisampleLocationsFixed(),
                     isLinearFilteringEnabled(),
                     areMipmapsEnabled(),

@@ -56,6 +56,7 @@ import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.SRGB;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -186,7 +187,12 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final @Nullable GraphicsResourcesImageSpace<ContextType> getResources()
+    public final @NotNull GraphicsResourcesImageSpace<ContextType> getResources()
+    {
+        return Objects.requireNonNull(resources, "Renderable has not been initialized.");
+    }
+    @Override
+    public final @Nullable GraphicsResourcesImageSpace<ContextType> getResourcesOrNull()
     {
         return resources;
     }
@@ -218,6 +224,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
                 context.flush();
             }
+            assert resources != null;
 
             simpleTexDrawable = context.createDrawable(simpleTexProgram);
             simpleTexDrawable.addVertexBuffer("position", rectangleVertices);
@@ -332,7 +339,8 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
     private void updateWorldSpaceDefinition()
     {
-        if (resources.getGeometry() != null)
+        ReadonlyVertexGeometry geometry = getResources().getGeometry();
+        if (geometry != null)
         {
             ReadonlyViewSet viewSet = getViewSet();
 
@@ -355,14 +363,14 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 //                        .times(Objects.requireNonNullElse(viewSet.getObjectTranslation(), Vector3.ZERO).negated()));
 
                     // Just use true centroid instead
-                    sceneModel.setCentroid(resources.getGeometry().getCentroid());
+                    sceneModel.setCentroid(geometry.getCentroid());
 
                     // TODO figure out if we can use imported scale for user interaction without breaking things.
 //                    // "Scene scale" is generally taken by the Kintsugi renderer to be world space to model space
 //                    // so we need to invert the imported global scale.
 //                    sceneModel.setScale(1.0f / viewSet.getObjectScale());
-//                    sceneModel.setScale((resources.getGeometry().getBoundingRadius() + resources.getGeometry().getCentroid().length()) * 2);
-                    sceneModel.setScale(resources.getGeometry().getBoundingRadius() * 2);
+//                    sceneModel.setScale((geometry.getBoundingRadius() + geometry.getCentroid().length()) * 2);
+                    sceneModel.setScale(geometry.getBoundingRadius() * 2);
                 }
                 else
                 {
@@ -371,16 +379,16 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
                     Matrix3 referenceCameraPose = orientationView.getCameraPose().getUpperLeft3x3();
                     sceneModel.setOrientation(Matrix3.rotateZ(Math.toRadians(-viewSet.getOrientationViewRotationDegrees()))
                         .times(referenceCameraPose));
-                    sceneModel.setCentroid(resources.getGeometry().getCentroid());
-                    sceneModel.setScale(resources.getGeometry().getBoundingRadius() * 2);
+                    sceneModel.setCentroid(geometry.getCentroid());
+                    sceneModel.setScale(geometry.getBoundingRadius() * 2);
                 }
             }
             else
             {
                 // Defaults if there's no view set for some reason (identity for orientation and geometry-based centroid and scale)
                 sceneModel.setOrientation(Matrix3.IDENTITY);
-                sceneModel.setCentroid(resources.getGeometry().getCentroid());
-                sceneModel.setScale(resources.getGeometry().getBoundingRadius() * 2);
+                sceneModel.setCentroid(geometry.getCentroid());
+                sceneModel.setScale(geometry.getBoundingRadius() * 2);
             }
         }
     }
@@ -396,7 +404,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
     private Vector3 calculateClearColor()
     {
-        float maxLuminance = (float) SRGB.fromLinear(resources.getViewSet().getLuminanceEncoding().getDecodeFunction().applyAsDouble(255.0));
+        float maxLuminance = (float) SRGB.fromLinear(getResources().getViewSet().getLuminanceEncoding().getDecodeFunction().applyAsDouble(255.0));
         return new Vector3(
                 sceneModel.getLightingModel().getBackgroundColor().x / maxLuminance,
                 sceneModel.getLightingModel().getBackgroundColor().y / maxLuminance,
@@ -526,7 +534,8 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
                     // TODO support multiple light sources.
                     if (Vector3.ZERO.equals(getViewSet().getLightIntensity(0)))
                     {
-                        resources.getViewSet().setAllLightIntensities(resources.determineGlobalLightIntensity());
+                        GraphicsResourcesImageSpace<ContextType> validatedResources = getResources();
+                        validatedResources.getViewSet().setAllLightIntensities(validatedResources.determineGlobalLightIntensity());
                     }
 
                     if (progressMonitor != null)
@@ -590,13 +599,13 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     @Override
     public final ReadonlyVertexGeometry getGeometry()
     {
-        return resources.getGeometry();
+        return getResources().getGeometry();
     }
 
     @Override
     public final ViewSet getViewSet()
     {
-        return resources.getViewSet();
+        return getResources().getViewSet();
     }
 
     @Override
@@ -667,7 +676,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
                     transform = Matrix4.scale(viewSet.getObjectScale()).times(transform);
                 }
 
-                ReadonlyTextureResources<ContextType> textureResources = resources.getTextureResources();
+                ReadonlyTextureResources<ContextType> textureResources = getResources().getTextureResources();
 
                 ModelExporter exporter = ModelExporter.fromVertexGeometry(getGeometry(), transform);
                 settings.applyToExporter(exporter, textureResources, filename);

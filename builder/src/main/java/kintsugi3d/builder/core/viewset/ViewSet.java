@@ -37,6 +37,7 @@ import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -479,14 +480,16 @@ public final class ViewSet implements ReadonlyViewSet
 
             result.gpuBufferSize = gpuBufferSize;
 
-            if (primaryView != null)
+            View currentPrimaryView = primaryView;
+            if (currentPrimaryView != null)
             {
-                result.primaryView = result.views.get(primaryView.getImageFile());
+                result.primaryView = result.views.get(currentPrimaryView.getImageFile());
             }
 
-            if (orientationView != null)
+            View currentOrientationView = orientationView;
+            if (currentOrientationView != null)
             {
-                result.orientationView = result.views.get(orientationView.getImageFile());
+                result.orientationView = result.views.get(currentOrientationView.getImageFile());
             }
         }
 
@@ -1075,7 +1078,8 @@ public final class ViewSet implements ReadonlyViewSet
             removed = views.remove(image);
 
             // Check to see if we just removed the tone calibration primary or orientation views.
-            if (primaryView != null && Objects.equals(image.getName(), primaryView.getImageFile().getName()))
+            View currentPrimaryView = primaryView;
+            if (currentPrimaryView != null && Objects.equals(image.getName(), currentPrimaryView.getImageFile().getName()))
             {
                 // Primary view should always be non-null, if possible.
                 // NOTE: This will not automatically re-calculate light intensity;
@@ -1086,11 +1090,15 @@ public final class ViewSet implements ReadonlyViewSet
                 primaryView = views.isEmpty() ? null : getRepresentativeView();
             }
 
-            if (orientationView != null && Objects.equals(image.getName(), orientationView.getImageFile().getName()))
+            View currentOrientationView = orientationView;
+            if (currentOrientationView != null)
             {
-                // Orientation view can be null.
-                // TODO notify renderer that the orientation has changed.
-                orientationView = null;
+                if (Objects.equals(image.getName(), currentOrientationView.getImageFile().getName()))
+                {
+                    // Orientation view can be null.
+                    // TODO notify renderer that the orientation has changed.
+                    orientationView = null;
+                }
             }
         }
 
@@ -1324,6 +1332,8 @@ public final class ViewSet implements ReadonlyViewSet
         {
             if (hasCustomLuminanceEncoding())
             {
+                assert linearLuminanceValues != null;
+                assert encodedLuminanceValues != null;
                 return new SampledLuminanceEncoding(linearLuminanceValues, encodedLuminanceValues);
             }
             else
@@ -1334,24 +1344,26 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public double[] getLinearLuminanceValues()
+    public double @Nullable [] getLinearLuminanceValues()
     {
         synchronized (luminanceEncodingLock)
         {
-            return Arrays.copyOf(linearLuminanceValues, linearLuminanceValues.length);
+            double[] currentValues = linearLuminanceValues;
+            return currentValues == null ? null : Arrays.copyOf(currentValues, currentValues.length);
         }
     }
 
     @Override
-    public byte[] getEncodedLuminanceValues()
+    public byte @Nullable [] getEncodedLuminanceValues()
     {
         synchronized (luminanceEncodingLock)
         {
-            return Arrays.copyOf(encodedLuminanceValues, encodedLuminanceValues.length);
+            byte[] currentValues = encodedLuminanceValues;
+            return currentValues == null ? null : Arrays.copyOf(currentValues, currentValues.length);
         }
     }
 
-    public void setLuminanceEncoding(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
+    public void setLuminanceEncoding(double @NotNull [] linearLuminanceValues, byte @NotNull [] encodedLuminanceValues)
     {
         if (linearLuminanceValues.length != encodedLuminanceValues.length)
         {

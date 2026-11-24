@@ -21,6 +21,7 @@ import kintsugi3d.builder.util.ImageUndistorter;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.util.ImageHelper;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 class PreviewImages
@@ -127,7 +129,8 @@ class PreviewImages
 
             try (ImageUndistorter<?> undistort = new ImageUndistorter<>(context))
             {
-                undistortedPreviewImage = undistort.undistort(fullResImage.getBufferedImage(), distortion);
+                undistortedPreviewImage = undistort.undistort(
+                    validateFullResImage().getBufferedImage(), distortion);
             }
         }
         catch (IOException | RuntimeException ex)
@@ -135,6 +138,11 @@ class PreviewImages
             // Failure to undistort
             LOG.error(ex.getMessage(), ex);
         }
+    }
+
+    private @NotNull ImageHelper validateFullResImage()
+    {
+        return Objects.requireNonNull(fullResImage, "Full resolution image does not exist.");
     }
 
 
@@ -178,7 +186,7 @@ class PreviewImages
                         Resolution thumbnailResolution = getThumbnailResolution();
 
                         // Thumbnail doesn't need undistortion.
-                        fullResImage.saveAtResolution("PNG", view.getThumbnailImageFile(),
+                        validateFullResImage().saveAtResolution("PNG", view.getThumbnailImageFile(),
                             thumbnailResolution.width, thumbnailResolution.height);
                         logFinished(view.getThumbnailImageFile());
                     }
@@ -212,8 +220,9 @@ class PreviewImages
 
     private Resolution getThumbnailResolution()
     {
-        int fullWidth = fullResImage.getBufferedImage().getWidth();
-        int fullHeight = fullResImage.getBufferedImage().getHeight();
+        ImageHelper validatedFullResImage = validateFullResImage();
+        int fullWidth = validatedFullResImage.getBufferedImage().getWidth();
+        int fullHeight = validatedFullResImage.getBufferedImage().getHeight();
 
         int thumbnailWidth;
         int thumbnailHeight;
@@ -240,7 +249,7 @@ class PreviewImages
             // Use PNG to ensure losslessness
             if (missingPreview)
             {
-                fullResImage.saveAtResolution("PNG", view.getPreviewImageFile("png"),
+                validateFullResImage().saveAtResolution("PNG", view.getPreviewImageFile("png"),
                     view.getContainingViewSet().getPreviewWidth(), view.getContainingViewSet().getPreviewHeight());
                 logFinished(view.getPreviewImageFile());
             }
@@ -248,7 +257,7 @@ class PreviewImages
             if (missingThumbnail)
             {
                 Resolution thumbnailResolution = getThumbnailResolution();
-                fullResImage.saveAtResolution("PNG", view.getThumbnailImageFile("png"),
+                validateFullResImage().saveAtResolution("PNG", view.getThumbnailImageFile("png"),
                     thumbnailResolution.width, thumbnailResolution.height);
                 logFinished(view.getThumbnailImageFile());
             }

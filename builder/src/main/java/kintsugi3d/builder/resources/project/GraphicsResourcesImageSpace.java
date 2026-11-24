@@ -354,11 +354,21 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             // Use preview-resolution images for the texture array due to VRAM limitations
             try
             {
-                File imageFile = viewSet.getPrimaryView().findPreviewImageFile();
-                IntVector2 dimensions = ImageHelper.dimensionsOf(imageFile);
+                View primaryView = viewSet.getPrimaryView();
+                if (primaryView != null)
+                {
+                    File imageFile = primaryView.findPreviewImageFile();
+                    IntVector2 dimensions = ImageHelper.dimensionsOf(imageFile);
 
-                width = dimensions.x;
-                height = dimensions.y;
+                    width = dimensions.x;
+                    height = dimensions.y;
+                }
+                else
+                {
+                    // Fallback if there's no primary view (i.e. if there's no views at all)
+                    width = loadOptions.getPreviewImageWidth();
+                    height = loadOptions.getPreviewImageHeight();
+                }
             }
             catch (FileNotFoundException e)
             {
@@ -582,15 +592,15 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         if (shadowTextures != null)
         {
             try
-                (
-                    // Don't automatically generate any texture attachments for this framebuffer object
-                    FramebufferObject<ContextType> depthRenderingFBO =
-                        getContext().buildFramebufferObject(shadowTextures.getWidth(), shadowTextures.getHeight())
-                            .createFramebufferObject();
+            (
+                // Don't automatically generate any texture attachments for this framebuffer object
+                FramebufferObject<ContextType> depthRenderingFBO =
+                    getContext().buildFramebufferObject(shadowTextures.getWidth(), shadowTextures.getHeight())
+                        .createFramebufferObject();
 
-                    // Load the program
-                    DepthMapGenerator<ContextType> depthMapGenerator = DepthMapGenerator.createFromGeometryResources(getGeometryResources())
-                )
+                // Load the program
+                DepthMapGenerator<ContextType> depthMapGenerator = DepthMapGenerator.createFromGeometryResources(getGeometryResources())
+            )
             {
                 // Flatten the camera pose matrices into 16-component vectors and store them in the vertex list data structure.
                 NativeVectorBuffer flattenedShadowMatrices = NativeVectorBufferFactory.createEmpty(
@@ -614,6 +624,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
                 }
 
                 // Create the uniform buffer
+                assert shadowMatrixBuffer != null;
                 shadowMatrixBuffer.setData(flattenedShadowMatrices);
             }
         }

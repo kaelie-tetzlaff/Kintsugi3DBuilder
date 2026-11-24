@@ -24,11 +24,11 @@ import kintsugi3d.builder.rendering.components.snap.ViewSnap;
 import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 public class LightCalibrationRoot<ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
-    private @Nullable ViewSnap<ContextType> viewSnapRoot;
+    private final @NotNull ViewSnap<ContextType> viewSnapRoot;
 
     public LightCalibrationRoot(ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel,
                                 ViewSelection viewSelection, SceneViewportModel sceneViewportModel)
@@ -63,10 +63,6 @@ public class LightCalibrationRoot<ContextType extends Context<ContextType>> impl
     @Override
     public final void close()
     {
-        if (viewSnapRoot != null)
-        {
-            viewSnapRoot.close();
-            viewSnapRoot = null;
-        }
+        viewSnapRoot.close();
     }
 }
