@@ -713,11 +713,6 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         return getGeometryResources().createDrawable(program);
     }
 
-    public void determineAndSetAllLightIntensities()
-    {
-        getViewSet().setAllLightIntensities(determineGlobalLightIntensity());
-    }
-
     @Override
     public Vector3 determineGlobalLightIntensity()
     {

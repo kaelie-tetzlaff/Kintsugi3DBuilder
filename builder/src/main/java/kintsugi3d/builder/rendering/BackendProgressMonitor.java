@@ -15,6 +15,7 @@
 
 package kintsugi3d.builder.rendering;
 
+import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.vecmath.Vector3;
@@ -121,7 +122,8 @@ class BackendProgressMonitor implements ProgressMonitor
         // TODO support multiple light sources.
         if (Vector3.ZERO.equals(instance.getViewSet().getLightIntensity(0)))
         {
-            instance.getResources().determineAndSetAllLightIntensities();
+            GraphicsResourcesImageSpace<?> graphicsResourcesImageSpace = instance.getResources();
+            graphicsResourcesImageSpace.getViewSet().setAllLightIntensities(graphicsResourcesImageSpace.determineGlobalLightIntensity());
         }
 
         instance.reloadShaders();

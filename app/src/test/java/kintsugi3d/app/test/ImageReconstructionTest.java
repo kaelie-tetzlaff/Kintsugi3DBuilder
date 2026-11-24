@@ -1036,7 +1036,7 @@ class ImageReconstructionTest
                 .loadLooseFiles(new File(Objects.requireNonNull(classLoader.getResource(cameras)).toURI()), viewSetLoadOptions)
                 .create())
         {
-            resources.determineAndSetAllLightIntensities();
+            resources.getViewSet().setAllLightIntensities(resources.determineGlobalLightIntensity());
             testFit(resources, validation, testName);
         }
     }
@@ -1052,7 +1052,7 @@ class ImageReconstructionTest
             .loadVSETFile(viewSetFile, viewSetFile.getParentFile())
             .create())
         {
-            resources.determineAndSetAllLightIntensities();
+            resources.getViewSet().setAllLightIntensities(resources.determineGlobalLightIntensity());
             testFit(resources, validation, testName);
         }
         catch (UserCancellationException e)
