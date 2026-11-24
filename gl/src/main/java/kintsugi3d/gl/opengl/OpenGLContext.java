@@ -127,11 +127,11 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
     }
 
     @Override
-    public final Drawable<OpenGLContext> createDrawable(Program<OpenGLContext> program)
+    public final DrawableResource<OpenGLContext> createDrawable(Program<OpenGLContext> program)
     {
         if (program instanceof OpenGLProgramObject)
         {
-            return new OpenGLDrawable(this, (OpenGLProgramObject)program);
+            return new OpenGLDrawableResource(this, (OpenGLProgramObject)program);
         }
         else
         {

@@ -21,9 +21,9 @@ import org.jetbrains.annotations.Nullable;
 
 class ManagedSceneViewport implements SceneViewport
 {
-    private final RenderableManager<?> renderableManager;
+    private final RenderableManager<?, ? extends ViewportRenderable<?>> renderableManager;
 
-    ManagedSceneViewport(RenderableManager<?> renderableManager)
+    ManagedSceneViewport(RenderableManager<?, ? extends ViewportRenderable<?>> renderableManager)
     {
         this.renderableManager = renderableManager;
     }

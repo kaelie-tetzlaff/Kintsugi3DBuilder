@@ -15,6 +15,8 @@
 
 package kintsugi3d.fx.internal;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
 import kintsugi3d.builder.state.project.SerializableCameraSettings;
 import kintsugi3d.builder.state.scene.CameraModelFromSettings;
@@ -24,6 +26,11 @@ public class ObservableCameraModel extends CameraModelFromSettings
 {
     private ObservableValue<ObservableCameraSettings> selectedCameraSetting;
     private final SerializableCameraSettings sentinel = new ObservableCameraSettings("sentinel");
+
+    private final IntegerProperty paddingLeft = new SimpleIntegerProperty(0);
+    private final IntegerProperty paddingRight = new SimpleIntegerProperty(0);
+    private final IntegerProperty paddingTop = new SimpleIntegerProperty(0);
+    private final IntegerProperty paddingBottom = new SimpleIntegerProperty(0);
 
     public ObservableCameraModel()
     {
@@ -46,5 +53,73 @@ public class ObservableCameraModel extends CameraModelFromSettings
         {
             return selectedCameraSetting.getValue();
         }
+    }
+
+    @Override
+    public final int getPaddingLeft()
+    {
+        return paddingLeft.get();
+    }
+
+    public final IntegerProperty paddingLeftProperty()
+    {
+        return paddingLeft;
+    }
+
+    @Override
+    public final int getPaddingRight()
+    {
+        return paddingRight.get();
+    }
+
+    public final IntegerProperty paddingRightProperty()
+    {
+        return paddingRight;
+    }
+
+    @Override
+    public final int getPaddingTop()
+    {
+        return paddingTop.get();
+    }
+
+    public final IntegerProperty paddingTopProperty()
+    {
+        return paddingTop;
+    }
+
+    @Override
+    public final int getPaddingBottom()
+    {
+        return paddingBottom.get();
+    }
+
+    public final IntegerProperty paddingBottomProperty()
+    {
+        return paddingBottom;
+    }
+
+    @Override
+    public final void setPaddingLeft(int paddingLeft)
+    {
+        this.paddingLeft.set(paddingLeft);
+    }
+
+    @Override
+    public final void setPaddingRight(int paddingRight)
+    {
+        this.paddingRight.set(paddingRight);
+    }
+
+    @Override
+    public final void setPaddingTop(int paddingTop)
+    {
+        this.paddingTop.set(paddingTop);
+    }
+
+    @Override
+    public final void setPaddingBottom(int paddingBottom)
+    {
+        this.paddingBottom.set(paddingBottom);
     }
 }

@@ -29,7 +29,7 @@ public class ShaderHoleFill<ContextType extends Context<ContextType>> implements
     private final VertexBuffer<ContextType> rect;
 
     // Drawable
-    private final Drawable<ContextType> drawable;
+    private final DrawableResource<ContextType> drawable;
 
     public ShaderHoleFill(ContextType context) throws IOException
     {

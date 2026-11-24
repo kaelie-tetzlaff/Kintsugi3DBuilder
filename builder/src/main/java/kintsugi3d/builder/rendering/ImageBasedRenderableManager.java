@@ -16,10 +16,7 @@
 package kintsugi3d.builder.rendering;
 
 import kintsugi3d.builder.core.Global;
-import kintsugi3d.builder.core.texture.TextureInfo;
-import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
-import kintsugi3d.builder.fit.decomposition.BasisMaterialInfo;
 import kintsugi3d.builder.fit.settings.ExportSettings;
 import kintsugi3d.builder.io.IOHandler;
 import kintsugi3d.builder.io.ReadonlyLoadOptionsModel;
@@ -37,8 +34,7 @@ import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace.Builder;
 import kintsugi3d.builder.resources.project.MeshImportException;
 import kintsugi3d.builder.resources.project.MissingImagesException;
 import kintsugi3d.builder.state.SelectableViewListModel;
-import kintsugi3d.builder.state.cards.CardsModel;
-import kintsugi3d.builder.state.cards.TabsManager;
+import kintsugi3d.builder.state.scene.ReadonlyCameraModel;
 import kintsugi3d.builder.state.scene.ReadonlyLightingEnvironmentModel;
 import kintsugi3d.builder.state.scene.ReadonlyObjectPoseModel;
 import kintsugi3d.builder.state.scene.ReadonlyViewpointModel;
@@ -47,15 +43,15 @@ import kintsugi3d.builder.state.shader.ReadonlyActiveShaderModel;
 import kintsugi3d.builder.state.shader.ShaderInfo;
 import kintsugi3d.builder.util.events.EventDispatcher;
 import kintsugi3d.builder.util.events.EventListeners;
-import kintsugi3d.builder.util.events.MappedChange;
-import kintsugi3d.builder.util.events.Observer;
 import kintsugi3d.gl.builders.framebuffer.DoubleFramebufferFactory;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.geometry.VertexGeometry;
 import kintsugi3d.gl.interactive.*;
 import kintsugi3d.gl.vecmath.IntVector2;
+import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.window.FramebufferCanvas;
 import kintsugi3d.util.EncodableColorImage;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,10 +61,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class ImageBasedRenderableManager<ContextType extends Context<ContextType>>
-    extends InteractiveRenderableBase<ContextType> implements IOHandler, RenderableManager<ContextType>
+    extends InteractiveRenderableBase<ContextType>
+    implements IOHandler, RenderableManager<ContextType, ImageBasedRenderable<ContextType>>
 {
     private static final Logger LOG = LoggerFactory.getLogger(ImageBasedRenderableManager.class);
 
@@ -84,7 +80,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
 
     private volatile ViewSet loadedViewSet;
     private volatile VertexGeometry loadedGeometry;
-    private volatile ImageBasedRenderable<ContextType> renderableInstance;
+    private volatile ImageBasedRenderingEngine<ContextType> renderableInstance;
     private ProgressMonitor progressMonitor;
 
     private ReadonlyObjectPoseModel objectModel;
@@ -94,7 +90,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     private SelectableViewListModel viewListModel;
 
     // These are one-shot callbacks for queuing up graphics requests before a project is loaded
-    private final List<Consumer<ImageBasedRenderable<?>>> instanceLoadCallbacks
+    private final List<Consumer<InteractiveRenderable<? extends Context<?>>>> instanceLoadCallbacks
         = Collections.synchronizedList(new ArrayList<>(4));
 
     // These are the ongoing listeners for UI synchronization
@@ -165,7 +161,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
      * @param callback to add
      */
     @Override
-    public final void addMainRenderableLoadCallback(Consumer<ImageBasedRenderable<?>> callback)
+    public final void addMainRenderableLoadCallback(Consumer<InteractiveRenderable<? extends Context<?>>> callback)
     {
         synchronized (instanceLoadCallbacks)
         {
@@ -240,10 +236,12 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
 
         // Create the instance (will be initialized on the graphics thread)
-        ImageBasedRenderable<ContextType> newInstance = new ImageBasedRenderingEngine<>(internalName, context, builder);
+        ImageBasedRenderingEngine<ContextType> newInstance = new ImageBasedRenderingEngine<>(internalName, context, builder);
         newInstance.setOwningApp(getOwningApp());
 
-        initializeSceneModel(newInstance.getSceneModel());
+        SceneModel newInstanceSceneModel = newInstance.getSceneModel();
+        newInstanceSceneModel.setCameraModel(cameraModel);
+        initializeSceneModel(newInstanceSceneModel);
 
         newInstance.setProgressMonitor(new BackendProgressMonitor(newInstance, progressMonitor));
 
@@ -254,22 +252,6 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
             try
             {
                 newInstance.initialize();
-
-                // Wait to refresh the tabs manager until we're about to actually initialize the new instance.
-                TabsManager tabsManager = new TabsManager(newInstance);
-                tabsManager.rebuildTabs();
-
-                GraphicsResourcesImageSpace<ContextType> resources = newInstance.getResources();
-
-                // Register observer for changes in each tab
-                loadedViewSet.viewsChangedListeners().register(
-                    getMappedChangeObserver(tabsManager, TabsManager.PHOTOS, View.class, File::new));
-                resources.basisListeners().register(
-                    getMappedChangeObserver(tabsManager, TabsManager.MATERIALS, BasisMaterialInfo.class));
-                resources.texturesListeners().register(
-                    getMappedChangeObserver(tabsManager, TabsManager.TEXTURES, TextureInfo.class));
-                // Currently the shaders tab is not expected to have changes other than when textures are processed,
-                // which is handled separately via an event listener.
 
                 // Check for an old instance just to be safe
                 if (renderableInstance != null)
@@ -283,7 +265,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                 synchronized (instanceLoadCallbacks)
                 {
                     // Invoke callbacks
-                    for (Consumer<ImageBasedRenderable<?>> callback : instanceLoadCallbacks)
+                    for (Consumer<InteractiveRenderable<? extends Context<?>>> callback : instanceLoadCallbacks)
                     {
                         callback.accept(renderableInstance);
                     }
@@ -295,6 +277,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                 // Notify listeners that project has loaded
                 projectLoaded.notify(new ProjectLoadedEvent(loadedGeometry.getBoundingBoxSize()));
 
+                GraphicsResourcesImageSpace<ContextType> resources = newInstance.getResources();
                 if (resources.hasProcessedWeightMaps())
                 {
                     // Project has been processed previously; notify listeners
@@ -334,38 +317,13 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         });
     }
 
-    private static <K, V> Observer<MappedChange<K, V>> getMappedChangeObserver(
-        TabsManager tabsManager, String tabName, Class<V> dataClass, Function<String, K> keyConstructor)
-    {
-        return change ->
-        {
-            CardsModel<V> texturesTab = Global.state().getTabModels().getTab(tabName, dataClass);
-
-            switch (change.getType())
-            {
-                case ADDED:
-                    tabsManager.refreshTab(tabName); // TODO implement support for adding individual card without rebuilding
-                    break;
-                case REMOVED:
-                    texturesTab.deleteCards(card -> change.getMap().get(keyConstructor.apply(card.getInternalName())) != null);
-                    break;
-                case MODIFIED:
-                    texturesTab.refreshCards(card -> change.getMap().get(keyConstructor.apply(card.getInternalName())));
-                    break;
-            }
-        };
-    }
-
-    private static <V> Observer<MappedChange<String, V>> getMappedChangeObserver(
-        TabsManager tabsManager, String tabName, Class<V> dataClass)
-    {
-        return getMappedChangeObserver(tabsManager, tabName, dataClass, Function.identity());
-    }
-
+    /**
+     * Does not initialize camera model.
+     * @param sceneModel
+     */
     private void initializeSceneModel(SceneModel sceneModel)
     {
         sceneModel.setObjectModel(objectModel);
-        sceneModel.setCameraModel(cameraModel);
         sceneModel.setLightingModel(lightingModel);
         sceneModel.setSettingsModel(settingsModel);
         sceneModel.setCameraViewListModel(viewListModel);
@@ -513,48 +471,56 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                                     int safeLeftPadding, int safeTopPadding, int safeRightPadding, int safeBottomPadding,
                                     Consumer<FramebufferCanvas<?>> framebufferCallback)
     {
-        // Create a new rendering engine instance that references the same resources as the main rendering engine.
-        // This can run on any thread, but initialization needs to run on the graphics thread.
-        ImageBasedRenderingEngine<ContextType> renderView =
-            new ImageBasedRenderingEngine<>(renderableInstance.getInternalName(), context, renderableInstance.getResources());
-        renderView.setSafeRegionPadding(safeLeftPadding, safeTopPadding, safeRightPadding, safeBottomPadding);
-        initializeSceneModel(renderView.getSceneModel());
-
-        Rendering.runLater(() ->
+        if (renderableInstance != null)
         {
-            // Create framebuffer
-            DoubleFramebufferObject<ContextType> framebuffer =
-                DoubleFramebufferFactory.create(context, viewSize.width, viewSize.height);
+            // Create a new rendering engine instance that references the same resources as the main rendering engine.
+            // This can run on any thread, but initialization needs to run on the graphics thread.
+            ImageBasedRenderingEngine<ContextType> renderView =
+                new ImageBasedRenderingEngine<>(renderableInstance.getInternalName(), context, renderableInstance.getResources());
 
-            // Create and initialize refreshable, which will manage the framebuffer object
-            var refreshable = RenderRefreshable.createWithManagedFrambufferObject(context, renderView, framebuffer);
+            RenderViewCameraModel renderViewCameraModel = new RenderViewCameraModel(cameraModel);
+            renderViewCameraModel.setPadding(safeLeftPadding, safeTopPadding, safeRightPadding, safeBottomPadding);
 
-            try
+            SceneModel renderViewSceneModel = renderView.getSceneModel();
+            renderViewSceneModel.setCameraModel(renderViewCameraModel);
+            initializeSceneModel(renderViewSceneModel);
+
+            Rendering.runLater(() ->
             {
-                // Pre-initialize here so that we can set the shader right away.
-                // RefreshableCollection will just skip this one when processing its initialize queue
-                // as it sees that it is already initialized.
-                refreshable.initialize();
-            }
-            catch (InitializationException e)
-            {
-                LOG.error("Error initialing render view for shader: {}", shader.getFullName(), e);
-            }
+                // Create framebuffer
+                DoubleFramebufferObject<ContextType> framebuffer =
+                    DoubleFramebufferFactory.create(context, viewSize.width, viewSize.height);
 
-            // Set to use the specified shader.
-            RenderingSubject<ContextType> subject = renderView.getSubject();
-            subject.setExtraFragmentShaderDefinesFactory(shader::getDefines);
-            subject.useFragmentShader(shader.getFile());
+                // Create and initialize refreshable, which will manage the framebuffer object
+                var refreshable = RenderRefreshable.createWithManagedFrambufferObject(context, renderView, framebuffer);
 
-            // render views will defer actually adding it to its main list until its own refresh call
-            // so it can safely be added here in the processing of the runLater queue.
-            renderViews.add(refreshable);
+                try
+                {
+                    // Pre-initialize here so that we can set the shader right away.
+                    // RefreshableCollection will just skip this one when processing its initialize queue
+                    // as it sees that it is already initialized.
+                    refreshable.initialize();
+                }
+                catch (InitializationException e)
+                {
+                    LOG.error("Error initialing render view for shader: {}", shader.getFullName(), e);
+                }
 
-            // Also store it in a map so that we can find it by UserShader when it needs to be removed.
-            renderViewMap.put(shader, refreshable);
+                // Set to use the specified shader.
+                RenderingSubject<ContextType> subject = renderView.getSubject();
+                subject.setExtraFragmentShaderDefinesFactory(shader::getDefines);
+                subject.useFragmentShader(shader.getFile());
 
-            framebufferCallback.accept(FramebufferCanvas.createUsingExistingFramebuffer(framebuffer));
-        });
+                // render views will defer actually adding it to its main list until its own refresh call
+                // so it can safely be added here in the processing of the runLater queue.
+                renderViews.add(refreshable);
+
+                // Also store it in a map so that we can find it by UserShader when it needs to be removed.
+                renderViewMap.put(shader, refreshable);
+
+                framebufferCallback.accept(FramebufferCanvas.createUsingExistingFramebuffer(framebuffer));
+            });
+        }
     }
 
     @Override
@@ -646,15 +612,25 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public final EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException
+    public final @Nullable EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException
     {
-        return renderableInstance.getDynamicResourceManager().loadEnvironmentMap(environmentMapFile);
+        if (renderableInstance != null)
+        {
+            return renderableInstance.getDynamicResourceManager().loadEnvironmentMap(environmentMapFile);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     @Override
     public final void loadBackplate(File backplateFile) throws FileNotFoundException
     {
-        renderableInstance.getDynamicResourceManager().loadBackplate(backplateFile);
+        if (renderableInstance != null)
+        {
+            renderableInstance.getDynamicResourceManager().loadBackplate(backplateFile);
+        }
     }
 
     @Override
@@ -765,5 +741,69 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     public final void setLoadedViewSet(ViewSet viewSet)
     {
         loadedViewSet = viewSet;
+    }
+
+    private static final class RenderViewCameraModel implements ReadonlyCameraModel
+    {
+        private final ReadonlyViewpointModel cameraModel;
+        private int paddingLeft = 0;
+        private int paddingTop = 0;
+        private int paddingRight = 0;
+        private int paddingBottom = 0;
+
+        RenderViewCameraModel(ReadonlyViewpointModel cameraModel)
+        {
+            this.cameraModel = cameraModel;
+        }
+
+        @Override
+        public Matrix4 getLookMatrix()
+        {
+            return cameraModel.getLookMatrix();
+        }
+
+        @Override
+        public float getHorizontalFOV()
+        {
+            return cameraModel.getHorizontalFOV();
+        }
+
+        @Override
+        public boolean isOrthographic()
+        {
+            return cameraModel.isOrthographic();
+        }
+
+        @Override
+        public int getPaddingLeft()
+        {
+            return paddingLeft;
+        }
+
+        @Override
+        public int getPaddingTop()
+        {
+            return paddingTop;
+        }
+
+        @Override
+        public int getPaddingRight()
+        {
+            return paddingRight;
+        }
+
+        @Override
+        public int getPaddingBottom()
+        {
+            return paddingBottom;
+        }
+
+        void setPadding(int left, int top, int right, int bottom)
+        {
+            paddingLeft = left;
+            paddingTop = top;
+            paddingRight = right;
+            paddingBottom = bottom;
+        }
     }
 }

@@ -19,8 +19,8 @@ import kintsugi3d.builder.core.texture.NamedTextureInfo;
 import kintsugi3d.builder.core.texture.StandardTexture;
 import kintsugi3d.builder.core.texture.TextureInfo;
 import kintsugi3d.builder.core.texture.TextureResolution;
-import kintsugi3d.builder.resources.project.ReadonlyGraphicsResources;
-import kintsugi3d.builder.resources.project.ShaderProgramFactory;
+import kintsugi3d.gl.interactive.ShaderResources;
+import kintsugi3d.gl.interactive.ShaderProgramFactory;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.gl.builders.framebuffer.FramebufferObjectBuilder;
 import kintsugi3d.gl.core.*;
@@ -53,10 +53,10 @@ public class FinalDiffuseOptimization<ContextType extends Context<ContextType>> 
     // Framebuffer for storing the diffuse solution
     private FramebufferObject<ContextType> framebuffer;
 
-    private final Drawable<ContextType> drawable;
+    private final DrawableResource<ContextType> drawable;
 
     public FinalDiffuseOptimization(
-        ReadonlyGraphicsResources<ContextType> resources,
+        ShaderResources<ContextType> resources,
         TextureResolution textureResolution, boolean includeConstant)
         throws IOException
     {

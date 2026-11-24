@@ -29,7 +29,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.texture.ImageReplacer;
-import kintsugi3d.builder.io.IOModel;
+import kintsugi3d.builder.io.IO;
 import kintsugi3d.builder.state.project.ProjectModelBase;
 import kintsugi3d.fx.controllers.scene.camera.ObservableCameraSettings;
 import kintsugi3d.fx.controllers.scene.environment.ObservableEnvironmentSettings;
@@ -326,19 +326,19 @@ public class ObservableProjectModel extends ProjectModelBase<
 
     public final void registerIOListeners()
     {
-        IOModel ioModel = Global.io();
+        IO io = Global.io();
 
-        ioModel.projectOpenedListeners().register(event ->
+        io.projectOpenedListeners().register(event ->
             Platform.runLater(() ->
             {
                 setProjectOpen(true);
                 setProjectName(event.projectName);
             }));
 
-        ioModel.projectSavedListeners().register(event ->
+        io.projectSavedListeners().register(event ->
             Platform.runLater(() -> setProjectName(event.projectName)));
 
-        ioModel.projectClosedListeners().register(event ->
+        io.projectClosedListeners().register(event ->
             Platform.runLater(() ->
             {
                 setProjectOpen(false);
@@ -350,14 +350,14 @@ public class ObservableProjectModel extends ProjectModelBase<
                 setModelSize(new Vector3(1.0f));
             }));
 
-        ioModel.projectLoadedListeners().register(event ->
+        io.projectLoadedListeners().register(event ->
             Platform.runLater(() ->
             {
                 setProjectLoaded(true);
                 setModelSize(event.getModelSize());
             }));
 
-        ioModel.projectProcessedListeners().register(event ->
+        io.projectProcessedListeners().register(event ->
             Platform.runLater(() ->
             {
                 setProjectProcessed(true);

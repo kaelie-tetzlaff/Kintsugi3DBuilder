@@ -124,9 +124,9 @@ public class GeometryResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final Drawable<ContextType> createDrawable(Program<ContextType> program)
+    public final DrawableResource<ContextType> createDrawable(Program<ContextType> program)
     {
-        Drawable<ContextType> drawable = program.getContext().createDrawable(program);
+        DrawableResource<ContextType> drawable = program.getContext().createDrawable(program);
         drawable.addVertexBuffer("position", positionBuffer);
         drawable.addVertexBuffer("texCoord", texCoordBuffer);
         drawable.addVertexBuffer("normal", normalBuffer);

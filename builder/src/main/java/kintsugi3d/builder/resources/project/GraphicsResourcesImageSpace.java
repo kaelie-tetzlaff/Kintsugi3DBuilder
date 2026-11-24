@@ -15,6 +15,7 @@
 
 package kintsugi3d.builder.resources.project;
 
+import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.io.*;
@@ -57,7 +58,8 @@ import java.util.concurrent.ForkJoinPool;
  *
  * @param <ContextType>
  */
-public final class GraphicsResourcesImageSpace<ContextType extends Context<ContextType>> extends ImageBasedGraphicsResourcesBase<ContextType>
+public final class GraphicsResourcesImageSpace<ContextType extends Context<ContextType>>
+    extends ImageBasedGraphicsResourcesBase<ContextType> implements ReadonlyGraphicsResourcesImageSpace<ContextType>
 {
     private static final boolean MULTITHREAD_PREVIEW_IMAGE_GENERATION = false;
 
@@ -706,35 +708,31 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
     }
 
     @Override
-    public Drawable<ContextType> createDrawable(Program<ContextType> program)
+    public DrawableResource<ContextType> createDrawable(Program<ContextType> program)
     {
         return getGeometryResources().createDrawable(program);
     }
 
-    public void calibrateLightIntensities()
+    @Override
+    public Vector3 determineGlobalLightIntensity()
     {
-        ViewSet viewSet = getViewSet();
-        calibrateLightIntensities(viewSet);
-    }
-
-    private void calibrateLightIntensities(ViewSet viewSet)
-    {
+        ReadonlyViewSet viewSet = getViewSet();
         if (viewSet.getProjectSettings().getBoolean("infiniteLightSources"))
         {
             // Use unit light intensity if light sources don't have inverse-square falloff.
-            viewSet.setAllLightIntensities(new Vector3(1.0f));
+            return new Vector3(1.0f);
         }
         else
         {
             try
             {
                 double primaryViewDistance = getMinDepthForView(viewSet.getPrimaryView());
-                Vector3 lightIntensity = new Vector3((float) (primaryViewDistance * primaryViewDistance));
-                viewSet.setAllLightIntensities(lightIntensity);
+                return new Vector3((float) (primaryViewDistance * primaryViewDistance));
             }
             catch (IOException e)
             {
                 LOG.error("Error loading shader to calculate primary view distance", e);
+                throw new IllegalStateException("Could not determine global light intensity.", e);
             }
         }
     }

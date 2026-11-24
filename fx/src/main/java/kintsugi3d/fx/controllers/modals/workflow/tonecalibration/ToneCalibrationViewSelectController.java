@@ -37,7 +37,7 @@ public class ToneCalibrationViewSelectController extends ViewSelectController
     @Override
     public final boolean tryAdvance()
     {
-        ViewSet viewSet = Global.io().validateRenderable().getLoadedViewSet();
+        ViewSet viewSet = Global.io().getLoadedViewSetOrThrow();
 
         View view = viewSet.findViewByName(getSelectedViewName());
         if (Objects.equals(view, viewSet.getPrimaryView()))

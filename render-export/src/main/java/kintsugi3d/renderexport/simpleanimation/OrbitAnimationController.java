@@ -66,7 +66,7 @@ public class OrbitAnimationController
     @FXML
     public final void run()
     {
-        if (Global.io().getProgressMonitor().isConflictingProcess())
+        if (Global.io().getAggregateProgressMonitor().isConflictingProcess())
         {
             return;
         }

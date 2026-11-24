@@ -33,6 +33,7 @@ import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
+import kintsugi3d.gl.interactive.ShaderProgramFactory;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.material.ReadonlyImportedMaterial;
 import kintsugi3d.gl.material.ReadonlyMaterialTextureMap;
@@ -124,7 +125,7 @@ public abstract class SpecularFitProcess
                 ReconstructionShaders.getBasisModelReconstructionProgramBuilder(
                     programFactory, resources.getTextureResources())
                 .createProgram();
-            Drawable<ContextType> drawable = resources.createDrawable(basisModelReconstructionProgram))
+            DrawableResource<ContextType> drawable = resources.createDrawable(basisModelReconstructionProgram))
         {
             resources.setupShaderProgram(basisModelReconstructionProgram);
 

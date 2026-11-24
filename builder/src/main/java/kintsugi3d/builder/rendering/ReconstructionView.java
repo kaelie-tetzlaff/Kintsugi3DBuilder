@@ -18,7 +18,7 @@ package kintsugi3d.builder.rendering;
 import kintsugi3d.builder.core.metrics.ReadonlyColorAppearanceRMSE;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.gl.core.Context;
-import kintsugi3d.gl.core.Drawable;
+import kintsugi3d.gl.core.DrawableResource;
 import kintsugi3d.gl.core.ReadableFramebuffer;
 import kintsugi3d.gl.vecmath.DoubleVector3;
 
@@ -30,5 +30,5 @@ public interface ReconstructionView<ContextType extends Context<ContextType>>
 
     ReadableFramebuffer<ContextType> getReconstructionFramebuffer();
 
-    ReadonlyColorAppearanceRMSE reconstruct(Drawable<ContextType> drawable);
+    ReadonlyColorAppearanceRMSE reconstruct(DrawableResource<ContextType> drawable);
 }

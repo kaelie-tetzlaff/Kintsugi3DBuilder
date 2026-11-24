@@ -18,7 +18,7 @@ package kintsugi3d.app;
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.SynchronizedWindow;
 import kintsugi3d.builder.core.WindowSynchronization;
-import kintsugi3d.builder.io.IOModel;
+import kintsugi3d.builder.io.IO;
 import kintsugi3d.builder.rendering.*;
 import kintsugi3d.builder.state.SelectableViewListModel;
 import kintsugi3d.builder.state.scene.ManipulableLightingEnvironmentModel;
@@ -34,6 +34,7 @@ import kintsugi3d.gl.glfw.CanvasWindow;
 import kintsugi3d.gl.interactive.InitializationException;
 import kintsugi3d.gl.interactive.InteractiveApplication;
 import kintsugi3d.gl.interactive.InteractiveGraphics;
+import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.opengl.OpenGLContext;
 import kintsugi3d.gl.opengl.OpenGLContextFactory;
 import kintsugi3d.gl.util.CanvasListener;
@@ -247,7 +248,7 @@ public final class RenderingBootstrap
             renderableManager.setObjectModel(Global.state().getObjectModel());
         }
 
-        IOModel ioModel = Global.io();
+        IO io = Global.io();
 
         // Replace the temporary sentinel with the actual scene viewport from the instance manager.
         SCENE_VIEWPORT_WRAPPER.setSceneViewport(renderableManager.getSceneViewport());
@@ -261,7 +262,7 @@ public final class RenderingBootstrap
 
         // Pass reference to instance manager to other components as needed.
         Rendering.initialize(context, renderableManager);
-        ioModel.setLoadingHandler(renderableManager);
+        io.initialize(renderableManager);
 
         canvas.addKeyPressListener((win, key, modifierKeys) ->
         {
@@ -271,7 +272,7 @@ public final class RenderingBootstrap
 
                 try
                 {
-                    // reload program
+                    // reload shader programs
                     renderableManager.getMainRenderable().reloadShaders();
                 }
                 catch (RuntimeException e)
@@ -301,7 +302,7 @@ public final class RenderingBootstrap
         }
         catch(RuntimeException|InitializationException|Error e)
         {
-            Optional.ofNullable(ioModel.getProgressMonitor()).ifPresent(monitor -> monitor.fail(e));
+            Optional.ofNullable(io.getAggregateProgressMonitor()).ifPresent(monitor -> monitor.fail(e));
             throw e;
         }
     }
@@ -365,12 +366,13 @@ public final class RenderingBootstrap
                     requestQueue.addGraphicsRequest((ProgressMonitoredGraphicsRequest) createMethod.invoke(null, (Object[]) args));
 
                     // Quit after the request finishes
-                    // Use ProjectGraphicsRequest (rather than GraphicsRequest) so that it gets queued up after the actual request,
+                    // Use ImageBasedGraphicsRequest (rather than GraphicsRequest) so that it gets queued up after the actual request,
                     // once the project has finished loading
                     requestQueue.addBackgroundImageBasedGraphicsRequest(new ImageBasedGraphicsRequest()
                     {
                         @Override
-                        public <ContextType extends Context<ContextType>> void executeRequest(ImageBasedRenderable<ContextType> instance)
+                        public <ContextType extends Context<ContextType>>
+                        void executeRequest(ReadonlyImageBasedRenderable<ContextType> instance, ProgressMonitor monitor)
                         {
                             WindowSynchronization.getInstance().quitWithoutConfirmation();
                         }

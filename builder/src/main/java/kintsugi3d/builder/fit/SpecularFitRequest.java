@@ -19,17 +19,15 @@ import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.metrics.ReadonlyColorAppearanceRMSE;
 import kintsugi3d.builder.fit.decomposition.ReadonlyBasisResources;
 import kintsugi3d.builder.fit.settings.*;
-import kintsugi3d.builder.rendering.ImageBasedRenderable;
-import kintsugi3d.builder.rendering.ProgressMonitoredImageBasedGraphicsRequest;
-import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
-import kintsugi3d.builder.resources.project.ReadonlyGraphicsResources;
+import kintsugi3d.builder.rendering.TextureReplacementGraphicsRequest;
+import kintsugi3d.builder.rendering.ReadonlyImageBasedRenderable;
+import kintsugi3d.builder.resources.project.texture.TextureResources;
+import kintsugi3d.builder.state.settings.ReadonlyGeneralSettingsModel;
+import kintsugi3d.gl.interactive.ShaderResources;
 import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
-import kintsugi3d.builder.resources.project.ShaderProgramFactory;
+import kintsugi3d.gl.interactive.ShaderProgramFactory;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
-import kintsugi3d.builder.state.cards.TabsManager;
-import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.util.ApplicationFolders;
-import kintsugi3d.builder.util.Kintsugi3DViewerLauncher;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
@@ -45,7 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public final class SpecularFitRequest implements ProgressMonitoredImageBasedGraphicsRequest
+public final class SpecularFitRequest implements TextureReplacementGraphicsRequest
 {
     private static final Logger LOG = LoggerFactory.getLogger(SpecularFitRequest.class);
 
@@ -95,9 +93,7 @@ public final class SpecularFitRequest implements ProgressMonitoredImageBasedGrap
 
     private static ReadonlySpecularFitSettings getSettingsFromProject()
     {
-        GeneralSettingsModel projectSettings = Global.io()
-            .validateRenderable()
-            .getLoadedViewSet().getProjectSettings();
+        ReadonlyGeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
 
         // Start with texture size
         int textureSize = projectSettings.getInt("textureSize");
@@ -131,9 +127,7 @@ public final class SpecularFitRequest implements ProgressMonitoredImageBasedGrap
 
     private static ReadonlyBasisOptimizationSettings getBasisOptimizationSettingsFromProject()
     {
-        GeneralSettingsModel projectSettings = Global.io()
-            .validateRenderable()
-            .getLoadedViewSet().getProjectSettings();
+        ReadonlyGeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
 
         BasisOptimizationSettings settings = new BasisOptimizationSettings();
 
@@ -169,64 +163,33 @@ public final class SpecularFitRequest implements ProgressMonitoredImageBasedGrap
      *                   If this is unused, an "infinite loading" indicator will be displayed instead.
      */
     @Override
-    public <ContextType extends Context<ContextType>> void executeRequest(ImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
-        throws UserCancellationException
+    public <ContextType extends Context<ContextType>>
+    TextureResources<ContextType> executeRequest(ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
+        throws UserCancellationException, IOException
     {
-        try
+        if (outputDirectory == null) // If the output directory wasn't overridden
         {
-            if (outputDirectory == null) // If the output directory wasn't overridden
-            {
-                // Set the output directory based on the view set's texture fit file path
-                outputDirectory = renderable.getViewSet().getSupportingFilesDirectory();
-            }
-
-            if (monitor != null)
-            {
-                monitor.setProcessName("Process Textures");
-            }
-
-            // Perform the specular fit
-            ImageBasedGraphicsResources<ContextType> resources = renderable.getResources();
-
-            if (basisOptimizationSettings != null)
-            {
-                BasisAndTexturesOptimizationProcess process = new BasisAndTexturesOptimizationProcess(settings, basisOptimizationSettings, outputDirectory);
-                resources.replaceTextureResources(process.optimizeFitWithCache(resources, monitor));
-            }
-            else
-            {
-                ReoptimizeTexturesProcess process = new ReoptimizeTexturesProcess(settings, outputDirectory);
-                resources.replaceTextureResources(process.reoptimizeTexturesWithCache(resources, monitor));
-            }
-
-            // Reload shaders in case preprocessor constants (i.e. number of basis functions) have changed
-            renderable.reloadShaders();
-
-            // Save project to avoid inconsistency between results and settings
-            Global.io().saveProject(() ->
-            {
-                // Perform reconstruction
-                //performReconstruction(renderable.getGraphicsResources(), renderable.getGraphicsResources().getSpecularMaterialResources());
-
-                if (settings.getExportSettings().shouldOpenViewerOnceComplete())
-                {
-                    try
-                    {
-                        Kintsugi3DViewerLauncher.launchViewer(new File(outputDirectory, "model.glb"));
-                    }
-                    catch (IOException|RuntimeException e)
-                    {
-                        Global.state().getProjectModel().error("Error launching Kintsugi 3D Viewer", e);
-                    }
-                }
-
-                // Refresh tabs
-                new TabsManager(renderable).refreshAllTabs();
-            });
+            // Set the output directory based on the view set's texture fit file path
+            outputDirectory = renderable.getViewSet().getSupportingFilesDirectory();
         }
-        catch (IOException|RuntimeException e)
+
+        if (monitor != null)
         {
-            Global.state().getProjectModel().error("Error executing specular fit request", e);
+            monitor.setProcessName("Process Textures");
+        }
+
+        // Perform the specular fit
+        ReadonlyImageBasedGraphicsResources<ContextType> resources = renderable.getResources();
+
+        if (basisOptimizationSettings != null)
+        {
+            BasisAndTexturesOptimizationProcess process = new BasisAndTexturesOptimizationProcess(settings, basisOptimizationSettings, outputDirectory);
+            return process.optimizeFitWithCache(resources, monitor);
+        }
+        else
+        {
+            ReoptimizeTexturesProcess process = new ReoptimizeTexturesProcess(settings, outputDirectory);
+            return process.reoptimizeTexturesWithCache(resources, monitor);
         }
     }
 
@@ -287,7 +250,7 @@ public final class SpecularFitRequest implements ProgressMonitoredImageBasedGrap
     }
 
     private <ContextType extends Context<ContextType>> @NotNull ShaderProgramFactory<ContextType> getProgramFactory(
-        ReadonlyGraphicsResources<ContextType> resources, ReadonlyTextureResources<ContextType> specularFit)
+        ShaderResources<ContextType> resources, ReadonlyTextureResources<ContextType> specularFit)
     {
         ReadonlyBasisResources<ContextType> basisResources = specularFit.getBasisResources();
         ReadonlyBasisSettings basisSettings = new SimpleBasisSettings(

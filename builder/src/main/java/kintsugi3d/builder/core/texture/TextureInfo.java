@@ -15,8 +15,9 @@
 
 package kintsugi3d.builder.core.texture;
 
-import kintsugi3d.builder.rendering.ImageBasedRenderable;
+import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
 import kintsugi3d.builder.state.shader.ShaderInfo;
+import kintsugi3d.gl.core.Context;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -61,7 +62,7 @@ public abstract class TextureInfo implements Comparable<TextureInfo>
 
     public abstract ShaderInfo getVisualizationShader();
 
-    public abstract void refresh(ImageBasedRenderable<?> instance) throws IOException;
+    public abstract void refresh(ImageBasedGraphicsResources<? extends Context<?>> resources) throws IOException;
 
-    public abstract ImageReplacer getReplaceData(ImageBasedRenderable<?> instance);
+    public abstract ImageReplacer getReplaceData(ImageBasedGraphicsResources<? extends Context<?>> resources);
 }

@@ -25,7 +25,7 @@ public final class ShaderBasedErrorCalculator<ContextType extends Context<Contex
 {
     // Compare fitted models against actual photographs
     private ProgramObject<ContextType> program;
-    private Drawable<ContextType> drawable;
+    private DrawableResource<ContextType> drawable;
 
     // Framebuffer for calculating error and reconstructing 3D renderings of the object
     private FramebufferObject<ContextType> framebuffer;
@@ -33,14 +33,15 @@ public final class ShaderBasedErrorCalculator<ContextType extends Context<Contex
     private final ErrorReport report;
 
     public static <ContextType extends Context<ContextType>> ShaderBasedErrorCalculator<ContextType> create(
-            ContextType context, Supplier<ProgramObject<ContextType>> programFactory,
-            Function<Program<ContextType>, Drawable<ContextType>> drawableFactory, int imageWidth, int imageHeight)
+        ContextType context, Supplier<ProgramObject<ContextType>> programFactory,
+        Function<Program<ContextType>, DrawableResource<ContextType>> drawableFactory, int imageWidth, int imageHeight)
     {
         return new ShaderBasedErrorCalculator<>(context, programFactory, drawableFactory, imageWidth, imageHeight);
     }
 
-    private ShaderBasedErrorCalculator(ContextType context, Supplier<ProgramObject<ContextType>> programFactory,
-        Function<Program<ContextType>, Drawable<ContextType>> drawableFactory, int imageWidth, int imageHeight)
+    private ShaderBasedErrorCalculator(
+        ContextType context, Supplier<ProgramObject<ContextType>> programFactory,
+        Function<Program<ContextType>, DrawableResource<ContextType>> drawableFactory, int imageWidth, int imageHeight)
     {
         program = programFactory.get();
         drawable = drawableFactory.apply(program);

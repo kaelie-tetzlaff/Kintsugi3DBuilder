@@ -18,9 +18,9 @@ package kintsugi3d.renderexport.general;
 import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.io.ViewSetReaderFromVSET;
-import kintsugi3d.builder.rendering.ImageBasedRenderable;
-import kintsugi3d.builder.rendering.ProgressMonitoredImageBasedGraphicsRequest;
-import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace;
+import kintsugi3d.builder.rendering.ImageBasedGraphicsRequest;
+import kintsugi3d.builder.rendering.ReadonlyImageBasedRenderable;
+import kintsugi3d.builder.resources.project.ReadonlyGraphicsResourcesImageSpace;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
@@ -54,7 +54,7 @@ final class MultiviewRetargetRenderRequest extends RenderRequestBase
         }
 
         @Override
-        public final ProgressMonitoredImageBasedGraphicsRequest create()
+        public final ImageBasedGraphicsRequest create()
         {
             return new MultiviewRetargetRenderRequest(getWidth(), getHeight(), getShaderSetupCallback(),
                 targetViewSet, getVertexShader(), getFragmentShader(), getOutputDirectory());
@@ -63,17 +63,18 @@ final class MultiviewRetargetRenderRequest extends RenderRequestBase
 
     @Override
     public <ContextType extends Context<ContextType>> void executeRequest(
-        ImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor) throws IOException, UserCancellationException
+        ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
+        throws IOException, UserCancellationException
     {
         ReadonlyViewSet targetViewSet = ViewSetReaderFromVSET.getInstance().readFromFile(targetViewSetFile).finish();
 
-        GraphicsResourcesImageSpace<ContextType> resources = renderable.getResources();
+        ReadonlyGraphicsResourcesImageSpace<ContextType> resources = renderable.getResources();
 
         try
         (
             ProgramObject<ContextType> program = createProgram(resources);
             FramebufferObject<ContextType> framebuffer = createFramebuffer(resources.getContext());
-            Drawable<ContextType> drawable = createDrawable(program, resources)
+            DrawableResource<ContextType> drawable = createDrawable(program, resources)
         )
         {
             int progressCount = 0;

@@ -67,7 +67,7 @@ public class LightCalibrationController extends NonDataPageControllerBase
         bind();
 
         // Set the "currentLightCalibration" to the existing calibration values in the view set.
-        ViewSet loadedViewSet = Global.io().validateRenderable().getLoadedViewSet();
+        ViewSet loadedViewSet = Global.io().getLoadedViewSetOrThrow();
 
         settingsModel.set("currentLightCalibration", loadedViewSet.getPrimaryView().getLightPosition().getXY());
 
@@ -98,7 +98,7 @@ public class LightCalibrationController extends NonDataPageControllerBase
     @Override
     public final boolean tryConfirm()
     {
-        Global.io().getLoadedViewSet().setAllLightPositions(
+        Global.io().getLoadedViewSetOrThrow().setAllLightPositions(
             settingsModel.get("currentLightCalibration", Vector2.class).asVector3());
         settingsModel.set("lightCalibrationMode", false);
         unbind();

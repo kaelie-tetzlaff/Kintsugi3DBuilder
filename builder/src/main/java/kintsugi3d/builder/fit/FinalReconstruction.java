@@ -89,7 +89,7 @@ public class FinalReconstruction<ContextType extends Context<ContextType>>
                     .addDepthAttachment(),
                 incidentRadianceProgramBuilder, resources))
         {
-            Map<String, Drawable<ContextType>> drawableMap = new HashMap<>(reconstructionProgramBuilders.size());
+            Map<String, DrawableResource<ContextType>> drawableMap = new HashMap<>(reconstructionProgramBuilders.size());
 
             for (var entry : reconstructionProgramBuilders.entrySet())
             {

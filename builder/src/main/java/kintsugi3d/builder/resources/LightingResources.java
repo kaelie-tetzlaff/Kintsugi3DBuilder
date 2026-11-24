@@ -43,7 +43,7 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
 
     private Texture3D<ContextType> shadowMaps;
     private FramebufferObject<ContextType> shadowFramebuffer;
-    private Drawable<ContextType> shadowDrawable;
+    private DrawableResource<ContextType> shadowDrawable;
 
     // A reference to the position buffer for the object casting shadows.
     // Not managed or released by LightingResources

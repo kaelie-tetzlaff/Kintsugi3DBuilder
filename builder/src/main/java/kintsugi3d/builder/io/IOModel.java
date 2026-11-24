@@ -25,7 +25,7 @@ import kintsugi3d.builder.io.XMLHelper.ErrorsAsWarningsLogger;
 import kintsugi3d.builder.io.events.*;
 import kintsugi3d.builder.io.metashape.MetashapeModel;
 import kintsugi3d.builder.io.metashape.MetashapeTextures;
-import kintsugi3d.builder.rendering.ImageBasedRenderable;
+import kintsugi3d.builder.rendering.ReadonlyImageBasedRenderable;
 import kintsugi3d.builder.rendering.Rendering;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.builder.state.shader.ShaderInfo;
@@ -33,11 +33,11 @@ import kintsugi3d.builder.util.ApplicationFolders;
 import kintsugi3d.builder.util.UnzipHelper;
 import kintsugi3d.builder.util.events.EventDispatcher;
 import kintsugi3d.builder.util.events.EventListeners;
+import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
-import kintsugi3d.gl.geometry.VertexGeometry;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
-import kintsugi3d.gl.material.ImportedMaterial;
+import kintsugi3d.gl.material.ReadonlyImportedMaterial;
 import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.util.EncodableColorImage;
 import org.slf4j.Logger;
@@ -88,15 +88,24 @@ public class IOModel implements IO
         progressMonitor.addSubMonitor(cancellationMonitor);
     }
 
-    public final ProgressMonitor getProgressMonitor()
+    @Override
+    public final void initialize(@SuppressWarnings("ParameterHidesMemberVariable") IOHandler handler)
     {
-        return progressMonitor;
+        if (this.handler == null)
+        {
+            this.handler = handler;
+            this.handler.setProgressMonitor(progressMonitor);
+        }
+        else
+        {
+            throw new IllegalStateException("I/O has already been initialized.");
+        }
     }
 
-    public final void setLoadingHandler(IOHandler handler)
+    @Override
+    public final ProgressMonitor getAggregateProgressMonitor()
     {
-        this.handler = handler;
-        this.handler.setProgressMonitor(progressMonitor);
+        return progressMonitor;
     }
 
     @Override
@@ -147,13 +156,13 @@ public class IOModel implements IO
     }
 
     @Override
-    public final ImageBasedRenderable<?> getRenderableForShader(ShaderInfo shader)
+    public final ReadonlyImageBasedRenderable<? extends Context<?>> getRenderableForShader(ShaderInfo shader)
     {
         return handler.getRenderableForShader(shader);
     }
 
     @Override
-    public final ViewSet getLoadedViewSet()
+    public final ViewSet getLoadedViewSetOrNull()
     {
         return handler.getLoadedViewSet();
     }
@@ -165,7 +174,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public final ImageBasedRenderable<?> getMainRenderable()
+    public final ReadonlyImageBasedRenderable<?> getMainRenderable()
     {
         return handler.getMainRenderable();
     }
@@ -227,7 +236,7 @@ public class IOModel implements IO
         {
             try
             {
-                viewSetLoadOptions.setUUID(getLoadedViewSet() != null ? getLoadedViewSet().getUUID() : null);
+                viewSetLoadOptions.setUUID(getLoadedViewSetOrNull() != null ? getLoadedViewSetOrNull().getUUID() : null);
                 handler.loadFromLooseFiles(currentProjectFile, internalName, xmlFile, viewSetLoadOptions, loadOptionsModel);
             }
             catch (Exception e)
@@ -347,7 +356,8 @@ public class IOModel implements IO
     @Override
     public final void saveProject(File projectFile, Runnable finishedCallback) throws IOException
     {
-        ViewSet viewSet = getLoadedViewSet();
+        ViewSet viewSet = getLoadedViewSetOrNull();
+
         setViewsetDirectories(projectFile, viewSet);
 
         progressMonitor.setStage(0, "Saving project...");
@@ -385,10 +395,10 @@ public class IOModel implements IO
         // Export glTF for Kintsugi 3D Viewer even if not requested
         // TODO: ensure that GLTF texture filenames match default material texture names;
         //  otherwise might not work when launching Kintsugi 3D Viewer from Builder.
-        handler.saveGLTF(getLoadedViewSet().getSupportingFilesDirectory(), /* defaults */ new ExportSettings());
+        handler.saveGLTF(getLoadedViewSetOrNull().getSupportingFilesDirectory(), /* defaults */ new ExportSettings());
 
         // Save textures and basis funtions (will be deferred to graphics thread).
-        handler.saveAllMaterialFiles(getLoadedViewSet().getSupportingFilesDirectory(), finishedCallback);
+        handler.saveAllMaterialFiles(getLoadedViewSetOrNull().getSupportingFilesDirectory(), finishedCallback);
 
         // Add to recent files
         RecentProjects.getInstance().addToRecentFiles(projectFile.getAbsolutePath());
@@ -532,20 +542,9 @@ public class IOModel implements IO
     }
 
     @Override
-    public final boolean hasValidHandler()
+    public final boolean isInitialized()
     {
         return handler != null;
-    }
-
-    @Override
-    public final IOModel validateRenderable()
-    {
-        if (!hasLoadedRenderable())
-        {
-            throw new IllegalStateException("No project loaded.");
-        }
-
-        return this;
     }
 
     /**
@@ -578,7 +577,7 @@ public class IOModel implements IO
      */
     private void copyMasks()
     {
-        ViewSet viewSet = getLoadedViewSet();
+        ViewSet viewSet = getLoadedViewSetOrNull();
         File masksSrcDir = viewSet.getMasksDirectory();
         if (masksSrcDir == null)
         {
@@ -654,7 +653,7 @@ public class IOModel implements IO
      */
     private void copyModelAndTextures()
     {
-        ViewSet viewSet = getLoadedViewSet();
+        ViewSet viewSet = getLoadedViewSetOrNull();
 
         // Grab reference first just in case for thread synchronization.
         File modelDestParentDir = viewSet.getSupportingFilesDirectory();
@@ -727,11 +726,11 @@ public class IOModel implements IO
             }
             else
             {
-                VertexGeometry geometry = handler.getLoadedGeometry();
+                ReadonlyVertexGeometry geometry = handler.getLoadedGeometry();
 
                 if (geometry != null)
                 {
-                    ImportedMaterial material = geometry.getMaterial();
+                    ReadonlyImportedMaterial material = geometry.getMaterial();
 
                     if (material != null)
                     {
@@ -754,7 +753,7 @@ public class IOModel implements IO
     {
         if (originalFile != null && originalFile.exists())
         {
-            File outTex = TextureResources.getTextureFile(texName, getLoadedViewSet().getSupportingFilesDirectory());
+            File outTex = TextureResources.getTextureFile(texName, getLoadedViewSetOrNull().getSupportingFilesDirectory());
             try
             {
                 // Force conversion to PNG.

@@ -19,14 +19,15 @@ import kintsugi3d.builder.core.Global;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.EventPollable;
 import kintsugi3d.gl.interactive.SimpleRefreshable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 public final class Rendering
 {
     private static volatile Context<?> context;
-    private static volatile RenderableManager<?> renderableManager;
-    private static volatile GraphicsRequestManager<?> requestQueue;
+    private static volatile RenderableManager<?, ?> renderableManager;
+    private static volatile GraphicsRequestQueue requestQueue;
     private static volatile Thread renderingThread;
     private static boolean terminateRequested = false;
 
@@ -49,7 +50,7 @@ public final class Rendering
         }
     }
 
-    public static RenderableManager<?> getRenderableManager()
+    public static RenderableManager<?, ?> getRenderableManager()
     {
         if (renderableManager != null)
         {
@@ -76,7 +77,7 @@ public final class Rendering
     }
 
     public static <ContextType extends Context<ContextType>> void initialize(
-        ContextType injectedContext, RenderableManager<ContextType> injectedRenderableManager)
+        ContextType injectedContext, RenderableManager<ContextType, ImageBasedRenderable<ContextType>> injectedRenderableManager)
     {
         renderingThread = Thread.currentThread();
 
@@ -86,9 +87,7 @@ public final class Rendering
             if (context == null && renderableManager == null)
             {
                 // Start the request queue as soon as we have a graphics context.
-                GraphicsRequestManager<ContextType> newRequestQueue = new GraphicsRequestManager<>(injectedContext);
-                newRequestQueue.setRenderableManager(injectedRenderableManager);
-                newRequestQueue.setProgressMonitor(Global.io().getProgressMonitor());
+                GraphicsRequestManager<ContextType> newRequestQueue = createRequestQueue(injectedContext, injectedRenderableManager);
 
                 if (injectedRenderableManager.getOwningApp() != null)
                 {
@@ -122,6 +121,16 @@ public final class Rendering
                 throw new IllegalStateException("Rendering has already been initialized.");
             }
         }
+    }
+
+    private static <ContextType extends Context<ContextType>>
+    @NotNull GraphicsRequestManager<ContextType> createRequestQueue(
+        ContextType injectedContext, RenderableManager<ContextType, ImageBasedRenderable<ContextType>> injectedRenderableManager)
+    {
+        GraphicsRequestManager<ContextType> newRequestQueue = new GraphicsRequestManager<>(injectedContext);
+        newRequestQueue.setRenderableManager(injectedRenderableManager);
+        newRequestQueue.setProgressMonitor(Global.io().getAggregateProgressMonitor());
+        return newRequestQueue;
     }
 
     public static void runLater(GraphicsRequest request)

@@ -16,6 +16,7 @@
 package kintsugi3d.builder.rendering.components.scene.light;
 
 import kintsugi3d.builder.rendering.CameraViewport;
+import kintsugi3d.builder.rendering.ReadonlySceneModel;
 import kintsugi3d.builder.rendering.SceneModel;
 import kintsugi3d.builder.rendering.SceneViewportModel;
 import kintsugi3d.gl.core.FramebufferSize;
@@ -50,7 +51,8 @@ public final class LightWidgetInfo
             .toArray(LightWidgetInfo[]::new);
     }
 
-    private LightWidgetInfo(SceneViewportModel sceneViewportModel, SceneModel sceneModel, CameraViewport cameraViewport, FramebufferSize size, int lightIndex)
+    private LightWidgetInfo(
+        SceneViewportModel sceneViewportModel, ReadonlySceneModel sceneModel, CameraViewport cameraViewport, FramebufferSize size, int lightIndex)
     {
         transformation = cameraViewport.getView().times(sceneModel.getInverseLightViewMatrix(lightIndex));
         lightWidgetScale = sceneViewportModel.computeRawLightWidgetScale(cameraViewport.getView(), size);

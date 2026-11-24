@@ -23,7 +23,11 @@ public interface GraphicsRequestQueue
 
     void addBackgroundImageBasedGraphicsRequest(ImageBasedGraphicsRequest request);
 
-    void addImageBasedGraphicsRequest(ProgressMonitoredImageBasedGraphicsRequest request);
+    void addImageBasedGraphicsRequest(ImageBasedGraphicsRequest request);
+
+    void addBackgroundTextureReplacementGraphicsRequest(TextureReplacementGraphicsRequest request);
+
+    void addTextureReplacementGraphicsRequest(TextureReplacementGraphicsRequest request);
 
     void addBackgroundGraphicsRequest(GraphicsRequest request);
 

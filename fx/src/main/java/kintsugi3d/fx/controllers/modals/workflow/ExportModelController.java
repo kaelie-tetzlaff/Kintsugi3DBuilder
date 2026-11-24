@@ -99,7 +99,7 @@ public class ExportModelController extends ProjectSettingsControllerBase
         generateLowResolutionCheckBox.disableProperty().bind(gltfSelected.not());
         openViewerOnceCheckBox.disableProperty().bind(gltfSelected.not());
 
-        File loadedProjectFile = Global.io().validateRenderable().getProjectFile();
+        File loadedProjectFile = Global.io().getProjectFile();
         if (loadedProjectFile != null)
         {
             setCurrentDirectoryFile(loadedProjectFile.getParentFile());
@@ -114,7 +114,7 @@ public class ExportModelController extends ProjectSettingsControllerBase
     {
         applySettings();
 
-        if (Global.io().getProgressMonitor().isConflictingProcess())
+        if (Global.io().getAggregateProgressMonitor().isConflictingProcess())
         {
             error("Failed to export model", "Another process is already running.");
             return false;

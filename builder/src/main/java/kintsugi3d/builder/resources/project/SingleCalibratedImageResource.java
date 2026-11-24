@@ -179,7 +179,7 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
      * @param program The program to use to construct the Drawable.
      * @return A Drawable for rendering this instance using the specified shader program.
      */
-    public final Drawable<ContextType> createDrawable(Program<ContextType> program)
+    public final DrawableResource<ContextType> createDrawable(Program<ContextType> program)
     {
         return geometryResources.createDrawable(program);
     }

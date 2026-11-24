@@ -170,9 +170,9 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
     }
 
     @Override
-    public final Drawable<ContextType> createDrawable(Program<ContextType> program)
+    public final DrawableResource<ContextType> createDrawable(Program<ContextType> program)
     {
-        Drawable<ContextType> drawable = getCommonResources().getContext().createDrawable(program);
+        DrawableResource<ContextType> drawable = getCommonResources().getContext().createDrawable(program);
         drawable.addVertexBuffer("position", rectangle);
         drawable.setDefaultPrimitiveMode(PrimitiveMode.TRIANGLE_FAN);
         return drawable;

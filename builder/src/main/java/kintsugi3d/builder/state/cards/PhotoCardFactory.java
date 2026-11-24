@@ -17,8 +17,9 @@ package kintsugi3d.builder.state.cards;
 
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.viewset.View;
-import kintsugi3d.builder.rendering.ImageBasedRenderable;
+import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
 import kintsugi3d.builder.util.AppIcon;
+import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.gl.vecmath.IntVector2;
 import org.jetbrains.annotations.Nullable;
@@ -35,9 +36,9 @@ public class PhotoCardFactory extends ProjectDataCardFactoryBase<View>
 {
     private static final Logger LOG = LoggerFactory.getLogger(PhotoCardFactory.class);
 
-    public PhotoCardFactory(ImageBasedRenderable<?> instance)
+    public PhotoCardFactory(ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
-        super(instance);
+        super(resources);
     }
 
     @Override

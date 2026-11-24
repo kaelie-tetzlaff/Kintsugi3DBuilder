@@ -16,7 +16,6 @@
 package kintsugi3d.builder.fit.decomposition;
 
 import kintsugi3d.builder.core.Global;
-import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.nativebuffer.NativeDataType;
 import kintsugi3d.gl.nativebuffer.NativeVectorBuffer;
@@ -131,11 +130,9 @@ public abstract class BasisResourcesBase<ContextType extends Context<ContextType
             filenameOverride != null ? filenameOverride : BasisResources.getBasisFunctionsFilename());
 
         // Save basis image visualization for cards
-        try (BasisImageCreator<ContextType> basisImageCreator =
-                 new BasisImageCreator<>(context, basisResolution))
+        try (BasisImageCreator<ContextType> basisImageCreator = new BasisImageCreator<>(context, basisResolution))
         {
-            ViewSet viewSet = Global.io().getLoadedViewSet();
-            basisImageCreator.createImages(this, viewSet.getThumbnailImageDirectory());
+            basisImageCreator.createImages(this, Global.io().getLoadedViewSetOrThrow().getThumbnailImageDirectory());
         }
         catch (IOException e)
         {

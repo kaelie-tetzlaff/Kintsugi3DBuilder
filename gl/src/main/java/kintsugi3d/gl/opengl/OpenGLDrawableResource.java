@@ -15,7 +15,7 @@
 
 package kintsugi3d.gl.opengl;
 
-import kintsugi3d.gl.core.DrawableBase;
+import kintsugi3d.gl.core.DrawableResourceBase;
 import kintsugi3d.gl.core.Framebuffer;
 import kintsugi3d.gl.core.PrimitiveMode;
 import kintsugi3d.gl.core.ReadonlyVertexBuffer;
@@ -27,7 +27,7 @@ import java.util.TreeMap;
 
 import static org.lwjgl.opengl.GL32.*;
 
-class OpenGLDrawable extends DrawableBase<OpenGLContext>
+class OpenGLDrawableResource extends DrawableResourceBase<OpenGLContext>
 {
     @FunctionalInterface
     private interface VertexAttributeSetting
@@ -41,7 +41,7 @@ class OpenGLDrawable extends DrawableBase<OpenGLContext>
     private final OpenGLVertexArray vao;
     private final Map<Integer, VertexAttributeSetting> settings;
 
-    OpenGLDrawable(OpenGLContext context, OpenGLProgramObject program)
+    OpenGLDrawableResource(OpenGLContext context, OpenGLProgramObject program)
     {
         this.context = context;
         this.program = program;

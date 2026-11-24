@@ -34,7 +34,7 @@ abstract class RoughnessOptimizationBase<ContextType extends Context<ContextType
 
     private final ProgramObject<ContextType> specularRoughnessFitProgram;
     private final VertexBuffer<ContextType> rect;
-    private final Drawable<ContextType> specularRoughnessFitDrawable;
+    private final DrawableResource<ContextType> specularRoughnessFitDrawable;
 
     RoughnessOptimizationBase(ReadonlyBasisResources<ContextType> basisResources)
         throws IOException

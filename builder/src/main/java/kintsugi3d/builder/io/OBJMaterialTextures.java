@@ -16,7 +16,7 @@
 package kintsugi3d.builder.io;
 
 import kintsugi3d.builder.core.texture.StandardTexture;
-import kintsugi3d.gl.material.ImportedMaterial;
+import kintsugi3d.gl.material.ReadonlyImportedMaterial;
 import kintsugi3d.gl.material.ReadonlyMaterialTextureMap;
 
 import java.io.File;
@@ -25,10 +25,10 @@ import java.util.Map;
 
 public class OBJMaterialTextures implements TextureSupplier
 {
-    private final ImportedMaterial material;
+    private final ReadonlyImportedMaterial material;
     private final File directory;
 
-    public OBJMaterialTextures(ImportedMaterial material, File directory)
+    public OBJMaterialTextures(ReadonlyImportedMaterial material, File directory)
     {
         this.material = material;
         this.directory = directory;

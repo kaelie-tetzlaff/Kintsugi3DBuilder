@@ -22,6 +22,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import kintsugi3d.builder.core.Global;
+import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.state.settings.DefaultSettings;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.state.settings.SimpleGeneralSettingsModel;
@@ -66,9 +67,10 @@ public class ProjectSettingsManager
 
     public final void refresh()
     {
-        if (Global.io().hasLoadedRenderable())
+        ViewSet viewSet = Global.io().getLoadedViewSetOrNull();
+        if (viewSet != null)
         {
-            projectSettingsModel = Global.io().getLoadedViewSet().getProjectSettings();
+            projectSettingsModel = viewSet.getProjectSettings();
         }
         else
         {

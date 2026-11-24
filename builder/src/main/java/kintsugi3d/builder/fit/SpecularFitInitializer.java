@@ -17,7 +17,7 @@ package kintsugi3d.builder.fit;
 
 import kintsugi3d.builder.fit.decomposition.SpecularDecomposition;
 import kintsugi3d.builder.fit.settings.ReadonlyBasisSettings;
-import kintsugi3d.builder.resources.project.ReadonlyGraphicsResources;
+import kintsugi3d.gl.interactive.ShaderResources;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.util.ColorArrayList;
 import kintsugi3d.gl.vecmath.Vector3;
@@ -36,10 +36,10 @@ import java.util.stream.IntStream;
 public class SpecularFitInitializer<ContextType extends Context<ContextType>>
 {
     private static final Logger LOG = LoggerFactory.getLogger(SpecularFitInitializer.class);
-    private final ReadonlyGraphicsResources<ContextType> resources;
+    private final ShaderResources<ContextType> resources;
     private final ReadonlyBasisSettings basisSettings;
 
-    public SpecularFitInitializer(ReadonlyGraphicsResources<ContextType> resources, ReadonlyBasisSettings basisSettings)
+    public SpecularFitInitializer(ShaderResources<ContextType> resources, ReadonlyBasisSettings basisSettings)
     {
         this.resources = resources;
         this.basisSettings = basisSettings;
@@ -59,7 +59,7 @@ public class SpecularFitInitializer<ContextType extends Context<ContextType>>
                 resources.getContext().buildFramebufferObject(solution.getTextureResolution().width, solution.getTextureResolution().height)
                     .addColorAttachment(ColorFormat.RGBA32F)
                     .createFramebufferObject();
-            Drawable<ContextType> drawable = resources.createDrawable(averageProgram))
+            DrawableResource<ContextType> drawable = resources.createDrawable(averageProgram))
         {
 
             LOG.info("Clustering to initialize weights...");

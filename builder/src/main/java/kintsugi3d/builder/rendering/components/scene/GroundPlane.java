@@ -45,9 +45,9 @@ public class GroundPlane<ContextType extends Context<ContextType>> extends Stand
     }
 
     @Override
-    protected final @NotNull Drawable<ContextType> createDrawable(Program<ContextType> drawableProgram)
+    protected final @NotNull DrawableResource<ContextType> createDrawable(Program<ContextType> drawableProgram)
     {
-        Drawable<ContextType> drawable = super.createDrawable(drawableProgram);
+        DrawableResource<ContextType> drawable = super.createDrawable(drawableProgram);
         drawable.setVertexAttrib("normal", new Vector3(0, 0, 1));
         return drawable;
     }

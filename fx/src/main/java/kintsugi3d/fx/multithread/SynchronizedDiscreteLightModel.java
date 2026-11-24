@@ -28,7 +28,7 @@ public class SynchronizedDiscreteLightModel extends DiscreteLightModelBase
 
     public SynchronizedDiscreteLightModel(DiscreteLightModel baseModel)
     {
-        super(new SynchronizedCameraModel(baseModel));
+        super(new SynchronizedViewpointModel(baseModel));
         this.baseModel = baseModel;
 
         color = SynchronizedValue.createFromFunctions(baseModel::getColor, baseModel::setColor);

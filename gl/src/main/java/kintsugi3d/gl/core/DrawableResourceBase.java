@@ -13,28 +13,21 @@
  * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
-package kintsugi3d.builder.resources.project;
+package kintsugi3d.gl.core;
 
-import kintsugi3d.gl.core.Context;
-import kintsugi3d.gl.core.Drawable;
-import kintsugi3d.gl.core.Program;
-import kintsugi3d.gl.geometry.ReadonlyGeometryResources;
-import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
-
-public interface ReadonlyGraphicsResources<ContextType extends Context<ContextType>> extends ShaderProgramFactory<ContextType>
+public abstract class DrawableResourceBase<ContextType extends Context<ContextType>> implements DrawableResource<ContextType>
 {
-    default ReadonlyVertexGeometry getGeometry()
+    private PrimitiveMode defaultPrimitiveMode = PrimitiveMode.TRIANGLES;
+
+    @Override
+    public final PrimitiveMode getDefaultPrimitiveMode()
     {
-        return getGeometryResources().getGeometry();
+        return defaultPrimitiveMode;
     }
 
-    /**
-     * Creates a Drawable using this instance's geometry resources, and the specified shader program.
-     *
-     * @param program The program to use to construct the Drawable.
-     * @return A Drawable for rendering this instance using the specified shader program.
-     */
-    Drawable<ContextType> createDrawable(Program<ContextType> program);
-
-    ReadonlyGeometryResources<ContextType> getGeometryResources();
+    @Override
+    public final void setDefaultPrimitiveMode(PrimitiveMode primitiveMode)
+    {
+        defaultPrimitiveMode = primitiveMode;
+    }
 }

@@ -41,7 +41,7 @@ public class OrientationViewSelectController extends ViewSelectController
     public final boolean tryConfirm()
     {
         // If a view set was already loaded, apply changes.
-        ViewSet currentViewSet = Global.io().getLoadedViewSet();
+        ViewSet currentViewSet = Global.io().getLoadedViewSetOrNull();
         if (currentViewSet != null)
         {
             if (getData().getViewSelection() == null)

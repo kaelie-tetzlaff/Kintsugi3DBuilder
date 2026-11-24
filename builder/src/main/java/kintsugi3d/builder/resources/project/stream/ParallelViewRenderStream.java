@@ -17,7 +17,7 @@ package kintsugi3d.builder.resources.project.stream;
 
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.gl.core.Context;
-import kintsugi3d.gl.core.Drawable;
+import kintsugi3d.gl.core.DrawableResource;
 import kintsugi3d.gl.core.ReadableFramebuffer;
 import kintsugi3d.gl.stream.GraphicsStream;
 import kintsugi3d.gl.stream.GraphicsStreamBase;
@@ -38,7 +38,7 @@ public class ParallelViewRenderStream<ContextType extends Context<ContextType>> 
 {
     private static final Logger LOG = LoggerFactory.getLogger(ParallelViewRenderStream.class);
     private final Collection<View> views;
-    private final Drawable<ContextType> drawable;
+    private final DrawableResource<ContextType> drawable;
     private final ReadableFramebuffer<ContextType> framebuffer;
     private final int attachmentCount;
     private final int maxRunningThreads;
@@ -50,8 +50,8 @@ public class ParallelViewRenderStream<ContextType extends Context<ContextType>> 
 
     private final Deque<ColorNativeBufferList[]> unusedColorBuffers;
 
-    ParallelViewRenderStream(Collection<View> views, Drawable<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer, int attachmentCount,
-        int maxRunningThreads)
+    ParallelViewRenderStream(Collection<View> views, DrawableResource<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer, int attachmentCount,
+                             int maxRunningThreads)
     {
         this.views = Collections.unmodifiableCollection(views);
         this.drawable = drawable;
@@ -65,7 +65,7 @@ public class ParallelViewRenderStream<ContextType extends Context<ContextType>> 
             .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
-    ParallelViewRenderStream(Collection<View> views, Drawable<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer, int attachmentCount)
+    ParallelViewRenderStream(Collection<View> views, DrawableResource<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer, int attachmentCount)
     {
         this(views, drawable, framebuffer, attachmentCount, DEFAULT_MAX_RUNNING_THREADS);
     }

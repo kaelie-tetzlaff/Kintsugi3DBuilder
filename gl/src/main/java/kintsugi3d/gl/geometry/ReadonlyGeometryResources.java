@@ -36,7 +36,7 @@ public interface ReadonlyGeometryResources<ContextType extends Context<ContextTy
      * @param program The program to use to construct the Drawable.
      * @return A Drawable for rendering this instance using the specified shader program.
      */
-    Drawable<ContextType> createDrawable(Program<ContextType> program);
+    DrawableResource<ContextType> createDrawable(Program<ContextType> program);
 
     GeometryFramebuffer<ContextType> createGeometryFramebuffer(int width, int height);
 

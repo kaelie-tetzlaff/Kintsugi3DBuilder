@@ -18,8 +18,7 @@ package kintsugi3d.builder.core.texture;
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.fit.decomposition.BasisMaterialInfo;
 import kintsugi3d.builder.fit.decomposition.BasisWeightResources;
-import kintsugi3d.builder.rendering.ImageBasedRenderable;
-import kintsugi3d.builder.resources.project.texture.TextureResources;
+import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
 import kintsugi3d.builder.state.shader.BasisIndexedShaderInfo;
 import kintsugi3d.builder.state.shader.ShaderInfo;
 import kintsugi3d.gl.core.Context;
@@ -52,19 +51,18 @@ public class WeightmapTextureInfo extends TextureInfo
     }
 
     @Override
-    public final void refresh(ImageBasedRenderable<?> instance) throws IOException
+    public final void refresh(ImageBasedGraphicsResources<? extends Context<?>> resources) throws IOException
     {
-        TextureResources<? extends Context<?>> resources = instance.getResources().getTextureResources();
-        resources.replaceWeightMapWithDefaultFile(material, instance.getViewSet().getSupportingFilesDirectory());
+        resources.getTextureResources().replaceWeightMapWithDefaultFile(material, resources.getViewSet().getSupportingFilesDirectory());
     }
 
     @Override
-    public final ImageReplacer getReplaceData(ImageBasedRenderable<?> instance)
+    public final ImageReplacer getReplaceData(ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
-        File supportingFilesDirectory = Global.io().validateRenderable().getLoadedViewSet().getSupportingFilesDirectory();
+        File supportingFilesDirectory = Global.io().getLoadedViewSetOrThrow().getSupportingFilesDirectory();
         try
         {
-            return new WeightmapReplacer(instance.getResources().getTextureResources(), material,
+            return new WeightmapReplacer(resources.getTextureResources(), material,
                 BasisWeightResources.findWeightmap(supportingFilesDirectory, material.getName()));
         }
         catch (FileNotFoundException e)
@@ -72,7 +70,7 @@ public class WeightmapTextureInfo extends TextureInfo
             LOG.error("Could not find weightmap to be replaced: {}", material.getName(), e);
 
             // Return an object with the expected path anyways and attempt to recover.
-            return new WeightmapReplacer(instance.getResources().getTextureResources(), material,
+            return new WeightmapReplacer(resources.getTextureResources(), material,
                 new File(supportingFilesDirectory, BasisWeightResources.getUnpackedWeightMapFilename(material.getName())));
         }
     }

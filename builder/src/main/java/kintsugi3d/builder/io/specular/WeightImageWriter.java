@@ -28,7 +28,7 @@ public class WeightImageWriter<ContextType extends Context<ContextType>> impleme
 
     private final ProgramObject<ContextType> program;
     private final VertexBuffer<ContextType> rect;
-    private final Drawable<ContextType> drawable;
+    private final DrawableResource<ContextType> drawable;
     private final FramebufferObject<ContextType> framebuffer;
 
     public WeightImageWriter(ContextType context, TextureResolution resolution, int weightsPerImage) throws IOException

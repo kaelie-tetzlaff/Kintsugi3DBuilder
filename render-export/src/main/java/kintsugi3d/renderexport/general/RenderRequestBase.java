@@ -16,9 +16,9 @@
 package kintsugi3d.renderexport.general;
 
 import kintsugi3d.builder.core.Global;
-import kintsugi3d.builder.rendering.ProgressMonitoredImageBasedGraphicsRequest;
-import kintsugi3d.builder.resources.project.ReadonlyGraphicsResources;
-import kintsugi3d.builder.resources.project.ShaderProgramFactory;
+import kintsugi3d.builder.rendering.ImageBasedGraphicsRequest;
+import kintsugi3d.gl.interactive.ShaderResources;
+import kintsugi3d.gl.interactive.ShaderProgramFactory;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.gl.core.*;
 
@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.function.Consumer;
 
-abstract class RenderRequestBase implements ProgressMonitoredImageBasedGraphicsRequest
+abstract class RenderRequestBase implements ImageBasedGraphicsRequest
 {
     private static final File TEX_SPACE_VERTEX_SHADER = Paths.get("shaders", "common", "texspace.vert").toFile();
     private static final File IMG_SPACE_VERTEX_SHADER = Paths.get("shaders", "common", "imgspace.vert").toFile();
@@ -169,13 +169,13 @@ abstract class RenderRequestBase implements ProgressMonitoredImageBasedGraphicsR
             .createFramebufferObject();
     }
 
-    protected static <ContextType extends Context<ContextType>> Drawable<ContextType>
-        createDrawable(Program<ContextType> program, ReadonlyGraphicsResources<ContextType> resources)
+    protected static <ContextType extends Context<ContextType>> DrawableResource<ContextType>
+        createDrawable(Program<ContextType> program, ShaderResources<ContextType> resources)
     {
         return resources.createDrawable(program);
     }
 
-    protected final <ContextType extends Context<ContextType>> void render(Drawable<ContextType> drawable, Framebuffer<ContextType> framebuffer)
+    protected final <ContextType extends Context<ContextType>> void render(DrawableResource<ContextType> drawable, Framebuffer<ContextType> framebuffer)
     {
         drawable.getContext().getState().disableBackFaceCulling();
         framebuffer.clearColorBuffer(0, 0.0f, 0.0f, 0.0f, 0.0f);

@@ -15,8 +15,8 @@
 
 package kintsugi3d.renderexport.simpleanimation;
 
-import kintsugi3d.builder.rendering.ImageBasedRenderable;
-import kintsugi3d.builder.rendering.ProgressMonitoredImageBasedGraphicsRequest;
+import kintsugi3d.builder.rendering.ImageBasedGraphicsRequest;
+import kintsugi3d.builder.rendering.ReadonlyImageBasedRenderable;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
 import kintsugi3d.gl.interactive.ProgressMonitor;
@@ -27,7 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 
-abstract class AnimationRequest implements ProgressMonitoredImageBasedGraphicsRequest
+abstract class AnimationRequest implements ImageBasedGraphicsRequest
 {
     private final int width;
     private final int height;
@@ -104,7 +104,8 @@ abstract class AnimationRequest implements ProgressMonitoredImageBasedGraphicsRe
     }
 
     @Override
-    public final <ContextType extends Context<ContextType>> void executeRequest(ImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
+    public final <ContextType extends Context<ContextType>> void executeRequest(
+        ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         try

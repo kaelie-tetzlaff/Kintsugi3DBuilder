@@ -20,8 +20,8 @@ import kintsugi3d.builder.core.texture.TextureInfo;
 import kintsugi3d.builder.core.texture.WeightmapTextureInfo;
 import kintsugi3d.builder.fit.decomposition.BasisMaterialInfo;
 import kintsugi3d.builder.fit.decomposition.ReadonlyBasisResources;
-import kintsugi3d.builder.rendering.ImageBasedRenderable;
 import kintsugi3d.builder.rendering.Rendering;
+import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
 import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
@@ -48,11 +48,11 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
     /**
      * TextureCardFactory is the constructor for this class takes a RenderableInstance and
      * assigns it to private variable in class
-     * @param instance
+     * @param resources
      */
-    public TextureCardFactory(ImageBasedRenderable<?> instance)
+    public TextureCardFactory(ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
-        super(instance);
+        super(resources);
     }
 
     @Override
@@ -149,7 +149,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
     public final List<ProjectDataCard> createAllCards()
     {
         List<ProjectDataCard> textureCards = new ArrayList<>(8);
-        ReadonlyImageBasedGraphicsResources<? extends Context<?>> resources = getInstance().getResources();
+        ReadonlyImageBasedGraphicsResources<? extends Context<?>> resources = getResources();
         if (resources != null)
         {
             ReadonlyTextureResources<? extends Context<?>> texResources = resources.getTextureResources();
@@ -190,7 +190,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
             try
             {
                 // Refreshing the texture should trigger observers to update the cards.
-                texture.refresh(getInstance());
+                texture.refresh(getResources());
             }
             catch (IOException | RuntimeException e)
             {
@@ -207,8 +207,8 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
             try
             {
                 // Refreshing the textures should trigger observers to update the cards.
-                TextureResources<?> resources = getInstance().getResources().getTextureResources();
-                resources.replaceAllTexturesWithDefaultFiles(getInstance().getViewSet().getSupportingFilesDirectory());
+                TextureResources<?> resources = getResources().getTextureResources();
+                resources.replaceAllTexturesWithDefaultFiles(getViewSet().getSupportingFilesDirectory());
             }
             catch (IOException | RuntimeException e)
             {
@@ -219,6 +219,6 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
 
     private void replaceTexture(TextureInfo texture)
     {
-        Global.state().getProjectModel().requestUserImageReplacement(texture.getReplaceData(getInstance()));
+        Global.state().getProjectModel().requestUserImageReplacement(texture.getReplaceData(getResources()));
     }
 }

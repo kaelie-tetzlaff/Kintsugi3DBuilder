@@ -52,7 +52,7 @@ public class RenderingSubject<ContextType extends Context<ContextType>> extends 
     }
 
     @Override
-    protected final @NotNull Drawable<ContextType> createDrawable(Program<ContextType> program)
+    protected final @NotNull DrawableResource<ContextType> createDrawable(Program<ContextType> program)
     {
         // Use GraphicsResources to create a drawable with all the available vertex buffers.
         return getResources().createDrawable(program);

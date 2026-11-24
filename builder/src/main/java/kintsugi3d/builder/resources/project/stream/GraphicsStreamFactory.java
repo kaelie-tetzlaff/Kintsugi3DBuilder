@@ -19,7 +19,7 @@ import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.builders.framebuffer.FramebufferObjectBuilder;
 import kintsugi3d.gl.core.Context;
-import kintsugi3d.gl.core.Drawable;
+import kintsugi3d.gl.core.DrawableResource;
 import kintsugi3d.gl.core.ReadableFramebuffer;
 import kintsugi3d.gl.stream.GraphicsStream;
 import kintsugi3d.gl.stream.GraphicsStreamResource;
@@ -52,7 +52,7 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
      * @return a sequential Stream over the views in this instance.
      */
     public final GraphicsStream<ColorList[]> stream(
-        Drawable<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer, int attachmentCount)
+        DrawableResource<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer, int attachmentCount)
     {
         return new SequentialViewRenderStream<>(resources.getViewSet().getEnabledViews(), drawable, framebuffer, attachmentCount);
     }
@@ -67,7 +67,7 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
      * @return a sequential Stream over the views in this instance.
      */
     public final GraphicsStream<ColorList> stream(
-        Drawable<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer)
+        DrawableResource<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer)
     {
         return new SequentialViewRenderStream<>(resources.getViewSet().getEnabledViews(), drawable, framebuffer, 1)
             .map(singletonList -> singletonList[0]);
@@ -109,7 +109,7 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
      * @return a parallel Stream over the views in this instance.
      */
     public final GraphicsStream<ColorList[]> parallelStream(
-        Drawable<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer, int attachmentCount, int maxRunningThreads)
+        DrawableResource<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer, int attachmentCount, int maxRunningThreads)
     {
         return new ParallelViewRenderStream<>(resources.getViewSet().getEnabledViews(), drawable, framebuffer,
                 attachmentCount, maxRunningThreads);
@@ -127,7 +127,7 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
      * @return a parallel Stream over the views in this instance.
      */
     public final GraphicsStream<ColorList[]> parallelStream(
-        Drawable<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer, int attachmentCount)
+        DrawableResource<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer, int attachmentCount)
     {
         return new ParallelViewRenderStream<>(resources.getViewSet().getEnabledViews(), drawable, framebuffer, attachmentCount);
     }
@@ -142,7 +142,7 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
      * @return a parallel Stream over the views in this instance.
      */
     public final GraphicsStream<ColorList> parallelStream(
-        Drawable<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer)
+        DrawableResource<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer)
     {
         return new ParallelViewRenderStream<>(resources.getViewSet().getEnabledViews(), drawable, framebuffer, 1)
             .map(singletonList -> singletonList[0]);

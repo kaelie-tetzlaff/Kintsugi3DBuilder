@@ -19,7 +19,7 @@ import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.io.TextureLoadOptions;
 import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.core.Context;
-import kintsugi3d.gl.core.Drawable;
+import kintsugi3d.gl.core.DrawableResource;
 import kintsugi3d.gl.core.Program;
 import kintsugi3d.gl.geometry.GeometryMode;
 import kintsugi3d.gl.geometry.VertexGeometry;
@@ -64,7 +64,7 @@ public class GraphicsResourcesAnalytic<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final Drawable<ContextType> createDrawable(Program<ContextType> program)
+    public final DrawableResource<ContextType> createDrawable(Program<ContextType> program)
     {
         return getGeometryResources().createDrawable(program);
     }

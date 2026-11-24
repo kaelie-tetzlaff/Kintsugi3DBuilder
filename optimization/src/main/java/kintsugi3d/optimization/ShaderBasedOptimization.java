@@ -38,7 +38,7 @@ public class ShaderBasedOptimization<ContextType extends Context<ContextType>> i
     private final FramebufferObject<ContextType> framebuffer1;
     private final FramebufferObject<ContextType> framebuffer2;
 
-    private final Drawable<ContextType> estimationDrawable;
+    private final DrawableResource<ContextType> estimationDrawable;
 
     // References to the two framebuffers that can swap (double-buffering)
     private FramebufferObject<ContextType> frontFramebuffer;
@@ -53,7 +53,7 @@ public class ShaderBasedOptimization<ContextType extends Context<ContextType>> i
     public ShaderBasedOptimization(
         ProgramBuilder<ContextType> estimationProgramBuilder,
         FramebufferObjectBuilder<ContextType> framebufferObjectBuilder,
-        Function<Program<ContextType>, Drawable<ContextType>> drawableFactory)
+        Function<Program<ContextType>, DrawableResource<ContextType>> drawableFactory)
         throws IOException
     {
         // Normal estimation program

@@ -15,7 +15,7 @@
 
 package kintsugi3d.builder.core;
 
-import kintsugi3d.builder.io.IOModel;
+import kintsugi3d.builder.io.IO;
 
 public final class Global
 {
@@ -33,7 +33,7 @@ public final class Global
         return GlobalBootstrap.getState();
     }
 
-    public static IOModel io()
+    public static IO io()
     {
         return GlobalBootstrap.getIOModel();
     }

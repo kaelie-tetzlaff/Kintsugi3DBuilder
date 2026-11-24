@@ -18,8 +18,8 @@ package kintsugi3d.renderexport.resample;
 import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.io.ViewSetReaderFromVSET;
-import kintsugi3d.builder.rendering.ImageBasedRenderable;
-import kintsugi3d.builder.rendering.ProgressMonitoredImageBasedGraphicsRequest;
+import kintsugi3d.builder.rendering.ImageBasedGraphicsRequest;
+import kintsugi3d.builder.rendering.ReadonlyImageBasedRenderable;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
 import kintsugi3d.gl.interactive.ProgressMonitor;
@@ -32,7 +32,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.text.MessageFormat;
 
-public class ResampleRequest implements ProgressMonitoredImageBasedGraphicsRequest
+public class ResampleRequest implements ImageBasedGraphicsRequest
 {
     private final int resampleWidth;
     private final int resampleHeight;
@@ -48,7 +48,8 @@ public class ResampleRequest implements ProgressMonitoredImageBasedGraphicsReque
     }
 
     @Override
-    public final <ContextType extends Context<ContextType>> void executeRequest(ImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor) throws IOException, UserCancellationException
+    public final <ContextType extends Context<ContextType>> void executeRequest(
+        ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor) throws IOException, UserCancellationException
     {
         ReadonlyViewSet targetViewSet = ViewSetReaderFromVSET.getInstance().readFromFile(resampleVSETFile).finish();
 

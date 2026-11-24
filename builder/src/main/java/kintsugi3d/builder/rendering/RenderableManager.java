@@ -23,12 +23,13 @@ import kintsugi3d.gl.window.FramebufferCanvas;
 
 import java.util.function.Consumer;
 
-public interface RenderableManager<ContextType extends Context<ContextType>> extends InteractiveRenderable<ContextType>
+public interface RenderableManager<ContextType extends Context<ContextType>, RenderableType extends InteractiveRenderable<ContextType>>
+    extends InteractiveRenderable<ContextType>
 {
     boolean isRenderableLoaded();
 
-    ImageBasedRenderable<ContextType> getMainRenderable(); // TODO this would ideally just be a ViewportRenderable
-    void addMainRenderableLoadCallback(Consumer<ImageBasedRenderable<?>> callback); // TODO this would ideally just be a ViewportRenderable
+    RenderableType getMainRenderable();
+    void addMainRenderableLoadCallback(Consumer<InteractiveRenderable<? extends Context<?>>> callback);
 
     void addRenderView(ShaderInfo shader, FramebufferSize viewSize,
                        int safeLeftPadding, int safeTopPadding, int safeRightPadding, int safeBottomPadding,
