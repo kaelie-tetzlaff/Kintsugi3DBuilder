@@ -20,6 +20,8 @@ import kintsugi3d.builder.core.viewset.events.LightCalibrationChangedEvent;
 import kintsugi3d.builder.core.viewset.events.LightCalibrationChangedListener;
 import kintsugi3d.builder.core.viewset.events.LuminanceEncodingChangedEvent;
 import kintsugi3d.builder.core.viewset.events.LuminanceEncodingChangedListener;
+import kintsugi3d.builder.core.viewset.events.PrimaryViewChangedEvent;
+import kintsugi3d.builder.core.viewset.events.PrimaryViewChangedListener;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.state.settings.SimpleGeneralSettingsModel;
 import kintsugi3d.builder.util.events.*;
@@ -61,6 +63,8 @@ public final class ViewSet implements ReadonlyViewSet
         = new EventDispatcher<>(LightCalibrationChangedListener::onLightCalibrationChanged);
     private final EventDispatcher<LuminanceEncodingChangedListener, LuminanceEncodingChangedEvent> luminanceEncodingChanged
         = new EventDispatcher<>(LuminanceEncodingChangedListener::onLuminanceEncodingChanged);
+    private final EventDispatcher<PrimaryViewChangedListener, PrimaryViewChangedEvent> primaryViewChanged
+        = new EventDispatcher<>(PrimaryViewChangedListener::onPrimaryViewChanged);
 
     /**
      * A unique id given to each view set that can be used to prevent cache collisions on disk.
@@ -424,7 +428,7 @@ public final class ViewSet implements ReadonlyViewSet
     {
         synchronized (views)
         {
-            // Store the light indices in a uniform buffer
+            // Store the view indices in a uniform buffer
             if (views.isEmpty())
             {
                 return null;
@@ -711,7 +715,7 @@ public final class ViewSet implements ReadonlyViewSet
         {
             return getAbsoluteRootDirectory().relativize(effectiveFullResImageDirectory.toPath().toAbsolutePath()).toString();
         }
-        catch (RuntimeException e) // If the root and other directories are located under different drive letters on Windows
+        catch (RuntimeException e) // If the root and other directories are located under different drive letters on windows
         {
             LOG.warn("Could not relativize full resolution image directory ({}) using root directory {}",
                 effectiveFullResImageDirectory, getAbsoluteRootDirectory(), e);
@@ -819,16 +823,25 @@ public final class ViewSet implements ReadonlyViewSet
 
     public void setPrimaryView(View primaryView)
     {
+        View previousPrimaryView;
+
         synchronized (views)
         {
             if (Objects.equals(views.get(primaryView.getImageFile()), primaryView))
             {
+                previousPrimaryView = this.primaryView;
                 this.primaryView = primaryView;
             }
             else
             {
                 viewNotFoundException(primaryView);
+                return;
             }
+        }
+
+        if (!Objects.equals(previousPrimaryView, primaryView))
+        {
+            primaryViewChanged.notify(new PrimaryViewChangedEvent(previousPrimaryView, primaryView));
         }
     }
 
@@ -962,7 +975,7 @@ public final class ViewSet implements ReadonlyViewSet
             // i.e. target file is photo314.jpg and imageFiles contains myPhotos/photo314.jpg
 
             // Also check for extension mismatch
-            // i.e. the camera label is photo314.jpg, other times just photo314
+            // i. e. the camera label is photo314.jpg, other times just photo314
 
             // This is all necessary due to inconsistencies with camera labels in frame.zip and chunk.zip XMLs
             for (View view : views.values())
@@ -1083,7 +1096,13 @@ public final class ViewSet implements ReadonlyViewSet
                 // This is intentional in case of a workflow where the user performs tone calibration on a photo
                 // then deletes it entirely if it is not needed for texture processing -- we want the tone calibration
                 // to still be in terms of the light intensity derived from that deleted view!
+                View previousPrimaryView = primaryView;
                 primaryView = views.isEmpty() ? null : getRepresentativeView();
+
+                if (!Objects.equals(previousPrimaryView, primaryView))
+                {
+                    primaryViewChanged.notify(new PrimaryViewChangedEvent(previousPrimaryView, primaryView));
+                }
             }
 
             if (orientationView != null && Objects.equals(image.getName(), orientationView.getImageFile().getName()))
@@ -1408,7 +1427,7 @@ public final class ViewSet implements ReadonlyViewSet
         {
             return getAbsoluteRootDirectory().relativize(masksDirectoryRef.toPath().toAbsolutePath()).toString();
         }
-        catch (RuntimeException e) // If the root and other directories are located under different drive letters on Windows
+        catch (RuntimeException e) // If the root and masks directory are located under different drive letters on Windows
         {
             LOG.warn("Could not relativize masks directory ({}) using root directory {}",
                 masksDirectoryRef, getAbsoluteRootDirectory(), e);
@@ -1467,7 +1486,7 @@ public final class ViewSet implements ReadonlyViewSet
         {
             return getAbsoluteRootDirectory().relativize(geometryFileRef.toPath().toAbsolutePath()).toString();
         }
-        catch (RuntimeException e) // If the root and other directories are located under different drive letters on windows
+        catch (RuntimeException e) // If the root and geometry file are located under different drive letters on windows
         {
             LOG.warn("Could not relativize geometry file ({}) using root directory {}",
                 geometryFileRef, getAbsoluteRootDirectory(), e);
@@ -1550,5 +1569,10 @@ public final class ViewSet implements ReadonlyViewSet
     public EventListeners<LuminanceEncodingChangedListener> luminanceEncodingChangedListeners()
     {
         return luminanceEncodingChanged;
+    }
+
+    public EventListeners<PrimaryViewChangedListener> primaryViewChangedListeners()
+    {
+        return primaryViewChanged;
     }
 }
