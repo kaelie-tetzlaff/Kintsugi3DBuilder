@@ -157,6 +157,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
             var textures = texResources.getTextures();
             if (textures != null)
             {
+                //noinspection RedundantComparatorComparing
                 textureCards = textures.entrySet().stream()
                     .sorted(Comparator.comparing(Entry::getKey))
                     .map(entry -> createCard(entry.getKey()))

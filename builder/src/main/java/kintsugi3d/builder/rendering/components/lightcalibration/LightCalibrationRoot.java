@@ -24,10 +24,11 @@ import kintsugi3d.builder.rendering.components.snap.ViewSnap;
 import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
+import org.jetbrains.annotations.Nullable;
 
 public class LightCalibrationRoot<ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
-    private ViewSnap<ContextType> viewSnapRoot;
+    private @Nullable ViewSnap<ContextType> viewSnapRoot;
 
     public LightCalibrationRoot(ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel,
                                 ViewSelection viewSelection, SceneViewportModel sceneViewportModel)

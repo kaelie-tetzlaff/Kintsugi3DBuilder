@@ -42,7 +42,7 @@ import java.util.Objects;
 public final class ToolBox implements CanvasListener
 {
     private static final Logger LOG = LoggerFactory.getLogger(ToolBox.class);
-    private MouseMode currentMode;
+    private @Nullable MouseMode currentMode;
     private final ToolBindingModel toolBindingModel;
 
     private final Map<DragToolType, DragTool> dragTools;

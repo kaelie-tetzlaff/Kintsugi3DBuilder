@@ -27,6 +27,7 @@ import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResourcesBase
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.ManagedResource;
 import kintsugi3d.gl.core.Texture2D;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,7 +40,7 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
     private final ContextType context;
     private final BasisResources<ContextType> basisResources;
     private final BasisWeightResources<ContextType> basisWeightResources;
-    private final RoughnessOptimization<ContextType> roughnessOptimization;
+    private final @Nullable RoughnessOptimization<ContextType> roughnessOptimization;
 
     /**
      *
@@ -157,7 +158,7 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
     /**
      * Estimated specular reflectivity and roughness
      */
-    public final RoughnessOptimization<ContextType> getRoughnessOptimization()
+    public final @Nullable RoughnessOptimization<ContextType> getRoughnessOptimization()
     {
         return roughnessOptimization;
     }

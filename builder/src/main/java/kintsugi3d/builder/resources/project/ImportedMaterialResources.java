@@ -21,6 +21,7 @@ import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.material.ImportedMaterial;
 import kintsugi3d.gl.material.ReadonlyImportedMaterial;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,12 +38,12 @@ public final class ImportedMaterialResources<ContextType extends Context<Context
 {
     private static final Logger LOG = LoggerFactory.getLogger(ImportedMaterialResources.class);
 
-    private final ContextType context;
+    private final @Nullable ContextType context;
 
     private final Map<StandardTexture, Texture2D<ContextType>> textures = new EnumMap<>(StandardTexture.class);
 
     @Override
-    public ContextType getContext()
+    public @Nullable ContextType getContext()
     {
         return context;
     }

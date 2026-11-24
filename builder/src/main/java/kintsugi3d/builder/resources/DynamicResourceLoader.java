@@ -22,6 +22,7 @@ import kintsugi3d.gl.core.Texture2D;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.util.EncodableColorImage;
 import kintsugi3d.util.EnvironmentMap;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -42,7 +43,7 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
     private final AsyncLoadedResource<BufferedImage, Texture2D<ContextType>> backplateResource;
 
     /** Flag checked by the render thread in {@link #update()}; set by the JavaFX thread in {@link #requestFragmentShader(File)}. */
-    private volatile File desiredShaderFile;
+    private volatile @Nullable File desiredShaderFile;
 
     /** Read by the render thread in {@link #update()}; set by the JavaFX thread in {@link #requestFragmentShader(File)}. */
     private volatile Supplier<Map<String, Optional<Object>>> shaderDefinesFactory;

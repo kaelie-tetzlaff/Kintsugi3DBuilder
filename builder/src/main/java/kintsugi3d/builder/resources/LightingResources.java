@@ -21,6 +21,7 @@ import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,19 +40,19 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
     private final ContextType context;
     private final SceneModel sceneModel;
 
-    private ProgramObject<ContextType> shadowProgram;
+    private @Nullable ProgramObject<ContextType> shadowProgram;
 
-    private Texture3D<ContextType> shadowMaps;
-    private FramebufferObject<ContextType> shadowFramebuffer;
-    private DrawableResource<ContextType> shadowDrawable;
+    private @Nullable Texture3D<ContextType> shadowMaps;
+    private @Nullable FramebufferObject<ContextType> shadowFramebuffer;
+    private @Nullable DrawableResource<ContextType> shadowDrawable;
 
     // A reference to the position buffer for the object casting shadows.
     // Not managed or released by LightingResources
     private ReadonlyVertexBuffer<ContextType> shadowCastingPositionBuffer;
 
-    private Texture2D<ContextType> backplateTexture;
-    private Cubemap<ContextType> environmentMap;
-    private FramebufferObject<ContextType> screenSpaceDepthFBO;
+    private @Nullable Texture2D<ContextType> backplateTexture;
+    private @Nullable Cubemap<ContextType> environmentMap;
+    private @Nullable FramebufferObject<ContextType> screenSpaceDepthFBO;
 
 
     public LightingResources(ContextType context, SceneModel sceneModel)
@@ -132,7 +133,7 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
         backplateTexture = newBackplateTexture;
     }
 
-    public final Cubemap<ContextType> getEnvironmentMap()
+    public final @Nullable Cubemap<ContextType> getEnvironmentMap()
     {
         return environmentMap;
     }

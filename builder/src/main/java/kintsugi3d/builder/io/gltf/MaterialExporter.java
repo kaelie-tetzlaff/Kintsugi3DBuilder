@@ -147,7 +147,7 @@ public class MaterialExporter
 
         for (Method method : getClass().getMethods()) // all methods in the current class and superclasses
         {
-            String texName;
+            @Nullable String texName;
             boolean requiresAlpha;
 
             if (method.isAnnotationPresent(CustomTextureExport.class))

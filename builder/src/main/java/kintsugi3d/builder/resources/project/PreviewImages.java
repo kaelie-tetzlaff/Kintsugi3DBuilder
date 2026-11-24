@@ -21,6 +21,7 @@ import kintsugi3d.builder.util.ImageUndistorter;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.util.ImageHelper;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +46,7 @@ class PreviewImages
     private boolean missingPreview;
     private boolean missingThumbnail;
 
-    private ImageHelper fullResImage;
+    private @Nullable ImageHelper fullResImage;
     private BufferedImage undistortedPreviewImage;
 
     PreviewImages(View view, ProgressMonitor progressMonitor,

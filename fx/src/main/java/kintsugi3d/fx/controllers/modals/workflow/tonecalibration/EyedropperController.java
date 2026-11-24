@@ -54,6 +54,7 @@ import kintsugi3d.fx.util.StaticUtilities;
 import kintsugi3d.fx.util.ZoomSafeImageView;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.SRGB;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,7 +99,7 @@ public class EyedropperController extends NonDataPageControllerBase
 
     @FXML private ImageDetailsController imageDetailsController;
 
-    private Button sourceButton;
+    private @Nullable Button sourceButton;
 
     private List<Rectangle> finalSelectRectangles;
 
@@ -115,7 +116,7 @@ public class EyedropperController extends NonDataPageControllerBase
     private final LiveProjectSettingsManager projectSettingsManager = new LiveProjectSettingsManager();
 
     // Use short to avoid sign issues
-    private byte[] prevEncodedLuminanceValues;
+    private byte @Nullable [] prevEncodedLuminanceValues;
 
     private double anchorX;
     private double anchorY;

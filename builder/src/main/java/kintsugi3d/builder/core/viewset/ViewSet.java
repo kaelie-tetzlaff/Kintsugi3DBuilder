@@ -97,12 +97,12 @@ public final class ViewSet implements ReadonlyViewSet
     /**
      * The reference linear luminance values used for decoding pixel colors.
      */
-    private double[] linearLuminanceValues;
+    private double @Nullable [] linearLuminanceValues;
 
     /**
      * The reference encoded luminance values used for decoding pixel colors.
      */
-    private byte[] encodedLuminanceValues;
+    private byte @Nullable [] encodedLuminanceValues;
 
     /**
      * Synchronizes access to linear and encoded luminance values
@@ -159,12 +159,12 @@ public final class ViewSet implements ReadonlyViewSet
     /**
      * The view used for color calibration
      */
-    private volatile View primaryView;
+    private volatile @Nullable View primaryView;
 
     /**
      * The view used to reorient the model
      */
-    private volatile View orientationView;
+    private volatile @Nullable View orientationView;
 
     private int gpuBufferSize = 0;
 
@@ -812,7 +812,7 @@ public final class ViewSet implements ReadonlyViewSet
 
 
     @Override
-    public View getPrimaryView()
+    public @Nullable View getPrimaryView()
     {
         return primaryView;
     }
@@ -833,7 +833,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public View getOrientationView()
+    public @Nullable View getOrientationView()
     {
         return orientationView;
     }

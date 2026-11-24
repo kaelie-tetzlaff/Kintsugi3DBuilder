@@ -28,6 +28,7 @@ import kintsugi3d.builder.core.Global;
 import kintsugi3d.fx.util.Stopwatch;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,7 +110,7 @@ public class ProgressBarsController
      * Target expiry instant for the countdown — the moment when the countdown reaches zero.
      * Null means no active countdown.
      */
-    private Instant countdownExpiry;
+    private @Nullable Instant countdownExpiry;
 
     /**
      * Periodic timer for updating elapsed time and ticking down the countdown.

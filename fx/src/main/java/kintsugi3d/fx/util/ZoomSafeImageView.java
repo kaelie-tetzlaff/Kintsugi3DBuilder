@@ -25,6 +25,7 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,7 @@ public class ZoomSafeImageView
     private final ObjectProperty<Image> fullImage = new SimpleObjectProperty<>();
     private final ObjectProperty<Rectangle2D> logicalViewport = new SimpleObjectProperty<>();
 
-    private Rectangle2D cropBounds;
+    private @Nullable Rectangle2D cropBounds;
 
     public ZoomSafeImageView(ImageView imageView)
     {

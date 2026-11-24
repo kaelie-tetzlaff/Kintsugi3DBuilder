@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Objects;
 
 public final class AlbedoORMOptimization<ContextType extends Context<ContextType>> implements AutoCloseable, TextureSet<ContextType>
 {
@@ -40,8 +41,8 @@ public final class AlbedoORMOptimization<ContextType extends Context<ContextType
     private FramebufferObject<ContextType> framebuffer;
 
     private VertexBuffer<ContextType> rect;
-    private final DrawableResource<ContextType> drawable;
-    private final Texture2D<ContextType> occlusionMap;
+    private final @Nullable DrawableResource<ContextType> drawable;
+    private final @Nullable Texture2D<ContextType> occlusionMap;
 
     private boolean optimizedAlbedo;
     private boolean optimizedMetallicRoughness;
@@ -60,7 +61,7 @@ public final class AlbedoORMOptimization<ContextType extends Context<ContextType
         return new AlbedoORMOptimization<>(context, null, resolution);
     }
 
-    private AlbedoORMOptimization(ContextType context, Texture2D<ContextType> occlusionMap, TextureResolution settings)
+    private AlbedoORMOptimization(ContextType context, @Nullable Texture2D<ContextType> occlusionMap, TextureResolution settings)
         throws IOException
     {
         this.occlusionMap = occlusionMap;
@@ -171,7 +172,7 @@ public final class AlbedoORMOptimization<ContextType extends Context<ContextType
         framebuffer.clearColorBuffer(0, 0.0f, 0.0f, 0.0f, 0.0f);
         framebuffer.clearColorBuffer(1, 0.0f, 0.0f, 0.0f, 0.0f);
         framebuffer.clearColorBuffer(2, 0.0f, 0.0f, 0.0f, 0.0f);
-        drawable.draw(framebuffer);
+        Objects.requireNonNull(drawable).draw(framebuffer);
 
         optimizedAlbedo = true;
         optimizedMetallicRoughness = true;

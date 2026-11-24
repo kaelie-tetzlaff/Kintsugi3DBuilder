@@ -27,9 +27,8 @@ public class WeightmapReplacer extends ImageReplacer
 
     public WeightmapReplacer(TextureResources<?> resources, BasisMaterialInfo material, File currentImage)
     {
-        super(resources);
+        super(resources, currentImage);
         this.material = material;
-        setCurrentImage(currentImage);
     }
 
     @Override

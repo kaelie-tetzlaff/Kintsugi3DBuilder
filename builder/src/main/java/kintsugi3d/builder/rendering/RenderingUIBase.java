@@ -75,6 +75,7 @@ public abstract class RenderingUIBase implements RenderingUI
         {
             synchronized (waitForRenderingWork)
             {
+                //noinspection NakedNotify
                 waitForRenderingWork.notifyAll();
             }
         }

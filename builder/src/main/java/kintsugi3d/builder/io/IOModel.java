@@ -40,6 +40,7 @@ import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.material.ReadonlyImportedMaterial;
 import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.util.EncodableColorImage;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -73,8 +74,8 @@ public class IOModel implements IO
     // Set defaults just in case the load options model is never set (i.e. testing)
     private ReadonlyLoadOptionsModel loadOptionsModel = new SimpleLoadOptionsModel();
 
-    private File currentProjectFile;
-    private File currentViewSetFile;
+    private @Nullable File currentProjectFile;
+    private @Nullable File currentViewSetFile;
 
     private final EventDispatcher<ProjectOpenedListener, ProjectOpenedEvent> projectOpened
         = new EventDispatcher<>(ProjectOpenedListener::onProjectOpened);
@@ -278,7 +279,7 @@ public class IOModel implements IO
         //open the project, update the recent files list & recentDirectory, disable shaders which aren't useful until processing textures
         RecentProjects.getInstance().setMostRecentDirectory(projectFile.getParentFile());
 
-        File vsetFile;
+        @Nullable File vsetFile;
 
         if (projectFile.getName().endsWith(".vset"))
         {

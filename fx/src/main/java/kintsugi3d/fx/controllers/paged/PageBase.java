@@ -19,6 +19,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -27,9 +28,9 @@ import java.util.Map;
 abstract class PageBase<InType, OutType, ControllerType extends PageController<? super InType>>
     implements Page<InType, OutType>
 {
-    private final ControllerType controller;
+    private final @Nullable ControllerType controller;
 
-    private final Parent root;
+    private final @Nullable Parent root;
 
     private final ObjectProperty<Page<? super OutType, ?>> nextPageProperty = new SimpleObjectProperty<>(null);
 
@@ -52,13 +53,13 @@ abstract class PageBase<InType, OutType, ControllerType extends PageController<?
     }
 
     @Override
-    public final ControllerType getController()
+    public final @Nullable ControllerType getController()
     {
         return controller;
     }
 
     @Override
-    public final Parent getRoot()
+    public final @Nullable Parent getRoot()
     {
         return root;
     }

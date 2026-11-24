@@ -19,6 +19,7 @@ import kintsugi3d.builder.rendering.RenderedComponent;
 import kintsugi3d.builder.rendering.SceneViewportModel;
 import kintsugi3d.gl.core.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 
 public abstract class ShaderComponent<ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
@@ -34,8 +36,8 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
     private final ContextType context;
     private Map<String, VertexBuffer<ContextType>> vertexBuffers;
     private final Collection<ManagedResource> otherManagedResources = new ArrayList<>(8);
-    private ProgramObject<ContextType> program;
-    private DrawableResource<ContextType> drawable;
+    private @Nullable ProgramObject<ContextType> program;
+    private @Nullable DrawableResource<ContextType> drawable;
 
     private final SceneViewportModel sceneViewportModel;
 
@@ -162,14 +164,14 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
         return context;
     }
 
-    public final DrawableResource<ContextType> getDrawable()
+    public final @NotNull DrawableResource<ContextType> getDrawable()
     {
-        return drawable;
+        return Objects.requireNonNull(drawable);
     }
 
     public final Program<ContextType> getProgram()
     {
-        return drawable.program();
+        return Objects.requireNonNull(drawable).program();
     }
 
     /**

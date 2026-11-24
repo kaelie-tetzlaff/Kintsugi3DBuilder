@@ -38,6 +38,7 @@ import kintsugi3d.gl.vecmath.IntVector2;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,29 +72,29 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
     /**
      * A GPU buffer containing projection transformations defining the intrinsic properties of each camera.
      */
-    private final UniformBuffer<ContextType> cameraProjectionBuffer;
+    private final @Nullable UniformBuffer<ContextType> cameraProjectionBuffer;
 
     /**
      * A GPU buffer containing for every view an index designating the projection transformation that should be used for each view.
      */
-    private final UniformBuffer<ContextType> cameraProjectionIndexBuffer;
+    private final @Nullable UniformBuffer<ContextType> cameraProjectionIndexBuffer;
 
-    private final Texture3D<ContextType> colorTextures;
+    private final @Nullable Texture3D<ContextType> colorTextures;
 
     /**
      * A depth texture array containing a depth image for every view.
      */
-    private final Texture3D<ContextType> depthTextures;
+    private final @Nullable Texture3D<ContextType> depthTextures;
 
     /**
      * A depth texture array containing a shadow map for every view.
      */
-    private final Texture3D<ContextType> shadowTextures;
+    private final @Nullable Texture3D<ContextType> shadowTextures;
 
     /**
      * A GPU buffer containing the matrices that were used for each shadow map in the shadowTextures array.
      */
-    private final UniformBuffer<ContextType> shadowMatrixBuffer;
+    private final @Nullable UniformBuffer<ContextType> shadowMatrixBuffer;
 
 
     public static final class Builder<ContextType extends Context<ContextType>>

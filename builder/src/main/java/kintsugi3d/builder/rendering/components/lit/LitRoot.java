@@ -26,8 +26,8 @@ import kintsugi3d.gl.core.ReadonlyVertexBuffer;
 public class LitRoot<ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
     private final ContextType context;
-    private LightingResources<ContextType> lightingResources;
-    private LitContent<ContextType> litContentRoot;
+    private final LightingResources<ContextType> lightingResources;
+    private final LitContent<ContextType> litContentRoot;
 
     /**
      * x
@@ -98,17 +98,8 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
     @Override
     public final void close()
     {
-        if (lightingResources != null)
-        {
-            lightingResources.close();
-            lightingResources = null;
-        }
-
-        if (litContentRoot != null)
-        {
-            litContentRoot.close();
-            litContentRoot = null;
-        }
+        lightingResources.close();
+        litContentRoot.close();
     }
 
     public final RenderedComponent<ContextType> getLitContentRoot()

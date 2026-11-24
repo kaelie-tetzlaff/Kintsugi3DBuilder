@@ -16,6 +16,7 @@
 package kintsugi3d.optimization;
 
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -24,11 +25,11 @@ import java.util.stream.IntStream;
 public final class ShaderBasedErrorCalculator<ContextType extends Context<ContextType>> implements ManagedResource
 {
     // Compare fitted models against actual photographs
-    private ProgramObject<ContextType> program;
-    private DrawableResource<ContextType> drawable;
+    private final @NotNull ProgramObject<ContextType> program;
+    private final @NotNull DrawableResource<ContextType> drawable;
 
     // Framebuffer for calculating error and reconstructing 3D renderings of the object
-    private FramebufferObject<ContextType> framebuffer;
+    private final @NotNull FramebufferObject<ContextType> framebuffer;
 
     private final ErrorReport report;
 
@@ -58,7 +59,7 @@ public final class ShaderBasedErrorCalculator<ContextType extends Context<Contex
         return program;
     }
 
-    public FramebufferObject<ContextType> getFramebuffer()
+    public @NotNull FramebufferObject<ContextType> getFramebuffer()
     {
         return framebuffer;
     }
@@ -125,22 +126,8 @@ public final class ShaderBasedErrorCalculator<ContextType extends Context<Contex
     @Override
     public void close()
     {
-        if (program != null)
-        {
-            program.close();
-            program = null;
-        }
-
-        if (drawable != null)
-        {
-            drawable.close();
-            drawable = null;
-        }
-
-        if (framebuffer != null)
-        {
-            framebuffer.close();
-            framebuffer = null;
-        }
+        program.close();
+        drawable.close();
+        framebuffer.close();
     }
 }

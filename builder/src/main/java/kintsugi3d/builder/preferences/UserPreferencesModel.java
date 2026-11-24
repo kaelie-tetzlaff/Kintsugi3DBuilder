@@ -38,15 +38,6 @@ public final class UserPreferencesModel implements ReadOnlyUserPreferencesModel
         return new UserPreferencesModel();
     }
 
-    public static UserPreferencesModel createEmpty()
-    {
-        UserPreferencesModel model = new UserPreferencesModel();
-        model.loadOptionsModel = null;
-        model.directoryPreferencesModel = null;
-
-        return model;
-    }
-
     @Override
     @JsonIgnore
     public ReadonlyLoadOptionsModel getReadOnlyLoadOptions()

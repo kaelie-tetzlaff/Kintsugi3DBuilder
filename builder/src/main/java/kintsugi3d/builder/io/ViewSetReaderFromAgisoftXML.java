@@ -23,6 +23,7 @@ import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -284,8 +285,8 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
             }
         });
 
-        private Sensor sensor;
-        private Camera camera;
+        private @Nullable Sensor sensor;
+        private @Nullable Camera camera;
         private int lightIndex = -1;
         private int nextLightIndex = 0;
         private int defaultLightIndex = -1;
@@ -295,7 +296,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
         private float globalScale = 1.0f;
         private Vector3 globalTranslate = new Vector3(0.0f, 0.0f, 0.0f);
 
-        private String currentModelID; // takes on the model ID while within a <model> tag
+        private @Nullable String currentModelID; // takes on the model ID while within a <model> tag
         private Matrix4 modelTransform = Matrix4.IDENTITY;
 
         private float b1 = 0.0f; // fx - fy: https://www.agisoft.com/forum/index.php?topic=6437.0

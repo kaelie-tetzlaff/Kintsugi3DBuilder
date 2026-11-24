@@ -27,8 +27,8 @@ import java.util.List;
  */
 public class LightCalibrationChangedEvent
 {
-    private final List<Vector3> lightPositionList;
-    private final List<Vector3> lightIntensityList;
+    private final @Nullable List<Vector3> lightPositionList;
+    private final @Nullable List<Vector3> lightIntensityList;
 
     public LightCalibrationChangedEvent(List<Vector3> lightPositionList, List<Vector3> lightIntensityList)
     {

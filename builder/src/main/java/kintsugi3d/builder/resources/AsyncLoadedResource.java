@@ -59,13 +59,13 @@ public class AsyncLoadedResource<CPUResourceType, GPUResourceType>
     private volatile boolean newDataAvailable;
 
     /** Only accessed within {@code synchronized(lock)} blocks. */
-    private CPUResourceType newData;
+    private @Nullable CPUResourceType newData;
 
     /** Flag checked by the consumer thread; set by a worker thread or caller. */
     private volatile boolean unloadRequested = false;
 
     /** Only accessed within {@code synchronized(lock)} blocks. */
-    private File currentFile;
+    private @Nullable File currentFile;
 
     /** Only accessed within {@code synchronized(lock)} blocks. */
     private long lastModified;
@@ -74,7 +74,7 @@ public class AsyncLoadedResource<CPUResourceType, GPUResourceType>
     private volatile File desiredFile;
 
     /** Optional preview image (e.g. panorama image); only accessed within {@code synchronized(lock)} blocks. */
-    private EncodableColorImage previewImage;
+    private @Nullable EncodableColorImage previewImage;
 
     /** Lock for synchronized access to resource data. */
     private final Object lock = new Object();

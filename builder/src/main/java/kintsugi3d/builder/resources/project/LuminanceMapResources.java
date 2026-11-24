@@ -17,14 +17,15 @@ package kintsugi3d.builder.resources.project;
 
 import kintsugi3d.builder.core.viewset.SampledLuminanceEncoding;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.Nullable;
 
 public final class LuminanceMapResources<ContextType extends Context<ContextType>> implements ManagedResource, ReadonlyLuminanceMapResources<ContextType>
 {
     private final ContextType context;
 
-    private Texture1D<ContextType> luminanceMap;
+    private @Nullable Texture1D<ContextType> luminanceMap;
 
-    private Texture1D<ContextType> inverseLuminanceMap;
+    private @Nullable Texture1D<ContextType> inverseLuminanceMap;
 
     public static <ContextType extends Context<ContextType>> LuminanceMapResources<ContextType> createNull(ContextType context)
     {

@@ -28,6 +28,7 @@ import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.Nullable;
 
 public class LightCalibrationContent <ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
@@ -36,7 +37,7 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
     private final SceneModel sceneModel;
     private final SceneViewportModel sceneViewportModel;
 
-    private RenderingSubject<ContextType> renderingSubject;
+    private @Nullable RenderingSubject<ContextType> renderingSubject;
 
     public LightCalibrationContent(ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel,
                                    SceneViewportModel sceneViewportModel)

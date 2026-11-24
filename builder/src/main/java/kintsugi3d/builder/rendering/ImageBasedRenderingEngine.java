@@ -56,6 +56,7 @@ import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.SRGB;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,8 +77,8 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     private volatile ProgressMonitor progressMonitor;
     private boolean logErrors = true;
 
-    private final Builder<ContextType> resourceBuilder;
-    private GraphicsResourcesImageSpace<ContextType> resources;
+    private final @Nullable Builder<ContextType> resourceBuilder;
+    private @Nullable GraphicsResourcesImageSpace<ContextType> resources;
     private final boolean managedResources;
 
     private VertexBuffer<ContextType> rectangleVertices;
@@ -107,7 +108,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
     private boolean loaded = false;
 
-    ImageBasedRenderingEngine(String internalName, ContextType context, Builder<ContextType> resourceBuilder)
+    ImageBasedRenderingEngine(String internalName, ContextType context, @Nullable Builder<ContextType> resourceBuilder)
     {
         this.internalName = internalName;
         this.context = context;
@@ -117,7 +118,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         sceneViewportModel = createSceneViewportModel(sceneModel);
     }
 
-    ImageBasedRenderingEngine(String internalName, ContextType context, GraphicsResourcesImageSpace<ContextType> resources)
+    ImageBasedRenderingEngine(String internalName, ContextType context, @Nullable GraphicsResourcesImageSpace<ContextType> resources)
     {
         this.internalName = internalName;
         this.context = context;
@@ -185,7 +186,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final GraphicsResourcesImageSpace<ContextType> getResources()
+    public final @Nullable GraphicsResourcesImageSpace<ContextType> getResources()
     {
         return resources;
     }
@@ -559,44 +560,14 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
             if (managedResources && resources != null)
             {
                 resources.close();
-                resources = null;
             }
 
-            if (rectangleVertices != null)
-            {
-                rectangleVertices.close();
-                rectangleVertices = null;
-            }
-
-            if (simpleTexProgram != null)
-            {
-                simpleTexProgram.close();
-                simpleTexProgram = null;
-            }
-
-            if (simpleTexDrawable != null)
-            {
-                simpleTexDrawable.close();
-                simpleTexDrawable = null;
-            }
-
-            if (lightCalibration != null)
-            {
-                lightCalibration.close();
-                lightCalibration = null;
-            }
-
-            if (litRoot != null)
-            {
-                litRoot.close();
-                litRoot = null;
-            }
-
-            if (lightCalibration3DRoot != null)
-            {
-                lightCalibration3DRoot.close();
-                lightCalibration3DRoot = null;
-            }
+            rectangleVertices.close();
+            simpleTexProgram.close();
+            simpleTexDrawable.close();
+            lightCalibration.close();
+            litRoot.close();
+            lightCalibration3DRoot.close();
 
             for (FramebufferObject<ContextType> fbo : shadingFramebuffers)
             {

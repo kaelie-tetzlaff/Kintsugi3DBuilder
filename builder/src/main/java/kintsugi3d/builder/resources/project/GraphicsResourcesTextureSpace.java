@@ -41,17 +41,17 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
     /**
      * Array of image data pre-projected into texture space
      */
-    private Texture3D<ContextType> textureArray;
+    private final Texture3D<ContextType> textureArray;
 
     /**
      * Simple rectangle for draw calls
      */
-    private VertexBuffer<ContextType> rectangle;
+    private final VertexBuffer<ContextType> rectangle;
 
     /**
      * Textures storing pre-computed geometry information per-texel
      */
-    private GeometryTextures<ContextType> geometryTextures;
+    private final GeometryTextures<ContextType> geometryTextures;
 
     private final int texWidth;
     private final int texHeight;
@@ -188,22 +188,8 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
     {
         super.close();
 
-        if (geometryTextures != null)
-        {
-            geometryTextures.close();
-            geometryTextures = null;
-        }
-
-        if (rectangle != null)
-        {
-            rectangle.close();
-            rectangle = null;
-        }
-
-        if (textureArray != null)
-        {
-            textureArray.close();
-            textureArray = null;
-        }
+        geometryTextures.close();
+        rectangle.close();
+        textureArray.close();
     }
 }

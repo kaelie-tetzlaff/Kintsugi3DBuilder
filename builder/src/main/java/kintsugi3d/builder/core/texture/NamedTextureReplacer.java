@@ -26,9 +26,8 @@ public class NamedTextureReplacer extends ImageReplacer
 
     public NamedTextureReplacer(TextureResources<?> resources, TextureInfo texture, File currentImage)
     {
-        super(resources);
+        super(resources, currentImage);
         this.texture = texture;
-        setCurrentImage(currentImage);
     }
 
     public final TextureInfo getTexture()

@@ -78,9 +78,9 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     @SuppressWarnings("ThisEscapedInObjectConstruction")
     private final SceneViewport sceneViewport = new ManagedSceneViewport(this);
 
-    private volatile ViewSet loadedViewSet;
-    private volatile VertexGeometry loadedGeometry;
-    private volatile ImageBasedRenderingEngine<ContextType> renderableInstance;
+    private volatile @Nullable ViewSet loadedViewSet;
+    private volatile @Nullable VertexGeometry loadedGeometry;
+    private volatile @Nullable ImageBasedRenderingEngine<ContextType> renderableInstance;
     private ProgressMonitor progressMonitor;
 
     private ReadonlyObjectPoseModel objectModel;
@@ -138,13 +138,13 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public final ViewSet getLoadedViewSet()
+    public final @Nullable ViewSet getLoadedViewSet()
     {
         return loadedViewSet;
     }
 
     @Override
-    public final VertexGeometry getLoadedGeometry()
+    public final @Nullable VertexGeometry getLoadedGeometry()
     {
         return loadedGeometry;
     }
@@ -733,14 +733,6 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         {
             renderableInstance.close();
         }
-    }
-
-    /**
-     * Work around for use in testing only
-     */
-    public final void setLoadedViewSet(ViewSet viewSet)
-    {
-        loadedViewSet = viewSet;
     }
 
     private static final class RenderViewCameraModel implements ReadonlyCameraModel

@@ -37,6 +37,7 @@ import javafx.util.Duration;
 import javafx.util.converter.CharacterStringConverter;
 import kintsugi3d.gl.core.FramebufferSize;
 import kintsugi3d.gl.window.*;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,13 +50,13 @@ public final class FramebufferView extends Region
 {
     private static final Logger LOG = LoggerFactory.getLogger(FramebufferView.class);
     private final ImageView imageView;
-    private FramebufferCanvas<?> canvas;
+    private @Nullable FramebufferCanvas<?> canvas;
 
     private WritableImage frontImage;
     private WritableImage backImage;
 
     private volatile boolean copyThreadRunning = false;
-    private Thread nextCopyThread;
+    private @Nullable Thread nextCopyThread;
     private final Object nextCopyThreadLock = new Object();
 
     private volatile boolean frontImagePending = false;

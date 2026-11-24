@@ -62,7 +62,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
     private float boundingRadius;
 
     private String materialFileName;
-    private ImportedMaterial material; // TODO support multiple materials
+    private @Nullable ImportedMaterial material; // TODO support multiple materials
 
     private VertexGeometry(File filename)
     {
@@ -843,7 +843,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
     }
 
     @Override
-    public ImportedMaterial getMaterial()
+    public @Nullable ImportedMaterial getMaterial()
     {
         return material;
     }

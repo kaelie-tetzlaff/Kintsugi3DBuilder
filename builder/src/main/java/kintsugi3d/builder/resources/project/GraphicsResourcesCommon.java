@@ -48,6 +48,7 @@ import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
 import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
 import kintsugi3d.gl.vecmath.IntVector2;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,35 +63,35 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
      * A GPU buffer containing the camera poses defining the transformation from object space to camera space for each view.
      * These are necessary to determine view vectors, and for performing projective texture mapping with an image-space implementation.
      */
-    private final UniformBuffer<ContextType> cameraPoseBuffer;
+    private final @Nullable UniformBuffer<ContextType> cameraPoseBuffer;
 
     /**
      * A GPU buffer containing light source positions, used only for reflectance fields and illumination-dependent rendering (ignored for light
      * fields).
      * Assumed by convention to be in camera space.
      */
-    private final UniformBuffer<ContextType> lightPositionBuffer;
+    private final @Nullable UniformBuffer<ContextType> lightPositionBuffer;
 
     /**
      * A GPU buffer containing light source intensities, used only for reflectance fields and illumination-dependent rendering (ignored for light
      * fields).
      */
-    private final UniformBuffer<ContextType> lightIntensityBuffer;
+    private final @Nullable UniformBuffer<ContextType> lightIntensityBuffer;
 
     /**
      * A GPU buffer containing for every view an index designating the light source position and intensity that should be used for each view.
      */
-    private final UniformBuffer<ContextType> lightIndexBuffer;
+    private final @Nullable UniformBuffer<ContextType> lightIndexBuffer;
 
     /**
      * A GPU buffer containing the weights associated with all the views (determined by the distance from other views).
      */
-    private final UniformBuffer<ContextType> viewWeightBuffer;
+    private final @Nullable UniformBuffer<ContextType> viewWeightBuffer;
 
     /**
      * A GPU buffer containing the indices of enabled and non-deleted cameras
      */
-    private final UniformBuffer<ContextType> viewIndexBuffer;
+    private final @Nullable UniformBuffer<ContextType> viewIndexBuffer;
 
     /**
      * Contains the VBOs for positions, tex-coords, normals, and tangents
@@ -105,7 +106,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
     private final ViewSet viewSet;
 
-    private float[] viewWeights;
+    private float @Nullable [] viewWeights;
 
     private final EventDispatcher<ProjectProcessedListener, ProjectProcessedEvent> projectProcessed
         = new EventDispatcher<>(ProjectProcessedListener::onProjectProcessed);
@@ -679,15 +680,39 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
     public void close()
     {
-        viewWeightBuffer.close();
-        cameraPoseBuffer.close();
-        lightPositionBuffer.close();
-        lightIntensityBuffer.close();
-        lightIndexBuffer.close();
+        if (viewWeightBuffer != null)
+        {
+            viewWeightBuffer.close();
+        }
+
+        if (cameraPoseBuffer != null)
+        {
+            cameraPoseBuffer.close();
+        }
+
+        if (lightPositionBuffer != null)
+        {
+            lightPositionBuffer.close();
+        }
+
+        if (lightIntensityBuffer != null)
+        {
+            lightIntensityBuffer.close();
+        }
+
+        if (lightIndexBuffer != null)
+        {
+            lightIndexBuffer.close();
+        }
+
         geometryResources.close();
         textureResources.close();
         luminanceMapResources.close();
-        viewIndexBuffer.close();
+
+        if (viewIndexBuffer != null)
+        {
+            viewIndexBuffer.close();
+        }
     }
 
     public EventListeners<Observer<MappedChange<String, BasisMaterialInfo>>> basisListeners()

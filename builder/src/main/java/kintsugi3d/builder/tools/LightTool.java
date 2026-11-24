@@ -23,6 +23,7 @@ import kintsugi3d.gl.vecmath.DoubleVector2;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.window.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -32,7 +33,7 @@ final class LightTool implements PickerTool
     private float inclinationOffset;
     private float distanceOffset;
 
-    private Consumer<DoubleVector2> updateFunction;
+    private @Nullable Consumer<DoubleVector2> updateFunction;
     private int lightIndex;
 
     private final ManipulableLightingEnvironmentModel lightingModel;

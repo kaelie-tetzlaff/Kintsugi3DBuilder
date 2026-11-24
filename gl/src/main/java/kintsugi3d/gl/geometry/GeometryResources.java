@@ -16,6 +16,7 @@
 package kintsugi3d.gl.geometry;
 
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,29 +27,29 @@ public class GeometryResources<ContextType extends Context<ContextType>>
 {
     private static final Logger LOG = LoggerFactory.getLogger(GeometryResources.class);
 
-    private final ContextType context;
+    private final @Nullable ContextType context;
 
-    private final ReadonlyVertexGeometry geometry;
+    private final @Nullable ReadonlyVertexGeometry geometry;
 
     /**
      * A vertex buffer containing vertex positions.
      */
-    private final VertexBuffer<ContextType> positionBuffer;
+    private final @Nullable VertexBuffer<ContextType> positionBuffer;
 
     /**
      * A vertex buffer containing texture coordinates.
      */
-    private final VertexBuffer<ContextType> texCoordBuffer;
+    private final @Nullable VertexBuffer<ContextType> texCoordBuffer;
 
     /**
      * A vertex buffer containing surface normals.
      */
-    private final VertexBuffer<ContextType> normalBuffer;
+    private final @Nullable VertexBuffer<ContextType> normalBuffer;
 
     /**
      * A vertex buffer containing tangent vectors.
      */
-    private final VertexBuffer<ContextType> tangentBuffer;
+    private final @Nullable VertexBuffer<ContextType> tangentBuffer;
 
     /**
      * Default constructor: create null object
@@ -106,13 +107,13 @@ public class GeometryResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final ContextType getContext()
+    public final @Nullable ContextType getContext()
     {
         return context;
     }
 
     @Override
-    public final ReadonlyVertexGeometry getGeometry()
+    public final @Nullable ReadonlyVertexGeometry getGeometry()
     {
         return geometry;
     }

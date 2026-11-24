@@ -22,6 +22,7 @@ import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,12 +42,12 @@ public final class ViewSetBuilder
     private Matrix4 cameraPose;
     private int cameraProjectionIndex = 0;
     private int lightIndex = 0;
-    private File maskFile;
+    private @Nullable File maskFile;
     private final Map<Integer, File> maskMap;
     private boolean hasUnsupportedCorrections;
 
     private int orientationViewIndex = -1;
-    private String orientationViewName;
+    private @Nullable String orientationViewName;
 
     /**
      * Uses root directory as supporting files directory by default

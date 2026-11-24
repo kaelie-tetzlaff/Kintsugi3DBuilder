@@ -15,13 +15,15 @@
 
 package kintsugi3d.gl.core;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Objects;
 
 public final class OptionalManagedResource<ResourceType extends ManagedResource> implements ManagedResource
 {
-    private final ResourceType resource;
+    private final @Nullable ResourceType resource;
 
-    private OptionalManagedResource(ResourceType resource)
+    private OptionalManagedResource(@Nullable ResourceType resource)
     {
         this.resource = resource;
     }

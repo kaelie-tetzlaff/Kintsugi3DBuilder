@@ -35,6 +35,7 @@ import javafx.scene.shape.Rectangle;
 import kintsugi3d.builder.state.cards.ProjectDataCard;
 import kintsugi3d.builder.util.AppIcon;
 import kintsugi3d.fx.internal.ObservableCardsModel;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.Locale;
@@ -65,7 +66,7 @@ public class CardController
 
     private final ObjectProperty<Image> previewImage = new SimpleObjectProperty<>(AppIcon.getImage());
     private File currentPreviewImageFile;
-    private File loadedPreviewImageFile;
+    private @Nullable File loadedPreviewImageFile;
 
     public final void init(@SuppressWarnings("ParameterHidesMemberVariable") ObservableCardsModel<?> cardsModel, ProjectDataCard dataCard)
     {

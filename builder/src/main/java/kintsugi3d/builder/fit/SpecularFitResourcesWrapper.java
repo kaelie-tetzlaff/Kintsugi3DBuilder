@@ -18,13 +18,14 @@ package kintsugi3d.builder.fit;
 import kintsugi3d.builder.fit.settings.ReadonlyBasisSettings;
 import kintsugi3d.gl.interactive.ShaderResources;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.Nullable;
 
 public class SpecularFitResourcesWrapper<ContextType extends Context<ContextType>>
 {
     private final boolean smithMaskingShadowing;
-    private final ReadonlyBasisSettings basisSettings;
+    private final @Nullable ReadonlyBasisSettings basisSettings;
 
-    public SpecularFitResourcesWrapper(boolean smithMaskingShadowing, ReadonlyBasisSettings basisSettings)
+    public SpecularFitResourcesWrapper(boolean smithMaskingShadowing, @Nullable ReadonlyBasisSettings basisSettings)
     {
         this.smithMaskingShadowing = smithMaskingShadowing;
         this.basisSettings = basisSettings;

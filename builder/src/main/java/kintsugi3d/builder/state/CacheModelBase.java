@@ -21,6 +21,7 @@ import kintsugi3d.builder.io.RecentProjects;
 import kintsugi3d.builder.io.ViewSetReaderFromVSET;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.util.ApplicationFolders;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +55,7 @@ public abstract class CacheModelBase implements CacheModel
      * This thread will be set to a non-null value while running, and null otherwise
      * to prevent multiple thread running simultaneously.
      */
-    private volatile Thread cacheSizeCalcThread;
+    private volatile @Nullable Thread cacheSizeCalcThread;
 
     protected CacheModelBase()
     {
@@ -675,7 +676,7 @@ public abstract class CacheModelBase implements CacheModel
             if (cacheSizeCalcThread == null) // only want one thread running at a time.
             {
                 setCacheSizeCalcInProgress(true);
-                cacheSizeCalcThread = new Thread(() ->
+                Thread newThread = new Thread(() ->
                 {
                     try
                     {
@@ -709,7 +710,8 @@ public abstract class CacheModelBase implements CacheModel
                     }
                 }, "Cache Size Calculation");
 
-                cacheSizeCalcThread.start();
+                cacheSizeCalcThread = newThread;
+                newThread.start();
             }
 
             // If cache size calc thread is already running, then it should eventually trigger the listener registered above.
