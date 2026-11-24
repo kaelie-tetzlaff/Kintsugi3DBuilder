@@ -24,8 +24,8 @@ import kintsugi3d.builder.fit.normal.NormalOptimization;
 import kintsugi3d.builder.fit.roughness.RoughnessOptimization;
 import kintsugi3d.builder.fit.settings.ReadonlyBasisOptimizationSettings;
 import kintsugi3d.builder.fit.settings.ReadonlyNormalOptimizationSettings;
-import kintsugi3d.builder.resources.project.ReadonlyGraphicsResources;
-import kintsugi3d.builder.resources.project.ShaderProgramFactory;
+import kintsugi3d.gl.interactive.ShaderResources;
+import kintsugi3d.gl.interactive.ShaderProgramFactory;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResourcesBase;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
@@ -60,7 +60,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
 
     private final ContextType context;
 
-    private final ReadonlyGraphicsResources<ContextType> resources;
+    private final ShaderResources<ContextType> resources;
     private final TextureResolution textureResolution;
 
     private final FinalDiffuseOptimization<ContextType> diffuseOptimization;
@@ -71,7 +71,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
     private final SpecularFitBase<ContextType> base;
 
     private SpecularFitOptimizable(
-        ReadonlyGraphicsResources<ContextType> resources, BasisResources<ContextType> basisResources,
+        ShaderResources<ContextType> resources, BasisResources<ContextType> basisResources,
         SpecularFitResourcesWrapper<ContextType> programFactory, TextureResolution textureResolution,
         ReadonlyNormalOptimizationSettings normalOptimizationSettings, boolean includeConstantTerm)
         throws IOException
@@ -85,7 +85,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
         this.resources = resources;
         this.textureResolution = textureResolution;
 
-        ReadonlyGraphicsResources<ContextType> wrappedResources = programFactory.wrap(resources);
+        ShaderResources<ContextType> wrappedResources = programFactory.wrap(resources);
 
         // Final diffuse estimation
         diffuseOptimization = new FinalDiffuseOptimization<>(wrappedResources, textureResolution, includeConstantTerm);
@@ -184,10 +184,10 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
     }
 
 
-    private Drawable<ContextType> getNormalDrawable(Program<ContextType> estimationProgram,
-                                                    ShaderProgramFactory<ContextType> programFactory)
+    private DrawableResource<ContextType> getNormalDrawable(Program<ContextType> estimationProgram,
+                                                            ShaderProgramFactory<ContextType> programFactory)
     {
-        Drawable<ContextType> drawable = resources.createDrawable(estimationProgram);
+        DrawableResource<ContextType> drawable = resources.createDrawable(estimationProgram);
         programFactory.setupShaderProgram(estimationProgram);
         getBasisResources().useWithShaderProgram(estimationProgram);
         getBasisWeightResources().useWithShaderProgram(estimationProgram);
@@ -210,11 +210,11 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
         }
     }
 
-    private static <ContextType extends Context<ContextType>> Drawable<ContextType> createErrorCalcDrawable(
-        ReadonlyTextureResources<ContextType> specularFit, ReadonlyGraphicsResources<ContextType> resources,
+    private static <ContextType extends Context<ContextType>> DrawableResource<ContextType> createErrorCalcDrawable(
+        ReadonlyTextureResources<ContextType> specularFit, ShaderResources<ContextType> resources,
         Program<ContextType> errorCalcProgram)
     {
-        Drawable<ContextType> errorCalcDrawable = resources.createDrawable(errorCalcProgram);
+        DrawableResource<ContextType> errorCalcDrawable = resources.createDrawable(errorCalcProgram);
         specularFit.getBasisResources().useWithShaderProgram(errorCalcProgram);
         specularFit.getBasisWeightResources().useWithShaderProgram(errorCalcProgram);
         errorCalcProgram.setTexture("tex_roughness", specularFit.getTexture(StandardTexture.ROUGHNESS));
@@ -224,7 +224,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
     }
 
     public static <ContextType extends Context<ContextType>> SpecularFitOptimizable<ContextType> createNew(
-        ReadonlyGraphicsResources<ContextType> resources, SpecularFitResourcesWrapper<ContextType> programFactory,
+        ShaderResources<ContextType> resources, SpecularFitResourcesWrapper<ContextType> programFactory,
         MaterialBasis materialBasis, TextureResolution textureResolution,
         ReadonlyNormalOptimizationSettings normalOptimizationSettings, boolean includeConstantTerm)
         throws IOException

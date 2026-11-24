@@ -27,15 +27,15 @@ import java.io.IOException;
 public class TextureBlockResourceFactory<ContextType extends Context<ContextType>> implements ManagedResource
 {
     private final ImageCache<ContextType> imageCache;
-    private final GraphicsResourcesCommon<ContextType> sharedResources;
+    private final GraphicsResourcesCommon<ContextType> commonResources;
     private final GeometryTextures<ContextType> fullGeometryTextures;
 
-    TextureBlockResourceFactory(GraphicsResourcesCommon<ContextType> sharedResources, ImageCache<ContextType> imageCache)
+    TextureBlockResourceFactory(GraphicsResourcesCommon<ContextType> commonResources, ImageCache<ContextType> imageCache)
     {
         this.imageCache = imageCache;
-        this.sharedResources = sharedResources;
+        this.commonResources = commonResources;
 
-        fullGeometryTextures = sharedResources.getGeometryResources()
+        fullGeometryTextures = commonResources.getGeometryResources()
             .createGeometryFramebuffer(imageCache.getSettings().getTextureWidth(), imageCache.getSettings().getTextureHeight());
     }
 
@@ -54,7 +54,7 @@ public class TextureBlockResourceFactory<ContextType extends Context<ContextType
                 int width = imageCache.getSettings().getBlockStartX(i + 1) - x;
                 int height = imageCache.getSettings().getBlockStartY(j + 1) - y;
 
-                return new GraphicsResourcesTextureSpace<>(sharedResources,
+                return new GraphicsResourcesTextureSpace<>(commonResources,
                     () -> fullGeometryTextures.createViewportCopy(x, y, width, height),
                     imageCache.getBlockDirectory(i, j), loadOptions, width, height, monitor);
             },

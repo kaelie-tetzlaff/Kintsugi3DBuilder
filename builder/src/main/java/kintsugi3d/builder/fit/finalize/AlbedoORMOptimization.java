@@ -40,7 +40,7 @@ public final class AlbedoORMOptimization<ContextType extends Context<ContextType
     private FramebufferObject<ContextType> framebuffer;
 
     private VertexBuffer<ContextType> rect;
-    private final Drawable<ContextType> drawable;
+    private final DrawableResource<ContextType> drawable;
     private final Texture2D<ContextType> occlusionMap;
 
     private boolean optimizedAlbedo;
@@ -264,7 +264,7 @@ public final class AlbedoORMOptimization<ContextType extends Context<ContextType
         program.setTexture("orm", orm);
 
         VertexBuffer<ContextType> metallicRect = context.createRectangle();
-        Drawable<ContextType> metallicDrawable = context.createDrawable(program);
+        DrawableResource<ContextType> metallicDrawable = context.createDrawable(program);
         metallicDrawable.setDefaultPrimitiveMode(PrimitiveMode.TRIANGLE_FAN);
         metallicDrawable.addVertexBuffer("position", metallicRect);
         framebuffer.clearColorBuffer(2, 0.0f, 0.0f, 0.0f, 0.0f);

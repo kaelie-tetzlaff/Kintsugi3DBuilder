@@ -16,7 +16,8 @@
 package kintsugi3d.builder.state.cards;
 
 import kintsugi3d.builder.core.viewset.ViewSet;
-import kintsugi3d.builder.rendering.ImageBasedRenderable;
+import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
+import kintsugi3d.gl.core.Context;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
@@ -26,21 +27,21 @@ import java.util.stream.IntStream;
 
 public abstract class ProjectDataCardFactoryBase<T> implements ProjectDataCardFactory<T>
 {
-    private final ImageBasedRenderable<?> instance;
+    private final ImageBasedGraphicsResources<? extends Context<?>> resources;
 
-    protected ProjectDataCardFactoryBase(ImageBasedRenderable<?> instance)
+    protected ProjectDataCardFactoryBase(ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
-        this.instance = instance;
+        this.resources = resources;
     }
 
-    protected final ImageBasedRenderable<?> getInstance()
+    protected final ImageBasedGraphicsResources<? extends Context<?>> getResources()
     {
-        return instance;
+        return resources;
     }
 
     protected final ViewSet getViewSet()
     {
-        return instance.getViewSet();
+        return resources.getViewSet();
     }
 
     @Override

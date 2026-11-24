@@ -18,7 +18,7 @@ package kintsugi3d.builder.fit.debug;
 import kintsugi3d.builder.core.texture.StandardTexture;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
-import kintsugi3d.builder.resources.project.ShaderProgramFactory;
+import kintsugi3d.gl.interactive.ShaderProgramFactory;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.vecmath.DoubleVector2;
@@ -70,7 +70,7 @@ public final class FinalErrorCalculaton
                 .createProgram();
                  FramebufferObject<ContextType> textureRectFBO =
                     resources.getContext().buildFramebufferObject(specularFit.getWidth(), specularFit.getHeight()).addColorAttachment().createFramebufferObject();
-                Drawable<ContextType> textureRect = resources.createDrawable(textureRectProgram))
+                DrawableResource<ContextType> textureRect = resources.createDrawable(textureRectProgram))
             {
                 textureRectProgram.setTexture("tex", priorNormalMap);
                 textureRectFBO.clearColorBuffer(0, 0.0f, 0.0f, 0.0f, 0.0f);
@@ -115,7 +115,7 @@ public final class FinalErrorCalculaton
         PrintStream rmseOut)
     {
         try (ProgramObject<ContextType> finalErrorCalcProgram = createFinalErrorCalcProgram(programFactory);
-            Drawable<ContextType> finalErrorCalcDrawable = resources.createDrawable(finalErrorCalcProgram))
+            DrawableResource<ContextType> finalErrorCalcDrawable = resources.createDrawable(finalErrorCalcProgram))
         {
             // Calculate linear RMSE using basis diffuse
             basisErrorCalculator.update();
@@ -168,7 +168,7 @@ public final class FinalErrorCalculaton
         throws IOException
     {
         try (ProgramObject<ContextType> ggxErrorCalcProgram = createGGXErrorCalcProgram(programFactory);
-            Drawable<ContextType> ggxErrorCalcDrawable = resources.createDrawable(ggxErrorCalcProgram))
+            DrawableResource<ContextType> ggxErrorCalcDrawable = resources.createDrawable(ggxErrorCalcProgram))
         {
             specularFit.setupShaderProgram(ggxErrorCalcProgram);
             ggxErrorCalcProgram.setUniform("sRGB", false);
@@ -198,7 +198,7 @@ public final class FinalErrorCalculaton
     }
 
     private static <ContextType extends Context<ContextType>>
-    double runFinalErrorCalculation(Drawable<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer, Iterable<View> views)
+    double runFinalErrorCalculation(DrawableResource<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer, Iterable<View> views)
     {
         WeightedError errorTotal = new WeightedError(0, 0);
 

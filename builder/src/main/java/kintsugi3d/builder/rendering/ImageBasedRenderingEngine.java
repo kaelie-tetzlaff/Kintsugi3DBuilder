@@ -16,9 +16,11 @@
 package kintsugi3d.builder.rendering;
 
 import kintsugi3d.builder.core.Global;
+import kintsugi3d.builder.core.texture.TextureInfo;
 import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
+import kintsugi3d.builder.fit.decomposition.BasisMaterialInfo;
 import kintsugi3d.builder.fit.settings.ExportSettings;
 import kintsugi3d.builder.io.events.ProjectLoadedEvent;
 import kintsugi3d.builder.io.events.ProjectLoadedListener;
@@ -36,8 +38,12 @@ import kintsugi3d.builder.resources.DynamicResourceManager;
 import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace;
 import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace.Builder;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
+import kintsugi3d.builder.state.cards.CardsModel;
+import kintsugi3d.builder.state.cards.TabsHelper;
 import kintsugi3d.builder.util.events.EventDispatcher;
 import kintsugi3d.builder.util.events.EventListeners;
+import kintsugi3d.builder.util.events.MappedChange;
+import kintsugi3d.builder.util.events.Observer;
 import kintsugi3d.gl.builders.framebuffer.ColorAttachmentSpec;
 import kintsugi3d.gl.builders.framebuffer.DepthAttachmentSpec;
 import kintsugi3d.gl.core.*;
@@ -58,6 +64,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.function.Function;
 
 public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     extends InteractiveRenderableBase<ContextType> implements ImageBasedRenderable<ContextType>
@@ -80,7 +87,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     private final SceneModel sceneModel;
 
     private ProgramObject<ContextType> simpleTexProgram;
-    private Drawable<ContextType> simpleTexDrawable;
+    private DrawableResource<ContextType> simpleTexDrawable;
 
     private SplitScreenComponent<ContextType> lightCalibrationSplitScreen;
     private LightCalibrationRoot<ContextType> lightCalibration;
@@ -119,6 +126,34 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         managedResources = false;
         sceneModel = new SceneModel();
         sceneViewportModel = createSceneViewportModel(sceneModel);
+    }
+
+    private static <K, V> Observer<MappedChange<K, V>> getMappedChangeObserver(
+        TabsHelper tabsHelper, String tabName, Class<V> dataClass, Function<String, K> keyConstructor)
+    {
+        return change ->
+        {
+            CardsModel<V> texturesTab = Global.state().getTabModels().getTab(tabName, dataClass);
+
+            switch (change.getType())
+            {
+                case ADDED:
+                    tabsHelper.refreshTab(tabName); // TODO implement support for adding individual card without rebuilding
+                    break;
+                case REMOVED:
+                    texturesTab.deleteCards(card -> change.getMap().get(keyConstructor.apply(card.getInternalName())) != null);
+                    break;
+                case MODIFIED:
+                    texturesTab.refreshCards(card -> change.getMap().get(keyConstructor.apply(card.getInternalName())));
+                    break;
+            }
+        };
+    }
+
+    private static <V> Observer<MappedChange<String, V>> getMappedChangeObserver(
+        TabsHelper tabsHelper, String tabName, Class<V> dataClass)
+    {
+        return getMappedChangeObserver(tabsHelper, tabName, dataClass, Function.identity());
     }
 
     public final boolean isLoaded()
@@ -228,6 +263,31 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 //
 //            // Flush to prevent timeout
 //            context.flush();
+
+            ViewSet viewSet = getViewSet();
+
+            // Wait to refresh the tabs manager until we're about to actually initialize the new instance.
+            TabsHelper tabsHelper = new TabsHelper(resources);
+            tabsHelper.rebuildTabs();
+
+            // Register observer for changes in each tab
+            viewSet.viewsChangedListeners().register(
+                getMappedChangeObserver(tabsHelper, TabsHelper.PHOTOS, View.class, File::new));
+            resources.basisListeners().register(
+                getMappedChangeObserver(tabsHelper, TabsHelper.MATERIALS, BasisMaterialInfo.class));
+            resources.texturesListeners().register(
+                getMappedChangeObserver(tabsHelper, TabsHelper.TEXTURES, TextureInfo.class));
+            // Currently the shaders tab is not expected to have changes other than when textures are processed,
+            // which is handled separately via an event listener.
+
+            resources.texturesReplacedListeners().register(
+                event ->
+            {
+                // Reload shaders in case preprocessor constants (i.e. number of basis functions) have changed
+                reloadShaders();
+
+                new TabsHelper(resources).refreshAllTabs();
+            });
         }
         catch (UserCancellationException e)
         {
@@ -461,6 +521,13 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
                     projectLoaded.notify(new ProjectLoadedEvent(getGeometry().getBoundingBoxSize()));
 
+                    // Zero vector signals that the light requires calibration.
+                    // TODO support multiple light sources.
+                    if (Vector3.ZERO.equals(getViewSet().getLightIntensity(0)))
+                    {
+                        resources.getViewSet().setAllLightIntensities(resources.determineGlobalLightIntensity());
+                    }
+
                     if (progressMonitor != null)
                     {
                         progressMonitor.complete();
@@ -473,7 +540,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
             if (logErrors)
             {
                 LOG.error("Error during draw call", e);
-                logErrors = false; // Prevent excessive errors
+                logErrors = false; // Suppress recurring errors
             }
         }
         catch (Error e)
@@ -544,8 +611,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         }
     }
 
-    @Override
-    public final void setProgressMonitor(ProgressMonitor progressMonitor)
+    final void setProgressMonitor(ProgressMonitor progressMonitor)
     {
         this.progressMonitor = progressMonitor;
     }

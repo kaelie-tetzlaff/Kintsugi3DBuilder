@@ -15,7 +15,7 @@
 
 package kintsugi3d.builder.fit;
 
-import kintsugi3d.builder.resources.project.ShaderProgramFactory;
+import kintsugi3d.gl.interactive.ShaderProgramFactory;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureSet;
 import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.core.Context;

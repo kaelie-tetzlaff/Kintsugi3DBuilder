@@ -41,5 +41,4 @@ public class NamedTextureReplacer extends ImageReplacer
     {
         getResources().replaceTextureWithSpecificFile(texture, getNewImage());
     }
-
 }

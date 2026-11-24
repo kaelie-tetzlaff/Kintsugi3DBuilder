@@ -16,10 +16,7 @@
 package kintsugi3d.builder.rendering;
 
 import kintsugi3d.builder.core.Global;
-import kintsugi3d.builder.core.texture.TextureInfo;
-import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
-import kintsugi3d.builder.fit.decomposition.BasisMaterialInfo;
 import kintsugi3d.builder.fit.settings.ExportSettings;
 import kintsugi3d.builder.io.IOHandler;
 import kintsugi3d.builder.io.ReadonlyLoadOptionsModel;
@@ -37,8 +34,6 @@ import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace.Builder;
 import kintsugi3d.builder.resources.project.MeshImportException;
 import kintsugi3d.builder.resources.project.MissingImagesException;
 import kintsugi3d.builder.state.SelectableViewListModel;
-import kintsugi3d.builder.state.cards.CardsModel;
-import kintsugi3d.builder.state.cards.TabsManager;
 import kintsugi3d.builder.state.scene.ReadonlyCameraModel;
 import kintsugi3d.builder.state.scene.ReadonlyLightingEnvironmentModel;
 import kintsugi3d.builder.state.scene.ReadonlyObjectPoseModel;
@@ -48,8 +43,6 @@ import kintsugi3d.builder.state.shader.ReadonlyActiveShaderModel;
 import kintsugi3d.builder.state.shader.ShaderInfo;
 import kintsugi3d.builder.util.events.EventDispatcher;
 import kintsugi3d.builder.util.events.EventListeners;
-import kintsugi3d.builder.util.events.MappedChange;
-import kintsugi3d.builder.util.events.Observer;
 import kintsugi3d.gl.builders.framebuffer.DoubleFramebufferFactory;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.geometry.VertexGeometry;
@@ -68,10 +61,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class ImageBasedRenderableManager<ContextType extends Context<ContextType>>
-    extends InteractiveRenderableBase<ContextType> implements IOHandler, RenderableManager<ContextType>
+    extends InteractiveRenderableBase<ContextType>
+    implements IOHandler, RenderableManager<ContextType, ImageBasedRenderable<ContextType>>
 {
     private static final Logger LOG = LoggerFactory.getLogger(ImageBasedRenderableManager.class);
 
@@ -87,7 +80,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
 
     private volatile ViewSet loadedViewSet;
     private volatile VertexGeometry loadedGeometry;
-    private volatile ImageBasedRenderable<ContextType> renderableInstance;
+    private volatile ImageBasedRenderingEngine<ContextType> renderableInstance;
     private ProgressMonitor progressMonitor;
 
     private ReadonlyObjectPoseModel objectModel;
@@ -97,7 +90,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     private SelectableViewListModel viewListModel;
 
     // These are one-shot callbacks for queuing up graphics requests before a project is loaded
-    private final List<Consumer<ImageBasedRenderable<?>>> instanceLoadCallbacks
+    private final List<Consumer<InteractiveRenderable<? extends Context<?>>>> instanceLoadCallbacks
         = Collections.synchronizedList(new ArrayList<>(4));
 
     // These are the ongoing listeners for UI synchronization
@@ -168,7 +161,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
      * @param callback to add
      */
     @Override
-    public final void addMainRenderableLoadCallback(Consumer<ImageBasedRenderable<?>> callback)
+    public final void addMainRenderableLoadCallback(Consumer<InteractiveRenderable<? extends Context<?>>> callback)
     {
         synchronized (instanceLoadCallbacks)
         {
@@ -243,7 +236,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
 
         // Create the instance (will be initialized on the graphics thread)
-        ImageBasedRenderable<ContextType> newInstance = new ImageBasedRenderingEngine<>(internalName, context, builder);
+        ImageBasedRenderingEngine<ContextType> newInstance = new ImageBasedRenderingEngine<>(internalName, context, builder);
         newInstance.setOwningApp(getOwningApp());
 
         SceneModel newInstanceSceneModel = newInstance.getSceneModel();
@@ -260,22 +253,6 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
             {
                 newInstance.initialize();
 
-                // Wait to refresh the tabs manager until we're about to actually initialize the new instance.
-                TabsManager tabsManager = new TabsManager(newInstance);
-                tabsManager.rebuildTabs();
-
-                GraphicsResourcesImageSpace<ContextType> resources = newInstance.getResources();
-
-                // Register observer for changes in each tab
-                loadedViewSet.viewsChangedListeners().register(
-                    getMappedChangeObserver(tabsManager, TabsManager.PHOTOS, View.class, File::new));
-                resources.basisListeners().register(
-                    getMappedChangeObserver(tabsManager, TabsManager.MATERIALS, BasisMaterialInfo.class));
-                resources.texturesListeners().register(
-                    getMappedChangeObserver(tabsManager, TabsManager.TEXTURES, TextureInfo.class));
-                // Currently the shaders tab is not expected to have changes other than when textures are processed,
-                // which is handled separately via an event listener.
-
                 // Check for an old instance just to be safe
                 if (renderableInstance != null)
                 {
@@ -288,7 +265,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                 synchronized (instanceLoadCallbacks)
                 {
                     // Invoke callbacks
-                    for (Consumer<ImageBasedRenderable<?>> callback : instanceLoadCallbacks)
+                    for (Consumer<InteractiveRenderable<? extends Context<?>>> callback : instanceLoadCallbacks)
                     {
                         callback.accept(renderableInstance);
                     }
@@ -300,6 +277,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                 // Notify listeners that project has loaded
                 projectLoaded.notify(new ProjectLoadedEvent(loadedGeometry.getBoundingBoxSize()));
 
+                GraphicsResourcesImageSpace<ContextType> resources = newInstance.getResources();
                 if (resources.hasProcessedWeightMaps())
                 {
                     // Project has been processed previously; notify listeners
@@ -337,34 +315,6 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                 newInstance.close();
             }
         });
-    }
-
-    private static <K, V> Observer<MappedChange<K, V>> getMappedChangeObserver(
-        TabsManager tabsManager, String tabName, Class<V> dataClass, Function<String, K> keyConstructor)
-    {
-        return change ->
-        {
-            CardsModel<V> texturesTab = Global.state().getTabModels().getTab(tabName, dataClass);
-
-            switch (change.getType())
-            {
-                case ADDED:
-                    tabsManager.refreshTab(tabName); // TODO implement support for adding individual card without rebuilding
-                    break;
-                case REMOVED:
-                    texturesTab.deleteCards(card -> change.getMap().get(keyConstructor.apply(card.getInternalName())) != null);
-                    break;
-                case MODIFIED:
-                    texturesTab.refreshCards(card -> change.getMap().get(keyConstructor.apply(card.getInternalName())));
-                    break;
-            }
-        };
-    }
-
-    private static <V> Observer<MappedChange<String, V>> getMappedChangeObserver(
-        TabsManager tabsManager, String tabName, Class<V> dataClass)
-    {
-        return getMappedChangeObserver(tabsManager, tabName, dataClass, Function.identity());
     }
 
     /**

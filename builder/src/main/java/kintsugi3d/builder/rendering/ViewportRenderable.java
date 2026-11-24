@@ -16,9 +16,9 @@
 package kintsugi3d.builder.rendering;
 
 import kintsugi3d.gl.core.Context;
-import kintsugi3d.gl.interactive.InteractiveRenderable;
+import kintsugi3d.gl.interactive.ReadonlyShaderBasedRenderable;
 
-public interface ViewportRenderable<ContextType extends Context<ContextType>> extends InteractiveRenderable<ContextType>
+public interface ViewportRenderable<ContextType extends Context<ContextType>> extends ReadonlyShaderBasedRenderable<ContextType>
 {
     /**
      * Gets pixel-by-pixel information about what is currently being displayed on screen.

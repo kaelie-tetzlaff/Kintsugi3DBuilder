@@ -15,6 +15,7 @@
 
 package kintsugi3d.builder.resources.project;
 
+import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.texture.TextureInfo;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
@@ -25,8 +26,11 @@ import kintsugi3d.builder.io.TextureLoadOptions;
 import kintsugi3d.builder.io.events.ProjectProcessedEvent;
 import kintsugi3d.builder.io.events.ProjectProcessedListener;
 import kintsugi3d.builder.rendering.Rendering;
+import kintsugi3d.builder.resources.project.events.TexturesReplacedEvent;
+import kintsugi3d.builder.resources.project.events.TexturesReplacedListener;
 import kintsugi3d.builder.resources.project.texture.ImportedMaterialResourcesWrapper;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
+import kintsugi3d.builder.util.Kintsugi3DViewerLauncher;
 import kintsugi3d.builder.util.events.*;
 import kintsugi3d.builder.util.events.Observable;
 import kintsugi3d.builder.util.events.Observer;
@@ -47,6 +51,7 @@ import kintsugi3d.gl.vecmath.Vector3;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -104,6 +109,9 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
     private final EventDispatcher<ProjectProcessedListener, ProjectProcessedEvent> projectProcessed
         = new EventDispatcher<>(ProjectProcessedListener::onProjectProcessed);
+
+    private final EventDispatcher<TexturesReplacedListener, TexturesReplacedEvent> texturesReplaced
+        = new EventDispatcher<>(TexturesReplacedListener::onTexturesReplaced);
 
     private final Observable<MappedChange<String, BasisMaterialInfo>> basisObservable = new SimpleObservable<>();
     private final Observable<MappedChange<String, TextureInfo>> texturesObservable = new SimpleObservable<>();
@@ -541,19 +549,52 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         return projectProcessed;
     }
 
+    public EventListeners<TexturesReplacedListener> texturesReplacedListeners()
+    {
+        return texturesReplaced;
+    }
+
     public void replaceTextureResources(TextureResources<ContextType> newTextureResources)
     {
         textureResources.close();
         textureResources = newTextureResources == null ? TextureResources.makeNull(context) : newTextureResources;
 
-        if (hasProcessedWeightMaps())
-        {
-            IntVector2 processedTextureResolution = getProcessedWeightMapResolution();
-            projectProcessed.notify( new ProjectProcessedEvent(processedTextureResolution.x, processedTextureResolution.y));
-        }
-
         textureResources.setBasisObservable(basisObservable);
         textureResources.setTexturesObservable(texturesObservable);
+
+        // Save project to avoid inconsistencies.
+        try
+        {
+            Global.io().saveProject(() ->
+            {
+                if (hasProcessedWeightMaps())
+                {
+                    IntVector2 processedTextureResolution = getProcessedWeightMapResolution();
+                    projectProcessed.notify( new ProjectProcessedEvent(processedTextureResolution.x, processedTextureResolution.y));
+
+                    // Perform reconstruction
+                    //performReconstruction(renderable.getGraphicsResources(), renderable.getGraphicsResources().getSpecularMaterialResources());
+
+                    if (viewSet.getProjectSettings().getBoolean("openViewerOnProcessingComplete"))
+                    {
+                        try
+                        {
+                            Kintsugi3DViewerLauncher.launchViewer(new File(viewSet.getSupportingFilesDirectory(), "model.glb"));
+                        }
+                        catch (IOException | RuntimeException e)
+                        {
+                            Global.state().getProjectModel().error("Error launching Kintsugi 3D Viewer", e);
+                        }
+                    }
+                }
+
+                texturesReplaced.notify(new TexturesReplacedEvent(newTextureResources));
+            });
+        }
+        catch (IOException e)
+        {
+            LOG.error("Error saving project after replacing textures.", e);
+        }
     }
 
     /**

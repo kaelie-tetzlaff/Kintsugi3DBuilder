@@ -15,14 +15,11 @@
 
 package kintsugi3d.builder.rendering;
 
+import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.gl.core.Context;
-import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 
-/**
- * An interface for an executable that requires a loaded model instance and can be observed by a loading monitor
- */
-public interface ProgressMonitoredImageBasedGraphicsRequest extends ImageBasedGraphicsRequest
+public interface TextureReplacementGraphicsRequest
 {
     /**
      * The entry point for the executable.
@@ -34,12 +31,6 @@ public interface ProgressMonitoredImageBasedGraphicsRequest extends ImageBasedGr
      * @param <ContextType> The type of the graphics context that the renderer implementation uses.
      * @throws Exception An exception may be thrown by the executable that will be caught and logged by Kintsugi 3D Builder.
      */
-    <ContextType extends Context<ContextType>> void executeRequest(ImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor) throws Exception;
-
-    @Override
-    default <ContextType extends Context<ContextType>> void executeRequest(ImageBasedRenderable<ContextType> instance) throws Exception
-    {
-        // Use a default ProgressMonitor that does nothing but doesn't cause null pointer exceptions
-        executeRequest(instance, new DefaultProgressMonitor());
-    }
+    <ContextType extends Context<ContextType>>
+    TextureResources<ContextType> executeRequest(ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor) throws Exception;
 }

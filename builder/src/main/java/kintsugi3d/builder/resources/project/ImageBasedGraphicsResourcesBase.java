@@ -21,6 +21,7 @@ import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.fit.decomposition.BasisMaterialInfo;
 import kintsugi3d.builder.io.ReadonlyLoadOptionsModel;
 import kintsugi3d.builder.io.events.ProjectProcessedListener;
+import kintsugi3d.builder.resources.project.events.TexturesReplacedListener;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.builder.util.events.EventListeners;
 import kintsugi3d.builder.util.events.MappedChange;
@@ -140,6 +141,12 @@ abstract class ImageBasedGraphicsResourcesBase<ContextType extends Context<Conte
     public final EventListeners<ProjectProcessedListener> weightMapsProcessedListeners()
     {
         return commonResources.weightMapsProcessedListeners();
+    }
+
+    @Override
+    public final EventListeners<TexturesReplacedListener> texturesReplacedListeners()
+    {
+        return commonResources.texturesReplacedListeners();
     }
 
     @Override

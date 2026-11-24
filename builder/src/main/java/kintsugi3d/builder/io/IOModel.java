@@ -25,7 +25,6 @@ import kintsugi3d.builder.io.XMLHelper.ErrorsAsWarningsLogger;
 import kintsugi3d.builder.io.events.*;
 import kintsugi3d.builder.io.metashape.MetashapeModel;
 import kintsugi3d.builder.io.metashape.MetashapeTextures;
-import kintsugi3d.builder.rendering.ImageBasedRenderable;
 import kintsugi3d.builder.rendering.ReadonlyImageBasedRenderable;
 import kintsugi3d.builder.rendering.Rendering;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
@@ -34,11 +33,11 @@ import kintsugi3d.builder.util.ApplicationFolders;
 import kintsugi3d.builder.util.UnzipHelper;
 import kintsugi3d.builder.util.events.EventDispatcher;
 import kintsugi3d.builder.util.events.EventListeners;
+import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
-import kintsugi3d.gl.geometry.VertexGeometry;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
-import kintsugi3d.gl.material.ImportedMaterial;
+import kintsugi3d.gl.material.ReadonlyImportedMaterial;
 import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.util.EncodableColorImage;
 import org.slf4j.Logger;
@@ -157,7 +156,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public final ImageBasedRenderable<?> getRenderableForShader(ShaderInfo shader)
+    public final ReadonlyImageBasedRenderable<? extends Context<?>> getRenderableForShader(ShaderInfo shader)
     {
         return handler.getRenderableForShader(shader);
     }
@@ -738,11 +737,11 @@ public class IOModel implements IO
             }
             else
             {
-                VertexGeometry geometry = handler.getLoadedGeometry();
+                ReadonlyVertexGeometry geometry = handler.getLoadedGeometry();
 
                 if (geometry != null)
                 {
-                    ImportedMaterial material = geometry.getMaterial();
+                    ReadonlyImportedMaterial material = geometry.getMaterial();
 
                     if (material != null)
                     {

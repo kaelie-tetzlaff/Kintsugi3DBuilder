@@ -16,20 +16,20 @@
 package kintsugi3d.builder.fit;
 
 import kintsugi3d.builder.fit.settings.ReadonlyBasisSettings;
-import kintsugi3d.builder.resources.project.ReadonlyGraphicsResources;
+import kintsugi3d.gl.interactive.ShaderResources;
 import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.core.Context;
-import kintsugi3d.gl.core.Drawable;
+import kintsugi3d.gl.core.DrawableResource;
 import kintsugi3d.gl.core.Program;
 import kintsugi3d.gl.geometry.ReadonlyGeometryResources;
 
-final class SpecularFitResources<ContextType extends Context<ContextType>> implements ReadonlyGraphicsResources<ContextType>
+final class SpecularFitResources<ContextType extends Context<ContextType>> implements ShaderResources<ContextType>
 {
-    private final ReadonlyGraphicsResources<ContextType> base;
+    private final ShaderResources<ContextType> base;
     private final ReadonlyBasisSettings basisSettings;
     private final boolean smithMaskingShadowing;
 
-    SpecularFitResources(ReadonlyGraphicsResources<ContextType> base, boolean smithMaskingShadowing, ReadonlyBasisSettings basisSettings)
+    SpecularFitResources(ShaderResources<ContextType> base, boolean smithMaskingShadowing, ReadonlyBasisSettings basisSettings)
     {
         this.base = base;
         this.basisSettings = basisSettings;
@@ -80,7 +80,7 @@ final class SpecularFitResources<ContextType extends Context<ContextType>> imple
     }
 
     @Override
-    public Drawable<ContextType> createDrawable(Program<ContextType> program)
+    public DrawableResource<ContextType> createDrawable(Program<ContextType> program)
     {
         return base.createDrawable(program);
     }

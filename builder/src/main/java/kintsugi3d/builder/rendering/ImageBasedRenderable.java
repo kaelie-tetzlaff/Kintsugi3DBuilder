@@ -20,11 +20,8 @@ import kintsugi3d.builder.fit.settings.ExportSettings;
 import kintsugi3d.builder.resources.DynamicResourceManager;
 import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace;
 import kintsugi3d.gl.core.Context;
-import kintsugi3d.gl.core.Framebuffer;
-import kintsugi3d.gl.core.FramebufferSize;
 import kintsugi3d.gl.interactive.InteractiveRenderableResource;
-import kintsugi3d.gl.interactive.ProgressMonitor;
-import kintsugi3d.gl.vecmath.Matrix4;
+import kintsugi3d.gl.interactive.ShaderBasedRenderable;
 
 import java.io.File;
 
@@ -33,38 +30,13 @@ import java.io.File;
  * @param <ContextType> The type of the graphics context that this implementation uses.
  */
 public interface ImageBasedRenderable<ContextType extends Context<ContextType>>
-    extends InteractiveRenderableResource<ContextType>, ReadonlyImageBasedRenderable<ContextType>
+    extends InteractiveRenderableResource<ContextType>, ReadonlyImageBasedRenderable<ContextType>, ShaderBasedRenderable<ContextType>
 {
-    @Override
-    default void draw(Framebuffer<ContextType> framebuffer, Matrix4 modelViewOverride, Matrix4 projectionOverride)
-    {
-        FramebufferSize framebufferSize = framebuffer.getSize();
-        draw(framebuffer, modelViewOverride, projectionOverride, framebufferSize.width , framebufferSize.height);
-    }
-
-    @Override
-    default void draw(Framebuffer<ContextType> framebuffer)
-    {
-        draw(framebuffer, null, null);
-    }
-
-    /**
-     * Sets the loading monitor for this implementation.
-     * The implementation may use this as a callback to update a loading bar as the object is being loaded.
-     * @param progressMonitor
-     */
-    void setProgressMonitor(ProgressMonitor progressMonitor);
-
     @Override
     ViewSet getViewSet();
 
     @Override
     SceneModel getSceneModel();
-
-    /**
-     * Reloads all of the shaders.
-     */
-    void reloadShaders();
 
     @Override
     GraphicsResourcesImageSpace<ContextType> getResources();
@@ -86,5 +58,4 @@ public interface ImageBasedRenderable<ContextType extends Context<ContextType>>
     {
         saveGLTF(outputDirectory, filename, settings, null);
     }
-
 }

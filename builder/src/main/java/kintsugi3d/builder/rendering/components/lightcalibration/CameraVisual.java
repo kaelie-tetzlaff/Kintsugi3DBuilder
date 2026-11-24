@@ -21,7 +21,7 @@ import kintsugi3d.builder.rendering.SceneViewportModel;
 import kintsugi3d.builder.rendering.components.ShaderComponent;
 import kintsugi3d.builder.rendering.components.snap.ViewSelection;
 import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace;
-import kintsugi3d.builder.resources.project.ShaderProgramFactory;
+import kintsugi3d.gl.interactive.ShaderProgramFactory;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;

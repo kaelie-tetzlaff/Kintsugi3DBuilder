@@ -16,6 +16,7 @@
 package kintsugi3d.builder.rendering;
 
 import kintsugi3d.gl.core.Context;
+import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import org.slf4j.Logger;
@@ -37,7 +38,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     private final ContextType context;
     private final Queue<Runnable> requestList;
     private final Collection<Runnable> requestAddedListeners = new CopyOnWriteArrayList<>();
-    private volatile RenderableManager<ContextType> renderableManager;
+    private volatile RenderableManager<ContextType, ImageBasedRenderable<ContextType>> renderableManager;
     private volatile ProgressMonitor progressMonitor;
 
     public GraphicsRequestManager(ContextType context)
@@ -50,7 +51,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
      * Should be called once by Rendering.
      * @param renderableManager
      */
-    final void setRenderableManager(RenderableManager<ContextType> renderableManager)
+    final void setRenderableManager(RenderableManager<ContextType, ImageBasedRenderable<ContextType>> renderableManager)
     {
         this.renderableManager = renderableManager;
     }
@@ -152,7 +153,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
                         //noinspection ErrorNotRethrown
                         try
                         {
-                            request.executeRequest(renderableManager.getMainRenderable());
+                            request.executeRequest(renderableManager.getMainRenderable(), new DefaultProgressMonitor());
                         }
                         catch (UserCancellationException e)
                         {
@@ -175,7 +176,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public final void addImageBasedGraphicsRequest(ProgressMonitoredImageBasedGraphicsRequest request)
+    public final void addImageBasedGraphicsRequest(ImageBasedGraphicsRequest request)
     {
         if (progressMonitor.isConflictingProcess())
         {
@@ -212,6 +213,126 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
                         try
                         {
                             request.executeRequest(renderableManager.getMainRenderable(), progressMonitor);
+
+                            if (progressMonitor != null)
+                            {
+                                progressMonitor.complete();
+                            }
+                        }
+                        catch (UserCancellationException e)
+                        {
+                            handleCancellation(e);
+                        }
+                        catch (Exception | AssertionError e)
+                        {
+                            handleException(e);
+                        }
+                    }
+                });
+            }
+        }
+
+        // Notify listeners
+        for (Runnable r :  requestAddedListeners)
+        {
+            r.run();
+        }
+    }
+
+    @Override
+    public final void addBackgroundTextureReplacementGraphicsRequest(TextureReplacementGraphicsRequest request)
+    {
+        if (renderableManager.getMainRenderable() == null)
+        {
+            // Instance is currently null, wait for a load and then call this function again (recursive-ish)
+            renderableManager.addMainRenderableLoadCallback(
+                instance -> addBackgroundTextureReplacementGraphicsRequest(request));
+        }
+        else
+        {
+            synchronized (requestList)
+            {
+                requestList.add(() ->
+                {
+                    // Check again for null, just in case
+                    if (renderableManager.getMainRenderable() == null)
+                    {
+                        // Instance is currently null, wait for a load and then call this function again (recursive-ish)
+                        renderableManager.addMainRenderableLoadCallback(
+                            instance -> addBackgroundTextureReplacementGraphicsRequest(request));
+                    }
+                    else
+                    {
+                        // Suppress warning about catching and not rethrowing AssertionError.
+                        // The request should effectively be regarded a "sandbox" where a critical logic error should not result in the application terminating.
+                        //noinspection ErrorNotRethrown
+                        try
+                        {
+                            renderableManager.getMainRenderable().getResources().replaceTextureResources(
+                                request.executeRequest(renderableManager.getMainRenderable(), new DefaultProgressMonitor()));
+                        }
+                        catch (UserCancellationException e)
+                        {
+                            logCancellation(e);
+                        }
+                        catch (Exception | AssertionError e)
+                        {
+                            logException(e);
+                        }
+                    }
+                });
+            }
+
+            // Notify listeners
+            for (Runnable r :  requestAddedListeners)
+            {
+                r.run();
+            }
+        }
+    }
+
+    @Override
+    public final void addTextureReplacementGraphicsRequest(TextureReplacementGraphicsRequest request)
+    {
+        if (progressMonitor.isConflictingProcess())
+        {
+            return;
+        }
+
+        if (renderableManager.getMainRenderable() == null)
+        {
+            // Instance is currently null, wait for a load and then call this function again (recursive-ish)
+            renderableManager.addMainRenderableLoadCallback(
+                instance -> addTextureReplacementGraphicsRequest(request));
+        }
+        else
+        {
+            synchronized (requestList)
+            {
+                requestList.add(() ->
+                {
+                    if (progressMonitor != null)
+                    {
+                        progressMonitor.start();
+                    }
+
+                    // Check again for null, just in case
+                    if (renderableManager.getMainRenderable() == null)
+                    {
+                        // Instance is currently null, wait for a load and then call this function again (recursive-ish)
+                        renderableManager.addMainRenderableLoadCallback(
+                            instance -> addTextureReplacementGraphicsRequest(request));
+                    }
+                    else
+                    {
+                        // Suppress warning about catching and not rethrowing AssertionError.
+                        // The request should effectively be regarded a "sandbox" where a critical logic error should not result in the application terminating.
+                        //noinspection ErrorNotRethrown
+                        try
+                        {
+
+                            renderableManager.getMainRenderable().getResources().replaceTextureResources(
+                                request.executeRequest(renderableManager.getMainRenderable(), progressMonitor));
 
                             if (progressMonitor != null)
                             {

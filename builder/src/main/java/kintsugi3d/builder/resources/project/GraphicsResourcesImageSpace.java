@@ -708,7 +708,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
     }
 
     @Override
-    public Drawable<ContextType> createDrawable(Program<ContextType> program)
+    public DrawableResource<ContextType> createDrawable(Program<ContextType> program)
     {
         return getGeometryResources().createDrawable(program);
     }

@@ -15,10 +15,11 @@
 
 package kintsugi3d.builder.state.cards;
 
-import kintsugi3d.builder.rendering.ImageBasedRenderable;
+import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
 import kintsugi3d.builder.state.shader.ShaderInfo;
 import kintsugi3d.builder.state.shader.SimpleShaderInfo;
 import kintsugi3d.builder.util.AppIcon;
+import kintsugi3d.gl.core.Context;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,11 +36,11 @@ public class ShaderCardFactory extends ProjectDataCardFactoryBase<ShaderInfo>
     /**
      * ShaderCardFactory is the constructor for this class takes a RenderableInstance and
      * assigns it to private variable in class
-     * @param instance
+     * @param resources
      */
-    public ShaderCardFactory(ImageBasedRenderable<?> instance)
+    public ShaderCardFactory(ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
-        super(instance);
+        super(resources);
     }
 
     @Override
@@ -89,7 +90,7 @@ public class ShaderCardFactory extends ProjectDataCardFactoryBase<ShaderInfo>
         shaderDataCards.add(createCard("Textured Lambertian", "rendermodes/texturedLambertian.frag"));
 
         //if model is not processed these shaders are not shown
-       if (getInstance().getResources().hasProcessedWeightMaps())
+       if (getResources().hasProcessedWeightMaps())
        {
             shaderDataCards.add(createCard("Material (metallicity)", "rendermodes/texturedORMMaterial.frag"));
             shaderDataCards.add(createCard("Material (reflectivity)", "rendermodes/texturedMaterial.frag"));
@@ -99,7 +100,7 @@ public class ShaderCardFactory extends ProjectDataCardFactoryBase<ShaderInfo>
         shaderDataCards.add(createCard("Image-based", "rendermodes/ibrUntextured.frag"));
 
         //if model is not processed these shaders are not shown
-        if (getInstance().getResources().hasProcessedWeightMaps())
+        if (getResources().hasProcessedWeightMaps())
         {
             shaderDataCards.add(createCard("Image-based with textures", "rendermodes/ibrTextured.frag"));
             shaderDataCards.add(createCard("Weight maps (combined)", "rendermodes/weightmaps/weightmapCombination.frag"));

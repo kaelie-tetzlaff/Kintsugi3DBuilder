@@ -18,7 +18,7 @@ package kintsugi3d.builder.fit.normal;
 import kintsugi3d.builder.core.texture.StandardTexture;
 import kintsugi3d.builder.core.texture.TextureResolution;
 import kintsugi3d.builder.fit.settings.ReadonlyNormalOptimizationSettings;
-import kintsugi3d.builder.resources.project.ShaderProgramFactory;
+import kintsugi3d.gl.interactive.ShaderProgramFactory;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.builders.framebuffer.ColorAttachmentSpec;
@@ -43,7 +43,7 @@ public class NormalOptimization<ContextType extends Context<ContextType>> implem
 
     public NormalOptimization(
         ShaderProgramFactory<ContextType> programFactory,
-        Function<Program<ContextType>, Drawable<ContextType>> drawableFactory,
+        Function<Program<ContextType>, DrawableResource<ContextType>> drawableFactory,
         TextureResolution textureResolution, ReadonlyNormalOptimizationSettings normalOptimizationSettings)
         throws IOException
     {

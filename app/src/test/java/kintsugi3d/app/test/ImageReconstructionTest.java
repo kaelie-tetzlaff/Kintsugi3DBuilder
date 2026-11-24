@@ -37,6 +37,7 @@ import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.geometry.VertexGeometry;
 import kintsugi3d.gl.interactive.ProgressMonitor;
+import kintsugi3d.gl.interactive.ShaderProgramFactory;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.opengl.OpenGLContext;
 import kintsugi3d.gl.opengl.OpenGLContextFactory;
@@ -234,7 +235,7 @@ class ImageReconstructionTest
 
         try (GraphicsResourcesAnalytic<OpenGLContext> resources = new GraphicsResourcesAnalytic<>(context, viewSet, potatoGeometry);
             ProgramObject<OpenGLContext> groundTruthProgram = groundTruthProgramCreator.apply(programFactory.wrap(resources));
-            Drawable<OpenGLContext> groundTruthDrawable = resources.createDrawable(groundTruthProgram))
+            DrawableResource<OpenGLContext> groundTruthDrawable = resources.createDrawable(groundTruthProgram))
         {
             groundTruthProgram.setUniform("noiseScale", 0.0f);
             resources.setupShaderProgram(groundTruthProgram);
@@ -889,7 +890,7 @@ class ImageReconstructionTest
                 new SpecularFitResourcesWrapper<OpenGLContext>(true, basisSettings).wrap(resources);
             try (
                 ProgramObject<OpenGLContext> groundTruthProgram = groundTruthProgramCreator.apply(programFactory);
-                Drawable<OpenGLContext> groundTruthDrawable = resources.createDrawable(groundTruthProgram))
+                DrawableResource<OpenGLContext> groundTruthDrawable = resources.createDrawable(groundTruthProgram))
             {
                 groundTruthProgram.setUniform("noiseScale", 0.0f);
                 resources.setupShaderProgram(groundTruthProgram);
@@ -910,7 +911,7 @@ class ImageReconstructionTest
                          resources,
                          view -> renderGroundTruth(view, groundTruthDrawable, groundTruthFBO));
                      ProgramObject<OpenGLContext> syntheticWithNoise = testProgramCreator.apply(programFactory);
-                     Drawable<OpenGLContext> drawable = resources.createDrawable(syntheticWithNoise))
+                     DrawableResource<OpenGLContext> drawable = resources.createDrawable(syntheticWithNoise))
                 {
                     resources.setupShaderProgram(syntheticWithNoise);
 
@@ -942,7 +943,7 @@ class ImageReconstructionTest
     }
 
     private static ColorArrayImage renderGroundTruth(
-        View view, Drawable<OpenGLContext> groundTruthDrawable, ReadableFramebuffer<OpenGLContext> groundTruthFBO)
+        View view, DrawableResource<OpenGLContext> groundTruthDrawable, ReadableFramebuffer<OpenGLContext> groundTruthFBO)
     {
         groundTruthDrawable.program().setUniform("model_view", view.getCameraPose());
         groundTruthDrawable.program().setUniform("projection", view.getProjectionMatrix());

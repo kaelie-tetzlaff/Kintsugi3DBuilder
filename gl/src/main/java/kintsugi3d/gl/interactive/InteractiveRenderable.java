@@ -16,10 +16,10 @@
 package kintsugi3d.gl.interactive;
 
 import kintsugi3d.gl.core.Context;
-import kintsugi3d.gl.core.Framebuffer;
+import kintsugi3d.gl.core.Drawable;
 import kintsugi3d.gl.core.ManagedResource;
 
-public interface InteractiveRenderable<ContextType extends Context<ContextType>> extends ManagedResource
+public interface InteractiveRenderable<ContextType extends Context<ContextType>> extends ManagedResource, Drawable<ContextType>
 {
     /**
      * Gets the application managing this renderable.
@@ -35,12 +35,4 @@ public interface InteractiveRenderable<ContextType extends Context<ContextType>>
      * This method may also be called without subsequently calling draw() to allow its internal state to be updated only.
      */
     void update();
-
-    /**
-     * Interpret the internal state and draw this object.  Called every time the associated
-     * InteractiveApplication object refreshes and immediately after update is called.
-     * The associated context will be made current first.  Generally, the object should be
-     * immutable (no internal state should change) while executing this method.
-     */
-    void draw(Framebuffer<ContextType> framebuffer);
 }

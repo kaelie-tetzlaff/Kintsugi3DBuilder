@@ -35,7 +35,7 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
     private Map<String, VertexBuffer<ContextType>> vertexBuffers;
     private final Collection<ManagedResource> otherManagedResources = new ArrayList<>(8);
     private ProgramObject<ContextType> program;
-    private Drawable<ContextType> drawable;
+    private DrawableResource<ContextType> drawable;
 
     private final SceneViewportModel sceneViewportModel;
 
@@ -162,7 +162,7 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
         return context;
     }
 
-    public final Drawable<ContextType> getDrawable()
+    public final DrawableResource<ContextType> getDrawable()
     {
         return drawable;
     }
@@ -190,7 +190,7 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
      * Override to customize drawable creation.
      */
     @SuppressWarnings("DesignForExtension")
-    protected @NotNull Drawable<ContextType> createDrawable(Program<ContextType> drawableProgram)
+    protected @NotNull DrawableResource<ContextType> createDrawable(Program<ContextType> drawableProgram)
     {
         return context.createDrawable(drawableProgram);
     }

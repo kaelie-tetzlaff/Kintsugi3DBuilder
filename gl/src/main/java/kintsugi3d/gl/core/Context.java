@@ -154,7 +154,7 @@ public interface Context<ContextType extends Context<ContextType>> extends Manag
      * @param program The shader program to use with the drawable object.
      * @return The newly created drawable object.
      */
-    Drawable<ContextType> createDrawable(Program<ContextType> program);
+    DrawableResource<ContextType> createDrawable(Program<ContextType> program);
 
     /**
      * Gets an factory object for the purpose of creating texture resources on the GPU.

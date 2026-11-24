@@ -29,7 +29,7 @@ public class BasisImageCreator<ContextType extends Context<ContextType>> impleme
     private final VertexBuffer<ContextType> rect;
 
     // Drawable with program and rectangle vertex buffer
-    private final Drawable<ContextType> drawable;
+    private final DrawableResource<ContextType> drawable;
 
     // Framebuffer for the basis images
     private final FramebufferObject<ContextType> framebuffer;

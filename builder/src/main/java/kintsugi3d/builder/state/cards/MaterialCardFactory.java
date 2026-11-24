@@ -20,8 +20,8 @@ import kintsugi3d.builder.fit.decomposition.BasisImageCreator;
 import kintsugi3d.builder.fit.decomposition.BasisMaterialInfo;
 import kintsugi3d.builder.fit.decomposition.ReadonlyBasisResources;
 import kintsugi3d.builder.fit.decomposition.VisualizationShaders;
-import kintsugi3d.builder.rendering.ImageBasedRenderable;
 import kintsugi3d.builder.rendering.Rendering;
+import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.builder.state.shader.ShaderInfo;
 import kintsugi3d.builder.state.shader.WeightmapOverlayShaderInfo;
@@ -39,9 +39,9 @@ import java.util.stream.Collectors;
 
 public class MaterialCardFactory extends ProjectDataCardFactoryBase<BasisMaterialInfo>
 {
-    public MaterialCardFactory(ImageBasedRenderable<?> instance)
+    public MaterialCardFactory(ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
-        super(instance);
+        super(resources);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class MaterialCardFactory extends ProjectDataCardFactoryBase<BasisMateria
                 // needs to run on graphics thread to replace GPU resources
                 Rendering.runLater(() ->
                 {
-                    TextureResources<?> resources = getInstance().getResources().getTextureResources();
+                    TextureResources<?> resources = getResources().getTextureResources();
                     ReadonlyBasisResources<?> basisResources = resources.getBasisResources();
                     if (basisResources != null)
                     {
@@ -67,7 +67,7 @@ public class MaterialCardFactory extends ProjectDataCardFactoryBase<BasisMateria
                 // needs to run on graphics thread to replace GPU resources
                 Rendering.runLater(() ->
                 {
-                    TextureResources<?> resources = getInstance().getResources().getTextureResources();
+                    TextureResources<?> resources = getResources().getTextureResources();
                     ReadonlyBasisResources<?> basisResources = resources.getBasisResources();
                     if (basisResources != null)
                     {
@@ -108,7 +108,7 @@ public class MaterialCardFactory extends ProjectDataCardFactoryBase<BasisMateria
             VisualizationShaders.getForBasisMaterial(VisualizationShaders.BASIS_MATERIAL_WEIGHTED,
                 material, VisualizationShaders.FORMAT_PALETTE_MATERIAL);
 
-        TextureResources<?> resources = getInstance().getResources().getTextureResources();
+        TextureResources<?> resources = getResources().getTextureResources();
 
         return new ShaderDataCard(name, material.getFriendlyName(), shader, thumbnailPath, null, Map.of(),
             List.of(
@@ -155,8 +155,7 @@ public class MaterialCardFactory extends ProjectDataCardFactoryBase<BasisMateria
     @Override
     public final List<ProjectDataCard> createAllCards()
     {
-        ReadonlyBasisResources<? extends Context<?>> basisResources =
-            getInstance().getResources().getTextureResources().getBasisResources();
+        ReadonlyBasisResources<? extends Context<?>> basisResources = getResources().getTextureResources().getBasisResources();
         if (basisResources != null)
         {
             return basisResources.getBasis().getMaterials().stream()

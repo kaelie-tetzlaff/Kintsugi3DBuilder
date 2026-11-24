@@ -17,10 +17,12 @@ package kintsugi3d.builder.resources.project;
 
 import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.io.events.ProjectProcessedListener;
+import kintsugi3d.builder.resources.project.events.TexturesReplacedListener;
 import kintsugi3d.builder.resources.project.stream.GraphicsStreamFactory;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.builder.util.events.EventListeners;
 import kintsugi3d.gl.core.Context;
+import kintsugi3d.gl.interactive.ShaderResources;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.vecmath.IntVector2;
@@ -28,7 +30,7 @@ import kintsugi3d.gl.vecmath.IntVector2;
 import java.io.IOException;
 import java.util.List;
 
-public interface ReadonlyImageBasedGraphicsResources<ContextType extends Context<ContextType>> extends ReadonlyGraphicsResources<ContextType>
+public interface ReadonlyImageBasedGraphicsResources<ContextType extends Context<ContextType>> extends ShaderResources<ContextType>
 {
     /**
      * The view set that these resources were loaded from.
@@ -71,6 +73,7 @@ public interface ReadonlyImageBasedGraphicsResources<ContextType extends Context
      */
     IntVector2 getProcessedWeightMapResolution();
 
+    EventListeners<TexturesReplacedListener> texturesReplacedListeners();
     EventListeners<ProjectProcessedListener> weightMapsProcessedListeners();
 
     /**

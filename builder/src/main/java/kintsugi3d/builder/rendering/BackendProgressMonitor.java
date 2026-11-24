@@ -15,17 +15,16 @@
 
 package kintsugi3d.builder.rendering;
 
-import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace;
 import kintsugi3d.gl.interactive.ProgressMonitor;
+import kintsugi3d.gl.interactive.ShaderBasedRenderable;
 import kintsugi3d.gl.interactive.UserCancellationException;
-import kintsugi3d.gl.vecmath.Vector3;
 
 class BackendProgressMonitor implements ProgressMonitor
 {
-    private final ImageBasedRenderable<?> instance;
+    private final ShaderBasedRenderable<?> instance;
     private final ProgressMonitor base;
 
-    BackendProgressMonitor(ImageBasedRenderable<?> instance, ProgressMonitor base)
+    BackendProgressMonitor(ShaderBasedRenderable<?> instance, ProgressMonitor base)
     {
         this.instance = instance;
         this.base = base;
@@ -118,14 +117,6 @@ class BackendProgressMonitor implements ProgressMonitor
     @Override
     public final void complete()
     {
-        // Zero vector signals that the light requires calibration.
-        // TODO support multiple light sources.
-        if (Vector3.ZERO.equals(instance.getViewSet().getLightIntensity(0)))
-        {
-            GraphicsResourcesImageSpace<?> graphicsResourcesImageSpace = instance.getResources();
-            graphicsResourcesImageSpace.getViewSet().setAllLightIntensities(graphicsResourcesImageSpace.determineGlobalLightIntensity());
-        }
-
         instance.reloadShaders();
 
         if (base != null)

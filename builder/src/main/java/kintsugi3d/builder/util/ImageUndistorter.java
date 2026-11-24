@@ -30,7 +30,7 @@ public class ImageUndistorter<ContextType extends Context<ContextType>> implemen
     private final Context<ContextType> context;
     private final ProgramObject<ContextType> program;
     private final VertexBuffer<ContextType> rect;
-    private final Drawable<ContextType> drawable;
+    private final DrawableResource<ContextType> drawable;
 
     public ImageUndistorter(Context<ContextType> context) throws IOException
     {

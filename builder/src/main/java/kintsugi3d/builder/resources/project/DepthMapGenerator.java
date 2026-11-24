@@ -33,7 +33,7 @@ import java.io.IOException;
 public final class DepthMapGenerator<ContextType extends Context<ContextType>> implements ManagedResource
 {
     private final ProgramObject<ContextType> depthRenderingProgram;
-    private final Drawable<ContextType> depthDrawable;
+    private final DrawableResource<ContextType> depthDrawable;
     private final ReadonlyGeometryResources<ContextType> geometryResources;
 
     /**

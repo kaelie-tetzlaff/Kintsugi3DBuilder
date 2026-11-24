@@ -43,7 +43,7 @@ import kintsugi3d.builder.core.WindowSynchronization;
 import kintsugi3d.builder.io.RecentProjects;
 import kintsugi3d.builder.state.cards.ProjectDataCard;
 import kintsugi3d.builder.state.cards.ShaderDataCard;
-import kintsugi3d.builder.state.cards.TabsManager;
+import kintsugi3d.builder.state.cards.TabsHelper;
 import kintsugi3d.builder.state.shader.ShaderInfo;
 import kintsugi3d.builder.state.shader.SimpleShaderInfo;
 import kintsugi3d.builder.util.Kintsugi3DViewerLauncher;
@@ -310,13 +310,13 @@ public class MainWindowController
         javaFXState.getTabModels().getObservableTabsMap().addListener(
             (MapChangeListener<? super String, ? super ObservableCardsModel<?>>) change ->
             {
-                if (change.wasAdded() && TabsManager.MATERIALS.equals(change.getKey()))
+                if (change.wasAdded() && TabsHelper.MATERIALS.equals(change.getKey()))
                 {
                     ObservableCardsModel<?> materialCardsModel = change.getValueAdded();
                     materialCardsModel.getCardList().addListener((InvalidationListener)
                         obs -> updateMaterialShaderList(materialCardsModel.getCardList()));
                 }
-                else if (change.wasAdded() && TabsManager.TEXTURES.equals(change.getKey()))
+                else if (change.wasAdded() && TabsHelper.TEXTURES.equals(change.getKey()))
                 {
                     ObservableCardsModel<?> textureCardsModel = change.getValueAdded();
                     textureCardsModel.getCardList().addListener((InvalidationListener)

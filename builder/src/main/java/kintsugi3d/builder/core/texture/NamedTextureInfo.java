@@ -16,10 +16,11 @@
 package kintsugi3d.builder.core.texture;
 
 import kintsugi3d.builder.core.Global;
-import kintsugi3d.builder.rendering.ImageBasedRenderable;
+import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.builder.state.shader.ShaderInfo;
 import kintsugi3d.builder.state.shader.TextureVisualizationShaderInfo;
+import kintsugi3d.gl.core.Context;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,17 +44,16 @@ public class NamedTextureInfo extends TextureInfo
     }
 
     @Override
-    public final void refresh(ImageBasedRenderable<?> instance) throws IOException
+    public final void refresh(ImageBasedGraphicsResources<? extends Context<?>> resources) throws IOException
     {
         // TODO switch to observable pattern for textures?
-        TextureResources<?> resources = instance.getResources().getTextureResources();
-        resources.replaceTextureWithDefaultFile(this, instance.getViewSet().getSupportingFilesDirectory());
+        resources.getTextureResources().replaceTextureWithDefaultFile(this, resources.getViewSet().getSupportingFilesDirectory());
     }
 
     @Override
-    public final ImageReplacer getReplaceData(ImageBasedRenderable<?> instance)
+    public final ImageReplacer getReplaceData(ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
-                return new NamedTextureReplacer(instance.getResources().getTextureResources(), this,
+        return new NamedTextureReplacer(resources.getTextureResources(), this,
             new File(Global.io().getLoadedViewSetOrThrow().getSupportingFilesDirectory(),
                 TextureResources.getTextureFilename(name)));
     }

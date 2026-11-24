@@ -20,10 +20,11 @@ import kintsugi3d.builder.fit.settings.ExportSettings;
 import kintsugi3d.builder.io.events.ProjectLoadedListener;
 import kintsugi3d.builder.io.events.ProjectProcessedListener;
 import kintsugi3d.builder.io.metashape.MetashapeModel;
-import kintsugi3d.builder.rendering.ImageBasedRenderable;
+import kintsugi3d.builder.rendering.ReadonlyImageBasedRenderable;
 import kintsugi3d.builder.state.shader.ShaderInfo;
 import kintsugi3d.builder.util.events.EventListeners;
-import kintsugi3d.gl.geometry.VertexGeometry;
+import kintsugi3d.gl.core.Context;
+import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.util.EncodableColorImage;
 
@@ -34,12 +35,12 @@ import java.io.IOException;
 public interface IOHandler
 {
     ViewSet getLoadedViewSet();
-    VertexGeometry getLoadedGeometry();
+    ReadonlyVertexGeometry getLoadedGeometry();
 
 
     boolean isRenderableLoaded();
-    ImageBasedRenderable<?> getMainRenderable();
-    ImageBasedRenderable<?> getRenderableForShader(ShaderInfo shader);
+    ReadonlyImageBasedRenderable<?> getMainRenderable();
+    ReadonlyImageBasedRenderable<? extends Context<?>> getRenderableForShader(ShaderInfo shader);
 
     EventListeners<ProjectLoadedListener> projectLoadedListeners();
     EventListeners<ProjectProcessedListener> projectProcessedListeners();

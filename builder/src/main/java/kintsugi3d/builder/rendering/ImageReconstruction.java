@@ -19,7 +19,7 @@ import kintsugi3d.builder.core.metrics.ColorAppearanceRMSE;
 import kintsugi3d.builder.core.metrics.ReadonlyColorAppearanceRMSE;
 import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.core.viewset.View;
-import kintsugi3d.builder.resources.project.ReadonlyGraphicsResources;
+import kintsugi3d.gl.interactive.ShaderResources;
 import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.builders.framebuffer.FramebufferObjectBuilder;
 import kintsugi3d.gl.core.*;
@@ -45,7 +45,7 @@ public class ImageReconstruction<ContextType extends Context<ContextType>> imple
     private final ReadonlyViewSet viewSet;
     private final Function<View, ColorImage> groundTruthLoader;
     private final ProgramObject<ContextType> incidentRadianceProgram;
-    private final Drawable<ContextType> incidentRadianceDrawable;
+    private final DrawableResource<ContextType> incidentRadianceDrawable;
 
     private final Consumer<FramebufferObjectBuilder<ContextType>> buildFramebufferAttachments;
     private final Consumer<FramebufferObjectBuilder<ContextType>> buildIncidentRadianceFramebufferAttachments;
@@ -61,7 +61,7 @@ public class ImageReconstruction<ContextType extends Context<ContextType>> imple
         Consumer<FramebufferObjectBuilder<ContextType>> buildFramebufferAttachments,
         Consumer<FramebufferObjectBuilder<ContextType>> buildIncidentRadianceFramebufferAttachments,
         ProgramBuilder<ContextType> incidentRadianceProgramBuilder,
-        ReadonlyGraphicsResources<ContextType> resources)
+        ShaderResources<ContextType> resources)
         throws IOException
     {
         this(viewSet, buildFramebufferAttachments, buildIncidentRadianceFramebufferAttachments, incidentRadianceProgramBuilder, resources,
@@ -87,7 +87,7 @@ public class ImageReconstruction<ContextType extends Context<ContextType>> imple
             Consumer<FramebufferObjectBuilder<ContextType>> buildFramebufferAttachments,
             Consumer<FramebufferObjectBuilder<ContextType>> buildIncidentRadianceFramebufferAttachments,
             ProgramBuilder<ContextType> incidentRadianceProgramBuilder,
-            ReadonlyGraphicsResources<ContextType> resources,
+            ShaderResources<ContextType> resources,
             Function<View, ColorImage> groundTruthLoader)
         throws IOException
     {
@@ -107,7 +107,7 @@ public class ImageReconstruction<ContextType extends Context<ContextType>> imple
     }
 
     private static <ContextType extends Context<ContextType>> void render(
-        View view, Drawable<ContextType> drawable, Framebuffer<ContextType> framebuffer)
+        View view, DrawableResource<ContextType> drawable, Framebuffer<ContextType> framebuffer)
     {
         // Reconstruct the view
         drawable.program().setUniform("model_view", view.getCameraPose());
@@ -207,7 +207,7 @@ public class ImageReconstruction<ContextType extends Context<ContextType>> imple
                  * @return x-component stores rmse, y-component stores pixel count after masking
                  */
                 @Override
-                public ReadonlyColorAppearanceRMSE reconstruct(Drawable<ContextType> drawable)
+                public ReadonlyColorAppearanceRMSE reconstruct(DrawableResource<ContextType> drawable)
                 {
                     // Create new framebuffer if necessary.
                     if (reconstructionFramebuffer == null

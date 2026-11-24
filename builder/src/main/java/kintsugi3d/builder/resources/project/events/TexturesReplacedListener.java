@@ -13,21 +13,10 @@
  * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  */
 
-package kintsugi3d.gl.core;
+package kintsugi3d.builder.resources.project.events;
 
-public abstract class DrawableBase<ContextType extends Context<ContextType>> implements Drawable<ContextType>
+@FunctionalInterface
+public interface TexturesReplacedListener
 {
-    private PrimitiveMode defaultPrimitiveMode = PrimitiveMode.TRIANGLES;
-
-    @Override
-    public final PrimitiveMode getDefaultPrimitiveMode()
-    {
-        return defaultPrimitiveMode;
-    }
-
-    @Override
-    public final void setDefaultPrimitiveMode(PrimitiveMode primitiveMode)
-    {
-        defaultPrimitiveMode = primitiveMode;
-    }
+    void onTexturesReplaced(TexturesReplacedEvent event);
 }

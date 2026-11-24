@@ -15,52 +15,13 @@ import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.fit.settings.ExportSettings;
 import kintsugi3d.builder.resources.project.ReadonlyGraphicsResourcesImageSpace;
 import kintsugi3d.gl.core.Context;
-import kintsugi3d.gl.core.Framebuffer;
-import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
-import kintsugi3d.gl.vecmath.Matrix4;
+import kintsugi3d.gl.interactive.SubdivisionRenderable;
 
 import java.io.File;
 
-public interface ReadonlyImageBasedRenderable<ContextType extends Context<ContextType>> extends ViewportRenderable<ContextType>
+public interface ReadonlyImageBasedRenderable<ContextType extends Context<ContextType>>
+    extends ViewportRenderable<ContextType>, SubdivisionRenderable<ContextType>
 {
-    /**
-     * Draw the object using the current settings and selections in the 3D viewport,
-     * potentially in subdivisions to avoid graphics card timeouts.
-     *
-     * @param framebuffer        The framebuffer into which to draw the object.
-     * @param modelViewOverride  The model-view matrix.  If this is null, it will default to the current viewpoint in the app.
-     * @param projectionOverride The projection matrix.  If this is null, it will default to the current camera in the app.
-     * @param subdivWidth        The width of the rectangle of pixels to draw at once.  This can be set to a fraction of the
-     *                           framebuffer width to reduce the likelihood of graphics card timeouts that would crash Kintsugi 3D Builder.
-     * @param subdivHeight       The height of the rectangle of pixels to draw at once.  This can be set to a fraction of the
-     *                           framebuffer height to reduce the likelihood of graphics card timeouts that would crash Kintsugi 3D Builder.
-     */
-    void draw(Framebuffer<ContextType> framebuffer, Matrix4 modelViewOverride, Matrix4 projectionOverride, int subdivWidth, int subdivHeight);
-
-    /**
-     * Draw the object using the current settings and selections in the 3D viewport.
-     * The whole frame will be drawn at once (no subdivisions).
-     * @param framebuffer The framebuffer into which to draw the object.
-     * @param modelViewOverride The model-view matrix.  If this is null, it will default to the current viewpoint in the app.
-     * @param projectionOverride The projection matrix.  If this is null, it will default to the current camera in the app.
-     */
-    void draw(Framebuffer<ContextType> framebuffer, Matrix4 modelViewOverride, Matrix4 projectionOverride);
-
-    /**
-     * Draw the object using the current settings and viewpoint in the 3D viewport.
-     * The whole frame will be drawn at once (no subdivisions).
-     * @param framebuffer The framebuffer into which to draw the object.
-     */
-    @Override
-    void draw(Framebuffer<ContextType> framebuffer);
-
-    /**
-     * Gets the geometry mesh for the currently loaded object.
-     *
-     * @return The geometry mesh.
-     */
-    ReadonlyVertexGeometry getGeometry();
-
     /**
      * Gets the view set for the currently loaded object.
      *
@@ -74,6 +35,7 @@ public interface ReadonlyImageBasedRenderable<ContextType extends Context<Contex
      * The resources are automatically destroyed when this implementation closes.
      * @return The project resources.
      */
+    @Override
     ReadonlyGraphicsResourcesImageSpace<ContextType> getResources();
 
     /**

@@ -34,6 +34,7 @@ import kintsugi3d.gl.glfw.CanvasWindow;
 import kintsugi3d.gl.interactive.InitializationException;
 import kintsugi3d.gl.interactive.InteractiveApplication;
 import kintsugi3d.gl.interactive.InteractiveGraphics;
+import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.opengl.OpenGLContext;
 import kintsugi3d.gl.opengl.OpenGLContextFactory;
 import kintsugi3d.gl.util.CanvasListener;
@@ -271,7 +272,7 @@ public final class RenderingBootstrap
 
                 try
                 {
-                    // reload program
+                    // reload shader programs
                     renderableManager.getMainRenderable().reloadShaders();
                 }
                 catch (RuntimeException e)
@@ -365,12 +366,13 @@ public final class RenderingBootstrap
                     requestQueue.addGraphicsRequest((ProgressMonitoredGraphicsRequest) createMethod.invoke(null, (Object[]) args));
 
                     // Quit after the request finishes
-                    // Use ProjectGraphicsRequest (rather than GraphicsRequest) so that it gets queued up after the actual request,
+                    // Use ImageBasedGraphicsRequest (rather than GraphicsRequest) so that it gets queued up after the actual request,
                     // once the project has finished loading
                     requestQueue.addBackgroundImageBasedGraphicsRequest(new ImageBasedGraphicsRequest()
                     {
                         @Override
-                        public <ContextType extends Context<ContextType>> void executeRequest(ImageBasedRenderable<ContextType> instance)
+                        public <ContextType extends Context<ContextType>>
+                        void executeRequest(ReadonlyImageBasedRenderable<ContextType> instance, ProgressMonitor monitor)
                         {
                             WindowSynchronization.getInstance().quitWithoutConfirmation();
                         }

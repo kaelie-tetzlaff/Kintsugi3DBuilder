@@ -17,8 +17,8 @@ package kintsugi3d.builder.io;
 
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.fit.settings.ExportSettings;
-import kintsugi3d.builder.rendering.ImageBasedRenderable;
-import kintsugi3d.builder.rendering.ProgressMonitoredImageBasedGraphicsRequest;
+import kintsugi3d.builder.rendering.ImageBasedGraphicsRequest;
+import kintsugi3d.builder.rendering.ReadonlyImageBasedRenderable;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.util.Kintsugi3DViewerLauncher;
 import kintsugi3d.gl.core.Context;
@@ -27,7 +27,7 @@ import kintsugi3d.gl.interactive.ProgressMonitor;
 import java.io.File;
 import java.io.IOException;
 
-public class ExportTexturesRequest implements ProgressMonitoredImageBasedGraphicsRequest
+public class ExportTexturesRequest implements ImageBasedGraphicsRequest
 {
     private final File exportLocationFile;
     private final ExportSettings settings;
@@ -70,7 +70,7 @@ public class ExportTexturesRequest implements ProgressMonitoredImageBasedGraphic
 
     @Override
     public final <ContextType extends Context<ContextType>> void executeRequest(
-        ImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
+        ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
     {
         // Includes textures is shouldSaveTextures is true
         renderable.saveGLTF(exportLocationFile.getParentFile(), exportLocationFile.getName(), settings, this::onSaveComplete);

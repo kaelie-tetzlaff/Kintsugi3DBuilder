@@ -324,7 +324,7 @@ public class SmokeTest
             projectSettings.set("textureSampledSize", TEXTURE_SAMPLED_SIZE);
             projectSettings.set("textureSubdivSize", TEXTURE_SUBDIV_SIZE);
             SpecularFitRequest request = SpecularFitRequest.createBasisAndTexturesOptimizationRequest();
-            Rendering.getRequestQueue().addImageBasedGraphicsRequest(request);
+            Rendering.getRequestQueue().addTextureReplacementGraphicsRequest(request);
         });
 
         LOG.debug("Waiting for processing to complete...");

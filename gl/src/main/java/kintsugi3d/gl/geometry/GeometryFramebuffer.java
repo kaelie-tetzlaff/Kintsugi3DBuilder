@@ -66,7 +66,7 @@ public class GeometryFramebuffer<ContextType extends Context<ContextType>> imple
             .addShader(ShaderType.VERTEX, new File("shaders/common/texspace.vert"))
             .addShader(ShaderType.FRAGMENT, new File("shaders/common/geomBuffers.frag"))
             .createProgram();
-            Drawable<ContextType> drawable = geometry.createDrawable(program))
+            DrawableResource<ContextType> drawable = geometry.createDrawable(program))
         {
             drawable.draw(fbo);
         }
