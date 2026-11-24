@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import kintsugi3d.builder.preferences.serialization.SettingsModelDeserializer;
 import kintsugi3d.builder.preferences.serialization.SettingsModelSerializer;
+import kintsugi3d.builder.util.events.EventListeners;
 
 import java.util.Collection;
 
@@ -29,6 +30,12 @@ public interface GeneralSettingsModel extends ReadonlyGeneralSettingsModel
     <T> void set(String name, T value);
     void copyAllFrom(ReadonlyGeneralSettingsModel other);
     void createSetting(String name, Class<?> type, Object initialValue, boolean serialize);
+
+    /**
+     * Returns a registration point for listeners that will be notified whenever a setting in this model is changed.
+     */
+    EventListeners<SettingChangedListener> settingChangedListeners();
+
     default void createBooleanSetting(String name, boolean initialValue)
     {
         createBooleanSetting(name, initialValue, false);
