@@ -15,13 +15,24 @@
 
 package kintsugi3d.builder.state.settings;
 
+import kintsugi3d.builder.util.events.EventDispatcher;
+
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
 public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
 {
+    private final EventDispatcher<SettingChangedListener, SettingChangedEvent> settingChanged
+        = new EventDispatcher<>(SettingChangedListener::onSettingChanged);
+
     protected abstract Object getUnchecked(String name);
     protected abstract void setUnchecked(String name, Object value);
+
+    @Override
+    public final EventListeners<SettingChangedListener> settingChangedListeners()
+    {
+        return settingChanged;
+    }
 
     @Override
     public final Object getObject(String name)
@@ -60,6 +71,7 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
             if (value == null || getType(name).isAssignableFrom(value.getClass()))
             {
                 setUnchecked(name, value);
+                settingChanged.notify(new SettingChangedEvent(this, name, value));
             }
             else
             {
