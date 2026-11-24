@@ -523,6 +523,18 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
                     });
                 }
             });
+
+            // Recalculate global light intensity whenever the primary view or the infinite light sources
+            // setting changes so that components like the eyedropper don't need to do so manually.
+            viewSet.primaryViewChangedListeners().register(event -> Rendering.runLater(this::determineAndSetAllLightIntensities));
+
+            viewSet.getProjectSettings().settingChangedListeners().register(event ->
+            {
+                if (event.getSettingName().equals("infiniteLightSources"))
+                {
+                    Rendering.runLater(this::determineAndSetAllLightIntensities);
+                }
+            });
         }
     }
 
