@@ -140,14 +140,14 @@
       <option name="m_limit" value="15" />
     </inspection_tool>
     <inspection_tool class="ClassIndependentOfModule" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
-    <inspection_tool class="ClassInheritanceDepth" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <inspection_tool class="ClassInheritanceDepth" enabled="false" level="WEAK WARNING" enabled_by_default="false">
       <option name="m_limit" value="2" />
     </inspection_tool>
     <inspection_tool class="ClassInitializer" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ClassLoaderInstantiation" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ClassMayBeInterface" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ClassNameDiffersFromFileName" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="ClassNamePrefixedWithPackageName" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="ClassNamePrefixedWithPackageName" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="ClassNameSameAsAncestorName" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ClassNamingConvention" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="m_regex" value="[A-Z][A-Za-z\d]*" />
@@ -169,13 +169,13 @@
     <inspection_tool class="ClassWithTooManyDependencies" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="limit" value="10" />
     </inspection_tool>
-    <inspection_tool class="ClassWithTooManyDependents" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <inspection_tool class="ClassWithTooManyDependents" enabled="false" level="WEAK WARNING" enabled_by_default="false">
       <option name="limit" value="10" />
     </inspection_tool>
-    <inspection_tool class="ClassWithTooManyTransitiveDependencies" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <inspection_tool class="ClassWithTooManyTransitiveDependencies" enabled="false" level="WEAK WARNING" enabled_by_default="false">
       <option name="limit" value="35" />
     </inspection_tool>
-    <inspection_tool class="ClassWithTooManyTransitiveDependents" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <inspection_tool class="ClassWithTooManyTransitiveDependents" enabled="false" level="WEAK WARNING" enabled_by_default="false">
       <option name="limit" value="35" />
     </inspection_tool>
     <inspection_tool class="ClassWithoutLogger" enabled="false" level="WEAK WARNING" enabled_by_default="false">
@@ -260,7 +260,7 @@
       </option>
     </inspection_tool>
     <inspection_tool class="CustomSecurityManager" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="CyclicClassDependency" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="CyclicClassDependency" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="CyclicPackageDependency" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="CyclomaticComplexity" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="m_limit" value="10" />
@@ -650,7 +650,7 @@
     <inspection_tool class="MethodOverridesInaccessibleMethodOfSuper" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="MethodOverridesStaticMethod" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="MethodRefCanBeReplacedWithLambda" enabled="false" level="INFORMATION" enabled_by_default="false" />
-    <inspection_tool class="MethodReturnAlwaysConstant" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="MethodReturnAlwaysConstant" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="MethodReturnOfConcreteClass" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="MethodWithMultipleLoops" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="MigrateAssertToMatcherAssert" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -667,7 +667,7 @@
     <inspection_tool class="ModuleWithTooFewClasses" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="limit" value="10" />
     </inspection_tool>
-    <inspection_tool class="ModuleWithTooManyClasses" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <inspection_tool class="ModuleWithTooManyClasses" enabled="false" level="WEAK WARNING" enabled_by_default="false">
       <option name="limit" value="100" />
     </inspection_tool>
     <inspection_tool class="MoveFieldAssignmentToInitializer" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -675,7 +675,7 @@
     <inspection_tool class="MultipleDeclaration" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoreForLoopDeclarations" value="true" />
     </inspection_tool>
-    <inspection_tool class="MultipleReturnPointsPerMethod" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <inspection_tool class="MultipleReturnPointsPerMethod" enabled="false" level="WEAK WARNING" enabled_by_default="false">
       <option name="ignoreGuardClauses" value="false" />
       <option name="ignoreEqualsMethod" value="false" />
       <option name="m_limit" value="1" />
@@ -814,13 +814,13 @@
     <inspection_tool class="NotifyWithoutCorrespondingWait" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="NullThrown" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="NumericToString" enabled="true" level="WARNING" enabled_by_default="true" editorAttributes="WARNING_ATTRIBUTES" />
-    <inspection_tool class="ObjectAllocationInLoop" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="ObjectAllocationInLoop" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="ObjectEquality" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="m_ignoreEnums" value="true" />
       <option name="m_ignoreClassObjects" value="false" />
       <option name="m_ignorePrivateConstructors" value="true" />
     </inspection_tool>
-    <inspection_tool class="ObjectInstantiationInEqualsHashCode" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
+    <inspection_tool class="ObjectInstantiationInEqualsHashCode" enabled="false" level="WEAK WARNING" enabled_by_default="false" editorAttributes="INFO_ATTRIBUTES" />
     <inspection_tool class="ObjectNotify" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ObjectToString" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ObsoleteCollection" enabled="true" level="WARNING" enabled_by_default="true">
@@ -889,7 +889,7 @@
       <option name="ignoreEnums" value="true" />
       <option name="ignoreInterfaces" value="true" />
     </inspection_tool>
-    <inspection_tool class="PublicConstructor" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="PublicConstructor" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="PublicConstructorInNonPublicClass" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PublicField" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoreEnums" value="true" />
@@ -908,7 +908,7 @@
           <item value="javafx.fxml.FXML" />
         </value>
       </option>
-      <option name="onlyWarnIfContainingClassImplementsAnInterface" value="false" />
+      <option name="onlyWarnIfContainingClassImplementsAnInterface" value="true" />
     </inspection_tool>
     <inspection_tool class="PublicMethodWithoutLogging" enabled="false" level="WEAK WARNING" enabled_by_default="false">
       <option name="loggerClassName" value="" />
@@ -923,7 +923,7 @@
     <inspection_tool class="ReadObjectAndWriteObjectPrivate" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ReadObjectInitialization" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ReadResolveAndWriteReplaceProtected" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="RedundantComparatorComparing" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
+    <inspection_tool class="RedundantComparatorComparing" enabled="true" level="WARNING" enabled_by_default="true" editorAttributes="WARNING_ATTRIBUTES" />
     <inspection_tool class="RedundantFieldInitialization" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="onlyWarnOnNull" value="true" />
     </inspection_tool>
@@ -957,7 +957,7 @@
       <option name="ignoreNonPublic" value="true" />
     </inspection_tool>
     <inspection_tool class="ReturnSeparatedFromComputation" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
-    <inspection_tool class="ReturnThis" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="ReturnThis" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="ReuseOfLocalVariable" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RuntimeExec" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RuntimeExecWithNonConstantString" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -1026,7 +1026,7 @@
     <inspection_tool class="SimplifiableEqualsExpression" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SingleElementAnnotation" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="SingleStatementInBlock" enabled="false" level="INFORMATION" enabled_by_default="false" />
-    <inspection_tool class="Singleton" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="Singleton" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="SleepWhileHoldingLock" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SocketResource" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="insideTryAllowed" value="false" />
@@ -1111,7 +1111,7 @@
     <inspection_tool class="SystemExit" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SystemGC" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SystemGetenv" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="SystemOutErr" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="SystemOutErr" enabled="true" level="WARNING" enabled_by_default="true" editorAttributes="WARNING_ATTRIBUTES" />
     <inspection_tool class="SystemProperties" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SystemSetSecurityManager" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="TailRecursion" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -1227,7 +1227,7 @@
       <option name="ignoreInnerClasses" value="true" />
     </inspection_tool>
     <inspection_tool class="UseOfClone" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="UseOfConcreteClass" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <inspection_tool class="UseOfConcreteClass" enabled="false" level="WEAK WARNING" enabled_by_default="false">
       <option name="reportLocalVariables" value="false" />
       <option name="reportStaticFields" value="false" />
       <option name="reportInstanceFields" value="false" />
@@ -1238,7 +1238,7 @@
     <inspection_tool class="UseOfProcessBuilder" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UseOfPropertiesAsHashtable" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UseOfSunClasses" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="UtilityClass" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <inspection_tool class="UtilityClass" enabled="false" level="WEAK WARNING" enabled_by_default="false">
       <option name="ignorableAnnotations">
         <value />
       </option>
