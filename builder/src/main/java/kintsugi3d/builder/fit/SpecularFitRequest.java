@@ -22,11 +22,11 @@ import kintsugi3d.builder.fit.settings.*;
 import kintsugi3d.builder.rendering.TextureReplacementGraphicsRequest;
 import kintsugi3d.builder.rendering.ReadonlyImageBasedRenderable;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
+import kintsugi3d.builder.state.settings.ReadonlyGeneralSettingsModel;
 import kintsugi3d.gl.interactive.ShaderResources;
 import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.gl.interactive.ShaderProgramFactory;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
-import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.util.ApplicationFolders;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.ProgressMonitor;
@@ -93,7 +93,7 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
 
     private static ReadonlySpecularFitSettings getSettingsFromProject()
     {
-        GeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
+        ReadonlyGeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
 
         // Start with texture size
         int textureSize = projectSettings.getInt("textureSize");
@@ -127,7 +127,7 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
 
     private static ReadonlyBasisOptimizationSettings getBasisOptimizationSettingsFromProject()
     {
-        GeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
+        ReadonlyGeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
 
         BasisOptimizationSettings settings = new BasisOptimizationSettings();
 

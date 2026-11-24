@@ -19,7 +19,7 @@ import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.fit.settings.ExportSettings;
 import kintsugi3d.builder.rendering.ImageBasedGraphicsRequest;
 import kintsugi3d.builder.rendering.ReadonlyImageBasedRenderable;
-import kintsugi3d.builder.state.settings.GeneralSettingsModel;
+import kintsugi3d.builder.state.settings.ReadonlyGeneralSettingsModel;
 import kintsugi3d.builder.util.Kintsugi3DViewerLauncher;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.ProgressMonitor;
@@ -47,7 +47,7 @@ public class ExportTexturesRequest implements ImageBasedGraphicsRequest
 
     private static ExportSettings getExportSettingsFromProject()
     {
-        GeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
+        ReadonlyGeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
 
         ExportSettings exportSettings = new ExportSettings();
 

@@ -16,7 +16,7 @@
 package kintsugi3d.builder.util;
 
 import kintsugi3d.builder.core.Global;
-import kintsugi3d.builder.core.viewset.ViewSet;
+import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -153,7 +153,7 @@ public final class Kintsugi3DViewerLauncher
      */
     public static void launchViewer() throws IOException
     {
-        ViewSet viewSet = Global.io().getLoadedViewSetOrNull();
+        ReadonlyViewSet viewSet = Global.io().getLoadedViewSetOrNull();
         launchViewer(viewSet == null ? null : new File(viewSet.getSupportingFilesDirectory(), "model.glb"));
     }
 
