@@ -36,12 +36,6 @@ public interface IO
     boolean isInitialized();
     boolean hasLoadedRenderable();
 
-    /**
-     * Checks if this has a valid project instance loaded.  Otherwise, throws an IllegalStateException.
-     * @return This model if it has a valid project instance.
-     */
-    IO validateRenderable();
-
     ReadonlyLoadOptionsModel getLoadOptionsModel();
 
     ProgressMonitor getAggregateProgressMonitor();

@@ -547,17 +547,6 @@ public class IOModel implements IO
         return handler != null;
     }
 
-    @Override
-    public final IOModel validateRenderable()
-    {
-        if (!hasLoadedRenderable())
-        {
-            throw new IllegalStateException("No project loaded.");
-        }
-
-        return this;
-    }
-
     /**
      * Checks for whether srcFile is null before copying into destDir.
      *
