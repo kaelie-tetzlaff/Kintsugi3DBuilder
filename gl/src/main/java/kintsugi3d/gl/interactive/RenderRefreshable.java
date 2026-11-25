@@ -16,6 +16,7 @@
 package kintsugi3d.gl.interactive;
 
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -32,16 +33,16 @@ public final class RenderRefreshable
 
     public static
     <ContextType extends Context<ContextType>, RenderableType extends InteractiveRenderableResource<ContextType>>
-    RenderRefreshable<ContextType, RenderableType> createWithManagedFrambufferObject(
-        ContextType context, RenderableType renderable, DoubleFramebufferObject<ContextType> framebuffer)
+    @NotNull RenderRefreshable<ContextType, RenderableType> createWithManagedFrambufferObject(
+        ContextType context, @NotNull RenderableType renderable, @NotNull DoubleFramebufferObject<ContextType> framebuffer)
     {
         return new RenderRefreshable<>(context, renderable, framebuffer, List.of(renderable, framebuffer));
     }
 
     public static
     <ContextType extends Context<ContextType>, RenderableType extends InteractiveRenderableResource<ContextType>>
-    RenderRefreshable<ContextType, RenderableType>  createWithDefaultFrambufferObject(
-        ContextType context, RenderableType renderable)
+    @NotNull RenderRefreshable<ContextType, RenderableType>  createWithDefaultFrambufferObject(
+        @NotNull ContextType context, @NotNull RenderableType renderable)
     {
         return new RenderRefreshable<>(context, renderable, context.getDefaultFramebuffer(), List.of(renderable));
     }

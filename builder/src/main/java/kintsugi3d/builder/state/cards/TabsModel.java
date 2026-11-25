@@ -15,6 +15,8 @@
 
 package kintsugi3d.builder.state.cards;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Map;
 
 public interface TabsModel
@@ -30,6 +32,6 @@ public interface TabsModel
 
     void clearTabs();
     CardsModel<?> getTab(String label);
-    <T> CardsModel<T> getTab(String label, Class<T> dataClass);
+    <T> @Nullable CardsModel<T> getTab(String label, Class<T> dataClass);
     Map<String, ? extends CardsModel<?>> getTabsMap();
 }

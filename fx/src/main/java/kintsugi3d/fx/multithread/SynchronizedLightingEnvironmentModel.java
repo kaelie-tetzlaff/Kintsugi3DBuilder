@@ -18,13 +18,14 @@ package kintsugi3d.fx.multithread;
 import kintsugi3d.builder.state.scene.LightingEnvironmentModelBase;
 import kintsugi3d.builder.state.scene.ManipulableLightingEnvironmentModel;
 import kintsugi3d.fx.controllers.scene.lights.ObservableLightGroupSettings;
+import org.jetbrains.annotations.NotNull;
 
 public class SynchronizedLightingEnvironmentModel extends LightingEnvironmentModelBase<SynchronizedDiscreteLightModel>
 {
-    private final ManipulableLightingEnvironmentModel baseModel;
-    private final SynchronizedValue<Integer> selectedLightIndex;
+    private final @NotNull ManipulableLightingEnvironmentModel baseModel;
+    private final @NotNull SynchronizedValue<Integer> selectedLightIndex;
 
-    public SynchronizedLightingEnvironmentModel(ManipulableLightingEnvironmentModel baseModel)
+    public SynchronizedLightingEnvironmentModel(@NotNull ManipulableLightingEnvironmentModel baseModel)
     {
         super(ObservableLightGroupSettings.LIGHT_LIMIT,
             index -> new SynchronizedDiscreteLightModel(baseModel.getLight(index)),

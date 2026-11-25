@@ -15,6 +15,8 @@
 
 package kintsugi3d.gl.core;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface Blittable<SourceType extends TwoDimensional> extends TwoDimensional
 {
     /**
@@ -60,7 +62,7 @@ public interface Blittable<SourceType extends TwoDimensional> extends TwoDimensi
      * @param linearFiltering Whether or not to use linear filtering if the dimensions of the source and destination are not the same.
      *                        This may be ignored if linear filtering is not supported (i.e. for depth / stencil textures).
      */
-    default void blitScaled(int destX, int destY, int destWidth, int destHeight, SourceType readSource, boolean linearFiltering)
+    default void blitScaled(int destX, int destY, int destWidth, int destHeight, @NotNull SourceType readSource, boolean linearFiltering)
     {
         blitCroppedAndScaled(destX, destY, destWidth, destHeight,
             readSource, 0, 0, readSource.getWidth(), readSource.getHeight(), linearFiltering);
@@ -73,7 +75,7 @@ public interface Blittable<SourceType extends TwoDimensional> extends TwoDimensi
      * @param linearFiltering Whether or not to use linear filtering if the dimensions of the source and destination are not the same.
      *                        This may be ignored if linear filtering is not supported (i.e. for depth / stencil textures).
      */
-    default void blitScaled(SourceType readSource, boolean linearFiltering)
+    default void blitScaled(@NotNull SourceType readSource, boolean linearFiltering)
     {
         blitScaled(0, 0, getWidth(), getHeight(), readSource, linearFiltering);
     }
@@ -132,7 +134,7 @@ public interface Blittable<SourceType extends TwoDimensional> extends TwoDimensi
      * @param y The bottom edge of the rectangle to copy into within this blittable.
      * @param readSource The blittable source to copy from.
      */
-    default void blit(int x, int y, SourceType readSource)
+    default void blit(int x, int y, @NotNull SourceType readSource)
     {
         blitCropped(x, y, readSource, 0, 0, readSource.getWidth(), readSource.getHeight());
     }
@@ -142,7 +144,7 @@ public interface Blittable<SourceType extends TwoDimensional> extends TwoDimensi
      * The copying operation will be start at the lower left corner of this blittable, and will preserve the resolution of the read source
      * @param readSource The blittable source to copy from.
      */
-    default void blit(SourceType readSource)
+    default void blit(@NotNull SourceType readSource)
     {
         blit(0, 0, readSource);
     }

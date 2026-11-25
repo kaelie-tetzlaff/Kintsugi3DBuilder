@@ -17,6 +17,7 @@ package kintsugi3d.fx.multithread;
 
 import javafx.application.Platform;
 import javafx.beans.value.WritableValue;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -29,7 +30,7 @@ public final class SynchronizedValue<T> implements WritableValue<T>
     private final Consumer<T> setter;
     private final Object lock = new Object();
 
-    public static <T> SynchronizedValue<T> createFromFunctions(Supplier<T> getter, Consumer<T> setter)
+    public static <T> @NotNull SynchronizedValue<T> createFromFunctions(Supplier<T> getter, Consumer<T> setter)
     {
         return new SynchronizedValue<>(getter, setter);
     }

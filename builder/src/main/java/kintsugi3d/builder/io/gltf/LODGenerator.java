@@ -16,6 +16,7 @@
 package kintsugi3d.builder.io.gltf;
 
 import kintsugi3d.gl.util.ImageHelper;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +31,7 @@ public final class LODGenerator
     {
     }
 
-    static void generateLODs(int minResolution, File directory, TextureExportSpecification... originalTextureSpecs)
+    static void generateLODs(int minResolution, File directory, TextureExportSpecification @NotNull ... originalTextureSpecs)
     {
         for (TextureExportSpecification t : originalTextureSpecs)
         {
@@ -38,7 +39,7 @@ public final class LODGenerator
         }
     }
 
-    private static void generateLODs(String format, int minResolution, File directory, String... originalImageFilenames)
+    private static void generateLODs(@NotNull String format, int minResolution, File directory, String @NotNull ... originalImageFilenames)
     {
         for (String originalImageFilename : originalImageFilenames)
         {

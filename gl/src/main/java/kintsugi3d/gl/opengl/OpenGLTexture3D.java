@@ -25,6 +25,7 @@ import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
 import kintsugi3d.gl.types.AbstractDataType;
 import kintsugi3d.gl.types.AbstractDataTypeFactory;
 import kintsugi3d.gl.util.ImageHelper;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -61,7 +62,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         }
 
         @Override
-        public final OpenGLTexture3D createTexture()
+        public final @NotNull OpenGLTexture3D createTexture()
         {
             if (isInternalFormatCompressed())
             {
@@ -119,7 +120,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         }
 
         @Override
-        public final OpenGLTexture3D createTexture()
+        public final @NotNull OpenGLTexture3D createTexture()
         {
             return new OpenGLTexture3D(
                 getContext(),
@@ -156,7 +157,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         }
 
         @Override
-        public final OpenGLTexture3D createTexture()
+        public final @NotNull OpenGLTexture3D createTexture()
         {
             return new OpenGLTexture3D(
                 getContext(),
@@ -193,7 +194,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         }
 
         @Override
-        public final OpenGLTexture3D createTexture()
+        public final @NotNull OpenGLTexture3D createTexture()
         {
             return new OpenGLTexture3D(
                 getContext(),
@@ -213,7 +214,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         }
     }
 
-    private OpenGLTexture3D(OpenGLContext context, int textureTarget, int multisamples, ColorFormat colorFormat,
+    private OpenGLTexture3D(OpenGLContext context, int textureTarget, int multisamples, @NotNull ColorFormat colorFormat,
                             int width, int height, int layerCount, int format, boolean fixedSampleLocations, boolean useLinearFiltering,
                             boolean useMipmaps, int maxMipmapLevel, float maxAnisotropy)
     {
@@ -229,7 +230,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
             fixedSampleLocations, useLinearFiltering, maxMipmapLevel, maxAnisotropy);
     }
 
-    private OpenGLTexture3D(OpenGLContext context, int textureTarget, int multisamples, CompressionFormat compressionFormat,
+    private OpenGLTexture3D(OpenGLContext context, int textureTarget, int multisamples, @NotNull CompressionFormat compressionFormat,
                             int width, int height, int layerCount, int format, boolean fixedSampleLocations, boolean useLinearFiltering,
                             boolean useMipmaps, int maxMipmapLevel, float maxAnisotropy)
     {
@@ -245,7 +246,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
             fixedSampleLocations, useLinearFiltering, maxMipmapLevel, maxAnisotropy);
     }
 
-    private OpenGLTexture3D(OpenGLContext context, int textureTarget, int multisamples, TextureType textureType,
+    private OpenGLTexture3D(OpenGLContext context, int textureTarget, int multisamples, @NotNull TextureType textureType,
                             int precision, int width, int height, int layerCount, int format, boolean fixedSampleLocations,
                             boolean useLinearFiltering, boolean useMipmaps, int maxMipmapLevel, float maxAnisotropy)
     {
@@ -306,13 +307,13 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
     }
 
     @Override
-    public void loadLayer(int layerIndex, File file, boolean flipVertical) throws IOException
+    public void loadLayer(int layerIndex, @NotNull File file, boolean flipVertical) throws IOException
     {
         loadLayer(layerIndex, new FileInputStream(file), flipVertical);
     }
 
     @Override
-    public void loadLayer(int layerIndex, InputStream fileStream, boolean flipVertical) throws IOException
+    public void loadLayer(int layerIndex, @NotNull InputStream fileStream, boolean flipVertical) throws IOException
     {
         validateLayerIndex(layerIndex);
 
@@ -339,13 +340,13 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
     }
 
     @Override
-    public void loadLayer(int layerIndex, File imageFile, File maskFile, boolean flipVertical) throws IOException
+    public void loadLayer(int layerIndex, @NotNull File imageFile, @NotNull File maskFile, boolean flipVertical) throws IOException
     {
         loadLayer(layerIndex, new FileInputStream(imageFile), new FileInputStream(maskFile), flipVertical);
     }
 
     @Override
-    public void loadLayer(int layerIndex, InputStream imageStream, InputStream maskStream, boolean flipVertical) throws IOException
+    public void loadLayer(int layerIndex, @NotNull InputStream imageStream, InputStream maskStream, boolean flipVertical) throws IOException
     {
         validateLayerIndex(layerIndex);
 
@@ -373,15 +374,15 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
     }
 
     @Override
-    public <MappedType> void loadLayer(int layerIndex, File imageFile, File maskFile, boolean flipVertical,
-                                       AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction) throws IOException
+    public <MappedType> void loadLayer(int layerIndex, @NotNull File imageFile, @NotNull File maskFile, boolean flipVertical,
+                                       @NotNull AbstractDataType<? super MappedType> mappedType, @NotNull Function<Color, MappedType> mappingFunction) throws IOException
     {
         loadLayer(layerIndex, new FileInputStream(imageFile), new FileInputStream(maskFile), flipVertical, mappedType, mappingFunction);
     }
 
     @Override
-    public <MappedType> void loadLayer(int layerIndex, InputStream imageStream, InputStream maskStream, boolean flipVertical,
-                                       AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction) throws IOException
+    public <MappedType> void loadLayer(int layerIndex, @NotNull InputStream imageStream, InputStream maskStream, boolean flipVertical,
+                                       @NotNull AbstractDataType<? super MappedType> mappedType, @NotNull Function<Color, MappedType> mappingFunction) throws IOException
     {
         validateLayerIndex(layerIndex);
 
@@ -395,15 +396,15 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
     }
 
     @Override
-    public <MappedType> void loadLayer(int layerIndex, File file, boolean flipVertical,
-                                       AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction) throws IOException
+    public <MappedType> void loadLayer(int layerIndex, @NotNull File file, boolean flipVertical,
+                                       @NotNull AbstractDataType<? super MappedType> mappedType, @NotNull Function<Color, MappedType> mappingFunction) throws IOException
     {
         loadLayer(layerIndex, new FileInputStream(file), flipVertical, mappedType, mappingFunction);
     }
 
     @Override
-    public <MappedType> void loadLayer(int layerIndex, InputStream fileStream, boolean flipVertical,
-                                       AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction) throws IOException
+    public <MappedType> void loadLayer(int layerIndex, @NotNull InputStream fileStream, boolean flipVertical,
+                                       @NotNull AbstractDataType<? super MappedType> mappedType, @NotNull Function<Color, MappedType> mappingFunction) throws IOException
     {
         validateLayerIndex(layerIndex);
 
@@ -416,7 +417,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
     }
 
     @Override
-    public void loadLayer(int layerIndex, ReadonlyNativeVectorBuffer data)
+    public void loadLayer(int layerIndex, @NotNull ReadonlyNativeVectorBuffer data)
     {
         if (data.getCount() != width * height)
         {
@@ -434,7 +435,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
                 data.getBuffer()));
     }
 
-    private void loadLayer(int layerIndex, OpenGLTextureData textureData)
+    private void loadLayer(int layerIndex, @NotNull OpenGLTextureData textureData)
     {
         bind();
 
@@ -470,14 +471,14 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
     }
 
     @Override
-    public OpenGLFramebufferAttachment getLayerAsFramebufferAttachment(int layerIndex)
+    public @NotNull OpenGLFramebufferAttachment getLayerAsFramebufferAttachment(int layerIndex)
     {
         int textureId = getTextureId();
         return new TextureLayer(this, textureId, layerIndex);
     }
 
     @Override
-    public void setTextureWrap(TextureWrapMode wrapS, TextureWrapMode wrapT, TextureWrapMode wrapR)
+    public void setTextureWrap(@NotNull TextureWrapMode wrapS, @NotNull TextureWrapMode wrapT, @NotNull TextureWrapMode wrapR)
     {
         bind();
         switch (wrapS)
@@ -540,7 +541,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
     }
 
     @Override
-    public Texture3D<OpenGLContext> createTextureWithMatchingFormat(int newWidth, int newHeight, int newDepth)
+    public @NotNull Texture3D<OpenGLContext> createTextureWithMatchingFormat(int newWidth, int newHeight, int newDepth)
     {
         if (getTextureType() == TextureType.COLOR)
         {
@@ -567,7 +568,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
 
     @Override
     public void blitCroppedAndScaled(int destX, int destY, int destZ, int destWidth, int destHeight,
-                                     ReadonlyTexture3D<OpenGLContext> readSource, int srcX, int srcY, int srcZ, int srcWidth, int srcHeight, int srcDepth,
+                                     @NotNull ReadonlyTexture3D<OpenGLContext> readSource, int srcX, int srcY, int srcZ, int srcWidth, int srcHeight, int srcDepth,
                                      boolean linearFiltering)
     {
         if (isInternalFormatCompressed())

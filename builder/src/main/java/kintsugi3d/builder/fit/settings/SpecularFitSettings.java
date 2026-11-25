@@ -17,12 +17,13 @@ package kintsugi3d.builder.fit.settings;
 
 import kintsugi3d.builder.core.texture.TextureResolution;
 import kintsugi3d.builder.resources.project.ImageCacheSettings;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
 public class SpecularFitSettings implements ReadonlySpecularFitSettings
 {
-    private final TextureResolution textureResolution;
+    private final @NotNull TextureResolution textureResolution;
     private final NormalOptimizationSettings normalOptimizationSettings = new NormalOptimizationSettings();
     private final ReconstructionSettings reconstructionSettings = new ReconstructionSettings();
     private final ImageCacheSettings imageCacheSettings = new ImageCacheSettings();
@@ -60,25 +61,25 @@ public class SpecularFitSettings implements ReadonlySpecularFitSettings
     }
 
     @Override
-    public final NormalOptimizationSettings getNormalOptimizationSettings()
+    public final @NotNull NormalOptimizationSettings getNormalOptimizationSettings()
     {
         return normalOptimizationSettings;
     }
 
     @Override
-    public final ImageCacheSettings getImageCacheSettings()
+    public final @NotNull ImageCacheSettings getImageCacheSettings()
     {
         return imageCacheSettings;
     }
 
     @Override
-    public final ReconstructionSettings getReconstructionSettings()
+    public final @NotNull ReconstructionSettings getReconstructionSettings()
     {
         return reconstructionSettings;
     }
 
     @Override
-    public final ExportSettings getExportSettings()
+    public final @NotNull ExportSettings getExportSettings()
     {
         return exportSettings;
     }

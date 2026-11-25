@@ -19,6 +19,7 @@ import javafx.application.Platform;
 import kintsugi3d.builder.state.cards.CardsModel;
 import kintsugi3d.builder.state.cards.ProjectDataCardFactory;
 import kintsugi3d.builder.state.cards.TabsModel;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -45,19 +46,19 @@ public class SynchronizedTabsModel implements TabsModel
     }
 
     @Override
-    public final CardsModel<?> getTab(String label)
+    public final @NotNull CardsModel<?> getTab(String label)
     {
         return new SynchronizedCardsModel<>(base.getTab(label));
     }
 
     @Override
-    public final <T> CardsModel<T> getTab(String label, Class<T> dataClass)
+    public final <T> @NotNull CardsModel<T> getTab(String label, Class<T> dataClass)
     {
         return new SynchronizedCardsModel<>(base.getTab(label, dataClass));
     }
 
     @Override
-    public final Map<String, CardsModel<?>> getTabsMap()
+    public final @NotNull Map<String, CardsModel<?>> getTabsMap()
     {
         Map<String, CardsModel<?>> wrapped = new LinkedHashMap<>(4);
 

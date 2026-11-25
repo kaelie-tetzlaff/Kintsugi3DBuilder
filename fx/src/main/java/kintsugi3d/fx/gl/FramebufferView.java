@@ -37,6 +37,7 @@ import javafx.util.Duration;
 import javafx.util.converter.CharacterStringConverter;
 import kintsugi3d.gl.core.FramebufferSize;
 import kintsugi3d.gl.window.*;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 import org.slf4j.Logger;
@@ -49,7 +50,7 @@ import java.util.OptionalInt;
 public final class FramebufferView extends Region
 {
     private static final Logger LOG = LoggerFactory.getLogger(FramebufferView.class);
-    private final ImageView imageView;
+    private final @NotNull ImageView imageView;
     private @Nullable FramebufferCanvas<?> canvas;
 
     private WritableImage frontImage;
@@ -218,7 +219,7 @@ public final class FramebufferView extends Region
      * Registers for key and window events from the stage
      * @param stage
      */
-    public void registerKeyAndWindowEventsFromStage(Stage stage)
+    public void registerKeyAndWindowEventsFromStage(@NotNull Stage stage)
     {
         stage.getScene().setOnKeyPressed(event ->
         {
@@ -285,12 +286,12 @@ public final class FramebufferView extends Region
         });
     }
 
-    public PollableCanvas3D<?> getCanvas()
+    public @Nullable PollableCanvas3D<?> getCanvas()
     {
         return canvas;
     }
 
-    public void setCanvas(FramebufferCanvas<?> canvas)
+    public void setCanvas(@Nullable FramebufferCanvas<?> canvas)
     {
         this.canvas = canvas;
 
@@ -468,7 +469,7 @@ public final class FramebufferView extends Region
         }
     }
 
-    private static OptionalInt getButtonIndex(MouseButton button)
+    private static @NotNull OptionalInt getButtonIndex(@NotNull MouseButton button)
     {
         switch(button)
         {
@@ -479,7 +480,7 @@ public final class FramebufferView extends Region
         }
     }
 
-    private static ModifierKeys getModifierKeys(KeyEvent event)
+    private static @NotNull ModifierKeys getModifierKeys(@NotNull KeyEvent event)
     {
         return new ModifierKeysInstance(
             event.isShiftDown(),
@@ -488,7 +489,7 @@ public final class FramebufferView extends Region
             event.isMetaDown());
     }
 
-    private static ModifierKeys getModifierKeys(MouseEvent event)
+    private static @NotNull ModifierKeys getModifierKeys(@NotNull MouseEvent event)
     {
         return new ModifierKeysInstance(
             event.isShiftDown(),
@@ -497,7 +498,7 @@ public final class FramebufferView extends Region
             event.isMetaDown());
     }
 
-    private CursorPosition getCursorPosition(MouseEvent event)
+    private @NotNull CursorPosition getCursorPosition(@NotNull MouseEvent event)
     {
         try
         {

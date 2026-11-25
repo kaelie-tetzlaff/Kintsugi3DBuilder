@@ -26,6 +26,7 @@ import kintsugi3d.gl.window.*;
 import kintsugi3d.gl.window.listeners.CursorPositionListener;
 import kintsugi3d.gl.window.listeners.KeyPressListener;
 import kintsugi3d.gl.window.listeners.KeyReleaseListener;
+import org.jetbrains.annotations.NotNull;
 
 public class FirstPersonController implements KeyPressListener, KeyReleaseListener, CursorPositionListener
 {
@@ -66,7 +67,7 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
         phi = 0.0f;
     }
 
-    public final void addAsWindowListener(WindowListenerManager windowListenerManager)
+    public final void addAsWindowListener(@NotNull WindowListenerManager windowListenerManager)
     {
         windowListenerManager.addKeyPressListener(this);
         windowListenerManager.addKeyReleaseListener(this);
@@ -95,7 +96,7 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
     }
 
     @Override
-    public final void keyPressed(Canvas3D<? extends Context<?>> canvas, Key key, ModifierKeys mods)
+    public final void keyPressed(Canvas3D<? extends Context<?>> canvas, Key key, @NotNull ModifierKeys mods)
     {
         if (enabled)
         {
@@ -143,7 +144,7 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
     }
 
     @Override
-    public final void keyReleased(Canvas3D<? extends Context<?>> canvas, Key key, ModifierKeys mods)
+    public final void keyReleased(Canvas3D<? extends Context<?>> canvas, Key key, @NotNull ModifierKeys mods)
     {
         if (enabled)
         {
@@ -182,7 +183,7 @@ public class FirstPersonController implements KeyPressListener, KeyReleaseListen
     }
 
     @Override
-    public final void cursorMoved(Canvas3D<? extends Context<?>> canvas, double xPos, double yPos)
+    public final void cursorMoved(@NotNull Canvas3D<? extends Context<?>> canvas, double xPos, double yPos)
     {
         if (enabled)
         {

@@ -16,6 +16,7 @@
 package kintsugi3d.gl.material;
 
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,7 +80,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
         clearcoatRoughness = 0.0f;
     }
 
-    public static Map<String, ImportedMaterial> loadFromMTLFile(File mtlFile) throws IOException
+    public static @NotNull Map<String, ImportedMaterial> loadFromMTLFile(@NotNull File mtlFile) throws IOException
     {
         Map<String, ImportedMaterial> materials = new HashMap<>(1);
         ImportedMaterial currentMaterial = null;
@@ -294,7 +295,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
         return materials;
     }
 
-    private static void processTextureOption(Scanner scanner, MaterialTextureMap texture, String option)
+    private static void processTextureOption(@NotNull Scanner scanner, @NotNull MaterialTextureMap texture, @NotNull String option)
     {
         try
         {
@@ -373,7 +374,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
         }
     }
 
-    private static ReadonlyMaterialTextureMap parseTextureStatement(Scanner scanner)
+    private static @NotNull ReadonlyMaterialTextureMap parseTextureStatement(@NotNull Scanner scanner)
     {
         MaterialTextureMap texture = new MaterialTextureMap();
 
@@ -400,7 +401,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
         return texture;
     }
 
-    private static ReadonlyMaterialColorMap parseColorMapStatement(Scanner scanner)
+    private static @NotNull ReadonlyMaterialColorMap parseColorMapStatement(@NotNull Scanner scanner)
     {
         MaterialColorMap texture = new MaterialColorMap();
 
@@ -437,7 +438,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
         return texture;
     }
 
-    private static MaterialScalarMap parseScalarMapStatement(Scanner scanner)
+    private static @NotNull MaterialScalarMap parseScalarMapStatement(@NotNull Scanner scanner)
     {
         MaterialScalarMap texture = new MaterialScalarMap();
 
@@ -472,7 +473,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
         return texture;
     }
 
-    private static MaterialBumpMap parseBumpMapStatement(Scanner scanner)
+    private static @NotNull MaterialBumpMap parseBumpMapStatement(@NotNull Scanner scanner)
     {
         MaterialBumpMap texture = new MaterialBumpMap();
 
@@ -518,7 +519,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
         return texture;
     }
 
-    private static void parseChannel(String channel, MaterialScalarMap texture)
+    private static void parseChannel(@NotNull String channel, @NotNull MaterialScalarMap texture)
     {
         switch(channel.toLowerCase(Locale.ROOT))
         {

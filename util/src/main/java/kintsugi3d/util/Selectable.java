@@ -15,10 +15,12 @@
 
 package kintsugi3d.util;
 
+import org.jetbrains.annotations.Nullable;
+
 public interface Selectable<T>
 {
     int getSelectedIndex();
-    T getSelectedItem();
+    @Nullable T getSelectedItem();
     void setSelectedIndex(int index);
     void setSelectedItem(Object item);
 }

@@ -21,6 +21,7 @@ import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.window.CanvasSize;
 import kintsugi3d.gl.window.CursorPosition;
+import org.jetbrains.annotations.NotNull;
 
 final class ObjectRotationTool implements DragTool
 {
@@ -38,13 +39,13 @@ final class ObjectRotationTool implements DragTool
     private static class Builder extends ToolBuilderBase<ObjectRotationTool>
     {
         @Override
-        public final ObjectRotationTool create()
+        public final @NotNull ObjectRotationTool create()
         {
             return new ObjectRotationTool(getCameraModel(), getObjectModel());
         }
     }
 
-    static ToolBuilder<ObjectRotationTool> getBuilder()
+    static @NotNull ToolBuilder<ObjectRotationTool> getBuilder()
     {
         return new Builder();
     }
@@ -56,7 +57,7 @@ final class ObjectRotationTool implements DragTool
     }
 
     @Override
-    public void mouseButtonPressed(CursorPosition cursorPosition, CanvasSize canvasSize)
+    public void mouseButtonPressed(CursorPosition cursorPosition, @NotNull CanvasSize canvasSize)
     {
         mouseStart = cursorPosition;
 
@@ -66,7 +67,7 @@ final class ObjectRotationTool implements DragTool
     }
 
     @Override
-    public void cursorDragged(CursorPosition cursorPosition, CanvasSize canvasSize)
+    public void cursorDragged(@NotNull CursorPosition cursorPosition, CanvasSize canvasSize)
     {
         //noinspection FloatingPointEquality
         if (cursorPosition.y != mouseStart.y || cursorPosition.x != mouseStart.x)

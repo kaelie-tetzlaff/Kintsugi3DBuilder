@@ -27,6 +27,7 @@ import kintsugi3d.builder.rendering.components.snap.ViewSelectionImpl;
 import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
+import org.jetbrains.annotations.NotNull;
 
 public class CameraWidgetGroup<ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
@@ -35,10 +36,10 @@ public class CameraWidgetGroup<ContextType extends Context<ContextType>> impleme
     private final ReadonlyImageBasedGraphicsResources<ContextType> resources;
     private final SceneModel sceneModel;
 
-    private final CameraVisual<ContextType> cameraVisual;
-    private final CameraFrustum<ContextType> cameraFrustum;
+    private final @NotNull CameraVisual<ContextType> cameraVisual;
+    private final @NotNull CameraFrustum<ContextType> cameraFrustum;
 
-    public CameraWidgetGroup(ReadonlyImageBasedGraphicsResources<ContextType> resources,
+    public CameraWidgetGroup(@NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources,
                              SceneModel sceneModel, SceneViewportModel sceneViewportModel)
     {
         this.resources = resources;

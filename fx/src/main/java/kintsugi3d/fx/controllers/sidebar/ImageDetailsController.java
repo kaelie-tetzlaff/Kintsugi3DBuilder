@@ -31,6 +31,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 import kintsugi3d.builder.util.FXImageHelper;
 import kintsugi3d.fx.util.ZoomSafeImageView;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.Collection;
@@ -132,7 +134,7 @@ public class ImageDetailsController
      * If filePath is null it will instead hide the detailsBox
      * @param
      */
-    public final void setImage(String filePath)
+    public final void setImage(@Nullable String filePath)
     {
         if (filePath != null) //If there is a file path
         {
@@ -181,7 +183,7 @@ public class ImageDetailsController
      * Creates buttons with events, that are then added to buttonRow.
      * New buttons can be added and automatically given the same properties as current buttons.
      */
-    private Collection<Region> createButtons()
+    private @NotNull Collection<Region> createButtons()
     {
         toggleGroup = new ToggleGroup(); // Toggle group created so only 1 Radio button can be selected at once
 
@@ -209,7 +211,7 @@ public class ImageDetailsController
      * @param name
      * @return Button
      */
-    private RadioButton createButton(String name)
+    private @NotNull RadioButton createButton(String name)
     {
         RadioButton button = new RadioButton(name); //New radio button
 
@@ -296,7 +298,7 @@ public class ImageDetailsController
      * @param event
      */
     @FXML
-    public final void scrollZoom(ScrollEvent event)
+    public final void scrollZoom(@NotNull ScrollEvent event)
     {
         // Will exit this function if we have no image or if canZoom is false
         if (ScrollEvent.SCROLL.equals(event.getEventType()) && event.getDeltaY() != 0.0 && currentImage != null && canZoom)
@@ -394,7 +396,7 @@ public class ImageDetailsController
      * @param event
      */
     @FXML
-    public final void startSelection(MouseEvent event)
+    public final void startSelection(@NotNull MouseEvent event)
     {
         //Event location
         mousePressedX = event.getX();
@@ -430,7 +432,7 @@ public class ImageDetailsController
      * @param event
      */
     @FXML
-    public final void dragSelection(MouseEvent event)
+    public final void dragSelection(@NotNull MouseEvent event)
     {
         if (currentImage != null) // Safeguard if image is there
         {

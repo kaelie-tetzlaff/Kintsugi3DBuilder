@@ -34,6 +34,7 @@ import kintsugi3d.builder.io.metashape.MetashapeDocument;
 import kintsugi3d.builder.io.metashape.MetashapeModel;
 import kintsugi3d.fx.controllers.modals.createnewproject.inputsources.MetashapeProjectInputSource;
 import kintsugi3d.fx.core.FrontendIO;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -108,13 +109,13 @@ public class MetashapeImportController extends ProjectImportController
     }
 
     @Override
-    protected final MetashapeProjectInputSource getData()
+    protected final @NotNull MetashapeProjectInputSource getData()
     {
         return new MetashapeProjectInputSource(() -> FrontendIO.getInstance().showSaveProjectDialog(getPageFrameController().getWindow()))
             .setMetashapeModel(metashapeDocument.getSelectedChunk().getSelectedModel());
     }
 
-    private static @Nullable String getModelIDFromSelection(String selectionAsString)
+    private static @Nullable String getModelIDFromSelection(@Nullable String selectionAsString)
     {
         //TODO: need to revisit this when formatting of model selection choice box changes
         if (selectionAsString == null || selectionAsString.startsWith(NO_MODEL_ID_MSG))
@@ -125,7 +126,7 @@ public class MetashapeImportController extends ProjectImportController
         return selectionAsString.substring(0, selectionAsString.indexOf(' '));
     }
 
-    private static String getModelNameFromSelection(String selectionAsString)
+    private static @NotNull String getModelNameFromSelection(@Nullable String selectionAsString)
     {
         //TODO: need to revisit this when formatting of model selection choice box changes
         if (selectionAsString == null || selectionAsString.endsWith(NO_MODEL_NAME_MSG))
@@ -139,7 +140,7 @@ public class MetashapeImportController extends ProjectImportController
     }
 
     @FXML
-    private void psxFileSelect(ActionEvent actionEvent)
+    private void psxFileSelect(@NotNull ActionEvent actionEvent)
     {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         File file = psxFileChooser.showOpenDialog(stage);
@@ -154,7 +155,7 @@ public class MetashapeImportController extends ProjectImportController
         }
     }
 
-    private void updateChoiceBoxes(File psxFile)
+    private void updateChoiceBoxes(@NotNull File psxFile)
     {
         loadMetashapeDocument(psxFile);
         updateModelSelectionChoiceBox();
@@ -222,7 +223,7 @@ public class MetashapeImportController extends ProjectImportController
         return !metashapeDocument.getSelectedChunk().getModels().isEmpty();
     }
 
-    private void loadMetashapeDocument(File psxFile)
+    private void loadMetashapeDocument(@NotNull File psxFile)
     {
         chunkSelectionChoiceBox.setDisable(true);
 

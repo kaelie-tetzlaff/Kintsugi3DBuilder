@@ -28,6 +28,7 @@ import kintsugi3d.builder.io.imageset.ImageSetInfo;
 import kintsugi3d.fx.controllers.paged.DataReceiverPageControllerBase;
 import kintsugi3d.fx.controllers.sidebar.SearchableTreeView;
 import kintsugi3d.fx.util.ScrollBarHelper;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -60,7 +61,7 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
     @FXML private Pane hostPane;
 
     private ViewSelectable newData;
-    private ViewSelectable data;
+    private @Nullable ViewSelectable data;
 
     protected abstract String getHintText();
 
@@ -146,7 +147,7 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
         }
     }
 
-    private void setDefaultSelection(SearchableTreeView searchableTreeView)
+    private void setDefaultSelection(@NotNull SearchableTreeView searchableTreeView)
     {
         // Set the initial selection to what is currently being used
         TreeItem<String> selectionItem = NONE_ITEM;
@@ -163,7 +164,7 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
         searchableTreeView.getTreeView().getSelectionModel().select(selectionItem);
     }
 
-    private void addTreeElems(SearchableTreeView searchableTreeView, ImageSetInfo imageSetInfo)
+    private void addTreeElems(@NotNull SearchableTreeView searchableTreeView, @NotNull ImageSetInfo imageSetInfo)
     {
         TreeItem<String> rootItem = new TreeItem<>(imageSetInfo.getName());
         searchableTreeView.getTreeView().setRoot(rootItem);
@@ -225,7 +226,7 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
         searchableTreeView.getTreeView().getRoot().setExpanded(true);
     }
 
-    private static TreeItem<String> createTreeItem(Map<Integer, Image> thumbnailImgMap, ImageIdentifier primaryViewCandidate)
+    private static @NotNull TreeItem<String> createTreeItem(@NotNull Map<Integer, Image> thumbnailImgMap, @NotNull ImageIdentifier primaryViewCandidate)
     {
         ImageView thumbnailImgView;
         Image img = thumbnailImgMap.get(primaryViewCandidate.id);
@@ -302,7 +303,7 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
         }
     }
 
-    private void setThumbnailAsFullImage(TreeItem<String> selectedItem)
+    private void setThumbnailAsFullImage(@NotNull TreeItem<String> selectedItem)
     {
         // Use thumbnail as main image if image is not found, or if larger resolution image is being loaded
         ImageView imageView = (ImageView) selectedItem.getGraphic();

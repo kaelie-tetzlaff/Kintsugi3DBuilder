@@ -15,9 +15,11 @@
 
 package kintsugi3d.builder.state.settings;
 
+import org.jetbrains.annotations.Nullable;
+
 public interface SafeReadonlyGlobalSettingsModel
 {
-    <T> T get(String name, Class<T> settingType);
+    <T> @Nullable T get(String name, Class<T> settingType);
 
     default Object getObject(String name)
     {

@@ -25,6 +25,7 @@ import kintsugi3d.gl.builders.framebuffer.ColorAttachmentSpec;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.optimization.ReadonlyErrorReport;
 import kintsugi3d.optimization.ShaderBasedOptimization;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,16 +36,16 @@ import java.util.function.Function;
 public class NormalOptimization<ContextType extends Context<ContextType>> implements ManagedResource
 {
     private static final Logger LOG = LoggerFactory.getLogger(NormalOptimization.class);
-    private final ShaderBasedOptimization<ContextType> estimateNormals;
-    private final ShaderBasedOptimization<ContextType> smoothNormals;
+    private final @NotNull ShaderBasedOptimization<ContextType> estimateNormals;
+    private final @NotNull ShaderBasedOptimization<ContextType> smoothNormals;
     private final ReadonlyNormalOptimizationSettings normalOptimizationSettings;
 
     private boolean firstSmooth = true;
 
     public NormalOptimization(
-        ShaderProgramFactory<ContextType> programFactory,
-        Function<Program<ContextType>, DrawableResource<ContextType>> drawableFactory,
-        TextureResolution textureResolution, ReadonlyNormalOptimizationSettings normalOptimizationSettings)
+        @NotNull ShaderProgramFactory<ContextType> programFactory,
+        @NotNull Function<Program<ContextType>, DrawableResource<ContextType>> drawableFactory,
+        @NotNull TextureResolution textureResolution, ReadonlyNormalOptimizationSettings normalOptimizationSettings)
         throws IOException
     {
         this.normalOptimizationSettings = normalOptimizationSettings;
@@ -127,7 +128,7 @@ public class NormalOptimization<ContextType extends Context<ContextType>> implem
         return normalOptimizationSettings.isNormalRefinementEnabled();
     }
 
-    public final void execute(Function<Texture<ContextType>, ReadonlyErrorReport> errorCalculator, double convergenceTolerance)
+    public final void execute(@NotNull Function<Texture<ContextType>, ReadonlyErrorReport> errorCalculator, double convergenceTolerance)
     {
         if (normalOptimizationSettings.isLevenbergMarquardtEnabled())
         {
@@ -191,7 +192,7 @@ public class NormalOptimization<ContextType extends Context<ContextType>> implem
         }
     }
 
-    private ProgramBuilder<ContextType> getNormalEstimationProgramBuilder(ShaderProgramFactory<ContextType> programFactory)
+    private ProgramBuilder<ContextType> getNormalEstimationProgramBuilder(@NotNull ShaderProgramFactory<ContextType> programFactory)
     {
         return programFactory.getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File("shaders/common/texspace_dynamic.vert"))
@@ -201,7 +202,7 @@ public class NormalOptimization<ContextType extends Context<ContextType>> implem
     }
 
     private static <ContextType extends Context<ContextType>>
-    ProgramBuilder<ContextType> getNormalSmoothProgramBuilder(ShaderProgramFactory<ContextType> programFactory)
+    ProgramBuilder<ContextType> getNormalSmoothProgramBuilder(@NotNull ShaderProgramFactory<ContextType> programFactory)
     {
         return programFactory.getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File("shaders/common/texspace_dynamic.vert"))

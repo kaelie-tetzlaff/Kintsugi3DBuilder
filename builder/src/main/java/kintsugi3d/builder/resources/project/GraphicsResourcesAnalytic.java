@@ -23,6 +23,7 @@ import kintsugi3d.gl.core.DrawableResource;
 import kintsugi3d.gl.core.Program;
 import kintsugi3d.gl.geometry.GeometryMode;
 import kintsugi3d.gl.geometry.VertexGeometry;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
@@ -31,7 +32,7 @@ public class GraphicsResourcesAnalytic<ContextType extends Context<ContextType>>
     private final Function<ProgramBuilder<ContextType>, ProgramBuilder<ContextType>> definesInjection;
 
     public GraphicsResourcesAnalytic(
-        ContextType context, ViewSet viewSet, VertexGeometry geometry,
+        @NotNull ContextType context, ViewSet viewSet, VertexGeometry geometry,
         Function<ProgramBuilder<ContextType>, ProgramBuilder<ContextType>> definesInjection)
     {
         super(new GraphicsResourcesCommon<>(context, viewSet, geometry, new TextureLoadOptions()), true);
@@ -39,7 +40,7 @@ public class GraphicsResourcesAnalytic<ContextType extends Context<ContextType>>
     }
 
 
-    public GraphicsResourcesAnalytic(ContextType context, ViewSet viewSet, VertexGeometry geometry)
+    public GraphicsResourcesAnalytic(@NotNull ContextType context, ViewSet viewSet, VertexGeometry geometry)
     {
         this(context, viewSet, geometry, Function.identity());
     }
@@ -58,13 +59,13 @@ public class GraphicsResourcesAnalytic<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final void setupShaderProgram(Program<ContextType> program)
+    public final void setupShaderProgram(@NotNull Program<ContextType> program)
     {
         getCommonResources().setupShaderProgram(program);
     }
 
     @Override
-    public final DrawableResource<ContextType> createDrawable(Program<ContextType> program)
+    public final @NotNull DrawableResource<ContextType> createDrawable(@NotNull Program<ContextType> program)
     {
         return getGeometryResources().createDrawable(program);
     }

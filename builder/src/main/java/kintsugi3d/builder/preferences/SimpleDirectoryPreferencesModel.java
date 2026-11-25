@@ -17,6 +17,7 @@ package kintsugi3d.builder.preferences;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import kintsugi3d.builder.preferences.serialization.JacksonUserPreferencesSerializer;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 
@@ -29,7 +30,7 @@ public final class SimpleDirectoryPreferencesModel implements DirectoryPreferenc
 
     private SimpleDirectoryPreferencesModel() {}
 
-    public static SimpleDirectoryPreferencesModel createDefault()
+    public static @NotNull SimpleDirectoryPreferencesModel createDefault()
     {
         return new SimpleDirectoryPreferencesModel();
     }
@@ -82,7 +83,7 @@ public final class SimpleDirectoryPreferencesModel implements DirectoryPreferenc
 
     @Override
     @JsonIgnore
-    public Path getPreferencesFileLocation()
+    public @NotNull Path getPreferencesFileLocation()
     {
         return JacksonUserPreferencesSerializer.getPreferencesFile().toPath();
     }

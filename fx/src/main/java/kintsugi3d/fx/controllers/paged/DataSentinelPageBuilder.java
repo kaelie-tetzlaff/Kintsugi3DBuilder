@@ -15,6 +15,8 @@
 
 package kintsugi3d.fx.controllers.paged;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.function.Supplier;
 
 public final class DataSentinelPageBuilder<T> extends DataPageBuilder<Object, T, PageFrameController>
@@ -24,7 +26,7 @@ public final class DataSentinelPageBuilder<T> extends DataPageBuilder<Object, T,
         super(new SentinelPage<>(), frameController, finisher);
     }
 
-    static <T> DataSentinelPageBuilder<T> of(PageFrameController frameController, Supplier<PageFrameController> finisher, T data)
+    static <T> @NotNull DataSentinelPageBuilder<T> of(@NotNull PageFrameController frameController, Supplier<PageFrameController> finisher, T data)
     {
         DataSentinelPageBuilder<T> result = new DataSentinelPageBuilder<>(frameController, finisher);
 

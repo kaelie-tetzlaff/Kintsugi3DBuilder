@@ -15,12 +15,14 @@
 
 package kintsugi3d.fx.experience;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 public class SpecularBasisFit extends ExperienceBase
 {
     @Override
-    public final String getName()
+    public final @NotNull String getName()
     {
         return "Process Textures";
     }

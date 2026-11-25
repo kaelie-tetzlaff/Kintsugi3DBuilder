@@ -17,6 +17,7 @@ package kintsugi3d.gl.util;
 
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
@@ -39,12 +40,12 @@ public class ColorNativeBufferList extends AbstractList<Vector4> implements Colo
         this.size = size;
     }
 
-    @Override public final Vector4 get(int index)
+    @Override public final @NotNull Vector4 get(int index)
     {
         return new Vector4(buffer.get(4 * index), buffer.get(4 * index + 1), buffer.get(4 * index + 2), buffer.get(4 * index + 3));
     }
 
-    public final Vector3 getRGB(int index)
+    public final @NotNull Vector3 getRGB(int index)
     {
         return new Vector3(buffer.get(4 * index), buffer.get(4 * index + 1), buffer.get(4 * index + 2));
     }

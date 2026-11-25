@@ -18,6 +18,7 @@ package kintsugi3d.optimization;
 import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.builders.framebuffer.FramebufferObjectBuilder;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -51,9 +52,9 @@ public class ShaderBasedOptimization<ContextType extends Context<ContextType>> i
     private final Collection<Consumer<FramebufferObject<ContextType>>> postUpdateCallbacks = new LinkedList<>();
 
     public ShaderBasedOptimization(
-        ProgramBuilder<ContextType> estimationProgramBuilder,
-        FramebufferObjectBuilder<ContextType> framebufferObjectBuilder,
-        Function<Program<ContextType>, DrawableResource<ContextType>> drawableFactory)
+        @NotNull ProgramBuilder<ContextType> estimationProgramBuilder,
+        @NotNull FramebufferObjectBuilder<ContextType> framebufferObjectBuilder,
+        @NotNull Function<Program<ContextType>, DrawableResource<ContextType>> drawableFactory)
         throws IOException
     {
         // Normal estimation program
@@ -163,7 +164,7 @@ public class ShaderBasedOptimization<ContextType extends Context<ContextType>> i
      * @param errorCalculator
      * @return
      */
-    public final ReadonlyErrorReport runOnce(Function<FramebufferObject<ContextType>, ReadonlyErrorReport> errorCalculator)
+    public final @NotNull ReadonlyErrorReport runOnce(@NotNull Function<FramebufferObject<ContextType>, ReadonlyErrorReport> errorCalculator)
     {
         runOnce();
 
@@ -180,7 +181,7 @@ public class ShaderBasedOptimization<ContextType extends Context<ContextType>> i
         return report;
     }
 
-    public final void runUntilConvergence(Function<FramebufferObject<ContextType>, ReadonlyErrorReport> errorCalculator,
+    public final void runUntilConvergence(@NotNull Function<FramebufferObject<ContextType>, ReadonlyErrorReport> errorCalculator,
                                           double convergenceTolerance, int unsuccessfulIterationsAllowed)
     {
         int unsuccessfulIterations = 0;

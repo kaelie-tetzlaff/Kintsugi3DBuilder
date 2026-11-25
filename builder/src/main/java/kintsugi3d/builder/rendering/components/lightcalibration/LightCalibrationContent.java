@@ -28,20 +28,21 @@ import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
 public class LightCalibrationContent <ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
-    private final ContextType context;
-    private final ReadonlyImageBasedGraphicsResources<ContextType> resources;
+    private final @Nullable ContextType context;
+    private final @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources;
     private final SceneModel sceneModel;
     private final SceneViewportModel sceneViewportModel;
 
     private @Nullable RenderingSubject<ContextType> renderingSubject;
 
-    public LightCalibrationContent(ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel,
+    public LightCalibrationContent(@NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel,
                                    SceneViewportModel sceneViewportModel)
     {
         context = resources.getContext();
@@ -50,7 +51,7 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
         this.sceneViewportModel = sceneViewportModel;
     }
 
-    private RenderingSubject<ContextType> validateRenderingSubject()
+    private @NotNull RenderingSubject<ContextType> validateRenderingSubject()
     {
         return Objects.requireNonNull(renderingSubject, "Rendered component has not been initialized.");
     }
@@ -78,7 +79,7 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
     }
 
     @Override
-    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(@NotNull FramebufferObject<ContextType> framebuffer, @NotNull CameraViewport cameraViewport)
     {
         Vector3 lightPosition = sceneModel.getSettingsModel().get("currentLightCalibration", Vector2.class).asVector3();
         Matrix4 lightTransform = Matrix4.translate(lightPosition.negated());

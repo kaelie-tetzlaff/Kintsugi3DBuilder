@@ -18,6 +18,7 @@ package kintsugi3d.builder.io.imageset;
 import javafx.scene.image.Image;
 import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.core.viewset.View;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,7 @@ public final class GenericImageSetInfo implements ImageSetInfo
     private final String name;
     private final List<View> views;
 
-    public GenericImageSetInfo(String name, ReadonlyViewSet viewSet)
+    public GenericImageSetInfo(String name, @NotNull ReadonlyViewSet viewSet)
     {
         this.name = name;
 
@@ -45,7 +46,7 @@ public final class GenericImageSetInfo implements ImageSetInfo
     }
 
     @Override
-    public List<ImageIdentifier> getViews()
+    public @NotNull List<ImageIdentifier> getViews()
     {
         return views.stream()
             .map(view -> new ImageIdentifier(view.toString()))
@@ -53,14 +54,14 @@ public final class GenericImageSetInfo implements ImageSetInfo
     }
 
     @Override
-    public Map<Integer, Image> getThumbnailMap()
+    public @NotNull Map<Integer, Image> getThumbnailMap()
     {
         // TODO implement thumbnails for generic case
         return new HashMap<>(16);
     }
 
     @Override
-    public Optional<String> findFullResImagePath(String imageName)
+    public @NotNull Optional<String> findFullResImagePath(String imageName)
     {
         for (View view : views)
         {

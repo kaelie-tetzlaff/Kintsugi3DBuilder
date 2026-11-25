@@ -22,6 +22,8 @@ import kintsugi3d.gl.core.FramebufferObject;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.vecmath.Matrix4;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,25 +63,25 @@ abstract class AnimationRequest implements ImageBasedGraphicsRequest
             return exportPath;
         }
 
-        public final BuilderBase setWidth(int width)
+        public final @NotNull BuilderBase setWidth(int width)
         {
             this.width = width;
             return this;
         }
 
-        public final BuilderBase setHeight(int height)
+        public final @NotNull BuilderBase setHeight(int height)
         {
             this.height = height;
             return this;
         }
 
-        public final BuilderBase setFrameCount(int frameCount)
+        public final @NotNull BuilderBase setFrameCount(int frameCount)
         {
             this.frameCount = frameCount;
             return this;
         }
 
-        public final BuilderBase setExportPath(File exportPath)
+        public final @NotNull BuilderBase setExportPath(File exportPath)
         {
             this.exportPath = exportPath;
             return this;
@@ -105,7 +107,7 @@ abstract class AnimationRequest implements ImageBasedGraphicsRequest
 
     @Override
     public final <ContextType extends Context<ContextType>> void executeRequest(
-        ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
+        @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @Nullable ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         try

@@ -19,6 +19,7 @@ import javafx.scene.image.Image;
 import kintsugi3d.builder.resources.project.MissingImagesException;
 import kintsugi3d.builder.util.UnzipHelper;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -46,14 +47,14 @@ public final class MetashapeChunk
     private Document chunkXML;
     private Document frameXML;
 
-    private List<MetashapeModel> models = new ArrayList<>(8);
+    private @NotNull List<MetashapeModel> models = new ArrayList<>(8);
     private Integer defaultModelID;
     private MetashapeModel currentModel;
     private File thumbnailsDir;
     private File masksDir;
     private File masksDirOverride;
 
-    public static MetashapeChunk parseFromElement(MetashapeDocument document, Element chunkElement) throws IOException
+    public static @NotNull MetashapeChunk parseFromElement(@NotNull MetashapeDocument document, @NotNull Element chunkElement) throws IOException
     {
         Integer chunkID = null;
         String tempChunkID = chunkElement.getAttribute("id");
@@ -200,25 +201,25 @@ public final class MetashapeChunk
         currentModel = model;
     }
 
-    private MetashapeChunk setChunkID(Integer chunkID)
+    private @NotNull MetashapeChunk setChunkID(Integer chunkID)
     {
         id = Objects.requireNonNullElse(chunkID, -1);
         return this;
     }
 
-    private MetashapeChunk setDefaultModelID(Integer defaultModelID)
+    private @NotNull MetashapeChunk setDefaultModelID(Integer defaultModelID)
     {
         this.defaultModelID = defaultModelID;
         return this;
     }
 
-    private MetashapeChunk setFrameXml(Document frameXML)
+    private @NotNull MetashapeChunk setFrameXml(Document frameXML)
     {
         this.frameXML = frameXML;
         return this;
     }
 
-    private MetashapeChunk setChunkXml(Document doc)
+    private @NotNull MetashapeChunk setChunkXml(Document doc)
     {
         chunkXML = doc;
         return this;
@@ -229,19 +230,19 @@ public final class MetashapeChunk
         return frameXML;
     }
 
-    public String getChunkDirectoryPath()
+    public @NotNull String getChunkDirectoryPath()
     {
         String psxFilePath = metashapeDocument.getPsxFilePath();
         String psxPathBase = psxFilePath.substring(0, psxFilePath.length() - 4); //remove ".psx" from path
         return new File(new File(psxPathBase + ".files"), Integer.toString(id)).getPath();
     }
 
-    public String getFrameDirectoryPath()
+    public @NotNull String getFrameDirectoryPath()
     {
         return new File(new File(getChunkDirectoryPath()), "0").getPath();
     }
 
-    public String getFramePath()
+    public @NotNull String getFramePath()
     {
         return new File(new File(getFrameDirectoryPath()), "frame.zip").getPath();
     }
@@ -253,7 +254,7 @@ public final class MetashapeChunk
         metashapeDocument = parentDocument;
     }
 
-    public Integer getID()
+    public @NotNull Integer getID()
     {
         return id;
     }
@@ -263,12 +264,12 @@ public final class MetashapeChunk
         return currentModel;
     }
 
-    public Map<Integer, Image> loadThumbnailImageList()
+    public @NotNull Map<Integer, Image> loadThumbnailImageList()
     {
         return UnzipHelper.unzipImagesToMap(thumbnailsDir);
     }
 
-    private List<Element> findChunkXmlCameras()
+    private @NotNull List<Element> findChunkXmlCameras()
     {
         NodeList cams = chunkXML.getElementsByTagName("camera");
         return IntStream.range(0, cams.getLength())
@@ -278,7 +279,7 @@ public final class MetashapeChunk
             .collect(Collectors.toList());
     }
 
-    public List<Element> findEnabledCameras()
+    public @NotNull List<Element> findEnabledCameras()
     {
         Collection<Element> cams = findChunkXmlCameras();
         List<Element> enabledCams = new ArrayList<>(cams.size());
@@ -297,7 +298,7 @@ public final class MetashapeChunk
         return enabledCams;
     }
 
-    public Map<Integer, String> buildCameraPathsMap(boolean useRelativePaths, Collection<File> disabledImageFiles)
+    public @NotNull Map<Integer, String> buildCameraPathsMap(boolean useRelativePaths, @NotNull Collection<File> disabledImageFiles)
         throws FileNotFoundException, MissingImagesException
     {
         File rootDirectory = new File(metashapeDocument.getPsxFilePath()).getParentFile();
@@ -395,7 +396,7 @@ public final class MetashapeChunk
         return currentModel.getPath();
     }
 
-    public List<MetashapeModel> getModels()
+    public @NotNull List<MetashapeModel> getModels()
     {
         return Collections.unmodifiableList(models);
     }
@@ -419,7 +420,7 @@ public final class MetashapeChunk
         return Objects.requireNonNullElse(currentModel.getId(), -1);
     }
 
-    public File getPsxFile()
+    public @NotNull File getPsxFile()
     {
         return metashapeDocument.getPsxFile();
     }

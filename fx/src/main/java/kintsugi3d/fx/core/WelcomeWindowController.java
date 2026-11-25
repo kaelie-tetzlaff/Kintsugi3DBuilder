@@ -38,6 +38,7 @@ import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.io.RecentProjects;
 import kintsugi3d.builder.io.ViewSetReaderFromVSET;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,7 +79,7 @@ public class WelcomeWindowController
 
     private BooleanExpression shouldBeHidden;
 
-    public final void init(Stage injectedStage, JavaFXState state, Runnable injectedUserDocumentationHandler)
+    public final void init(@NotNull Stage injectedStage, @NotNull JavaFXState state, Runnable injectedUserDocumentationHandler)
     {
         //noinspection AssignmentToStaticFieldFromInstanceMethod
         instance = this;
@@ -151,13 +152,13 @@ public class WelcomeWindowController
             promptCacheSize -> LOG.info("No cache cleanup needed (Size: {}GB)", promptCacheSize));
     }
 
-    private static void handleMenuItemSelection(MenuItem item)
+    private static void handleMenuItemSelection(@NotNull MenuItem item)
     {
         String projectName = item.getText();
         FrontendIO.openProjectFromFile(new File(projectName));
     }
 
-    public final void splitMenuButtonActions(ActionEvent actionEvent)
+    public final void splitMenuButtonActions(@NotNull ActionEvent actionEvent)
     {
         Object source = actionEvent.getSource();
         //user clicks on a menu item
@@ -203,7 +204,7 @@ public class WelcomeWindowController
         //TODO: ONLY HIDE THE MENU WHEN THE USER'S MOUSE LEAVES THE CONTEXT MENU
     }
 
-    public final void recentButton(ActionEvent actionEvent)
+    public final void recentButton(@NotNull ActionEvent actionEvent)
     {
         Object source = actionEvent.getSource();
         //user clicks on a menu item
@@ -286,7 +287,7 @@ public class WelcomeWindowController
         }
     }
 
-    private static void addContextMenus(Labeled control)
+    private static void addContextMenus(@NotNull Labeled control)
     {
         String path = control.getTooltip().getText();
         String projectName = control.getText();
@@ -345,7 +346,7 @@ public class WelcomeWindowController
         RecentProjectsHelper.updateAllControlStructures();
     }
 
-    private static void addItemToQuickAccess(String fileName, Button recentButton)
+    private static void addItemToQuickAccess(@NotNull String fileName, @NotNull Button recentButton)
     {
         //set project file name
         File projFile = new File(fileName);
@@ -360,7 +361,7 @@ public class WelcomeWindowController
         setRecentButtonImg(recentButton, projFile);
     }
 
-    private static void setRecentButtonImg(Button recentButton, File projFile)
+    private static void setRecentButtonImg(@NotNull Button recentButton, @NotNull File projFile)
     {
         try
         {

@@ -27,27 +27,29 @@ import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.state.shader.ActiveShaderModel;
 import kintsugi3d.fx.core.JavaFXState;
 import kintsugi3d.fx.multithread.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class MultithreadState implements Kintsugi3DBuilderState
 {
-    private final ManipulableCameraModel cameraModel;
-    private final ManipulableLightingEnvironmentModel lightingModel;
-    private final ManipulableObjectPoseModel objectModel;
-    private final ActiveShaderModel activeShaderModel;
-    private final SelectableViewListModel viewListModel;
-    private final ProjectModel projectModel;
-    private final CarouselModel carouselModel;
+    private final @NotNull ManipulableCameraModel cameraModel;
+    private final @NotNull ManipulableLightingEnvironmentModel lightingModel;
+    private final @NotNull ManipulableObjectPoseModel objectModel;
+    private final @NotNull ActiveShaderModel activeShaderModel;
+    private final @NotNull SelectableViewListModel viewListModel;
+    private final @NotNull ProjectModel projectModel;
+    private final @NotNull CarouselModel carouselModel;
 
-    private final GeneralSettingsModel settingsModel;
-    private final LoadOptionsModel loadOptionsModel;
-    private final CacheModel cacheModel;
+    private final @NotNull GeneralSettingsModel settingsModel;
+    private final @NotNull LoadOptionsModel loadOptionsModel;
+    private final @NotNull CacheModel cacheModel;
 
-    private final TabsModel tabsModel;
+    private final @NotNull TabsModel tabsModel;
 
     private static MultithreadState instance;
 
     // TODO make private
-    public static MultithreadState getInstance()
+    public static @Nullable MultithreadState getInstance()
     {
         if (instance == null)
         {
@@ -65,7 +67,7 @@ public final class MultithreadState implements Kintsugi3DBuilderState
         return JavaFXApplication.isInitialized();
     }
 
-    private MultithreadState(JavaFXState base)
+    private MultithreadState(@NotNull JavaFXState base)
     {
         cameraModel = new SynchronizedCameraModel(base.getCameraModel());
         objectModel = new SynchronizedObjectPoseModel(base.getObjectModel());

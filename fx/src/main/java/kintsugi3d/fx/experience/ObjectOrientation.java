@@ -18,13 +18,14 @@ package kintsugi3d.fx.experience;
 import javafx.stage.WindowEvent;
 import kintsugi3d.fx.controllers.scene.object.ObservableObjectPoseSettings;
 import kintsugi3d.fx.controllers.scene.object.SettingsObjectSceneController;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
 public class ObjectOrientation extends ExperienceBase
 {
     @Override
-    public final String getName()
+    public final @NotNull String getName()
     {
         return "Object Orientation";
     }

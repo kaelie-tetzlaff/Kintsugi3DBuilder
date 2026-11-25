@@ -23,6 +23,7 @@ import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -155,7 +156,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
      * @return The populated {@link ViewSetBuilder}.
      */
     @Override
-    public ViewSetBuilder readFromStream(InputStream stream, ViewSetDirectories directories) throws XMLStreamException
+    public @NotNull ViewSetBuilder readFromStream(InputStream stream, @NotNull ViewSetDirectories directories) throws XMLStreamException
     {
         if (directories.getSupportingFilesDirectory() == null)
         {
@@ -172,7 +173,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
      * @param stream stream The Agisoft camera XML stream to parse.
      * @param directories the project directory used when constructing {@code Builder}
      */
-    private static ViewSetBuilder readFromLooseFiles(InputStream stream, ViewSetDirectories directories) throws XMLStreamException
+    private static @NotNull ViewSetBuilder readFromLooseFiles(InputStream stream, @NotNull ViewSetDirectories directories) throws XMLStreamException
     {
         return readFromStream(stream, directories, null, null, null, false);
     }
@@ -181,8 +182,8 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
      * Loads a view set from a Metashape psx chunk's extracted XML.
      * Image and mask filenames come from a pre-built path map; disabled images already be filtered out of imagePathMap.
      */
-    private static ViewSetBuilder readFromMetashapeChunk(InputStream stream, ViewSetDirectories directories, String modelID,
-                                                         Map<Integer, String> imagePathMap, Map<Integer, String> maskPathMap) throws XMLStreamException
+    private static @NotNull ViewSetBuilder readFromMetashapeChunk(InputStream stream, @NotNull ViewSetDirectories directories, String modelID,
+                                                                  Map<Integer, String> imagePathMap, Map<Integer, String> maskPathMap) throws XMLStreamException
     {
         return readFromStream(stream, directories, modelID, imagePathMap, maskPathMap, true);
     }
@@ -201,8 +202,8 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
      *                               transform drives projective texture mapping. When false (XML import),
      *                               the inverted global transform is used instead.
      */
-    private static ViewSetBuilder readFromStream(InputStream stream, ViewSetDirectories directories, String modelID,
-                                                 Map<Integer, String> imagePathMap, Map<Integer, String> maskPathMap, boolean ignoreGlobalTransforms)
+    private static @NotNull ViewSetBuilder readFromStream(InputStream stream, @NotNull ViewSetDirectories directories, String modelID,
+                                                          Map<Integer, String> imagePathMap, Map<Integer, String> maskPathMap, boolean ignoreGlobalTransforms)
         throws XMLStreamException
     {
         Helper helper = new Helper(modelID);
@@ -292,12 +293,12 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
         private int defaultLightIndex = -1;
         private int disabledCameraCount = 0;
 
-        private Matrix4 globalTransform = Matrix4.IDENTITY;
+        private @NotNull Matrix4 globalTransform = Matrix4.IDENTITY;
         private float globalScale = 1.0f;
-        private Vector3 globalTranslate = new Vector3(0.0f, 0.0f, 0.0f);
+        private @NotNull Vector3 globalTranslate = new Vector3(0.0f, 0.0f, 0.0f);
 
         private @Nullable String currentModelID; // takes on the model ID while within a <model> tag
-        private Matrix4 modelTransform = Matrix4.IDENTITY;
+        private @NotNull Matrix4 modelTransform = Matrix4.IDENTITY;
 
         private float b1 = 0.0f; // fx - fy: https://www.agisoft.com/forum/index.php?topic=6437.0
 
@@ -313,7 +314,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
             this.modelID = modelID;
         }
 
-        void startElement(String name, ElementTextSupplier elementText, Function<String, String> attributeLookup)
+        void startElement(@NotNull String name, @NotNull ElementTextSupplier elementText, @NotNull Function<String, String> attributeLookup)
             throws XMLStreamException
         {
             switch (name)
@@ -609,7 +610,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
             }
         }
 
-        void endElement(String name)
+        void endElement(@NotNull String name)
         {
             switch (name)
             {
@@ -650,8 +651,8 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
             }
         }
 
-        ViewSetBuilder getBuilder(
-            ViewSetDirectories directories, Map<Integer, String> imagePathMap,  Map<Integer, String> maskPathMap,
+        @NotNull ViewSetBuilder getBuilder(
+            @NotNull ViewSetDirectories directories, @Nullable Map<Integer, String> imagePathMap, @Nullable Map<Integer, String> maskPathMap,
             boolean ignoreGlobalTransforms)
         {
             ViewSetBuilder builder = ViewSet.getBuilder(directories.getProjectRoot(), directories.getSupportingFilesDirectory(), cameraSet.size());
@@ -878,7 +879,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
         }
     }
 
-    private static Matrix4 arrayToCameraMatrix(float[] m)
+    private static @NotNull Matrix4 arrayToCameraMatrix(float @NotNull [] m)
     {
         // Negate 2nd and 3rd column to rotate 180 degrees around x-axis
         // Invert matrix by transposing rotation and negating translation
@@ -903,7 +904,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
         }
     }
 
-    private static Matrix4 arrayToMatrix(float[] m)
+    private static @NotNull Matrix4 arrayToMatrix(float @NotNull [] m)
     {
         if (m.length == 9)
         {
@@ -936,7 +937,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
      * @param disabledImageFiles Image labels to exclude from the camera path map; may be null or empty.
      * @return A builder populated with the chunk's cameras, masks, geometry, and full-res image directory.
      */
-    public static ViewSetBuilder loadViewsetFromChunk(MetashapeChunk metashapeChunk, Collection<File> disabledImageFiles)
+    public static @NotNull ViewSetBuilder loadViewsetFromChunk(@NotNull MetashapeChunk metashapeChunk, @NotNull Collection<File> disabledImageFiles)
         throws IOException, XMLStreamException, MissingImagesException
     {
         // Get reference to the chunk directory
@@ -1051,7 +1052,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
      * @param masksZipFile The masks zip to inspect.
      * @return A camera-ID → mask path map containing one entry per {@code <mask>} element in the document.
      */
-    private static Map<Integer, String> extractMaskFilenames(File masksZipFile) throws IOException
+    private static @NotNull Map<Integer, String> extractMaskFilenames(File masksZipFile) throws IOException
     {
         LOG.info("Unzipping masks folder...");
         Document docXml = UnzipHelper.unzipToDocument(masksZipFile, "doc.xml");

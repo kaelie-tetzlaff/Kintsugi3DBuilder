@@ -19,6 +19,7 @@ import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritablePixelFormat;
 import javafx.scene.paint.Color;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -49,7 +50,7 @@ public abstract class PixelReaderBase implements PixelReader
     }
 
     @Override
-    public final <T extends Buffer> void getPixels(int x, int y, int w, int h, WritablePixelFormat<T> pixelformat, T buffer, int scanlineStride)
+    public final <T extends Buffer> void getPixels(int x, int y, int w, int h, @NotNull WritablePixelFormat<T> pixelformat, T buffer, int scanlineStride)
     {
         for (int i = 0; i < w; i++)
         {
@@ -61,13 +62,13 @@ public abstract class PixelReaderBase implements PixelReader
     }
 
     @Override
-    public final void getPixels(int x, int y, int w, int h, WritablePixelFormat<ByteBuffer> pixelformat, byte[] buffer, int offset, int scanlineStride)
+    public final void getPixels(int x, int y, int w, int h, @NotNull WritablePixelFormat<ByteBuffer> pixelformat, byte @NotNull [] buffer, int offset, int scanlineStride)
     {
         getPixels(x, y, w, h, pixelformat, ByteBuffer.wrap(buffer, offset, buffer.length - offset), scanlineStride);
     }
 
     @Override
-    public final void getPixels(int x, int y, int w, int h, WritablePixelFormat<IntBuffer> pixelformat, int[] buffer, int offset, int scanlineStride)
+    public final void getPixels(int x, int y, int w, int h, @NotNull WritablePixelFormat<IntBuffer> pixelformat, int @NotNull [] buffer, int offset, int scanlineStride)
     {
         getPixels(x, y, w, h, pixelformat, IntBuffer.wrap(buffer, offset, buffer.length - offset), scanlineStride);
     }

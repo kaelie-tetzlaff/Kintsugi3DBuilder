@@ -19,6 +19,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import kintsugi3d.builder.state.project.SerializableLightGroupSettings;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -43,7 +44,7 @@ public class ObservableLightGroupSettings extends SerializableLightGroupSettings
     }
 
     @Override
-    public final ObservableLightSettings constructLightInstanceSetting()
+    public final @NotNull ObservableLightSettings constructLightInstanceSetting()
     {
         return new ObservableLightSettings(locked);
     }
@@ -101,7 +102,7 @@ public class ObservableLightGroupSettings extends SerializableLightGroupSettings
     }
 
     @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
-    public final ListProperty<ObservableLightSettings> lightListProperty()
+    public final @NotNull ListProperty<ObservableLightSettings> lightListProperty()
     {
         return lightList;
     }
@@ -112,7 +113,7 @@ public class ObservableLightGroupSettings extends SerializableLightGroupSettings
         return locked.get();
     }
 
-    public final BooleanProperty lockedProperty()
+    public final @NotNull BooleanProperty lockedProperty()
     {
         return locked;
     }
@@ -129,7 +130,7 @@ public class ObservableLightGroupSettings extends SerializableLightGroupSettings
         return name.get();
     }
 
-    public final StringProperty nameProperty()
+    public final @NotNull StringProperty nameProperty()
     {
         return name;
     }
@@ -140,7 +141,7 @@ public class ObservableLightGroupSettings extends SerializableLightGroupSettings
         this.name.set(name);
     }
 
-    public final IntegerProperty selectedLightIndexProperty()
+    public final @NotNull IntegerProperty selectedLightIndexProperty()
     {
         return selectedLightIndex;
     }

@@ -19,6 +19,7 @@ import kintsugi3d.builder.core.texture.TextureResolution;
 import kintsugi3d.builder.fit.ReflectanceData;
 import kintsugi3d.gl.stream.GraphicsStream;
 import kintsugi3d.optimization.NonNegativeWeightOptimization;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +28,7 @@ import java.util.Collections;
 public class SpecularWeightOptimization
 {
     private static final Logger LOG = LoggerFactory.getLogger(SpecularWeightOptimization.class);
-    private final NonNegativeWeightOptimization base;
+    private final @NotNull NonNegativeWeightOptimization base;
     private final TextureResolution textureResolution;
 
     private final int weightBlockSize;
@@ -40,7 +41,7 @@ public class SpecularWeightOptimization
             Collections.singletonList(b -> 1.0), Collections.singletonList(1.0)); // Equality constraint to ensure that the weights sum up to 1.0.
     }
 
-    public SpecularWeightOptimization(TextureResolution textureResolution, int materialCount)
+    public SpecularWeightOptimization(@NotNull TextureResolution textureResolution, int materialCount)
     {
         // Default weight block size (only one weight block)
         this(textureResolution, materialCount, textureResolution.width * textureResolution.height);
@@ -51,7 +52,7 @@ public class SpecularWeightOptimization
         return weightBlockSize;
     }
 
-    public final void execute(GraphicsStream<ReflectanceData> viewStream, SpecularDecomposition solution, int pStart)
+    public final void execute(GraphicsStream<ReflectanceData> viewStream, @NotNull SpecularDecomposition solution, int pStart)
     {
         LOG.info("Building weight fitting matrices...");
 
@@ -95,7 +96,7 @@ public class SpecularWeightOptimization
         LOG.info("DONE!");
     }
 
-    public final void execute(GraphicsStream<ReflectanceData> viewStream, SpecularDecomposition solution)
+    public final void execute(GraphicsStream<ReflectanceData> viewStream, @NotNull SpecularDecomposition solution)
     {
         // Start at p=0 by default
         execute(viewStream, solution, 0);

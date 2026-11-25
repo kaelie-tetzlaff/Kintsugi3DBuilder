@@ -23,6 +23,7 @@ import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,7 +57,7 @@ public final class ViewSetReaderFromVSET implements ViewSetReader
      * @throws IOException If I/O errors occur while reading the file.
      */
     @Override
-    public ViewSetBuilder readFromStream(InputStream stream, ViewSetDirectories directories)
+    public @NotNull ViewSetBuilder readFromStream(@NotNull InputStream stream, @NotNull ViewSetDirectories directories)
     {
         File root = directories.getProjectRoot();
         File supportingFilesDirectory = directories.getSupportingFilesDirectory();
@@ -419,7 +420,7 @@ public final class ViewSetReaderFromVSET implements ViewSetReader
         return builder;
     }
 
-    private static String makePortableFilePath(String original)
+    private static @NotNull String makePortableFilePath(@NotNull String original)
     {
         return original
             .replace('/', File.separatorChar).replace('\\', File.separatorChar);
@@ -434,7 +435,7 @@ public final class ViewSetReaderFromVSET implements ViewSetReader
      * @return The view set
      * @throws Exception If errors occur while reading the file.
      */
-    private ViewSetBuilder readFromStream(InputStream stream, File root)
+    private @NotNull ViewSetBuilder readFromStream(@NotNull InputStream stream, File root)
     {
         // Use root directory as supporting files directory
         ViewSetDirectories directories = new ViewSetDirectories();
@@ -453,7 +454,7 @@ public final class ViewSetReaderFromVSET implements ViewSetReader
      * @return The view set
      * @throws Exception If errors occur while reading the file.
      */
-    public ViewSetBuilder readFromFile(File file, File supportingFilesDirectory) throws IOException
+    public @NotNull ViewSetBuilder readFromFile(@NotNull File file, File supportingFilesDirectory) throws IOException
     {
         try (InputStream stream = new FileInputStream(file))
         {
@@ -474,7 +475,7 @@ public final class ViewSetReaderFromVSET implements ViewSetReader
      * after any additional options are specified.
      * @throws IOException If I/O errors occur while reading the file.
      */
-    public ViewSetBuilder readFromFile(File file) throws IOException
+    public @NotNull ViewSetBuilder readFromFile(@NotNull File file) throws IOException
     {
         try (InputStream stream = new FileInputStream(file))
         {

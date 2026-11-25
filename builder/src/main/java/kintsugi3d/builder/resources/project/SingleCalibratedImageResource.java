@@ -53,16 +53,16 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
      * @param loadOptions
      * @throws IOException
      */
-    SingleCalibratedImageResource(ContextType context, View view, ReadonlyVertexGeometry geometry,
-                                  ReadonlyLoadOptionsModel loadOptions) throws IOException
+    SingleCalibratedImageResource(@NotNull ContextType context, @NotNull View view, @Nullable ReadonlyVertexGeometry geometry,
+                                  @NotNull ReadonlyLoadOptionsModel loadOptions) throws IOException
     {
         this(context, view,
             geometry == null ? GeometryResources.createNullResources() : geometry.createGraphicsResources(context),
             true, loadOptions);
     }
 
-    private SingleCalibratedImageResource(ContextType context, View view,
-        @NotNull GeometryResources<ContextType> geometryResources, boolean geometryResourcesOwned, ReadonlyLoadOptionsModel loadOptions) throws IOException
+    private SingleCalibratedImageResource(@NotNull ContextType context, @NotNull View view,
+                                          @NotNull GeometryResources<ContextType> geometryResources, boolean geometryResourcesOwned, @NotNull ReadonlyLoadOptionsModel loadOptions) throws IOException
     {
         this.view = view;
         this.geometryResources = geometryResources;
@@ -137,7 +137,7 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
     }
 
     public static <ContextType extends Context<ContextType>> ProgramBuilder<ContextType> getShaderProgramBuilder(
-        ContextType context, ReadonlyViewSet viewSet, ReadonlyLoadOptionsModel loadOptions)
+        ContextType context, @NotNull ReadonlyViewSet viewSet, @NotNull ReadonlyLoadOptionsModel loadOptions)
     {
         ProgramBuilder<ContextType> builder = viewSet.getShaderProgramBuilder(context);
 
@@ -150,7 +150,7 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
         return builder;
     }
 
-    public final void setupShaderProgram(Program<ContextType> program)
+    public final void setupShaderProgram(@NotNull Program<ContextType> program)
     {
         view.getContainingViewSet().setupShaderProgram(program);
 
@@ -181,7 +181,7 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
      * @param program The program to use to construct the Drawable.
      * @return A Drawable for rendering this instance using the specified shader program.
      */
-    public final DrawableResource<ContextType> createDrawable(Program<ContextType> program)
+    public final @NotNull DrawableResource<ContextType> createDrawable(@NotNull Program<ContextType> program)
     {
         return geometryResources.createDrawable(program);
     }

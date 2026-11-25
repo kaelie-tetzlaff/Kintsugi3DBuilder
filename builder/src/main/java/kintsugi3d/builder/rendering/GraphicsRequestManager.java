@@ -19,6 +19,7 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     public static final String ERROR_MESSAGE = "An error occurred during the operation.";
 
     private final ContextType context;
-    private final Queue<Runnable> requestList;
+    private final @NotNull Queue<Runnable> requestList;
     private final Collection<Runnable> requestAddedListeners = new CopyOnWriteArrayList<>();
     private volatile RenderableManager<ContextType, ImageBasedRenderable<ContextType>> renderableManager;
     private volatile ProgressMonitor progressMonitor;
@@ -89,7 +90,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
         }
     }
 
-    private static void logException(Throwable e)
+    private static void logException(@NotNull Throwable e)
     {
         Throwable cause = e.getCause();
         if (cause instanceof UserCancellationException)
@@ -102,7 +103,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
         }
     }
 
-    private void handleException(Throwable e)
+    private void handleException(@NotNull Throwable e)
     {
         Throwable cause = e.getCause();
         if (cause instanceof UserCancellationException)
@@ -127,7 +128,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public final void addBackgroundImageBasedGraphicsRequest(ImageBasedGraphicsRequest request)
+    public final void addBackgroundImageBasedGraphicsRequest(@NotNull ImageBasedGraphicsRequest request)
     {
         if (renderableManager.getMainRenderable() == null)
         {
@@ -176,7 +177,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public final void addImageBasedGraphicsRequest(ImageBasedGraphicsRequest request)
+    public final void addImageBasedGraphicsRequest(@NotNull ImageBasedGraphicsRequest request)
     {
         if (progressMonitor.isConflictingProcess())
         {
@@ -240,7 +241,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public final void addBackgroundTextureReplacementGraphicsRequest(TextureReplacementGraphicsRequest request)
+    public final void addBackgroundTextureReplacementGraphicsRequest(@NotNull TextureReplacementGraphicsRequest request)
     {
         if (renderableManager.getMainRenderable() == null)
         {
@@ -292,7 +293,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public final void addTextureReplacementGraphicsRequest(TextureReplacementGraphicsRequest request)
+    public final void addTextureReplacementGraphicsRequest(@NotNull TextureReplacementGraphicsRequest request)
     {
         if (progressMonitor.isConflictingProcess())
         {
@@ -365,7 +366,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
      * @param request
      */
     @Override
-    public final void addBackgroundGraphicsRequest(GraphicsRequest request)
+    public final void addBackgroundGraphicsRequest(@NotNull GraphicsRequest request)
     {
         synchronized (requestList)
         {
@@ -397,7 +398,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public final void addGraphicsRequest(ProgressMonitoredGraphicsRequest request)
+    public final void addGraphicsRequest(@NotNull ProgressMonitoredGraphicsRequest request)
     {
         synchronized (requestList)
         {

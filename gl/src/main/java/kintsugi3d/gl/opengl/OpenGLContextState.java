@@ -18,6 +18,7 @@ package kintsugi3d.gl.opengl;
 import kintsugi3d.gl.core.BlendFunction;
 import kintsugi3d.gl.core.BlendFunction.Weight;
 import kintsugi3d.gl.core.ContextState;
+import org.jetbrains.annotations.NotNull;
 
 import static org.lwjgl.opengl.GL31.*;
 
@@ -83,7 +84,7 @@ public class OpenGLContextState implements ContextState
         OpenGLContext.errorCheck();
     }
 
-    private static int blendFuncEnumToInt(Weight func)
+    private static int blendFuncEnumToInt(@NotNull Weight func)
     {
         switch(func)
         {
@@ -104,7 +105,7 @@ public class OpenGLContextState implements ContextState
     }
 
     @Override
-    public final void setBlendFunction(BlendFunction func)
+    public final void setBlendFunction(@NotNull BlendFunction func)
     {
         glEnable(GL_BLEND);
         OpenGLContext.errorCheck();

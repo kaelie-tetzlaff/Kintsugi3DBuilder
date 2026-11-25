@@ -30,6 +30,7 @@ import kintsugi3d.fx.experience.CreateProject;
 import kintsugi3d.fx.util.StaticUtilities;
 import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -120,7 +121,7 @@ public final class FrontendIO
         }
     }
 
-    private static CreateProject getCreateProjectExperience()
+    private static @Nullable CreateProject getCreateProjectExperience()
     {
         return ExperienceManager.getInstance().getExperience(ExperienceManager.CREATE_PROJECT, CreateProject.class);
     }
@@ -188,7 +189,7 @@ public final class FrontendIO
      *
      * @param parentWindow
      */
-    private void saveProject(File projectFile, Window parentWindow)
+    private void saveProject(@Nullable File projectFile, Window parentWindow)
     {
         if (projectFile == null)
         {

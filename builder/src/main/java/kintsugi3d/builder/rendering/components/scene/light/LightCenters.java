@@ -24,6 +24,7 @@ import kintsugi3d.gl.core.BlendFunction.Weight;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.RadialTextureGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class LightCenters<ContextType extends Context<ContextType>> extends Shad
 
     private Texture2D<ContextType> lightCenterTexture;
 
-    public LightCenters(ContextType context, SceneViewportModel sceneViewportModel, SceneModel sceneModel)
+    public LightCenters(ContextType context, @NotNull SceneViewportModel sceneViewportModel, @NotNull SceneModel sceneModel)
     {
         super(context);
         this.sceneViewportModel = sceneViewportModel;
@@ -50,7 +51,7 @@ public class LightCenters<ContextType extends Context<ContextType>> extends Shad
         }
     }
 
-    private static String getSceneObjectTag(int i)
+    private static @NotNull String getSceneObjectTag(int i)
     {
         return String.format(SCENE_OBJECT_TAG_FORMAT, i);
     }
@@ -75,13 +76,13 @@ public class LightCenters<ContextType extends Context<ContextType>> extends Shad
     }
 
     @Override
-    protected final Map<String, VertexBuffer<ContextType>> createVertexBuffers()
+    protected final @NotNull Map<String, VertexBuffer<ContextType>> createVertexBuffers()
     {
         return Map.of("position", getContext().createRectangle());
     }
 
     @Override
-    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(@NotNull FramebufferObject<ContextType> framebuffer, @NotNull CameraViewport cameraViewport)
     {
         if (sceneModel.getSettingsModel().getBoolean("relightingEnabled")
             && sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled")

@@ -22,6 +22,8 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.ContextBound;
 import kintsugi3d.gl.core.Program;
 import kintsugi3d.gl.core.TwoDimensional;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.stream.Collectors;
@@ -29,9 +31,9 @@ import java.util.stream.Collectors;
 public interface ReadonlyTextureResources<ContextType extends Context<ContextType>>
     extends ContextBound<ContextType>, TwoDimensional, ReadonlyTextureSet<ContextType>
 {
-    ReadonlyBasisResources<ContextType> getBasisResources();
+    @Nullable ReadonlyBasisResources<ContextType> getBasisResources();
 
-    ReadonlyBasisWeightResources<ContextType> getBasisWeightResources();
+    @Nullable ReadonlyBasisWeightResources<ContextType> getBasisWeightResources();
 
     String sanitizeTextureName(CharSequence name);
 
@@ -55,7 +57,7 @@ public interface ReadonlyTextureResources<ContextType extends Context<ContextTyp
      * @param outputDirectory  The directory in which to save the texture.
      * @param filenameOverride The filename to use.  If set to null, a default filename will be provided.
      */
-    default void saveTexture(StandardTexture tex, String format, File outputDirectory, String filenameOverride)
+    default void saveTexture(@NotNull StandardTexture tex, String format, File outputDirectory, String filenameOverride)
     {
         saveTexture(tex.getDetails().name, format, outputDirectory, filenameOverride);
     }
@@ -125,7 +127,7 @@ public interface ReadonlyTextureResources<ContextType extends Context<ContextTyp
      * @param filenamePrefix  A prefix to attach to each file (i.e. the name of the project).
      *                        This can be set to the empty string "" to use just the base / default names.
      */
-    default void saveNamedTextures(Iterable<String> texNames, String format, File outputDirectory, String filenamePrefix)
+    default void saveNamedTextures(@NotNull Iterable<String> texNames, @NotNull String format, File outputDirectory, String filenamePrefix)
     {
         for (String name : texNames)
         {
@@ -140,7 +142,7 @@ public interface ReadonlyTextureResources<ContextType extends Context<ContextTyp
      * @param filenamePrefix  A prefix to attach to each file (i.e. the name of the project).
      *                        This can be set to the empty string "" to use just the base / default names.
      */
-    default void saveAllNamedTextures(String format, File outputDirectory, String filenamePrefix)
+    default void saveAllNamedTextures(@NotNull String format, File outputDirectory, String filenamePrefix)
     {
         saveNamedTextures(getTextures().keySet().stream().map(t -> t.name).collect(Collectors.toList()),
             format, outputDirectory, filenamePrefix);
@@ -153,7 +155,7 @@ public interface ReadonlyTextureResources<ContextType extends Context<ContextTyp
      * @param format          The image format to use.  PNG, JPEG, and TIFF are supported.
      * @param outputDirectory
      */
-    default void saveAll(String format, File outputDirectory)
+    default void saveAll(@NotNull String format, File outputDirectory)
     {
         saveAllNamedTextures(format, outputDirectory, "");
         saveBasisFunctions(outputDirectory, null);

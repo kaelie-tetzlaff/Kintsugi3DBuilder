@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class GroundPlane<ContextType extends Context<ContextType>> extends StandardShaderComponent<ContextType>
 {
-    public GroundPlane(ReadonlyImageBasedGraphicsResources<ContextType> resources, LightingResources<ContextType> lightingResources,
+    public GroundPlane(@NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, LightingResources<ContextType> lightingResources,
                        SceneModel sceneModel, SceneViewportModel sceneViewportModel)
     {
         super(resources, sceneViewportModel, "SceneObject", sceneModel, lightingResources,
@@ -39,7 +39,7 @@ public class GroundPlane<ContextType extends Context<ContextType>> extends Stand
     }
 
     @Override
-    protected final Map<String, VertexBuffer<ContextType>> createVertexBuffers()
+    protected final @NotNull Map<String, VertexBuffer<ContextType>> createVertexBuffers()
     {
         return Map.of("position", getContext().createRectangle());
     }
@@ -53,7 +53,7 @@ public class GroundPlane<ContextType extends Context<ContextType>> extends Stand
     }
 
     @Override
-    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(@NotNull FramebufferObject<ContextType> framebuffer, @NotNull CameraViewport cameraViewport)
     {
         if (getSceneModel().getLightingModel().isGroundPlaneEnabled())
         {

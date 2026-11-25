@@ -16,6 +16,7 @@
 package kintsugi3d.gl.core;
 
 import kintsugi3d.gl.vecmath.IntVector2;
+import org.jetbrains.annotations.NotNull;
 
 final class NonReadableFramebufferViewport<ContextType extends Context<ContextType>> extends FramebufferViewportBase<ContextType>
 {
@@ -25,7 +26,7 @@ final class NonReadableFramebufferViewport<ContextType extends Context<ContextTy
     }
 
     @Override
-    public Framebuffer<ContextType> getViewport(int x, int y, int viewportWidth, int viewportHeight)
+    public @NotNull Framebuffer<ContextType> getViewport(int x, int y, int viewportWidth, int viewportHeight)
     {
         // Make sure that a FramebufferViewport never has another FramebufferViewport as its "full framebuffer"
         return new NonReadableFramebufferViewport<>(getFullFramebuffer(),

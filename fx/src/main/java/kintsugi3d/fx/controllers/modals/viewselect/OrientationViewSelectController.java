@@ -18,6 +18,7 @@ package kintsugi3d.fx.controllers.modals.viewselect;
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Controller for the PrimaryViewSelector, which is now used as the orientation view selector
@@ -67,7 +68,7 @@ public class OrientationViewSelectController extends ViewSelectController
     }
 
     @Override
-    protected final String getHintText()
+    protected final @NotNull String getHintText()
     {
         return "Select a photo to use to orient the object:";
     }

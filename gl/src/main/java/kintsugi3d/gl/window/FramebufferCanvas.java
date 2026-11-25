@@ -16,6 +16,7 @@
 package kintsugi3d.gl.window;
 
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -44,13 +45,13 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
 
     private boolean terminating = false;
 
-    public static <ContextType extends Context<ContextType>> FramebufferCanvas<ContextType>
-        createUsingExistingFramebuffer(DoubleFramebufferObject<ContextType> framebuffer)
+    public static <ContextType extends Context<ContextType>> @NotNull FramebufferCanvas<ContextType>
+        createUsingExistingFramebuffer(@NotNull DoubleFramebufferObject<ContextType> framebuffer)
     {
         return new FramebufferCanvas<>(framebuffer);
     }
 
-    private FramebufferCanvas(DoubleFramebufferObject<ContextType> framebuffer)
+    private FramebufferCanvas(@NotNull DoubleFramebufferObject<ContextType> framebuffer)
     {
         this.framebuffer = framebuffer;
         FramebufferSize fboSize = framebuffer.getSizeForRead();
@@ -122,7 +123,7 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public CanvasSize getSizeForDisplay()
+    public @NotNull CanvasSize getSizeForDisplay()
     {
         FramebufferSize sizeForRead = framebuffer.getSizeForRead();
         return new CanvasSize(sizeForRead.width, sizeForRead.height);
@@ -187,7 +188,7 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public void moveCursor(CursorPosition position, ModifierKeys modifierKeys)
+    public void moveCursor(@NotNull CursorPosition position, ModifierKeys modifierKeys)
     {
         lastModifierKeys = modifierKeys;
         cursorPosition = position;
@@ -247,7 +248,7 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public void changeBounds(CanvasPosition position, CanvasSize size)
+    public void changeBounds(@NotNull CanvasPosition position, @NotNull CanvasSize size)
     {
         // Store the new size
         canvasSize = size;

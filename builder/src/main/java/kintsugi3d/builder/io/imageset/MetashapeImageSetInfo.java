@@ -21,6 +21,8 @@ import kintsugi3d.builder.io.metashape.MetashapeChunk;
 import kintsugi3d.builder.io.metashape.MetashapeModel;
 import kintsugi3d.builder.resources.project.MissingImagesException;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -42,15 +44,15 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
 {
     private static final Logger LOG = LoggerFactory.getLogger(MetashapeImageSetInfo.class);
     private final String chunkName;
-    private final List<ImageIdentifier> primaryViewCandidates;
-    private final List<Element> cameras;
+    private final @NotNull List<ImageIdentifier> primaryViewCandidates;
+    private final @NotNull List<Element> cameras;
     private File fullResSearchDir;
 
-    private final Map<Integer, String> cameraIdToFullRes;
-    private final Map<Integer, Image> thumbnailMap;
+    private final @NotNull Map<Integer, String> cameraIdToFullRes;
+    private final @NotNull Map<Integer, Image> thumbnailMap;
 
     //custom import path
-    public MetashapeImageSetInfo(File cameraFile, File fullResSearchDir, Collection<File> disabledImageFiles)
+    public MetashapeImageSetInfo(File cameraFile, File fullResSearchDir, @NotNull Collection<File> disabledImageFiles)
             throws ParserConfigurationException, IOException, SAXException, MissingImagesException
     {
         this.fullResSearchDir = fullResSearchDir;
@@ -107,7 +109,7 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
     }
 
     //metashape import path
-    public MetashapeImageSetInfo(MetashapeModel model, Collection<File> disabledImageFiles)
+    public MetashapeImageSetInfo(@NotNull MetashapeModel model, Collection<File> disabledImageFiles)
             throws MissingImagesException, FileNotFoundException
     {
         MetashapeChunk parentChunk = model.getChunk();
@@ -125,19 +127,19 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
     }
 
     @Override
-    public List<ImageIdentifier> getViews()
+    public @NotNull List<ImageIdentifier> getViews()
     {
         return Collections.unmodifiableList(primaryViewCandidates);
     }
 
     @Override
-    public Map<Integer, Image> getThumbnailMap()
+    public @NotNull Map<Integer, Image> getThumbnailMap()
     {
         return Collections.unmodifiableMap(thumbnailMap);
     }
 
     @Override
-    public Optional<String> findFullResImagePath(String imageName)
+    public @NotNull Optional<String> findFullResImagePath(String imageName)
     {
         //find the camera (in chunk.xml) which holds the desired image
         //may have slightly different label from imageName --> "Processed\img123.jpg" vs. "img123.jpg"
@@ -207,7 +209,7 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
         return Optional.empty();
     }
 
-    private static List<ImageIdentifier> getViews(Stream<Element> cameras)
+    private static @NotNull List<ImageIdentifier> getViews(@NotNull Stream<Element> cameras)
     {
         return cameras
             .filter(camera ->
@@ -236,7 +238,7 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
             .collect(Collectors.toUnmodifiableList());
     }
 
-    private Element findTargetCamera(String imageName)
+    private @Nullable Element findTargetCamera(String imageName)
     {
         return cameras.stream()
             .filter(camera -> camera.getAttribute("label").matches(".*" + imageName + ".*"))

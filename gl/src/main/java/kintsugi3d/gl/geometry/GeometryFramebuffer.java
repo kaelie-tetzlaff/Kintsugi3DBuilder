@@ -16,6 +16,7 @@
 package kintsugi3d.gl.geometry;
 
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,8 +26,8 @@ public class GeometryFramebuffer<ContextType extends Context<ContextType>> imple
     private final FramebufferObject<ContextType> fbo;
     private final ContextType context;
 
-    public static <ContextType extends Context<ContextType>> GeometryFramebuffer<ContextType> createEmpty(
-        ContextType contextType, int width, int height)
+    public static <ContextType extends Context<ContextType>> @NotNull GeometryFramebuffer<ContextType> createEmpty(
+        @NotNull ContextType contextType, int width, int height)
     {
         return new GeometryFramebuffer<>(contextType, width, height);
     }
@@ -37,7 +38,7 @@ public class GeometryFramebuffer<ContextType extends Context<ContextType>> imple
      * @param width
      * @param height
      */
-    private GeometryFramebuffer(ContextType context, int width, int height)
+    private GeometryFramebuffer(@NotNull ContextType context, int width, int height)
     {
         this.context = context;
 
@@ -55,7 +56,7 @@ public class GeometryFramebuffer<ContextType extends Context<ContextType>> imple
      * @param height
      * @throws FileNotFoundException Thrown if there's trouble loading the geomBuffers shader for rendering to the framebuffer
      */
-    GeometryFramebuffer(ReadonlyGeometryResources<ContextType> geometry, int width, int height) throws IOException
+    GeometryFramebuffer(@NotNull ReadonlyGeometryResources<ContextType> geometry, int width, int height) throws IOException
     {
         this(geometry.getContext(), width, height);
 
@@ -131,7 +132,7 @@ public class GeometryFramebuffer<ContextType extends Context<ContextType>> imple
     }
 
     @Override
-    public final void setupShaderProgram(Program<ContextType> program)
+    public final void setupShaderProgram(@NotNull Program<ContextType> program)
     {
         program.setTexture("positionTex", getPositionTexture());
         program.setTexture("normalTex", getNormalTexture());
@@ -139,7 +140,7 @@ public class GeometryFramebuffer<ContextType extends Context<ContextType>> imple
     }
 
     @Override
-    public final GeometryTextures<ContextType> createViewportCopy(int x, int y, int viewportWidth, int viewportHeight)
+    public final @NotNull GeometryTextures<ContextType> createViewportCopy(int x, int y, int viewportWidth, int viewportHeight)
     {
         GeometryFramebuffer<ContextType> viewportFBO = createEmpty(context, viewportWidth, viewportHeight);
 

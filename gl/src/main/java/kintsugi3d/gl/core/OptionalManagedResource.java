@@ -15,6 +15,7 @@
 
 package kintsugi3d.gl.core;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -38,24 +39,24 @@ public final class OptionalManagedResource<ResourceType extends ManagedResource>
         return resource != null;
     }
 
-    public ResourceType get()
+    public @Nullable ResourceType get()
     {
         return resource;
     }
 
-    public static <ResourceType extends ManagedResource> OptionalManagedResource<ResourceType> empty()
+    public static <ResourceType extends ManagedResource> @NotNull OptionalManagedResource<ResourceType> empty()
     {
         return new OptionalManagedResource<>();
     }
 
     public static <ResourceType extends ManagedResource>
-    OptionalManagedResource<ResourceType> ofNullable(ResourceType resource)
+    @NotNull OptionalManagedResource<ResourceType> ofNullable(ResourceType resource)
     {
         return new OptionalManagedResource<>(resource);
     }
 
     public static <ResourceType extends ManagedResource>
-    OptionalManagedResource<ResourceType> of(ResourceType resource)
+    @NotNull OptionalManagedResource<ResourceType> of(ResourceType resource)
     {
         return new OptionalManagedResource<>(Objects.requireNonNull(resource));
     }

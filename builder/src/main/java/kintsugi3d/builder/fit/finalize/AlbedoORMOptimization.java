@@ -23,6 +23,7 @@ import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.builder.resources.project.texture.TextureSet;
 import kintsugi3d.gl.builders.framebuffer.ColorAttachmentSpec;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -47,21 +48,21 @@ public final class AlbedoORMOptimization<ContextType extends Context<ContextType
     private boolean optimizedAlbedo;
     private boolean optimizedMetallicRoughness;
 
-    public static <ContextType extends Context<ContextType>> AlbedoORMOptimization<ContextType> createWithOcclusion(
-        Texture2D<ContextType> occlusionMap, TextureResolution settings)
+    public static <ContextType extends Context<ContextType>> @NotNull AlbedoORMOptimization<ContextType> createWithOcclusion(
+        @NotNull Texture2D<ContextType> occlusionMap, @NotNull TextureResolution settings)
         throws IOException
     {
         return new AlbedoORMOptimization<>(occlusionMap.getContext(), occlusionMap, settings);
     }
 
-    public static <ContextType extends Context<ContextType>> AlbedoORMOptimization<ContextType> createWithoutOcclusion(
-        ContextType context, TextureResolution resolution)
+    public static <ContextType extends Context<ContextType>> @NotNull AlbedoORMOptimization<ContextType> createWithoutOcclusion(
+        @NotNull ContextType context, @NotNull TextureResolution resolution)
         throws IOException
     {
         return new AlbedoORMOptimization<>(context, null, resolution);
     }
 
-    private AlbedoORMOptimization(ContextType context, @Nullable Texture2D<ContextType> occlusionMap, TextureResolution settings)
+    private AlbedoORMOptimization(@NotNull ContextType context, @Nullable Texture2D<ContextType> occlusionMap, @NotNull TextureResolution settings)
         throws IOException
     {
         this.occlusionMap = occlusionMap;
@@ -82,13 +83,13 @@ public final class AlbedoORMOptimization<ContextType extends Context<ContextType
         drawable.addVertexBuffer("position", rect);
     }
 
-    public static <ContextType extends Context<ContextType>> AlbedoORMOptimization<ContextType> loadFromPriorSolution(
-        ContextType context, File priorSolutionDirectory) throws IOException
+    public static <ContextType extends Context<ContextType>> @NotNull AlbedoORMOptimization<ContextType> loadFromPriorSolution(
+        @NotNull ContextType context, File priorSolutionDirectory) throws IOException
     {
         return new AlbedoORMOptimization<>(context, priorSolutionDirectory);
     }
 
-    private AlbedoORMOptimization(ContextType context, File priorSolutionDirectory)
+    private AlbedoORMOptimization(@NotNull ContextType context, File priorSolutionDirectory)
         throws IOException
     {
         // Load albedo and ORM maps
@@ -151,7 +152,7 @@ public final class AlbedoORMOptimization<ContextType extends Context<ContextType
         }
     }
 
-    public void execute(ReadonlyTextureSet<ContextType> specularFit)
+    public void execute(@NotNull ReadonlyTextureSet<ContextType> specularFit)
     {
         // Set up shader program
         estimationProgram.setTexture("diffuseEstimate", specularFit.getTexture(StandardTexture.DIFFUSE_COLOR));
@@ -223,7 +224,7 @@ public final class AlbedoORMOptimization<ContextType extends Context<ContextType
     }
 
     @Override
-    public Map<StandardTexture, Texture2D<ContextType>> getStandardTextures()
+    public @NotNull Map<StandardTexture, Texture2D<ContextType>> getStandardTextures()
     {
         Map<StandardTexture, Texture2D<ContextType>> textures = new EnumMap<>(StandardTexture.class);
 
@@ -255,7 +256,7 @@ public final class AlbedoORMOptimization<ContextType extends Context<ContextType
         return StandardTexture.convertEnumMapToObjectMap(getStandardTextures());
     }
 
-    private Texture2D<ContextType> extractMetallicFromOrm(ContextType context, ReadonlyTexture2D<ContextType> orm) throws IOException
+    private Texture2D<ContextType> extractMetallicFromOrm(@NotNull ContextType context, ReadonlyTexture2D<ContextType> orm) throws IOException
     {
         ProgramObject<ContextType> program = context.getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File("shaders/common/texture.vert"))
@@ -275,7 +276,7 @@ public final class AlbedoORMOptimization<ContextType extends Context<ContextType
     }
 
     private static <ContextType extends Context<ContextType>>
-    ProgramObject<ContextType> createProgram(ContextType context, boolean occlusionTextureEnabled) throws IOException
+    ProgramObject<ContextType> createProgram(@NotNull ContextType context, boolean occlusionTextureEnabled) throws IOException
     {
         return context.getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File("shaders/common/texture.vert"))

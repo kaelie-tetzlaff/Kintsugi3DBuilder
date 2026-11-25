@@ -15,6 +15,8 @@
 
 package kintsugi3d.builder.util.events;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.Map;
 
@@ -26,15 +28,15 @@ public class MappedChange<K, V>
     }
 
     private final Type type;
-    private final Map<K, V> map;
+    private final @NotNull Map<K, V> map;
 
-    public MappedChange(Type type, Map<K, V> map)
+    public MappedChange(Type type, @NotNull Map<K, V> map)
     {
         this.type = type;
         this.map = Collections.unmodifiableMap(map);
     }
 
-    public MappedChange(Type type, K key, V value)
+    public MappedChange(Type type, @NotNull K key, @NotNull V value)
     {
         this.type = type;
         map = Map.of(key, value);

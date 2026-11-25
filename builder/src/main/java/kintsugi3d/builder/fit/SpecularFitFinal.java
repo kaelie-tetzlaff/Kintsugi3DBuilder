@@ -28,6 +28,8 @@ import kintsugi3d.builder.resources.project.texture.TextureResourcesBase;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.ReadonlyTexture2D;
 import kintsugi3d.gl.core.Texture2D;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,21 +51,21 @@ public final class SpecularFitFinal<ContextType extends Context<ContextType>>
 {
     private static final Logger LOG = LoggerFactory.getLogger(SpecularFitFinal.class);
 
-    private final Map<TextureInfo, Texture2D<ContextType>> managedTextures;
-    private final AlbedoORMOptimization<ContextType> albedoORMOptimization;
+    private final @NotNull Map<TextureInfo, Texture2D<ContextType>> managedTextures;
+    private final @Nullable AlbedoORMOptimization<ContextType> albedoORMOptimization;
 
-    private final MutableBasisResources<ContextType> mutableBasisResources;
+    private final @Nullable MutableBasisResources<ContextType> mutableBasisResources;
 
-    private final SpecularFitBase<ContextType> base;
+    private final @NotNull SpecularFitBase<ContextType> base;
 
-    public static <ContextType extends Context<ContextType>> SpecularFitFinal<ContextType> createEmpty(
-        ReadonlyTextureResources<ContextType> original, MutableMaterialBasis basis, TextureResolution textureResolution) throws IOException
+    public static <ContextType extends Context<ContextType>> @NotNull SpecularFitFinal<ContextType> createEmpty(
+        @NotNull ReadonlyTextureResources<ContextType> original, @NotNull MutableMaterialBasis basis, @NotNull TextureResolution textureResolution) throws IOException
     {
         return new SpecularFitFinal<>(original, basis, textureResolution);
     }
 
-    private SpecularFitFinal(ReadonlyTextureResources<ContextType> original,
-                             MutableBasisResources<ContextType> basisResources, TextureResolution textureResolution)
+    private SpecularFitFinal(@NotNull ReadonlyTextureResources<ContextType> original,
+                             @NotNull MutableBasisResources<ContextType> basisResources, @NotNull TextureResolution textureResolution)
         throws IOException
     {
         base = new SpecularFitBase<>(
@@ -92,14 +94,14 @@ public final class SpecularFitFinal<ContextType extends Context<ContextType>>
             AlbedoORMOptimization.createWithOcclusion(occlusionMap.copy(), textureResolution);
     }
 
-    private SpecularFitFinal(ReadonlyTextureResources<ContextType> original, MutableMaterialBasis basis, TextureResolution textureResolution)
+    private SpecularFitFinal(@NotNull ReadonlyTextureResources<ContextType> original, @NotNull MutableMaterialBasis basis, @NotNull TextureResolution textureResolution)
         throws IOException
     {
         this(original, new MutableBasisResources<>(original.getContext(), basis, textureResolution), textureResolution);
     }
 
     private SpecularFitFinal(
-        ContextType context, MutableBasisResources<ContextType> basisResources, File priorSolutionDirectory)
+        @NotNull ContextType context, @Nullable MutableBasisResources<ContextType> basisResources, File priorSolutionDirectory)
         throws IOException
     {
         base = new SpecularFitBase<>(context, basisResources,
@@ -129,18 +131,18 @@ public final class SpecularFitFinal<ContextType extends Context<ContextType>>
         albedoORMOptimization = albedoORMOptimizationTemp;
     }
 
-    private SpecularFitFinal(ContextType context, File priorSolutionDirectory) throws IOException
+    private SpecularFitFinal(@NotNull ContextType context, File priorSolutionDirectory) throws IOException
     {
         this(context, MutableBasisResources.loadFromPriorSolution(context, priorSolutionDirectory), priorSolutionDirectory);
     }
 
-    public static <ContextType extends Context<ContextType>> SpecularFitFinal<ContextType> loadFromPriorSolution(
-        ContextType context, File priorSolutionDirectory) throws IOException
+    public static <ContextType extends Context<ContextType>> @NotNull SpecularFitFinal<ContextType> loadFromPriorSolution(
+        @NotNull ContextType context, File priorSolutionDirectory) throws IOException
     {
         return new SpecularFitFinal<>(context, priorSolutionDirectory);
     }
 
-    private void addStandardTexture(StandardTexture standardTex, File priorSolutionDirectory) throws IOException
+    private void addStandardTexture(@NotNull StandardTexture standardTex, File priorSolutionDirectory) throws IOException
     {
         // Load texture file
         Texture2D<ContextType> texture = loadTexture(standardTex.getDetails().name, priorSolutionDirectory);
@@ -151,7 +153,7 @@ public final class SpecularFitFinal<ContextType extends Context<ContextType>>
         }
     }
 
-    private void addTexture(TextureInfo textureInfo, File priorSolutionDirectory) throws IOException
+    private void addTexture(@NotNull TextureInfo textureInfo, File priorSolutionDirectory) throws IOException
     {
         // Load texture file
         Texture2D<ContextType> texture = loadTexture(textureInfo.name, priorSolutionDirectory);
@@ -181,7 +183,7 @@ public final class SpecularFitFinal<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public Map<TextureInfo, Texture2D<ContextType>> getTextures()
+    public @NotNull Map<TextureInfo, Texture2D<ContextType>> getTextures()
     {
         Map<TextureInfo, Texture2D<ContextType>> mergedMaps =
             new HashMap<>(base.getSpecularTextureCount() + managedTextures.size() + albedoORMOptimization.getTextureCount());

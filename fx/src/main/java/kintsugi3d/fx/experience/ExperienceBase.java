@@ -20,6 +20,8 @@ import javafx.stage.Window;
 import kintsugi3d.fx.controllers.paged.*;
 import kintsugi3d.fx.core.ExceptionHandling;
 import kintsugi3d.fx.core.JavaFXState;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.MessageFormat;
@@ -37,7 +39,7 @@ public abstract class ExperienceBase implements Experience
 
     @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
-    public final void initialize(Window parentWindow, JavaFXState state)
+    public final void initialize(Window parentWindow, @Nullable JavaFXState state)
     {
         this.parentWindow = parentWindow;
         modal = new Modal(parentWindow);
@@ -92,7 +94,7 @@ public abstract class ExperienceBase implements Experience
      * @param <ControllerType> The type of the controller.
      * @throws IOException If the FXML could not be loaded.
      */
-    protected final <ControllerType> ControllerType createModal(String urlString) throws IOException
+    protected final <ControllerType> ControllerType createModal(@NotNull String urlString) throws IOException
     {
         return modal.create(getName(), urlString);
     }
@@ -104,7 +106,7 @@ public abstract class ExperienceBase implements Experience
      * @param <ControllerType> The type of the controller.
      * @throws IOException If the FXML could not be loaded.
      */
-    protected final <ControllerType> ControllerType openModal(String urlString) throws IOException
+    protected final <ControllerType> ControllerType openModal(@NotNull String urlString) throws IOException
     {
         ControllerType controller = createModal(urlString);
         modal.open();
@@ -116,7 +118,7 @@ public abstract class ExperienceBase implements Experience
      * @return The PageFrameController for the window housing this experience.
      * @throws IOException If the FXML could not be loaded.
      */
-    protected final PageFrameController createPagedModal() throws IOException
+    protected final @NotNull PageFrameController createPagedModal() throws IOException
     {
         PageFrameController frameController = createModal("/fxml/PageFrame.fxml");
         frameController.setState(state);
@@ -142,7 +144,7 @@ public abstract class ExperienceBase implements Experience
      * Builds a paged modal with multiple pages.
      * @throws IOException If the FXML could not be loaded.
      */
-    protected final NonDataPageBuilder<PageFrameController> buildPagedModal() throws IOException
+    protected final @NotNull NonDataPageBuilder<PageFrameController> buildPagedModal() throws IOException
     {
         return createPagedModal().buildPage(modal::open);
     }
@@ -151,7 +153,7 @@ public abstract class ExperienceBase implements Experience
      * Builds a paged modal with multiple pages.
      * @throws IOException If the FXML could not be loaded.
      */
-    protected final <T> SimplePageBuilder<Object, T, PageFrameController> buildPagedModal(T data) throws IOException
+    protected final <T> @NotNull SimplePageBuilder<Object, T, PageFrameController> buildPagedModal(T data) throws IOException
     {
         return createPagedModal().buildPage(modal::open, data);
     }
@@ -190,7 +192,7 @@ public abstract class ExperienceBase implements Experience
      * Handles errors that occur opening this experience (logging them and popping up a dialog window indicating that an error occurred).
      * @param e The exception that occurred.
      */
-    protected final void handleError(Exception e)
+    protected final void handleError(@NotNull Exception e)
     {
         ExceptionHandling.error(MessageFormat.format("An error occurred opening window:\n{0}", getName()), e);
     }

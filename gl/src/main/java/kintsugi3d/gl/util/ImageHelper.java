@@ -16,6 +16,8 @@
 package kintsugi3d.gl.util;
 
 import kintsugi3d.gl.vecmath.IntVector2;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import sun.java2d.cmm.CMSManager;
 import sun.java2d.cmm.ColorTransform;
 import sun.java2d.cmm.PCMM;
@@ -50,7 +52,7 @@ public final class ImageHelper
 
     private final BufferedImage image;
 
-    public static IntVector2 dimensionsOf(File file) throws IOException
+    public static @NotNull IntVector2 dimensionsOf(@NotNull File file) throws IOException
     {
         InputStream input = new FileInputStream(file);
         try (ImageInputStream iis = ImageIO.createImageInputStream(input))
@@ -74,14 +76,14 @@ public final class ImageHelper
         throw unsupportedFormatException(file);
     }
 
-    public static ImageHelper read(File file) throws IOException
+    public static ImageHelper read(@NotNull File file) throws IOException
     {
         ImageHelper raw = new ImageHelper(ImageIO.read(file));
         raw.validate(file);
         return ICC_TRANSFORM_ENABLED ? raw.convertedICCToSRGB() : raw.forcedSRGB();
     }
 
-    public static ImageHelper read(InputStream input) throws IOException
+    public static ImageHelper read(@NotNull InputStream input) throws IOException
     {
         ImageHelper raw = new ImageHelper(ImageIO.read(input));
         raw.validate(null);
@@ -95,7 +97,7 @@ public final class ImageHelper
         return ICC_TRANSFORM_ENABLED ? raw.convertedICCToSRGB() : raw.forcedSRGB();
     }
 
-    private ImageHelper validate(File file) throws IOException
+    private @NotNull ImageHelper validate(File file) throws IOException
     {
         if (image == null)
         {
@@ -105,7 +107,7 @@ public final class ImageHelper
         return this;
     }
 
-    private static IOException unsupportedFormatException(File file)
+    private static @NotNull IOException unsupportedFormatException(@Nullable File file)
     {
         return new IOException(file == null ? ERROR_UNSUPPORTED_IMAGE_FORMAT
             : String.format("%s (%s)", ERROR_UNSUPPORTED_IMAGE_FORMAT, file.getName()));
@@ -121,7 +123,7 @@ public final class ImageHelper
         return image;
     }
 
-    private ImageHelper withAlphaMask(ImageHelper mask)
+    private @NotNull ImageHelper withAlphaMask(@NotNull ImageHelper mask)
     {
         int width = image.getWidth();
         int height = image.getHeight();
@@ -143,7 +145,7 @@ public final class ImageHelper
         return new ImageHelper(result);
     }
 
-    public ImageHelper withAlphaMask(BufferedImage mask)
+    public @NotNull ImageHelper withAlphaMask(@Nullable BufferedImage mask)
     {
         if (mask != null)
         {
@@ -156,7 +158,7 @@ public final class ImageHelper
         }
     }
 
-    public ImageHelper withAlphaMask(InputStream maskStream) throws IOException
+    public ImageHelper withAlphaMask(@Nullable InputStream maskStream) throws IOException
     {
         if (maskStream != null)
         {
@@ -169,7 +171,7 @@ public final class ImageHelper
         }
     }
 
-    public ImageHelper withAlphaMask(File maskFile) throws IOException
+    public ImageHelper withAlphaMask(@Nullable File maskFile) throws IOException
     {
         if (maskFile != null && maskFile.exists())
         {
@@ -200,7 +202,7 @@ public final class ImageHelper
         return scaledBy(factor, factor);
     }
 
-    public ImageHelper scaledToResolution(int width, int height)
+    public @NotNull ImageHelper scaledToResolution(int width, int height)
     {
         if (width == image.getWidth() && height == image.getHeight())
         {
@@ -223,7 +225,7 @@ public final class ImageHelper
         }
     }
 
-    private ImageHelper forcedSRGB()
+    private @NotNull ImageHelper forcedSRGB()
     {
         // TODO is there a cleaner way to ignore input color space?  Maybe work with the Raster object directly?
         if (image != null && image.getColorModel() instanceof ComponentColorModel)
@@ -253,7 +255,7 @@ public final class ImageHelper
     }
 
     @SuppressWarnings("UseOfSunClasses")
-    private ImageHelper convertedICCToSRGB()
+    private @NotNull ImageHelper convertedICCToSRGB()
     {
         if (image == null || !(image.getColorModel().getColorSpace() instanceof ICC_ColorSpace))
         {
@@ -306,26 +308,26 @@ public final class ImageHelper
         }
     }
 
-    public ImageHelper save(String format, File file) throws IOException
+    public @NotNull ImageHelper save(@NotNull String format, @NotNull File file) throws IOException
     {
         ImageIO.write(image, format, file);
         return this;
     }
 
-    public ImageHelper saveAtResolution(String format, File scaledFile, int width, int height) throws IOException
+    public @NotNull ImageHelper saveAtResolution(@NotNull String format, @NotNull File scaledFile, int width, int height) throws IOException
     {
         BufferedImage scaled = scaledToResolution(width, height).image;
         ImageIO.write(scaled, format, scaledFile);
         return this;
     }
 
-    public ImageHelper saveAtScale(String format, File file, double factor) throws IOException
+    public @NotNull ImageHelper saveAtScale(@NotNull String format, @NotNull File file, double factor) throws IOException
     {
         saveAtResolution(format, file, (int)(image.getWidth() * factor), (int)(image.getHeight() * factor));
         return this;
     }
 
-    public ImageHelper saveAtResolution(String format, File file, int height) throws IOException
+    public @NotNull ImageHelper saveAtResolution(@NotNull String format, @NotNull File file, int height) throws IOException
     {
         saveAtScale(format, file, (double) height / image.getHeight());
         return this;

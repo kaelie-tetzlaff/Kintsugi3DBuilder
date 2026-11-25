@@ -21,6 +21,7 @@ import kintsugi3d.builder.core.texture.StandardTexture;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,7 +122,7 @@ public class MaterialExporter
         this.textureResources = textureResources;
     }
 
-    private Iterable<String> getSupportedTextures()
+    private @NotNull Iterable<String> getSupportedTextures()
     {
         Collection<String> supportedTextures = new ArrayList<>(StandardTexture.values().length);
 
@@ -271,7 +272,7 @@ public class MaterialExporter
         LODGenerator.generateLODs(minLODSize, outputDirectory, textures.values().toArray(TextureExportSpecification[]::new));
     }
 
-    private @Nullable TextureInfo processTextureParam(String texName, Method method, Class<?> paramType, boolean requiresAlpha)
+    private @Nullable TextureInfo processTextureParam(String texName, Method method, @NotNull Class<?> paramType, boolean requiresAlpha)
     {
         String format = determineFileFormat(textureFileFormat, requiresAlpha);
         TextureInfo tex = createRelativeTexture(getTextureFilename(texName, format), texName, format);
@@ -301,7 +302,7 @@ public class MaterialExporter
      * @param texName
      * @return
      */
-    protected final TextureInfo addTexture(String texName)
+    protected final @NotNull TextureInfo addTexture(String texName)
     {
         return addTexture(texName, false);
     }
@@ -312,7 +313,7 @@ public class MaterialExporter
      * @param requiresAlpha
      * @return
      */
-    protected final TextureInfo addTexture(String texName, boolean requiresAlpha)
+    protected final @NotNull TextureInfo addTexture(String texName, boolean requiresAlpha)
     {
         String format = determineFileFormat(textureFileFormat, requiresAlpha);
         return createRelativeTexture(getTextureFilename(texName, format), texName, format);
@@ -323,7 +324,7 @@ public class MaterialExporter
         LOG.warn(TEXTURE_EXPORT_FAILED, e);
     }
 
-    private TextureInfo createRelativeTexture(String uri, String name, String format)
+    private @NotNull TextureInfo createRelativeTexture(String uri, String name, String format)
     {
         GlTF gltf = asset.getGltf();
 
@@ -346,7 +347,7 @@ public class MaterialExporter
         return info;
     }
 
-    protected static MaterialNormalTextureInfo convertTexInfoToNormal(TextureInfo texInfo)
+    protected static @NotNull MaterialNormalTextureInfo convertTexInfoToNormal(@NotNull TextureInfo texInfo)
     {
         MaterialNormalTextureInfo normInfo = new MaterialNormalTextureInfo();
 
@@ -358,7 +359,7 @@ public class MaterialExporter
         return normInfo;
     }
 
-    protected static MaterialOcclusionTextureInfo convertTexInfoToOcclusion(TextureInfo texInfo)
+    protected static @NotNull MaterialOcclusionTextureInfo convertTexInfoToOcclusion(@NotNull TextureInfo texInfo)
     {
         MaterialOcclusionTextureInfo occlusionInfo = new MaterialOcclusionTextureInfo();
 
@@ -370,7 +371,7 @@ public class MaterialExporter
         return occlusionInfo;
     }
 
-    protected final String getTextureFilename(String name, String format)
+    protected final @NotNull String getTextureFilename(String name, @NotNull String format)
     {
         return TextureResources.getTextureFilename(name, format, textureFilePrefix);
     }
@@ -381,7 +382,7 @@ public class MaterialExporter
         return requiresAlpha && ("JPEG".equals(preferredFormat) || "JPG".equals(preferredFormat)) ? "PNG" : preferredFormat;
     }
 
-    private void addLodsToTexture(TextureInfo textureInfo, String baseUri, int baseRes, int minRes)
+    private void addLodsToTexture(@Nullable TextureInfo textureInfo, String baseUri, int baseRes, int minRes)
     {
         if (textureInfo != null)
         {
@@ -415,7 +416,7 @@ public class MaterialExporter
         }
     }
 
-    private Texture getTexForInfo(TextureInfo info)
+    private Texture getTexForInfo(@NotNull TextureInfo info)
     {
         GlTF gltf = asset.getGltf();
         return gltf.getTextures().get(info.getIndex());

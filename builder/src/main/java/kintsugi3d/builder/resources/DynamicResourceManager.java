@@ -16,6 +16,7 @@
 package kintsugi3d.builder.resources;
 
 import kintsugi3d.util.EncodableColorImage;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -41,5 +42,5 @@ public interface DynamicResourceManager
      * @param environmentFile The environment map image file.
      * @throws FileNotFoundException If the environment map image is not found.
      */
-    EncodableColorImage loadEnvironmentMap(File environmentFile) throws FileNotFoundException;
+    @Nullable EncodableColorImage loadEnvironmentMap(File environmentFile) throws FileNotFoundException;
 }

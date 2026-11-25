@@ -15,6 +15,9 @@
 
 package kintsugi3d.builder.state.settings;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public final class SafeSettingsModelWrapperFactory
 {
     private SafeSettingsModelWrapperFactory()
@@ -32,7 +35,7 @@ public final class SafeSettingsModelWrapperFactory
 
         @SuppressWarnings("unchecked")
         @Override
-        public final <T> T get(String name, Class<T> settingType)
+        public final <T> @Nullable T get(String name, @NotNull Class<T> settingType)
         {
             if (base.existsForGet(name, settingType))
             {
@@ -46,7 +49,7 @@ public final class SafeSettingsModelWrapperFactory
         }
     }
 
-    public static SafeReadonlyGlobalSettingsModel wrapUnsafeModel(ReadonlyGeneralSettingsModel base)
+    public static @NotNull SafeReadonlyGlobalSettingsModel wrapUnsafeModel(ReadonlyGeneralSettingsModel base)
     {
         return new Implementation(base);
     }

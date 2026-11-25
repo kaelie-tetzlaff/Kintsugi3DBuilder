@@ -16,6 +16,7 @@
 package kintsugi3d.builder.fit.decomposition;
 
 import kintsugi3d.gl.vecmath.DoubleVector3;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
@@ -73,9 +74,9 @@ final class MutableBasisMaterialInfo implements IndexAssignableBasisMaterialInfo
      * @param enabled
      * @return
      */
-    public static MutableBasisMaterialInfo create(
+    public static @NotNull MutableBasisMaterialInfo create(
         String name, int gpuIndex, String friendlyName, DoubleVector3 diffuseColor,
-        double[] redBasis, double[] greenBasis, double[] blueBasis, boolean enabled)
+        double @NotNull [] redBasis, double @NotNull [] greenBasis, double @NotNull [] blueBasis, boolean enabled)
     {
         return new MutableBasisMaterialInfo(
             name, gpuIndex, friendlyName, diffuseColor,
@@ -94,9 +95,9 @@ final class MutableBasisMaterialInfo implements IndexAssignableBasisMaterialInfo
      * @param blueBasis An effectively immutable copy will be created
      * @return
      */
-    public static MutableBasisMaterialInfo create(
+    public static @NotNull MutableBasisMaterialInfo create(
         String name, int gpuIndex, String friendlyName, DoubleVector3 diffuseColor,
-        double[] redBasis, double[] greenBasis, double[] blueBasis)
+        double @NotNull [] redBasis, double @NotNull [] greenBasis, double @NotNull [] blueBasis)
     {
         return create(name, gpuIndex, friendlyName, diffuseColor, redBasis, greenBasis, blueBasis, true);
     }
@@ -166,12 +167,12 @@ final class MutableBasisMaterialInfo implements IndexAssignableBasisMaterialInfo
         this.gpuIndex = gpuIndex;
     }
 
-    public MutableBasisMaterialInfo copy()
+    public @NotNull MutableBasisMaterialInfo copy()
     {
         return copy(name);
     }
 
-    public MutableBasisMaterialInfo copy(String newName)
+    public @NotNull MutableBasisMaterialInfo copy(String newName)
     {
         // Don't need to copy arrays since they should be effectively immutable
         return new MutableBasisMaterialInfo(newName, gpuIndex, friendlyName, diffuseColor, redBasis, greenBasis, blueBasis, enabled);

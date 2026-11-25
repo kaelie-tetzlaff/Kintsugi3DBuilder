@@ -51,8 +51,8 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
      * @throws FileNotFoundException
      */
     protected SpecularFitBase(
-        ContextType context, BasisResources<ContextType> basisResources,
-        BasisWeightResources<ContextType> basisWeightResources, TextureResolution textureResolution)
+        ContextType context, @Nullable BasisResources<ContextType> basisResources,
+        BasisWeightResources<ContextType> basisWeightResources, @NotNull TextureResolution textureResolution)
         throws IOException
     {
         this.context = context;
@@ -81,7 +81,7 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
      * @return
      */
     protected SpecularFitBase(
-        ContextType context, BasisResources<ContextType> basisResources,
+        ContextType context, @Nullable BasisResources<ContextType> basisResources,
         BasisWeightResources<ContextType> basisWeightResources, File priorSolutionDirectory)
         throws IOException
     {
@@ -144,7 +144,7 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final Map<StandardTexture, Texture2D<ContextType>> getStandardTextures()
+    public final @NotNull Map<StandardTexture, Texture2D<ContextType>> getStandardTextures()
     {
         return roughnessOptimization == null ? Map.of() :
             Map.of(StandardTexture.SPECULAR_COLOR, roughnessOptimization.getReflectivityTexture(),

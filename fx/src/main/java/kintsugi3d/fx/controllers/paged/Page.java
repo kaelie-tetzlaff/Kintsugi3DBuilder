@@ -17,6 +17,7 @@ package kintsugi3d.fx.controllers.paged;
 
 import javafx.beans.binding.ObjectExpression;
 import javafx.scene.Parent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
@@ -43,7 +44,7 @@ public interface Page<InType, OutType>
     void linkBackFromNextPage();
 
     void receiveData(InType data);
-    OutType getOutData();
+    @Nullable OutType getOutData();
 
     void sendOutData();
 }

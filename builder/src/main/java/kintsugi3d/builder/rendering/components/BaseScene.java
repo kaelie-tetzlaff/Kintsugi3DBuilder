@@ -29,6 +29,8 @@ import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,14 +43,14 @@ public class BaseScene<ContextType extends Context<ContextType>> extends LitCont
 {
     private static final Logger LOG = LoggerFactory.getLogger(BaseScene.class);
 
-    private final ContextType context;
+    private final @Nullable ContextType context;
     private final SceneModel sceneModel;
     private final SceneViewportModel sceneViewportModel;
     private final Collection<RenderedComponent<ContextType>> components = new ArrayList<>(5);
-    private final ReadonlyImageBasedGraphicsResources<ContextType> resources;
+    private final @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources;
     private RenderingSubject<ContextType> renderingSubject;
 
-    public BaseScene(ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel, SceneViewportModel sceneViewportModel)
+    public BaseScene(@NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel, SceneViewportModel sceneViewportModel)
     {
         context = resources.getContext();
         this.sceneModel = sceneModel;
@@ -107,7 +109,7 @@ public class BaseScene<ContextType extends Context<ContextType>> extends LitCont
     }
 
     @Override
-    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(@NotNull FramebufferObject<ContextType> framebuffer, @NotNull CameraViewport cameraViewport)
     {
         if (renderingSubject.getProgram() != null)
         {
@@ -167,7 +169,7 @@ public class BaseScene<ContextType extends Context<ContextType>> extends LitCont
         return sceneViewportModel;
     }
 
-    protected final Collection<RenderedComponent<ContextType>> getComponents()
+    protected final @NotNull Collection<RenderedComponent<ContextType>> getComponents()
     {
         return Collections.unmodifiableCollection(components);
     }

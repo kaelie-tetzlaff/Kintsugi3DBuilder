@@ -18,6 +18,7 @@ package kintsugi3d.builder.state.scene;
 import javafx.scene.paint.Color;
 import kintsugi3d.builder.state.project.LightSettings;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase implements DiscreteLightModel
 {
@@ -39,7 +40,7 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     }
 
     @Override
-    public final Vector3 getTarget()
+    public final @NotNull Vector3 getTarget()
     {
         return new Vector3((float) getLightSettings().getTargetX(),
             (float) getLightSettings().getTargetY(),
@@ -47,7 +48,7 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     }
 
     @Override
-    public final void setTarget(Vector3 target)
+    public final void setTarget(@NotNull Vector3 target)
     {
         if (!isLocked())
         {
@@ -149,7 +150,7 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     }
 
     @Override
-    public final Vector3 getColor()
+    public final @NotNull Vector3 getColor()
     {
         Color color = getLightSettings().getColor();
         Vector3 out = new Vector3((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue());
@@ -158,7 +159,7 @@ public abstract class DiscreteLightModelFromSettings extends ViewpointModelBase 
     }
 
     @Override
-    public final void setColor(Vector3 color)
+    public final void setColor(@NotNull Vector3 color)
     {
         if (!isLocked())
         {

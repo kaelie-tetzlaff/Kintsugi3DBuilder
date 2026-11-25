@@ -52,7 +52,7 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
         addedRenderables = new ArrayList<>(8);
     }
 
-    private InteractiveRenderableList(List<RenderableType> renderables)
+    private InteractiveRenderableList(@NotNull List<RenderableType> renderables)
     {
         this.renderables = renderables;
         removedRenderables = new ArrayList<>(8);
@@ -145,7 +145,7 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public final void setSelectedItem(Object item)
+    public final void setSelectedItem(@Nullable Object item)
     {
         if (item == null)
         {
@@ -281,7 +281,7 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public final RenderableType set(int index, RenderableType element)
+    public final @Nullable RenderableType set(int index, @Nullable RenderableType element)
     {
         RenderableType removed = renderables.set(index, element);
         if (removed != null)
@@ -296,7 +296,7 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public final void add(int index, RenderableType element)
+    public final void add(int index, @Nullable RenderableType element)
     {
         renderables.add(index, element);
         if (element != null)
@@ -310,7 +310,7 @@ public class InteractiveRenderableList<ContextType extends Context<ContextType>,
     }
 
     @Override
-    public final RenderableType remove(int index)
+    public final @Nullable RenderableType remove(int index)
     {
         RenderableType removed = renderables.remove(index);
         if (removed != null)

@@ -18,6 +18,7 @@ package kintsugi3d.builder.tools;
 import kintsugi3d.builder.state.scene.ManipulableViewpointModel;
 import kintsugi3d.gl.window.CanvasSize;
 import kintsugi3d.gl.window.CursorPosition;
+import org.jetbrains.annotations.NotNull;
 
 final class TwistTool implements DragTool
 {
@@ -33,13 +34,13 @@ final class TwistTool implements DragTool
     private static class Builder extends ToolBuilderBase<TwistTool>
     {
         @Override
-        public final TwistTool create()
+        public final @NotNull TwistTool create()
         {
             return new TwistTool(getCameraModel());
         }
     }
 
-    static ToolBuilder<TwistTool> getBuilder()
+    static @NotNull ToolBuilder<TwistTool> getBuilder()
     {
         return new Builder();
     }
@@ -50,7 +51,7 @@ final class TwistTool implements DragTool
     }
 
     @Override
-    public void mouseButtonPressed(CursorPosition cursorPosition, CanvasSize canvasSize)
+    public void mouseButtonPressed(CursorPosition cursorPosition, @NotNull CanvasSize canvasSize)
     {
         mouseStart = cursorPosition;
         oldTwist = cameraModel.getTwist();
@@ -58,7 +59,7 @@ final class TwistTool implements DragTool
     }
 
     @Override
-    public void cursorDragged(CursorPosition cursorPosition, CanvasSize canvasSize)
+    public void cursorDragged(@NotNull CursorPosition cursorPosition, CanvasSize canvasSize)
     {
         cameraModel.setTwist(oldTwist + (float) Math.toDegrees((cursorPosition.x - mouseStart.x) * twistSensitivityAdjusted));
     }

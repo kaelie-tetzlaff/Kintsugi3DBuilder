@@ -23,6 +23,7 @@ import kintsugi3d.builder.state.settings.ReadonlyGeneralSettingsModel;
 import kintsugi3d.builder.util.Kintsugi3DViewerLauncher;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.ProgressMonitor;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class ExportTexturesRequest implements ImageBasedGraphicsRequest
         this(exportLocationFile, getExportSettingsFromProject(), callback);
     }
 
-    private static ExportSettings getExportSettingsFromProject()
+    private static @NotNull ExportSettings getExportSettingsFromProject()
     {
         ReadonlyGeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
 
@@ -70,7 +71,7 @@ public class ExportTexturesRequest implements ImageBasedGraphicsRequest
 
     @Override
     public final <ContextType extends Context<ContextType>> void executeRequest(
-        ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
+        @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
     {
         // Includes textures is shouldSaveTextures is true
         renderable.saveGLTF(exportLocationFile.getParentFile(), exportLocationFile.getName(), settings, this::onSaveComplete);

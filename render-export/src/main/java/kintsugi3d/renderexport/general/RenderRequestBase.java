@@ -21,6 +21,7 @@ import kintsugi3d.gl.interactive.ShaderResources;
 import kintsugi3d.gl.interactive.ShaderProgramFactory;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -97,28 +98,28 @@ abstract class RenderRequestBase implements ImageBasedGraphicsRequest
         }
 
         @Override
-        public final RenderRequestBuilder useTextureSpaceVertexShader()
+        public final @NotNull RenderRequestBuilder useTextureSpaceVertexShader()
         {
             vertexShader = TEX_SPACE_VERTEX_SHADER;
             return this;
         }
 
         @Override
-        public final RenderRequestBuilder useCameraSpaceVertexShader()
+        public final @NotNull RenderRequestBuilder useCameraSpaceVertexShader()
         {
             vertexShader = IMG_SPACE_VERTEX_SHADER;
             return this;
         }
 
         @Override
-        public final RenderRequestBuilder useCustomVertexShader(@SuppressWarnings("ParameterHidesMemberVariable") File vertexShader)
+        public final @NotNull RenderRequestBuilder useCustomVertexShader(@SuppressWarnings("ParameterHidesMemberVariable") File vertexShader)
         {
             this.vertexShader = vertexShader;
             return this;
         }
 
         @Override
-        public final RenderRequestBuilder setShaderSetupCallback(
+        public final @NotNull RenderRequestBuilder setShaderSetupCallback(
             @SuppressWarnings("ParameterHidesMemberVariable") Consumer<Program<? extends Context<?>>> shaderSetupCallback)
         {
             this.shaderSetupCallback = shaderSetupCallback;
@@ -126,22 +127,22 @@ abstract class RenderRequestBase implements ImageBasedGraphicsRequest
         }
 
         @Override
-        public final RenderRequestBuilder setWidth(@SuppressWarnings("ParameterHidesMemberVariable") int width)
+        public final @NotNull RenderRequestBuilder setWidth(@SuppressWarnings("ParameterHidesMemberVariable") int width)
         {
             this.width = width;
             return this;
         }
 
         @Override
-        public final RenderRequestBuilder setHeight(@SuppressWarnings("ParameterHidesMemberVariable") int height)
+        public final @NotNull RenderRequestBuilder setHeight(@SuppressWarnings("ParameterHidesMemberVariable") int height)
         {
             this.height = height;
             return this;
         }
     }
 
-    protected final <ContextType extends Context<ContextType>> ProgramObject<ContextType> createProgram(
-        ShaderProgramFactory<ContextType> programFactory) throws IOException
+    protected final <ContextType extends Context<ContextType>> @NotNull ProgramObject<ContextType> createProgram(
+        @NotNull ShaderProgramFactory<ContextType> programFactory) throws IOException
     {
         GeneralSettingsModel settingsModel = Global.state().getSettingsModel();
 
@@ -161,7 +162,7 @@ abstract class RenderRequestBase implements ImageBasedGraphicsRequest
         return program;
     }
 
-    protected final <ContextType extends Context<ContextType>> FramebufferObject<ContextType> createFramebuffer(ContextType context)
+    protected final <ContextType extends Context<ContextType>> FramebufferObject<ContextType> createFramebuffer(@NotNull ContextType context)
     {
         return context.buildFramebufferObject(width, height)
             .addColorAttachment()
@@ -170,12 +171,12 @@ abstract class RenderRequestBase implements ImageBasedGraphicsRequest
     }
 
     protected static <ContextType extends Context<ContextType>> DrawableResource<ContextType>
-        createDrawable(Program<ContextType> program, ShaderResources<ContextType> resources)
+        createDrawable(Program<ContextType> program, @NotNull ShaderResources<ContextType> resources)
     {
         return resources.createDrawable(program);
     }
 
-    protected final <ContextType extends Context<ContextType>> void render(DrawableResource<ContextType> drawable, Framebuffer<ContextType> framebuffer)
+    protected final <ContextType extends Context<ContextType>> void render(@NotNull DrawableResource<ContextType> drawable, @NotNull Framebuffer<ContextType> framebuffer)
     {
         drawable.getContext().getState().disableBackFaceCulling();
         framebuffer.clearColorBuffer(0, 0.0f, 0.0f, 0.0f, 0.0f);

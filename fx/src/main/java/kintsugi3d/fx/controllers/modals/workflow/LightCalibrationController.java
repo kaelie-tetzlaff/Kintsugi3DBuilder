@@ -29,6 +29,7 @@ import kintsugi3d.fx.util.SafeFloatStringConverter;
 import kintsugi3d.fx.util.StaticUtilities;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 public class LightCalibrationController extends NonDataPageControllerBase
 {
@@ -211,7 +212,7 @@ public class LightCalibrationController extends NonDataPageControllerBase
         yTextField.setText(converter.toString(ySlider.getValue()));
     }
 
-    private void setDefaultLimits(Vector3 bounds, Vector2 lightCalibration)
+    private void setDefaultLimits(@NotNull Vector3 bounds, @NotNull Vector2 lightCalibration)
     {
         double origScale = Math.max(bounds.x, Math.max(bounds.y, bounds.z));
         double finalScale = roundToLeadingDecimal(0.5 * origScale);

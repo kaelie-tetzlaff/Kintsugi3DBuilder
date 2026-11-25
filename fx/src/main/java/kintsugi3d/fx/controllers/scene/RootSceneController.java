@@ -22,6 +22,7 @@ import kintsugi3d.fx.controllers.scene.environment.RootEnvironmentSceneControlle
 import kintsugi3d.fx.controllers.scene.lights.RootLightSceneController;
 import kintsugi3d.fx.controllers.scene.object.RootObjectSceneController;
 import kintsugi3d.fx.internal.*;
+import org.jetbrains.annotations.NotNull;
 
 public class RootSceneController
 {
@@ -34,8 +35,8 @@ public class RootSceneController
     @FXML
     private RootObjectSceneController objectPosesController;
 
-    public final void injectDependencies(ObservableCameraModel cameraModel, ObservableLightingEnvironmentModel lightingModel,
-                                         ObservableEnvironmentModel environmentMapModel, ObservableObjectPoseModel objectModel,
+    public final void injectDependencies(@NotNull ObservableCameraModel cameraModel, @NotNull ObservableLightingEnvironmentModel lightingModel,
+                                         @NotNull ObservableEnvironmentModel environmentMapModel, @NotNull ObservableObjectPoseModel objectModel,
                                          ObservableProjectModel projectModel, SceneViewport sceneViewport)
     {
         cameraController.injectDependencies(cameraModel, projectModel);

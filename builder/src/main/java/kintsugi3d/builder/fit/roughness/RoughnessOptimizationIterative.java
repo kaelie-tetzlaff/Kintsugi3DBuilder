@@ -23,6 +23,7 @@ import kintsugi3d.gl.builders.framebuffer.ColorAttachmentSpec;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.optimization.ErrorReport;
 import kintsugi3d.optimization.ShaderBasedOptimization;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +44,7 @@ public class RoughnessOptimizationIterative<ContextType extends Context<ContextT
     private static final Logger LOG = LoggerFactory.getLogger(RoughnessOptimizationIterative.class);
     private final TextureResolution settings;
 
-    private final ShaderBasedOptimization<ContextType> roughnessOptimization;
+    private final @NotNull ShaderBasedOptimization<ContextType> roughnessOptimization;
 //    private Program<ContextType> errorCalcProgram;
 
     private final double convergenceTolerance;
@@ -54,9 +55,9 @@ public class RoughnessOptimizationIterative<ContextType extends Context<ContextT
      * @param basisWeightResources Used for the initial estimate
      * @throws FileNotFoundException
      */
-    public RoughnessOptimizationIterative(BasisResources<ContextType> basisResources,
-                                          ReadonlyBasisWeightResources<ContextType> basisWeightResources, TextureResolution settings,
-                                          Supplier<ReadonlyTexture2D<ContextType>> getDiffuseTexture, double convergenceTolerance, int unsuccessfulLMIterationsAllowed)
+    public RoughnessOptimizationIterative(@NotNull BasisResources<ContextType> basisResources,
+                                          ReadonlyBasisWeightResources<ContextType> basisWeightResources, @NotNull TextureResolution settings,
+                                          @NotNull Supplier<ReadonlyTexture2D<ContextType>> getDiffuseTexture, double convergenceTolerance, int unsuccessfulLMIterationsAllowed)
             throws IOException
     {
         // Inherit from base class to facilitate initial fit.
@@ -148,7 +149,7 @@ public class RoughnessOptimizationIterative<ContextType extends Context<ContextT
 
     private static <ContextType extends Context<ContextType>>
     ProgramBuilder<ContextType> getRoughnessEstimationProgramBuilder(
-            ContextType context)
+        @NotNull ContextType context)
     {
         return context.getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File("shaders/common/texture.vert"))

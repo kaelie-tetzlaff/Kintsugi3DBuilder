@@ -29,6 +29,8 @@ import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.state.CacheModelBase;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,7 +69,7 @@ public class ObservableCacheModel extends CacheModelBase
      */
     private final Collection<ChangeListener<Number>> pendingCacheSizeCallbacks = new ArrayList<>(1);
 
-    private Map<String, Long> projectSizes = Map.of();
+    private @NotNull Map<String, Long> projectSizes = Map.of();
 
     @Override
     public final long getCacheSizeBytes()
@@ -94,7 +96,7 @@ public class ObservableCacheModel extends CacheModelBase
         return cacheSizeGB.get();
     }
 
-    public final BooleanProperty getCacheSizeCalcInProgressProperty()
+    public final @NotNull BooleanProperty getCacheSizeCalcInProgressProperty()
     {
         return cacheSizeCalcInProgress;
     }
@@ -112,7 +114,7 @@ public class ObservableCacheModel extends CacheModelBase
     }
 
     @Override
-    protected final void updateCacheSize(long newCacheSize, Map<String, Long> newProjectSizes, Runnable onCompleteCallback)
+    protected final void updateCacheSize(long newCacheSize, @NotNull Map<String, Long> newProjectSizes, @Nullable Runnable onCompleteCallback)
     {
         Platform.runLater(() ->
         {
@@ -138,7 +140,7 @@ public class ObservableCacheModel extends CacheModelBase
     }
 
     @Override
-    protected final void addCacheSizeChangeCallback(DoubleConsumer cacheSizeChangeCallback)
+    protected final void addCacheSizeChangeCallback(@Nullable DoubleConsumer cacheSizeChangeCallback)
     {
         // Add one-shot listener with the specified callback before checking whether calculation is in progress.
         // Because cacheSize should only be modified in one place (within a Platform.runLater fired by the worker thread),
@@ -148,7 +150,7 @@ public class ObservableCacheModel extends CacheModelBase
         ChangeListener<Number> changeListener = new ChangeListener<>()
         {
             @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, @NotNull Number newValue)
             {
                 cacheSizeGB.removeListener(this); // Remove first in case the callback throws an exception.
                 pendingCacheSizeCallbacks.remove(this);
@@ -238,7 +240,7 @@ public class ObservableCacheModel extends CacheModelBase
      * @param promptWithCacheSizeGB The callback, which takes as input the current cache size in GB.
      */
     public final void requestPromptForCacheCleanup(
-        Consumer<Double> promptWithCacheSizeGB, Consumer<Double> noCleanupNeededWithCacheSizeGB)
+        @NotNull Consumer<Double> promptWithCacheSizeGB, @NotNull Consumer<Double> noCleanupNeededWithCacheSizeGB)
     {
         if (getCacheSizeBytes() < 0)
         {
@@ -254,8 +256,8 @@ public class ObservableCacheModel extends CacheModelBase
         }
     }
 
-    private static void checkforCleanupPrompts(double newCacheSizeGB, Consumer<Double> promptWithCacheSizeGB,
-                                               Consumer<Double> noCleanupNeededWithCacheSizeGB)
+    private static void checkforCleanupPrompts(double newCacheSizeGB, @NotNull Consumer<Double> promptWithCacheSizeGB,
+                                               @NotNull Consumer<Double> noCleanupNeededWithCacheSizeGB)
     {
         GeneralSettingsModel settingsModel = Global.state().getSettingsModel();
         if (settingsModel.getBoolean("sizePromptEnabled"))

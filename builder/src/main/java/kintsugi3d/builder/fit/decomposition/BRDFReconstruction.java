@@ -25,6 +25,7 @@ import kintsugi3d.optimization.function.BasisFunctions;
 import kintsugi3d.optimization.function.OptimizedFunctions;
 import kintsugi3d.util.Counter;
 import org.ejml.data.DMatrixRMaj;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +44,7 @@ public class BRDFReconstruction
         matrixSize = this.settings.getMaterialCount() * (this.settings.getBasisComplexity() + 1);
     }
 
-    public final void execute(GraphicsStream<ReflectanceData> viewStream, SpecularDecompositionFromScratch solution, ProgressMonitor monitor)
+    public final void execute(@NotNull GraphicsStream<ReflectanceData> viewStream, @NotNull SpecularDecompositionFromScratch solution, ProgressMonitor monitor)
     {
         LOG.info("Building reflectance fitting matrix...");
         MatrixSystem system = buildReflectanceMatrix(viewStream, solution, monitor);
@@ -128,7 +129,7 @@ public class BRDFReconstruction
     }
 
     private MatrixSystem buildReflectanceMatrix(
-        GraphicsStream<ReflectanceData> viewStream, SpecularDecomposition solution,
+        @NotNull GraphicsStream<ReflectanceData> viewStream, SpecularDecomposition solution,
         @SuppressWarnings("unused") ProgressMonitor monitor) // TODO add ProgressMonitor support to GraphicsStream.
     {
         Counter counter = new Counter();

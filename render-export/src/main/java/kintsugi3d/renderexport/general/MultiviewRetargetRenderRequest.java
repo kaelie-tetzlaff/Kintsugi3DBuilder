@@ -25,6 +25,8 @@ import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,7 +56,7 @@ final class MultiviewRetargetRenderRequest extends RenderRequestBase
         }
 
         @Override
-        public final ImageBasedGraphicsRequest create()
+        public final @NotNull ImageBasedGraphicsRequest create()
         {
             return new MultiviewRetargetRenderRequest(getWidth(), getHeight(), getShaderSetupCallback(),
                 targetViewSet, getVertexShader(), getFragmentShader(), getOutputDirectory());
@@ -63,7 +65,7 @@ final class MultiviewRetargetRenderRequest extends RenderRequestBase
 
     @Override
     public <ContextType extends Context<ContextType>> void executeRequest(
-        ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
+        @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @Nullable ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         ReadonlyViewSet targetViewSet = ViewSetReaderFromVSET.getInstance().readFromFile(targetViewSetFile).finish();

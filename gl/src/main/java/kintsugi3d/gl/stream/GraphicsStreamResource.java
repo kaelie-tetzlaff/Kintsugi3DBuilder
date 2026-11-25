@@ -19,6 +19,7 @@ import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.builders.framebuffer.FramebufferObjectBuilder;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.util.ColorList;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.function.*;
@@ -34,9 +35,9 @@ public class GraphicsStreamResource<ContextType extends Context<ContextType>> im
     private final FramebufferObject<ContextType> framebuffer;
     private final GraphicsStream<ColorList[]> base;
 
-    public GraphicsStreamResource(ProgramBuilder<ContextType> programBuilder,
-        FramebufferObjectBuilder<ContextType> framebufferBuilder,
-        BiFunction<Program<ContextType>, FramebufferObject<ContextType>, GraphicsStream<ColorList[]>> streamFactory) throws IOException
+    public GraphicsStreamResource(@NotNull ProgramBuilder<ContextType> programBuilder,
+                                  @NotNull FramebufferObjectBuilder<ContextType> framebufferBuilder,
+                                  @NotNull BiFunction<Program<ContextType>, FramebufferObject<ContextType>, GraphicsStream<ColorList[]>> streamFactory) throws IOException
     {
         program = programBuilder.createProgram();
         framebuffer = framebufferBuilder.createFramebufferObject();

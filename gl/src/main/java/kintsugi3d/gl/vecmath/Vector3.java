@@ -65,37 +65,37 @@ public class Vector3 implements Iterable<Float>
         this(value, value, value);
     }
 
-    public final Vector4 asVector4(float w)
+    public final @NotNull Vector4 asVector4(float w)
     {
         return new Vector4(x, y, z, w);
     }
 
-    public final Vector4 asDirection()
+    public final @NotNull Vector4 asDirection()
     {
         return new Vector4(x, y, z, 0.0f);
     }
 
-    public final Vector4 asPosition()
+    public final @NotNull Vector4 asPosition()
     {
         return new Vector4(x, y, z, 1.0f);
     }
 
-    public final Vector2 getXY()
+    public final @NotNull Vector2 getXY()
     {
         return new Vector2(x, y);
     }
 
-    public final IntVector3 rounded()
+    public final @NotNull IntVector3 rounded()
     {
         return new IntVector3(Math.round(x), Math.round(y), Math.round(z));
     }
 
-    public final IntVector3 truncated()
+    public final @NotNull IntVector3 truncated()
     {
         return new IntVector3((int) x, (int) y, (int) z);
     }
 
-    public final DoubleVector3 asDoublePrecision()
+    public final @NotNull DoubleVector3 asDoublePrecision()
     {
         return new DoubleVector3(x, y, z);
     }
@@ -135,7 +135,7 @@ public class Vector3 implements Iterable<Float>
      * @param other The vector to add.
      * @return A new vector that is the mathematical (componentwise) sum of this and 'other'.
      */
-    public final Vector3 plus(Vector3 other)
+    public final @NotNull Vector3 plus(@NotNull Vector3 other)
     {
         return new Vector3(
             x + other.x,
@@ -149,7 +149,7 @@ public class Vector3 implements Iterable<Float>
      * @param other The vector to add.
      * @return A new vector that is the mathematical (componentwise) subtraction of 'other' from this.
      */
-    public final Vector3 minus(Vector3 other)
+    public final @NotNull Vector3 minus(@NotNull Vector3 other)
     {
         return new Vector3(
             x - other.x,
@@ -162,7 +162,7 @@ public class Vector3 implements Iterable<Float>
      * Construct a new vector that is the negation of this.
      * @return A new vector with the values (-x, -y, -z)
      */
-    public final Vector3 negated()
+    public final @NotNull Vector3 negated()
     {
         return new Vector3(-x, -y, -z);
     }
@@ -172,7 +172,7 @@ public class Vector3 implements Iterable<Float>
      * @param s The scaler to multiply by.
      * @return A new vector equal to (s*x, s*y, s*z)
      */
-    public final Vector3 times(float s)
+    public final @NotNull Vector3 times(float s)
     {
         return new Vector3(s* x, s* y, s* z);
     }
@@ -182,17 +182,17 @@ public class Vector3 implements Iterable<Float>
      * @param s The scaler to divide by.
      * @return A new vector equal to (x/s, y/s, z/s)
      */
-    public final Vector3 dividedBy(float s)
+    public final @NotNull Vector3 dividedBy(float s)
     {
         return new Vector3(x/s, y/s, z/s);
     }
 
-    public final Vector3 times(Vector3 other)
+    public final @NotNull Vector3 times(@NotNull Vector3 other)
     {
         return new Vector3(x * other.x, y * other.y, z * other.z);
     }
 
-    public final Vector3 dividedBy(Vector3 other)
+    public final @NotNull Vector3 dividedBy(@NotNull Vector3 other)
     {
         return new Vector3(x / other.x, y / other.y, z / other.z);
     }
@@ -202,7 +202,7 @@ public class Vector3 implements Iterable<Float>
      * @param other The vector to use when computing the dot product.
      * @return A scalar value equal to the sum of x1*x2, y1*y2 and z1*z2.
      */
-    public final float dot(Vector3 other)
+    public final float dot(@NotNull Vector3 other)
     {
         return x * other.x + y * other.y + z * other.z;
     }
@@ -212,7 +212,7 @@ public class Vector3 implements Iterable<Float>
      * @param other The vector to use when computing the outer product.
      * @return The matrix that is the outer product of the vectors.
      */
-    public final Matrix3 outerProduct(Vector3 other)
+    public final @NotNull Matrix3 outerProduct(@NotNull Vector3 other)
     {
         return Matrix3.fromColumns(
             new Vector3(x * other.x, y * other.x, z * other.x),
@@ -226,7 +226,7 @@ public class Vector3 implements Iterable<Float>
      * @param other The vector to use when computing the dot product.
      * @return A new 3d vector with the values (y1*z2-z1*y2, z1*x2-x1*z2, x1*y2-y1*x2)
      */
-    public final Vector3 cross(Vector3 other)
+    public final @NotNull Vector3 cross(@NotNull Vector3 other)
     {
         return new Vector3(
             y * other.z - z * other.y,
@@ -249,7 +249,7 @@ public class Vector3 implements Iterable<Float>
      * @param other The vector to compute the distance between.
      * @return A scaler value equal to the length of the different vector.
      */
-    public final float distance(Vector3 other)
+    public final float distance(@NotNull Vector3 other)
     {
         return minus(other).length();
     }
@@ -260,7 +260,7 @@ public class Vector3 implements Iterable<Float>
      * Do not attempt to normalize a zero-length vector.
      * @return A new vector equal to this vector divided by it's length.
      */
-    public final Vector3 normalized()
+    public final @NotNull Vector3 normalized()
     {
         return times(1.0f / length());
     }
@@ -270,7 +270,7 @@ public class Vector3 implements Iterable<Float>
      * magnitude (a length of 1.0).  If this vector has zero length, it will return itself.
      * @return A new vector equal to this vector divided by it's length except in cases of a zero-length vector.
      */
-    public final Vector3 normalizedSafe()
+    public final @NotNull Vector3 normalizedSafe()
     {
         float l = length();
         if (l == 0.0f)
@@ -283,13 +283,13 @@ public class Vector3 implements Iterable<Float>
         }
     }
 
-    public final Vector3 applyOperator(DoubleUnaryOperator operator)
+    public final @NotNull Vector3 applyOperator(@NotNull DoubleUnaryOperator operator)
     {
         return new Vector3((float)operator.applyAsDouble(x), (float)operator.applyAsDouble(y), (float)operator.applyAsDouble(z));
     }
 
     @Override
-    public final String toString()
+    public final @NotNull String toString()
     {
         return String.format("Vector3{x=%s, y=%s, z=%s}", x, y, z);
     }

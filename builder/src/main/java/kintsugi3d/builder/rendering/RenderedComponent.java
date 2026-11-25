@@ -20,6 +20,7 @@ import kintsugi3d.gl.core.FramebufferObject;
 import kintsugi3d.gl.core.FramebufferSize;
 import kintsugi3d.gl.core.ManagedResource;
 import kintsugi3d.gl.vecmath.Matrix4;
+import org.jetbrains.annotations.NotNull;
 
 public interface RenderedComponent<ContextType extends Context<ContextType>> extends ManagedResource
 {
@@ -39,13 +40,13 @@ public interface RenderedComponent<ContextType extends Context<ContextType>> ext
 
     void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport);
 
-    default void draw(FramebufferObject<ContextType> framebuffer, Matrix4 view, Matrix4 projection)
+    default void draw(@NotNull FramebufferObject<ContextType> framebuffer, Matrix4 view, @NotNull Matrix4 projection)
     {
         FramebufferSize size = framebuffer.getSize();
         draw(framebuffer, new CameraViewport(view, projection, Matrix4.IDENTITY, 0, 0, size.width, size.height));
     }
 
-    static Matrix4 getViewportCrop(
+    static @NotNull Matrix4 getViewportCrop(
         float x, float y, float effectiveWidth, float effectiveHeight, float fullWidth, float fullHeight)
     {
         float scaleX = fullWidth / effectiveWidth;
@@ -64,8 +65,8 @@ public interface RenderedComponent<ContextType extends Context<ContextType>> ext
      * @param subdivHeight
      * @param cameraViewport
      */
-    default void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight,
-                                    CameraViewport cameraViewport)
+    default void drawInSubdivisions(@NotNull FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight,
+                                    @NotNull CameraViewport cameraViewport)
     {
         for (int x = cameraViewport.getX(); x < cameraViewport.getWidth(); x += subdivWidth)
         {
@@ -97,8 +98,8 @@ public interface RenderedComponent<ContextType extends Context<ContextType>> ext
      * @param view
      * @param projection
      */
-    default void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight,
-                                    Matrix4 view, Matrix4 projection)
+    default void drawInSubdivisions(@NotNull FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight,
+                                    Matrix4 view, @NotNull Matrix4 projection)
     {
         FramebufferSize size = framebuffer.getSize();
         drawInSubdivisions(framebuffer, subdivWidth, subdivHeight,

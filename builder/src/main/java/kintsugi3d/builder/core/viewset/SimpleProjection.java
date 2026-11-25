@@ -16,6 +16,7 @@
 package kintsugi3d.builder.core.viewset;
 
 import kintsugi3d.gl.vecmath.Matrix4;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A simple perspective projection defined simply by aspect ratio and field of view.
@@ -57,13 +58,13 @@ public class SimpleProjection implements Projection
     }
 
     @Override
-    public final Matrix4 getProjectionMatrix(float nearPlane, float farPlane)
+    public final @NotNull Matrix4 getProjectionMatrix(float nearPlane, float farPlane)
     {
         return Matrix4.perspective(verticalFieldOfView, aspectRatio, nearPlane, farPlane);
     }
 
     @Override
-    public final String toVSETString()
+    public final @NotNull String toVSETString()
     {
         return String.format("f\t0\t0\t%.8f\t%.8f", aspectRatio, verticalFieldOfView * 180.0 / Math.PI);
     }

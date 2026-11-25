@@ -28,6 +28,7 @@ import kintsugi3d.builder.state.cards.CardsModel;
 import kintsugi3d.builder.state.cards.ProjectDataCard;
 import kintsugi3d.builder.state.cards.ProjectDataCardFactory;
 import kintsugi3d.builder.state.cards.RefreshFunction;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -138,12 +139,12 @@ public class ObservableCardsModel<T> implements CardsModel<T>
         return expandedCardsModel.isSelected(cardId);
     }
 
-    public final BooleanExpression createSelectedBinding(UUID cardId)
+    public final @NotNull BooleanExpression createSelectedBinding(UUID cardId)
     {
         return selectedCardsModel.createSelectedBinding(cardId);
     }
 
-    public final BooleanExpression createExpandedBinding(UUID cardId)
+    public final @NotNull BooleanExpression createExpandedBinding(UUID cardId)
     {
         return expandedCardsModel.createSelectedBinding(cardId);
     }
@@ -168,12 +169,12 @@ public class ObservableCardsModel<T> implements CardsModel<T>
         Platform.runLater(() -> selectedCardsModel.unselect(cardId));
     }
 
-    public final Collection<ProjectDataCard> getSelectedCards()
+    public final @NotNull Collection<ProjectDataCard> getSelectedCards()
     {
         return selectedCardsModel.getSelected().keySet().stream().map(cardMap::get).collect(Collectors.toList());
     }
 
-    public final ObjectExpression<ProjectDataCard> lastSelectedCardProperty()
+    public final @NotNull ObjectExpression<ProjectDataCard> lastSelectedCardProperty()
     {
         return lastSelectedCard;
     }
@@ -190,14 +191,14 @@ public class ObservableCardsModel<T> implements CardsModel<T>
     }
 
     @Override
-    public final ObservableList<ProjectDataCard> getCardList()
+    public final @NotNull ObservableList<ProjectDataCard> getCardList()
     {
         //noinspection AssignmentOrReturnOfFieldWithMutableType
         return unmodifiableCardsList;
     }
 
     @Override
-    public final void setCardList(List<ProjectDataCard> cards)
+    public final void setCardList(@NotNull List<ProjectDataCard> cards)
     {
         cardsList.clear();
         cardsList.addAll(cards);
@@ -229,7 +230,7 @@ public class ObservableCardsModel<T> implements CardsModel<T>
     }
 
     @Override
-    public final void deleteCards(Predicate<ProjectDataCard> filter)
+    public final void deleteCards(@NotNull Predicate<ProjectDataCard> filter)
     {
         cardsList.removeIf(filter);
 

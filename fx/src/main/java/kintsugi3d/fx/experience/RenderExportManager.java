@@ -19,6 +19,8 @@ import javafx.beans.binding.BooleanExpression;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.stage.Window;
 import kintsugi3d.fx.core.JavaFXState;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +37,7 @@ public class RenderExportManager
 
     private final List<RenderExport> renderExportList = new ArrayList<>(4);
 
-    private BooleanExpression anyModalOpen;
+    private @Nullable BooleanExpression anyModalOpen;
 
     public final boolean isAnyModalOpen()
     {
@@ -47,7 +49,7 @@ public class RenderExportManager
         return anyModalOpen;
     }
 
-    public final List<RenderExport> getList()
+    public final @NotNull List<RenderExport> getList()
     {
         return Collections.unmodifiableList(renderExportList);
     }

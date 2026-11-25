@@ -17,6 +17,8 @@ package kintsugi3d.builder.fit.decomposition;
 
 import kintsugi3d.builder.io.specular.SpecularFitSerializer;
 import kintsugi3d.gl.vecmath.DoubleVector3;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.Collection;
@@ -36,7 +38,7 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
 
     private int enabledMaterialCount;
 
-    SimpleMaterialBasis(DoubleVector3[] diffuseColors, List<double[]> redBasis, List<double[]> greenBasis, List<double[]> blueBasis)
+    SimpleMaterialBasis(DoubleVector3[] diffuseColors, @NotNull List<double[]> redBasis, @NotNull List<double[]> greenBasis, @NotNull List<double[]> blueBasis)
     {
         enabledMaterialCount = redBasis.size();
         specularResolution = redBasis.get(0).length - 1;
@@ -53,7 +55,7 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
         }
     }
 
-    private SimpleMaterialBasis(LinkedHashMap<String, MutableBasisMaterialInfo> basis)
+    private SimpleMaterialBasis(@NotNull LinkedHashMap<String, MutableBasisMaterialInfo> basis)
     {
         this.basis = basis;
         specularResolution = basis.values().stream().findAny().orElseThrow().getResolution();
@@ -71,8 +73,8 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
      * @param <KeyType>
      */
     public <KeyType> SimpleMaterialBasis(
-        Map<KeyType, String> names, Map<KeyType, String> disabledNames, Map<KeyType, DoubleVector3> diffuseColors,
-        Map<KeyType, double[]> redBasis, Map<KeyType, double[]> greenBasis, Map<KeyType, double[]> blueBasis)
+        @NotNull Map<KeyType, String> names, @NotNull Map<KeyType, String> disabledNames, @NotNull Map<KeyType, DoubleVector3> diffuseColors,
+        @NotNull Map<KeyType, double[]> redBasis, @NotNull Map<KeyType, double[]> greenBasis, @NotNull Map<KeyType, double[]> blueBasis)
     {
         enabledMaterialCount = names.size();
         specularResolution = redBasis.values().stream().findAny().orElseThrow().length - 1;
@@ -102,7 +104,7 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
         }
     }
 
-    private static String getFriendlyName(String name)
+    private static @Nullable String getFriendlyName(@NotNull String name)
     {
         try
         {
@@ -116,13 +118,13 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
     }
 
     @Override
-    public final Collection<? extends IndexAssignableBasisMaterialInfo> getMaterials()
+    public final @NotNull Collection<? extends IndexAssignableBasisMaterialInfo> getMaterials()
     {
         return basis.values();
     }
 
     @Override
-    public final List<BasisMaterialInfo> getIndexableMaterialList()
+    public final @NotNull List<BasisMaterialInfo> getIndexableMaterialList()
     {
         BasisMaterialInfo[] result = new BasisMaterialInfo[basis.size()];
         for (BasisMaterialInfo material : basis.values())
@@ -158,7 +160,7 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
     }
 
     @Override
-    public final IndexAssignableBasisMaterialInfo deleteMaterial(String name)
+    public final @Nullable IndexAssignableBasisMaterialInfo deleteMaterial(String name)
     {
         MutableBasisMaterialInfo removed = basis.remove(name);
         if (removed != null)
@@ -191,7 +193,7 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
      * @return
      */
     @Override
-    public final MutableMaterialBasis copy()
+    public final @NotNull MutableMaterialBasis copy()
     {
         LinkedHashMap<String, MutableBasisMaterialInfo> copy = new LinkedHashMap<>(basis.size());
         for (var entry : basis.entrySet())
@@ -203,7 +205,7 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
     }
 
     @Override
-    public final BasisMaterialInfo disableMaterial(String name)
+    public final @NotNull BasisMaterialInfo disableMaterial(String name)
     {
         MutableBasisMaterialInfo material = basis.get(name);
 
@@ -229,7 +231,7 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
     }
 
     @Override
-    public final BasisMaterialInfo enableMaterial(String name)
+    public final @NotNull BasisMaterialInfo enableMaterial(String name)
     {
         MutableBasisMaterialInfo material = basis.get(name);
 

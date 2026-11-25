@@ -23,6 +23,7 @@ import kintsugi3d.optimization.function.MatrixBuilder;
 import kintsugi3d.optimization.function.MatrixBuilderSample;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.simple.SimpleMatrix;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.stream.IntStream;
 
@@ -49,7 +50,7 @@ final class ReflectanceMatrixBuilder
     /**
      * Underlying matrix builder utility.
      */
-    private final MatrixBuilder matrixBuilder;
+    private final @NotNull MatrixBuilder matrixBuilder;
     private final ReadonlyBasisOptimizationSettings basisSettings;
 
     /**
@@ -63,7 +64,7 @@ final class ReflectanceMatrixBuilder
      * Construct by accepting matrices where the final results will be stored.
      */
     ReflectanceMatrixBuilder(ReflectanceData reflectanceData, SpecularDecomposition solution,
-        BasisFunctions stepBasis, MatrixSystem contribution, ReadonlyBasisOptimizationSettings settings)
+                             BasisFunctions stepBasis, MatrixSystem contribution, @NotNull ReadonlyBasisOptimizationSettings settings)
     {
         this.solution = solution;
         this.reflectanceData = reflectanceData;

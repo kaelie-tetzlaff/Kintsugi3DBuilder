@@ -41,6 +41,8 @@ import kintsugi3d.gl.util.CanvasListener;
 import kintsugi3d.gl.window.*;
 import kintsugi3d.util.KeyPress;
 import kintsugi3d.util.MouseMode;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +73,7 @@ public final class RenderingBootstrap
         return started;
     }
 
-    static SceneViewport getSceneViewport()
+    static @NotNull SceneViewport getSceneViewport()
     {
         return SCENE_VIEWPORT_WRAPPER;
     }
@@ -109,7 +111,7 @@ public final class RenderingBootstrap
         runProgram(renderingUI, false, args);
     }
 
-    public static void runProgram(RenderingUI renderingUI, boolean standaloneWindow, String... args) throws InitializationException
+    public static void runProgram(@Nullable RenderingUI renderingUI, boolean standaloneWindow, String... args) throws InitializationException
     {
         started = true;
 
@@ -165,7 +167,7 @@ public final class RenderingBootstrap
         }
     }
 
-    private static void setup3DWindow(Window window)
+    private static void setup3DWindow(@NotNull Window window)
     {
         SynchronizedWindow glfwSynchronization = new SynchronizedWindow()
         {
@@ -204,7 +206,7 @@ public final class RenderingBootstrap
         window.show();
     }
 
-    private static void runProgram(RenderingUI renderingUI, PollableCanvas3D<OpenGLContext> canvas, String... args) throws InitializationException
+    private static void runProgram(@Nullable RenderingUI renderingUI, @NotNull PollableCanvas3D<OpenGLContext> canvas, String... args) throws InitializationException
     {
         OpenGLContext context = canvas.getContext();
         context.getState().enableDepthTest();
@@ -307,7 +309,7 @@ public final class RenderingBootstrap
         }
     }
 
-    private static ToolBindingModel createToolBinding()
+    private static @NotNull ToolBindingModel createToolBinding()
     {
         // Bind tools
         ToolBindingModel toolBindingModel = new ToolBindingModelImpl();
@@ -341,7 +343,7 @@ public final class RenderingBootstrap
         return toolBindingModel;
     }
 
-    private static void processArgs(String... args)
+    private static void processArgs(String @NotNull ... args)
     {
         // Load project if requested
         if (args.length >= 1)

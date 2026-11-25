@@ -68,7 +68,7 @@ public class GeometryResources<ContextType extends Context<ContextType>>
         tangentBuffer = null;
     }
 
-    public static <ContextType extends Context<ContextType>> GeometryResources<ContextType> createNullResources()
+    public static <ContextType extends Context<ContextType>> @NotNull GeometryResources<ContextType> createNullResources()
     {
         return new GeometryResources<>();
     }
@@ -76,7 +76,7 @@ public class GeometryResources<ContextType extends Context<ContextType>>
     /**
      * package-visible constructor, called by VertexGeometry.createGraphicsResources
      */
-    GeometryResources(ContextType context, ReadonlyVertexGeometry geometry)
+    GeometryResources(@NotNull ContextType context, @NotNull ReadonlyVertexGeometry geometry)
     {
         this.context = context;
         this.geometry = geometry;
@@ -123,13 +123,13 @@ public class GeometryResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final ReadonlyVertexBuffer<ContextType> getPositionBuffer()
+    public final @Nullable ReadonlyVertexBuffer<ContextType> getPositionBuffer()
     {
         return positionBuffer;
     }
 
     @Override
-    public final DrawableResource<ContextType> createDrawable(Program<ContextType> program)
+    public final @NotNull DrawableResource<ContextType> createDrawable(@NotNull Program<ContextType> program)
     {
         DrawableResource<ContextType> drawable = program.getContext().createDrawable(program);
         drawable.addVertexBuffer("position", positionBuffer);
@@ -140,7 +140,7 @@ public class GeometryResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final GeometryFramebuffer<ContextType> createGeometryFramebuffer(int width, int height)
+    public final @NotNull GeometryFramebuffer<ContextType> createGeometryFramebuffer(int width, int height)
     {
         try
         {

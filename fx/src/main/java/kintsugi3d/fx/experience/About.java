@@ -15,12 +15,14 @@
 
 package kintsugi3d.fx.experience;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 public class About extends ExperienceBase
 {
     @Override
-    public final String getName()
+    public final @NotNull String getName()
     {
         return "About Kintsugi 3D Builder";
     }

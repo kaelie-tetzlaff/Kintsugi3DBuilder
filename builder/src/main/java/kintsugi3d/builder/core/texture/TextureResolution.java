@@ -16,6 +16,7 @@
 package kintsugi3d.builder.core.texture;
 
 import kintsugi3d.gl.core.TwoDimensional;
+import org.jetbrains.annotations.NotNull;
 
 public class TextureResolution
 {
@@ -42,7 +43,7 @@ public class TextureResolution
      * @param texture
      * @return
      */
-    public static TextureResolution of(TwoDimensional texture)
+    public static @NotNull TextureResolution of(@NotNull TwoDimensional texture)
     {
         return new TextureResolution(texture.getWidth(), texture.getHeight());
     }

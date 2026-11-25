@@ -25,6 +25,8 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -40,7 +42,7 @@ public class ViewSnap<ContextType extends Context<ContextType>> implements Rende
     private final RenderedComponent<ContextType> contentRoot;
 
     private Matrix4 viewSnap = Matrix4.IDENTITY;
-    private View lastSnapView;
+    private @Nullable View lastSnapView;
 
     /**
      *
@@ -72,7 +74,7 @@ public class ViewSnap<ContextType extends Context<ContextType>> implements Rende
         contentRoot.reloadShaders();
     }
 
-    private Matrix4 snapToView(Matrix4 targetView)
+    private Matrix4 snapToView(@NotNull Matrix4 targetView)
     {
         SelectableViewListModel viewListModel = sceneModel.getCameraViewListModel();
 
@@ -136,7 +138,7 @@ public class ViewSnap<ContextType extends Context<ContextType>> implements Rende
     }
 
     @Override
-    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, @NotNull CameraViewport cameraViewport)
     {
         View selectedView = viewSelection.getSelectedView();
         if (selectedView != null)
@@ -174,7 +176,7 @@ public class ViewSnap<ContextType extends Context<ContextType>> implements Rende
     }
 
     @Override
-    public final void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight, CameraViewport cameraViewport)
+    public final void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight, @NotNull CameraViewport cameraViewport)
     {
         contentRoot.drawInSubdivisions(framebuffer, subdivWidth, subdivHeight, cameraViewport.copyForView(viewSnap));
     }

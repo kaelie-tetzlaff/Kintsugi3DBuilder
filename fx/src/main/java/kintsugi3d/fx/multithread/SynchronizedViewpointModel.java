@@ -14,21 +14,22 @@ package kintsugi3d.fx.multithread;
 import kintsugi3d.builder.state.scene.ManipulableViewpointModel;
 import kintsugi3d.builder.state.scene.ViewpointModelBase;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 public class SynchronizedViewpointModel extends ViewpointModelBase
 {
     private final ManipulableViewpointModel baseModel;
 
-    private final SynchronizedValue<Vector3> target;
-    private final SynchronizedValue<Float> azimuth;
-    private final SynchronizedValue<Float> inclination;
-    private final SynchronizedValue<Float> log10Distance;
-    private final SynchronizedValue<Float> twist;
-    private final SynchronizedValue<Float> horizontalFOV;
-    private final SynchronizedValue<Float> focalLength;
-    private final SynchronizedValue<Boolean> orthographic;
+    private final @NotNull SynchronizedValue<Vector3> target;
+    private final @NotNull SynchronizedValue<Float> azimuth;
+    private final @NotNull SynchronizedValue<Float> inclination;
+    private final @NotNull SynchronizedValue<Float> log10Distance;
+    private final @NotNull SynchronizedValue<Float> twist;
+    private final @NotNull SynchronizedValue<Float> horizontalFOV;
+    private final @NotNull SynchronizedValue<Float> focalLength;
+    private final @NotNull SynchronizedValue<Boolean> orthographic;
 
-    public SynchronizedViewpointModel(ManipulableViewpointModel baseModel)
+    public SynchronizedViewpointModel(@NotNull ManipulableViewpointModel baseModel)
     {
         this.baseModel = baseModel;
         target = SynchronizedValue.createFromFunctions(baseModel::getTarget, baseModel::setTarget);

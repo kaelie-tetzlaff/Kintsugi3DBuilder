@@ -48,6 +48,7 @@ import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
 import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
 import kintsugi3d.gl.vecmath.IntVector2;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
@@ -97,11 +98,11 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
     /**
      * Contains the VBOs for positions, tex-coords, normals, and tangents
      */
-    private final GeometryResources<ContextType> geometryResources;
+    private final @NotNull GeometryResources<ContextType> geometryResources;
 
     private TextureResources<ContextType> textureResources;
 
-    private final LuminanceMapResources<ContextType> luminanceMapResources;
+    private final @NotNull LuminanceMapResources<ContextType> luminanceMapResources;
 
     private final ContextType context;
 
@@ -118,7 +119,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
     private final Observable<MappedChange<String, BasisMaterialInfo>> basisObservable = new SimpleObservable<>();
     private final Observable<MappedChange<String, TextureInfo>> texturesObservable = new SimpleObservable<>();
 
-    GraphicsResourcesCommon(ContextType context, ViewSet viewSet, VertexGeometry geometry, TextureLoadOptions loadOptions)
+    GraphicsResourcesCommon(@NotNull ContextType context, @Nullable ViewSet viewSet, @Nullable VertexGeometry geometry, @NotNull TextureLoadOptions loadOptions)
     {
         this.context = context;
         this.viewSet = viewSet;
@@ -392,7 +393,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         }
     }
 
-    private static double findMaxMinDistance(Vector3[] viewDirections)
+    private static double findMaxMinDistance(Vector3 @NotNull [] viewDirections)
     {
         double maxMinDistance = 0.0;
         for (int i = 0; i < viewDirections.length; i++)
@@ -423,31 +424,6 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
     public ViewSet getViewSet()
     {
         return viewSet;
-    }
-
-    public float getViewWeight(int index)
-    {
-        if (viewWeights != null)
-        {
-            return viewWeights[index];
-        }
-        else
-        {
-            throw new IllegalStateException("View weights are unavailable.");
-        }
-    }
-
-    public List<Float> getViewWeights()
-    {
-        float[] currentViewWeights = viewWeights;
-        if (currentViewWeights != null)
-        {
-            return new ViewWeightListWrapper(currentViewWeights);
-        }
-        else
-        {
-            throw new IllegalStateException("View weights are unavailable.");
-        }
     }
 
     /**
@@ -524,7 +500,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
      *
      * @return The texture resolution of the weight maps if the project has been fully processed
      */
-    public IntVector2 getProcessedWeightMapResolution()
+    public @NotNull IntVector2 getProcessedWeightMapResolution()
     {
         ReadonlyBasisWeightResources<? extends Context<?>> basisWeightResources = textureResources.getBasisWeightResources();
         if (basisWeightResources != null)
@@ -537,17 +513,17 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         }
     }
 
-    public EventListeners<ProjectProcessedListener> weightMapsProcessedListeners()
+    public @NotNull EventListeners<ProjectProcessedListener> weightMapsProcessedListeners()
     {
         return projectProcessed;
     }
 
-    public EventListeners<TexturesReplacedListener> texturesReplacedListeners()
+    public @NotNull EventListeners<TexturesReplacedListener> texturesReplacedListeners()
     {
         return texturesReplaced;
     }
 
-    public void replaceTextureResources(TextureResources<ContextType> newTextureResources)
+    public void replaceTextureResources(@Nullable TextureResources<ContextType> newTextureResources)
     {
         textureResources.close();
         textureResources = newTextureResources == null ? TextureResources.makeNull(context) : newTextureResources;
@@ -609,7 +585,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
      * @return A program builder with all of the above preprocessor defines specified, ready to have the
      * vertex and fragment shaders added as well as any additional application-specific preprocessor definitions.
      */
-    public ProgramBuilder<ContextType> getShaderProgramBuilder()
+    public @NotNull ProgramBuilder<ContextType> getShaderProgramBuilder()
     {
         boolean basisEnabled = textureResources.getBasisResources() != null
             && textureResources.getBasisWeightResources() != null;
@@ -640,7 +616,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         return builder;
     }
 
-    public void setupShaderProgram(Program<ContextType> program)
+    public void setupShaderProgram(@NotNull Program<ContextType> program)
     {
         viewSet.setupShaderProgram(program);
 
@@ -707,35 +683,13 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         }
     }
 
-    public EventListeners<Observer<MappedChange<String, BasisMaterialInfo>>> basisListeners()
+    public @NotNull EventListeners<Observer<MappedChange<String, BasisMaterialInfo>>> basisListeners()
     {
         return basisObservable;
     }
 
-    public EventListeners<Observer<MappedChange<String, TextureInfo>>> texturesListeners()
+    public @NotNull EventListeners<Observer<MappedChange<String, TextureInfo>>> texturesListeners()
     {
         return texturesObservable;
-    }
-
-    private static final class ViewWeightListWrapper extends AbstractList<Float>
-    {
-        private final float[] viewWeights;
-
-        private ViewWeightListWrapper(float[] viewWeights)
-        {
-            this.viewWeights = viewWeights;
-        }
-
-        @Override
-        public int size()
-        {
-            return viewWeights.length;
-        }
-
-        @Override
-        public Float get(int index)
-        {
-            return viewWeights[index];
-        }
     }
 }

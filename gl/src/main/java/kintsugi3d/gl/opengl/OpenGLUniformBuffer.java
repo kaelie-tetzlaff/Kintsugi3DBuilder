@@ -17,6 +17,7 @@ package kintsugi3d.gl.opengl;
 
 import kintsugi3d.gl.core.UniformBuffer;
 import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
+import org.jetbrains.annotations.NotNull;
 
 import static org.lwjgl.opengl.GL31.GL_STATIC_DRAW;
 import static org.lwjgl.opengl.GL31.GL_UNIFORM_BUFFER;
@@ -45,7 +46,7 @@ class OpenGLUniformBuffer extends OpenGLBuffer implements UniformBuffer<OpenGLCo
     }
 
     @Override
-    public final void setData(ReadonlyNativeVectorBuffer data)
+    public final void setData(@NotNull ReadonlyNativeVectorBuffer data)
     {
         setData(data.getBuffer());
     }

@@ -21,6 +21,8 @@ import kintsugi3d.gl.nativebuffer.NativeDataType;
 import kintsugi3d.gl.nativebuffer.NativeVectorBuffer;
 import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
 import kintsugi3d.gl.vecmath.DoubleVector3;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +35,7 @@ public abstract class BasisResourcesBase<ContextType extends Context<ContextType
     private final UniformBuffer<ContextType> diffuseUniformBuffer;
     private Texture2D<ContextType> basisMaps;
 
-    protected BasisResourcesBase(ContextType context, int materialCount, int basisResolution)
+    protected BasisResourcesBase(@NotNull ContextType context, int materialCount, int basisResolution)
     {
         this.basisResolution = basisResolution;
 
@@ -43,7 +45,7 @@ public abstract class BasisResourcesBase<ContextType extends Context<ContextType
     }
 
     private static <ContextType extends Context<ContextType>>
-    Texture2D<ContextType> createBasisMaps(ContextType context, int materialCount, int basisResolution)
+    @NotNull Texture2D<ContextType> createBasisMaps(@NotNull ContextType context, int materialCount, int basisResolution)
     {
         Texture2D<ContextType> basisMaps = context.getTextureFactory().build1DColorTextureArray(
                 basisResolution + 1, materialCount)
@@ -124,7 +126,7 @@ public abstract class BasisResourcesBase<ContextType extends Context<ContextType
     }
 
     @Override
-    public final void save(File outputDirectory, String filenameOverride)
+    public final void save(File outputDirectory, @Nullable String filenameOverride)
     {
         getBasis().save(outputDirectory,
             filenameOverride != null ? filenameOverride : BasisResources.getBasisFunctionsFilename());
@@ -141,7 +143,7 @@ public abstract class BasisResourcesBase<ContextType extends Context<ContextType
     }
 
     @Override
-    public final void useWithShaderProgram(Program<ContextType> program)
+    public final void useWithShaderProgram(@NotNull Program<ContextType> program)
     {
         program.setTexture("basisFunctions", basisMaps);
         program.setUniformBuffer("DiffuseColors", diffuseUniformBuffer);

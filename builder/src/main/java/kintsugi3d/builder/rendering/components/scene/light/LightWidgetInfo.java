@@ -23,28 +23,29 @@ import kintsugi3d.gl.core.FramebufferSize;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.stream.IntStream;
 
 public final class LightWidgetInfo
 {
-    private final Matrix4 transformation;
+    private final @NotNull Matrix4 transformation;
     private final float lightWidgetScale;
-    private final Vector3 lightCenter;
-    private final Vector3 widgetPosition;
-    private final Vector3 widgetDisplacement;
+    private final @NotNull Vector3 lightCenter;
+    private final @NotNull Vector3 widgetPosition;
+    private final @NotNull Vector3 widgetDisplacement;
     private final float widgetDistance;
-    private final Vector3 distanceWidgetPosition;
+    private final @NotNull Vector3 distanceWidgetPosition;
     private final float perspectiveWidgetScale;
-    private final Vector3 azimuthRotationAxis;
+    private final @NotNull Vector3 azimuthRotationAxis;
     private final float lightDistanceAtInclination;
-    private final Vector3 lightDisplacementWorld;
+    private final @NotNull Vector3 lightDisplacementWorld;
     private final double azimuth;
     private final double inclination;
     private final double azimuthArrowRotation;
     private final double inclinationArrowRotation;
 
-    public static LightWidgetInfo[] calculate(SceneViewportModel sceneViewportModel, SceneModel sceneModel, CameraViewport cameraViewport, FramebufferSize size)
+    public static LightWidgetInfo @NotNull [] calculate(@NotNull SceneViewportModel sceneViewportModel, @NotNull SceneModel sceneModel, @NotNull CameraViewport cameraViewport, FramebufferSize size)
     {
         return IntStream.range(0, sceneModel.getLightingModel().getLightCount())
             .mapToObj(i -> new LightWidgetInfo(sceneViewportModel, sceneModel, cameraViewport, size, i))
@@ -52,7 +53,7 @@ public final class LightWidgetInfo
     }
 
     private LightWidgetInfo(
-        SceneViewportModel sceneViewportModel, ReadonlySceneModel sceneModel, CameraViewport cameraViewport, FramebufferSize size, int lightIndex)
+        @NotNull SceneViewportModel sceneViewportModel, @NotNull ReadonlySceneModel sceneModel, @NotNull CameraViewport cameraViewport, FramebufferSize size, int lightIndex)
     {
         transformation = cameraViewport.getView().times(sceneModel.getInverseLightViewMatrix(lightIndex));
         lightWidgetScale = sceneViewportModel.computeRawLightWidgetScale(cameraViewport.getView(), size);

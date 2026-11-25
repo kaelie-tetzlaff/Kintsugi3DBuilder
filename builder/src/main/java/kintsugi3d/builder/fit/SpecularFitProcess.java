@@ -42,6 +42,8 @@ import kintsugi3d.gl.util.BufferedImageColorList;
 import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.util.ImageFinder;
 import org.ejml.simple.SimpleMatrix;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,7 +85,7 @@ public abstract class SpecularFitProcess
     }
 
     public final <ContextType extends Context<ContextType>> void reconstructAll(
-        ReadonlyImageBasedGraphicsResources<ContextType> resources, BiConsumer<ReconstructionView<ContextType>, ReadonlyColorAppearanceRMSE> reconstructionCallback)
+        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, @NotNull BiConsumer<ReconstructionView<ContextType>, ReadonlyColorAppearanceRMSE> reconstructionCallback)
         throws IOException
     {
         ReadonlyViewSet viewSet = resources.getViewSet();
@@ -137,9 +139,9 @@ public abstract class SpecularFitProcess
         }
     }
 
-    protected final <ContextType extends Context<ContextType>> SpecularFitFinal<ContextType> optimizeFullResTexturesWithCache(
-        ImageCache<ContextType> cache, ProgressMonitor monitor, ReadonlyTextureResources<ContextType> original,
-        MaterialBasis basis, Temporal start) throws IOException, UserCancellationException
+    protected final <ContextType extends Context<ContextType>> @NotNull SpecularFitFinal<ContextType> optimizeFullResTexturesWithCache(
+        @NotNull ImageCache<ContextType> cache, @Nullable ProgressMonitor monitor, @NotNull ReadonlyTextureResources<ContextType> original,
+        @NotNull MaterialBasis basis, @NotNull Temporal start) throws IOException, UserCancellationException
     {
         // Create space for the solution.
         // Complete "specular fit": includes basis representation on GPU, roughness / reflectivity fit, normal fit, and final diffuse fit.
@@ -208,7 +210,7 @@ public abstract class SpecularFitProcess
     }
 
     private static <ContextType extends Context<ContextType>>
-    Texture2D<ContextType> loadInitialNormalMap(ContextType context, int targetWidth, int targetHeight, File inputNormalMapFile)
+    Texture2D<ContextType> loadInitialNormalMap(@NotNull ContextType context, int targetWidth, int targetHeight, @Nullable File inputNormalMapFile)
         throws IOException
     {
         Texture2D<ContextType> normalMap = context.getTextureFactory()
@@ -237,11 +239,11 @@ public abstract class SpecularFitProcess
     }
 
     private <ContextType extends Context<ContextType>> void optimizeBlocks(
-        Blittable<ReadonlyTextureResources<ContextType>> fullResolutionDestination,
-        ImageCache<ContextType> cache,
-        MaterialBasis basis,
-        File inputNormalMapFile,
-        ProgressMonitor monitor)
+        @NotNull Blittable<ReadonlyTextureResources<ContextType>> fullResolutionDestination,
+        @NotNull ImageCache<ContextType> cache,
+        @NotNull MaterialBasis basis,
+        @Nullable File inputNormalMapFile,
+        @Nullable ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         SpecularFitResourcesWrapper<ContextType> resourcesWrapper = getResourcesWrapper();
@@ -338,9 +340,9 @@ public abstract class SpecularFitProcess
     }
 
     protected final <ContextType extends Context<ContextType>> void optimizeTexSpaceFit(
-        ReadonlyImageBasedGraphicsResources<ContextType> resources,
-        TextureResolution resolution,
-        OptimizationMethod<ContextType> optimizationMethod,
+        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources,
+        @NotNull TextureResolution resolution,
+        @NotNull OptimizationMethod<ContextType> optimizationMethod,
         ProgressMonitor monitor) throws IOException, UserCancellationException
     {
         SpecularFitResourcesWrapper<ContextType> resourcesWrapper = getResourcesWrapper();
@@ -390,7 +392,7 @@ public abstract class SpecularFitProcess
 //    }
 
     private static <ContextType extends Context<ContextType>>
-    ProgramBuilder<ContextType> getReflectanceProgramBuilder(ShaderProgramFactory<ContextType> programFactory)
+    ProgramBuilder<ContextType> getReflectanceProgramBuilder(@NotNull ShaderProgramFactory<ContextType> programFactory)
     {
         return programFactory.getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File("shaders/common/texspace_dynamic.vert"))

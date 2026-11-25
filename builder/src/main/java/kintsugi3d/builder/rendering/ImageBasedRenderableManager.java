@@ -52,6 +52,7 @@ import kintsugi3d.gl.vecmath.IntVector2;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.window.FramebufferCanvas;
 import kintsugi3d.util.EncodableColorImage;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,13 +122,13 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public final EventListeners<ProjectLoadedListener> projectLoadedListeners()
+    public final @NotNull EventListeners<ProjectLoadedListener> projectLoadedListeners()
     {
         return projectLoaded;
     }
 
     @Override
-    public final EventListeners<ProjectProcessedListener> projectProcessedListeners()
+    public final @NotNull EventListeners<ProjectProcessedListener> projectProcessedListeners()
     {
         return projectProcessed;
     }
@@ -150,7 +151,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         return loadedGeometry;
     }
 
-    public final SceneViewport getSceneViewport()
+    public final @NotNull SceneViewport getSceneViewport()
     {
         return sceneViewport;
     }
@@ -176,7 +177,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
      * @param builder
      * @throws UserCancellationException
      */
-    private void loadInstance(File newProjectFile, String internalName, Builder<ContextType> builder)
+    private void loadInstance(@Nullable File newProjectFile, String internalName, @NotNull Builder<ContextType> builder)
         throws UserCancellationException
     {
         ViewSet viewSet = Objects.requireNonNull(builder.getViewSet(), "Builder must have a view set assigned.");
@@ -327,7 +328,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
      * Does not initialize camera model.
      * @param sceneModel
      */
-    private void initializeSceneModel(SceneModel sceneModel)
+    private void initializeSceneModel(@NotNull SceneModel sceneModel)
     {
         sceneModel.setObjectModel(objectModel);
         sceneModel.setLightingModel(lightingModel);
@@ -379,7 +380,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public final void loadFromMetashapeModel(File newProjectFile, MetashapeModel model, ReadonlyLoadOptionsModel loadOptionsModel)
+    public final void loadFromMetashapeModel(File newProjectFile, @NotNull MetashapeModel model, ReadonlyLoadOptionsModel loadOptionsModel)
         throws UserCancellationException, MissingImagesException, MeshImportException, IOException, XMLStreamException
     {
 
@@ -467,15 +468,15 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
     }
 
-    public final RefreshableCollection<RenderRefreshable<ContextType, ImageBasedRenderingEngine<ContextType>>> getRenderViews()
+    public final @NotNull RefreshableCollection<RenderRefreshable<ContextType, ImageBasedRenderingEngine<ContextType>>> getRenderViews()
     {
         return renderViews;
     }
 
     @Override
-    public final void addRenderView(ShaderInfo shader, FramebufferSize viewSize,
+    public final void addRenderView(@NotNull ShaderInfo shader, @NotNull FramebufferSize viewSize,
                                     int safeLeftPadding, int safeTopPadding, int safeRightPadding, int safeBottomPadding,
-                                    Consumer<FramebufferCanvas<?>> framebufferCallback)
+                                    @NotNull Consumer<FramebufferCanvas<?>> framebufferCallback)
     {
         ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
         if (currentInstance != null)
@@ -548,7 +549,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
     }
 
-    private void requestFragmentShader(ShaderInfo shaderInfo)
+    private void requestFragmentShader(@NotNull ShaderInfo shaderInfo)
     {
         ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
         if (currentInstance != null)
@@ -558,7 +559,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public final ImageBasedRenderable<ContextType> getMainRenderable()
+    public final @Nullable ImageBasedRenderable<ContextType> getMainRenderable()
     {
         return renderableInstance;
     }
@@ -609,7 +610,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
     }
 
-    public final void setUserShaderModel(ReadonlyActiveShaderModel userShaderModel)
+    public final void setUserShaderModel(@NotNull ReadonlyActiveShaderModel userShaderModel)
     {
         userShaderModel.registerHandler(this::requestFragmentShader);
     }
@@ -649,13 +650,13 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public final void saveToVSETFile(File vsetFile) throws IOException
+    public final void saveToVSETFile(@NotNull File vsetFile) throws IOException
     {
         ViewSetWriterToVSET.getInstance().writeToFile(Objects.requireNonNull(loadedViewSet, "No view set is currently loaded."), vsetFile);
     }
 
     @Override
-    public final void saveAllMaterialFiles(File materialDirectory, Runnable finishedCallback)
+    public final void saveAllMaterialFiles(File materialDirectory, @Nullable Runnable finishedCallback)
     {
         ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
         if (currentInstance == null || currentInstance.getResourcesOrNull() == null)
@@ -701,7 +702,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public final void unload(Runnable onUnloadComplete)
+    public final void unload(@NotNull Runnable onUnloadComplete)
     {
         // Use the runLater system so that the rendering loop knows that an operation that might take longer is queued.
         Rendering.runLater(() ->

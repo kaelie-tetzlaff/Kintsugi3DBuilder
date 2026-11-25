@@ -24,6 +24,7 @@ import kintsugi3d.gl.core.ReadableFramebuffer;
 import kintsugi3d.gl.stream.GraphicsStream;
 import kintsugi3d.gl.stream.GraphicsStreamResource;
 import kintsugi3d.gl.util.ColorList;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -51,7 +52,7 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
      * @param attachmentCount The number of attachments that the framebuffer contains.
      * @return a sequential Stream over the views in this instance.
      */
-    public final GraphicsStream<ColorList[]> stream(
+    public final @NotNull GraphicsStream<ColorList[]> stream(
         DrawableResource<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer, int attachmentCount)
     {
         return new SequentialViewRenderStream<>(resources.getViewSet().getEnabledViews(), drawable, framebuffer, attachmentCount);
@@ -66,7 +67,7 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
      * @param framebuffer The GPU framebuffer which will store the result of invoking the specified drawable.
      * @return a sequential Stream over the views in this instance.
      */
-    public final GraphicsStream<ColorList> stream(
+    public final @NotNull GraphicsStream<ColorList> stream(
         DrawableResource<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer)
     {
         return new SequentialViewRenderStream<>(resources.getViewSet().getEnabledViews(), drawable, framebuffer, 1)
@@ -86,9 +87,9 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
      * with a dual function as an AutoCloseable that manages the associated GPU resources.
      * @throws FileNotFoundException if the shader program files cannot be found.
      */
-    public final GraphicsStreamResource<ContextType> streamAsResource(
-        ProgramBuilder<ContextType> programBuilder,
-        FramebufferObjectBuilder<ContextType> framebufferBuilder) throws IOException
+    public final @NotNull GraphicsStreamResource<ContextType> streamAsResource(
+        @NotNull ProgramBuilder<ContextType> programBuilder,
+        @NotNull FramebufferObjectBuilder<ContextType> framebufferBuilder) throws IOException
     {
         return new GraphicsStreamResource<>(programBuilder, framebufferBuilder,
             (program, framebuffer) -> new SequentialViewRenderStream<>(
@@ -108,7 +109,7 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
      *                          will be dedicated to GPU rendering should be considered when specifying this parameter.
      * @return a parallel Stream over the views in this instance.
      */
-    public final GraphicsStream<ColorList[]> parallelStream(
+    public final @NotNull GraphicsStream<ColorList[]> parallelStream(
         DrawableResource<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer, int attachmentCount, int maxRunningThreads)
     {
         return new ParallelViewRenderStream<>(resources.getViewSet().getEnabledViews(), drawable, framebuffer,
@@ -126,7 +127,7 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
      * @param attachmentCount The number of attachments that the framebuffer contains.
      * @return a parallel Stream over the views in this instance.
      */
-    public final GraphicsStream<ColorList[]> parallelStream(
+    public final @NotNull GraphicsStream<ColorList[]> parallelStream(
         DrawableResource<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer, int attachmentCount)
     {
         return new ParallelViewRenderStream<>(resources.getViewSet().getEnabledViews(), drawable, framebuffer, attachmentCount);
@@ -141,7 +142,7 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
      * @param framebuffer The GPU framebuffer which will store the result of invoking the specified drawable.
      * @return a parallel Stream over the views in this instance.
      */
-    public final GraphicsStream<ColorList> parallelStream(
+    public final @NotNull GraphicsStream<ColorList> parallelStream(
         DrawableResource<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer)
     {
         return new ParallelViewRenderStream<>(resources.getViewSet().getEnabledViews(), drawable, framebuffer, 1)
@@ -163,9 +164,9 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
      * with a dual function as an AutoCloseable that manages the associated GPU resources.
      * @throws FileNotFoundException if the shader program files cannot be found.
      */
-    public final GraphicsStreamResource<ContextType> parallelStreamAsResource(
-        ProgramBuilder<ContextType> programBuilder,
-        FramebufferObjectBuilder<ContextType> framebufferBuilder,
+    public final @NotNull GraphicsStreamResource<ContextType> parallelStreamAsResource(
+        @NotNull ProgramBuilder<ContextType> programBuilder,
+        @NotNull FramebufferObjectBuilder<ContextType> framebufferBuilder,
         int maxRunningThreads) throws IOException
     {
         return new GraphicsStreamResource<>(programBuilder, framebufferBuilder,
@@ -188,9 +189,9 @@ public class GraphicsStreamFactory<ContextType extends Context<ContextType>>
      * with a dual function as an AutoCloseable that manages the associated GPU resources.
      * @throws FileNotFoundException if the shader program files cannot be found.
      */
-    public final GraphicsStreamResource<ContextType> parallelStreamAsResource(
-        ProgramBuilder<ContextType> programBuilder,
-        FramebufferObjectBuilder<ContextType> framebufferBuilder) throws IOException
+    public final @NotNull GraphicsStreamResource<ContextType> parallelStreamAsResource(
+        @NotNull ProgramBuilder<ContextType> programBuilder,
+        @NotNull FramebufferObjectBuilder<ContextType> framebufferBuilder) throws IOException
     {
         return new GraphicsStreamResource<>(programBuilder, framebufferBuilder,
             (program, framebuffer) -> new ParallelViewRenderStream<>(

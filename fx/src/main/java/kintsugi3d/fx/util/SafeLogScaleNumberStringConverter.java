@@ -16,20 +16,21 @@
 package kintsugi3d.fx.util;
 
 import javafx.util.StringConverter;
+import org.jetbrains.annotations.NotNull;
 
 public class SafeLogScaleNumberStringConverter extends StringConverter<Number>
 {
-    private final SafeNumberStringConverter base;
-    private final Number defaultValue;
+    private final @NotNull SafeNumberStringConverter base;
+    private final @NotNull Number defaultValue;
 
-    public SafeLogScaleNumberStringConverter(Number defaultValue)
+    public SafeLogScaleNumberStringConverter(@NotNull Number defaultValue)
     {
         this.defaultValue = StrictMath.log10(defaultValue.doubleValue());
         base = new SafeNumberStringConverter(this.defaultValue);
     }
 
     @Override
-    public final String toString(Number object)
+    public final String toString(@NotNull Number object)
     {
         Double to10 = StrictMath.pow(10, object.doubleValue());
         return base.toString(to10);

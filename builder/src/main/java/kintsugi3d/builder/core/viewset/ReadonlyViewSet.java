@@ -22,6 +22,7 @@ import kintsugi3d.gl.core.Program;
 import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
 import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.List;
@@ -31,17 +32,17 @@ import java.util.UUID;
 
 public interface ReadonlyViewSet
 {
-    ReadonlyNativeVectorBuffer getCameraPoseData();
+    @Nullable ReadonlyNativeVectorBuffer getCameraPoseData();
 
-    ReadonlyNativeVectorBuffer getCameraProjectionData();
+    @Nullable ReadonlyNativeVectorBuffer getCameraProjectionData();
 
-    ReadonlyNativeVectorBuffer getCameraProjectionIndexData();
+    @Nullable ReadonlyNativeVectorBuffer getCameraProjectionIndexData();
 
-    ReadonlyNativeVectorBuffer getLightPositionData();
+    @Nullable ReadonlyNativeVectorBuffer getLightPositionData();
 
-    ReadonlyNativeVectorBuffer getLightIntensityData();
+    @Nullable ReadonlyNativeVectorBuffer getLightIntensityData();
 
-    ReadonlyNativeVectorBuffer getLightIndexData();
+    @Nullable ReadonlyNativeVectorBuffer getLightIndexData();
 
     /**
      * Note: not currently guaranteed to be thead-safe
@@ -61,7 +62,7 @@ public interface ReadonlyViewSet
      * Gets the name of the geometry file associated with this view set.
      * @return The name of the geometry file.
      */
-    String getGeometryFileName();
+    @Nullable String getGeometryFileName();
 
     /**
      * Gets the geometry file associated with this view set.
@@ -79,7 +80,7 @@ public interface ReadonlyViewSet
      * Gets the file path of the supporting files (i.e. texture fit results) associated with this view set, relative to the root directory.
      * @return The relative file path of the supporting files.
      */
-    String getRelativeSupportingFilesPathName();
+    @Nullable String getRelativeSupportingFilesPathName();
 
     /**
      * Gets the full resolution image file path associated with this view set.
@@ -91,7 +92,7 @@ public interface ReadonlyViewSet
      * Gets the full resolution image file path string associated with this view set, relative to the root directory.
      * @return imageFilePath The image file path.
      */
-    String getRelativeFullResImagePathName();
+    @Nullable String getRelativeFullResImagePathName();
 
     /**
      * Gets the image file path for downscaled "preview" images for real-time rendering
@@ -109,7 +110,7 @@ public interface ReadonlyViewSet
      * Gets the image file path string for downscaled "preview" images for real-time rendering, relative to the root directory.
      * @return The image file path.
      */
-    String getRelativePreviewImagePathName();
+    @Nullable String getRelativePreviewImagePathName();
 
     /**
      * Gets orientation imported, to be applied to the model
@@ -137,13 +138,13 @@ public interface ReadonlyViewSet
      * Gets the view to be used for color calibration and tonemapping operations
      * @return view
      */
-    View getPrimaryView();
+    @Nullable View getPrimaryView();
 
     /**
      * Gets the view index to use as a reference pose for reorienting the model
      * @return view index
      */
-    View getOrientationView();
+    @Nullable View getOrientationView();
 
     /**
      * Roll rotation of the reference view pose to correct upside down and sideways images
@@ -157,7 +158,7 @@ public interface ReadonlyViewSet
      * otherwise, the first view in the list.
      * @return
      */
-    View getRepresentativeView();
+    @Nullable View getRepresentativeView();
 
     /**
      * Gets all views in an arbitrary order.
@@ -281,14 +282,14 @@ public interface ReadonlyViewSet
 
     SampledLuminanceEncoding getLuminanceEncoding();
 
-    double[] getLinearLuminanceValues();
-    byte[] getEncodedLuminanceValues();
+    double @Nullable [] getLinearLuminanceValues();
+    byte @Nullable [] getEncodedLuminanceValues();
 
     boolean hasMasks();
 
     File getMasksDirectory();
 
-    String getRelativeMaskPathName();
+    @Nullable String getRelativeMaskPathName();
 
     /**
      * Gets additional settings associated with this view set

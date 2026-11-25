@@ -18,6 +18,7 @@ package kintsugi3d.builder.fit.decomposition;
 import kintsugi3d.builder.fit.ReflectanceData;
 import kintsugi3d.gl.vecmath.DoubleVector3;
 import kintsugi3d.optimization.LeastSquaresModel;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.IntFunction;
@@ -38,28 +39,28 @@ public class SpecularWeightModel implements LeastSquaresModel<ReflectanceData, D
     }
 
     @Override
-    public final boolean isValid(ReflectanceData sampleData, int systemIndex)
+    public final boolean isValid(@NotNull ReflectanceData sampleData, int systemIndex)
     {
         // Visibility test
         return sampleData.getVisibility(systemIndex) > 0;
     }
 
     @Override
-    public final double getSampleWeight(ReflectanceData sampleData, int systemIndex)
+    public final double getSampleWeight(@NotNull ReflectanceData sampleData, int systemIndex)
     {
         // Don't multiply by n dot l when optimizing reflectance (rather than radiance)
         return sampleData.getAdditionalWeight(systemIndex);
     }
 
     @Override
-    public final DoubleVector3 getSamples(ReflectanceData sampleData, int systemIndex)
+    public final @NotNull DoubleVector3 getSamples(@NotNull ReflectanceData sampleData, int systemIndex)
     {
         // Sampler (ground truth data)
         return new DoubleVector3(sampleData.getRed(systemIndex), sampleData.getGreen(systemIndex), sampleData.getBlue(systemIndex));
     }
 
     @Override
-    public final IntFunction<DoubleVector3> getBasisFunctions(ReflectanceData sampleData, int systemIndex)
+    public final @NotNull IntFunction<DoubleVector3> getBasisFunctions(@NotNull ReflectanceData sampleData, int systemIndex)
     {
         // Precompute values that will be reused; captured by the lambda expression.
         float halfwayIndex = sampleData.getHalfwayIndex(systemIndex);
@@ -117,7 +118,7 @@ public class SpecularWeightModel implements LeastSquaresModel<ReflectanceData, D
     }
 
     @Override
-    public final double innerProduct(DoubleVector3 t1, DoubleVector3 t2)
+    public final double innerProduct(@NotNull DoubleVector3 t1, @NotNull DoubleVector3 t2)
     {
         return t1.dot(t2);
     }

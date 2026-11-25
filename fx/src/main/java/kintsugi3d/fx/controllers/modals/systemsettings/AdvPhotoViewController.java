@@ -28,6 +28,7 @@ import kintsugi3d.fx.util.SafeFloatStringConverter;
 import kintsugi3d.fx.util.SafeNumberStringConverter;
 import kintsugi3d.fx.util.StaticUtilities;
 import kintsugi3d.util.ShadingParameterMode;
+import org.jetbrains.annotations.NotNull;
 
 public class AdvPhotoViewController implements SystemSettingsControllerBase
 {
@@ -41,7 +42,7 @@ public class AdvPhotoViewController implements SystemSettingsControllerBase
     @FXML private ChoiceBox<ShadingParameterMode> weightModeChoiceBox;
 
     @Override
-    public final void initializePage(Window parentWindow, JavaFXState state)
+    public final void initializePage(Window parentWindow, @NotNull JavaFXState state)
     {
         // Weight exponent and isotropy factor only matter when Buehler algorithm is not being used.
         weightExponentSlider.disableProperty().bind(buehlerCheckBox.selectedProperty());
@@ -58,7 +59,7 @@ public class AdvPhotoViewController implements SystemSettingsControllerBase
         bind(state.getSettingsModel());
     }
 
-    private void bind(ObservableGeneralSettingsModel injectedSettingsModel)
+    private void bind(@NotNull ObservableGeneralSettingsModel injectedSettingsModel)
     {
         buehlerCheckBox.selectedProperty().bindBidirectional(injectedSettingsModel.getBooleanProperty("buehlerAlgorithm"));
 
@@ -83,13 +84,13 @@ public class AdvPhotoViewController implements SystemSettingsControllerBase
     private static class WeightModeStringConverter extends StringConverter<ShadingParameterMode>
     {
         @Override
-        public final String toString(ShadingParameterMode object)
+        public final @NotNull String toString(@NotNull ShadingParameterMode object)
         {
             return object.name();
         }
 
         @Override
-        public final ShadingParameterMode fromString(String string)
+        public final @NotNull ShadingParameterMode fromString(String string)
         {
             return ShadingParameterMode.valueOf(string);
         }

@@ -25,6 +25,7 @@ import javafx.scene.layout.VBox;
 import kintsugi3d.fx.internal.ObservableCameraModel;
 import kintsugi3d.fx.internal.ObservableProjectModel;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +49,7 @@ public class RootCameraSceneController
 
     private ObservableProjectModel projectModel;
 
-    public final void injectDependencies(ObservableCameraModel cameraModel, ObservableProjectModel injectedProjectModel)
+    public final void injectDependencies(@NotNull ObservableCameraModel cameraModel, ObservableProjectModel injectedProjectModel)
     {
         projectModel = injectedProjectModel;
 

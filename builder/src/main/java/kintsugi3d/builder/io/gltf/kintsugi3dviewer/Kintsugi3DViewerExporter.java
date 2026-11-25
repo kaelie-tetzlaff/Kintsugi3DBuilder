@@ -22,6 +22,7 @@ import kintsugi3d.builder.io.gltf.CustomTextureExport;
 import kintsugi3d.builder.io.gltf.PBRExporter;
 import kintsugi3d.builder.io.gltf.StandardTextureExport;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
@@ -97,7 +98,7 @@ public class Kintsugi3DViewerExporter extends PBRExporter
         getTextureResources().saveBasisFunctions(outputDirectory, getBasisFunctionsUri());
     }
 
-    private String getBasisFunctionsUri()
+    private @NotNull String getBasisFunctionsUri()
     {
         return BasisResources.getBasisFunctionsFilename(getTextureFilePrefix());
     }

@@ -30,7 +30,7 @@ public class LightCalibrationRoot<ContextType extends Context<ContextType>> impl
 {
     private final @NotNull ViewSnap<ContextType> viewSnapRoot;
 
-    public LightCalibrationRoot(ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel,
+    public LightCalibrationRoot(@NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel,
                                 ViewSelection viewSelection, SceneViewportModel sceneViewportModel)
     {
         viewSnapRoot = new ViewSnap<>(sceneModel, viewSelection, new LightCalibrationContent<>(resources, sceneModel, sceneViewportModel));
@@ -55,7 +55,7 @@ public class LightCalibrationRoot<ContextType extends Context<ContextType>> impl
     }
 
     @Override
-    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, @NotNull CameraViewport cameraViewport)
     {
         viewSnapRoot.draw(framebuffer, cameraViewport);
     }

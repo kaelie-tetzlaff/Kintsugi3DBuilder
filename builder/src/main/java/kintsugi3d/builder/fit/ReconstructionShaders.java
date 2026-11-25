@@ -20,6 +20,7 @@ import kintsugi3d.builder.resources.project.texture.ReadonlyTextureSet;
 import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.ShaderType;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
@@ -30,7 +31,7 @@ public final class ReconstructionShaders
     }
 
     public static <ContextType extends Context<ContextType>>
-    ProgramBuilder<ContextType> getIncidentRadianceProgramBuilder(ShaderProgramFactory<ContextType> programFactory)
+    ProgramBuilder<ContextType> getIncidentRadianceProgramBuilder(@NotNull ShaderProgramFactory<ContextType> programFactory)
     {
         return programFactory.getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX,  new File("shaders/common/imgspace.vert"))
@@ -39,7 +40,7 @@ public final class ReconstructionShaders
 
     public static <ContextType extends Context<ContextType>>
     ProgramBuilder<ContextType> getBasisModelReconstructionProgramBuilder(
-        ShaderProgramFactory<ContextType> programFactory, ReadonlyTextureSet<ContextType> specularFit)
+        @NotNull ShaderProgramFactory<ContextType> programFactory, @NotNull ReadonlyTextureSet<ContextType> specularFit)
     {
         return programFactory.getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX,  new File("shaders/common/imgspace.vert"))
@@ -49,7 +50,7 @@ public final class ReconstructionShaders
 
     public static <ContextType extends Context<ContextType>>
     ProgramBuilder<ContextType> getReflectivityModelReconstructionProgramBuilder(
-        ShaderProgramFactory<ContextType> programFactory, ReadonlyTextureSet<ContextType> specularFit)
+        @NotNull ShaderProgramFactory<ContextType> programFactory, @NotNull ReadonlyTextureSet<ContextType> specularFit)
     {
         return programFactory.getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX,  new File("shaders/common/imgspace.vert"))

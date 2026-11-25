@@ -15,6 +15,8 @@
 
 package kintsugi3d.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.function.DoubleUnaryOperator;
 
@@ -24,7 +26,7 @@ public class CubicHermiteSpline implements DoubleUnaryOperator
     private final double[] y;
     private final double[] m;
 
-    public CubicHermiteSpline(double[] x, double[] y, boolean monotone)
+    public CubicHermiteSpline(double @NotNull [] x, double @NotNull [] y, boolean monotone)
     {
         if (x.length != y.length)
         {
@@ -84,7 +86,7 @@ public class CubicHermiteSpline implements DoubleUnaryOperator
         }
     }
 
-    public CubicHermiteSpline(double[] x, double[] y, double[] m)
+    public CubicHermiteSpline(double @NotNull [] x, double @NotNull [] y, double @NotNull [] m)
     {
         if (x.length != y.length || x.length != m.length)
         {

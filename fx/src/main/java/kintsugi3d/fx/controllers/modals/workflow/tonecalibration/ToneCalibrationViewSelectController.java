@@ -22,6 +22,7 @@ import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.fx.controllers.modals.viewselect.ViewSelectController;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -64,7 +65,7 @@ public class ToneCalibrationViewSelectController extends ViewSelectController
     }
 
     @Override
-    protected final String getHintText()
+    protected final @NotNull String getHintText()
     {
         return "Select tone calibration view";
     }

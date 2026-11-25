@@ -15,6 +15,8 @@
 
 package kintsugi3d.fx.controllers.paged;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.function.Supplier;
 
 public class DataPageBuilder<InType, OutType, FinishType> extends SimplePageBuilder<InType, OutType, FinishType>
@@ -26,28 +28,28 @@ public class DataPageBuilder<InType, OutType, FinishType> extends SimplePageBuil
 
     @Override
     public final <ControllerType extends NonSupplierPageController<? super OutType>>
-    SimplePageBuilder<OutType, OutType, FinishType> then(String fxmlPath, Supplier<ControllerType> controllerConstructorOverride)
+    @NotNull SimplePageBuilder<OutType, OutType, FinishType> then(String fxmlPath, Supplier<ControllerType> controllerConstructorOverride)
     {
         return then(fxmlPath, SimpleDataReceiverPage<OutType, ControllerType>::new, controllerConstructorOverride);
     }
 
     @Override
     public final <ControllerType extends NonSupplierPageController<? super OutType>>
-    SimplePageBuilder<OutType, OutType, FinishType> then(String fxmlPath)
+    @NotNull SimplePageBuilder<OutType, OutType, FinishType> then(String fxmlPath)
     {
         return this.<ControllerType>then(fxmlPath, null);
     }
 
     @Override
     public final <ControllerType extends SelectionPageController<OutType>>
-    SelectionPageBuilder<? super OutType, FinishType> thenSelect(String prompt, Supplier<ControllerType> controllerConstructorOverride)
+    @NotNull SelectionPageBuilder<? super OutType, FinishType> thenSelect(String prompt, Supplier<ControllerType> controllerConstructorOverride)
     {
         return thenSelect(prompt, SimpleSelectionPage<OutType, ControllerType>::new, controllerConstructorOverride);
     }
 
     @Override
     public final <ControllerType extends SelectionPageController<OutType>>
-    SelectionPageBuilder<? super OutType, FinishType> thenSelect(String prompt)
+    @NotNull SelectionPageBuilder<? super OutType, FinishType> thenSelect(String prompt)
     {
         return thenSelect(prompt, SimpleSelectionPage<OutType, ControllerType>::new, null);
     }

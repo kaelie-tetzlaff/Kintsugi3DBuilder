@@ -26,6 +26,7 @@ import kintsugi3d.builder.state.settings.SimpleGeneralSettingsModel;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -44,7 +45,7 @@ public class SettingsModelDeserializer extends StdDeserializer<GeneralSettingsMo
     }
 
     @Override
-    public final GeneralSettingsModel deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException
+    public final @NotNull GeneralSettingsModel deserialize(@NotNull JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException
     {
         GeneralSettingsModel outputModel = new SimpleGeneralSettingsModel();
         ObjectMapper mapper = new ObjectMapper();

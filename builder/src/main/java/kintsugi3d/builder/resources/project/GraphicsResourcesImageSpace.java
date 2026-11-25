@@ -38,6 +38,7 @@ import kintsugi3d.gl.vecmath.IntVector2;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,7 +102,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
     {
         private final ContextType context;
         private ViewSet viewSet;
-        private VertexGeometry geometry;
+        private @Nullable VertexGeometry geometry;
         private File imageDirectoryOverride;
         private ReadonlyLoadOptionsModel imageLoadOptions;
         private ProgressMonitor progressMonitor;
@@ -125,14 +126,14 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             }
         }
 
-        public Builder<ContextType> setOrientationView(@SuppressWarnings("ParameterHidesMemberVariable") String orientationViewName, double rotation)
+        public @NotNull Builder<ContextType> setOrientationView(@SuppressWarnings("ParameterHidesMemberVariable") String orientationViewName, double rotation)
         {
             this.orientationViewName = orientationViewName;
             viewSet.setOrientationViewRotationDegrees(rotation);
             return this;
         }
 
-        public Builder<ContextType> setImageLoadOptions(ReadonlyLoadOptionsModel imageLoadOptions)
+        public @NotNull Builder<ContextType> setImageLoadOptions(ReadonlyLoadOptionsModel imageLoadOptions)
         {
             this.imageLoadOptions = imageLoadOptions;
 
@@ -141,21 +142,21 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             return this;
         }
 
-        public Builder<ContextType> setProgressMonitor(ProgressMonitor progressMonitor)
+        public @NotNull Builder<ContextType> setProgressMonitor(ProgressMonitor progressMonitor)
         {
             this.progressMonitor = progressMonitor;
             return this;
         }
 
         @SuppressWarnings("ParameterHidesMemberVariable")
-        public Builder<ContextType> setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
+        public @NotNull Builder<ContextType> setTonemapping(double @NotNull [] linearLuminanceValues, byte @NotNull [] encodedLuminanceValues)
         {
             this.linearLuminanceValues = Arrays.copyOf(linearLuminanceValues, linearLuminanceValues.length);
             this.encodedLuminanceValues = Arrays.copyOf(encodedLuminanceValues, encodedLuminanceValues.length);
             return this;
         }
 
-        public Builder<ContextType> loadVSETFile(File vsetFile, File supportingFilesDirectory) throws IOException, MeshImportException
+        public @NotNull Builder<ContextType> loadVSETFile(@NotNull File vsetFile, File supportingFilesDirectory) throws IOException, MeshImportException
         {
             viewSet = ViewSetReaderFromVSET.getInstance().readFromFile(vsetFile, supportingFilesDirectory).finish();
             updateViewSetFromImageLoadOptions();
@@ -163,7 +164,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             return this;
         }
 
-        private static ViewSetReader getReaderForFile(File cameraFile)
+        private static @NotNull ViewSetReader getReaderForFile(@NotNull File cameraFile)
         {
             if (cameraFile.getName().endsWith(".xml")) // Agisoft Metashape
             {
@@ -180,13 +181,13 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         }
 
         // images are defined in the load options
-        public Builder<ContextType> loadLooseFiles(File cameraFile, ViewSetLoadOptions viewSetLoadOptions) throws Exception
+        public @NotNull Builder<ContextType> loadLooseFiles(@NotNull File cameraFile, @NotNull ViewSetLoadOptions viewSetLoadOptions) throws Exception
         {
             return loadLooseFiles(getReaderForFile(cameraFile), cameraFile, viewSetLoadOptions);
         }
 
         // images are defined in the load options
-        public Builder<ContextType> loadLooseFiles(ViewSetReader reader, File cameraFile, ViewSetLoadOptions viewSetLoadOptions) throws Exception
+        public @NotNull Builder<ContextType> loadLooseFiles(@NotNull ViewSetReader reader, @NotNull File cameraFile, @NotNull ViewSetLoadOptions viewSetLoadOptions) throws Exception
         {
             // Load view set
             viewSet = reader.readFromFile(cameraFile, viewSetLoadOptions)
@@ -202,7 +203,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
          * @return
          * @throws IOException
          */
-        public Builder<ContextType> loadFromMetashapeModel(MetashapeModel model)
+        public @NotNull Builder<ContextType> loadFromMetashapeModel(@NotNull MetashapeModel model)
             throws IOException, MeshImportException, XMLStreamException, MissingImagesException
         {
             viewSet = ViewSetReaderFromAgisoftXML
@@ -250,7 +251,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             return geometry;
         }
 
-        public Builder<ContextType> useExistingViewSet(ViewSet existingViewSet)
+        public @NotNull Builder<ContextType> useExistingViewSet(ViewSet existingViewSet)
         {
             viewSet = existingViewSet;
 
@@ -262,7 +263,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             return this;
         }
 
-        public Builder<ContextType> useExistingGeometry(VertexGeometry existingGeometry)
+        public @NotNull Builder<ContextType> useExistingGeometry(VertexGeometry existingGeometry)
         {
             geometry = existingGeometry;
 
@@ -274,7 +275,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             return this;
         }
 
-        public Builder<ContextType> overrideImageDirectory(File imageDirectory)
+        public @NotNull Builder<ContextType> overrideImageDirectory(File imageDirectory)
         {
             imageDirectoryOverride = imageDirectory;
             return this;
@@ -287,7 +288,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
          * @throws IOException
          * @throws UserCancellationException
          */
-        public Builder<ContextType> generateAllPreviewImages() throws IOException, UserCancellationException
+        public @NotNull Builder<ContextType> generateAllPreviewImages() throws IOException, UserCancellationException
         {
             if (viewSet != null)
             {
@@ -298,7 +299,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             return this;
         }
 
-        public GraphicsResourcesImageSpace<ContextType> create() throws IOException, UserCancellationException
+        public @NotNull GraphicsResourcesImageSpace<ContextType> create() throws IOException, UserCancellationException
         {
             if ((linearLuminanceValues != null) && (encodedLuminanceValues != null))
             {
@@ -325,13 +326,13 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         }
     }
 
-    public static <ContextType extends Context<ContextType>> Builder<ContextType> getBuilderForContext(ContextType context)
+    public static <ContextType extends Context<ContextType>> @NotNull Builder<ContextType> getBuilderForContext(ContextType context)
     {
         return new Builder<>(context);
     }
 
-    private GraphicsResourcesImageSpace(ContextType context, ViewSet viewSet, VertexGeometry geometry,
-        ReadonlyLoadOptionsModel loadOptions, ProgressMonitor progressMonitor) throws IOException, UserCancellationException
+    private GraphicsResourcesImageSpace(@NotNull ContextType context, @Nullable ViewSet viewSet, VertexGeometry geometry,
+                                        @Nullable ReadonlyLoadOptionsModel loadOptions, @Nullable ProgressMonitor progressMonitor) throws IOException, UserCancellationException
     {
         // IAN: This super call should be creating the geometry
         super(new GraphicsResourcesCommon<>(context, viewSet, geometry,
@@ -537,7 +538,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         }
     }
 
-    private double getMinDepthForView(View view) throws IOException
+    private double getMinDepthForView(@NotNull View view) throws IOException
     {
         if (depthTextures == null)
         {
@@ -569,7 +570,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
     }
 
     private static double getMinDepthFromTextureReader(
-        DepthTextureReader textureReader, double nearPlane, double farPlane)
+        @NotNull DepthTextureReader textureReader, double nearPlane, double farPlane)
     {
         double minDepth = farPlane;
 
@@ -587,7 +588,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         updateShadowTextures(getViewSet().getViews());
     }
 
-    private void updateShadowTextures(Iterable<View> views) throws IOException
+    private void updateShadowTextures(@NotNull Iterable<View> views) throws IOException
     {
         if (shadowTextures != null)
         {
@@ -684,7 +685,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
     }
 
     @Override
-    public void setupShaderProgram(Program<ContextType> program)
+    public void setupShaderProgram(@NotNull Program<ContextType> program)
     {
         getCommonResources().setupShaderProgram(program);
 
@@ -720,13 +721,13 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
     }
 
     @Override
-    public DrawableResource<ContextType> createDrawable(Program<ContextType> program)
+    public @NotNull DrawableResource<ContextType> createDrawable(@NotNull Program<ContextType> program)
     {
         return getGeometryResources().createDrawable(program);
     }
 
     @Override
-    public Vector3 determineGlobalLightIntensity()
+    public @NotNull Vector3 determineGlobalLightIntensity()
     {
         ReadonlyViewSet viewSet = getViewSet();
         if (viewSet.getProjectSettings().getBoolean("infiniteLightSources"))
@@ -755,7 +756,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
      * @param viewSet
      * @throws IOException
      */
-    private static void generateAllPreviewImages(ViewSet viewSet, ProgressMonitor progressMonitor, int maxLoadingThreads)
+    private static void generateAllPreviewImages(@NotNull ViewSet viewSet, @NotNull ProgressMonitor progressMonitor, int maxLoadingThreads)
         throws IOException, UserCancellationException
     {
         if (viewSet.getPreviewWidth() == 0 || viewSet.getPreviewHeight() == 0)
@@ -786,13 +787,13 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
     }
 
     private static void generateAllPreviewImagesSequential(
-        PreviewImageGenerator previewImageGenerator)
+        @NotNull PreviewImageGenerator previewImageGenerator)
     {
         // Do the undistortion on the rendering thread
         Rendering.runLater(new GraphicsRequest()
         {
             @Override
-            public <ContextType extends Context<ContextType>> void executeRequest(ContextType context) throws UserCancellationException
+            public <ContextType extends Context<ContextType>> void executeRequest(@NotNull ContextType context) throws UserCancellationException
             {
                 for (View view : previewImageGenerator.getViews())
                 {
@@ -809,7 +810,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         LOG.info("Waiting for undistortion to finish on rendering thread");
     }
 
-    private static void generateAllPreviewImagesMultithread(PreviewImageGenerator previewImageGenerator, int maxLoadingThreads)
+    private static void generateAllPreviewImagesMultithread(@NotNull PreviewImageGenerator previewImageGenerator, int maxLoadingThreads)
     {
         // Need to use custom ForkJoinPool so that number of threads doesn't go out of control and use up the Java heap space
         ForkJoinPool customThreadPool = new ForkJoinPool(maxLoadingThreads);
@@ -827,7 +828,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
                         Rendering.runLater(new GraphicsRequest()
                         {
                             @Override
-                            public <ContextType extends Context<ContextType>> void executeRequest(ContextType context)
+                            public <ContextType extends Context<ContextType>> void executeRequest(@NotNull ContextType context)
                             {
                                 previewImages.tryGenerateUndistortedPreviewImage(context);
 
@@ -848,7 +849,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         LOG.info("Finished reading all images; waiting for undistortion to finish on other threads");
     }
 
-    private File findOrGeneratePreviewImageFile(View view) throws IOException
+    private @NotNull File findOrGeneratePreviewImageFile(@NotNull View view) throws IOException
     {
         try
         {

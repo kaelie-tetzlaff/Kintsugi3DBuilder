@@ -71,14 +71,14 @@ public final class ViewSet implements ReadonlyViewSet
     /**
      * Views indexed by nominal file path.
      */
-    private final Map<File, View> views;
+    private final @NotNull Map<File, View> views;
 
     /**
      * A list of projection transformations defining the intrinsic properties of each camera.
      * This list can be much smaller than the number of views if the same intrinsic properties apply for multiple views.
      * This array may be added to but should never be removed from as indices are expected to be persistent.
      */
-    private final List<Projection> cameraProjectionList;
+    private final @NotNull List<Projection> cameraProjectionList;
 
     /**
      * A list of light source positions, used only for reflectance fields and illumination-dependent rendering (ignored for light fields).
@@ -86,14 +86,14 @@ public final class ViewSet implements ReadonlyViewSet
      * This list can be much smaller than the number of views if the same illumination conditions apply for multiple views.
      * This array may be added to but should never be removed from as indices are expected to be persistent.
      */
-    private final List<Vector3> lightPositionList;
+    private final @NotNull List<Vector3> lightPositionList;
 
     /**
      * A list of light source intensities, used only for reflectance fields and illumination-dependent rendering (ignored for light fields).
      * This list can be much smaller than the number of views if the same illumination conditions apply for multiple views.
      * This array may be added to but should never be removed from as indices are expected to be persistent.
      */
-    private final List<Vector3> lightIntensityList;
+    private final @NotNull List<Vector3> lightIntensityList;
 
     /**
      * The reference linear luminance values used for decoding pixel colors.
@@ -203,12 +203,12 @@ public final class ViewSet implements ReadonlyViewSet
      */
     private boolean hasUnsupportedCorrections = false;
 
-    public static ViewSetBuilder getBuilder(File rootDirectory, int initialCapacity)
+    public static @NotNull ViewSetBuilder getBuilder(File rootDirectory, int initialCapacity)
     {
         return new ViewSetBuilder(rootDirectory, initialCapacity);
     }
 
-    public static ViewSetBuilder getBuilder(File rootDirectory, File supportingFilesDirectory, int initialCapacity)
+    public static @NotNull ViewSetBuilder getBuilder(File rootDirectory, File supportingFilesDirectory, int initialCapacity)
     {
         return new ViewSetBuilder(rootDirectory, supportingFilesDirectory, initialCapacity);
     }
@@ -465,7 +465,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public ViewSet copy()
+    public @NotNull ViewSet copy()
     {
         ViewSet result = new ViewSet(getViewCount());
 
@@ -543,8 +543,8 @@ public final class ViewSet implements ReadonlyViewSet
         return result;
     }
 
-    public static ReadonlyViewSet createFromLookAt(List<Vector3> viewDir, Vector3 center, Vector3 up, float distance,
-        float nearPlane, float aspect, float sensorWidth, float focalLength)
+    public static @NotNull ReadonlyViewSet createFromLookAt(@NotNull List<Vector3> viewDir, @NotNull Vector3 center, @NotNull Vector3 up, float distance,
+                                                            float nearPlane, float aspect, float sensorWidth, float focalLength)
     {
         ViewSet result = new ViewSet(viewDir.size());
 
@@ -583,7 +583,7 @@ public final class ViewSet implements ReadonlyViewSet
         this.uuid = uuid;
     }
 
-    public void toggleViewEnabled(File image)
+    public void toggleViewEnabled(@NotNull File image)
     {
         View view = findViewByName(image.getName());
         if (view != null)
@@ -592,7 +592,7 @@ public final class ViewSet implements ReadonlyViewSet
         }
     }
 
-    public void setViewEnabled(File image, boolean isEnabled)
+    public void setViewEnabled(@NotNull File image, boolean isEnabled)
     {
         View view = findViewByName(image.getName());
 
@@ -616,7 +616,7 @@ public final class ViewSet implements ReadonlyViewSet
         }
     }
 
-    public void setViewsEnabled(Collection<File> images, boolean isEnabled)
+    public void setViewsEnabled(@NotNull Collection<File> images, boolean isEnabled)
     {
         Map<File, View> imageFilesModified = new HashMap<>(images.size());
         synchronized (views)
@@ -722,7 +722,7 @@ public final class ViewSet implements ReadonlyViewSet
         }
     }
 
-    private Path getAbsoluteRootDirectory()
+    private @NotNull Path getAbsoluteRootDirectory()
     {
         return rootDirectory.toPath().toAbsolutePath();
     }
@@ -732,7 +732,7 @@ public final class ViewSet implements ReadonlyViewSet
      *
      * @param relativeImagePath The image file path.
      */
-    public void setRelativeFullResImagePathName(String relativeImagePath)
+    public void setRelativeFullResImagePathName(@NotNull String relativeImagePath)
     {
         fullResImageDirectory = getAbsoluteRootDirectory().resolve(relativeImagePath).toFile();
     }
@@ -780,17 +780,17 @@ public final class ViewSet implements ReadonlyViewSet
      *
      * @param relativeImagePath The image file path.
      */
-    public void setRelativePreviewImagePathName(String relativeImagePath)
+    public void setRelativePreviewImagePathName(@NotNull String relativeImagePath)
     {
         previewImageDirectory = getAbsoluteRootDirectory().resolve(relativeImagePath).toFile();
     }
 
-    public void setRelativeThumbnailImagePathName(String relativeImagePath)
+    public void setRelativeThumbnailImagePathName(@NotNull String relativeImagePath)
     {
         thumbnailImageDirectory = getAbsoluteRootDirectory().resolve(relativeImagePath).toFile();
     }
 
-    public void setRelativeMasksPathName(String relativeMasksPath)
+    public void setRelativeMasksPathName(@NotNull String relativeMasksPath)
     {
         masksDirectory = getAbsoluteRootDirectory().resolve(relativeMasksPath).toFile();
     }
@@ -820,7 +820,7 @@ public final class ViewSet implements ReadonlyViewSet
         return primaryView;
     }
 
-    public void setPrimaryView(View primaryView)
+    public void setPrimaryView(@NotNull View primaryView)
     {
         synchronized (views)
         {
@@ -846,7 +846,7 @@ public final class ViewSet implements ReadonlyViewSet
      *
      * @param orientationView Can be null to use default orientation.
      */
-    public void setOrientationView(View orientationView)
+    public void setOrientationView(@Nullable View orientationView)
     {
         synchronized (views)
         {
@@ -873,7 +873,7 @@ public final class ViewSet implements ReadonlyViewSet
      *
      * @param viewName Can be null to use default orientation.
      */
-    public void setOrientationViewByName(String viewName)
+    public void setOrientationViewByName(@Nullable String viewName)
     {
         synchronized (views)
         {
@@ -918,7 +918,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public View getRepresentativeView()
+    public @Nullable View getRepresentativeView()
     {
         synchronized (views)
         {
@@ -941,7 +941,7 @@ public final class ViewSet implements ReadonlyViewSet
         }
     }
 
-    public @Nullable View findViewByName(String viewName)
+    public @Nullable View findViewByName(@Nullable String viewName)
     {
         // Treat null as "not found" or "not present"
         // Important for allowing for orientation pose to remain unset.
@@ -984,14 +984,14 @@ public final class ViewSet implements ReadonlyViewSet
         }
     }
 
-    private static String removeExt(String fileName)
+    private static @NotNull String removeExt(@NotNull String fileName)
     {
         int dotIndex = fileName.lastIndexOf('.');
         return (dotIndex == -1) ? fileName : fileName.substring(0, dotIndex);
     }
 
     @Override
-    public Set<View> getViews()
+    public @NotNull Set<View> getViews()
     {
         // Make a copy to ensure that the list is not changed while another object is using it.
         synchronized (views)
@@ -1001,7 +1001,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public List<View> getViewsSorted()
+    public @NotNull List<View> getViewsSorted()
     {
         // Make a copy to ensure that the list is not changed while another object is using it.
         synchronized (views)
@@ -1011,7 +1011,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public Set<View> getEnabledViews()
+    public @NotNull Set<View> getEnabledViews()
     {
         synchronized (views)
         {
@@ -1020,7 +1020,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public Set<View> getDisabledViews()
+    public @NotNull Set<View> getDisabledViews()
     {
         synchronized (views)
         {
@@ -1029,7 +1029,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public List<View> getEnabledViewsSorted()
+    public @NotNull List<View> getEnabledViewsSorted()
     {
         synchronized (views)
         {
@@ -1041,7 +1041,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public List<View> getDisabledViewsSorted()
+    public @NotNull List<View> getDisabledViewsSorted()
     {
         synchronized (views)
         {
@@ -1052,7 +1052,7 @@ public final class ViewSet implements ReadonlyViewSet
         }
     }
 
-    void addView(View view)
+    void addView(@NotNull View view)
     {
         synchronized (views)
         {
@@ -1069,7 +1069,7 @@ public final class ViewSet implements ReadonlyViewSet
         viewsObservable.notify(new MappedChange<>(Type.ADDED, view.getImageFile(), view));
     }
 
-    public void removeViewByImageFilename(File image)
+    public void removeViewByImageFilename(@NotNull File image)
     {
         View removed;
 
@@ -1326,7 +1326,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public SampledLuminanceEncoding getLuminanceEncoding()
+    public @NotNull SampledLuminanceEncoding getLuminanceEncoding()
     {
         synchronized (luminanceEncodingLock)
         {
@@ -1504,24 +1504,24 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public GeneralSettingsModel getProjectSettings()
+    public @NotNull GeneralSettingsModel getProjectSettings()
     {
         return projectSettings;
     }
 
     @Override
-    public Map<String, File> getResourceMap()
+    public @NotNull Map<String, File> getResourceMap()
     {
         return Collections.unmodifiableMap(resourceMap);
     }
 
-    void putResources(Map<String, File> newResourceMap)
+    void putResources(@NotNull Map<String, File> newResourceMap)
     {
         resourceMap.putAll(newResourceMap);
     }
 
     @Override
-    public <ContextType extends Context<ContextType>> ProgramBuilder<ContextType> getShaderProgramBuilder(ContextType context)
+    public <ContextType extends Context<ContextType>> ProgramBuilder<ContextType> getShaderProgramBuilder(@NotNull ContextType context)
     {
         // Determine shader defines here that should apply globally as defaults without require specific resources other than view set data.
         // The defines can be overridden by the actual shader.
@@ -1540,7 +1540,7 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public <ContextType extends Context<ContextType>> void setupShaderProgram(Program<ContextType> program)
+    public <ContextType extends Context<ContextType>> void setupShaderProgram(@NotNull Program<ContextType> program)
     {
         // Determine shader uniforms here that should apply globally as defaults without require specific resources other than view set data.
         // The uniforms can be overridden by the actual shader.
@@ -1549,17 +1549,17 @@ public final class ViewSet implements ReadonlyViewSet
         program.setUniform("edgeProximityCutoff", projectSettings.getFloat("edgeProximityCutoff"));
     }
 
-    public EventListeners<Observer<MappedChange<File, View>>> viewsChangedListeners()
+    public @NotNull EventListeners<Observer<MappedChange<File, View>>> viewsChangedListeners()
     {
         return viewsObservable;
     }
 
-    public EventListeners<LightCalibrationChangedListener> lightCalibrationChangedListeners()
+    public @NotNull EventListeners<LightCalibrationChangedListener> lightCalibrationChangedListeners()
     {
         return lightCalibrationChanged;
     }
 
-    public EventListeners<LuminanceEncodingChangedListener> luminanceEncodingChangedListeners()
+    public @NotNull EventListeners<LuminanceEncodingChangedListener> luminanceEncodingChangedListeners()
     {
         return luminanceEncodingChanged;
     }

@@ -27,6 +27,7 @@ import kintsugi3d.gl.core.ColorFormat;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
 import kintsugi3d.gl.core.Texture2D;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,8 +37,8 @@ public class RoughnessOptimizationSimple<ContextType extends Context<ContextType
     private final FramebufferObject<ContextType> specularTexFramebuffer;
 
     public RoughnessOptimizationSimple(
-        BasisResources<ContextType> basisResources, ReadonlyBasisWeightResources<ContextType> weightResources,
-        TextureResolution settings)
+        @NotNull BasisResources<ContextType> basisResources, ReadonlyBasisWeightResources<ContextType> weightResources,
+        @NotNull TextureResolution settings)
         throws IOException
     {
         super(basisResources);
@@ -52,7 +53,7 @@ public class RoughnessOptimizationSimple<ContextType extends Context<ContextType
     }
 
     public RoughnessOptimizationSimple(
-        ReadonlyBasisResources<ContextType> basisResources, ReadonlyBasisWeightResources<ContextType> weightResources,
+        @NotNull ReadonlyBasisResources<ContextType> basisResources, ReadonlyBasisWeightResources<ContextType> weightResources,
         File priorSolutionDirectory)
         throws IOException
     {

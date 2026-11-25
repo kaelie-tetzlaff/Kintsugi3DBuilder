@@ -16,6 +16,7 @@
 package kintsugi3d.builder.state.shader;
 
 import kintsugi3d.builder.fit.decomposition.BasisMaterialInfo;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.HashMap;
@@ -41,7 +42,7 @@ public class WeightmapOverlayShaderInfo implements ShaderInfo
     }
 
     @Override
-    public final String getFullName()
+    public final @NotNull String getFullName()
     {
         return String.format("%s [%s]", baseShader.getFullName(), weightmapMaterial.getFriendlyName());
     }
@@ -69,7 +70,7 @@ public class WeightmapOverlayShaderInfo implements ShaderInfo
     }
 
     @Override
-    public final Map<String, Optional<Object>> getDefines()
+    public final @NotNull Map<String, Optional<Object>> getDefines()
     {
         Map<String, Optional<Object>> defines = new HashMap<>(baseShader.getDefines());
         defines.put("OVERLAY_MODE", Optional.of("OVERLAY_MODE_WEIGHTMAP"));

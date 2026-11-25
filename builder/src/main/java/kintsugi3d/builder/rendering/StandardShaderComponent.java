@@ -25,6 +25,7 @@ import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
 import kintsugi3d.util.SRGB;
 import kintsugi3d.util.ShadingParameterMode;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +44,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
 
     private final LightingResources<ContextType> lightingResources;
 
-    private final ReadonlyImageBasedGraphicsResources<ContextType> resources;
+    private final @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources;
     private final SceneModel sceneModel;
 
     private boolean lightCalibrationMode = false;
@@ -52,7 +53,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
     private File fragmentShaderFile;
     private Supplier<Map<String, Optional<Object>>> fragmentShaderDefinesFactory;
 
-    protected StandardShaderComponent(ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneViewportModel sceneViewportModel, String sceneObjectTag,
+    protected StandardShaderComponent(@NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneViewportModel sceneViewportModel, String sceneObjectTag,
                                       SceneModel sceneModel, LightingResources<ContextType> lightingResources, File fragmentShaderFile)
     {
         super(resources.getContext(), sceneViewportModel, sceneObjectTag);
@@ -62,7 +63,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         this.fragmentShaderFile = fragmentShaderFile;
     }
 
-    protected StandardShaderComponent(ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneViewportModel sceneViewportModel, String sceneObjectTag,
+    protected StandardShaderComponent(@NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneViewportModel sceneViewportModel, String sceneObjectTag,
                                       SceneModel sceneModel, LightingResources<ContextType> lightingResources)
     {
         this(resources, sceneViewportModel, sceneObjectTag, sceneModel, lightingResources,
@@ -117,7 +118,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         return fragmentShaderFile;
     }
 
-    private ProgramObject<ContextType> loadMainProgram(Map<String, Optional<Object>> defineMap) throws IOException
+    private ProgramObject<ContextType> loadMainProgram(@NotNull Map<String, Optional<Object>> defineMap) throws IOException
     {
         return getProgramBuilder(defineMap)
             .define("SPOTLIGHTS_ENABLED", true)
@@ -126,7 +127,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
             .createProgram();
     }
 
-    private ProgramBuilder<ContextType> getProgramBuilder(Map<String, Optional<Object>> defineMap)
+    private ProgramBuilder<ContextType> getProgramBuilder(@NotNull Map<String, Optional<Object>> defineMap)
     {
         ProgramBuilder<ContextType> programBuilder = resources.getShaderProgramBuilder();
 
@@ -146,7 +147,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
      * These defines override the defines set by the graphics resources.
      * @return
      */
-    private Map<String, Optional<Object>> getPreprocessorDefines()
+    private @NotNull Map<String, Optional<Object>> getPreprocessorDefines()
     {
         Map<String, Optional<Object>> defineMap = new HashMap<>(256);
 
@@ -225,12 +226,12 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         return defineMap;
     }
 
-    protected final void setupShader(CameraViewport cameraViewport)
+    protected final void setupShader(@NotNull CameraViewport cameraViewport)
     {
         setupShader(cameraViewport, sceneModel.getFullModelMatrix());
     }
 
-    protected final void setupShader(CameraViewport cameraViewport, Matrix4 model)
+    protected final void setupShader(@NotNull CameraViewport cameraViewport, @NotNull Matrix4 model)
     {
         setupUnlit(model);
 
@@ -263,13 +264,13 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         getDrawable().program().setUniform("fullProjection", cameraViewport.getFullProjection());
     }
 
-    protected final void setupModelView(Program<ContextType> p, Matrix4 modelView)
+    protected final void setupModelView(@NotNull Program<ContextType> p, @NotNull Matrix4 modelView)
     {
         p.setUniform("model_view", modelView);
         p.setUniform("viewPos", modelView.quickInverse(0.01f).getColumn(3).getXYZ());
     }
 
-    private void setupLight(Program<ContextType> program, int lightIndex, Matrix4 lightMatrix)
+    private void setupLight(@NotNull Program<ContextType> program, int lightIndex, @NotNull Matrix4 lightMatrix)
     {
         Matrix4 lightMatrixInverse = lightMatrix.quickInverse(0.001f);
 
@@ -288,7 +289,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         program.setUniform(String.format("lightSpotTaperVirtual[%d]", lightIndex), sceneModel.getLightingModel().getLightPrototype(lightIndex).getSpotTaper());
     }
 
-    private void setupUnlit(Matrix4 model)
+    private void setupUnlit(@NotNull Matrix4 model)
     {
         Program<ContextType> program = getDrawable().program();
 

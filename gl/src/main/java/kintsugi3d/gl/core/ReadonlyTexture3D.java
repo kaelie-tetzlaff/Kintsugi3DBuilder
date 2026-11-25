@@ -15,6 +15,8 @@
 
 package kintsugi3d.gl.core;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface ReadonlyTexture3D<ContextType extends Context<ContextType>>
     extends Texture<ContextType>, Croppable<Texture3D<ContextType>>, ThreeDimensional
 {
@@ -61,7 +63,7 @@ public interface ReadonlyTexture3D<ContextType extends Context<ContextType>>
      * @param cropDepth The depth of the cropped region
      * @return The new cropped texture.
      */
-    default Texture3D<ContextType> crop(int x, int y, int z, int cropWidth, int cropHeight, int cropDepth)
+    default @NotNull Texture3D<ContextType> crop(int x, int y, int z, int cropWidth, int cropHeight, int cropDepth)
     {
         Texture3D<ContextType> cropTexture = createTextureWithMatchingFormat(cropWidth, cropHeight, cropDepth);
         cropTexture.blitCropped(this, x, y, z, cropWidth, cropHeight, cropDepth);

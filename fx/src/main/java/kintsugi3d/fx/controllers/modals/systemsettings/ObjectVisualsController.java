@@ -23,6 +23,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Window;
 import javafx.util.StringConverter;
 import kintsugi3d.fx.core.JavaFXState;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ObjectVisualsController implements SystemSettingsControllerBase
 {
@@ -44,7 +46,7 @@ public class ObjectVisualsController implements SystemSettingsControllerBase
     @FXML private CheckBox reduceViewportResCheckBox;
 
     @Override
-    public final void initializePage(Window parentWindow, JavaFXState state)
+    public final void initializePage(Window parentWindow, @NotNull JavaFXState state)
     {
         // Disable width / height fields for depth maps if they are disabled.
         depthWidthTxtField.disableProperty().bind(preloadVisibilityEtcCheckBox.selectedProperty().not());
@@ -77,12 +79,12 @@ public class ObjectVisualsController implements SystemSettingsControllerBase
 
     //this function is used to hook up the text field's string property to the backend
     //StringProperty --> IntegerProperty
-    private static void setupTxtFieldProperties(IntegerProperty integerProperty, TextField txtField)
+    private static void setupTxtFieldProperties(@NotNull IntegerProperty integerProperty, @NotNull TextField txtField)
     {
         StringConverter<Number> numberStringConverter = new StringConverter<>()
         {
             @Override
-            public String toString(Number object)
+            public String toString(@Nullable Number object)
             {
                 if (object != null)
                 {
@@ -95,7 +97,7 @@ public class ObjectVisualsController implements SystemSettingsControllerBase
             }
 
             @Override
-            public Number fromString(String string)
+            public @NotNull Number fromString(@NotNull String string)
             {
                 try
                 {

@@ -21,6 +21,7 @@ import kintsugi3d.builder.rendering.SceneModel;
 import kintsugi3d.builder.rendering.SceneViewportModel;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Class for drawing the 3D light representations and manipulation widgets.
@@ -31,13 +32,13 @@ public class LightVisualsGroup<ContextType extends Context<ContextType>> impleme
     private final SceneModel sceneModel;
     private final SceneViewportModel sceneViewportModel;
 
-    private final Lights<ContextType> lights;
-    private final LightCenters<ContextType> lightCenters;
-    private final LightWidgets<ContextType> lightWidgets;
-    private final LightWidgetCircles<ContextType> lightWidgetCircle;
-    private final LightWidgetLines<ContextType> lightWidgetLines;
+    private final @NotNull Lights<ContextType> lights;
+    private final @NotNull LightCenters<ContextType> lightCenters;
+    private final @NotNull LightWidgets<ContextType> lightWidgets;
+    private final @NotNull LightWidgetCircles<ContextType> lightWidgetCircle;
+    private final @NotNull LightWidgetLines<ContextType> lightWidgetLines;
 
-    public LightVisualsGroup(ContextType context, SceneModel sceneModel, SceneViewportModel sceneViewportModel)
+    public LightVisualsGroup(ContextType context, @NotNull SceneModel sceneModel, @NotNull SceneViewportModel sceneViewportModel)
     {
         this.sceneModel = sceneModel;
         this.sceneViewportModel = sceneViewportModel;
@@ -70,7 +71,7 @@ public class LightVisualsGroup<ContextType extends Context<ContextType>> impleme
     }
 
     @Override
-    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(@NotNull FramebufferObject<ContextType> framebuffer, @NotNull CameraViewport cameraViewport)
     {
         LightWidgetInfo[] widgetInfo = LightWidgetInfo.calculate(sceneViewportModel, sceneModel, cameraViewport, framebuffer.getSize());
         lightWidgets.refreshWidgetInfo(widgetInfo);

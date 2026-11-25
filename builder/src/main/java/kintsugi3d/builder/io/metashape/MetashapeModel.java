@@ -15,6 +15,7 @@
 
 package kintsugi3d.builder.io.metashape;
 
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
@@ -40,7 +41,7 @@ public final class MetashapeModel
         this.chunk = chunk;
     }
 
-    public static MetashapeModel parseFromElement(MetashapeChunk chunk, Element elem)
+    public static @NotNull MetashapeModel parseFromElement(@NotNull MetashapeChunk chunk, @NotNull Element elem)
     {
         Integer modelID = null;
         String tempLabel = null;
@@ -67,7 +68,7 @@ public final class MetashapeModel
         return new MetashapeModel(chunk, modelID, tempLabel, path);
     }
 
-    private static String findModelPath(MetashapeChunk chunk, Integer modelID)
+    private static @NotNull String findModelPath(@NotNull MetashapeChunk chunk, Integer modelID)
     {
         // TODO Figure out why NullPointException would be thrown, change to explicit null check,
         //  and remove inspection suppression.
@@ -104,7 +105,7 @@ public final class MetashapeModel
         return "";
     }
 
-    public LoadPreferences getLoadPreferences()
+    public @NotNull LoadPreferences getLoadPreferences()
     {
         return loadPreferences;
     }

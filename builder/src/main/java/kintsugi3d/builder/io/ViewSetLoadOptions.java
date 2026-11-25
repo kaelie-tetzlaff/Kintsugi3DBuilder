@@ -15,6 +15,8 @@
 
 package kintsugi3d.builder.io;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,7 +31,7 @@ public class ViewSetLoadOptions
     private String orientationViewName;
     private double orientationViewRotation;
     private UUID uuid;
-    private Collection<File> disabledImages = new ArrayList<>(8);
+    private @NotNull Collection<File> disabledImages = new ArrayList<>(8);
 
     public final ViewSetDirectories getMainDirectories()
     {
@@ -91,12 +93,12 @@ public class ViewSetLoadOptions
         this.uuid = uuid;
     }
 
-    public final Collection<File> getDisabledImages()
+    public final @NotNull Collection<File> getDisabledImages()
     {
         return Collections.unmodifiableCollection(disabledImages);
     }
 
-    public final void setDisabledImages(Collection<File> disabledImages)
+    public final void setDisabledImages(@NotNull Collection<File> disabledImages)
     {
         this.disabledImages = new ArrayList<>(disabledImages);
     }

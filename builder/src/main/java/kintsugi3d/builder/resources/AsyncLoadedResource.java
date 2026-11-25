@@ -101,7 +101,7 @@ public class AsyncLoadedResource<CPUResourceType, GPUResourceType>
      *         empty if no side-effect was produced or the load was skipped.
      * @throws FileNotFoundException If the file does not exist.
      */
-    public final @Nullable EncodableColorImage load(File file, ProgressMonitor progressMonitor) throws FileNotFoundException
+    public final @Nullable EncodableColorImage load(@Nullable File file, @Nullable ProgressMonitor progressMonitor) throws FileNotFoundException
     {
         if (file == null)
         {
@@ -191,7 +191,7 @@ public class AsyncLoadedResource<CPUResourceType, GPUResourceType>
      *
      * @param progressMonitor Optional progress monitor; {@code complete()} is called if data was consumed.
      */
-    public final void consume(ProgressMonitor progressMonitor)
+    public final void consume(@Nullable ProgressMonitor progressMonitor)
     {
         if (unloadRequested)
         {

@@ -16,6 +16,7 @@
 package kintsugi3d.gl.core;
 
 import kintsugi3d.gl.vecmath.IntVector2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An interface for a framebuffer.
@@ -167,7 +168,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * @param readFramebuffer The framebuffer to copy from.
      * @param readAttachmentIndex The index of the attachment within the read framebuffer to copy from.
      */
-    default void blitColorAttachmentFromFramebuffer(int drawAttachmentIndex, ReadableFramebuffer<ContextType> readFramebuffer, int readAttachmentIndex)
+    default void blitColorAttachmentFromFramebuffer(int drawAttachmentIndex, @NotNull ReadableFramebuffer<ContextType> readFramebuffer, int readAttachmentIndex)
     {
         blitColorAttachmentFromFramebuffer(drawAttachmentIndex, 0, 0, readFramebuffer, readAttachmentIndex);
     }
@@ -181,7 +182,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * @param readFramebuffer The framebuffer to copy from.
      * @param readAttachmentIndex The index of the attachment within the read framebuffer to copy from.
      */
-    default void blitColorAttachmentFromFramebuffer(int drawAttachmentIndex, int x, int y, ReadableFramebuffer<ContextType> readFramebuffer, int readAttachmentIndex)
+    default void blitColorAttachmentFromFramebuffer(int drawAttachmentIndex, int x, int y, @NotNull ReadableFramebuffer<ContextType> readFramebuffer, int readAttachmentIndex)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
         FramebufferSize drawSize = getSize();
@@ -198,7 +199,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * @param linearFiltering Whether or not to use linear filtering if the dimensions of the source and destination are not the same.
      */
     default void blitScaledColorAttachmentFromFramebuffer(
-        int drawAttachmentIndex, ReadableFramebuffer<ContextType> readFramebuffer, int readAttachmentIndex, boolean linearFiltering)
+        int drawAttachmentIndex, @NotNull ReadableFramebuffer<ContextType> readFramebuffer, int readAttachmentIndex, boolean linearFiltering)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
         FramebufferSize drawSize = getSize();
@@ -223,7 +224,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * The copying operation will be start at the lower left corner of this framebuffer, and will preserve the resolution of the read framebuffer
      * @param readFramebuffer The framebuffer to copy from.
      */
-    default void blitDepthAttachmentFromFramebuffer(ReadableFramebuffer<ContextType> readFramebuffer)
+    default void blitDepthAttachmentFromFramebuffer(@NotNull ReadableFramebuffer<ContextType> readFramebuffer)
     {
         blitDepthAttachmentFromFramebuffer(0, 0, readFramebuffer);
     }
@@ -235,7 +236,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * @param y The bottom edge of the rectangle to copy into within this framebuffer.
      * @param readFramebuffer The framebuffer to copy from.
      */
-    default void blitDepthAttachmentFromFramebuffer(int x, int y, ReadableFramebuffer<ContextType> readFramebuffer)
+    default void blitDepthAttachmentFromFramebuffer(int x, int y, @NotNull ReadableFramebuffer<ContextType> readFramebuffer)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
         FramebufferSize drawSize = getSize();
@@ -249,7 +250,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * Due to OpenGL limitations, linear filtering will not be applied.
      * @param readFramebuffer The framebuffer to copy from.
      */
-    default void blitScaledDepthAttachmentFromFramebuffer(ReadableFramebuffer<ContextType> readFramebuffer)
+    default void blitScaledDepthAttachmentFromFramebuffer(@NotNull ReadableFramebuffer<ContextType> readFramebuffer)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
         FramebufferSize drawSize = getSize();
@@ -274,7 +275,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * The copying operation will be start at the lower left corner of this framebuffer, and will preserve the resolution of the read framebuffer
      * @param readFramebuffer The framebuffer to copy from.
      */
-    default void blitStencilAttachmentFromFramebuffer(ReadableFramebuffer<ContextType> readFramebuffer)
+    default void blitStencilAttachmentFromFramebuffer(@NotNull ReadableFramebuffer<ContextType> readFramebuffer)
     {
         blitStencilAttachmentFromFramebuffer(0, 0, readFramebuffer);
     }
@@ -286,7 +287,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * @param y The bottom edge of the rectangle to copy into within this framebuffer.
      * @param readFramebuffer The framebuffer to copy from.
      */
-    default void blitStencilAttachmentFromFramebuffer(int x, int y, ReadableFramebuffer<ContextType> readFramebuffer)
+    default void blitStencilAttachmentFromFramebuffer(int x, int y, @NotNull ReadableFramebuffer<ContextType> readFramebuffer)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
         FramebufferSize drawSize = getSize();
@@ -300,7 +301,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * Due to OpenGL limitations, linear filtering will not be applied.
      * @param readFramebuffer The framebuffer to copy from.
      */
-    default void blitScaledStencilAttachmentFromFramebuffer(ReadableFramebuffer<ContextType> readFramebuffer)
+    default void blitScaledStencilAttachmentFromFramebuffer(@NotNull ReadableFramebuffer<ContextType> readFramebuffer)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
         FramebufferSize drawSize = getSize();
@@ -325,7 +326,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * The copying operation will be start at the lower left corner of this framebuffer, and will preserve the resolution of the read framebuffer
      * @param readFramebuffer The framebuffer to copy from.
      */
-    default void blitDepthStencilAttachmentFromFramebuffer(ReadableFramebuffer<ContextType> readFramebuffer)
+    default void blitDepthStencilAttachmentFromFramebuffer(@NotNull ReadableFramebuffer<ContextType> readFramebuffer)
     {
         blitDepthStencilAttachmentFromFramebuffer(0, 0, readFramebuffer);
     }
@@ -337,7 +338,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * @param y The bottom edge of the rectangle to copy into within this framebuffer.
      * @param readFramebuffer The framebuffer to copy from.
      */
-    default void blitDepthStencilAttachmentFromFramebuffer(int x, int y, ReadableFramebuffer<ContextType> readFramebuffer)
+    default void blitDepthStencilAttachmentFromFramebuffer(int x, int y, @NotNull ReadableFramebuffer<ContextType> readFramebuffer)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
         FramebufferSize drawSize = getSize();
@@ -351,7 +352,7 @@ public interface Framebuffer<ContextType extends Context<ContextType>> extends C
      * Due to OpenGL limitations, linear filtering will not be applied.
      * @param readFramebuffer The framebuffer to copy from.
      */
-    default void blitScaledDepthStencilAttachmentFromFramebuffer(ReadableFramebuffer<ContextType> readFramebuffer)
+    default void blitScaledDepthStencilAttachmentFromFramebuffer(@NotNull ReadableFramebuffer<ContextType> readFramebuffer)
     {
         FramebufferSize readSize = readFramebuffer.getSize();
         FramebufferSize drawSize = getSize();

@@ -18,6 +18,7 @@ package kintsugi3d.gl.core;
 import kintsugi3d.gl.builders.*;
 import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
 import kintsugi3d.gl.types.AbstractDataType;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -132,7 +133,7 @@ public interface TextureFactory<ContextType extends Context<ContextType>>
      * @throws IOException Upon a File I/O problem when reading the images.
      */
     default ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>>
-    build2DColorTextureFromFileWithMask(File imageFile, File maskFile, boolean flipVertical) throws IOException
+    build2DColorTextureFromFileWithMask(@NotNull File imageFile, @NotNull File maskFile, boolean flipVertical) throws IOException
     {
         if (imageFile.getName().endsWith(".hdr"))
         {
@@ -158,7 +159,7 @@ public interface TextureFactory<ContextType extends Context<ContextType>>
      */
     default <MappedType> ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>>
     build2DColorTextureFromFileWithMask(
-        File imageFile, File maskFile, boolean flipVertical,
+        @NotNull File imageFile, @NotNull File maskFile, boolean flipVertical,
         AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction) throws IOException
     {
         return build2DColorTextureFromStreamWithMask(new FileInputStream(imageFile), new FileInputStream(maskFile), flipVertical,
@@ -186,7 +187,7 @@ public interface TextureFactory<ContextType extends Context<ContextType>>
      * @throws IOException Upon a File I/O problem when reading the images.
      */
     default ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>>
-    build2DColorTextureFromFile(File imageFile, boolean flipVertical) throws IOException
+    build2DColorTextureFromFile(@NotNull File imageFile, boolean flipVertical) throws IOException
     {
         if (imageFile.getName().endsWith(".hdr"))
         {
@@ -210,8 +211,8 @@ public interface TextureFactory<ContextType extends Context<ContextType>>
      * @throws IOException Upon a File I/O problem when reading the images.
      */
     default <MappedType> ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>>
-    build2DColorTextureFromFile(File imageFile, boolean flipVertical,
-        AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction) throws IOException
+    build2DColorTextureFromFile(@NotNull File imageFile, boolean flipVertical,
+                                AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction) throws IOException
     {
         return build2DColorTextureFromStream(new FileInputStream(imageFile), flipVertical, mappedType, mappingFunction);
     }

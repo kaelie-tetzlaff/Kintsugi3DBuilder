@@ -18,6 +18,7 @@ package kintsugi3d.gl.builders.base;
 import kintsugi3d.gl.builders.StencilTextureBuilder;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Texture;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class StencilTextureBuilderBase<ContextType extends Context<ContextType>, TextureType extends Texture<ContextType>> 
     extends TextureBuilderBase<ContextType, TextureType> implements StencilTextureBuilder<ContextType, TextureType>
@@ -35,42 +36,42 @@ public abstract class StencilTextureBuilderBase<ContextType extends Context<Cont
     }
 
     @Override
-    public final StencilTextureBuilderBase<ContextType, TextureType> setInternalPrecision(int precision)
+    public final @NotNull StencilTextureBuilderBase<ContextType, TextureType> setInternalPrecision(int precision)
     {
         this.precision = precision;
         return this;
     }
 
     @Override
-    public final StencilTextureBuilderBase<ContextType, TextureType> setMultisamples(int samples, boolean fixedSampleLocations)
+    public final @NotNull StencilTextureBuilderBase<ContextType, TextureType> setMultisamples(int samples, boolean fixedSampleLocations)
     {
         super.setMultisamples(samples, fixedSampleLocations);
         return this;
     }
 
     @Override
-    public final StencilTextureBuilderBase<ContextType, TextureType> setMipmapsEnabled(boolean enabled)
+    public final @NotNull StencilTextureBuilderBase<ContextType, TextureType> setMipmapsEnabled(boolean enabled)
     {
         super.setMipmapsEnabled(enabled);
         return this;
     }
 
     @Override
-    public final StencilTextureBuilderBase<ContextType, TextureType> setMaxMipmapLevel(int maxMipmapLevel)
+    public final @NotNull StencilTextureBuilderBase<ContextType, TextureType> setMaxMipmapLevel(int maxMipmapLevel)
     {
         super.setMaxMipmapLevel(maxMipmapLevel);
         return this;
     }
 
     @Override
-    public final StencilTextureBuilderBase<ContextType, TextureType> setLinearFilteringEnabled(boolean enabled)
+    public final @NotNull StencilTextureBuilderBase<ContextType, TextureType> setLinearFilteringEnabled(boolean enabled)
     {
         super.setLinearFilteringEnabled(enabled);
         return this;
     }
 
     @Override
-    public final StencilTextureBuilderBase<ContextType, TextureType> setMaxAnisotropy(float maxAnisotropy)
+    public final @NotNull StencilTextureBuilderBase<ContextType, TextureType> setMaxAnisotropy(float maxAnisotropy)
     {
         super.setMaxAnisotropy(maxAnisotropy);
         return this;

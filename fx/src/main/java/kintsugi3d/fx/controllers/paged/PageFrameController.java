@@ -38,6 +38,8 @@ import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 import kintsugi3d.builder.util.FXWindowHelper;
 import kintsugi3d.fx.core.JavaFXState;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -98,7 +100,7 @@ public class PageFrameController
             }
 
             @Override
-            protected String computeValue()
+            protected @NotNull String computeValue()
             {
                 return currentPage.getValue().getPrevPage() == null ? "Cancel" : "Back";
             }
@@ -107,19 +109,19 @@ public class PageFrameController
         setButtonShortcuts(currentPage.get().getController());
     }
 
-    public final PageFrameController setMinContentWidth(double width)
+    public final @NotNull PageFrameController setMinContentWidth(double width)
     {
         hostPane.setMinWidth(width);
         return this;
     }
 
-    public final PageFrameController setMinContentHeight(double height)
+    public final @NotNull PageFrameController setMinContentHeight(double height)
     {
         hostPane.setMinHeight(height);
         return this;
     }
 
-    private void setButtonShortcuts(PageController<?> pageController)
+    private void setButtonShortcuts(@NotNull PageController<?> pageController)
     {
         KeyCombination leftKeyCode = new KeyCodeCombination(KeyCode.A);
         KeyCombination rightKeyCode = new KeyCodeCombination(KeyCode.D);
@@ -134,7 +136,7 @@ public class PageFrameController
         FXWindowHelper.requestClose(currentPage.get().getController().getRootNode());
     }
 
-    private void onCloseRequest(WindowEvent windowEvent)
+    private void onCloseRequest(@NotNull WindowEvent windowEvent)
     {
         // If confirmed, do nothing.
         // Otherwise, try to close the current page, but if it's overridden, consume the event to prevent the modal from closing.
@@ -160,8 +162,8 @@ public class PageFrameController
      * @param <ControllerType>
      */
     final <PageType extends Page<?, ?>, ControllerType extends PageController<?>>
-    PageType createPage(String fxmlPath, Function<FXMLLoader, PageType> pageConstructor,
-                        Supplier<ControllerType> controllerConstructorOverride)
+    @NotNull PageType createPage(@NotNull String fxmlPath, @NotNull Function<FXMLLoader, PageType> pageConstructor,
+                                 @Nullable Supplier<ControllerType> controllerConstructorOverride)
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
 
@@ -210,7 +212,7 @@ public class PageFrameController
         return page;
     }
 
-    public final NonDataPageBuilder<PageFrameController> buildPage(Runnable callback)
+    public final @NotNull NonDataPageBuilder<PageFrameController> buildPage(@NotNull Runnable callback)
     {
         return NonDataSentinelPageBuilder.of(this,
             () ->
@@ -221,7 +223,7 @@ public class PageFrameController
             });
     }
 
-    public final <T> SimplePageBuilder<Object, T, PageFrameController> buildPage(Runnable callback, T data)
+    public final <T> @NotNull SimplePageBuilder<Object, T, PageFrameController> buildPage(@NotNull Runnable callback, T data)
     {
         return DataSentinelPageBuilder.of(this,
             () ->
@@ -326,7 +328,7 @@ public class PageFrameController
         private final StringExpression advanceLabelOverride;
         private final BooleanBinding advanceLabelOverrideNotNull;
 
-        private NextButtonTextBinding(BooleanBinding shouldConfirm, StringExpression advanceLabelOverride)
+        private NextButtonTextBinding(BooleanBinding shouldConfirm, @NotNull StringExpression advanceLabelOverride)
         {
             this.shouldConfirm = shouldConfirm;
             this.advanceLabelOverride = advanceLabelOverride;

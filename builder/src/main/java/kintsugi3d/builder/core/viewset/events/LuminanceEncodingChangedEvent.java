@@ -32,7 +32,7 @@ public class LuminanceEncodingChangedEvent
      */
     private final byte @Nullable [] encodedLuminanceValues;
 
-    public LuminanceEncodingChangedEvent(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
+    public LuminanceEncodingChangedEvent(double @Nullable [] linearLuminanceValues, byte @Nullable [] encodedLuminanceValues)
     {
         if (linearLuminanceValues != null)
         {

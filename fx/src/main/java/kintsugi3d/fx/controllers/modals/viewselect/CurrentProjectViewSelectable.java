@@ -20,6 +20,7 @@ import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.io.imageset.GenericImageSetInfo;
 import kintsugi3d.builder.io.imageset.ImageSetInfo;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
@@ -29,9 +30,9 @@ public class CurrentProjectViewSelectable extends ViewSelectableBase
 {
     private final View initialView;
     private final double initialViewRotationDegrees;
-    private final ImageSetInfo imageSetInfo;
+    private final @NotNull ImageSetInfo imageSetInfo;
 
-    public CurrentProjectViewSelectable(Function<ViewSet, View> getInitialSelection, ToDoubleFunction<ViewSet> getInitialRotationDegrees)
+    public CurrentProjectViewSelectable(@NotNull Function<ViewSet, View> getInitialSelection, @Nullable ToDoubleFunction<ViewSet> getInitialRotationDegrees)
     {
         ViewSet currentViewSet = Global.io().getLoadedViewSetOrThrow();
         initialView = getInitialSelection.apply(currentViewSet);
@@ -54,7 +55,7 @@ public class CurrentProjectViewSelectable extends ViewSelectableBase
         imageSetInfo = new GenericImageSetInfo("Current Project", currentViewSet);
     }
 
-    public CurrentProjectViewSelectable(Function<ViewSet, View> getInitialSelection)
+    public CurrentProjectViewSelectable(@NotNull Function<ViewSet, View> getInitialSelection)
     {
         this(getInitialSelection, null);
     }

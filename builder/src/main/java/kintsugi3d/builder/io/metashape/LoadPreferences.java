@@ -15,6 +15,8 @@
 
 package kintsugi3d.builder.io.metashape;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,17 +25,17 @@ import java.util.List;
 
 public final class LoadPreferences
 {
-    private Collection<File> disabledImageFiles = new ArrayList<>(8);
+    private @NotNull Collection<File> disabledImageFiles = new ArrayList<>(8);
     private File fullResOverride;
     private String orientationViewName;
     private double orientationViewRotateDegrees = 0;
 
-    public Collection<File> getDisabledImageFiles()
+    public @NotNull Collection<File> getDisabledImageFiles()
     {
         return Collections.unmodifiableCollection(disabledImageFiles);
     }
 
-    public void setDisabledImageFiles(Collection<File> disabledImageFiles)
+    public void setDisabledImageFiles(@NotNull Collection<File> disabledImageFiles)
     {
         this.disabledImageFiles = List.copyOf(disabledImageFiles);
     }

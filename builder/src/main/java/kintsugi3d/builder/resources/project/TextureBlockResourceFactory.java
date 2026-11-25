@@ -21,6 +21,7 @@ import kintsugi3d.gl.core.ManagedResource;
 import kintsugi3d.gl.geometry.GeometryTextures;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -28,9 +29,9 @@ public class TextureBlockResourceFactory<ContextType extends Context<ContextType
 {
     private final ImageCache<ContextType> imageCache;
     private final GraphicsResourcesCommon<ContextType> commonResources;
-    private final GeometryTextures<ContextType> fullGeometryTextures;
+    private final @NotNull GeometryTextures<ContextType> fullGeometryTextures;
 
-    TextureBlockResourceFactory(GraphicsResourcesCommon<ContextType> commonResources, ImageCache<ContextType> imageCache)
+    TextureBlockResourceFactory(@NotNull GraphicsResourcesCommon<ContextType> commonResources, @NotNull ImageCache<ContextType> imageCache)
     {
         this.imageCache = imageCache;
         this.commonResources = commonResources;

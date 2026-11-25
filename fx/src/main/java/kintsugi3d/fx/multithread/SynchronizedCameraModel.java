@@ -16,15 +16,16 @@
 package kintsugi3d.fx.multithread;
 
 import kintsugi3d.builder.state.scene.ManipulableCameraModel;
+import org.jetbrains.annotations.NotNull;
 
 public class SynchronizedCameraModel extends SynchronizedViewpointModel implements ManipulableCameraModel
 {
-    private final SynchronizedValue<Integer> paddingLeft;
-    private final SynchronizedValue<Integer> paddingRight;
-    private final SynchronizedValue<Integer> paddingTop;
-    private final SynchronizedValue<Integer> paddingBottom;
+    private final @NotNull SynchronizedValue<Integer> paddingLeft;
+    private final @NotNull SynchronizedValue<Integer> paddingRight;
+    private final @NotNull SynchronizedValue<Integer> paddingTop;
+    private final @NotNull SynchronizedValue<Integer> paddingBottom;
 
-    public SynchronizedCameraModel(ManipulableCameraModel baseModel)
+    public SynchronizedCameraModel(@NotNull ManipulableCameraModel baseModel)
     {
         super(baseModel);
         paddingLeft = SynchronizedValue.createFromFunctions(baseModel::getPaddingLeft, baseModel::setPaddingLeft);

@@ -16,6 +16,7 @@
 package kintsugi3d.optimization.function;
 
 import kintsugi3d.optimization.MatrixSystem;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.stream.Stream;
@@ -44,7 +45,7 @@ public class MatrixBuilder
      */
     private final int observationCount;
 
-    private final MatrixBuilderSums sums;
+    private final @NotNull MatrixBuilderSums sums;
 
     /**
      * Stores both the LHS and RHS of the system to be solved.
@@ -147,7 +148,7 @@ public class MatrixBuilder
      * This function should only be called once per instance of this class.
      * @param samples The stream of samples to process.
      */
-    public final void build(Stream<MatrixBuilderSample> samples)
+    public final void build(@NotNull Stream<MatrixBuilderSample> samples)
     {
         // Sort samples so that we avoid repeating the same additions over and over again
         // Should sort ascending to visit low values first
@@ -163,7 +164,7 @@ public class MatrixBuilder
      * correctly.  Each sample must be in a "greater" bin than all previous samples passed to this function.
      * @param sample The new sample to handle
      */
-    private void processSample(MatrixBuilderSample sample)
+    private void processSample(@NotNull MatrixBuilderSample sample)
     {
         int sampleFloorPrevious = samplePrevious == null ? 0 : samplePrevious.floor;
 

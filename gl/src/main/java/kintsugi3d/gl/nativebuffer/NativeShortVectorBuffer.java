@@ -15,6 +15,7 @@
 
 package kintsugi3d.gl.nativebuffer;
 
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.BufferUtils;
 
 import java.nio.ByteBuffer;
@@ -24,7 +25,7 @@ import java.util.Objects;
 
 class NativeShortVectorBuffer implements NativeVectorBuffer
 {
-    private final ByteBuffer buffer;
+    private final @NotNull ByteBuffer buffer;
 
     private final int dimensions;
     private final int count;
@@ -45,7 +46,7 @@ class NativeShortVectorBuffer implements NativeVectorBuffer
         buffer = BufferUtils.createByteBuffer(dimensions * count * 2);
     }
 
-    NativeShortVectorBuffer(int dimensions, int count, ByteBuffer buffer)
+    NativeShortVectorBuffer(int dimensions, int count, @NotNull ByteBuffer buffer)
     {
         if (dimensions < 0)
         {
@@ -71,14 +72,14 @@ class NativeShortVectorBuffer implements NativeVectorBuffer
         this.buffer = buffer;
     }
 
-    NativeShortVectorBuffer(int dimensions, int count, byte[] buffer)
+    NativeShortVectorBuffer(int dimensions, int count, byte @NotNull [] buffer)
     {
         this(dimensions, count);
         this.buffer.put(buffer);
         this.buffer.flip();
     }
 
-    NativeShortVectorBuffer(int dimensions, int count, short[] buffer)
+    NativeShortVectorBuffer(int dimensions, int count, short @NotNull [] buffer)
     {
         this(dimensions, count);
         this.buffer.asShortBuffer().put(buffer);
@@ -97,7 +98,7 @@ class NativeShortVectorBuffer implements NativeVectorBuffer
     }
 
     @Override
-    public final Short get(int index, int dimension)
+    public final @NotNull Short get(int index, int dimension)
     {
         if (index < 0)
         {
@@ -140,7 +141,7 @@ class NativeShortVectorBuffer implements NativeVectorBuffer
     }
 
     @Override
-    public final void set(int index, int dimension, Number value)
+    public final void set(int index, int dimension, @NotNull Number value)
     {
         setPrimitive(index, dimension, value.shortValue());
     }
@@ -152,7 +153,7 @@ class NativeShortVectorBuffer implements NativeVectorBuffer
     }
 
     @Override
-    public final NativeDataType getDataType()
+    public final @NotNull NativeDataType getDataType()
     {
         return NativeDataType.SHORT;
     }

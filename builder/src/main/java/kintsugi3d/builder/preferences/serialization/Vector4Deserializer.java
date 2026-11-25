@@ -20,13 +20,14 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
 public class Vector4Deserializer extends JsonDeserializer<Vector4>
 {
     @Override
-    public final Vector4 deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException
+    public final @NotNull Vector4 deserialize(@NotNull JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException
     {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         return new Vector4(node.get("x").floatValue(), node.get("y").floatValue(), node.get("z").floatValue(), node.get("w").floatValue());

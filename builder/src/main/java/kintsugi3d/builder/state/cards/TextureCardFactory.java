@@ -30,6 +30,7 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.gl.vecmath.IntVector2;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,13 +57,13 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
     }
 
     @Override
-    public final List<? extends Map<String, Runnable>> getGlobalActions()
+    public final @NotNull List<? extends Map<String, Runnable>> getGlobalActions()
     {
         return List.of(Map.of("Refresh All", this::refreshAll));
     }
 
     @Override
-    public final Class<TextureInfo> getDataClass()
+    public final @NotNull Class<TextureInfo> getDataClass()
     {
         return TextureInfo.class;
     }
@@ -75,7 +76,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
      * @return projectDataCard
      */
     @Override
-    public final @Nullable ProjectDataCard createCard(TextureInfo texture)
+    public final @Nullable ProjectDataCard createCard(@NotNull TextureInfo texture)
     {
         // Base Location where the .pngs and thumbnails folder are.
         File baseDirectory = getViewSet().getSupportingFilesDirectory();
@@ -146,7 +147,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
      * @return
      */
     @Override
-    public final List<ProjectDataCard> createAllCards()
+    public final @NotNull List<ProjectDataCard> createAllCards()
     {
         List<ProjectDataCard> textureCards = new ArrayList<>(8);
         ReadonlyImageBasedGraphicsResources<? extends Context<?>> resources = getResources();
@@ -183,7 +184,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
         return textureCards;
     }
 
-    private void refreshTexture(TextureInfo texture)
+    private void refreshTexture(@NotNull TextureInfo texture)
     {
         // Texture replacement must happen on graphics thread.
         Rendering.runLater(() ->
@@ -218,7 +219,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
         });
     }
 
-    private void replaceTexture(TextureInfo texture)
+    private void replaceTexture(@NotNull TextureInfo texture)
     {
         Global.state().getProjectModel().requestUserImageReplacement(texture.getReplaceData(getResources()));
     }

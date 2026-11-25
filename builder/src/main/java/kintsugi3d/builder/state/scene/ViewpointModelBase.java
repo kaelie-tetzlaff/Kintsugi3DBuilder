@@ -18,11 +18,12 @@ package kintsugi3d.builder.state.scene;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.OrbitPolarConverter;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class ViewpointModelBase implements ManipulableViewpointModel
 {
     @Override
-    public final Matrix4 getLookMatrix()
+    public final @NotNull Matrix4 getLookMatrix()
     {
         return Matrix4.lookAt(
             new Vector3(0, 0, getDistance()),
@@ -40,14 +41,14 @@ public abstract class ViewpointModelBase implements ManipulableViewpointModel
     }
 
     @Override
-    public final Matrix4 getOrbit()
+    public final @NotNull Matrix4 getOrbit()
     {
         Vector3 polar = new Vector3(getAzimuth(), getInclination(), getTwist());
         return OrbitPolarConverter.convertToOrbitMatrix(polar);
     }
 
     @Override
-    public final void setOrbit(Matrix4 orbit)
+    public final void setOrbit(@NotNull Matrix4 orbit)
     {
         Vector3 polar = OrbitPolarConverter.convertToPolarCoordinates(orbit);
         setAzimuth(polar.x);

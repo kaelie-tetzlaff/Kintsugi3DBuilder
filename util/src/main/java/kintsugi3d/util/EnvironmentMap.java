@@ -28,6 +28,7 @@ package kintsugi3d.util;
 import kintsugi3d.gl.util.RadianceImageLoader;
 import kintsugi3d.gl.util.RadianceImageLoader.HDRImage;
 import kintsugi3d.gl.vecmath.DoubleVector3;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -59,10 +60,10 @@ public final class EnvironmentMap
         32, 32, 32, 32, 64, 64, 64, 64, 64, 64, 128, 128, 128, -1
     };
 
-    private final float[][] diff;
-    private final float[][] env;
+    private final float @NotNull [][] diff;
+    private final float @NotNull [][] env;
     private final int side;
-    private final float[][][] spec;
+    private final float @NotNull [][][] spec;
 
     //private final List<StructuredImportanceSampler.Zone> zones;
 
@@ -88,8 +89,8 @@ public final class EnvironmentMap
         //zones = new ArrayList<>();
     }
 
-    public static EnvironmentMap loadFromHDRFile(
-        File hdrFile/*, boolean computeIrradiance, boolean computeStructuredImportance*/) throws
+    public static @NotNull EnvironmentMap loadFromHDRFile(
+        @NotNull File hdrFile/*, boolean computeIrradiance, boolean computeStructuredImportance*/) throws
         IOException
     {
         HDRImage hdr;
@@ -140,7 +141,7 @@ public final class EnvironmentMap
         return map;
     }
 
-    public static EnvironmentMap loadFromEnvFile(File cachedData) throws IOException
+    public static @NotNull EnvironmentMap loadFromEnvFile(@NotNull File cachedData) throws IOException
     {
         try (DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(cachedData))))
         {
@@ -198,8 +199,8 @@ public final class EnvironmentMap
         }
     }
 
-    public static EnvironmentMap loadFromFile(
-        File data/*, boolean computeIrradiance, boolean computeStructuredImportance*/) throws
+    public static @NotNull EnvironmentMap loadFromFile(
+        @NotNull File data/*, boolean computeIrradiance, boolean computeStructuredImportance*/) throws
         IOException
     {
         if (data.getName().endsWith(".hdr"))
@@ -246,7 +247,7 @@ public final class EnvironmentMap
         }
     }
 
-    private static JFileChooser createFileChooser()
+    private static @NotNull JFileChooser createFileChooser()
     {
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -254,13 +255,13 @@ public final class EnvironmentMap
         fc.setFileFilter(new FileFilter()
         {
             @Override
-            public boolean accept(File f)
+            public boolean accept(@NotNull File f)
             {
                 return f.getName().endsWith(".hdr");
             }
 
             @Override
-            public String getDescription()
+            public @NotNull String getDescription()
             {
                 return "Radiance Environment Maps (.hdr)";
             }
@@ -268,7 +269,7 @@ public final class EnvironmentMap
         return fc;
     }
 
-    private static DoubleVector3 sample(float[][] env, int side, DoubleVector3 coord)
+    private static @NotNull DoubleVector3 sample(float[][] env, int side, @NotNull DoubleVector3 coord)
     {
         double sc;
         double tc;
@@ -405,7 +406,7 @@ public final class EnvironmentMap
         return pano;
     }
 
-    private static void toPanoramaCoord(DoubleVector3 dir, int width, int height, double[] out)
+    private static void toPanoramaCoord(@NotNull DoubleVector3 dir, int width, int height, double[] out)
     {
         // x = cos(theta) cos(phi)
         // y = sin(phi)
@@ -425,7 +426,7 @@ public final class EnvironmentMap
         out[1] = py;
     }
 
-    private static DoubleVector3 toVectorFromCubeMap(int face, int tx, int ty, int side)
+    private static @NotNull DoubleVector3 toVectorFromCubeMap(int face, int tx, int ty, int side)
     {
         // technically these are sc / |ma| and tc / |ma| but we assert
         // that |ma| = 1
@@ -458,7 +459,7 @@ public final class EnvironmentMap
         return v.normalized();
     }
 
-    private static DoubleVector3 toVectorFromPanorama(int lx, int ly, int w, int h)
+    private static @NotNull DoubleVector3 toVectorFromPanorama(int lx, int ly, int w, int h)
     {
         double lat = Math.PI * (ly / (h - 1.0)) - Math.PI / 2.0;
         double lon = 2.0 * Math.PI * (lx / (w - 1.0));
@@ -676,7 +677,7 @@ public final class EnvironmentMap
 //        return zones;
 //    }
 
-    public void write(File data) throws IOException
+    public void write(@NotNull File data) throws IOException
     {
         try (DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(data))))
         {
@@ -768,7 +769,7 @@ public final class EnvironmentMap
 
     // FIXME avery says I may have mirrored all the x images (so technically still a valid seamless environment
     // but won't be correct if i'm comparing it to the real place)
-    private static void convertCross(int side, float[][] env, HDRImage cross)
+    private static void convertCross(int side, float[][] env, @NotNull HDRImage cross)
     {
         // px
         for (int y = 0; y < side; y++)
@@ -869,7 +870,7 @@ public final class EnvironmentMap
         }
     }
 
-    private static void convertPanorama(int side, float[][] env, HDRImage pano)
+    private static void convertPanorama(int side, float[][] env, @NotNull HDRImage pano)
     {
         // assumes equirectangular projection
         double[] p = new double[2];

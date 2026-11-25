@@ -31,6 +31,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import kintsugi3d.fx.internal.ObservableCardsModel;
 import kintsugi3d.fx.internal.ObservableTabsModel;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.*;
@@ -71,7 +73,7 @@ public class SideBarController
         return mainBox;
     }
 
-    public final void init(@SuppressWarnings("ParameterHidesMemberVariable") ObservableTabsModel tabModels)
+    public final void init(@SuppressWarnings("ParameterHidesMemberVariable") @NotNull ObservableTabsModel tabModels)
     {
         this.tabModels = tabModels;
 
@@ -153,7 +155,7 @@ public class SideBarController
         }
     }
 
-    private void addTab(ObservableCardsModel<?> model)
+    private void addTab(@NotNull ObservableCardsModel<?> model)
     {
         RadioButton newButton = createButton(model.getLabel());
         VBox newTab = createTab(model);
@@ -169,7 +171,7 @@ public class SideBarController
         newTab.managedProperty().bind(newButton.selectedProperty());
     }
 
-    private RadioButton createButton(String name)
+    private @NotNull RadioButton createButton(String name)
     {
         RadioButton button = new RadioButton(name);
 
@@ -198,7 +200,7 @@ public class SideBarController
         return button;
     }
 
-    private VBox createTab(ObservableCardsModel<?> model)
+    private @Nullable VBox createTab(@NotNull ObservableCardsModel<?> model)
     {
         VBox newTab = null;
         FXMLLoader loader = new FXMLLoader();
@@ -253,7 +255,7 @@ public class SideBarController
      * If it is, cursor is set to resize cursor. Otherwise, default cursor.
      * @param event
      */
-    public final void mouseMoved(MouseEvent event)
+    public final void mouseMoved(@NotNull MouseEvent event)
     {
         if (event.getX() > (mainBox.getWidth() - RESIZE_WIDTH))
         {
@@ -289,7 +291,7 @@ public class SideBarController
      * @param event
      */
     @FXML
-    public final void mouseDragged(MouseEvent event)
+    public final void mouseDragged(@NotNull MouseEvent event)
     {
         double newWidth = event.getX();
 

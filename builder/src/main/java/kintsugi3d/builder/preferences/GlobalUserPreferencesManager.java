@@ -19,6 +19,7 @@ import kintsugi3d.builder.io.LoadOptionsModel;
 import kintsugi3d.builder.preferences.serialization.JacksonUserPreferencesSerializer;
 import kintsugi3d.builder.preferences.serialization.UserPreferencesSerializer;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,7 +87,7 @@ public final class GlobalUserPreferencesManager
      * @param loadOptionsModel The model into which to load options related to content loading.
      * @param settingsModel THe model into which to load general settings.
      */
-    public void load(LoadOptionsModel loadOptionsModel, GeneralSettingsModel settingsModel)
+    public void load(@NotNull LoadOptionsModel loadOptionsModel, @NotNull GeneralSettingsModel settingsModel)
     {
         readFromSerializer();
         inject(loadOptionsModel, settingsModel);
@@ -103,7 +104,7 @@ public final class GlobalUserPreferencesManager
         commit();
     }
 
-    private void inject(LoadOptionsModel loadOptionsModel, GeneralSettingsModel settingsModel)
+    private void inject(@NotNull LoadOptionsModel loadOptionsModel, @NotNull GeneralSettingsModel settingsModel)
     {
         loadOptionsModel.copyFrom(preferencesModel.getLoadOptions());
         settingsModel.copyAllFrom(preferencesModel.getSettings());

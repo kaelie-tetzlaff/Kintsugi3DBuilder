@@ -32,6 +32,7 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,24 +75,24 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
      * @param args args[0] is the project name; args[1] is the name of this class; args[2] is the output directory
      * @return the request object
      */
-    public static SpecularFitRequest create(String... args)
+    public static @NotNull SpecularFitRequest create(String @NotNull ... args)
     {
         SpecularFitSettings params = new SpecularFitSettings(2048, 2048, 256, 256);
         File outputDirectory = new File(args[2]);
         return new SpecularFitRequest(params, new BasisOptimizationSettings(), outputDirectory);
     }
 
-    public static SpecularFitRequest createReoptimizeTexturesRequest()
+    public static @NotNull SpecularFitRequest createReoptimizeTexturesRequest()
     {
         return new SpecularFitRequest(getSettingsFromProject(), null);
     }
 
-    public static SpecularFitRequest createBasisAndTexturesOptimizationRequest()
+    public static @NotNull SpecularFitRequest createBasisAndTexturesOptimizationRequest()
     {
         return new SpecularFitRequest(getSettingsFromProject(), getBasisOptimizationSettingsFromProject());
     }
 
-    private static ReadonlySpecularFitSettings getSettingsFromProject()
+    private static @NotNull ReadonlySpecularFitSettings getSettingsFromProject()
     {
         ReadonlyGeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
 
@@ -125,7 +126,7 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
         return settings;
     }
 
-    private static ReadonlyBasisOptimizationSettings getBasisOptimizationSettingsFromProject()
+    private static @NotNull ReadonlyBasisOptimizationSettings getBasisOptimizationSettingsFromProject()
     {
         ReadonlyGeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
 
@@ -164,7 +165,7 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
      */
     @Override
     public <ContextType extends Context<ContextType>>
-    TextureResources<ContextType> executeRequest(ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
+    @NotNull TextureResources<ContextType> executeRequest(@NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @Nullable ProgressMonitor monitor)
         throws UserCancellationException, IOException
     {
         if (outputDirectory == null) // If the output directory wasn't overridden
@@ -195,7 +196,7 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
 
     @SuppressWarnings("unused")
     private <ContextType extends Context<ContextType>> void performReconstruction(
-        ReadonlyImageBasedGraphicsResources<ContextType> resources, ReadonlyTextureResources<ContextType> specularFit)
+        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, @NotNull ReadonlyTextureResources<ContextType> specularFit)
         throws IOException
     {
         if (outputDirectory != null)
@@ -250,7 +251,7 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
     }
 
     private <ContextType extends Context<ContextType>> @NotNull ShaderProgramFactory<ContextType> getProgramFactory(
-        ShaderResources<ContextType> resources, ReadonlyTextureResources<ContextType> specularFit)
+        ShaderResources<ContextType> resources, @NotNull ReadonlyTextureResources<ContextType> specularFit)
     {
         ReadonlyBasisResources<ContextType> basisResources = specularFit.getBasisResources();
         ReadonlyBasisSettings basisSettings = new SimpleBasisSettings(

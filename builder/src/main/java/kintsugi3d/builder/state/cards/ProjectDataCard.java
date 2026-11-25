@@ -15,6 +15,8 @@
 
 package kintsugi3d.builder.state.cards;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -24,16 +26,16 @@ public class ProjectDataCard
 {
     private final String internalName;
     private final String fullResImageFilePath;
-    private final UUID cardId;
+    private final @NotNull UUID cardId;
     private final String title;
     private final String thumbnailPath;
-    private final Map<String, String> textFields;
-    private final Collection<? extends Map<String, Runnable>> actionGroups;
+    private final @NotNull Map<String, String> textFields;
+    private final @NotNull Collection<? extends Map<String, Runnable>> actionGroups;
     private boolean isEnabled;
 
     public ProjectDataCard(
         String internalName, String title, String fullResImageFilePath, String thumbnailPath,
-        Map<String, String> textFields, Collection<? extends Map<String, Runnable>> actionGroups, boolean isEnabled)
+        @NotNull Map<String, String> textFields, @NotNull Collection<? extends Map<String, Runnable>> actionGroups, boolean isEnabled)
     {
         this.internalName = internalName;
         cardId = UUID.randomUUID();

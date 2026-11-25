@@ -18,6 +18,7 @@ package kintsugi3d.builder.fit.decomposition;
 import kintsugi3d.builder.core.texture.TextureResolution;
 import kintsugi3d.builder.io.specular.SpecularFitSerializer;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,9 +35,9 @@ public class MutableBasisResources<ContextType extends Context<ContextType>> ext
 
     private MutableMaterialBasis basis;
 
-    private final BasisWeightResources<ContextType> weightResources;
+    private final @Nullable BasisWeightResources<ContextType> weightResources;
 
-    public MutableBasisResources(ContextType context, MutableMaterialBasis basis, TextureResolution textureResolution)
+    public MutableBasisResources(@NotNull ContextType context, @NotNull MutableMaterialBasis basis, @NotNull TextureResolution textureResolution)
     {
         // Load both enabled and disabled materials.  Enabled materials should always precede disabled materials.
         super(context, basis.getMaterialCount(), basis.getSpecularResolution());
@@ -49,7 +50,7 @@ public class MutableBasisResources<ContextType extends Context<ContextType>> ext
 
     }
 
-    private MutableBasisResources(ContextType context, MutableMaterialBasis basis, File priorSolutionDirectory)
+    private MutableBasisResources(@NotNull ContextType context, @NotNull MutableMaterialBasis basis, File priorSolutionDirectory)
     {
         // Load both enabled and disabled materials.  Enabled materials should always precede disabled materials.
         super(context, basis.getMaterialCount(), basis.getSpecularResolution());
@@ -120,7 +121,7 @@ public class MutableBasisResources<ContextType extends Context<ContextType>> ext
         }
     }
 
-    public final Map<String, BasisMaterialInfo> disableBasisMaterials(Collection<String> materialNames)
+    public final @NotNull Map<String, BasisMaterialInfo> disableBasisMaterials(@NotNull Collection<String> materialNames)
     {
         Map<String, BasisMaterialInfo> disabled = new HashMap<>(materialNames.size());
 
@@ -136,7 +137,7 @@ public class MutableBasisResources<ContextType extends Context<ContextType>> ext
         return disabled;
     }
 
-    public final Map<String, BasisMaterialInfo> enableBasisMaterials(Collection<String> materialNames)
+    public final @NotNull Map<String, BasisMaterialInfo> enableBasisMaterials(@NotNull Collection<String> materialNames)
     {
         Map<String, BasisMaterialInfo> enabled = new HashMap<>(materialNames.size());
 
@@ -169,7 +170,7 @@ public class MutableBasisResources<ContextType extends Context<ContextType>> ext
      * @throws IOException If a part of the solution cannot be loaded form file.
      */
     public static <ContextType extends Context<ContextType>> @Nullable MutableBasisResources<ContextType> loadFromPriorSolution(
-        ContextType context, File priorSolutionDirectory)
+        @NotNull ContextType context, File priorSolutionDirectory)
     {
         try
         {

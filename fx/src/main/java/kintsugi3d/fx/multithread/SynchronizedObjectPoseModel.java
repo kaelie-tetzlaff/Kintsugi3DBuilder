@@ -18,18 +18,19 @@ package kintsugi3d.fx.multithread;
 import kintsugi3d.builder.state.scene.ManipulableObjectPoseModel;
 import kintsugi3d.builder.state.scene.ObjectPoseModelBase;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 public class SynchronizedObjectPoseModel extends ObjectPoseModelBase
 {
     private final ManipulableObjectPoseModel baseModel;
-    private final SynchronizedValue<Vector3> center;
-    private final SynchronizedValue<Float> rotationX;
-    private final SynchronizedValue<Float> rotationY;
-    private final SynchronizedValue<Float> rotationZ;
+    private final @NotNull SynchronizedValue<Vector3> center;
+    private final @NotNull SynchronizedValue<Float> rotationX;
+    private final @NotNull SynchronizedValue<Float> rotationY;
+    private final @NotNull SynchronizedValue<Float> rotationZ;
 
-    private final SynchronizedValue<Float> scale;
+    private final @NotNull SynchronizedValue<Float> scale;
 
-    public SynchronizedObjectPoseModel(ManipulableObjectPoseModel baseModel)
+    public SynchronizedObjectPoseModel(@NotNull ManipulableObjectPoseModel baseModel)
     {
         this.baseModel = baseModel;
         center = SynchronizedValue.createFromFunctions(baseModel::getCenter, baseModel::setCenter);

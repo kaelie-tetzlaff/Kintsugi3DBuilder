@@ -16,12 +16,13 @@
 package kintsugi3d.builder.fit.decomposition;
 
 import kintsugi3d.builder.core.texture.TextureResolution;
+import org.jetbrains.annotations.NotNull;
 
 public class SpecularDecompositionFromExistingBasis extends SpecularDecompositionBase
 {
-    private final MaterialBasis materialBasis;
+    private final @NotNull MaterialBasis materialBasis;
 
-    public SpecularDecompositionFromExistingBasis(TextureResolution textureResolution, MaterialBasis materialBasis)
+    public SpecularDecompositionFromExistingBasis(@NotNull TextureResolution textureResolution, @NotNull MaterialBasis materialBasis)
     {
         super(textureResolution, materialBasis.getEnabledMaterialCount());
         this.materialBasis = materialBasis;

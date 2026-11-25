@@ -15,6 +15,8 @@
 
 package kintsugi3d.builder.state.cards;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -28,7 +30,7 @@ public interface CardsModel<T>
 
     void refreshCards(RefreshFunction<T> refreshedData);
 
-    default void refreshCard(Predicate<ProjectDataCard> cardEquals, T refreshedData)
+    default void refreshCard(@NotNull Predicate<ProjectDataCard> cardEquals, T refreshedData)
     {
         refreshCards(card -> cardEquals.test(card) ? refreshedData : null);
     }

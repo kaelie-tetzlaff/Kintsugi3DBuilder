@@ -16,6 +16,7 @@
 package kintsugi3d.gl.core;
 
 import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -79,7 +80,7 @@ public interface Texture2D<ContextType extends Context<ContextType>>
         ReadonlyTexture2D<ContextType> readSource, int srcX, int srcY, int srcWidth, int srcHeight, boolean linearFiltering);
 
     @Override
-    default Texture2D<ContextType> crop(int x, int y, int cropWidth, int cropHeight)
+    default @NotNull Texture2D<ContextType> crop(int x, int y, int cropWidth, int cropHeight)
     {
         Texture2D<ContextType> cropTexture = createTextureWithMatchingFormat(cropWidth, cropHeight);
         cropTexture.blitCropped(this, x, y, cropWidth, cropHeight);
@@ -87,13 +88,13 @@ public interface Texture2D<ContextType extends Context<ContextType>>
     }
 
     @Override
-    default ColorTextureReader getColorTextureReader()
+    default @NotNull ColorTextureReader getColorTextureReader()
     {
         return new ColorTextureReader2D<>(this);
     }
 
     @Override
-    default DepthTextureReader getDepthTextureReader()
+    default @NotNull DepthTextureReader getDepthTextureReader()
     {
         return new DepthTextureReader2D<>(this);
     }

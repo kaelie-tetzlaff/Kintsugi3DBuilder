@@ -22,6 +22,7 @@ import kintsugi3d.builder.io.gltf.MaterialExporter;
 import kintsugi3d.builder.io.gltf.StandardTextureExport;
 import kintsugi3d.builder.util.ApplicationFolders;
 import kintsugi3d.builder.util.OperatingSystem;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +58,7 @@ public abstract class USDZExporter extends MaterialExporter
     protected abstract void addCommands(File outputDirectory, List<String> commandList);
 
     @Override
-    protected final void postExport(File outputDirectory)
+    protected final void postExport(@NotNull File outputDirectory)
     {
         // Command list for the ProcessBuilder
         List<String> command = new ArrayList<>(8);
@@ -161,7 +162,7 @@ public abstract class USDZExporter extends MaterialExporter
 
     // Grab the output directory and redirect the save to a temporary directory
     @Override
-    public final File redirectOutputDirectory(File outputDirectory)
+    public final @NotNull File redirectOutputDirectory(File outputDirectory)
     {
         modelOutputDirectory = outputDirectory;
         return new File(Global.io().getLoadedViewSetOrThrow().getSupportingFilesDirectory(), "temp");

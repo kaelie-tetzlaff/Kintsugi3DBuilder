@@ -16,12 +16,13 @@
 package kintsugi3d.builder.fit.decomposition;
 
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.NotNull;
 
 public class SimpleBasisResources<ContextType extends Context<ContextType>> extends BasisResourcesBase<ContextType>
 {
-    private final MaterialBasis materialBasis;
+    private final @NotNull MaterialBasis materialBasis;
 
-    public SimpleBasisResources(ContextType context, MaterialBasis materialBasis)
+    public SimpleBasisResources(@NotNull ContextType context, @NotNull MaterialBasis materialBasis)
     {
         // Load both enabled and disabled materials.  Enabled materials should always precede disabled materials.
         super(context, materialBasis.getMaterialCount(), materialBasis.getSpecularResolution());

@@ -25,16 +25,17 @@ import kintsugi3d.gl.window.FramebufferCanvas;
 import kintsugi3d.gl.window.PollableCanvas3D;
 import kintsugi3d.gl.window.PollableWindow;
 import kintsugi3d.gl.window.WindowSpecification;
+import org.jetbrains.annotations.NotNull;
 
 public class Standalone3DWindow<ContextType extends Context<ContextType>> implements PollableWindow
 {
-    private final Stage stage;
-    private final FramebufferView framebufferView;
+    private final @NotNull Stage stage;
+    private final @NotNull FramebufferView framebufferView;
     private final FramebufferCanvas<ContextType> canvas;
     private boolean windowClosing = false;
     private boolean focused;
 
-    Standalone3DWindow(Stage primaryStage, FramebufferCanvas<ContextType> canvas, WindowSpecification windowSpec)
+    Standalone3DWindow(Stage primaryStage, FramebufferCanvas<ContextType> canvas, @NotNull WindowSpecification windowSpec)
     {
         this.canvas = canvas;
 

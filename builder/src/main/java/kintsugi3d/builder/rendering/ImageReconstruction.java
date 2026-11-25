@@ -60,8 +60,8 @@ public class ImageReconstruction<ContextType extends Context<ContextType>> imple
         ReadonlyViewSet viewSet,
         Consumer<FramebufferObjectBuilder<ContextType>> buildFramebufferAttachments,
         Consumer<FramebufferObjectBuilder<ContextType>> buildIncidentRadianceFramebufferAttachments,
-        ProgramBuilder<ContextType> incidentRadianceProgramBuilder,
-        ShaderResources<ContextType> resources)
+        @NotNull ProgramBuilder<ContextType> incidentRadianceProgramBuilder,
+        @NotNull ShaderResources<ContextType> resources)
         throws IOException
     {
         this(viewSet, buildFramebufferAttachments, buildIncidentRadianceFramebufferAttachments, incidentRadianceProgramBuilder, resources,
@@ -83,12 +83,12 @@ public class ImageReconstruction<ContextType extends Context<ContextType>> imple
     }
 
     public ImageReconstruction(
-            ReadonlyViewSet viewSet,
-            Consumer<FramebufferObjectBuilder<ContextType>> buildFramebufferAttachments,
-            Consumer<FramebufferObjectBuilder<ContextType>> buildIncidentRadianceFramebufferAttachments,
-            ProgramBuilder<ContextType> incidentRadianceProgramBuilder,
-            ShaderResources<ContextType> resources,
-            Function<View, ColorImage> groundTruthLoader)
+        ReadonlyViewSet viewSet,
+        Consumer<FramebufferObjectBuilder<ContextType>> buildFramebufferAttachments,
+        Consumer<FramebufferObjectBuilder<ContextType>> buildIncidentRadianceFramebufferAttachments,
+        @NotNull ProgramBuilder<ContextType> incidentRadianceProgramBuilder,
+        @NotNull ShaderResources<ContextType> resources,
+        Function<View, ColorImage> groundTruthLoader)
         throws IOException
     {
         this.viewSet = viewSet;
@@ -107,7 +107,7 @@ public class ImageReconstruction<ContextType extends Context<ContextType>> imple
     }
 
     private static <ContextType extends Context<ContextType>> void render(
-        View view, DrawableResource<ContextType> drawable, Framebuffer<ContextType> framebuffer)
+        @NotNull View view, @NotNull DrawableResource<ContextType> drawable, @NotNull Framebuffer<ContextType> framebuffer)
     {
         // Reconstruct the view
         drawable.program().setUniform("model_view", view.getCameraPose());
@@ -175,7 +175,7 @@ public class ImageReconstruction<ContextType extends Context<ContextType>> imple
             incidentRadianceFramebuffer.getTextureReaderForColorAttachment(0).readFloatingPointRGBA(incidentRadianceBuffer);
         }
 
-        private ReconstructionView<ContextType> makeReconstructionView()
+        private @NotNull ReconstructionView<ContextType> makeReconstructionView()
         {
             return new ReconstructionView<>()
             {
@@ -188,7 +188,7 @@ public class ImageReconstruction<ContextType extends Context<ContextType>> imple
                 }
 
                 @Override
-                public DoubleVector3 getIncidentRadiance(int pixelIndex)
+                public @NotNull DoubleVector3 getIncidentRadiance(int pixelIndex)
                 {
                     return new DoubleVector3(
                         incidentRadianceBuffer.get(4 * pixelIndex),
@@ -207,7 +207,7 @@ public class ImageReconstruction<ContextType extends Context<ContextType>> imple
                  * @return x-component stores rmse, y-component stores pixel count after masking
                  */
                 @Override
-                public ReadonlyColorAppearanceRMSE reconstruct(DrawableResource<ContextType> drawable)
+                public @NotNull ReadonlyColorAppearanceRMSE reconstruct(@NotNull DrawableResource<ContextType> drawable)
                 {
                     // Create new framebuffer if necessary.
                     if (reconstructionFramebuffer == null
@@ -293,7 +293,7 @@ public class ImageReconstruction<ContextType extends Context<ContextType>> imple
         }
 
         @Override
-        public ReconstructionView<ContextType> next()
+        public @NotNull ReconstructionView<ContextType> next()
         {
             if (hasNext())
             {

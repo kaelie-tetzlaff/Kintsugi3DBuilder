@@ -16,6 +16,7 @@
 package kintsugi3d.gl.core;
 
 import kintsugi3d.gl.vecmath.*;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A drawable entity for a GL context.
@@ -218,7 +219,7 @@ public interface DrawableResource<ContextType extends Context<ContextType>>
      * @param name The name used to reference the vertex attribute within the shaders.
      * @param value The value to set the vertex attribute to.
      */
-    default void setVertexAttrib(String name, IntLike value)
+    default void setVertexAttrib(String name, @NotNull IntLike value)
     {
         setVertexAttrib(name, value.getIntValue());
     }
@@ -326,7 +327,7 @@ public interface DrawableResource<ContextType extends Context<ContextType>>
      * @param location The location of the vertex attribute to set.
      * @param value The value to set the vertex attribute to.
      */
-    default void setVertexAttrib(int location, IntLike value)
+    default void setVertexAttrib(int location, @NotNull IntLike value)
     {
         setVertexAttrib(location, value.getIntValue());
     }

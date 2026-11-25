@@ -16,10 +16,11 @@
 package kintsugi3d.fx.controllers.modals.viewselect;
 
 import kintsugi3d.builder.io.imageset.ImageSetInfo;
+import org.jetbrains.annotations.Nullable;
 
 public interface ViewSelectable
 {
-    String getAdvanceLabelOverride();
+    @Nullable String getAdvanceLabelOverride();
 
     ImageSetInfo getImageSetInfo();
 

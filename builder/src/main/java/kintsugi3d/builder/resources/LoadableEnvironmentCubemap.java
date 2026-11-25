@@ -20,6 +20,7 @@ import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
 import kintsugi3d.util.ArrayBackedColorImage;
 import kintsugi3d.util.EncodableColorImage;
 import kintsugi3d.util.EnvironmentMap;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,19 +43,19 @@ class LoadableEnvironmentCubemap<ContextType extends Context<ContextType>> imple
     }
 
     @Override
-    public final String getProcessName()
+    public final @NotNull String getProcessName()
     {
         return "Load Environment Map";
     }
 
     @Override
-    public final EnvironmentMap loadCPU(File file) throws IOException
+    public final @NotNull EnvironmentMap loadCPU(@NotNull File file) throws IOException
     {
         return EnvironmentMap.loadFromHDRFile(file);
     }
 
     @Override
-    public final Cubemap<ContextType> loadGPU(EnvironmentMap data)
+    public final @NotNull Cubemap<ContextType> loadGPU(@NotNull EnvironmentMap data)
     {
         Cubemap<ContextType> texture = context.getTextureFactory().buildColorCubemap(data.getSide())
             .loadFace(CubemapFace.POSITIVE_X, NativeVectorBufferFactory.createFromFloatArray(3,
@@ -84,7 +85,7 @@ class LoadableEnvironmentCubemap<ContextType extends Context<ContextType>> imple
     }
 
     @Override
-    public final EncodableColorImage getPreviewImage(EnvironmentMap data)
+    public final @NotNull EncodableColorImage getPreviewImage(@NotNull EnvironmentMap data)
     {
         int width = data.getSide() * 4;
         int height = data.getSide() * 2;

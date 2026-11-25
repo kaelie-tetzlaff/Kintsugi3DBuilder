@@ -18,6 +18,7 @@ package kintsugi3d.app.test;
 import kintsugi3d.builder.state.cards.CardsModel;
 import kintsugi3d.builder.state.cards.ProjectDataCardFactory;
 import kintsugi3d.builder.state.cards.TabsModel;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -46,7 +47,7 @@ public class TestingTabsModel implements TabsModel
     }
 
     @Override
-    public final Map<String, ? extends CardsModel<?>> getTabsMap()
+    public final @NotNull Map<String, ? extends CardsModel<?>> getTabsMap()
     {
         return Map.of();
     }

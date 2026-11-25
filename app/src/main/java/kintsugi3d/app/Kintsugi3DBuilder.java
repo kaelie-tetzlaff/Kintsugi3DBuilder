@@ -39,7 +39,7 @@ public final class Kintsugi3DBuilder
     {
     }
 
-    public static void main(String... args) throws IOException, InitializationException
+    public static void main(String @NotNull ... args) throws IOException, InitializationException
     {
         // TODO: temp fix to make file I/O work as expected in an internationalized context
         Locale.setDefault(Locale.ROOT);

@@ -19,6 +19,7 @@ import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.control.ScrollBar;
+import org.jetbrains.annotations.NotNull;
 
 public final class ScrollBarHelper
 {
@@ -32,7 +33,7 @@ public final class ScrollBarHelper
      *                Expected to contain a scroll bar accessible with the CSS lookup ".scroll-bar:vertical".
      *                Confirmed to work with ListView and TreeView.
      */
-    public static void scrollbarFix(Control control)
+    public static void scrollbarFix(@NotNull Control control)
     {
         Platform.runLater(() ->
         {

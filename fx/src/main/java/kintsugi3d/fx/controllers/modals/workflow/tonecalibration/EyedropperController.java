@@ -54,6 +54,7 @@ import kintsugi3d.fx.util.StaticUtilities;
 import kintsugi3d.fx.util.ZoomSafeImageView;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.SRGB;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -331,7 +332,7 @@ public class EyedropperController extends NonDataPageControllerBase
         rectangleForTextField.put(textField, rectangle);
     }
 
-    private static Rectangle2D getDefaultViewport(ZoomSafeImageView imageView)
+    private static @NotNull Rectangle2D getDefaultViewport(@NotNull ZoomSafeImageView imageView)
     {
         Image image = imageView.getFullImage();
         return new Rectangle2D(0, 0, image.getWidth(), image.getHeight());
@@ -345,7 +346,7 @@ public class EyedropperController extends NonDataPageControllerBase
      * @param event
      */
     @FXML
-    private void handleMousePressed(MouseEvent event)
+    private void handleMousePressed(@NotNull MouseEvent event)
     {
         if (isSelecting) //In selection state
         {
@@ -372,7 +373,7 @@ public class EyedropperController extends NonDataPageControllerBase
      * @param event
      */
     @FXML
-    private void handleMouseDragged(MouseEvent event)
+    private void handleMouseDragged(@NotNull MouseEvent event)
     {
         if (isSelecting) // In selection state
         {
@@ -453,7 +454,7 @@ public class EyedropperController extends NonDataPageControllerBase
         }
     }
 
-    private Color getAvgColorFromSelection()
+    private @NotNull Color getAvgColorFromSelection()
     {
         ZoomSafeImageView imageView = imageDetailsController.getDisplayImage(); //Image details imageview
 
@@ -524,7 +525,7 @@ public class EyedropperController extends NonDataPageControllerBase
         return calculateAverageColor(selectedColors);
     }
 
-    private static Color calculateAverageColor(Collection<Color> colors)
+    private static @NotNull Color calculateAverageColor(@NotNull Collection<Color> colors)
     {
         double redSum = 0;
         double greenSum = 0;
@@ -545,7 +546,7 @@ public class EyedropperController extends NonDataPageControllerBase
         return Color.color(averageRed, averageGreen, averageBlue);
     }
 
-    private static double getGreyScaleDouble(Color color)
+    private static double getGreyScaleDouble(@NotNull Color color)
     {
         //new calculation uses weighted scaling
         double redVal = color.getRed();
@@ -566,7 +567,7 @@ public class EyedropperController extends NonDataPageControllerBase
     }
 
     //returns false if the color is null or has already been added
-    private void addSelectedColor(Color newColor)
+    private void addSelectedColor(@NotNull Color newColor)
     {
         if (sourceButton != null)
         {
@@ -599,7 +600,7 @@ public class EyedropperController extends NonDataPageControllerBase
         }
     }
 
-    private void updateFinalSelectRect(Rectangle rect)
+    private void updateFinalSelectRect(@NotNull Rectangle rect)
     {
         // when a text field is updated, update the rectangle beside it
         TextField txtField = textFieldForRectangle.get(rect);
@@ -637,7 +638,7 @@ public class EyedropperController extends NonDataPageControllerBase
     }
 
     @FXML
-    private void updatesFromTextField(KeyEvent event)
+    private void updatesFromTextField(@NotNull KeyEvent event)
     {
         //whenever a text field is updated, update its partner color rectangle and change the visibility of the Apply button
         //if all text fields contain valid info, make the Apply button functional
@@ -706,7 +707,7 @@ public class EyedropperController extends NonDataPageControllerBase
     }
 
     @FXML
-    private void enterColorSelectionMode(ActionEvent actionEvent)
+    private void enterColorSelectionMode(@NotNull ActionEvent actionEvent)
     {
         if (sourceButton != null)
         {
@@ -727,7 +728,7 @@ public class EyedropperController extends NonDataPageControllerBase
         setOverlayActive(true);
     }
 
-    private void refreshToneValueTextFields(DoubleUnaryOperator luminanceEncoding)
+    private void refreshToneValueTextFields(@NotNull DoubleUnaryOperator luminanceEncoding)
     {
         // Calculate starting encoded luminance values and remember them so we can cancel.
         byte[] newEncodedLuminanceValues = new byte[LINEAR_LUMINANCE_VALUES.length];
@@ -752,7 +753,7 @@ public class EyedropperController extends NonDataPageControllerBase
     }
 
     @FXML
-    private void selectImage(ActionEvent actionEvent)
+    private void selectImage(@NotNull ActionEvent actionEvent)
     {
         if (showMultiImageWarning)
         {
@@ -810,7 +811,7 @@ public class EyedropperController extends NonDataPageControllerBase
         }
     }
 
-    private void setImage(File file)
+    private void setImage(@Nullable File file)
     {
         if (file != null)
         {

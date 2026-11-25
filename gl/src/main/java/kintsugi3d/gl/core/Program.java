@@ -16,6 +16,7 @@
 package kintsugi3d.gl.core;
 
 import kintsugi3d.gl.vecmath.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.Optional;
@@ -131,7 +132,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
      */
-    default void setUniform(String name, IntLike value)
+    default void setUniform(String name, @NotNull IntLike value)
     {
         setUniform(name, value.getIntValue());
     }
@@ -222,7 +223,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param location The location of the uniform variable to set.
      * @param value    The value to set the uniform variable to.
      */
-    default void setUniform(int location, IntLike value)
+    default void setUniform(int location, @NotNull IntLike value)
     {
         setUniform(location, value.getIntValue());
     }

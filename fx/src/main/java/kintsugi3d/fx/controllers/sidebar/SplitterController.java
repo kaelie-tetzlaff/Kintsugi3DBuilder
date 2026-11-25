@@ -25,6 +25,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
+import org.jetbrains.annotations.NotNull;
 
 public class SplitterController
 {
@@ -66,7 +67,7 @@ public class SplitterController
     }
 
     @FXML
-    public final void mousePressed(MouseEvent event)
+    public final void mousePressed(@NotNull MouseEvent event)
     {
         double currentX = getSplitterX(event);
         double currentRightAnchor = getRightAnchorValue();
@@ -75,7 +76,7 @@ public class SplitterController
     }
 
     @FXML
-    private void mouseDragged(MouseEvent event)
+    private void mouseDragged(@NotNull MouseEvent event)
     {
         double currentX = getSplitterX(event);
 
@@ -91,7 +92,7 @@ public class SplitterController
         AnchorPane.setRightAnchor(splitHBox, clampedAnchor);
     }
 
-    private double getSplitterX(MouseEvent event) {
+    private double getSplitterX(@NotNull MouseEvent event) {
         Point2D pointInPane = splitPane.sceneToLocal(event.getSceneX(), event.getSceneY());
         return pointInPane.getX();
     }

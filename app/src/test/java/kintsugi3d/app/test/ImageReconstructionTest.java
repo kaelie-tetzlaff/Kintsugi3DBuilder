@@ -45,6 +45,7 @@ import kintsugi3d.gl.util.ColorArrayImage;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.ImageFinder;
 import kintsugi3d.util.Potato;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -220,9 +221,9 @@ class ImageReconstructionTest
     }
 
     private void saveGroundTruthSyntheticImages(
-        ViewSet viewSet,
-        Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>> groundTruthProgramCreator,
-        String groundTruthName)
+        @NotNull ViewSet viewSet,
+        @NotNull Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>> groundTruthProgramCreator,
+        @NotNull String groundTruthName)
         throws IOException
     {
         GeneralSettingsModel globalSettings = new SimpleGeneralSettingsModel();
@@ -269,8 +270,8 @@ class ImageReconstructionTest
         return noiseScale / SQRT12;
     }
 
-    private static Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>>
-        getProgramCreator(String testShaderName, Consumer<Program<OpenGLContext>> setupShader)
+    private static @NotNull Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>>
+        getProgramCreator(String testShaderName, @NotNull Consumer<Program<OpenGLContext>> setupShader)
     {
         return
             programFactory ->
@@ -829,7 +830,7 @@ class ImageReconstructionTest
     }
 
     private static ProgramObject<OpenGLContext> createGroundTruthProgram(
-        ShaderProgramFactory<OpenGLContext> programFactory, Consumer<Program<OpenGLContext>> setupShader)
+        @NotNull ShaderProgramFactory<OpenGLContext> programFactory, @NotNull Consumer<Program<OpenGLContext>> setupShader)
     {
         try
         {
@@ -846,10 +847,10 @@ class ImageReconstructionTest
     }
 
     private void verifyMultiple(
-        ViewSet viewSet,
-        Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>> testProgramCreator,
-        Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>> groundTruthProgramCreator,
-        BiConsumer<ReadonlyColorAppearanceRMSE, Float> validationByNoiseScale,
+        @NotNull ViewSet viewSet,
+        @NotNull Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>> testProgramCreator,
+        @NotNull Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>> groundTruthProgramCreator,
+        @NotNull BiConsumer<ReadonlyColorAppearanceRMSE, Float> validationByNoiseScale,
         String testName)  throws IOException
     {
         float[] noiseScaleTests = { 0.0f, 0.1f, 0.25f, 0.5f, 1.0f };
@@ -871,11 +872,11 @@ class ImageReconstructionTest
     }
 
     private void testSynthetic(
-        ViewSet viewSet,
-        Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>> testProgramCreator,
-        Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>> groundTruthProgramCreator,
-        Consumer<ReadonlyColorAppearanceRMSE> validation,
-        String testName) throws IOException
+        @NotNull ViewSet viewSet,
+        @NotNull Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>> testProgramCreator,
+        @NotNull Function<ShaderProgramFactory<OpenGLContext>, ProgramObject<OpenGLContext>> groundTruthProgramCreator,
+        @NotNull Consumer<ReadonlyColorAppearanceRMSE> validation,
+        @NotNull String testName) throws IOException
     {
         GeneralSettingsModel globalSettings = new SimpleGeneralSettingsModel();
         DefaultSettings.applyGlobalDefaults(globalSettings);
@@ -942,8 +943,8 @@ class ImageReconstructionTest
         }
     }
 
-    private static ColorArrayImage renderGroundTruth(
-        View view, DrawableResource<OpenGLContext> groundTruthDrawable, ReadableFramebuffer<OpenGLContext> groundTruthFBO)
+    private static @NotNull ColorArrayImage renderGroundTruth(
+        @NotNull View view, @NotNull DrawableResource<OpenGLContext> groundTruthDrawable, @NotNull ReadableFramebuffer<OpenGLContext> groundTruthFBO)
     {
         groundTruthDrawable.program().setUniform("model_view", view.getCameraPose());
         groundTruthDrawable.program().setUniform("projection", view.getProjectionMatrix());
@@ -963,7 +964,7 @@ class ImageReconstructionTest
 
     @SuppressWarnings("unused")
     private void testFitSynthetic(ViewSet viewSet, Function<ProgramBuilder<OpenGLContext>, ProgramBuilder<OpenGLContext>> injectDefines,
-                                  Consumer<ReadonlyTextureResources<? extends Context<?>>> fitValidation, Consumer<ReadonlyColorAppearanceRMSE> rmseValidation, String testName)
+                                  @NotNull Consumer<ReadonlyTextureResources<? extends Context<?>>> fitValidation, @NotNull Consumer<ReadonlyColorAppearanceRMSE> rmseValidation, @NotNull String testName)
     {
         try (ImageBasedGraphicsResources<OpenGLContext> resources = new GraphicsResourcesAnalytic<>(context, viewSet, potatoGeometry, injectDefines))
         {
@@ -1019,7 +1020,7 @@ class ImageReconstructionTest
     }
 
     private void testFitMetashape(String cameras, String geometry, String imageDirectory,
-                                  Consumer<ReadonlyColorAppearanceRMSE> validation, String testName) throws Exception
+                                  @NotNull Consumer<ReadonlyColorAppearanceRMSE> validation, @NotNull String testName) throws Exception
     {
         ClassLoader classLoader = getClass().getClassLoader();
         LoadOptionsModel imageLoadOptions = new SimpleLoadOptionsModel();
@@ -1043,7 +1044,7 @@ class ImageReconstructionTest
     }
 
     @SuppressWarnings("unused")
-    private void testFitVSET(File viewSetFile, Consumer<ReadonlyColorAppearanceRMSE> validation, String testName) throws MeshImportException
+    private void testFitVSET(@NotNull File viewSetFile, @NotNull Consumer<ReadonlyColorAppearanceRMSE> validation, @NotNull String testName) throws MeshImportException
     {
         LoadOptionsModel loadOptions = new SimpleLoadOptionsModel();
         loadOptions.setColorImagesRequested(false); // don't generate/load preview images; not needed for this test
@@ -1066,7 +1067,7 @@ class ImageReconstructionTest
         }
     }
 
-    private void testFit(ReadonlyImageBasedGraphicsResources<OpenGLContext> resources, Consumer<ReadonlyColorAppearanceRMSE> validation, String testName)
+    private void testFit(@NotNull ReadonlyImageBasedGraphicsResources<OpenGLContext> resources, @NotNull Consumer<ReadonlyColorAppearanceRMSE> validation, @NotNull String testName)
         throws IOException, UserCancellationException
     {
         // TODO not yet tested

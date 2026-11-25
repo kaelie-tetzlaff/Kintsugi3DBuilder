@@ -18,6 +18,7 @@ package kintsugi3d.optimization;
 import org.ejml.data.FMatrixRMaj;
 import org.ejml.dense.row.CommonOps_FDRM;
 import org.ejml.simple.SimpleMatrix;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public final class NonNegativeLeastSquaresSinglePrecision
     {
     }
 
-    private static SimpleMatrix solvePartial(SimpleMatrix mATA, SimpleMatrix vATb, boolean[] p, List<Integer> mapping, SimpleMatrix sOut)
+    private static @NotNull SimpleMatrix solvePartial(@NotNull SimpleMatrix mATA, @NotNull SimpleMatrix vATb, boolean @NotNull [] p, @NotNull List<Integer> mapping, @NotNull SimpleMatrix sOut)
     {
         for (int index = 0; index < p.length; index++)
         {
@@ -76,7 +77,7 @@ public final class NonNegativeLeastSquaresSinglePrecision
         return sForP;
     }
 
-    public static SimpleMatrix solve(SimpleMatrix mA, SimpleMatrix b, double epsilon)
+    public static SimpleMatrix solve(@NotNull SimpleMatrix mA, @NotNull SimpleMatrix b, double epsilon)
     {
         if (b.numCols() != 1 || b.numRows() != mA.numRows())
         {
@@ -94,7 +95,7 @@ public final class NonNegativeLeastSquaresSinglePrecision
         return solvePremultiplied(mATA, vATb, epsilon);
     }
 
-    public static SimpleMatrix solvePremultiplied(SimpleMatrix mATA, SimpleMatrix vATb, double epsilon)
+    public static @NotNull SimpleMatrix solvePremultiplied(@NotNull SimpleMatrix mATA, @NotNull SimpleMatrix vATb, double epsilon)
     {
         if (mATA.numCols() != mATA.numRows())
         {

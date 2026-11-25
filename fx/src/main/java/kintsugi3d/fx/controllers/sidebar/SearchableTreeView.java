@@ -28,7 +28,7 @@ import java.util.Iterator;
 
 public final class SearchableTreeView extends SearchableView
 {
-    private final TreeView<String> treeView;
+    private final @NotNull TreeView<String> treeView;
     private TreeItem<String> backupRoot;
 
     private SearchableTreeView(@NotNull TreeView<String> treeView, @NotNull TextInputControl searchTextInput, @NotNull CheckBox regexMode)
@@ -38,7 +38,7 @@ public final class SearchableTreeView extends SearchableView
     }
 
     @Override
-    public SearchableTreeView bind()
+    public @NotNull SearchableTreeView bind()
     {
         backupRoot = deepCopy(treeView.getRoot());
 
@@ -53,7 +53,7 @@ public final class SearchableTreeView extends SearchableView
         return this;
     }
 
-    public static SearchableTreeView createUnboundInstance(TreeView<String> tree, TextInputControl textInput, CheckBox regexMode)
+    public static @NotNull SearchableTreeView createUnboundInstance(@NotNull TreeView<String> tree, @NotNull TextInputControl textInput, @NotNull CheckBox regexMode)
     {
         return new SearchableTreeView(tree, textInput, regexMode);
     }
@@ -97,12 +97,12 @@ public final class SearchableTreeView extends SearchableView
         }
     }
 
-    private static void removeNonRootItem(TreeView<String> treeView, String toRemove)
+    private static void removeNonRootItem(@NotNull TreeView<String> treeView, String toRemove)
     {
         removeNonRootItemRecursive(treeView.getRoot().getChildren().iterator(), toRemove);
     }
 
-    private static boolean removeNonRootItemRecursive(Iterator<TreeItem<String>> current, String toRemove)
+    private static boolean removeNonRootItemRecursive(@NotNull Iterator<TreeItem<String>> current, String toRemove)
     {
         while (current.hasNext()) // Iterate to search sibling nodes if needed
         {
@@ -123,7 +123,7 @@ public final class SearchableTreeView extends SearchableView
         return false;
     }
 
-    private static TreeItem<String> deepCopy(TreeItem<String> item)
+    private static @NotNull TreeItem<String> deepCopy(@NotNull TreeItem<String> item)
     {
         TreeItem<String> copy = new TreeItem<>(item.getValue(), item.getGraphic());
         for (TreeItem<String> child : item.getChildren())
@@ -133,14 +133,14 @@ public final class SearchableTreeView extends SearchableView
         return copy;
     }
 
-    private static ObservableList<TreeItem<String>> getTreeViewGroups(TreeItem<String> backupRoot)
+    private static @NotNull ObservableList<TreeItem<String>> getTreeViewGroups(@NotNull TreeItem<String> backupRoot)
     {
         ObservableList<TreeItem<String>> list = FXCollections.observableArrayList();
         getTreeViewGroupsRec(backupRoot, list);
         return list;
     }
 
-    private static void getTreeViewGroupsRec(TreeItem<String> item, ObservableList<TreeItem<String>> list)
+    private static void getTreeViewGroupsRec(@NotNull TreeItem<String> item, @NotNull ObservableList<TreeItem<String>> list)
     {
         if (!item.getChildren().isEmpty())
         {
@@ -153,14 +153,14 @@ public final class SearchableTreeView extends SearchableView
         }
     }
 
-    private static ObservableList<TreeItem<String>> getTreeViewLeaves(TreeItem<String> backupRoot)
+    private static @NotNull ObservableList<TreeItem<String>> getTreeViewLeaves(@NotNull TreeItem<String> backupRoot)
     {
         ObservableList<TreeItem<String>> list = FXCollections.observableArrayList();
         getTreeViewLeavesRec(backupRoot, list);
         return list;
     }
 
-    private static void getTreeViewLeavesRec(TreeItem<String> item, ObservableList<TreeItem<String>> list)
+    private static void getTreeViewLeavesRec(@NotNull TreeItem<String> item, @NotNull ObservableList<TreeItem<String>> list)
     {
         if (item.isLeaf())
         {

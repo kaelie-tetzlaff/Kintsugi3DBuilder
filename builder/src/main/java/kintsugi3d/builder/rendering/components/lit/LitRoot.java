@@ -22,11 +22,12 @@ import kintsugi3d.builder.resources.LightingResources;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
 import kintsugi3d.gl.core.ReadonlyVertexBuffer;
+import org.jetbrains.annotations.NotNull;
 
 public class LitRoot<ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
     private final ContextType context;
-    private final LightingResources<ContextType> lightingResources;
+    private final @NotNull LightingResources<ContextType> lightingResources;
     private final LitContent<ContextType> litContentRoot;
 
     /**
@@ -35,7 +36,7 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
      * @param sceneModel
      * @param litContentRoot Transfers ownership of the lit content to this object
      */
-    public LitRoot(ContextType context, SceneModel sceneModel, LitContent<ContextType> litContentRoot)
+    public LitRoot(ContextType context, SceneModel sceneModel, @NotNull LitContent<ContextType> litContentRoot)
     {
         this.context = context;
         lightingResources = new LightingResources<>(context, sceneModel);
@@ -71,7 +72,7 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
     }
 
     @Override
-    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, @NotNull CameraViewport cameraViewport)
     {
         setupForDraw(cameraViewport);
         litContentRoot.draw(framebuffer, cameraViewport);
@@ -79,13 +80,13 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
 
     @Override
     public final void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight,
-                                         CameraViewport cameraViewport)
+                                         @NotNull CameraViewport cameraViewport)
     {
         setupForDraw(cameraViewport);
         litContentRoot.drawInSubdivisions(framebuffer, subdivWidth, subdivHeight, cameraViewport);
     }
 
-    private void setupForDraw(CameraViewport cameraViewport)
+    private void setupForDraw(@NotNull CameraViewport cameraViewport)
     {
         lightingResources.refreshShadowMaps();
 

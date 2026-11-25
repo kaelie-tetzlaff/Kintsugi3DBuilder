@@ -18,6 +18,7 @@ package kintsugi3d.builder.fit;
 import kintsugi3d.builder.fit.settings.ReadonlyBasisSettings;
 import kintsugi3d.gl.interactive.ShaderResources;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class SpecularFitResourcesWrapper<ContextType extends Context<ContextType>>
@@ -37,7 +38,7 @@ public class SpecularFitResourcesWrapper<ContextType extends Context<ContextType
         basisSettings = null;
     }
 
-    public final ShaderResources<ContextType> wrap(ShaderResources<ContextType> base)
+    public final @NotNull ShaderResources<ContextType> wrap(ShaderResources<ContextType> base)
     {
         return new SpecularFitResources<>(base, smithMaskingShadowing, basisSettings);
     }

@@ -19,6 +19,7 @@ import kintsugi3d.builder.io.gltf.MaterialExporter;
 import kintsugi3d.builder.io.gltf.MaterialExporterFactory;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.NotNull;
 
 public final class EeveeExporterFactory implements MaterialExporterFactory
 {
@@ -33,7 +34,7 @@ public final class EeveeExporterFactory implements MaterialExporterFactory
     }
 
     @Override
-    public MaterialExporter getExporter(ReadonlyTextureResources<? extends Context<?>> resources)
+    public @NotNull MaterialExporter getExporter(ReadonlyTextureResources<? extends Context<?>> resources)
     {
         BlenderExporter exporter = new BlenderExporter(false);
         exporter.setTextureResources(resources);

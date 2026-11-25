@@ -28,6 +28,7 @@ import javafx.util.StringConverter;
 import kintsugi3d.fx.util.SafeLogScaleNumberStringConverter;
 import kintsugi3d.fx.util.SafeNumberStringConverter;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -86,7 +87,7 @@ public class SettingsCameraSceneController implements Initializable
         distanceSlider.setLabelFormatter(new StringConverter<>()
         {
             @Override
-            public String toString(Double object)
+            public @NotNull String toString(@NotNull Double object)
             {
                 String out = n10.toString(object);
                 if (out.length() >= 4)
@@ -126,7 +127,7 @@ public class SettingsCameraSceneController implements Initializable
         }
     };
 
-    public final ChangeListener<ObservableCameraSettings> getChangeListener()
+    public final @NotNull ChangeListener<ObservableCameraSettings> getChangeListener()
     {
         return changeListener;
     }
@@ -136,7 +137,7 @@ public class SettingsCameraSceneController implements Initializable
         root.setDisable(disabled);
     }
 
-    private void bind(ObservableCameraSettings camera)
+    private void bind(@NotNull ObservableCameraSettings camera)
     {
 
         xCenterTextField.textProperty().bindBidirectional(camera.xCenterProperty(), n);
@@ -165,7 +166,7 @@ public class SettingsCameraSceneController implements Initializable
         focalLength.bindBidirectional(camera.focalLengthProperty());
     }
 
-    private void unbind(ObservableCameraSettings camera)
+    private void unbind(@NotNull ObservableCameraSettings camera)
     {
 
         xCenterTextField.textProperty().unbindBidirectional(camera.xCenterProperty());

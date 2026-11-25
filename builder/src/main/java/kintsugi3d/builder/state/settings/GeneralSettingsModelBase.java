@@ -15,6 +15,9 @@
 
 package kintsugi3d.builder.state.settings;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
@@ -38,7 +41,7 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
 
     @SuppressWarnings("unchecked")
     @Override
-    public final <T> T get(String name, Class<T> settingType)
+    public final <T> @NotNull T get(String name, @NotNull Class<T> settingType)
     {
         if (exists(name))
         {
@@ -53,7 +56,7 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
     }
 
     @Override
-    public final void set(String name, Object value)
+    public final void set(String name, @Nullable Object value)
     {
         if (exists(name))
         {
@@ -73,7 +76,7 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
     }
 
     @Override
-    public final void copyAllFrom(ReadonlyGeneralSettingsModel other)
+    public final void copyAllFrom(@NotNull ReadonlyGeneralSettingsModel other)
     {
         for (Setting s : other)
         {
@@ -85,7 +88,7 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
     }
 
     @Override
-    public final void copyFrom(ReadonlyGeneralSettingsModel other, Collection<String> settingNames)
+    public final void copyFrom(@NotNull ReadonlyGeneralSettingsModel other, @NotNull Collection<String> settingNames)
     {
         for (String name : settingNames)
         {
@@ -97,7 +100,7 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
     }
 
     @Override
-    public final void copyFrom(ReadonlyGeneralSettingsModel other, String... settingNames)
+    public final void copyFrom(@NotNull ReadonlyGeneralSettingsModel other, String @NotNull ... settingNames)
     {
         for (String name : settingNames)
         {

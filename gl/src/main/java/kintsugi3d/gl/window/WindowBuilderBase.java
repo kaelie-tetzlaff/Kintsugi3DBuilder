@@ -15,6 +15,8 @@
 
 package kintsugi3d.gl.window;
 
+import org.jetbrains.annotations.NotNull;
+
 public abstract class WindowBuilderBase<WindowType extends PollableWindow> implements WindowBuilder<WindowType>
 {
     private final String title;
@@ -77,28 +79,28 @@ public abstract class WindowBuilderBase<WindowType extends PollableWindow> imple
     }
 
     @Override
-    public final WindowBuilderBase<WindowType> setX(int x)
+    public final @NotNull WindowBuilderBase<WindowType> setX(int x)
     {
         this.x = x;
         return this;
     }
 
     @Override
-    public final WindowBuilderBase<WindowType> setY(int y)
+    public final @NotNull WindowBuilderBase<WindowType> setY(int y)
     {
         this.y = y;
         return this;
     }
 
     @Override
-    public final WindowBuilderBase<WindowType> setResizable(boolean resizable)
+    public final @NotNull WindowBuilderBase<WindowType> setResizable(boolean resizable)
     {
         this.resizable = resizable;
         return this;
     }
 
     @Override
-    public final WindowBuilderBase<WindowType> setMultisamples(int multisamples)
+    public final @NotNull WindowBuilderBase<WindowType> setMultisamples(int multisamples)
     {
         this.multisamples = multisamples;
         return this;

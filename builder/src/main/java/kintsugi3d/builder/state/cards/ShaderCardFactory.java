@@ -20,6 +20,7 @@ import kintsugi3d.builder.state.shader.ShaderInfo;
 import kintsugi3d.builder.state.shader.SimpleShaderInfo;
 import kintsugi3d.builder.util.AppIcon;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,7 @@ public class ShaderCardFactory extends ProjectDataCardFactoryBase<ShaderInfo>
     }
 
     @Override
-    public final Class<ShaderInfo> getDataClass()
+    public final @NotNull Class<ShaderInfo> getDataClass()
     {
         return ShaderInfo.class;
     }
@@ -56,7 +57,7 @@ public class ShaderCardFactory extends ProjectDataCardFactoryBase<ShaderInfo>
      @param fileName
      @return ProjectDataCard of the shader (single card).
     */
-    private ProjectDataCard createCard(String title, String fileName)
+    private @NotNull ProjectDataCard createCard(String title, String fileName)
     {
         // Creates shader with given title and filename
         ShaderInfo shader = new SimpleShaderInfo(title, fileName);
@@ -69,7 +70,7 @@ public class ShaderCardFactory extends ProjectDataCardFactoryBase<ShaderInfo>
      * @return ProjectDataCard of the shader (single card).
      */
     @Override
-    public final ProjectDataCard createCard(ShaderInfo shader)
+    public final @NotNull ProjectDataCard createCard(@NotNull ShaderInfo shader)
     {
         return new ShaderDataCard(shader.getFilename(), shader, AppIcon.PATH, null, Map.of(), List.of(), true);
     }
@@ -81,7 +82,7 @@ public class ShaderCardFactory extends ProjectDataCardFactoryBase<ShaderInfo>
      @return
      */
     @Override
-    public final List<ProjectDataCard> createAllCards()
+    public final @NotNull List<ProjectDataCard> createAllCards()
     {
         // shaderDataCards is an arraylist that will hold all shaders user can use
         List<ProjectDataCard> shaderDataCards = new ArrayList<>(9);

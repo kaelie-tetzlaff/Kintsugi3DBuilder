@@ -15,6 +15,8 @@
 
 package kintsugi3d.fx.controllers.paged;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.function.Supplier;
 
 public class NonDataPageBuilder<FinishType> extends SimplePageBuilder<Object, Object, FinishType>
@@ -26,27 +28,27 @@ public class NonDataPageBuilder<FinishType> extends SimplePageBuilder<Object, Ob
 
     @Override
     public final <ControllerType extends NonSupplierPageController<? super Object>>
-    NonDataPageBuilder<FinishType> then(String fxmlPath, Supplier<ControllerType> controllerConstructorOverride)
+    @NotNull NonDataPageBuilder<FinishType> then(String fxmlPath, Supplier<ControllerType> controllerConstructorOverride)
     {
         return thenNonData(fxmlPath, controllerConstructorOverride);
     }
 
     @Override
     public final <ControllerType extends NonSupplierPageController<? super Object>>
-    NonDataPageBuilder<FinishType> then(String fxmlPath)
+    @NotNull NonDataPageBuilder<FinishType> then(String fxmlPath)
     {
         return this.<ControllerType>thenNonData(fxmlPath);
     }
 
     @Override
     public final <ControllerType extends SelectionPageController<Object>>
-    NonDataSelectionPageBuilder<FinishType> thenSelect(String prompt, Supplier<ControllerType> controllerConstructorOverride)
+    @NotNull NonDataSelectionPageBuilder<FinishType> thenSelect(String prompt, Supplier<ControllerType> controllerConstructorOverride)
     {
         return thenSelectNonData(prompt, controllerConstructorOverride);
     }
 
     @Override
-    public final NonDataSelectionPageBuilder<FinishType> thenSelect(String prompt)
+    public final @NotNull NonDataSelectionPageBuilder<FinishType> thenSelect(String prompt)
     {
         return this.<SelectionPageController<Object>>thenSelect(prompt, null);
     }

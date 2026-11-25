@@ -86,7 +86,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
     private final String internalName;
 
-    private final SceneModel sceneModel;
+    private final @NotNull SceneModel sceneModel;
 
     private ProgramObject<ContextType> simpleTexProgram;
     private DrawableResource<ContextType> simpleTexDrawable;
@@ -99,7 +99,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     private RenderingSubject<ContextType> subject;
 
     private DynamicResourceLoader<ContextType> dynamicResourceLoader;
-    private final SceneViewportModel sceneViewportModel;
+    private final @NotNull SceneViewportModel sceneViewportModel;
 
     private static final int SHADING_FRAMEBUFFER_COUNT = 2;
     private final Collection<FramebufferObject<ContextType>> shadingFramebuffers = new ArrayList<>(SHADING_FRAMEBUFFER_COUNT);
@@ -130,8 +130,8 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         sceneViewportModel = createSceneViewportModel(sceneModel);
     }
 
-    private static <K, V> Observer<MappedChange<K, V>> getMappedChangeObserver(
-        TabsHelper tabsHelper, String tabName, Class<V> dataClass, Function<String, K> keyConstructor)
+    private static <K, V> @NotNull Observer<MappedChange<K, V>> getMappedChangeObserver(
+        @NotNull TabsHelper tabsHelper, String tabName, Class<V> dataClass, @NotNull Function<String, K> keyConstructor)
     {
         return change ->
         {
@@ -152,8 +152,8 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         };
     }
 
-    private static <V> Observer<MappedChange<String, V>> getMappedChangeObserver(
-        TabsHelper tabsHelper, String tabName, Class<V> dataClass)
+    private static <V> @NotNull Observer<MappedChange<String, V>> getMappedChangeObserver(
+        @NotNull TabsHelper tabsHelper, String tabName, Class<V> dataClass)
     {
         return getMappedChangeObserver(tabsHelper, tabName, dataClass, Function.identity());
     }
@@ -163,7 +163,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         return loaded;
     }
 
-    private static SceneViewportModel createSceneViewportModel(SceneModel sceneModel)
+    private static @NotNull SceneViewportModel createSceneViewportModel(SceneModel sceneModel)
     {
         SceneViewportModel sceneViewportModel = new SceneViewportModel(sceneModel);
         sceneViewportModel.addSceneObjectType("SceneObject");
@@ -176,7 +176,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         return internalName;
     }
 
-    public final EventListeners<ProjectLoadedListener> projectLoadedListeners()
+    public final @NotNull EventListeners<ProjectLoadedListener> projectLoadedListeners()
     {
         return projectLoaded;
     }
@@ -393,7 +393,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         }
     }
 
-    private Matrix4 getProjectionMatrix(FramebufferSize size)
+    private @NotNull Matrix4 getProjectionMatrix(@NotNull FramebufferSize size)
     {
         float scale = sceneModel.getScale();
 
@@ -402,7 +402,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
                 0.01f * scale, 100.0f * scale);
     }
 
-    private Vector3 calculateClearColor()
+    private @NotNull Vector3 calculateClearColor()
     {
         float maxLuminance = (float) SRGB.fromLinear(getResources().getViewSet().getLuminanceEncoding().getDecodeFunction().applyAsDouble(255.0));
         return new Vector3(
@@ -412,7 +412,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final void draw(Framebuffer<ContextType> framebuffer, Matrix4 modelViewOverride, Matrix4 projectionOverride,
+    public final void draw(@NotNull Framebuffer<ContextType> framebuffer, @Nullable Matrix4 modelViewOverride, @Nullable Matrix4 projectionOverride,
                            int subdivWidth, int subdivHeight)
     {
         try
@@ -609,7 +609,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final String toString()
+    public final @NotNull String toString()
     {
         return internalName.length() > 32
                 ? String.format("...%s", internalName.substring(internalName.length() - 31))
@@ -647,7 +647,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final void saveGLTF(File outputDirectory, String filename, ExportSettings settings, Runnable finishedCallback)
+    public final void saveGLTF(@Nullable File outputDirectory, @NotNull String filename, @NotNull ExportSettings settings, @Nullable Runnable finishedCallback)
     {
         if (outputDirectory != null)
         {

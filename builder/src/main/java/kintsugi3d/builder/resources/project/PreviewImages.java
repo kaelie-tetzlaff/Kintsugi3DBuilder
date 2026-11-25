@@ -51,8 +51,8 @@ class PreviewImages
     private @Nullable ImageHelper fullResImage;
     private BufferedImage undistortedPreviewImage;
 
-    PreviewImages(View view, ProgressMonitor progressMonitor,
-                  AtomicInteger finishedCount, AtomicInteger failedCount)
+    PreviewImages(@NotNull View view, @NotNull ProgressMonitor progressMonitor,
+                  @NotNull AtomicInteger finishedCount, @NotNull AtomicInteger failedCount)
     {
         this.view = view;
         this.progressMonitor = progressMonitor;
@@ -110,7 +110,7 @@ class PreviewImages
         return view.getCameraProjection() instanceof DistortionProjection;
     }
 
-    final <ContextType extends Context<ContextType>> void tryGenerateUndistortedPreviewImage(ContextType context)
+    final <ContextType extends Context<ContextType>> void tryGenerateUndistortedPreviewImage(@NotNull ContextType context)
     {
         try
         {
@@ -149,7 +149,7 @@ class PreviewImages
     /**
      * Uses graphics context to undistort if necessary, and resizes and saves as necessary.
      */
-    final <ContextType extends Context<ContextType>> void tryCreateMissingFiles(ContextType context)
+    final <ContextType extends Context<ContextType>> void tryCreateMissingFiles(@NotNull ContextType context)
     {
         if (needsUndistortion() && missingPreview && undistortedPreviewImage == null)
         {
@@ -218,7 +218,7 @@ class PreviewImages
         }
     }
 
-    private Resolution getThumbnailResolution()
+    private @NotNull Resolution getThumbnailResolution()
     {
         ImageHelper validatedFullResImage = validateFullResImage();
         int fullWidth = validatedFullResImage.getBufferedImage().getWidth();

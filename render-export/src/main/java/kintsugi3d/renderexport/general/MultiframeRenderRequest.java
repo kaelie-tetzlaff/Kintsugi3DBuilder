@@ -22,6 +22,8 @@ import kintsugi3d.builder.resources.project.ReadonlyGraphicsResourcesImageSpace;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,7 +52,7 @@ final class MultiframeRenderRequest extends RenderRequestBase
         }
 
         @Override
-        public final ImageBasedGraphicsRequest create()
+        public final @NotNull ImageBasedGraphicsRequest create()
         {
             return new MultiframeRenderRequest(getWidth(), getHeight(), frameCount, getShaderSetupCallback(),
                 getVertexShader(), getFragmentShader(), getOutputDirectory());
@@ -58,7 +60,7 @@ final class MultiframeRenderRequest extends RenderRequestBase
     }
 
     @Override
-    public <ContextType extends Context<ContextType>> void executeRequest(ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
+    public <ContextType extends Context<ContextType>> void executeRequest(@NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @Nullable ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         ReadonlyGraphicsResourcesImageSpace<ContextType> resources = renderable.getResources();

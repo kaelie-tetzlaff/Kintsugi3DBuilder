@@ -23,6 +23,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Window;
 import kintsugi3d.fx.core.JavaFXState;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
@@ -32,7 +33,7 @@ public class ExternalApplicationSettingsController implements SystemSettingsCont
     private Label blenderLocationLabel;
 
     @FXML
-    private void assignApplication(MouseEvent e)
+    private void assignApplication(@NotNull MouseEvent e)
     {
         // Should only ever be called by a label
         Label label = (Label) e.getSource();
@@ -61,7 +62,7 @@ public class ExternalApplicationSettingsController implements SystemSettingsCont
     }
 
     @Override
-    public final void initializePage(Window parentWindow, JavaFXState state)
+    public final void initializePage(Window parentWindow, @NotNull JavaFXState state)
     {
         blenderLocationLabel.textProperty().bindBidirectional(state.getSettingsModel().getObjectProperty("blenderLocation", String.class));
     }

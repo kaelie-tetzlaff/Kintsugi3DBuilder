@@ -21,6 +21,7 @@ import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.material.ImportedMaterial;
 import kintsugi3d.gl.material.ReadonlyImportedMaterial;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,18 +49,18 @@ public final class ImportedMaterialResources<ContextType extends Context<Context
         return context;
     }
 
-    public Map<StandardTexture, Texture2D<ContextType>> getTextures()
+    public @NotNull Map<StandardTexture, Texture2D<ContextType>> getTextures()
     {
         return Collections.unmodifiableMap(textures);
     }
 
-    public static <ContextType extends Context<ContextType>> ImportedMaterialResources<ContextType> createNull()
+    public static <ContextType extends Context<ContextType>> @NotNull ImportedMaterialResources<ContextType> createNull()
     {
         return new ImportedMaterialResources<>();
     }
 
-    public static <ContextType extends Context<ContextType>> ImportedMaterialResources<ContextType> createFromMaterial(
-        ContextType context, ImportedMaterial material, File textureDirectory, TextureLoadOptions loadOptions) throws IOException
+    public static <ContextType extends Context<ContextType>> @NotNull ImportedMaterialResources<ContextType> createFromMaterial(
+        @NotNull ContextType context, @NotNull ImportedMaterial material, File textureDirectory, @NotNull TextureLoadOptions loadOptions) throws IOException
     {
         return new ImportedMaterialResources<>(context, material, textureDirectory, loadOptions);
     }
@@ -69,7 +70,7 @@ public final class ImportedMaterialResources<ContextType extends Context<Context
         context = null;
     }
 
-    private ImportedMaterialResources(ContextType context, ReadonlyImportedMaterial material, File textureDirectory, TextureLoadOptions loadOptions) throws IOException
+    private ImportedMaterialResources(@NotNull ContextType context, @NotNull ReadonlyImportedMaterial material, File textureDirectory, @NotNull TextureLoadOptions loadOptions) throws IOException
     {
         this.context = context;
 

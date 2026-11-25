@@ -27,6 +27,7 @@ import kintsugi3d.gl.vecmath.DoubleVector3;
 import kintsugi3d.gl.vecmath.DoubleVector4;
 import kintsugi3d.util.CubicHermiteSpline;
 import kintsugi3d.util.SRGB;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.IntStream;
@@ -42,7 +43,7 @@ public class SampledLuminanceEncoding
         encodeFunction = decoded -> SRGB.fromLinear(decoded) * 255.0;
     }
 
-    public SampledLuminanceEncoding(double[] linear, byte[] encoded)
+    public SampledLuminanceEncoding(double @NotNull [] linear, byte @NotNull [] encoded)
     {
         if (linear.length != encoded.length)
         {
@@ -107,7 +108,7 @@ public class SampledLuminanceEncoding
         this.encodeFunction = encodeFunction;
     }
 
-    private ReadonlyNativeVectorBuffer sampleDecodeFunction()
+    private @NotNull ReadonlyNativeVectorBuffer sampleDecodeFunction()
     {
         NativeVectorBuffer sampledDecodeFunction = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 1, 256);
         for (int i = 0; i < 256; i++)
@@ -118,7 +119,7 @@ public class SampledLuminanceEncoding
         return sampledDecodeFunction;
     }
 
-    private ReadonlyNativeVectorBuffer sampleEncodeFunction()
+    private @NotNull ReadonlyNativeVectorBuffer sampleEncodeFunction()
     {
         NativeVectorBuffer sampledEncodeFunction = NativeVectorBufferFactory.createEmpty(NativeDataType.FLOAT, 1, 256);
         for (int i = 0; i < 256; i++)
@@ -129,7 +130,7 @@ public class SampledLuminanceEncoding
         return sampledEncodeFunction;
     }
 
-    public final DoubleVector3 encode(DoubleVector3 decoded)
+    public final @NotNull DoubleVector3 encode(@NotNull DoubleVector3 decoded)
     {
         if (decoded.x <= 0.0 && decoded.y <= 0.0 && decoded.z <= 0.0)
         {
@@ -165,13 +166,13 @@ public class SampledLuminanceEncoding
         }
     }
 
-    public final DoubleVector4 encode(DoubleVector4 decoded)
+    public final @NotNull DoubleVector4 encode(@NotNull DoubleVector4 decoded)
     {
         // Leave alpha unchanged other than normalization.
         return encode(decoded.getXYZ()).asVector4(decoded.w * 255.0);
     }
 
-    public final DoubleVector3 decode(DoubleVector3 encoded)
+    public final @NotNull DoubleVector3 decode(@NotNull DoubleVector3 encoded)
     {
         if (encoded.x <= 0.0 && encoded.y <= 0.0 && encoded.z <= 0.0)
         {
@@ -206,13 +207,13 @@ public class SampledLuminanceEncoding
         }
     }
 
-    public final DoubleVector4 decode(DoubleVector4 encoded)
+    public final @NotNull DoubleVector4 decode(@NotNull DoubleVector4 encoded)
     {
         // Leave alpha unchanged other than normalization.
         return decode(encoded.getXYZ()).asVector4(encoded.w / 255.0);
     }
 
-    public final <ContextType extends Context<ContextType>> Texture1D<ContextType> createLuminanceMap(ContextType context)
+    public final <ContextType extends Context<ContextType>> Texture1D<ContextType> createLuminanceMap(@NotNull ContextType context)
     {
         return context.getTextureFactory().build1DColorTexture(sampleDecodeFunction())
                 .setInternalFormat(ColorFormat.R32F)
@@ -220,7 +221,7 @@ public class SampledLuminanceEncoding
                 .createTexture();
     }
 
-    public final <ContextType extends Context<ContextType>> Texture1D<ContextType> createInverseLuminanceMap(ContextType context)
+    public final <ContextType extends Context<ContextType>> Texture1D<ContextType> createInverseLuminanceMap(@NotNull ContextType context)
     {
         return context.getTextureFactory().build1DColorTexture(sampleEncodeFunction())
                 .setInternalFormat(ColorFormat.R32F)
@@ -228,7 +229,7 @@ public class SampledLuminanceEncoding
                 .createTexture();
     }
 
-    public final <ContextType extends Context<ContextType>>LuminanceMapResources<ContextType> createResources(ContextType context)
+    public final <ContextType extends Context<ContextType>> @NotNull LuminanceMapResources<ContextType> createResources(ContextType context)
     {
         return LuminanceMapResources.createFromEncoding(context, this);
     }

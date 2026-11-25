@@ -18,6 +18,7 @@ package kintsugi3d.optimization;
 import org.ejml.data.SingularMatrixException;
 import org.ejml.dense.row.CommonOps_DDRM;
 import org.ejml.simple.SimpleMatrix;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,8 +36,8 @@ public final class NonNegativeLeastSquares
     {
     }
 
-    private static SimpleMatrix solvePartial(
-        SimpleMatrix mATA, SimpleMatrix vATb, boolean[] p, List<Integer> mapping, SimpleMatrix sOut, int constraintCount)
+    private static @NotNull SimpleMatrix solvePartial(
+        @NotNull SimpleMatrix mATA, @NotNull SimpleMatrix vATb, boolean @NotNull [] p, @NotNull List<Integer> mapping, @NotNull SimpleMatrix sOut, int constraintCount)
     {
         for (int index = 0; index < p.length; index++)
         {
@@ -80,7 +81,7 @@ public final class NonNegativeLeastSquares
         return sForP;
     }
 
-    private static double minNonConstraint(SimpleMatrix s, int constraintCount)
+    private static double minNonConstraint(@NotNull SimpleMatrix s, int constraintCount)
     {
         return IntStream.range(0, s.numRows() - constraintCount)
             .mapToDouble(s::get)
@@ -95,7 +96,7 @@ public final class NonNegativeLeastSquares
      * @param epsilon The allowed tolerance at which the algorithm will terminate.
      * @return The non-negative least squares solution.
      */
-    public static SimpleMatrix solve(SimpleMatrix mA, SimpleMatrix b, double epsilon)
+    public static SimpleMatrix solve(@NotNull SimpleMatrix mA, @NotNull SimpleMatrix b, double epsilon)
     {
         if (b.numCols() != 1 || b.numRows() != mA.numRows())
         {
@@ -120,7 +121,7 @@ public final class NonNegativeLeastSquares
      * @param epsilon The allowed tolerance at which the algorithm will terminate.
      * @return The non-negative least squares solution.
      */
-    public static SimpleMatrix solvePremultiplied(SimpleMatrix mATA, SimpleMatrix vATb, double epsilon)
+    public static SimpleMatrix solvePremultiplied(@NotNull SimpleMatrix mATA, @NotNull SimpleMatrix vATb, double epsilon)
     {
         return solvePremultipliedWithEqualityConstraints(mATA, vATb, epsilon, 0);
     }
@@ -144,8 +145,8 @@ public final class NonNegativeLeastSquares
      *                        and the final k rows and columns are where the constraints are provided.
      * @return The non-negative least squares solution, augmented with the Lagrange multipliers for the equality constraints.
      */
-    public static SimpleMatrix solvePremultipliedWithEqualityConstraints(
-        SimpleMatrix augmentedATA, SimpleMatrix augmentedATb, double epsilon, int constraintCount)
+    public static @NotNull SimpleMatrix solvePremultipliedWithEqualityConstraints(
+        @NotNull SimpleMatrix augmentedATA, @NotNull SimpleMatrix augmentedATb, double epsilon, int constraintCount)
     {
         if (augmentedATA.numCols() != augmentedATA.numRows())
         {

@@ -18,6 +18,7 @@ package kintsugi3d.gl.builders.base;
 import kintsugi3d.gl.builders.DepthStencilTextureBuilder;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Texture;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class DepthStencilTextureBuilderBase<ContextType extends Context<ContextType>, TextureType extends Texture<ContextType>> 
     extends TextureBuilderBase<ContextType, TextureType> implements DepthStencilTextureBuilder<ContextType, TextureType>
@@ -35,42 +36,42 @@ public abstract class DepthStencilTextureBuilderBase<ContextType extends Context
     }
 
     @Override
-    public final DepthStencilTextureBuilderBase<ContextType, TextureType> setFloatingPointDepthEnabled(boolean enabled)
+    public final @NotNull DepthStencilTextureBuilderBase<ContextType, TextureType> setFloatingPointDepthEnabled(boolean enabled)
     {
         floatingPoint = enabled;
         return this;
     }
 
     @Override
-    public final DepthStencilTextureBuilderBase<ContextType, TextureType> setMultisamples(int samples, boolean fixedSampleLocations)
+    public final @NotNull DepthStencilTextureBuilderBase<ContextType, TextureType> setMultisamples(int samples, boolean fixedSampleLocations)
     {
         super.setMultisamples(samples, fixedSampleLocations);
         return this;
     }
 
     @Override
-    public final DepthStencilTextureBuilderBase<ContextType, TextureType> setMipmapsEnabled(boolean enabled)
+    public final @NotNull DepthStencilTextureBuilderBase<ContextType, TextureType> setMipmapsEnabled(boolean enabled)
     {
         super.setMipmapsEnabled(enabled);
         return this;
     }
 
     @Override
-    public final DepthStencilTextureBuilderBase<ContextType, TextureType> setMaxMipmapLevel(int maxMipmapLevel)
+    public final @NotNull DepthStencilTextureBuilderBase<ContextType, TextureType> setMaxMipmapLevel(int maxMipmapLevel)
     {
         super.setMaxMipmapLevel(maxMipmapLevel);
         return this;
     }
 
     @Override
-    public final DepthStencilTextureBuilderBase<ContextType, TextureType> setLinearFilteringEnabled(boolean enabled)
+    public final @NotNull DepthStencilTextureBuilderBase<ContextType, TextureType> setLinearFilteringEnabled(boolean enabled)
     {
         super.setLinearFilteringEnabled(enabled);
         return this;
     }
 
     @Override
-    public final DepthStencilTextureBuilderBase<ContextType, TextureType> setMaxAnisotropy(float maxAnisotropy)
+    public final @NotNull DepthStencilTextureBuilderBase<ContextType, TextureType> setMaxAnisotropy(float maxAnisotropy)
     {
         super.setMaxAnisotropy(maxAnisotropy);
         return this;

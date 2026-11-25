@@ -16,6 +16,7 @@
 package kintsugi3d.gl.types;
 
 import kintsugi3d.gl.nativebuffer.NativeDataType;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.*;
 import java.util.Iterator;
@@ -31,7 +32,7 @@ public final class AbstractDataTypeFactory
     {
     }
 
-    static Consumer<Number> wrapByteBuffer(ByteBuffer baseBuffer, NativeDataType nativeDataType)
+    static @NotNull Consumer<Number> wrapByteBuffer(@NotNull ByteBuffer baseBuffer, @NotNull NativeDataType nativeDataType)
     {
         switch(nativeDataType)
         {
@@ -61,7 +62,7 @@ public final class AbstractDataTypeFactory
         }
     }
 
-    static BiConsumer<Integer, Number> wrapIndexedByteBuffer(ByteBuffer baseBuffer, NativeDataType nativeDataType)
+    static @NotNull BiConsumer<Integer, Number> wrapIndexedByteBuffer(@NotNull ByteBuffer baseBuffer, @NotNull NativeDataType nativeDataType)
     {
         switch(nativeDataType)
         {
@@ -121,7 +122,7 @@ public final class AbstractDataTypeFactory
         }
 
         @Override
-        public Consumer<Iterable<? extends Number>> wrapByteBuffer(ByteBuffer baseBuffer)
+        public @NotNull Consumer<Iterable<? extends Number>> wrapByteBuffer(@NotNull ByteBuffer baseBuffer)
         {
             Consumer<Number> componentConsumer = AbstractDataTypeFactory.wrapByteBuffer(baseBuffer, nativeDataType);
 
@@ -144,7 +145,7 @@ public final class AbstractDataTypeFactory
         }
 
         @Override
-        public BiConsumer<Integer, Iterable<? extends Number>> wrapIndexedByteBuffer(ByteBuffer baseBuffer)
+        public @NotNull BiConsumer<Integer, Iterable<? extends Number>> wrapIndexedByteBuffer(@NotNull ByteBuffer baseBuffer)
         {
             BiConsumer<Integer, Number> componentConsumer = AbstractDataTypeFactory.wrapIndexedByteBuffer(baseBuffer, nativeDataType);
 
@@ -195,13 +196,13 @@ public final class AbstractDataTypeFactory
         }
 
         @Override
-        public Consumer<Number> wrapByteBuffer(ByteBuffer baseBuffer)
+        public @NotNull Consumer<Number> wrapByteBuffer(@NotNull ByteBuffer baseBuffer)
         {
             return AbstractDataTypeFactory.wrapByteBuffer(baseBuffer, nativeDataType);
         }
 
         @Override
-        public BiConsumer<Integer, Number> wrapIndexedByteBuffer(ByteBuffer baseBuffer)
+        public @NotNull BiConsumer<Integer, Number> wrapIndexedByteBuffer(@NotNull ByteBuffer baseBuffer)
         {
             return AbstractDataTypeFactory.wrapIndexedByteBuffer(baseBuffer, nativeDataType);
         }
@@ -212,7 +213,7 @@ public final class AbstractDataTypeFactory
      * @param nativeType The internal type of each element.
      * @return An AbstractDataType representing a single component of the specified internal type.
      */
-    public static AbstractDataType<Number> getSingleComponentDataType(NativeDataType nativeType)
+    public static @NotNull AbstractDataType<Number> getSingleComponentDataType(NativeDataType nativeType)
     {
         return new SingleComponentDataType(nativeType);
     }
@@ -223,7 +224,7 @@ public final class AbstractDataTypeFactory
      * @param componentCount The number of components.
      * @return An AbstractDataType representing a vector with the specified number of components of the specified internal type.
      */
-    public static AbstractDataType<Iterable<? extends Number>> getMultiComponentDataType(NativeDataType nativeType, int componentCount)
+    public static @NotNull AbstractDataType<Iterable<? extends Number>> getMultiComponentDataType(NativeDataType nativeType, int componentCount)
     {
         return new MultiComponentDataType(nativeType, componentCount);
     }

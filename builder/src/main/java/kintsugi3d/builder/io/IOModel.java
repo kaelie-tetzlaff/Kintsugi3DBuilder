@@ -40,6 +40,7 @@ import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.material.ReadonlyImportedMaterial;
 import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.util.EncodableColorImage;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,7 +105,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public final ProgressMonitor getAggregateProgressMonitor()
+    public final @NotNull ProgressMonitor getAggregateProgressMonitor()
     {
         return progressMonitor;
     }
@@ -127,13 +128,13 @@ public class IOModel implements IO
     }
 
     @Override
-    public final EventListeners<ProjectOpenedListener> projectOpenedListeners()
+    public final @NotNull EventListeners<ProjectOpenedListener> projectOpenedListeners()
     {
         return projectOpened;
     }
 
     @Override
-    public final EventListeners<ProjectSavedListener> projectSavedListeners()
+    public final @NotNull EventListeners<ProjectSavedListener> projectSavedListeners()
     {
         return projectSaved;
     }
@@ -151,7 +152,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public final EventListeners<ProjectClosedListener> projectClosedListeners()
+    public final @NotNull EventListeners<ProjectClosedListener> projectClosedListeners()
     {
         return projectClosed;
     }
@@ -181,13 +182,13 @@ public class IOModel implements IO
     }
 
     @Override
-    public final File getViewSetFile()
+    public final @Nullable File getViewSetFile()
     {
         return currentViewSetFile;
     }
 
     @Override
-    public final File getProjectFile()
+    public final @Nullable File getProjectFile()
     {
         return currentProjectFile;
     }
@@ -231,7 +232,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public final void hotSwapLooseFiles(String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions)
+    public final void hotSwapLooseFiles(String internalName, File xmlFile, @NotNull ViewSetLoadOptions viewSetLoadOptions)
     {
         load(() ->
         {
@@ -268,7 +269,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public final void loadExistingProject(File projectFile)
+    public final void loadExistingProject(@NotNull File projectFile)
     {
         //need to check for conflicting process early so crucial info isn't unloaded
         if (progressMonitor.isConflictingProcess())
@@ -303,7 +304,7 @@ public class IOModel implements IO
         loadExistingProject(projectFile, vsetFile);
     }
 
-    private void loadExistingProject(File projectFile, File vsetFile)
+    private void loadExistingProject(@NotNull File projectFile, @Nullable File vsetFile)
     {
         if (vsetFile != null)
         {
@@ -355,7 +356,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public final void saveProject(File projectFile, Runnable finishedCallback) throws IOException
+    public final void saveProject(@NotNull File projectFile, Runnable finishedCallback) throws IOException
     {
         ViewSet viewSet = getLoadedViewSetOrNull();
 
@@ -408,7 +409,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public final File getViewSetFileForProject(File projectFile) throws IOException
+    public final @NotNull File getViewSetFileForProject(@NotNull File projectFile) throws IOException
     {
         try
         {
@@ -433,7 +434,7 @@ public class IOModel implements IO
         return openProjectFileAsXMLDocument(projectFile, new ErrorLogger());
     }
 
-    private static String getViewSetFilenameFromXMLDocument(Document document) throws IOException
+    private static @NotNull String getViewSetFilenameFromXMLDocument(@NotNull Document document) throws IOException
     {
         Node vsetNode = document.getElementsByTagName("ViewSet").item(0);
         if (vsetNode instanceof Element)
@@ -447,7 +448,7 @@ public class IOModel implements IO
         }
     }
 
-    private static void saveXMLProject(File projectFile, File vsetFile) throws IOException
+    private static void saveXMLProject(@NotNull File projectFile, @NotNull File vsetFile) throws IOException
     {
         try
         {
@@ -474,7 +475,7 @@ public class IOModel implements IO
         }
     }
 
-    private void setViewsetDirectories(File projectFile, ViewSet viewSet)
+    private void setViewsetDirectories(@Nullable File projectFile, @NotNull ViewSet viewSet)
     {
         if (projectFile != null)
         {
@@ -507,7 +508,7 @@ public class IOModel implements IO
         handler.loadBackplate(backplateFile);
     }
 
-    private static File getDefaultSupportingFilesDirectory(File projectFile)
+    private static @NotNull File getDefaultSupportingFilesDirectory(@NotNull File projectFile)
     {
         return new File(projectFile.getParentFile(), projectFile.getName() + ".files");
     }
@@ -554,7 +555,7 @@ public class IOModel implements IO
      * @param srcFile
      * @param destDir
      */
-    private static void copyFileSafe(File srcFile, File destDir)
+    private static void copyFileSafe(@Nullable File srcFile, @NotNull File destDir)
     {
         if (srcFile != null)
         {
@@ -628,7 +629,7 @@ public class IOModel implements IO
         }
     }
 
-    private static File getMasksDestinationDirectory(ReadonlyViewSet viewSet)
+    private static @NotNull File getMasksDestinationDirectory(@NotNull ReadonlyViewSet viewSet)
     {
         File masksDestParentDir = viewSet.getSupportingFilesDirectory();
 
@@ -716,7 +717,7 @@ public class IOModel implements IO
         }
     }
 
-    private void copyTextures(File textureDirectory)
+    private void copyTextures(@Nullable File textureDirectory)
     {
         if (textureDirectory != null)
         {
@@ -742,7 +743,7 @@ public class IOModel implements IO
         }
     }
 
-    private void copyTexturesFromSupplier(TextureSupplier textureSupplier)
+    private void copyTexturesFromSupplier(@NotNull TextureSupplier textureSupplier)
     {
         for (Entry<String, File> entry : textureSupplier.getTextures().entrySet())
         {
@@ -750,7 +751,7 @@ public class IOModel implements IO
         }
     }
 
-    private void copyTexture(File originalFile, String texName)
+    private void copyTexture(@Nullable File originalFile, String texName)
     {
         if (originalFile != null && originalFile.exists())
         {

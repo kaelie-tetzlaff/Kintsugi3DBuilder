@@ -25,6 +25,8 @@ import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.gl.builders.framebuffer.FramebufferObjectBuilder;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.util.ShaderHoleFill;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +44,7 @@ public class FinalDiffuseOptimization<ContextType extends Context<ContextType>> 
             "An experimental texture for translucency fitting.");
 
     // Graphics context
-    private final ContextType context;
+    private final @Nullable ContextType context;
 
     // Final diffuse estimation program
     private final ProgramObject<ContextType> estimationProgram;
@@ -56,8 +58,8 @@ public class FinalDiffuseOptimization<ContextType extends Context<ContextType>> 
     private final DrawableResource<ContextType> drawable;
 
     public FinalDiffuseOptimization(
-        ShaderResources<ContextType> resources,
-        TextureResolution textureResolution, boolean includeConstant)
+        @NotNull ShaderResources<ContextType> resources,
+        @NotNull TextureResolution textureResolution, boolean includeConstant)
         throws IOException
     {
         context = resources.getContext();
@@ -72,7 +74,7 @@ public class FinalDiffuseOptimization<ContextType extends Context<ContextType>> 
     }
 
     private static <ContextType extends Context<ContextType>> FramebufferObject<ContextType> createFramebuffer(
-        ContextType context, TextureResolution texSettings, boolean includeConstant)
+        @NotNull ContextType context, @NotNull TextureResolution texSettings, boolean includeConstant)
     {
         FramebufferObjectBuilder<ContextType> builder = context
             .buildFramebufferObject(texSettings.width, texSettings.height)
@@ -87,7 +89,7 @@ public class FinalDiffuseOptimization<ContextType extends Context<ContextType>> 
         return builder.createFramebufferObject();
     }
 
-    public final void execute(ReadonlyTextureResources<ContextType> specularFit)
+    public final void execute(@NotNull ReadonlyTextureResources<ContextType> specularFit)
     {
         // Set up diffuse estimation shader program
         specularFit.getBasisResources().useWithShaderProgram(estimationProgram);
@@ -153,19 +155,19 @@ public class FinalDiffuseOptimization<ContextType extends Context<ContextType>> 
         return framebuffer.getColorAttachmentTexture(0);
     }
 
-    public final Map<TextureInfo, Texture2D<ContextType>> getNonStandardTextures()
+    public final @NotNull Map<TextureInfo, Texture2D<ContextType>> getNonStandardTextures()
     {
         return includeConstant ? Map.of(CONSTANT_TRANSLUCENCY_MAP, framebuffer.getColorAttachmentTexture(1)) : Map.of();
     }
 
     private static <ContextType extends Context<ContextType>>
-    ProgramObject<ContextType> createDiffuseEstimationProgram(ShaderProgramFactory<ContextType> programFactory) throws IOException
+    ProgramObject<ContextType> createDiffuseEstimationProgram(@NotNull ShaderProgramFactory<ContextType> programFactory) throws IOException
     {
         return programFactory.createProgram(
             new File("shaders/common/texspace_dynamic.vert"), new File("shaders/specularfit/estimateDiffuse.frag"));
     }
     private static <ContextType extends Context<ContextType>>
-    ProgramObject<ContextType> createDiffuseTranslucentEstimationProgram(ShaderProgramFactory<ContextType> programFactory) throws IOException
+    ProgramObject<ContextType> createDiffuseTranslucentEstimationProgram(@NotNull ShaderProgramFactory<ContextType> programFactory) throws IOException
     {
         return programFactory.createProgram(
             new File("shaders/common/texspace_dynamic.vert"), new File("shaders/specularfit/estimateDiffuseTranslucent.frag"));

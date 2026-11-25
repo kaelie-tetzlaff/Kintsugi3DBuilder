@@ -22,6 +22,7 @@ import kintsugi3d.gl.core.Texture2D;
 import kintsugi3d.gl.nativebuffer.NativeDataType;
 import kintsugi3d.gl.nativebuffer.NativeVectorBuffer;
 import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.DoubleUnaryOperator;
 
@@ -35,7 +36,7 @@ public class RadialTextureGenerator<ContextType extends Context<ContextType>>
     }
 
     public final ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>> buildRadialTexture(
-        int size, DoubleUnaryOperator radialFunction)
+        int size, @NotNull DoubleUnaryOperator radialFunction)
     {
         NativeVectorBuffer textureData = NativeVectorBufferFactory
             .createEmpty(NativeDataType.FLOAT, 1, size * size);

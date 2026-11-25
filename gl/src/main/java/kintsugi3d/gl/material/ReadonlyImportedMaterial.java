@@ -16,6 +16,7 @@
 package kintsugi3d.gl.material;
 
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.Nullable;
 
 public interface ReadonlyImportedMaterial
 {
@@ -47,37 +48,37 @@ public interface ReadonlyImportedMaterial
 
     float getTranslucency();
 
-    ReadonlyMaterialColorMap getAmbientMap();
+    @Nullable ReadonlyMaterialColorMap getAmbientMap();
 
-    ReadonlyMaterialColorMap getDiffuseMap();
+    @Nullable ReadonlyMaterialColorMap getDiffuseMap();
 
-    ReadonlyMaterialColorMap getSpecularMap();
+    @Nullable ReadonlyMaterialColorMap getSpecularMap();
 
-    ReadonlyMaterialScalarMap getExponentMap();
+    @Nullable ReadonlyMaterialScalarMap getExponentMap();
 
-    ReadonlyMaterialScalarMap getRoughnessMap();
+    @Nullable ReadonlyMaterialScalarMap getRoughnessMap();
 
-    ReadonlyMaterialScalarMap getOpacityMap();
+    @Nullable ReadonlyMaterialScalarMap getOpacityMap();
 
-    ReadonlyMaterialScalarMap getTransparencyMap();
+    @Nullable ReadonlyMaterialScalarMap getTransparencyMap();
 
-    ReadonlyMaterialScalarMap getTranslucencyMap();
+    @Nullable ReadonlyMaterialScalarMap getTranslucencyMap();
 
-    ReadonlyMaterialColorMap getEmissionMap();
+    @Nullable ReadonlyMaterialColorMap getEmissionMap();
 
-    ReadonlyMaterialScalarMap getMetallicMap();
+    @Nullable ReadonlyMaterialScalarMap getMetallicMap();
 
-    ReadonlyMaterialColorMap getSheenMap();
+    @Nullable ReadonlyMaterialColorMap getSheenMap();
 
-    ReadonlyMaterialScalarMap getAnisotropyMap();
+    @Nullable ReadonlyMaterialScalarMap getAnisotropyMap();
 
-    ReadonlyMaterialScalarMap getAnisotropyRotationMap();
+    @Nullable ReadonlyMaterialScalarMap getAnisotropyRotationMap();
 
-    ReadonlyMaterialBumpMap getBumpMap();
+    @Nullable ReadonlyMaterialBumpMap getBumpMap();
 
-    ReadonlyMaterialTextureMap getNormalMap();
+    @Nullable ReadonlyMaterialTextureMap getNormalMap();
 
-    ReadonlyMaterialScalarMap getDisplacementMap();
+    @Nullable ReadonlyMaterialScalarMap getDisplacementMap();
 
-    ReadonlyMaterialScalarMap getAmbientOcclusionMap();
+    @Nullable ReadonlyMaterialScalarMap getAmbientOcclusionMap();
 }

@@ -24,6 +24,7 @@ import kintsugi3d.builder.util.events.EventListeners;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.util.EncodableColorImage;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -58,7 +59,7 @@ public interface IO
 
     ViewSet getLoadedViewSetOrNull();
 
-    default ViewSet getLoadedViewSetOrThrow()
+    default @NotNull ViewSet getLoadedViewSetOrThrow()
     {
         ViewSet viewSet = getLoadedViewSetOrNull();
         if (viewSet == null)

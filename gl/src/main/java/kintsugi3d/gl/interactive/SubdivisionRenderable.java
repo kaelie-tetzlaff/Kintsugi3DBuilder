@@ -19,6 +19,7 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Framebuffer;
 import kintsugi3d.gl.core.FramebufferSize;
 import kintsugi3d.gl.vecmath.Matrix4;
+import org.jetbrains.annotations.NotNull;
 
 @FunctionalInterface
 public interface SubdivisionRenderable<ContextType extends Context<ContextType>> extends Renderable<ContextType>
@@ -38,7 +39,7 @@ public interface SubdivisionRenderable<ContextType extends Context<ContextType>>
     void draw(Framebuffer<ContextType> framebuffer, Matrix4 modelViewOverride, Matrix4 projectionOverride, int subdivWidth, int subdivHeight);
 
     @Override
-    default void draw(Framebuffer<ContextType> framebuffer, Matrix4 modelViewOverride, Matrix4 projectionOverride)
+    default void draw(@NotNull Framebuffer<ContextType> framebuffer, Matrix4 modelViewOverride, Matrix4 projectionOverride)
     {
         FramebufferSize framebufferSize = framebuffer.getSize();
         draw(framebuffer, modelViewOverride, projectionOverride, framebufferSize.width, framebufferSize.height);

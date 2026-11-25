@@ -26,6 +26,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import kintsugi3d.fx.controllers.modals.createnewproject.inputsources.ValidatedInputSource;
 import kintsugi3d.fx.controllers.paged.DataReceiverPageControllerBase;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
@@ -96,7 +97,7 @@ public class MasksImportController
     }
 
     @FXML
-    private void chooseMasksDir(ActionEvent e)
+    private void chooseMasksDir(@NotNull ActionEvent e)
     {
         // Don't show directory chooser when deselecting
         if (!customMasksDirButton.isSelected())

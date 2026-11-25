@@ -15,6 +15,8 @@
 
 package kintsugi3d.builder.state.shader;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.Map;
 import java.util.Objects;
@@ -52,14 +54,14 @@ public class SimpleShaderInfo implements ShaderInfo
     }
 
     @Override
-    public final File getFile()
+    public final @NotNull File getFile()
     {
         return new File(SHADER_DIR, filename);
     }
 
     @SuppressWarnings("DesignForExtension")
     @Override
-    public Map<String, Optional<Object>> getDefines()
+    public @NotNull Map<String, Optional<Object>> getDefines()
     {
         return Map.of();
     }

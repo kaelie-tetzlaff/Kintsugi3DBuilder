@@ -17,6 +17,8 @@ package kintsugi3d.builder.util;
 
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -77,7 +79,7 @@ public final class Kintsugi3DViewerLauncher
         return executable;
     }
 
-    private static Optional<File> getFromPath()
+    private static @NotNull Optional<File> getFromPath()
     {
         @SuppressWarnings("CallToSystemGetenv") String path = System.getenv("PATH");
 
@@ -134,7 +136,7 @@ public final class Kintsugi3DViewerLauncher
         return Optional.empty();
     }
 
-    private static Optional<File> getExecFromDirectory(File dir)
+    private static @NotNull Optional<File> getExecFromDirectory(@NotNull File dir)
     {
         // Match "Kintsugi3DViewer", "Kintsugi3DViewer.exe" and "Kintsugi3DViewer.app"
         File[] foundFiles = dir.listFiles((dir1, name) -> KINTSUGI_3D_VIEWER.matcher(name).matches());
@@ -163,7 +165,7 @@ public final class Kintsugi3DViewerLauncher
      * @throws IOException Unknown error
      * @throws IllegalStateException Kintsugi 3D Viewer is not installed or not found
      */
-    public static void launchViewer(File modelFile) throws IOException
+    public static void launchViewer(@Nullable File modelFile) throws IOException
     {
         Optional<File> execOpt = getViewerExecutableLocation();
         if (execOpt.isEmpty())

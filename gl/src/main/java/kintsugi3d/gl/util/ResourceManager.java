@@ -16,6 +16,7 @@
 package kintsugi3d.gl.util;
 
 import kintsugi3d.gl.exceptions.NoAvailableTextureUnitsException;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,8 +25,8 @@ import java.util.List;
 public class ResourceManager<ResourceType>
 {
     private final int length;
-    private final int[] keys;
-    private final Object[] resources;
+    private final int @NotNull [] keys;
+    private final Object @NotNull [] resources;
     private int nextSlot;
 
     public ResourceManager(int length)
@@ -74,7 +75,7 @@ public class ResourceManager<ResourceType>
         return (ResourceType)resources[index];
     }
 
-    public final List<ResourceType> asReadonlyList()
+    public final @NotNull List<ResourceType> asReadonlyList()
     {
         //noinspection unchecked
         return Collections.unmodifiableList((List<ResourceType>)Arrays.asList(resources));

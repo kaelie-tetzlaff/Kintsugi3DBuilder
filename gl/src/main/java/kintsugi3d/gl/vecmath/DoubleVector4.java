@@ -74,32 +74,32 @@ public class DoubleVector4 implements Iterable<Double>
         this(value, value, value, value);
     }
 
-    public final DoubleVector2 getXY()
+    public final @NotNull DoubleVector2 getXY()
     {
         return new DoubleVector2(x, y);
     }
 
-    public final DoubleVector3 getXYZ()
+    public final @NotNull DoubleVector3 getXYZ()
     {
         return new DoubleVector3(x, y, z);
     }
 
-    public final IntVector4 rounded()
+    public final @NotNull IntVector4 rounded()
     {
         return new IntVector4((int)Math.round(x), (int)Math.round(y), (int)Math.round(z), (int)Math.round(w));
     }
 
-    public final IntVector4 truncated()
+    public final @NotNull IntVector4 truncated()
     {
         return new IntVector4((int) x, (int) y, (int) z, (int) w);
     }
 
-    public final Vector4 asSinglePrecision()
+    public final @NotNull Vector4 asSinglePrecision()
     {
         return new Vector4((float)x, (float)y, (float)z, (float)w);
     }
 
-    public final DoubleVector4 plus(DoubleVector4 other)
+    public final @NotNull DoubleVector4 plus(@NotNull DoubleVector4 other)
     {
         return new DoubleVector4(
             x + other.x,
@@ -109,7 +109,7 @@ public class DoubleVector4 implements Iterable<Double>
         );
     }
 
-    public final DoubleVector4 minus(DoubleVector4 other)
+    public final @NotNull DoubleVector4 minus(@NotNull DoubleVector4 other)
     {
         return new DoubleVector4(
             x - other.x,
@@ -119,32 +119,32 @@ public class DoubleVector4 implements Iterable<Double>
         );
     }
 
-    public final DoubleVector4 negated()
+    public final @NotNull DoubleVector4 negated()
     {
         return new DoubleVector4(-x, -y, -z, -w);
     }
 
-    public final DoubleVector4 times(double s)
+    public final @NotNull DoubleVector4 times(double s)
     {
         return new DoubleVector4(s* x, s* y, s* z, s* w);
     }
 
-    public final DoubleVector4 dividedBy(double s)
+    public final @NotNull DoubleVector4 dividedBy(double s)
     {
         return new DoubleVector4(x/s, y/s, z/s, w/s);
     }
 
-    public final DoubleVector4 times(DoubleVector4 other)
+    public final @NotNull DoubleVector4 times(@NotNull DoubleVector4 other)
     {
         return new DoubleVector4(x * other.x, y * other.y, z * other.z, w * other.w);
     }
 
-    public final DoubleVector4 dividedBy(DoubleVector4 other)
+    public final @NotNull DoubleVector4 dividedBy(@NotNull DoubleVector4 other)
     {
         return new DoubleVector4(x / other.x, y / other.y, z / other.z, w * other.w);
     }
 
-    public final double dot(DoubleVector4 other)
+    public final double dot(@NotNull DoubleVector4 other)
     {
         return x * other.x + y * other.y + z * other.z + w * other.w;
     }
@@ -154,7 +154,7 @@ public class DoubleVector4 implements Iterable<Double>
      * @param other The vector to use when computing the outer product.
      * @return The matrix that is the outer product of the vectors.
      */
-    public final DoubleMatrix4 outerProduct(DoubleVector4 other)
+    public final @NotNull DoubleMatrix4 outerProduct(@NotNull DoubleVector4 other)
     {
         return DoubleMatrix4.fromColumns(
             new DoubleVector4(x * other.x, y * other.x, z * other.x, w * other.x),
@@ -169,12 +169,12 @@ public class DoubleVector4 implements Iterable<Double>
         return Math.sqrt(dot(this));
     }
 
-    public final double distance(DoubleVector4 other)
+    public final double distance(@NotNull DoubleVector4 other)
     {
         return minus(other).length();
     }
 
-    public final DoubleVector4 normalized()
+    public final @NotNull DoubleVector4 normalized()
     {
         return times(1.0 / length());
     }
@@ -183,7 +183,7 @@ public class DoubleVector4 implements Iterable<Double>
      * magnitude (a length of 1.0).  If this vector has zero length, it will return itself.
      * @return A new vector equal to this vector divided by it's length except in cases of a zero-length vector.
      */
-    public final DoubleVector4 normalizedSafe()
+    public final @NotNull DoubleVector4 normalizedSafe()
     {
         double l = length();
         if (l == 0.0f)
@@ -196,7 +196,7 @@ public class DoubleVector4 implements Iterable<Double>
         }
     }
 
-    public final DoubleVector4 applyOperator(DoubleUnaryOperator operator)
+    public final @NotNull DoubleVector4 applyOperator(@NotNull DoubleUnaryOperator operator)
     {
         return new DoubleVector4(operator.applyAsDouble(x), operator.applyAsDouble(y), operator.applyAsDouble(z), operator.applyAsDouble(w));
     }
@@ -206,13 +206,13 @@ public class DoubleVector4 implements Iterable<Double>
      * @param operator
      * @return
      */
-    public final DoubleVector4 applyOperatorXYZ(DoubleUnaryOperator operator)
+    public final @NotNull DoubleVector4 applyOperatorXYZ(@NotNull DoubleUnaryOperator operator)
     {
         return new DoubleVector4(operator.applyAsDouble(x), operator.applyAsDouble(y), operator.applyAsDouble(z), w);
     }
 
     @Override
-    public final String toString()
+    public final @NotNull String toString()
     {
         return String.format("DoubleVector4{x=%s, y=%s, z=%s, w=%s}", x, y, z, w);
     }

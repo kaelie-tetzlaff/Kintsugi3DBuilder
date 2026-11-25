@@ -21,6 +21,7 @@ import kintsugi3d.builder.io.RecentProjects;
 import kintsugi3d.builder.io.ViewSetReaderFromVSET;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.util.ApplicationFolders;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,12 +45,12 @@ public abstract class CacheModelBase implements CacheModel
 {
     private static final Logger LOG = LoggerFactory.getLogger(CacheModelBase.class);
 
-    private final AtomicBoolean cacheCleanupInProgress;
+    private final @NotNull AtomicBoolean cacheCleanupInProgress;
 
     /**
      * Lock for multithreaded cache size calculation.
      */
-    private final Object cacheSizeCalcThreadLock;
+    private final @NotNull Object cacheSizeCalcThreadLock;
 
     /**
      * This thread will be set to a non-null value while running, and null otherwise
@@ -78,7 +79,7 @@ public abstract class CacheModelBase implements CacheModel
 
     protected abstract void removeAllCacheSizeChangeCallbacks();
 
-    protected static Map<File, Consumer<File[]>> getDeleteMethods()
+    protected static @NotNull Map<File, Consumer<File[]>> getDeleteMethods()
     {
         File previewCacheDir = ApplicationFolders.getPreviewImagesRootDirectory().toFile();
         File fitCacheDir = ApplicationFolders.getFitCacheRootDirectory().toFile();
@@ -88,12 +89,12 @@ public abstract class CacheModelBase implements CacheModel
             fitCacheDir, files -> tryDeleteFitCacheFiles(fitCacheDir, files));
     }
 
-    private static Collection<File> getCleanableCacheDirectories()
+    private static @NotNull Collection<File> getCleanableCacheDirectories()
     {
         return getDeleteMethods().keySet();
     }
 
-    private static void handleCacheCleanupError(Exception e)
+    private static void handleCacheCleanupError(@NotNull Exception e)
     {
         LOG.error(e.toString());
         Global.state().getProjectModel().error(
@@ -139,7 +140,7 @@ public abstract class CacheModelBase implements CacheModel
         });
     }
 
-    private static void clearCache(File directory, Consumer<File[]> deleteMethod) throws IOException
+    private static void clearCache(@NotNull File directory, @NotNull Consumer<File[]> deleteMethod) throws IOException
     {
         if (!directory.isDirectory())
         {
@@ -154,7 +155,7 @@ public abstract class CacheModelBase implements CacheModel
         deleteMethod.accept(projects);
     }
 
-    private static void deletePreviewCacheFiles(File directory, File[] projects) throws IOException
+    private static void deletePreviewCacheFiles(@NotNull File directory, File @NotNull [] projects) throws IOException
     {
         for (File project : projects)
         {
@@ -216,7 +217,7 @@ public abstract class CacheModelBase implements CacheModel
         }
     }
 
-    private static void tryDeletePreviewCacheFiles(File directory, File[] projects)
+    private static void tryDeletePreviewCacheFiles(@NotNull File directory, File @NotNull [] projects)
     {
         try
         {
@@ -228,7 +229,7 @@ public abstract class CacheModelBase implements CacheModel
         }
     }
 
-    private static void deleteFitCacheFiles(File directory, File[] projects) throws IOException
+    private static void deleteFitCacheFiles(@NotNull File directory, File @NotNull [] projects) throws IOException
     {
         for (File project : projects)
         {
@@ -332,7 +333,7 @@ public abstract class CacheModelBase implements CacheModel
         }
     }
 
-    private static void tryDeleteFitCacheFiles(File directory, File[] projects)
+    private static void tryDeleteFitCacheFiles(@NotNull File directory, File @NotNull [] projects)
     {
         try
         {
@@ -345,7 +346,7 @@ public abstract class CacheModelBase implements CacheModel
     }
 
     @Override
-    public final void requestCleanUpBothCaches(Map<File, Consumer<File[]>> deleteMethods)
+    public final void requestCleanUpBothCaches(@NotNull Map<File, Consumer<File[]>> deleteMethods)
     {
         new Thread(() -> cleanCacheSubDirs(deleteMethods), "Clean Up Cache").start();
     }
@@ -355,7 +356,7 @@ public abstract class CacheModelBase implements CacheModel
      *
      * @param deleteMethods
      */
-    private void cleanCacheSubDirs(Map<File, Consumer<File[]>> deleteMethods)
+    private void cleanCacheSubDirs(@NotNull Map<File, Consumer<File[]>> deleteMethods)
     {
         if (cacheCleanupInProgress.compareAndSet(false, true))
         {
@@ -446,7 +447,7 @@ public abstract class CacheModelBase implements CacheModel
         }
     }
 
-    private static void filterByRecentProjectLimit(File directory, List<File> oldProjects)
+    private static void filterByRecentProjectLimit(File directory, @NotNull List<File> oldProjects)
     {
         List<UUID> recentUUIDs = getRecentUUIDs(Global.state().getSettingsModel().getInt("recentProjectLimit"));
         for (UUID recentUUID : recentUUIDs)
@@ -463,7 +464,7 @@ public abstract class CacheModelBase implements CacheModel
         }
     }
 
-    private static void filterByFileAgeLimit(List<File> projects)
+    private static void filterByFileAgeLimit(@NotNull List<File> projects)
     {
         for (int i = projects.size() - 1; i >= 0; i--)
         {
@@ -557,7 +558,7 @@ public abstract class CacheModelBase implements CacheModel
         }
     }
 
-    private static Map<String, Collection<File>> getCleanableCacheProjects()
+    private static @NotNull Map<String, Collection<File>> getCleanableCacheProjects()
     {
         Map<String, Collection<File>> cleanableCacheProjects = new HashMap<>(getNumCachedProjects());
 
@@ -582,7 +583,7 @@ public abstract class CacheModelBase implements CacheModel
         return cleanableCacheProjects;
     }
 
-    private static List<UUID> getRecentUUIDs(int numProjectsToKeep)
+    private static @NotNull List<UUID> getRecentUUIDs(int numProjectsToKeep)
     {
         List<String> recentProjects = RecentProjects.getInstance().getRecentProjectFilenames().stream().limit(numProjectsToKeep).collect(Collectors.toList());
         // Load view sets of recent projects to get their UUID.
@@ -616,7 +617,7 @@ public abstract class CacheModelBase implements CacheModel
      * @param projectID       The name of project whose cache size is being calculated.
      * @return The total size of the cache over all projects.
      */
-    private long getDirectorySize(File directory, Map<String, Long> newProjectSizes, String projectID)
+    private long getDirectorySize(@NotNull File directory, @NotNull Map<String, Long> newProjectSizes, String projectID)
     {
         if (!Objects.equals(Thread.currentThread(), cacheSizeCalcThread))
         {
@@ -667,7 +668,7 @@ public abstract class CacheModelBase implements CacheModel
      * @param cacheSizeChangeCallback Runs only if the cache size changed.
      * @param onCompleteCallback      Always runs regardless of whether the cache size changed.  Also runs on the JavaFX thread.
      */
-    protected final void requestCacheSizeRefresh(DoubleConsumer cacheSizeChangeCallback, Runnable onCompleteCallback)
+    protected final void requestCacheSizeRefresh(DoubleConsumer cacheSizeChangeCallback, @Nullable Runnable onCompleteCallback)
     {
         synchronized (cacheSizeCalcThreadLock)
         {
@@ -723,7 +724,7 @@ public abstract class CacheModelBase implements CacheModel
      * @param postNewCacheSizes Handles actually posting the new cache size and individual project sizes,
      *                          guaranteed to be invoked from a synchronized context.
      */
-    protected final void synchronizedCacheSizeCalcComplete(Runnable postNewCacheSizes)
+    protected final void synchronizedCacheSizeCalcComplete(@NotNull Runnable postNewCacheSizes)
     {
         // prevent race condition if another call to requestCacheSizeRefresh comes in
         // while updating and cleaning up listeners.
@@ -755,7 +756,7 @@ public abstract class CacheModelBase implements CacheModel
      * @param newProjectSizes Will be populated with updated individual project cache sizes.
      * @return The total size of the cache over all projects.
      */
-    private long calcCacheSize(Map<String, Long> newProjectSizes)
+    private long calcCacheSize(@NotNull Map<String, Long> newProjectSizes)
     {
         // Calculates both the total cache size as well as individual project sizes.
         return getCleanableCacheDirectories().stream()

@@ -18,6 +18,7 @@ package kintsugi3d.builder.state.cards;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
@@ -45,7 +46,7 @@ public abstract class ProjectDataCardFactoryBase<T> implements ProjectDataCardFa
     }
 
     @Override
-    public final void refreshCards(List<ProjectDataCard> mutableCardList, RefreshFunction<T> refreshedData)
+    public final void refreshCards(@NotNull List<ProjectDataCard> mutableCardList, @NotNull RefreshFunction<T> refreshedData)
     {
         // Generate cards in parallel for efficiency
         List<Entry<Integer, ProjectDataCard>> entryList = IntStream.range(0, mutableCardList.size())

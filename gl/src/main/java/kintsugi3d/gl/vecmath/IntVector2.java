@@ -49,32 +49,32 @@ public class IntVector2 implements Iterable<Integer>
         this(value, value);
     }
 
-    public final IntVector3 asVector3(int z)
+    public final @NotNull IntVector3 asVector3(int z)
     {
         return new IntVector3(x, y, z);
     }
 
-    public final IntVector4 asVector4(int z, int w)
+    public final @NotNull IntVector4 asVector4(int z, int w)
     {
         return new IntVector4(x, y, z, w);
     }
 
-    public final Vector2 asFloatingPoint()
+    public final @NotNull Vector2 asFloatingPoint()
     {
         return new Vector2(x, y);
     }
 
-    public final Vector2 asFloatingPointNormalized()
+    public final @NotNull Vector2 asFloatingPointNormalized()
     {
         return new Vector2(x / 255.0f, y / 255.0f);
     }
 
-    public final DoubleVector2 asDoubleFloatingPoint()
+    public final @NotNull DoubleVector2 asDoubleFloatingPoint()
     {
         return new DoubleVector2(x, y);
     }
 
-    public final DoubleVector2 asDoubleFloatingPointNormalized()
+    public final @NotNull DoubleVector2 asDoubleFloatingPointNormalized()
     {
         return new DoubleVector2(x / 255.0, y / 255.0);
     }
@@ -99,7 +99,7 @@ public class IntVector2 implements Iterable<Integer>
         return 31 * (31 + x) + y;
     }
 
-    public final IntVector2 plus(IntVector2 other)
+    public final @NotNull IntVector2 plus(@NotNull IntVector2 other)
     {
         return new IntVector2(
             x + other.x,
@@ -107,7 +107,7 @@ public class IntVector2 implements Iterable<Integer>
         );
     }
 
-    public final IntVector2 minus(IntVector2 other)
+    public final @NotNull IntVector2 minus(@NotNull IntVector2 other)
     {
         return new IntVector2(
             x - other.x,
@@ -115,22 +115,22 @@ public class IntVector2 implements Iterable<Integer>
         );
     }
 
-    public final IntVector2 negated()
+    public final @NotNull IntVector2 negated()
     {
         return new IntVector2(-x, -y);
     }
 
-    public final IntVector2 times(int s)
+    public final @NotNull IntVector2 times(int s)
     {
         return new IntVector2(s* x, s* y);
     }
 
-    public final IntVector2 dividedBy(int s)
+    public final @NotNull IntVector2 dividedBy(int s)
     {
         return new IntVector2(x/s, y/s);
     }
 
-    public final int dot(IntVector2 other)
+    public final int dot(@NotNull IntVector2 other)
     {
         return x * other.x + y * other.y;
     }
@@ -140,18 +140,18 @@ public class IntVector2 implements Iterable<Integer>
         return Math.sqrt(dot(this));
     }
 
-    public final double distance(IntVector2 other)
+    public final double distance(@NotNull IntVector2 other)
     {
         return minus(other).length();
     }
 
-    public final IntVector2 applyOperator(IntUnaryOperator operator)
+    public final @NotNull IntVector2 applyOperator(@NotNull IntUnaryOperator operator)
     {
         return new IntVector2(operator.applyAsInt(x), operator.applyAsInt(y));
     }
 
     @Override
-    public final String toString()
+    public final @NotNull String toString()
     {
         return String.format("IntVector2{x=%d, y=%d}", x, y);
     }

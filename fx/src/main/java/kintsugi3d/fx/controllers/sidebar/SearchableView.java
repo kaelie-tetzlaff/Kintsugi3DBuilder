@@ -22,8 +22,8 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class SearchableView
 {
-    private final TextInputControl searchTextInput;
-    private final CheckBox regexMode;
+    private final @NotNull TextInputControl searchTextInput;
+    private final @Nullable CheckBox regexMode;
 
     SearchableView(@NotNull TextInputControl searchTextInput, @Nullable CheckBox regexMode)
     {

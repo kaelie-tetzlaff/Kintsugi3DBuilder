@@ -31,6 +31,7 @@ import kintsugi3d.builder.state.CarouselItem;
 import kintsugi3d.builder.state.shader.ShaderInfo;
 import kintsugi3d.fx.core.MainWindowController;
 import kintsugi3d.fx.internal.ObservableCarouselModel;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +72,7 @@ public class CarouselController
     private MainWindowController mainWindowBox;
 
     @SuppressWarnings("ParameterHidesMemberVariable")
-    public final void init(ObservableCarouselModel carouselModel, MainWindowController mainWindowBox)
+    public final void init(@NotNull ObservableCarouselModel carouselModel, MainWindowController mainWindowBox)
     {
         this.carouselModel = carouselModel;
         this.mainWindowBox = mainWindowBox;
@@ -325,7 +326,7 @@ public class CarouselController
      * @param event
      */
     @FXML
-    public final void mousePressed(MouseEvent event)
+    public final void mousePressed(@NotNull MouseEvent event)
     {
         dragStartY = event.getSceneY();
         initialHeight = mainBox.getHeight();
@@ -340,7 +341,7 @@ public class CarouselController
      * @param event
      */
     @FXML
-    public final void mouseDragged(MouseEvent event)
+    public final void mouseDragged(@NotNull MouseEvent event)
     {
         sizeLocked = false;
 

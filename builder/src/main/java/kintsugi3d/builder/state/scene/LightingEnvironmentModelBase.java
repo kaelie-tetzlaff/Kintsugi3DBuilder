@@ -17,6 +17,7 @@ package kintsugi3d.builder.state.scene;
 
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +26,11 @@ import java.util.function.IntFunction;
 public abstract class LightingEnvironmentModelBase<DiscreteLightType extends DiscreteLightModel> implements ManipulableLightingEnvironmentModel
 {
     private boolean lightWidgetsEthereal;
-    private final List<DiscreteLightType> lightInstanceModels;
-    private final LightWidgetModel[] lightWidgetModels;
+    private final @NotNull List<DiscreteLightType> lightInstanceModels;
+    private final LightWidgetModel @NotNull [] lightWidgetModels;
     private final EnvironmentModel environmentModel;
 
-    protected LightingEnvironmentModelBase(int lightCount, IntFunction<DiscreteLightType> lightInstanceCreator, EnvironmentModel environmentModel)
+    protected LightingEnvironmentModelBase(int lightCount, @NotNull IntFunction<DiscreteLightType> lightInstanceCreator, EnvironmentModel environmentModel)
     {
         lightInstanceModels = new ArrayList<>(lightCount);
         lightWidgetModels = new LightWidgetModel[lightCount];

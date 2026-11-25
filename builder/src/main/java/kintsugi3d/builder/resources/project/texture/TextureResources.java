@@ -23,6 +23,7 @@ import kintsugi3d.builder.fit.decomposition.MutableBasisResources;
 import kintsugi3d.builder.util.events.MappedChange;
 import kintsugi3d.builder.util.events.Observable;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -93,64 +94,64 @@ public interface TextureResources<ContextType extends Context<ContextType>>
 
     void setTexturesObservable(Observable<MappedChange<String, TextureInfo>> texturesObservable);
 
-    static String getTextureFilename(StandardTexture tex, String format)
+    static @NotNull String getTextureFilename(@NotNull StandardTexture tex, @NotNull String format)
     {
         return getTextureFilename(tex.getDetails().name, format);
     }
 
-    static String getTextureFilename(StandardTexture tex, String format, String filenamePrefix)
+    static @NotNull String getTextureFilename(@NotNull StandardTexture tex, @NotNull String format, String filenamePrefix)
     {
         return getTextureFilename(tex.getDetails().name, format, filenamePrefix);
     }
 
-    static String getTextureFilename(String texName, String format)
+    static @NotNull String getTextureFilename(String texName, @NotNull String format)
     {
         return getTextureFilename(texName, format, "");
     }
 
-    static String getTextureFilename(String texName)
+    static @NotNull String getTextureFilename(String texName)
     {
         return getTextureFilename(texName, "PNG");
     }
 
-    static String getTextureFilename(String texName, String format, String filenamePrefix)
+    static @NotNull String getTextureFilename(String texName, @NotNull String format, String filenamePrefix)
     {
         return String.format("%s%s.%s", filenamePrefix, texName, format.toLowerCase(Locale.ROOT));
     }
 
-    static String getPackedWeightMapFilename(int index, String format, String filenamePrefix)
+    static @NotNull String getPackedWeightMapFilename(int index, @NotNull String format, String filenamePrefix)
     {
         return getTextureFilename(getPackedWeightMapName(index), format, filenamePrefix);
     }
 
-    static String getPackedWeightMapFilename(int index, String format)
+    static @NotNull String getPackedWeightMapFilename(int index, @NotNull String format)
     {
         return getPackedWeightMapFilename(index, format, "");
     }
 
-    static String getPackedWeightMapFilename(int index)
+    static @NotNull String getPackedWeightMapFilename(int index)
     {
         return getPackedWeightMapFilename(index, "PNG");
     }
 
-    static String getPackedWeightMapName(int index)
+    static @NotNull String getPackedWeightMapName(int index)
     {
         int scaledWeightMapIndex = index * WEIGHTS_PER_CHANNEL_PACKED_IMAGE;
         return String.format("weights%02d%02d", scaledWeightMapIndex, scaledWeightMapIndex + (WEIGHTS_PER_CHANNEL_PACKED_IMAGE - 1));
     }
 
-    static File getTextureFile(StandardTexture t, File directory)
+    static @NotNull File getTextureFile(@NotNull StandardTexture t, File directory)
     {
         return getTextureFile(t.getDetails().name, directory);
     }
 
-    static File getTextureFile(String texName, File directory)
+    static @NotNull File getTextureFile(String texName, File directory)
     {
         return new File(directory, getTextureFilename(texName));
     }
 
     static <ContextType extends Context<ContextType>>
-    @Nullable Texture2D<ContextType> loadTexture(String texName, File directory, ContextType context) throws IOException
+    @Nullable Texture2D<ContextType> loadTexture(String texName, File directory, @NotNull ContextType context) throws IOException
     {
         // Load texture file
         File textureFile = getTextureFile(texName, directory);
@@ -169,22 +170,22 @@ public interface TextureResources<ContextType extends Context<ContextType>>
     }
 
     static <ContextType extends Context<ContextType>>
-    Texture2D<ContextType> loadTexture(StandardTexture tex, File directory, ContextType context) throws IOException
+    @Nullable Texture2D<ContextType> loadTexture(@NotNull StandardTexture tex, File directory, @NotNull ContextType context) throws IOException
     {
         return loadTexture(tex.getDetails().name, directory, context);
     }
 
-    default Texture2D<ContextType> loadTexture(String texName, File directory) throws IOException
+    default @Nullable Texture2D<ContextType> loadTexture(String texName, File directory) throws IOException
     {
         return loadTexture(texName, directory, getContext());
     }
 
-    default Texture2D<ContextType> loadTexture(StandardTexture tex, File directory) throws IOException
+    default @Nullable Texture2D<ContextType> loadTexture(@NotNull StandardTexture tex, File directory) throws IOException
     {
         return loadTexture(tex.getDetails().name, directory, getContext());
     }
 
-    static <ContextType extends Context<ContextType>> TextureResources<ContextType> makeNull(ContextType context)
+    static <ContextType extends Context<ContextType>> @NotNull TextureResources<ContextType> makeNull(@NotNull ContextType context)
     {
         return new TextureResources<>()
         {
@@ -207,7 +208,7 @@ public interface TextureResources<ContextType extends Context<ContextType>>
             }
 
             @Override
-            public Map<TextureInfo, Texture2D<ContextType>> getTextures()
+            public @NotNull Map<TextureInfo, Texture2D<ContextType>> getTextures()
             {
                 return Map.of();
             }

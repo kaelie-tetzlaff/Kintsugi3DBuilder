@@ -27,6 +27,8 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,8 +52,8 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
         this.basisOptimizationSettings = basisOptimizationSettings;
     }
 
-    public final <ContextType extends Context<ContextType>> TextureResources<ContextType> optimizeFitWithCache(
-        ReadonlyImageBasedGraphicsResources<ContextType> resources, ProgressMonitor monitor)
+    public final <ContextType extends Context<ContextType>> @NotNull TextureResources<ContextType> optimizeFitWithCache(
+        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, @Nullable ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         Instant start = Instant.now();
@@ -72,8 +74,8 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
         return optimizeFitWithCache(cache, monitor);
     }
 
-    private <ContextType extends Context<ContextType>> TextureResources<ContextType> optimizeFitWithCache(
-        ImageCache<ContextType> cache, ProgressMonitor monitor)
+    private <ContextType extends Context<ContextType>> @NotNull TextureResources<ContextType> optimizeFitWithCache(
+        @NotNull ImageCache<ContextType> cache, @Nullable ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         Instant start = Instant.now();
@@ -107,7 +109,7 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
     }
 
     public final <ContextType extends Context<ContextType>> SpecularFitOptimizable<ContextType> optimizeFit(
-        ReadonlyImageBasedGraphicsResources<ContextType> resources, ProgressMonitor monitor)
+        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         SpecularDecompositionFromScratch decomposition =
@@ -116,8 +118,8 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
         return optimizeFit(resources, decomposition, monitor);
     }
 
-    private <ContextType extends Context<ContextType>> SpecularFitOptimizable<ContextType> optimizeFit(
-        ReadonlyImageBasedGraphicsResources<ContextType> resources, SpecularDecompositionFromScratch decomposition, ProgressMonitor monitor)
+    private <ContextType extends Context<ContextType>> @NotNull SpecularFitOptimizable<ContextType> optimizeFit(
+        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, @NotNull SpecularDecompositionFromScratch decomposition, ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         SpecularFitResourcesWrapper<ContextType> programFactory = getResourcesWrapper();
@@ -174,7 +176,7 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
     }
 
     @Override
-    protected final <ContextType extends Context<ContextType>> SpecularFitResourcesWrapper<ContextType> getResourcesWrapper()
+    protected final <ContextType extends Context<ContextType>> @NotNull SpecularFitResourcesWrapper<ContextType> getResourcesWrapper()
     {
         return new SpecularFitResourcesWrapper<>(getSettings().isSmithMaskingShadowingEnabled(), basisOptimizationSettings);
     }

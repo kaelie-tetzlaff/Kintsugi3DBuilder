@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import kintsugi3d.gl.builders.ColorTextureBuilder;
 import kintsugi3d.gl.core.ColorFormat;
 import kintsugi3d.gl.core.CompressionFormat;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * For serialization purposes, this class should always return primitives
@@ -39,7 +40,7 @@ public interface ReadonlyLoadOptionsModel
     int getPreviewImageHeight();
 
     @JsonIgnore
-    default TextureLoadOptions getTextureLoadOptions()
+    default @NotNull TextureLoadOptions getTextureLoadOptions()
     {
         TextureLoadOptions options = new TextureLoadOptions();
         options.setMipmapsRequested(areMipmapsRequested());
@@ -47,7 +48,7 @@ public interface ReadonlyLoadOptionsModel
         return options;
     }
 
-    default <BuilderType extends ColorTextureBuilder<?,?>> void configureColorTextureBuilder(BuilderType colorTextureBuilder)
+    default <BuilderType extends ColorTextureBuilder<?,?>> void configureColorTextureBuilder(@NotNull BuilderType colorTextureBuilder)
     {
         if (isCompressionRequested())
         {

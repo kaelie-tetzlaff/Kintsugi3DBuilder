@@ -19,6 +19,7 @@ import javafx.application.Platform;
 import kintsugi3d.builder.state.CarouselItem;
 import kintsugi3d.builder.state.CarouselModel;
 import kintsugi3d.builder.state.shader.ShaderInfo;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +34,7 @@ public class SynchronizedCarouselModel implements CarouselModel
     }
 
     @Override
-    public final List<CarouselItem> getCarouselItems()
+    public final @NotNull List<CarouselItem> getCarouselItems()
     {
         return Collections.unmodifiableList(base.getCarouselItems());
     }

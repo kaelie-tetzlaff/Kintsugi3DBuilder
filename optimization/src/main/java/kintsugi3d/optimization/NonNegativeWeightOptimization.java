@@ -17,6 +17,7 @@ package kintsugi3d.optimization;
 
 import kintsugi3d.gl.stream.GraphicsStream;
 import org.ejml.simple.SimpleMatrix;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,9 +28,9 @@ public class NonNegativeWeightOptimization
 {
     public static final double DEFAULT_TOLERANCE_SCALE = 0.000000000001;
 
-    private final LeastSquaresMatrixBuilder matrixBuilder;
+    private final @NotNull LeastSquaresMatrixBuilder matrixBuilder;
 
-    public NonNegativeWeightOptimization(int sampleCount, int weightCount, List<IntToDoubleFunction> constraintWeights, List<Double> constraintsRHS)
+    public NonNegativeWeightOptimization(int sampleCount, int weightCount, @NotNull List<IntToDoubleFunction> constraintWeights, @NotNull List<Double> constraintsRHS)
     {
         matrixBuilder = new LeastSquaresMatrixBuilder(sampleCount, weightCount, constraintWeights, constraintsRHS);
     }
@@ -46,18 +47,18 @@ public class NonNegativeWeightOptimization
         this(sampleCount, weightCount, Collections.emptyList(), Collections.emptyList());
     }
 
-    public final <S, T> void buildMatrices(GraphicsStream<S> viewStream, LeastSquaresModel<S, T> leastSquaresModel, IntConsumer sampleValidator)
+    public final <S, T> void buildMatrices(@NotNull GraphicsStream<S> viewStream, @NotNull LeastSquaresModel<S, T> leastSquaresModel, @NotNull IntConsumer sampleValidator)
     {
         matrixBuilder.buildMatrices(viewStream, leastSquaresModel, sampleValidator);
     }
 
-    public final <S, T> void buildMatrices(GraphicsStream<S> viewStream, LeastSquaresModel<S, T> leastSquaresModel, IntConsumer sampleValidator,
+    public final <S, T> void buildMatrices(@NotNull GraphicsStream<S> viewStream, @NotNull LeastSquaresModel<S, T> leastSquaresModel, @NotNull IntConsumer sampleValidator,
                                            int rangeStart, int rangeEnd)
     {
         matrixBuilder.buildMatrices(viewStream, leastSquaresModel, sampleValidator, rangeStart, rangeEnd);
     }
 
-    public final void dampenWithPreviousSolution(double dampingFactor, IntFunction<IntToDoubleFunction> previousSolution)
+    public final void dampenWithPreviousSolution(double dampingFactor, @NotNull IntFunction<IntToDoubleFunction> previousSolution)
     {
         if (dampingFactor > 0.0)
         {
@@ -76,7 +77,7 @@ public class NonNegativeWeightOptimization
         }
     }
 
-    public final void optimizeWeights(IntPredicate areWeightsValid, BiConsumer<Integer, SimpleMatrix> weightSolutionConsumer,
+    public final void optimizeWeights(@NotNull IntPredicate areWeightsValid, @NotNull BiConsumer<Integer, SimpleMatrix> weightSolutionConsumer,
                                       double toleranceScale, int systemCount)
     {
         for (int p = 0; p < systemCount; p++)
@@ -100,7 +101,7 @@ public class NonNegativeWeightOptimization
         }
     }
 
-    public final void optimizeWeights(IntPredicate areWeightsValid, BiConsumer<Integer, SimpleMatrix> weightSolutionConsumer)
+    public final void optimizeWeights(@NotNull IntPredicate areWeightsValid, @NotNull BiConsumer<Integer, SimpleMatrix> weightSolutionConsumer)
     {
         optimizeWeights(areWeightsValid, weightSolutionConsumer, DEFAULT_TOLERANCE_SCALE, matrixBuilder.systemCount);
     }

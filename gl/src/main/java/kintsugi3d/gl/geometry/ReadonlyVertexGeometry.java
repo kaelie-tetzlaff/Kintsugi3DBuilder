@@ -19,6 +19,7 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.material.ReadonlyImportedMaterial;
 import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
@@ -100,7 +101,7 @@ public interface ReadonlyVertexGeometry
      * Gets the associated material for this mesh.
      * @return The material for this mesh.
      */
-    ReadonlyImportedMaterial getMaterial();
+    @Nullable ReadonlyImportedMaterial getMaterial();
 
     /**
      * Gets the mesh filename.

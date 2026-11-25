@@ -16,6 +16,7 @@
 package kintsugi3d.fx.controllers.modals.viewselect;
 
 import javafx.scene.image.Image;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayDeque;
@@ -27,8 +28,8 @@ class ImageSelectionCache
 {
     private static final int MAX_IMAGE_CACHE_QUEUE_SIZE = 16;
 
-    private final Map<String, Image> imageCache;
-    private final Queue<String> imageCacheRemovalQueue;
+    private final @NotNull Map<String, Image> imageCache;
+    private final @NotNull Queue<String> imageCacheRemovalQueue;
 
     ImageSelectionCache()
     {

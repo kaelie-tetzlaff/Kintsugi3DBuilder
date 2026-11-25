@@ -21,6 +21,7 @@ import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.builder.state.shader.ShaderInfo;
 import kintsugi3d.builder.state.shader.TextureVisualizationShaderInfo;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,20 +39,20 @@ public class NamedTextureInfo extends TextureInfo
     }
 
     @Override
-    public final ShaderInfo getVisualizationShader()
+    public final @NotNull ShaderInfo getVisualizationShader()
     {
         return new TextureVisualizationShaderInfo(this, "rendermodes/viewTextureSimple.frag");
     }
 
     @Override
-    public final void refresh(ImageBasedGraphicsResources<? extends Context<?>> resources) throws IOException
+    public final void refresh(@NotNull ImageBasedGraphicsResources<? extends Context<?>> resources) throws IOException
     {
         // TODO switch to observable pattern for textures?
         resources.getTextureResources().replaceTextureWithDefaultFile(this, resources.getViewSet().getSupportingFilesDirectory());
     }
 
     @Override
-    public final ImageReplacer getReplaceData(ImageBasedGraphicsResources<? extends Context<?>> resources)
+    public final @NotNull ImageReplacer getReplaceData(@NotNull ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
         return new NamedTextureReplacer(resources.getTextureResources(), this,
             new File(Global.io().getLoadedViewSetOrThrow().getSupportingFilesDirectory(),

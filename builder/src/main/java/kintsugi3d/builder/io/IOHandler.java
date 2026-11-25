@@ -27,6 +27,7 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.util.EncodableColorImage;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,8 +35,8 @@ import java.io.IOException;
 
 public interface IOHandler
 {
-    ViewSet getLoadedViewSet();
-    ReadonlyVertexGeometry getLoadedGeometry();
+    @Nullable ViewSet getLoadedViewSet();
+    @Nullable ReadonlyVertexGeometry getLoadedGeometry();
 
 
     boolean isRenderableLoaded();
@@ -74,7 +75,7 @@ public interface IOHandler
     void loadFromMetashapeModel(File newProjectFile, MetashapeModel model, ReadonlyLoadOptionsModel loadOptionsModel)
         throws Exception;
 
-    EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException;
+    @Nullable EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException;
     void loadBackplate(File backplateFile) throws FileNotFoundException;
 
     void saveToVSETFile(File vsetFile) throws IOException;

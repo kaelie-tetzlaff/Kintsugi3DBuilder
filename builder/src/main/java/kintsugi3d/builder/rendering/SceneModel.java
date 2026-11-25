@@ -27,13 +27,14 @@ import kintsugi3d.gl.core.FramebufferSize;
 import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 public class SceneModel implements ReadonlySceneModel
 {
     private ReadonlyObjectPoseModel objectModel;
     private ReadonlyViewpointModel cameraModel;
     private ReadonlyLightingEnvironmentModel lightingModel;
-    private SafeReadonlyGlobalSettingsModel settingsModel = new DefaultGlobalSettingsModel();
+    private @NotNull SafeReadonlyGlobalSettingsModel settingsModel = new DefaultGlobalSettingsModel();
     private SelectableViewListModel viewListModel;
 
     private Vector3 centroid = Vector3.ZERO;
@@ -142,19 +143,19 @@ public class SceneModel implements ReadonlySceneModel
     }
 
     @Override
-    public final Matrix4 getLightViewMatrix(int lightIndex)
+    public final @NotNull Matrix4 getLightViewMatrix(int lightIndex)
     {
         return getUnscaledMatrix(lightingModel.getLightMatrix(lightIndex));
     }
 
     @Override
-    public final Matrix4 getInverseLightViewMatrix(int lightIndex)
+    public final @NotNull Matrix4 getInverseLightViewMatrix(int lightIndex)
     {
         return getUnscaledMatrix(lightingModel.getLightMatrix(lightIndex).quickInverse(0.01f));
     }
 
     @Override
-    public final Matrix4 getLightModelViewMatrix(int lightIndex)
+    public final @NotNull Matrix4 getLightModelViewMatrix(int lightIndex)
     {
         return getUnscaledMatrix(
             lightingModel.getLightMatrix(lightIndex)
@@ -163,19 +164,19 @@ public class SceneModel implements ReadonlySceneModel
     }
 
     @Override
-    public final Matrix4 getEnvironmentMapMatrix(Matrix4 modelMatrix)
+    public final @NotNull Matrix4 getEnvironmentMapMatrix(@NotNull Matrix4 modelMatrix)
     {
         return getUnscaledMatrix(lightingModel.getEnvironmentMapMatrix()).times(modelMatrix);
     }
 
     @Override
-    public final Matrix4 getCurrentViewMatrix()
+    public final @NotNull Matrix4 getCurrentViewMatrix()
     {
         return getUnscaledMatrix(cameraModel.getLookMatrix());
     }
 
     @Override
-    public final Matrix4 getViewMatrixFromCameraPose(Matrix4 cameraPoseMatrix)
+    public final @NotNull Matrix4 getViewMatrixFromCameraPose(@NotNull Matrix4 cameraPoseMatrix)
     {
         return cameraPoseMatrix
                 .times(Matrix4.translate(centroid))
@@ -183,14 +184,14 @@ public class SceneModel implements ReadonlySceneModel
     }
 
     @Override
-    public final Matrix4 getCameraPoseFromViewMatrix(Matrix4 cameraPoseMatrix)
+    public final @NotNull Matrix4 getCameraPoseFromViewMatrix(@NotNull Matrix4 cameraPoseMatrix)
     {
         return cameraPoseMatrix
                 .times(getBaseModelMatrix());
     }
 
     @Override
-    public final Matrix4 getUnscaledMatrix(Matrix4 scaledMatrix)
+    public final @NotNull Matrix4 getUnscaledMatrix(@NotNull Matrix4 scaledMatrix)
     {
         return Matrix4.scale(scale)
                 .times(scaledMatrix)
@@ -198,26 +199,26 @@ public class SceneModel implements ReadonlySceneModel
     }
 
     @Override
-    public final Matrix4 getFullModelMatrix()
+    public final @NotNull Matrix4 getFullModelMatrix()
     {
         return getUnscaledMatrix(objectModel.getTransformationMatrix()).times(getBaseModelMatrix());
     }
 
     @Override
-    public final Matrix4 getBaseModelMatrix()
+    public final @NotNull Matrix4 getBaseModelMatrix()
     {
         return orientation.asMatrix4()
                 .times(Matrix4.translate(centroid.negated()));
     }
 
     @Override
-    public final Matrix4 getModelViewMatrix(Matrix4 view)
+    public final @NotNull Matrix4 getModelViewMatrix(@NotNull Matrix4 view)
     {
         return view.times(getFullModelMatrix());
     }
 
     @Override
-    public final Matrix4 getViewFromModelViewMatrix(Matrix4 modelViewMatrix)
+    public final @NotNull Matrix4 getViewFromModelViewMatrix(@NotNull Matrix4 modelViewMatrix)
     {
         return modelViewMatrix
                 .times(Matrix4.translate(centroid))
@@ -226,7 +227,7 @@ public class SceneModel implements ReadonlySceneModel
     }
 
     @Override
-    public final float getVerticalFieldOfView(FramebufferSize size)
+    public final float getVerticalFieldOfView(@NotNull FramebufferSize size)
     {
         return 2 * (float) StrictMath.atan(StrictMath.tan(cameraModel.getHorizontalFOV() / 2) * size.height / size.width);
     }

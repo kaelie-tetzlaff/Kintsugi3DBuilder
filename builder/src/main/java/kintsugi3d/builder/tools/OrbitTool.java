@@ -20,6 +20,7 @@ import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.window.CanvasSize;
 import kintsugi3d.gl.window.CursorPosition;
+import org.jetbrains.annotations.NotNull;
 
 final class OrbitTool implements DragTool
 {
@@ -36,13 +37,13 @@ final class OrbitTool implements DragTool
     private static class Builder extends ToolBuilderBase<OrbitTool>
     {
         @Override
-        public final OrbitTool create()
+        public final @NotNull OrbitTool create()
         {
             return new OrbitTool(getCameraModel());
         }
     }
 
-    static ToolBuilder<OrbitTool> getBuilder()
+    static @NotNull ToolBuilder<OrbitTool> getBuilder()
     {
         return new Builder();
     }
@@ -53,7 +54,7 @@ final class OrbitTool implements DragTool
     }
 
     @Override
-    public void mouseButtonPressed(CursorPosition cursorPosition, CanvasSize canvasSize)
+    public void mouseButtonPressed(CursorPosition cursorPosition, @NotNull CanvasSize canvasSize)
     {
         mouseStart = cursorPosition;
 
@@ -63,7 +64,7 @@ final class OrbitTool implements DragTool
     }
 
     @Override
-    public void cursorDragged(CursorPosition cursorPosition, CanvasSize canvasSize)
+    public void cursorDragged(@NotNull CursorPosition cursorPosition, CanvasSize canvasSize)
     {
         //noinspection FloatingPointEquality
         if (cursorPosition.y != mouseStart.y || cursorPosition.x != mouseStart.x)

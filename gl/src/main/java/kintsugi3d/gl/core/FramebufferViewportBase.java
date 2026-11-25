@@ -16,6 +16,7 @@
 package kintsugi3d.gl.core;
 
 import kintsugi3d.gl.vecmath.IntVector2;
+import org.jetbrains.annotations.NotNull;
 
 abstract class FramebufferViewportBase<ContextType extends Context<ContextType>> implements Framebuffer<ContextType>
 {
@@ -42,7 +43,7 @@ abstract class FramebufferViewportBase<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final FramebufferDrawContents<ContextType> getDrawContents()
+    public final @NotNull FramebufferDrawContents<ContextType> getDrawContents()
     {
         return new DrawContents<>(this, fullFramebuffer.getDrawContents());
     }

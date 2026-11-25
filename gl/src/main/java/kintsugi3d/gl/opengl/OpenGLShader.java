@@ -19,6 +19,7 @@ import kintsugi3d.gl.core.Shader;
 import kintsugi3d.gl.exceptions.IllegalShaderDefineException;
 import kintsugi3d.gl.exceptions.ShaderCompileFailureException;
 import kintsugi3d.gl.exceptions.ShaderPreprocessingFailureException;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +45,7 @@ class OpenGLShader implements Shader<OpenGLContext>
     private int shaderId;
     private boolean live = true;
 
-    OpenGLShader(OpenGLContext context, int shaderType, File file, Map<String, Object> defines) throws IOException
+    OpenGLShader(OpenGLContext context, int shaderType, @NotNull File file, @NotNull Map<String, Object> defines) throws IOException
     {
         this.context = context;
 
@@ -62,7 +63,7 @@ class OpenGLShader implements Shader<OpenGLContext>
         }
     }
 
-    private static void validateDefine(String key, Object value)
+    private static void validateDefine(String key, @NotNull Object value)
     {
         String valueString = value.toString();
         int parenthesesDepth = 0;
@@ -85,7 +86,7 @@ class OpenGLShader implements Shader<OpenGLContext>
         }
     }
 
-    private static void loadSource(File file, StringBuilder sb, Map<String, Object> defines) throws IOException
+    private static void loadSource(@NotNull File file, @NotNull StringBuilder sb, @NotNull Map<String, Object> defines) throws IOException
     {
         int lineCounter = 1;
         boolean needsDefines = !defines.isEmpty();
@@ -207,7 +208,7 @@ class OpenGLShader implements Shader<OpenGLContext>
         }
     }
 
-    OpenGLShader(OpenGLContext context, int shaderType, CharSequence source)
+    OpenGLShader(OpenGLContext context, int shaderType, @NotNull CharSequence source)
     {
         this.context = context;
         init(shaderType, source);
@@ -219,7 +220,7 @@ class OpenGLShader implements Shader<OpenGLContext>
         return context;
     }
 
-    private void init(int shaderType, CharSequence source)
+    private void init(int shaderType, @NotNull CharSequence source)
     {
         shaderId = glCreateShader(shaderType);
         OpenGLContext.errorCheck();

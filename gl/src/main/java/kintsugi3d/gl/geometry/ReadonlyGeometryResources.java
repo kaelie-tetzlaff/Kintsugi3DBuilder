@@ -16,6 +16,7 @@
 package kintsugi3d.gl.geometry;
 
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.Nullable;
 
 public interface ReadonlyGeometryResources<ContextType extends Context<ContextType>> extends ContextBound<ContextType>
 {
@@ -29,7 +30,7 @@ public interface ReadonlyGeometryResources<ContextType extends Context<ContextTy
      *
      * @return A vertex buffer containing vertex positions.
      */
-    ReadonlyVertexBuffer<ContextType> getPositionBuffer();
+    @Nullable ReadonlyVertexBuffer<ContextType> getPositionBuffer();
 
     /**
      * Creates a Drawable using this instance's geometry resources, and the specified shader program.

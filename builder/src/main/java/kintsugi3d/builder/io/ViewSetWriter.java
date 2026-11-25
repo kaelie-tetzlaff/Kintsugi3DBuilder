@@ -17,6 +17,7 @@ package kintsugi3d.builder.io;
 
 import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.core.viewset.ViewSet;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,7 +43,7 @@ public interface ViewSetWriter
      * @param file The file to save
      * @throws Exception If any errors occur while saving the file.
      */
-    default void writeToFile(ViewSet viewSet, File file) throws IOException
+    default void writeToFile(@NotNull ViewSet viewSet, @NotNull File file) throws IOException
     {
         try (OutputStream stream = new FileOutputStream(file))
         {

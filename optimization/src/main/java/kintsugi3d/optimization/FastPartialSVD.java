@@ -18,6 +18,7 @@ package kintsugi3d.optimization;
 import org.ejml.data.FMatrix;
 import org.ejml.data.FMatrixRMaj;
 import org.ejml.simple.SimpleMatrix;
+import org.jetbrains.annotations.NotNull;
 
 import java.security.SecureRandom;
 import java.util.Arrays;
@@ -32,23 +33,23 @@ import static org.ejml.dense.row.CommonOps_FDRM.*;
 @SuppressWarnings("unused")
 public final class FastPartialSVD
 {
-    private final SimpleMatrix matrix;
+    private final @NotNull SimpleMatrix matrix;
     private int singularValueCount;
     private final float tolerance;
     private final int maxIterations;
     private final int maxAttempts;
 
     private final boolean transpose;
-    private final SimpleMatrix u;
-    private final SimpleMatrix v;
-    private final float[] singularValues;
+    private final @NotNull SimpleMatrix u;
+    private final @NotNull SimpleMatrix v;
+    private final float @NotNull [] singularValues;
 
-    public static FastPartialSVD compute(SimpleMatrix matrix, int singularValueCount)
+    public static @NotNull FastPartialSVD compute(@NotNull SimpleMatrix matrix, int singularValueCount)
     {
         return compute(matrix, singularValueCount, Math.ulp(1.0f), 1000, 3);
     }
 
-    public static FastPartialSVD compute(SimpleMatrix matrix, int singularValueCount, float tolerance, int maxIterations, int maxAttempts)
+    public static @NotNull FastPartialSVD compute(@NotNull SimpleMatrix matrix, int singularValueCount, float tolerance, int maxIterations, int maxAttempts)
     {
         FastPartialSVD svd = new FastPartialSVD(matrix, singularValueCount, tolerance, maxIterations, maxAttempts);
         svd.compute();
@@ -75,7 +76,7 @@ public final class FastPartialSVD
         return Arrays.copyOf(singularValues, singularValueCount);
     }
 
-    private FastPartialSVD(SimpleMatrix matrix, int singularValueCount, float tolerance, int maxIterations, int maxAttempts)
+    private FastPartialSVD(@NotNull SimpleMatrix matrix, int singularValueCount, float tolerance, int maxIterations, int maxAttempts)
     {
         transpose = matrix.numCols() > matrix.numRows();
 

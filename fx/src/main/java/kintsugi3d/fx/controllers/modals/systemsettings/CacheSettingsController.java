@@ -34,6 +34,7 @@ import kintsugi3d.fx.internal.ObservableCacheModel;
 import kintsugi3d.fx.internal.ObservableGeneralSettingsModel;
 import kintsugi3d.fx.util.SafeFloatStringConverter;
 import kintsugi3d.fx.util.SafeNumberStringConverter;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.File;
@@ -55,7 +56,7 @@ public class CacheSettingsController implements SystemSettingsControllerBase
     private ObservableCacheModel cacheModel;
 
     @Override
-    public final void initializePage(Window parentWindow, JavaFXState state)
+    public final void initializePage(Window parentWindow, @NotNull JavaFXState state)
     {
         previewImageCacheLabel.setText(ApplicationFolders.getPreviewImagesRootDirectory().toString());
         specularFitCacheLabel.setText(ApplicationFolders.getFitCacheRootDirectory().toString());
@@ -80,7 +81,7 @@ public class CacheSettingsController implements SystemSettingsControllerBase
         bind(state.getSettingsModel());
     }
 
-    private void bind(ObservableGeneralSettingsModel injectedSettingsModel)
+    private void bind(@NotNull ObservableGeneralSettingsModel injectedSettingsModel)
     {
         sizeCheck.selectedProperty().bindBidirectional(injectedSettingsModel.getBooleanProperty("sizePromptEnabled"));
         recentCheck.selectedProperty().bindBidirectional(injectedSettingsModel.getBooleanProperty("recentPromptEnabled"));
@@ -94,7 +95,7 @@ public class CacheSettingsController implements SystemSettingsControllerBase
             new SafeNumberStringConverter(30));
     }
 
-    @FXML private void openDirectory(MouseEvent e)
+    @FXML private void openDirectory(@NotNull MouseEvent e)
     {
         if (!(e.getSource() instanceof Label))
         {

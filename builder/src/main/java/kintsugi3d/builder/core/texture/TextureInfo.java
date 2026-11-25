@@ -18,6 +18,7 @@ package kintsugi3d.builder.core.texture;
 import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
 import kintsugi3d.builder.state.shader.ShaderInfo;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -55,7 +56,7 @@ public abstract class TextureInfo implements Comparable<TextureInfo>
     }
 
     @Override
-    public final int compareTo(TextureInfo o)
+    public final int compareTo(@NotNull TextureInfo o)
     {
         return name.compareTo(o.name);
     }

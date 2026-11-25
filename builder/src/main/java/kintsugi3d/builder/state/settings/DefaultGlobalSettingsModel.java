@@ -63,7 +63,7 @@ public class DefaultGlobalSettingsModel implements SafeReadonlyGlobalSettingsMod
 
     @SuppressWarnings("unchecked")
     @Override
-    public final <T> T get(String name, Class<T> settingType)
+    public final <T> @Nullable T get(String name, Class<T> settingType)
     {
         return (T)getDefault(settingType);
     }

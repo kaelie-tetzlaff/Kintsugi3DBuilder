@@ -20,6 +20,7 @@ import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.rendering.SceneModel;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ViewSelectionImpl implements ViewSelection
@@ -55,7 +56,7 @@ public class ViewSelectionImpl implements ViewSelection
     }
 
     @Override
-    public final Matrix4 getMatrixFromView(View view)
+    public final @NotNull Matrix4 getMatrixFromView(@Nullable View view)
     {
         if (view == null)
         {
@@ -69,7 +70,7 @@ public class ViewSelectionImpl implements ViewSelection
     }
 
     @Override
-    public final Vector3 getFrustumDimensions()
+    public final @NotNull Vector3 getFrustumDimensions()
     {
         View selectedView = getSelectedView();
 

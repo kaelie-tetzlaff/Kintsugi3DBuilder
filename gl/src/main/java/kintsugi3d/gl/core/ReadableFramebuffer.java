@@ -16,6 +16,7 @@
 package kintsugi3d.gl.core;
 
 import kintsugi3d.gl.vecmath.IntVector2;
+import org.jetbrains.annotations.NotNull;
 
 public interface ReadableFramebuffer<ContextType extends Context<ContextType>> extends Framebuffer<ContextType>
 {
@@ -65,7 +66,7 @@ public interface ReadableFramebuffer<ContextType extends Context<ContextType>> e
      * @return
      */
     @Override
-    default FramebufferViewport<ContextType> getViewport(int x, int y, int viewportWidth, int viewportHeight)
+    default @NotNull FramebufferViewport<ContextType> getViewport(int x, int y, int viewportWidth, int viewportHeight)
     {
         return new ReadableFramebufferViewport<>(this, new IntVector2(x, y), new FramebufferSize(viewportWidth, viewportHeight));
     }

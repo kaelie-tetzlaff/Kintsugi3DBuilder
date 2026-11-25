@@ -20,6 +20,7 @@ import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.util.BufferedImageBuilder;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -32,7 +33,7 @@ public class ImageUndistorter<ContextType extends Context<ContextType>> implemen
     private final VertexBuffer<ContextType> rect;
     private final DrawableResource<ContextType> drawable;
 
-    public ImageUndistorter(Context<ContextType> context) throws IOException
+    public ImageUndistorter(@NotNull Context<ContextType> context) throws IOException
     {
         this.context = context;
 
@@ -48,7 +49,7 @@ public class ImageUndistorter<ContextType extends Context<ContextType>> implemen
         drawable.setDefaultPrimitiveMode(PrimitiveMode.TRIANGLE_FAN);
     }
 
-    public final Texture2D<ContextType> undistort(ReadonlyTexture2D<ContextType> inputImage, DistortionProjection distortion)
+    public final Texture2D<ContextType> undistort(ReadonlyTexture2D<ContextType> inputImage, @NotNull DistortionProjection distortion)
     {
         drawable.program().setTexture("inputImage", inputImage);
         drawable.program().setUniform("viewportSize", new Vector2(distortion.width, distortion.height));
@@ -75,7 +76,7 @@ public class ImageUndistorter<ContextType extends Context<ContextType>> implemen
         }
     }
 
-    public final BufferedImage undistort(BufferedImage inputImage, DistortionProjection distortion)
+    public final @NotNull BufferedImage undistort(BufferedImage inputImage, @NotNull DistortionProjection distortion)
     {
         try(Texture2D<ContextType> inTex = context.getTextureFactory()
             .build2DColorTextureFromImage(inputImage, true)
@@ -90,7 +91,7 @@ public class ImageUndistorter<ContextType extends Context<ContextType>> implemen
         }
     }
 
-    public final BufferedImage undistort(BufferedImage inputImage, DistortionProjection distortion, boolean mipmapsEnabled)
+    public final @NotNull BufferedImage undistort(BufferedImage inputImage, @NotNull DistortionProjection distortion, boolean mipmapsEnabled)
     {
         try(Texture2D<ContextType> inTex = context.getTextureFactory()
             .build2DColorTextureFromImage(inputImage, true)

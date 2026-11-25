@@ -19,15 +19,16 @@ import kintsugi3d.builder.state.scene.BackgroundMode;
 import kintsugi3d.builder.state.scene.EnvironmentModel;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 public class SynchronizedEnvironmentModel implements EnvironmentModel
 {
     private final EnvironmentModel baseModel;
-    private final SynchronizedValue<Float> environmentRotation;
-    private final SynchronizedValue<Float> environmentIntensity;
-    private final SynchronizedValue<Float> backgroundIntensity;
+    private final @NotNull SynchronizedValue<Float> environmentRotation;
+    private final @NotNull SynchronizedValue<Float> environmentIntensity;
+    private final @NotNull SynchronizedValue<Float> backgroundIntensity;
 
-    public SynchronizedEnvironmentModel(EnvironmentModel baseModel)
+    public SynchronizedEnvironmentModel(@NotNull EnvironmentModel baseModel)
     {
         this.baseModel = baseModel;
         environmentRotation = SynchronizedValue.createFromFunctions(baseModel::getEnvironmentRotation, baseModel::setEnvironmentRotation);

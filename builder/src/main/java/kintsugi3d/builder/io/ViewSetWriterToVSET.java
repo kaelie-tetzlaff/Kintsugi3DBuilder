@@ -21,6 +21,7 @@ import kintsugi3d.builder.state.settings.Setting;
 import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -42,7 +43,7 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
     {
     }
 
-    private static void writePoseMatrix(View view, PrintStream out)
+    private static void writePoseMatrix(@NotNull View view, @NotNull PrintStream out)
     {
         Matrix4 pose = view.getCameraPose();
 
@@ -68,7 +69,7 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
         out.println();
     }
 
-    private static void writeView(View view, int viewIndex, PrintStream out)
+    private static void writeView(@NotNull View view, int viewIndex, @NotNull PrintStream out)
     {
         String identifier = view.isEnabled() ? "v" : "vd";
         out.printf("%s\t%d\t%d\t%d\t%s", identifier, viewIndex,
@@ -77,7 +78,7 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
     }
 
     @Override
-    public void writeToStream(ReadonlyViewSet viewSet, OutputStream outputStream)
+    public void writeToStream(@NotNull ReadonlyViewSet viewSet, OutputStream outputStream)
     {
         PrintStream out = new PrintStream(outputStream, false, StandardCharsets.UTF_8);
         out.println("# Created by Kintsugi 3D Builder");

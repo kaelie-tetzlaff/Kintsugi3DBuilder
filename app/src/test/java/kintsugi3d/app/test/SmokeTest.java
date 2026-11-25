@@ -40,6 +40,7 @@ import kintsugi3d.builder.util.ApplicationFolders;
 import kintsugi3d.builder.util.logging.LogMessage;
 import kintsugi3d.builder.util.logging.LogMessageListener;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
 import org.lwjgl.system.Configuration;
 import org.slf4j.Logger;
@@ -99,7 +100,7 @@ public class SmokeTest
     private static class TestLogListener implements LogMessageListener
     {
         @Override
-        public final void newLogMessage(LogMessage logMessage)
+        public final void newLogMessage(@NotNull LogMessage logMessage)
         {
             // Only record errors, and only note the first error in a run.
             if (logMessage.getLogLevel() == Level.ERROR && LOG_ERROR.get() == null)
@@ -233,7 +234,7 @@ public class SmokeTest
         });
     }
 
-    private static void waitFor(BooleanSupplier finished, String operation)
+    private static void waitFor(@NotNull BooleanSupplier finished, String operation)
     {
         int startingErrorCount = TESTING_STATE.getErrors().size();
         long start = System.nanoTime();
@@ -258,7 +259,7 @@ public class SmokeTest
         }
     }
 
-    private static void waitFor(AtomicBoolean finished, String operation)
+    private static void waitFor(@NotNull AtomicBoolean finished, String operation)
     {
         waitFor(finished::get, operation);
     }
@@ -745,7 +746,7 @@ public class SmokeTest
         runSpecularFit();
     }
     
-    private static void testFitPsx(File psxFile, String imageDirectory, String testName)
+    private static void testFitPsx(@NotNull File psxFile, String imageDirectory, String testName)
         throws URISyntaxException
     {
         MetashapeDocument doc = new MetashapeDocument(psxFile.getAbsolutePath());

@@ -18,6 +18,7 @@ package kintsugi3d.builder.io.usdz;
 import de.javagl.jgltf.impl.v2.TextureInfo;
 import kintsugi3d.builder.core.texture.StandardTexture;
 import kintsugi3d.builder.io.gltf.StandardTextureExport;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.List;
@@ -35,7 +36,7 @@ public class USDZSpecularExporter extends USDZExporter
     }
 
     @Override
-    protected final void addCommands(File outputDirectory, List<String> commandList)
+    protected final void addCommands(File outputDirectory, @NotNull List<String> commandList)
     {
         commandList.add("--diffuse");
         commandList.add(new File(outputDirectory, getTextureFilename(StandardTexture.DIFFUSE_COLOR.getDetails().name, getTextureFileFormat())).getPath());

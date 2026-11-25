@@ -14,11 +14,14 @@
  */
 
 package kintsugi3d.builder.fit.decomposition;
+
+import org.jetbrains.annotations.Nullable;
+
 public interface MutableMaterialBasis extends IndexAssignableMaterialBasis
 {
     boolean isMaterialEnabled(String name);
 
-    BasisMaterialInfo deleteMaterial(String name);
+    @Nullable BasisMaterialInfo deleteMaterial(String name);
 
     BasisMaterialInfo disableMaterial(String name);
 

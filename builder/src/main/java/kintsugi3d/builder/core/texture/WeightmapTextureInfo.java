@@ -22,6 +22,7 @@ import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
 import kintsugi3d.builder.state.shader.BasisIndexedShaderInfo;
 import kintsugi3d.builder.state.shader.ShaderInfo;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,9 +34,9 @@ public class WeightmapTextureInfo extends TextureInfo
 {
     private static final Logger LOG = LoggerFactory.getLogger(WeightmapTextureInfo.class);
 
-    private final BasisMaterialInfo material;
+    private final @NotNull BasisMaterialInfo material;
 
-    public WeightmapTextureInfo(BasisMaterialInfo material)
+    public WeightmapTextureInfo(@NotNull BasisMaterialInfo material)
     {
         super(BasisWeightResources.getUnpackedWeightMapName(material.getName()),
             material.getFriendlyName(),
@@ -45,19 +46,19 @@ public class WeightmapTextureInfo extends TextureInfo
     }
 
     @Override
-    public final ShaderInfo getVisualizationShader()
+    public final @NotNull ShaderInfo getVisualizationShader()
     {
         return new BasisIndexedShaderInfo(friendlyName, "rendermodes/viewTextureWeights.frag", material);
     }
 
     @Override
-    public final void refresh(ImageBasedGraphicsResources<? extends Context<?>> resources) throws IOException
+    public final void refresh(@NotNull ImageBasedGraphicsResources<? extends Context<?>> resources) throws IOException
     {
         resources.getTextureResources().replaceWeightMapWithDefaultFile(material, resources.getViewSet().getSupportingFilesDirectory());
     }
 
     @Override
-    public final ImageReplacer getReplaceData(ImageBasedGraphicsResources<? extends Context<?>> resources)
+    public final @NotNull ImageReplacer getReplaceData(@NotNull ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
         File supportingFilesDirectory = Global.io().getLoadedViewSetOrThrow().getSupportingFilesDirectory();
         try

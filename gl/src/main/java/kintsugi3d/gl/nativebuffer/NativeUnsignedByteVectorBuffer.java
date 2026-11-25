@@ -15,6 +15,7 @@
 
 package kintsugi3d.gl.nativebuffer;
 
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.BufferUtils;
 
 import java.nio.ByteBuffer;
@@ -24,7 +25,7 @@ import java.util.Objects;
 
 class NativeUnsignedByteVectorBuffer implements NativeVectorBuffer
 {
-    private final ByteBuffer buffer;
+    private final @NotNull ByteBuffer buffer;
 
     private final int dimensions;
     private final int count;
@@ -45,7 +46,7 @@ class NativeUnsignedByteVectorBuffer implements NativeVectorBuffer
         buffer = BufferUtils.createByteBuffer(dimensions * count);
     }
 
-    NativeUnsignedByteVectorBuffer(int dimensions, int count, ByteBuffer buffer)
+    NativeUnsignedByteVectorBuffer(int dimensions, int count, @NotNull ByteBuffer buffer)
     {
         if (dimensions < 0)
         {
@@ -71,7 +72,7 @@ class NativeUnsignedByteVectorBuffer implements NativeVectorBuffer
         this.buffer = buffer;
     }
 
-    NativeUnsignedByteVectorBuffer(int dimensions, int count, byte[] buffer)
+    NativeUnsignedByteVectorBuffer(int dimensions, int count, byte @NotNull [] buffer)
     {
         this(dimensions, count);
         this.buffer.put(buffer);
@@ -91,7 +92,7 @@ class NativeUnsignedByteVectorBuffer implements NativeVectorBuffer
     }
 
     @Override
-    public final Integer get(int index, int dimension)
+    public final @NotNull Integer get(int index, int dimension)
     {
         if (index < 0)
         {
@@ -113,7 +114,7 @@ class NativeUnsignedByteVectorBuffer implements NativeVectorBuffer
     }
 
     @Override
-    public final void set(int index, int dimension, Number value)
+    public final void set(int index, int dimension, @NotNull Number value)
     {
         if (index < 0)
         {
@@ -141,7 +142,7 @@ class NativeUnsignedByteVectorBuffer implements NativeVectorBuffer
     }
 
     @Override
-    public final NativeDataType getDataType()
+    public final @NotNull NativeDataType getDataType()
     {
         return NativeDataType.UNSIGNED_BYTE;
     }

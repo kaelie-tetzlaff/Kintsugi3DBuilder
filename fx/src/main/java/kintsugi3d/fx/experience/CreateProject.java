@@ -19,6 +19,7 @@ import kintsugi3d.fx.controllers.modals.createnewproject.*;
 import kintsugi3d.fx.controllers.modals.createnewproject.inputsources.ValidatedInputSource;
 import kintsugi3d.fx.controllers.modals.viewselect.OrientationViewSelectController;
 import kintsugi3d.fx.controllers.paged.SimpleDataSourcePage;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -30,7 +31,7 @@ public class CreateProject extends ExperienceBase
     private static final String PRIMARY_VIEW_SELECT = "/fxml/modals/createnewproject/ViewSelect.fxml";
 
     @Override
-    public final String getName()
+    public final @NotNull String getName()
     {
         return "Create Project";
     }

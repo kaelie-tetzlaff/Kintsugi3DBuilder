@@ -30,7 +30,7 @@ public class LightCalibrationChangedEvent
     private final @Nullable List<Vector3> lightPositionList;
     private final @Nullable List<Vector3> lightIntensityList;
 
-    public LightCalibrationChangedEvent(List<Vector3> lightPositionList, List<Vector3> lightIntensityList)
+    public LightCalibrationChangedEvent(@Nullable List<Vector3> lightPositionList, @Nullable List<Vector3> lightIntensityList)
     {
         this.lightPositionList = lightPositionList == null ? null : new ArrayList<>(lightPositionList);
         this.lightIntensityList = lightIntensityList == null ? null : new ArrayList<>(lightIntensityList);

@@ -16,6 +16,7 @@
 package kintsugi3d.builder.state.project;
 
 import javafx.scene.paint.Color;
+import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -24,7 +25,7 @@ import java.util.function.Supplier;
 public abstract class SerializableLightSettings implements DOMConvertable, LightSettings
 {
     @Override
-    public final Element toDOMElement(Document document)
+    public final @NotNull Element toDOMElement(@NotNull Document document)
     {
         Element element = document.createElement("LightInstance");
         element.setAttribute("targetX", Double.toString(getTargetX()));
@@ -43,7 +44,7 @@ public abstract class SerializableLightSettings implements DOMConvertable, Light
     }
 
     public static <LightType extends SerializableLightSettings>
-    LightType fromDOMElement(Element element, Supplier<LightType> lightInstanceSettingConstructor)
+    @NotNull LightType fromDOMElement(@NotNull Element element, @NotNull Supplier<LightType> lightInstanceSettingConstructor)
     {
         LightType setting = lightInstanceSettingConstructor.get();
         setting.setName(element.getAttribute("name"));

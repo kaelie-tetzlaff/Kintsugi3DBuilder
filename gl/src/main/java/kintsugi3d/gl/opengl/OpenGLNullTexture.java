@@ -17,10 +17,11 @@ package kintsugi3d.gl.opengl;
 
 import kintsugi3d.gl.core.SamplerType;
 import kintsugi3d.gl.core.TextureType;
+import org.jetbrains.annotations.NotNull;
 
 class OpenGLNullTexture extends OpenGLTexture
 {
-    OpenGLNullTexture(OpenGLContext context, SamplerType type)
+    OpenGLNullTexture(OpenGLContext context, @NotNull SamplerType type)
     {
         super(context, translateSamplerType(type), TextureType.NULL, 0, new TextureParameters());
     }

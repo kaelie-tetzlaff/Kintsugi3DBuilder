@@ -21,6 +21,7 @@ import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.geometry.ReadonlyGeometryResources;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -42,13 +43,13 @@ public final class DepthMapGenerator<ContextType extends Context<ContextType>> i
      * @return
      * @throws FileNotFoundException Thrown if the depth map shader cannot be loaded
      */
-    public static <ContextType extends Context<ContextType>>DepthMapGenerator<ContextType> createFromGeometryResources(
-        ReadonlyGeometryResources<ContextType> geometryResources) throws IOException
+    public static <ContextType extends Context<ContextType>> @NotNull DepthMapGenerator<ContextType> createFromGeometryResources(
+        @NotNull ReadonlyGeometryResources<ContextType> geometryResources) throws IOException
     {
         return new DepthMapGenerator<>(geometryResources);
     }
 
-    private DepthMapGenerator(ReadonlyGeometryResources<ContextType> geometryResources) throws IOException
+    private DepthMapGenerator(@NotNull ReadonlyGeometryResources<ContextType> geometryResources) throws IOException
     {
         this.geometryResources = geometryResources;
         depthRenderingProgram = getDepthMapProgramBuilder(geometryResources.getContext()).createProgram();
@@ -56,14 +57,14 @@ public final class DepthMapGenerator<ContextType extends Context<ContextType>> i
         depthDrawable.addVertexBuffer("position", geometryResources.getPositionBuffer());
     }
 
-    private static <ContextType extends Context<ContextType>> ProgramBuilder<ContextType> getDepthMapProgramBuilder(ContextType context)
+    private static <ContextType extends Context<ContextType>> ProgramBuilder<ContextType> getDepthMapProgramBuilder(@NotNull ContextType context)
     {
         return context.getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File("shaders/common/depth.vert"))
             .addShader(ShaderType.FRAGMENT, new File("shaders/common/depth.frag"));
     }
 
-    public void generateDepthMap(View view, Framebuffer<ContextType> framebuffer)
+    public void generateDepthMap(@NotNull View view, @NotNull Framebuffer<ContextType> framebuffer)
     {
         framebuffer.clearDepthBuffer();
 
@@ -79,7 +80,7 @@ public final class DepthMapGenerator<ContextType extends Context<ContextType>> i
      * @param framebuffer
      * @return The shadow matrix
      */
-    public Matrix4 generateShadowMap(View view, Framebuffer<ContextType> framebuffer)
+    public @NotNull Matrix4 generateShadowMap(@NotNull View view, @NotNull Framebuffer<ContextType> framebuffer)
     {
         framebuffer.clearDepthBuffer();
 

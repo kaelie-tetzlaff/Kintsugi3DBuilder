@@ -16,6 +16,7 @@
 package kintsugi3d.gl.window;
 
 import kintsugi3d.gl.window.listeners.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,26 +25,26 @@ import java.util.List;
 
 public class WindowListenerManagerInstance implements WindowListenerManager
 {
-    private final List<CanvasPositionListener> canvasPosListeners;
-    private final List<CanvasSizeListener> canvasSizeListeners;
-    private final List<WindowCloseListener> windowCloseListeners;
-    private final List<CanvasRefreshListener> canvasRefreshListeners;
-    private final List<WindowFocusLostListener> windowFocusLostListeners;
-    private final List<WindowFocusGainedListener> windowFocusGainedListeners;
-    private final List<WindowIconifiedListener> windowIconifiedListeners;
-    private final List<WindowRestoredListener> windowRestoredListeners;
-    private final List<FramebufferSizeListener> framebufferSizeListeners;
-    private final List<KeyPressListener> keyPressListeners;
-    private final List<KeyReleaseListener> keyReleaseListeners;
-    private final List<KeyTypeListener> keyTypeListeners;
-    private final List<CharacterListener> characterListeners;
-    private final List<CharacterModifiersListener> charModsListeners;
-    private final List<MouseButtonPressListener> mouseButtonPressListeners;
-    private final List<MouseButtonReleaseListener> mouseButtonReleaseListeners;
-    private final List<CursorPositionListener> cursorPosListeners;
-    private final List<CursorEnteredListener> cursorEnterListeners;
-    private final List<CursorExitedListener> cursorExitListeners;
-    private final List<ScrollListener> scrollListeners;
+    private final @NotNull List<CanvasPositionListener> canvasPosListeners;
+    private final @NotNull List<CanvasSizeListener> canvasSizeListeners;
+    private final @NotNull List<WindowCloseListener> windowCloseListeners;
+    private final @NotNull List<CanvasRefreshListener> canvasRefreshListeners;
+    private final @NotNull List<WindowFocusLostListener> windowFocusLostListeners;
+    private final @NotNull List<WindowFocusGainedListener> windowFocusGainedListeners;
+    private final @NotNull List<WindowIconifiedListener> windowIconifiedListeners;
+    private final @NotNull List<WindowRestoredListener> windowRestoredListeners;
+    private final @NotNull List<FramebufferSizeListener> framebufferSizeListeners;
+    private final @NotNull List<KeyPressListener> keyPressListeners;
+    private final @NotNull List<KeyReleaseListener> keyReleaseListeners;
+    private final @NotNull List<KeyTypeListener> keyTypeListeners;
+    private final @NotNull List<CharacterListener> characterListeners;
+    private final @NotNull List<CharacterModifiersListener> charModsListeners;
+    private final @NotNull List<MouseButtonPressListener> mouseButtonPressListeners;
+    private final @NotNull List<MouseButtonReleaseListener> mouseButtonReleaseListeners;
+    private final @NotNull List<CursorPositionListener> cursorPosListeners;
+    private final @NotNull List<CursorEnteredListener> cursorEnterListeners;
+    private final @NotNull List<CursorExitedListener> cursorExitListeners;
+    private final @NotNull List<ScrollListener> scrollListeners;
 
     public WindowListenerManagerInstance()
     {
@@ -189,102 +190,102 @@ public class WindowListenerManagerInstance implements WindowListenerManager
         scrollListeners.add(listener);
     }
 
-    public final Collection<CanvasPositionListener> getCanvasPosListeners()
+    public final @NotNull Collection<CanvasPositionListener> getCanvasPosListeners()
     {
         return Collections.unmodifiableCollection(canvasPosListeners);
     }
 
-    public final Collection<CanvasSizeListener> getCanvasSizeListeners()
+    public final @NotNull Collection<CanvasSizeListener> getCanvasSizeListeners()
     {
         return Collections.unmodifiableCollection(canvasSizeListeners);
     }
 
-    public final Collection<WindowCloseListener> getWindowCloseListeners()
+    public final @NotNull Collection<WindowCloseListener> getWindowCloseListeners()
     {
         return Collections.unmodifiableCollection(windowCloseListeners);
     }
 
-    public final Collection<CanvasRefreshListener> getCanvasRefreshListeners()
+    public final @NotNull Collection<CanvasRefreshListener> getCanvasRefreshListeners()
     {
         return Collections.unmodifiableCollection(canvasRefreshListeners);
     }
 
-    public final Collection<WindowFocusLostListener> getWindowFocusLostListeners()
+    public final @NotNull Collection<WindowFocusLostListener> getWindowFocusLostListeners()
     {
         return Collections.unmodifiableCollection(windowFocusLostListeners);
     }
 
-    public final Collection<WindowFocusGainedListener> getWindowFocusGainedListeners()
+    public final @NotNull Collection<WindowFocusGainedListener> getWindowFocusGainedListeners()
     {
         return Collections.unmodifiableCollection(windowFocusGainedListeners);
     }
 
-    public final Collection<WindowIconifiedListener> getWindowIconifiedListeners()
+    public final @NotNull Collection<WindowIconifiedListener> getWindowIconifiedListeners()
     {
         return Collections.unmodifiableCollection(windowIconifiedListeners);
     }
 
-    public final Collection<WindowRestoredListener> getWindowRestoredListeners()
+    public final @NotNull Collection<WindowRestoredListener> getWindowRestoredListeners()
     {
         return Collections.unmodifiableCollection(windowRestoredListeners);
     }
 
-    public final Collection<FramebufferSizeListener> getFramebufferSizeListeners()
+    public final @NotNull Collection<FramebufferSizeListener> getFramebufferSizeListeners()
     {
         return Collections.unmodifiableCollection(framebufferSizeListeners);
     }
 
-    public final Collection<KeyPressListener> getKeyPressListeners()
+    public final @NotNull Collection<KeyPressListener> getKeyPressListeners()
     {
         return Collections.unmodifiableCollection(keyPressListeners);
     }
 
-    public final Collection<KeyReleaseListener> getKeyReleaseListeners()
+    public final @NotNull Collection<KeyReleaseListener> getKeyReleaseListeners()
     {
         return Collections.unmodifiableCollection(keyReleaseListeners);
     }
 
-    public final Collection<KeyTypeListener> getKeyTypeListeners()
+    public final @NotNull Collection<KeyTypeListener> getKeyTypeListeners()
     {
         return Collections.unmodifiableCollection(keyTypeListeners);
     }
 
-    public final Collection<CharacterListener> getCharacterListeners()
+    public final @NotNull Collection<CharacterListener> getCharacterListeners()
     {
         return Collections.unmodifiableCollection(characterListeners);
     }
 
-    public final Collection<CharacterModifiersListener> getCharModsListeners()
+    public final @NotNull Collection<CharacterModifiersListener> getCharModsListeners()
     {
         return Collections.unmodifiableCollection(charModsListeners);
     }
 
-    public final Collection<MouseButtonPressListener> getMouseButtonPressListeners()
+    public final @NotNull Collection<MouseButtonPressListener> getMouseButtonPressListeners()
     {
         return Collections.unmodifiableCollection(mouseButtonPressListeners);
     }
 
-    public final Collection<MouseButtonReleaseListener> getMouseButtonReleaseListeners()
+    public final @NotNull Collection<MouseButtonReleaseListener> getMouseButtonReleaseListeners()
     {
         return Collections.unmodifiableCollection(mouseButtonReleaseListeners);
     }
 
-    public final Collection<CursorPositionListener> getCursorPosListeners()
+    public final @NotNull Collection<CursorPositionListener> getCursorPosListeners()
     {
         return Collections.unmodifiableCollection(cursorPosListeners);
     }
 
-    public final Collection<CursorEnteredListener> getCursorEnterListeners()
+    public final @NotNull Collection<CursorEnteredListener> getCursorEnterListeners()
     {
         return Collections.unmodifiableCollection(cursorEnterListeners);
     }
 
-    public final Collection<CursorExitedListener> getCursorExitListeners()
+    public final @NotNull Collection<CursorExitedListener> getCursorExitListeners()
     {
         return Collections.unmodifiableCollection(cursorExitListeners);
     }
 
-    public final Collection<ScrollListener> getScrollListeners()
+    public final @NotNull Collection<ScrollListener> getScrollListeners()
     {
         return Collections.unmodifiableCollection(scrollListeners);
     }

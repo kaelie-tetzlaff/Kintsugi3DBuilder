@@ -20,6 +20,7 @@ import kintsugi3d.gl.core.ColorFormat;
 import kintsugi3d.gl.core.CompressionFormat;
 import kintsugi3d.gl.core.Texture1D;
 import kintsugi3d.gl.core.TextureWrapMode;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 
@@ -51,7 +52,7 @@ final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLCon
         }
 
         @Override
-        public final OpenGLTexture1D createTexture()
+        public final @NotNull OpenGLTexture1D createTexture()
         {
             if (isInternalFormatCompressed())
             {
@@ -84,8 +85,8 @@ final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLCon
         }
     }
 
-    private OpenGLTexture1D(OpenGLContext context, int textureTarget, ColorFormat colorFormat, int width, OpenGLTextureData textureData,
-            boolean useLinearFiltering, boolean useMipmaps, int maxMipmapLevel, float maxAnisotropy)
+    private OpenGLTexture1D(OpenGLContext context, int textureTarget, @NotNull ColorFormat colorFormat, int width, @NotNull OpenGLTextureData textureData,
+                            boolean useLinearFiltering, boolean useMipmaps, int maxMipmapLevel, float maxAnisotropy)
     {
         // Create an empty texture to be used as a render target for a framebuffer.
         super(context, textureTarget, colorFormat,
@@ -95,8 +96,8 @@ final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLCon
         init(textureTarget, OpenGLContext.getInternalColorFormat(colorFormat), textureData, useLinearFiltering, maxMipmapLevel, maxAnisotropy);
     }
 
-    private OpenGLTexture1D(OpenGLContext context, int textureTarget, CompressionFormat compressionFormat, int width, OpenGLTextureData textureData,
-            boolean useLinearFiltering, boolean useMipmaps, int maxMipmapLevel, float maxAnisotropy)
+    private OpenGLTexture1D(OpenGLContext context, int textureTarget, @NotNull CompressionFormat compressionFormat, int width, @NotNull OpenGLTextureData textureData,
+                            boolean useLinearFiltering, boolean useMipmaps, int maxMipmapLevel, float maxAnisotropy)
     {
         // Create an empty texture to be used as a render target for a framebuffer.
         super(context, textureTarget, compressionFormat,
@@ -107,7 +108,7 @@ final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLCon
     }
 
     private void init(
-        int textureTarget, int internalFormat, OpenGLTextureData textureData, boolean useLinearFiltering,
+        int textureTarget, int internalFormat, @NotNull OpenGLTextureData textureData, boolean useLinearFiltering,
         int maxMipmapLevel, float maxAnisotropy)
     {
         bind();
@@ -141,7 +142,7 @@ final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLCon
     }
 
     @Override
-    public void setTextureWrap(TextureWrapMode wrap)
+    public void setTextureWrap(@NotNull TextureWrapMode wrap)
     {
         bind();
         switch(wrap)

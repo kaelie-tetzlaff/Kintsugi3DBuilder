@@ -21,7 +21,7 @@ import java.util.*;
 
 public class ManagedResourceMap<K, V extends ManagedResource> implements ManagedResource, Map<K, V>
 {
-    private final Map<K, V> base;
+    private final @NotNull Map<K, V> base;
 
     @SuppressWarnings("CollectionWithoutInitialCapacity")
     public ManagedResourceMap()

@@ -38,6 +38,7 @@ import kintsugi3d.gl.util.ColorList;
 import kintsugi3d.optimization.ReadonlyErrorReport;
 import kintsugi3d.optimization.ShaderBasedErrorCalculator;
 import kintsugi3d.optimization.function.GeneralizedSmoothStepBasis;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,21 +59,21 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
 {
     private static final Logger LOG = LoggerFactory.getLogger(SpecularFitOptimizable.class);
 
-    private final ContextType context;
+    private final @Nullable ContextType context;
 
-    private final ShaderResources<ContextType> resources;
-    private final TextureResolution textureResolution;
+    private final @NotNull ShaderResources<ContextType> resources;
+    private final @NotNull TextureResolution textureResolution;
 
-    private final FinalDiffuseOptimization<ContextType> diffuseOptimization;
-    private final NormalOptimization<ContextType> normalOptimization;
+    private final @NotNull FinalDiffuseOptimization<ContextType> diffuseOptimization;
+    private final @NotNull NormalOptimization<ContextType> normalOptimization;
 
-    private final ShaderBasedErrorCalculator<ContextType> errorCalculator;
+    private final @NotNull ShaderBasedErrorCalculator<ContextType> errorCalculator;
 
-    private final SpecularFitBase<ContextType> base;
+    private final @NotNull SpecularFitBase<ContextType> base;
 
     private SpecularFitOptimizable(
-        ShaderResources<ContextType> resources, BasisResources<ContextType> basisResources,
-        SpecularFitResourcesWrapper<ContextType> programFactory, TextureResolution textureResolution,
+        @NotNull ShaderResources<ContextType> resources, @NotNull BasisResources<ContextType> basisResources,
+        @NotNull SpecularFitResourcesWrapper<ContextType> programFactory, @NotNull TextureResolution textureResolution,
         ReadonlyNormalOptimizationSettings normalOptimizationSettings, boolean includeConstantTerm)
         throws IOException
     {
@@ -121,7 +122,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
     }
 
     @Override
-    public Map<StandardTexture, Texture2D<ContextType>> getStandardTextures()
+    public @NotNull Map<StandardTexture, Texture2D<ContextType>> getStandardTextures()
     {
         // Mutable copy of getSpecularTextures()
         Map<StandardTexture, Texture2D<ContextType>> standardTextures = new EnumMap<>(base.getStandardTextures());
@@ -150,13 +151,13 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
         return base.getBasisWeightResources();
     }
 
-    public RoughnessOptimization<ContextType> getRoughnessOptimization()
+    public @NotNull RoughnessOptimization<ContextType> getRoughnessOptimization()
     {
         return base.getRoughnessOptimization();
     }
 
     @Override
-    public Map<TextureInfo, Texture2D<ContextType>> getTextures()
+    public @NotNull Map<TextureInfo, Texture2D<ContextType>> getTextures()
     {
         // Convert to enum-based keys to string-based keys
         Map<TextureInfo, Texture2D<ContextType>> standardTextures = StandardTexture.convertEnumMapToObjectMap(getStandardTextures());
@@ -184,8 +185,8 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
     }
 
 
-    private DrawableResource<ContextType> getNormalDrawable(Program<ContextType> estimationProgram,
-                                                            ShaderProgramFactory<ContextType> programFactory)
+    private DrawableResource<ContextType> getNormalDrawable(@NotNull Program<ContextType> estimationProgram,
+                                                            @NotNull ShaderProgramFactory<ContextType> programFactory)
     {
         DrawableResource<ContextType> drawable = resources.createDrawable(estimationProgram);
         programFactory.setupShaderProgram(estimationProgram);
@@ -195,7 +196,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
     }
 
     private static <ContextType extends Context<ContextType>>
-    @Nullable ProgramObject<ContextType> createErrorCalcProgram(ShaderProgramFactory<ContextType> programFactory)
+    @Nullable ProgramObject<ContextType> createErrorCalcProgram(@NotNull ShaderProgramFactory<ContextType> programFactory)
     {
         try
         {
@@ -211,8 +212,8 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
     }
 
     private static <ContextType extends Context<ContextType>> DrawableResource<ContextType> createErrorCalcDrawable(
-        ReadonlyTextureResources<ContextType> specularFit, ShaderResources<ContextType> resources,
-        Program<ContextType> errorCalcProgram)
+        @NotNull ReadonlyTextureResources<ContextType> specularFit, @NotNull ShaderResources<ContextType> resources,
+        @NotNull Program<ContextType> errorCalcProgram)
     {
         DrawableResource<ContextType> errorCalcDrawable = resources.createDrawable(errorCalcProgram);
         specularFit.getBasisResources().useWithShaderProgram(errorCalcProgram);
@@ -223,9 +224,9 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
         return errorCalcDrawable;
     }
 
-    public static <ContextType extends Context<ContextType>> SpecularFitOptimizable<ContextType> createNew(
-        ShaderResources<ContextType> resources, SpecularFitResourcesWrapper<ContextType> programFactory,
-        MaterialBasis materialBasis, TextureResolution textureResolution,
+    public static <ContextType extends Context<ContextType>> @NotNull SpecularFitOptimizable<ContextType> createNew(
+        @NotNull ShaderResources<ContextType> resources, @NotNull SpecularFitResourcesWrapper<ContextType> programFactory,
+        @NotNull MaterialBasis materialBasis, @NotNull TextureResolution textureResolution,
         ReadonlyNormalOptimizationSettings normalOptimizationSettings, boolean includeConstantTerm)
         throws IOException
     {
@@ -239,7 +240,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
         return textureResolution;
     }
 
-    private void optimize(Runnable iteration, boolean multipleBasisMaterials, double convergenceTolerance, ProgressMonitor monitor)
+    private void optimize(@NotNull Runnable iteration, boolean multipleBasisMaterials, double convergenceTolerance, @NotNull ProgressMonitor monitor)
         throws UserCancellationException
     {
         //monitor.setMaxProgress(1.0 / convergenceTolerance);
@@ -265,8 +266,8 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
     }
 
     void optimizeFromExistingBasis(
-        SpecularDecomposition specularDecomposition, GraphicsStreamResource<ContextType> reflectanceStream,
-        double convergenceTolerance, ProgressMonitor monitor, File debugDirectory)
+        @NotNull SpecularDecomposition specularDecomposition, @NotNull GraphicsStreamResource<ContextType> reflectanceStream,
+        double convergenceTolerance, @NotNull ProgressMonitor monitor, File debugDirectory)
         throws UserCancellationException
     {
         prepareForOptimization(reflectanceStream);
@@ -286,8 +287,8 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
     }
 
     void optimizeFromScratch(
-        ReadonlyBasisOptimizationSettings basisOptimizationSettings, SpecularDecompositionFromScratch specularDecomposition,
-        GraphicsStreamResource<ContextType> reflectanceStream, double convergenceTolerance, ProgressMonitor monitor, File debugDirectory)
+        @NotNull ReadonlyBasisOptimizationSettings basisOptimizationSettings, @NotNull SpecularDecompositionFromScratch specularDecomposition,
+        @NotNull GraphicsStreamResource<ContextType> reflectanceStream, double convergenceTolerance, @NotNull ProgressMonitor monitor, @Nullable File debugDirectory)
         throws UserCancellationException
     {
         prepareForOptimization(reflectanceStream);
@@ -331,8 +332,8 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
             basisOptimizationSettings.getMaterialCount() > 1, convergenceTolerance, monitor);
     }
 
-    private void weightAndNormalIteration(SpecularDecomposition specularDecomposition, GraphicsStream<ColorList[]> reflectanceStream,
-                                          SpecularWeightOptimization weightOptimization, double convergenceTolerance, File debugDirectory)
+    private void weightAndNormalIteration(@NotNull SpecularDecomposition specularDecomposition, @NotNull GraphicsStream<ColorList[]> reflectanceStream,
+                                          @NotNull SpecularWeightOptimization weightOptimization, double convergenceTolerance, @Nullable File debugDirectory)
     {
         if (specularDecomposition.getMaterialBasis().getEnabledMaterialCount() > 1)
         {
@@ -367,7 +368,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
         }
     }
 
-    private void prepareForOptimization(GraphicsStreamResource<ContextType> reflectanceStream)
+    private void prepareForOptimization(@NotNull GraphicsStreamResource<ContextType> reflectanceStream)
     {
         // Setup reflectance extraction program
         resources.setupShaderProgram(reflectanceStream.getProgram());
@@ -395,8 +396,8 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
      * @param monitor
      */
     private void basisOptimizationIteration(
-        ReadonlyBasisOptimizationSettings basisOptimizationSettings, SpecularDecompositionFromScratch specularDecomposition,
-        GraphicsStream<ColorList[]> reflectanceStreamParallel, ProgressMonitor monitor)
+        @NotNull ReadonlyBasisOptimizationSettings basisOptimizationSettings, @NotNull SpecularDecompositionFromScratch specularDecomposition,
+        @NotNull GraphicsStream<ColorList[]> reflectanceStreamParallel, ProgressMonitor monitor)
     {
         BRDFReconstruction brdfReconstruction = new BRDFReconstruction(
             basisOptimizationSettings,
@@ -430,8 +431,8 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
     }
 
     private void weightOptimizationIteration(
-        SpecularDecomposition specularDecomposition, GraphicsStream<ColorList[]> reflectanceStream,
-        SpecularWeightOptimization weightOptimization, File debugDirectory)
+        @NotNull SpecularDecomposition specularDecomposition, @NotNull GraphicsStream<ColorList[]> reflectanceStream,
+        @NotNull SpecularWeightOptimization weightOptimization, @Nullable File debugDirectory)
     {
         int weightBlockSize = weightOptimization.getWeightBlockSize();
 
@@ -463,7 +464,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
         }
     }
 
-    private void normalOptimizationIteration(double convergenceTolerance, File debugDirectory)
+    private void normalOptimizationIteration(double convergenceTolerance, @Nullable File debugDirectory)
     {
         LOG.info("Optimizing normals...");
 
@@ -490,7 +491,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
         }
     }
 
-    private static void logError(ReadonlyErrorReport report)
+    private static void logError(@NotNull ReadonlyErrorReport report)
     {
         LOG.debug("Error: {} (Previous error: {})", report.getError(), report.getPreviousError());
     }

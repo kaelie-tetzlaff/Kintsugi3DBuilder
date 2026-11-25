@@ -28,6 +28,7 @@ import javafx.scene.control.ButtonBase;
 import javafx.scene.control.ButtonType;
 import kintsugi3d.builder.util.FXWindowHelper;
 import kintsugi3d.fx.core.JavaFXState;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -83,7 +84,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
     }
 
     @Override
-    public final BooleanProperty getCanAdvanceObservable()
+    public final @NotNull BooleanProperty getCanAdvanceObservable()
     {
         return canAdvanceProperty;
     }
@@ -94,7 +95,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
     }
 
     @Override
-    public final StringProperty getAdvanceLabelOverrideObservable()
+    public final @NotNull StringProperty getAdvanceLabelOverrideObservable()
     {
         return advanceLabelOverrideProperty;
     }
@@ -115,7 +116,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
      * @return
      */
     @Override
-    public final BooleanProperty getCanConfirmObservable()
+    public final @NotNull BooleanProperty getCanConfirmObservable()
     {
         return canConfirmProperty;
     }

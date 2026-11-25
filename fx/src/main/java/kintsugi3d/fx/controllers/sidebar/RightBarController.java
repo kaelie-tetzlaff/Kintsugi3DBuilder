@@ -29,6 +29,7 @@ import javafx.scene.layout.VBox;
 import kintsugi3d.builder.state.cards.ProjectDataCard;
 import kintsugi3d.fx.internal.ObservableActiveShaderModel;
 import kintsugi3d.fx.internal.ObservableTabsModel;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -72,7 +73,7 @@ public class RightBarController
         return mainBox;
     }
 
-    public final void init(ObservableTabsModel tabsModel, ObservableActiveShaderModel shaderModel)
+    public final void init(@NotNull ObservableTabsModel tabsModel, ObservableActiveShaderModel shaderModel)
     {
         //Listener for any changes to selectedCards in tabModels
         tabsModel.lastSelectedCardProperty().addListener(
@@ -138,7 +139,7 @@ public class RightBarController
         }
     }
 
-    private void openCardDetails(ProjectDataCard card)
+    private void openCardDetails(@NotNull ProjectDataCard card)
     {
         imageDetailsController.setImage(card.getFullResImageFilePath());
 
@@ -178,7 +179,7 @@ public class RightBarController
      * If it is, cursor is set to resize cursor. Otherwise, default cursor.
      * @param event
      */
-    public final void mouseMoved(MouseEvent event)
+    public final void mouseMoved(@NotNull MouseEvent event)
     {
         if (event.getX() <= RESIZE_WIDTH)
         {
@@ -199,7 +200,7 @@ public class RightBarController
      * @param event
      */
     @FXML
-    public final void mouseDragged(MouseEvent event)
+    public final void mouseDragged(@NotNull MouseEvent event)
     {
         double newWidth = mainBox.getWidth()-event.getX();
 
@@ -323,7 +324,7 @@ public class RightBarController
         Platform.runLater(()->detailsBox.requestLayout());
     }
 
-    private static void setVisibilityState(Node node, boolean active)
+    private static void setVisibilityState(@NotNull Node node, boolean active)
     {
         node.setVisible(active);
         node.setManaged(active);

@@ -29,6 +29,7 @@ import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.fx.controllers.paged.NonDataPageControllerBase;
 import kintsugi3d.fx.internal.ObservableProjectModel;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +49,7 @@ public class SelectToneCalibrationImageController extends NonDataPageControllerB
     @FXML private ToggleButton selectImageFileButton;
     @FXML private Label selectImageFileLabel;
 
-    private final FileChooser imageFileChooser;
+    private final @NotNull FileChooser imageFileChooser;
     private final ObjectProperty<File> selectedImageFile = new SimpleObjectProperty<>(null);
 
     private final ToggleGroup buttonGroup = new ToggleGroup();

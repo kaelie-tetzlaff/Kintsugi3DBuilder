@@ -18,6 +18,7 @@ package kintsugi3d.builder.tools;
 import kintsugi3d.builder.state.scene.ManipulableViewpointModel;
 import kintsugi3d.gl.window.CanvasSize;
 import kintsugi3d.gl.window.CursorPosition;
+import org.jetbrains.annotations.NotNull;
 
 final class DollyTool implements DragTool
 {
@@ -33,13 +34,13 @@ final class DollyTool implements DragTool
     private static class Builder extends ToolBuilderBase<DollyTool>
     {
         @Override
-        public final DollyTool create()
+        public final @NotNull DollyTool create()
         {
             return new DollyTool(getCameraModel());
         }
     }
 
-    static ToolBuilder<DollyTool> getBuilder()
+    static @NotNull ToolBuilder<DollyTool> getBuilder()
     {
         return new Builder();
     }
@@ -50,7 +51,7 @@ final class DollyTool implements DragTool
     }
 
     @Override
-    public void mouseButtonPressed(CursorPosition cursorPosition, CanvasSize canvasSize)
+    public void mouseButtonPressed(CursorPosition cursorPosition, @NotNull CanvasSize canvasSize)
     {
         mouseStart = cursorPosition;
         oldLog10Distance = cameraModel.getLog10Distance();
@@ -58,7 +59,7 @@ final class DollyTool implements DragTool
     }
 
     @Override
-    public void cursorDragged(CursorPosition cursorPosition, CanvasSize canvasSize)
+    public void cursorDragged(@NotNull CursorPosition cursorPosition, CanvasSize canvasSize)
     {
         cameraModel.setLog10Distance((float) (oldLog10Distance - 0.5 * dollySensitivityAdjusted * (mouseStart.y - cursorPosition.y)));
     }

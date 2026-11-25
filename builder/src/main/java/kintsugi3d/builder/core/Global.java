@@ -16,6 +16,7 @@
 package kintsugi3d.builder.core;
 
 import kintsugi3d.builder.io.IO;
+import org.jetbrains.annotations.NotNull;
 
 public final class Global
 {
@@ -33,7 +34,7 @@ public final class Global
         return GlobalBootstrap.getState();
     }
 
-    public static IO io()
+    public static @NotNull IO io()
     {
         return GlobalBootstrap.getIOModel();
     }
