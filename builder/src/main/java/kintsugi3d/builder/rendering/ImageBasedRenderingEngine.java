@@ -642,55 +642,52 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final void saveGLTF(@Nullable File outputDirectory, @NotNull String filename, @NotNull ExportSettings settings, @Nullable Runnable finishedCallback)
+    public final void saveGLTF(@NotNull File outputDirectory, @NotNull String filename, @NotNull ExportSettings settings, @Nullable Runnable finishedCallback)
     {
-        if (outputDirectory != null)
+        LOG.info("Starting glTF export...");
+
+        if(progressMonitor != null)
         {
-            LOG.info("Starting glTF export...");
+            progressMonitor.setProcessName("Model Export");
+        }
 
-            if(progressMonitor != null)
+        try
+        {
+            updateWorldSpaceDefinition();
+
+            Matrix4 transform = sceneModel.getFullModelMatrix();
+
+            // Scale to imported scale from the photogrammetry project if that exists, otherwise at the original, raw scale
+            // ViewSet should default to scale of 1.0 if nothing was imported.
+            transform = Matrix4.scale(getViewSet().getObjectScale()).times(transform);
+
+            ReadonlyTextureResources<ContextType> textureResources = getResources().getTextureResources();
+
+            ModelExporter exporter = ModelExporter.fromVertexGeometry(getGeometry(), transform);
+            settings.applyToExporter(exporter, textureResources, filename);
+
+            outputDirectory.mkdirs();
+            File modelFile = new File(outputDirectory, filename);
+
+            if (settings.shouldSaveTextures())
             {
-                progressMonitor.setProcessName("Model Export");
+                exporter.exportWithTextures(modelFile, finishedCallback);
             }
-
-            try
+            else  // not saving textures
             {
-                updateWorldSpaceDefinition();
+                exporter.exportModelOnly(modelFile);
 
-                Matrix4 transform = sceneModel.getFullModelMatrix();
-
-                // Scale to imported scale from the photogrammetry project if that exists, otherwise at the original, raw scale
-                // ViewSet should default to scale of 1.0 if nothing was imported.
-                transform = Matrix4.scale(getViewSet().getObjectScale()).times(transform);
-
-                ReadonlyTextureResources<ContextType> textureResources = getResources().getTextureResources();
-
-                ModelExporter exporter = ModelExporter.fromVertexGeometry(getGeometry(), transform);
-                settings.applyToExporter(exporter, textureResources, filename);
-
-                outputDirectory.mkdirs();
-                File modelFile = new File(outputDirectory, filename);
-
-                if (settings.shouldSaveTextures())
+                if (finishedCallback != null)
                 {
-                    exporter.exportWithTextures(modelFile, finishedCallback);
+                    finishedCallback.run();
                 }
-                else  // not saving textures
-                {
-                    exporter.exportModelOnly(modelFile);
-
-                    if (finishedCallback != null)
-                    {
-                        finishedCallback.run();
-                    }
-                }
-
-                LOG.info("DONE!");
             }
-            catch (IOException e)
-            {
-                LOG.error("Error occurred during glTF export:", e);
-            }
+
+            LOG.info("DONE!");
+        }
+        catch (IOException e)
+        {
+            LOG.error("Error occurred during glTF export:", e);
         }
     }
 }

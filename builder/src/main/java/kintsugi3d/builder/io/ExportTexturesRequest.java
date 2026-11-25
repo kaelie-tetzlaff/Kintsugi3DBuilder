@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 public class ExportTexturesRequest implements ImageBasedGraphicsRequest
 {
@@ -74,7 +75,9 @@ public class ExportTexturesRequest implements ImageBasedGraphicsRequest
         @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
     {
         // Includes textures is shouldSaveTextures is true
-        renderable.saveGLTF(exportLocationFile.getParentFile(), exportLocationFile.getName(), settings, this::onSaveComplete);
+        renderable.saveGLTF(Objects.requireNonNull(exportLocationFile.getParentFile(),
+                "Export location must be an absolute file path.")
+            , exportLocationFile.getName(), settings, this::onSaveComplete);
     }
 
     private void onSaveComplete()

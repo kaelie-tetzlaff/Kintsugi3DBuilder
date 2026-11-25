@@ -396,7 +396,9 @@ public class IOModel implements IO
         // Export glTF for Kintsugi 3D Viewer even if not requested
         // TODO: ensure that GLTF texture filenames match default material texture names;
         //  otherwise might not work when launching Kintsugi 3D Viewer from Builder.
-        handler.saveGLTF(getLoadedViewSet().getSupportingFilesDirectory(), /* defaults */ new ExportSettings());
+        handler.saveGLTF(Objects.requireNonNull(getLoadedViewSet().getSupportingFilesDirectory(),
+                "No supporting files directory specified."),
+            /* defaults */ new ExportSettings());
 
         // Save textures and basis funtions (will be deferred to graphics thread).
         handler.saveAllMaterialFiles(getLoadedViewSet().getSupportingFilesDirectory(), finishedCallback);

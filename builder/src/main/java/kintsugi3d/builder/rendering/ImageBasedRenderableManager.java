@@ -692,7 +692,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public final void saveGLTF(File outputDirectory, ExportSettings settings)
+    public final void saveGLTF(@NotNull File outputDirectory, @NotNull ExportSettings settings)
     {
         ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
         if (currentInstance != null)

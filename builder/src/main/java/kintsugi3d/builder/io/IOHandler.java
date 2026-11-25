@@ -27,6 +27,7 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.util.EncodableColorImage;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -87,7 +88,7 @@ public interface IOHandler
      */
     void saveAllMaterialFiles(File materialDirectory, Runnable finishedCallback);
 
-    void saveGLTF(File outputDirectory, ExportSettings settings);
+    void saveGLTF(@NotNull File outputDirectory, @NotNull ExportSettings settings);
 
     /**
      *

@@ -50,13 +50,13 @@ public interface ImageBasedRenderable<ContextType extends Context<ContextType>>
     DynamicResourceManager getDynamicResourceManager();
 
     @Override
-    default void saveGLTF(File outputDirectory, ExportSettings settings)
+    default void saveGLTF(@NotNull File outputDirectory, @NotNull ExportSettings settings)
     {
         saveGLTF(outputDirectory, "model.glb", settings);
     }
 
     @Override
-    default void saveGLTF(File outputDirectory, String filename, ExportSettings settings)
+    default void saveGLTF(@NotNull File outputDirectory, @NotNull String filename, @NotNull ExportSettings settings)
     {
         saveGLTF(outputDirectory, filename, settings, null);
     }
