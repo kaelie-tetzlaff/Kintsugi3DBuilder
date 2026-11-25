@@ -100,9 +100,14 @@ public class ResampleRequest implements ImageBasedGraphicsRequest
             Files.copy(resampleVSETFile.toPath(),
                 new File(resampleExportPath, resampleVSETFile.getName()).toPath(),
                 StandardCopyOption.REPLACE_EXISTING);
-            Files.copy(renderable.getViewSet().getGeometryFile().toPath(),
-                new File(resampleExportPath, renderable.getViewSet().getGeometryFile().getName()).toPath(),
-                StandardCopyOption.REPLACE_EXISTING);
+
+            File geometryFile = renderable.getViewSet().getGeometryFile();
+            if (geometryFile != null)
+            {
+                Files.copy(geometryFile.toPath(),
+                    new File(resampleExportPath, geometryFile.getName()).toPath(),
+                    StandardCopyOption.REPLACE_EXISTING);
+            }
         }
     }
 }

@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 public final class TexturesReplacedEvent
 {
-    private final ReadonlyTextureResources<?> newTextures;
+    private final @Nullable ReadonlyTextureResources<?> newTextures;
 
     public TexturesReplacedEvent(@Nullable ReadonlyTextureResources<?> newTextures)
     {

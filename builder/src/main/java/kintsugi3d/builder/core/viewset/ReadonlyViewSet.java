@@ -68,7 +68,7 @@ public interface ReadonlyViewSet
      * Gets the geometry file associated with this view set.
      * @return The geometry file.
      */
-    File getGeometryFile();
+    @Nullable File getGeometryFile();
 
     /**
      * Gets the file path of the supporting files (i.e. texture fit results) associated with this view set.
@@ -287,7 +287,7 @@ public interface ReadonlyViewSet
 
     boolean hasMasks();
 
-    File getMasksDirectory();
+    @Nullable File getMasksDirectory();
 
     @Nullable String getRelativeMaskPathName();
 

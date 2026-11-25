@@ -278,7 +278,7 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
         return validateScreenSpaceDepthFBO().getDepthAttachmentTexture();
     }
 
-    public final void refreshScreenSpaceDepthFBO(@NotNull Matrix4 view, Matrix4 projection)
+    public final void refreshScreenSpaceDepthFBO(@NotNull Matrix4 view, @NotNull Matrix4 projection)
     {
         context.getState().disableBackFaceCulling();
 

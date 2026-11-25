@@ -42,7 +42,7 @@ public final class MetashapeChunk
     private static final Logger LOG = LoggerFactory.getLogger(MetashapeChunk.class);
 
     private final MetashapeDocument metashapeDocument;
-    private final String label;
+    private final @Nullable String label;
     private int id;//TODO: is this optional?
 
     private Document chunkXML;

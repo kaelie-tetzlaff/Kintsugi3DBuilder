@@ -43,7 +43,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
 {
     private static final Logger LOG = LoggerFactory.getLogger(StandardShaderComponent.class);
 
-    private final LightingResources<ContextType> lightingResources;
+    private final @Nullable LightingResources<ContextType> lightingResources;
 
     private final @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources;
     private final SceneModel sceneModel;

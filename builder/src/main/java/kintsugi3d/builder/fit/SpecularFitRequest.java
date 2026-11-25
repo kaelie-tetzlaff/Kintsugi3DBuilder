@@ -50,7 +50,7 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
     private static final boolean DEBUG_IMAGES = false;
 
     private final ReadonlySpecularFitSettings settings;
-    private final ReadonlyBasisOptimizationSettings basisOptimizationSettings;
+    private final @Nullable ReadonlyBasisOptimizationSettings basisOptimizationSettings;
 
     private File outputDirectory;
 

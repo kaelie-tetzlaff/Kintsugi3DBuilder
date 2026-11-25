@@ -86,8 +86,8 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     public final TextureParameters parameters;
 
     public final int precision;
-    private final ColorFormat colorFormat;
-    private final CompressionFormat compressionFormat;
+    private final @Nullable ColorFormat colorFormat;
+    private final @Nullable CompressionFormat compressionFormat;
     private final TextureType textureType;
 
     private OpenGLTexture(OpenGLContext context, int textureTarget, @Nullable ColorFormat colorFormat,
@@ -134,13 +134,13 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     }
 
     @Override
-    public final ColorFormat getInternalUncompressedColorFormat()
+    public final @Nullable ColorFormat getInternalUncompressedColorFormat()
     {
         return colorFormat;
     }
 
     @Override
-    public final CompressionFormat getInternalCompressedColorFormat()
+    public final @Nullable CompressionFormat getInternalCompressedColorFormat()
     {
         return compressionFormat;
     }
@@ -456,7 +456,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
 
     final boolean hasIntegerInternalFormat()
     {
-        return !isInternalFormatCompressed() && colorFormat.isInteger();
+        return colorFormat != null && colorFormat.isInteger();
     }
 
     private static Stream<Entry<Integer, int[]>> getScanlineStream(@NotNull BufferedImage colorImg, boolean flipVertical)

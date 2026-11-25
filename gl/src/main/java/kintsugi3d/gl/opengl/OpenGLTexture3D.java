@@ -548,12 +548,14 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         {
             if (isInternalFormatCompressed())
             {
+                assert getInternalCompressedColorFormat() != null;
                 return new OpenGLTexture3D(getContext(), getTextureTarget(), parameters.multisamples,
                     getInternalCompressedColorFormat(), newWidth, newHeight, newDepth, parameters.format, parameters.fixedMultisampleLocations,
                     parameters.useLinearFiltering, parameters.useMipmaps, parameters.maxMipmapLevel, parameters.maxAnisotropy);
             }
             else
             {
+                assert getInternalUncompressedColorFormat() != null;
                 return new OpenGLTexture3D(getContext(), getTextureTarget(), parameters.multisamples,
                     getInternalUncompressedColorFormat(), newWidth, newHeight, newDepth, parameters.format, parameters.fixedMultisampleLocations,
                     parameters.useLinearFiltering, parameters.useMipmaps, parameters.maxMipmapLevel, parameters.maxAnisotropy);

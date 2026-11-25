@@ -36,7 +36,7 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
     private static final Pattern TEXTURE_NAME_PROBLEM_CHARS = Pattern.compile("[^A-Za-z0-9]+");
 
     private static <ContextType extends Context<ContextType>> void useTextureSafe(
-        @NotNull Program<ContextType> program, String textureName, @Nullable Texture<ContextType> texture)
+        @NotNull Program<ContextType> program, @NotNull String textureName, @Nullable Texture<ContextType> texture)
     {
         if (texture == null)
         {

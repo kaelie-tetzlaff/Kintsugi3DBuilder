@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 final class SpecularFitResources<ContextType extends Context<ContextType>> implements ShaderResources<ContextType>
 {
     private final ShaderResources<ContextType> base;
-    private final ReadonlyBasisSettings basisSettings;
+    private final @Nullable ReadonlyBasisSettings basisSettings;
     private final boolean smithMaskingShadowing;
 
     SpecularFitResources(ShaderResources<ContextType> base, boolean smithMaskingShadowing, @Nullable ReadonlyBasisSettings basisSettings)

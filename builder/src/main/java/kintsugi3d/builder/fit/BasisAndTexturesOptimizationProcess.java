@@ -191,7 +191,7 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
      */
     private static final class CacheProgressMonitor extends DefaultProgressMonitor
     {
-        private final ProgressMonitor monitor;
+        private final @Nullable ProgressMonitor monitor;
         private double maxProgress;
 
         private CacheProgressMonitor(@Nullable ProgressMonitor monitor)

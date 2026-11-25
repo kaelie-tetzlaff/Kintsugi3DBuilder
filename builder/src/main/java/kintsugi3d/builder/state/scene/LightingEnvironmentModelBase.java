@@ -171,7 +171,7 @@ public abstract class LightingEnvironmentModelBase<DiscreteLightType extends Dis
     }
 
     @Override
-    public final void setLightCenter(int i, Vector3 lightCenter)
+    public final void setLightCenter(int i, @NotNull Vector3 lightCenter)
     {
         if (isLightWidgetEnabled(i))
         {

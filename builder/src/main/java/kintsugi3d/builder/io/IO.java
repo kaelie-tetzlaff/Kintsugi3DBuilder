@@ -111,7 +111,7 @@ public interface IO
      *
      * @throws IOException
      */
-    default void saveProject(File projectFile) throws IOException
+    default void saveProject(@NotNull File projectFile) throws IOException
     {
         saveProject(projectFile, null);
     }

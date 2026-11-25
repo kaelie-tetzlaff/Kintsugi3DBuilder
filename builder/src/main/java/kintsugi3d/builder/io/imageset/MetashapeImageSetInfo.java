@@ -43,7 +43,7 @@ import java.util.stream.Stream;
 public final class MetashapeImageSetInfo implements ImageSetInfo
 {
     private static final Logger LOG = LoggerFactory.getLogger(MetashapeImageSetInfo.class);
-    private final String chunkName;
+    private final @Nullable String chunkName;
     private final @NotNull List<ImageIdentifier> primaryViewCandidates;
     private final @NotNull List<Element> cameras;
     private File fullResSearchDir;
@@ -121,7 +121,7 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
     }
 
     @Override
-    public String getName()
+    public @Nullable String getName()
     {
         return chunkName;
     }

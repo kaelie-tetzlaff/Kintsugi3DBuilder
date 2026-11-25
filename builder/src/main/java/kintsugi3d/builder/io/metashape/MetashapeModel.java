@@ -28,8 +28,8 @@ public final class MetashapeModel
 {
     private static final Logger LOG = LoggerFactory.getLogger(MetashapeModel.class);
     private final MetashapeChunk chunk;
-    private final Integer id;
-    private final String label;
+    private final @Nullable Integer id;
+    private final @Nullable String label;
     private final String path;
 
     private final LoadPreferences loadPreferences = new LoadPreferences();

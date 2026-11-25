@@ -638,8 +638,9 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
         // Send the data to the GPU.
         bind();
 
+        ColorFormat uncompressedColorFormat = getInternalUncompressedColorFormat();
         int format = getPixelDataFormatFromDimensions(data.getDimensions(),
-            !isInternalFormatCompressed() && getInternalUncompressedColorFormat().isInteger());
+            uncompressedColorFormat != null && uncompressedColorFormat.isInteger());
 
         int type = OpenGLContext.getDataTypeConstant(data.getDataType());
 
@@ -700,12 +701,14 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
         {
             if (isInternalFormatCompressed())
             {
+                assert getInternalCompressedColorFormat() != null;
                 return new OpenGLTexture2D(getContext(), getTextureTarget(), parameters.multisamples,
                     getInternalCompressedColorFormat(), newWidth, newHeight, parameters.format, parameters.fixedMultisampleLocations,
                     parameters.useLinearFiltering, parameters.useMipmaps, parameters.maxMipmapLevel, parameters.maxAnisotropy);
             }
             else
             {
+                assert getInternalUncompressedColorFormat() != null;
                 return new OpenGLTexture2D(getContext(), getTextureTarget(), parameters.multisamples,
                     getInternalUncompressedColorFormat(), newWidth, newHeight, parameters.format, parameters.fixedMultisampleLocations,
                     parameters.useLinearFiltering, parameters.useMipmaps, parameters.maxMipmapLevel, parameters.maxAnisotropy);

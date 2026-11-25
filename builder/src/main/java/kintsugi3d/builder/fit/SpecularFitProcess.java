@@ -409,7 +409,7 @@ public abstract class SpecularFitProcess
 
     private static final class BlockResourcesProgressMonitor extends DefaultProgressMonitor
     {
-        private final ProgressMonitor monitor;
+        private final @Nullable ProgressMonitor monitor;
         private double maxProgress;
 
         private BlockResourcesProgressMonitor(@Nullable ProgressMonitor monitor)
@@ -442,7 +442,7 @@ public abstract class SpecularFitProcess
 
     private static final class OptimizationProgressMonitor extends DefaultProgressMonitor
     {
-        private final ProgressMonitor monitor;
+        private final @Nullable ProgressMonitor monitor;
         private final int blockProgress;
         private double maxProgress;
 

@@ -54,7 +54,7 @@ public class ShaderHoleFill<ContextType extends Context<ContextType>> implements
         rect.close();
     }
 
-    public final FramebufferObject<ContextType> execute(
+    public final @NotNull FramebufferObject<ContextType> execute(
         @NotNull FramebufferObject<ContextType> initFrontFramebuffer, FramebufferObject<ContextType> initBackFramebuffer)
     {
         FramebufferObject<ContextType> frontFramebuffer = initFrontFramebuffer;

@@ -95,7 +95,7 @@ public interface ReadonlyVertexGeometry
      * Gets the filename of the mesh's associated material.
      * @return The name of the material file for this mesh.
      */
-    String getMaterialFileName();
+    @Nullable String getMaterialFileName();
 
     /**
      * Gets the associated material for this mesh.
@@ -107,5 +107,5 @@ public interface ReadonlyVertexGeometry
      * Gets the mesh filename.
      * @return The filename of the mesh.
      */
-    File getFilename();
+    @Nullable File getFilename();
 }

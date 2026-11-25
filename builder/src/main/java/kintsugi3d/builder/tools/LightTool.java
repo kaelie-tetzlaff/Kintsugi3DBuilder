@@ -313,7 +313,11 @@ final class LightTool implements PickerTool
     {
         if ("RenderingSubject".equals(sceneViewport.getObjectAtCoordinates(normalizedPosition.x, normalizedPosition.y)))
         {
-            lightingModel.setLightCenter(lightIndex, sceneViewport.get3DPositionAtCoordinates(normalizedPosition.x, normalizedPosition.y));
+            Vector3 position = sceneViewport.get3DPositionAtCoordinates(normalizedPosition.x, normalizedPosition.y);
+            if (position != null)
+            {
+                lightingModel.setLightCenter(lightIndex, position);
+            }
         }
     }
 }

@@ -21,7 +21,7 @@ public class TabInfo
 {
     private final String label;
     private final ProjectDataCardFactory<?> factory;
-    private final String path;
+    private final @Nullable String path;
 
     public TabInfo(String label, ProjectDataCardFactory<?> factory, @Nullable String path)
     {

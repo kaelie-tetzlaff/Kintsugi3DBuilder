@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class CancellationPassthroughMonitor extends DefaultProgressMonitor
 {
-    private final ProgressMonitor monitor;
+    private final @Nullable ProgressMonitor monitor;
 
     public CancellationPassthroughMonitor(@Nullable ProgressMonitor monitor)
     {

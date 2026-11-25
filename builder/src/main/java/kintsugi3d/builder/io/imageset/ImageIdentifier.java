@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 public class ImageIdentifier
 {
     public final String name;
-    public final String group;
+    public final @Nullable String group;
     public final int id;
 
     public ImageIdentifier(String name, int id, @Nullable String group)

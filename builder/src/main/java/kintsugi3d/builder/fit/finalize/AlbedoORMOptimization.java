@@ -256,7 +256,7 @@ public final class AlbedoORMOptimization<ContextType extends Context<ContextType
         return StandardTexture.convertEnumMapToObjectMap(getStandardTextures());
     }
 
-    private Texture2D<ContextType> extractMetallicFromOrm(@NotNull ContextType context, ReadonlyTexture2D<ContextType> orm) throws IOException
+    private Texture2D<ContextType> extractMetallicFromOrm(@NotNull ContextType context, @NotNull ReadonlyTexture2D<ContextType> orm) throws IOException
     {
         ProgramObject<ContextType> program = context.getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File("shaders/common/texture.vert"))

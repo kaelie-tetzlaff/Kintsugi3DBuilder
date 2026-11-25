@@ -26,7 +26,7 @@ import java.util.UUID;
 public class ProjectDataCard
 {
     private final String internalName;
-    private final String fullResImageFilePath;
+    private final @Nullable String fullResImageFilePath;
     private final @NotNull UUID cardId;
     private final String title;
     private final String thumbnailPath;
@@ -95,7 +95,7 @@ public class ProjectDataCard
 
     public final void setIsEnabled(boolean isEnabled) { this.isEnabled = isEnabled; }
 
-    public final String getFullResImageFilePath()
+    public final @Nullable String getFullResImageFilePath()
     {
         return fullResImageFilePath;
     }

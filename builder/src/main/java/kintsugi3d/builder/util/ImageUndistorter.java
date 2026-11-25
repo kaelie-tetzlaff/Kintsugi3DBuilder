@@ -49,7 +49,7 @@ public class ImageUndistorter<ContextType extends Context<ContextType>> implemen
         drawable.setDefaultPrimitiveMode(PrimitiveMode.TRIANGLE_FAN);
     }
 
-    public final Texture2D<ContextType> undistort(ReadonlyTexture2D<ContextType> inputImage, @NotNull DistortionProjection distortion)
+    public final Texture2D<ContextType> undistort(@NotNull ReadonlyTexture2D<ContextType> inputImage, @NotNull DistortionProjection distortion)
     {
         drawable.program().setTexture("inputImage", inputImage);
         drawable.program().setUniform("viewportSize", new Vector2(distortion.width, distortion.height));

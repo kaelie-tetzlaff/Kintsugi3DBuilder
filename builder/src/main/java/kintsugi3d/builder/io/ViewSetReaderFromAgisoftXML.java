@@ -247,7 +247,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
     {
         private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
-        private final String modelID;
+        private final @Nullable String modelID;
 
         private final Map<String, Sensor> sensorSet = new HashMap<>(16);
         private final Set<Camera> cameraSet = new TreeSet<>((c1, c2) ->

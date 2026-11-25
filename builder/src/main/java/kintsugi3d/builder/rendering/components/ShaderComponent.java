@@ -39,9 +39,9 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
     private @Nullable ProgramObject<ContextType> program;
     private @Nullable DrawableResource<ContextType> drawable;
 
-    private final SceneViewportModel sceneViewportModel;
+    private final @Nullable SceneViewportModel sceneViewportModel;
 
-    private final String sceneObjectTag;
+    private final @Nullable String sceneObjectTag;
 
     /**
      * Creates a shader component using object ID managed by scene viewport model and scene object tag for framebuffer writes
@@ -70,7 +70,7 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
         this(context, null, null);
     }
 
-    protected final String getSceneObjectTag()
+    protected final @Nullable String getSceneObjectTag()
     {
         return sceneObjectTag;
     }
