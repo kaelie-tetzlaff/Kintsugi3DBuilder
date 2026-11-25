@@ -37,7 +37,7 @@ public interface ReadonlyImageBasedGraphicsResources<ContextType extends Context
      * The view set that these resources were loaded from.
      * @return A read-only view of the view set
      */
-    @Nullable ReadonlyViewSet getViewSet();
+    @NotNull ReadonlyViewSet getViewSet();
 
     /**
      * Diffuse, normal, specular, roughness maps
