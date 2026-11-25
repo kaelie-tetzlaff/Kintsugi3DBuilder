@@ -249,7 +249,7 @@ public class View
         this.maskFile = maskFile;
     }
 
-    public final ImageHelper loadFullResMaskedImage() throws IOException
+    public final @NotNull ImageHelper loadFullResMaskedImage() throws IOException
     {
         return ImageHelper.read(findFullResImageFile()).withAlphaMask(getMaskFile());
     }

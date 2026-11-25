@@ -16,9 +16,11 @@
 package kintsugi3d.gl.window;
 
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.Nullable;
 
 public interface PollableWindow extends Window
 {
     @Override
+    @Nullable
     PollableCanvas3D<? extends Context<?>> getCanvas();
 }

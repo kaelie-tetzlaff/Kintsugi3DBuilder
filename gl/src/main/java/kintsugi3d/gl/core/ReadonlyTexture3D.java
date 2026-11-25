@@ -89,7 +89,7 @@ public interface ReadonlyTexture3D<ContextType extends Context<ContextType>>
      * Copies this texture, creating a new resource with identical contents.
      * @return The new resource containing a copy of the texture
      */
-    default Texture3D<ContextType> copy()
+    default @NotNull Texture3D<ContextType> copy()
     {
         return crop(0, 0, getWidth(), getHeight());
     }

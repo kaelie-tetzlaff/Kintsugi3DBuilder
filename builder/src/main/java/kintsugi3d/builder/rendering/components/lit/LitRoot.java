@@ -103,7 +103,7 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
         litContentRoot.close();
     }
 
-    public final RenderedComponent<ContextType> getLitContentRoot()
+    public final @NotNull RenderedComponent<ContextType> getLitContentRoot()
     {
         return litContentRoot;
     }

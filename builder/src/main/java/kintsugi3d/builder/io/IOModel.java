@@ -176,7 +176,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public final ReadonlyImageBasedRenderable<?> getMainRenderable()
+    public final @Nullable ReadonlyImageBasedRenderable<?> getMainRenderable()
     {
         return handler.getMainRenderable();
     }

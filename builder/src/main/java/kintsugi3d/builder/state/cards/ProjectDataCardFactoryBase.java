@@ -19,6 +19,7 @@ import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
 import kintsugi3d.gl.core.Context;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
@@ -40,7 +41,7 @@ public abstract class ProjectDataCardFactoryBase<T> implements ProjectDataCardFa
         return resources;
     }
 
-    protected final ViewSet getViewSet()
+    protected final @Nullable ViewSet getViewSet()
     {
         return resources.getViewSet();
     }

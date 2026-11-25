@@ -181,7 +181,7 @@ public class ZoomSafeImageView
         }
     }
 
-    public final Node getImageViewNode()
+    public final @NotNull Node getImageViewNode()
     {
         return imageView;
     }

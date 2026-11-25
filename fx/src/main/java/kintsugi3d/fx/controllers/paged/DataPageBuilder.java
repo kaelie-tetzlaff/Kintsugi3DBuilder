@@ -28,14 +28,14 @@ public class DataPageBuilder<InType, OutType, FinishType> extends SimplePageBuil
 
     @Override
     public final <ControllerType extends NonSupplierPageController<? super OutType>>
-    @NotNull SimplePageBuilder<OutType, OutType, FinishType> then(String fxmlPath, Supplier<ControllerType> controllerConstructorOverride)
+    @NotNull SimplePageBuilder<OutType, OutType, FinishType> then(@NotNull String fxmlPath, Supplier<ControllerType> controllerConstructorOverride)
     {
         return then(fxmlPath, SimpleDataReceiverPage<OutType, ControllerType>::new, controllerConstructorOverride);
     }
 
     @Override
     public final <ControllerType extends NonSupplierPageController<? super OutType>>
-    @NotNull SimplePageBuilder<OutType, OutType, FinishType> then(String fxmlPath)
+    @NotNull SimplePageBuilder<OutType, OutType, FinishType> then(@NotNull String fxmlPath)
     {
         return this.<ControllerType>then(fxmlPath, null);
     }

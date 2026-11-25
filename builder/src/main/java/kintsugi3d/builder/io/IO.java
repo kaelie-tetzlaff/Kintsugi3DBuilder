@@ -58,7 +58,7 @@ public interface IO
         return hasLoadedRenderable() && getMainRenderable().getResources().hasProcessedWeightMaps();
     }
 
-    ViewSet getLoadedViewSetOrNull();
+    @Nullable ViewSet getLoadedViewSetOrNull();
 
     default @NotNull ViewSet getLoadedViewSetOrThrow()
     {
@@ -73,7 +73,7 @@ public interface IO
         }
     }
 
-    ReadonlyVertexGeometry getLoadedGeometry();
+    @Nullable ReadonlyVertexGeometry getLoadedGeometry();
     ReadonlyImageBasedRenderable<?> getMainRenderable();
     ReadonlyImageBasedRenderable<?> getRenderableForShader(ShaderInfo shader);
     void loadFromLooseFiles(File newProjectFile, String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions);
@@ -139,7 +139,7 @@ public interface IO
         saveProject(getProjectFile(), null);
     }
 
-    EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException;
+    @Nullable EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException;
     void loadBackplate(File backplateFile) throws FileNotFoundException;
 
     void closeProject();

@@ -170,7 +170,7 @@ public abstract class ExperienceBase implements Experience
      */
     protected final <ControllerType extends NonSupplierPageController<Object>>
     PageFrameController openPagedModal(
-        String firstPageURLString, Supplier<ControllerType> firstPageControllerConstructorOverride) throws IOException
+        @NotNull String firstPageURLString, Supplier<ControllerType> firstPageControllerConstructorOverride) throws IOException
     {
         return buildPagedModal()
             .<SimpleNonDataPage<ControllerType>, Object, ControllerType>then(
@@ -185,7 +185,7 @@ public abstract class ExperienceBase implements Experience
      * @throws IOException If the FXML could not be loaded.
      */
     protected final <ControllerType extends NonSupplierPageController<Object>>
-    PageFrameController openPagedModal(String firstPageURLString) throws IOException
+    PageFrameController openPagedModal(@NotNull String firstPageURLString) throws IOException
     {
         return this.<ControllerType>openPagedModal(firstPageURLString, null);
     }

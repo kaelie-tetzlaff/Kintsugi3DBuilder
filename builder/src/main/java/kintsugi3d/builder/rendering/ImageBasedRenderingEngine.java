@@ -603,7 +603,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final ViewSet getViewSet()
+    public final @Nullable ViewSet getViewSet()
     {
         return getResources().getViewSet();
     }

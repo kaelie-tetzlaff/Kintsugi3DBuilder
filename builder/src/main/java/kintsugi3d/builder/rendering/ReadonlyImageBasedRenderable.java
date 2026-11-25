@@ -16,6 +16,7 @@ import kintsugi3d.builder.fit.settings.ExportSettings;
 import kintsugi3d.builder.resources.project.ReadonlyGraphicsResourcesImageSpace;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.SubdivisionRenderable;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
@@ -27,7 +28,7 @@ public interface ReadonlyImageBasedRenderable<ContextType extends Context<Contex
      *
      * @return The view set.
      */
-    ReadonlyViewSet getViewSet();
+    @Nullable ReadonlyViewSet getViewSet();
 
     /**
      * Gets the resources used by this project instance.

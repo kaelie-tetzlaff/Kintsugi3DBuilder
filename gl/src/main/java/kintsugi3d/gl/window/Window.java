@@ -16,10 +16,11 @@
 package kintsugi3d.gl.window;
 
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.Nullable;
 
 public interface Window
 {
-    Canvas3D<? extends Context<?>> getCanvas();
+    @Nullable Canvas3D<? extends Context<?>> getCanvas();
 
     void show();
 

@@ -197,7 +197,7 @@ public final class ImageHelper
         }
     }
 
-    public ImageHelper scaledBy(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") double factor)
+    public @NotNull ImageHelper scaledBy(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") double factor)
     {
         return scaledBy(factor, factor);
     }

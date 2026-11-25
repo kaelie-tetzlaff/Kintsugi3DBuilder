@@ -114,7 +114,7 @@ public final class FXImageHelper
          * @throws IOException
          */
         @Override
-        public final ImageHelper getImageHelper() throws IOException
+        public final @NotNull ImageHelper getImageHelper() throws IOException
         {
             return ImageHelper.read(file);
         }
@@ -147,7 +147,7 @@ public final class FXImageHelper
          * @throws IOException
          */
         @Override
-        public final ImageHelper getImageHelper() throws IOException
+        public final @NotNull ImageHelper getImageHelper() throws IOException
         {
             return ImageHelper.read(inputStream);
         }

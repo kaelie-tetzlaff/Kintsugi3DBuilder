@@ -130,7 +130,7 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public CanvasPosition getPosition()
+    public @NotNull CanvasPosition getPosition()
     {
         return canvasPosition;
     }
