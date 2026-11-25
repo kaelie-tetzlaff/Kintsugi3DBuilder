@@ -99,8 +99,20 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
 
         errorCalculator = ShaderBasedErrorCalculator.create(resources.getContext(),
             () -> createErrorCalcProgram(wrappedResources),
-            program -> createErrorCalcDrawable(this, program),
+            program -> createErrorCalcDrawable(
+                // Copy textures other than error calc itself for use by error calculator.
+                () -> StandardTexture.convertEnumMapToObjectMap(buildTexturesMap()), program),
             textureResolution.width, textureResolution.height);
+    }
+
+    private @NotNull Map<StandardTexture, Texture2D<ContextType>> buildTexturesMap()
+    {
+        Map<StandardTexture, Texture2D<ContextType>> errorCalcTextures = new EnumMap<>(base.getStandardTextures());
+        errorCalcTextures.putAll(Map.of(
+            StandardTexture.DIFFUSE_COLOR, diffuseOptimization.getDiffuseMap(),
+            StandardTexture.NORMAL_MAP, normalOptimization.getNormalMap()));
+        // Error calc intentionally excluded since we need to also pass this to the error calc drawable.
+        return errorCalcTextures;
     }
 
     @Override
@@ -125,13 +137,8 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
     public @NotNull Map<StandardTexture, Texture2D<ContextType>> getStandardTextures()
     {
         // Mutable copy of getSpecularTextures()
-        Map<StandardTexture, Texture2D<ContextType>> standardTextures = new EnumMap<>(base.getStandardTextures());
-
-        standardTextures.putAll(Map.of(
-            StandardTexture.DIFFUSE_COLOR, diffuseOptimization.getDiffuseMap(),
-            StandardTexture.NORMAL_MAP, normalOptimization.getNormalMap()));
+        Map<StandardTexture, Texture2D<ContextType>> standardTextures = buildTexturesMap();
         standardTextures.put(StandardTexture.ERROR, errorCalculator.getFramebufferAsTexture());
-
         return Collections.unmodifiableMap(standardTextures);
     }
 
