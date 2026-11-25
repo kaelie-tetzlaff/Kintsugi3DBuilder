@@ -260,7 +260,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
         return textureResolution;
     }
 
-    private void optimize(@NotNull Runnable iteration, boolean multipleBasisMaterials, double convergenceTolerance, @NotNull ProgressMonitor monitor)
+    private void optimize(@NotNull Runnable iteration, boolean multipleBasisMaterials, double convergenceTolerance, @Nullable ProgressMonitor monitor)
         throws UserCancellationException
     {
         //monitor.setMaxProgress(1.0 / convergenceTolerance);
@@ -271,7 +271,10 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
 
         do
         {
-            monitor.allowUserCancellation();
+            if (monitor != null)
+            {
+                monitor.allowUserCancellation();
+            }
 
             double previousIterationError = errorCalculator.getReport().getError();
             iteration.run();
@@ -287,7 +290,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
 
     void optimizeFromExistingBasis(
         @NotNull SpecularDecomposition specularDecomposition, @NotNull GraphicsStreamResource<ContextType> reflectanceStream,
-        double convergenceTolerance, @NotNull ProgressMonitor monitor, File debugDirectory)
+        double convergenceTolerance, @Nullable ProgressMonitor monitor, @Nullable File debugDirectory)
         throws UserCancellationException
     {
         prepareForOptimization(reflectanceStream);
@@ -308,7 +311,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
 
     void optimizeFromScratch(
         @NotNull ReadonlyBasisOptimizationSettings basisOptimizationSettings, @NotNull SpecularDecompositionFromScratch specularDecomposition,
-        @NotNull GraphicsStreamResource<ContextType> reflectanceStream, double convergenceTolerance, @NotNull ProgressMonitor monitor, @Nullable File debugDirectory)
+        @NotNull GraphicsStreamResource<ContextType> reflectanceStream, double convergenceTolerance, @Nullable ProgressMonitor monitor, @Nullable File debugDirectory)
         throws UserCancellationException
     {
         prepareForOptimization(reflectanceStream);
@@ -429,7 +432,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
      */
     private void basisOptimizationIteration(
         @NotNull ReadonlyBasisOptimizationSettings basisOptimizationSettings, @NotNull SpecularDecompositionFromScratch specularDecomposition,
-        @NotNull GraphicsStream<ColorList[]> reflectanceStreamParallel, ProgressMonitor monitor)
+        @NotNull GraphicsStream<ColorList[]> reflectanceStreamParallel, @Nullable ProgressMonitor monitor)
     {
         BRDFReconstruction brdfReconstruction = new BRDFReconstruction(
             basisOptimizationSettings,

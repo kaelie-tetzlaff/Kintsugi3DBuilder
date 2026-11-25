@@ -83,7 +83,7 @@ public final class RenderingBootstrap
         startRenderThread(renderingUI, false, args);
     }
 
-    public static void startRenderThread(RenderingUI renderingUI, boolean standaloneWindow, String... args)
+    public static void startRenderThread(@Nullable RenderingUI renderingUI, boolean standaloneWindow, String... args)
     {
         LOG.info("Starting Render Thread");
         new Thread(() ->

@@ -19,11 +19,12 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Drawable;
 import kintsugi3d.gl.core.Framebuffer;
 import kintsugi3d.gl.vecmath.Matrix4;
+import org.jetbrains.annotations.Nullable;
 
 @FunctionalInterface
 public interface Renderable<ContextType extends Context<ContextType>> extends Drawable<ContextType>
 {
-    void draw(Framebuffer<ContextType> framebuffer, Matrix4 modelViewOverride, Matrix4 projectionOverride);
+    void draw(Framebuffer<ContextType> framebuffer, @Nullable Matrix4 modelViewOverride, @Nullable Matrix4 projectionOverride);
 
     @Override
     default void draw(Framebuffer<ContextType> framebuffer)

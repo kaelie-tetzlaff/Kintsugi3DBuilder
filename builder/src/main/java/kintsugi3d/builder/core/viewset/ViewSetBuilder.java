@@ -61,7 +61,7 @@ public final class ViewSetBuilder
         this(rootDirectory, rootDirectory, initialCapacity);
     }
 
-    ViewSetBuilder(File rootDirectory, File supportingFilesDirectory, int initialCapacity)
+    ViewSetBuilder(File rootDirectory, @Nullable File supportingFilesDirectory, int initialCapacity)
     {
         result = new ViewSet(initialCapacity);
         result.setRootDirectory(rootDirectory);
@@ -255,7 +255,8 @@ public final class ViewSetBuilder
     {
         result.setRelativeMasksPathName(relativePath);
 
-        if (!result.getMasksDirectory().exists())
+        File masksDirectory = result.getMasksDirectory();
+        if (masksDirectory != null && !masksDirectory.exists())
         {
             // Fallback for older projects where masks were stored as absolute path.
             File pathAsAbsoluteFile = new File(relativePath);
@@ -314,7 +315,7 @@ public final class ViewSetBuilder
         return this;
     }
 
-    public @NotNull ViewSetBuilder setMasksDirectory(File file)
+    public @NotNull ViewSetBuilder setMasksDirectory(@Nullable File file)
     {
         result.setMasksDirectory(file);
         return this;

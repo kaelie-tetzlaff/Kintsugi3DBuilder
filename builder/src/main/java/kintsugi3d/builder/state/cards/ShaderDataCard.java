@@ -18,6 +18,7 @@ package kintsugi3d.builder.state.cards;
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.state.shader.ShaderInfo;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
@@ -75,7 +76,7 @@ public class ShaderDataCard extends ProjectDataCard
      * @param isEnabled
      */
     public ShaderDataCard(
-        String internalName, String title, ShaderInfo shader, String thumbnailPath, String fullResImageFilePath,
+        String internalName, String title, ShaderInfo shader, String thumbnailPath, @Nullable String fullResImageFilePath,
         @NotNull Map<String, String> textFields, @NotNull Collection<? extends Map<String, Runnable>> actionGroups, boolean isEnabled)
     {
         super(internalName, title, fullResImageFilePath, thumbnailPath, textFields,
@@ -95,7 +96,7 @@ public class ShaderDataCard extends ProjectDataCard
      * @param isEnabled
      */
     public ShaderDataCard(
-        String internalName, @NotNull ShaderInfo shader, String thumbnailPath, String fullResImageFilePath,
+        String internalName, @NotNull ShaderInfo shader, String thumbnailPath, @Nullable String fullResImageFilePath,
         @NotNull Map<String, String> textFields, @NotNull Collection<? extends Map<String, Runnable>> actionGroups, boolean isEnabled)
     {
         this(internalName, shader.getFriendlyName(), shader, thumbnailPath, fullResImageFilePath, textFields,

@@ -107,7 +107,7 @@ public interface ReadonlyTextureResources<ContextType extends Context<ContextTyp
      * @param outputDirectory  The directory in which to save the basis functions.
      * @param filenameOverride The filename to use.  If set to null, a default filename will be provided.
      */
-    void saveBasisFunctions(File outputDirectory, String filenameOverride);
+    void saveBasisFunctions(File outputDirectory, @Nullable @Nullable String filenameOverride);
 
     /**
      * Saves basis function textures to the filesystem with a default filename.

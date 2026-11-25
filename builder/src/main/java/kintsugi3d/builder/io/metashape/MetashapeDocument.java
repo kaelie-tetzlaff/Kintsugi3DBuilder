@@ -30,10 +30,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class MetashapeDocument
 {
@@ -96,7 +93,7 @@ public class MetashapeDocument
         }
     }
 
-    public final String getChunkNameFromID(int id)
+    public final @Nullable String getChunkNameFromID(int id)
     {
         Optional<MetashapeChunk> chunk = chunks.stream()
             .filter(c -> c.getID() == id)
@@ -162,10 +159,10 @@ public class MetashapeDocument
         return Collections.unmodifiableList(chunks);
     }
 
-    public final void selectChunk(String selectedChunkLabel)
+    public final void selectChunk(@Nullable String selectedChunkLabel)
     {
         chunks.stream()
-            .filter(chunk -> chunk.getLabel().equals(selectedChunkLabel))
+            .filter(chunk -> Objects.equals(chunk.getLabel(), selectedChunkLabel))
             .findFirst()
             .ifPresent(metashapeChunk -> activeChunkID = metashapeChunk.getID());
     }

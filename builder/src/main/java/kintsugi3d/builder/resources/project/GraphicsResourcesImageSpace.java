@@ -213,13 +213,14 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
 
         private @NotNull VertexGeometry loadAndValidateGeometry() throws IOException, MeshImportException
         {
-            if (viewSet.getGeometryFile() != null)
+            File geometryFile = viewSet.getGeometryFile();
+            if (geometryFile != null)
             {
-                geometry = VertexGeometry.createFromGeometryFile(viewSet.getGeometryFile());
+                geometry = VertexGeometry.createFromGeometryFile(geometryFile);
 
                 if (geometry == null)
                 {
-                    throw new MeshImportException(MessageFormat.format("Unsupported geometry file: {0}", viewSet.getGeometryFile()));
+                    throw new MeshImportException(MessageFormat.format("Unsupported geometry file: {0}", geometryFile));
                 }
 
                 if (!geometry.hasNormals())
@@ -316,10 +317,11 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             }
 
             VertexGeometry validatedGeometry;
-            if (geometry == null && viewSet.getGeometryFile() != null)
+            File geometryFile = viewSet.getGeometryFile();
+            if (geometry == null && geometryFile != null)
             {
                 // Load geometry if it wasn't specified but a view set was.
-                geometry = VertexGeometry.createFromGeometryFile(viewSet.getGeometryFile());
+                geometry = VertexGeometry.createFromGeometryFile(geometryFile);
                 validatedGeometry = loadAndValidateGeometry();
             }
             else

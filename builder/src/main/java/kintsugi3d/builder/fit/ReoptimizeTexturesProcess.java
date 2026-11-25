@@ -41,7 +41,7 @@ public class ReoptimizeTexturesProcess extends SpecularFitProcess
     }
 
     public final <ContextType extends Context<ContextType>> @NotNull TextureResources<ContextType> reoptimizeTexturesWithCache(
-        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, ProgressMonitor monitor)
+        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, @Nullable ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         // Get cache (should already be generated).

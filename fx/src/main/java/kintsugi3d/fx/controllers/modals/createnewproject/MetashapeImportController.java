@@ -190,7 +190,8 @@ public class MetashapeImportController extends ProjectImportController
             for (MetashapeModel model : selectedChunk.getModels())
             {
                 String modelID = model.getId() != null ? String.valueOf(model.getId()) : NO_MODEL_ID_MSG;
-                String modelName = model.getLabel().isBlank() ? NO_MODEL_NAME_MSG : model.getLabel();
+                String label = model.getLabel();
+                String modelName = label == null || label.isBlank() ? NO_MODEL_NAME_MSG : label;
                 modelSelectionChoiceBox.getItems().add(String.format("%s%s%s", modelID, SPACER, modelName));
             }
 

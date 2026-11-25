@@ -62,7 +62,7 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
     }
 
     private SpecularFitRequest(ReadonlySpecularFitSettings settings,
-                               ReadonlyBasisOptimizationSettings basisOptimizationSettings)
+                               @Nullable ReadonlyBasisOptimizationSettings basisOptimizationSettings)
     {
         this.settings = settings;
         this.basisOptimizationSettings = basisOptimizationSettings;

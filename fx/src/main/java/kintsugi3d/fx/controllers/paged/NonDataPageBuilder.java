@@ -16,6 +16,7 @@
 package kintsugi3d.fx.controllers.paged;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -42,7 +43,7 @@ public class NonDataPageBuilder<FinishType> extends SimplePageBuilder<Object, Ob
 
     @Override
     public final <ControllerType extends SelectionPageController<Object>>
-    @NotNull NonDataSelectionPageBuilder<FinishType> thenSelect(String prompt, Supplier<ControllerType> controllerConstructorOverride)
+    @NotNull NonDataSelectionPageBuilder<FinishType> thenSelect(String prompt, @Nullable Supplier<ControllerType> controllerConstructorOverride)
     {
         return thenSelectNonData(prompt, controllerConstructorOverride);
     }

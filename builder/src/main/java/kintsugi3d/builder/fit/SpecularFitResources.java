@@ -23,6 +23,7 @@ import kintsugi3d.gl.core.DrawableResource;
 import kintsugi3d.gl.core.Program;
 import kintsugi3d.gl.geometry.ReadonlyGeometryResources;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 final class SpecularFitResources<ContextType extends Context<ContextType>> implements ShaderResources<ContextType>
 {
@@ -30,7 +31,7 @@ final class SpecularFitResources<ContextType extends Context<ContextType>> imple
     private final ReadonlyBasisSettings basisSettings;
     private final boolean smithMaskingShadowing;
 
-    SpecularFitResources(ShaderResources<ContextType> base, boolean smithMaskingShadowing, ReadonlyBasisSettings basisSettings)
+    SpecularFitResources(ShaderResources<ContextType> base, boolean smithMaskingShadowing, @Nullable ReadonlyBasisSettings basisSettings)
     {
         this.base = base;
         this.basisSettings = basisSettings;

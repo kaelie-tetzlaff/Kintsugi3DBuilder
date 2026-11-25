@@ -39,7 +39,7 @@ public class ShaderCardFactory extends ProjectDataCardFactoryBase<ShaderInfo>
      * assigns it to private variable in class
      * @param resources
      */
-    public ShaderCardFactory(ImageBasedGraphicsResources<? extends Context<?>> resources)
+    public ShaderCardFactory(@NotNull ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
         super(resources);
     }

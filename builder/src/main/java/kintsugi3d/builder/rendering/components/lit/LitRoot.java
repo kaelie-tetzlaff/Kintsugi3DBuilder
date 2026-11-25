@@ -23,6 +23,7 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
 import kintsugi3d.gl.core.ReadonlyVertexBuffer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class LitRoot<ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
@@ -112,7 +113,7 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
      * Must be called after initialize
      * @param shadowCaster
      */
-    public final void setShadowCaster(ReadonlyVertexBuffer<ContextType> shadowCaster)
+    public final void setShadowCaster(@Nullable ReadonlyVertexBuffer<ContextType> shadowCaster)
     {
         lightingResources.setShadowCastingPositionBuffer(shadowCaster);
     }

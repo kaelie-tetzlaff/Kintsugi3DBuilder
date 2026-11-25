@@ -22,6 +22,7 @@ import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.EncodableColorImage;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +41,7 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
 
     protected abstract EnvironmentSettings getEnvironmentSettings();
 
-    protected abstract void onEnvironmentMapImageLoaded(EncodableColorImage environmentMapImage);
+    protected abstract void onEnvironmentMapImageLoaded(@Nullable EncodableColorImage environmentMapImage);
 
     @Override
     public final @NotNull Vector3 getEnvironmentColor()

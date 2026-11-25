@@ -678,43 +678,50 @@ public class IOModel implements IO
         // Grab copy for thread synchronization, just in case.
         File geometryFile = viewSet.getGeometryFile();
 
-        // Unzip model and textures if needed
-        if (geometryFile.toString().endsWith(".zip"))
+        if (geometryFile != null)
         {
-            // Assuming a Metashape-zipped PLY model called "mesh.ply".
-            LOG.info("Unzipping model folder...");
-            try
+            // Unzip model and textures if needed
+            if (geometryFile.toString().endsWith(".zip"))
             {
-                // Just unzip everything for efficiency; could clean up any unused files but probably not necessary
-                UnzipHelper.unzipToDirectory(geometryFile, modelDestDir, null);
+                // Assuming a Metashape-zipped PLY model called "mesh.ply".
+                LOG.info("Unzipping model folder...");
+                try
+                {
+                    // Just unzip everything for efficiency; could clean up any unused files but probably not necessary
+                    UnzipHelper.unzipToDirectory(geometryFile, modelDestDir, null);
 
-                viewSet.setGeometryFile(new File(modelDestDir, "mesh.ply"));
+                    viewSet.setGeometryFile(new File(modelDestDir, "mesh.ply"));
 
-                // Copy textures from the destination directory.
-                copyTextures(modelDestDir);
+                    // Copy textures from the destination directory.
+                    copyTextures(modelDestDir);
+                }
+                catch (IOException e)
+                {
+                    LOG.error("Failed to unzip model / textures.", e);
+                }
             }
-            catch (IOException e)
+            else
             {
-                LOG.error("Failed to unzip model / textures.", e);
+                copyFileSafe(geometryFile, modelDestDir);
+
+                for (var resource : viewSet.getResourceMap().entrySet())
+                {
+                    if (resource.getKey().startsWith("texture."))
+                    {
+                        copyFileSafe(resource.getValue(), modelDestDir);
+                    }
+                }
+
+                // Use the destination directory as the model directory to use from now on.
+                viewSet.setGeometryFile(new File(modelDestDir, geometryFile.getName()));
+
+                // Copy textures from the "original" file directory
+                copyTextures(geometryFile.getParentFile());
             }
         }
         else
         {
-            copyFileSafe(geometryFile, modelDestDir);
-
-            for (var resource : viewSet.getResourceMap().entrySet())
-            {
-                if (resource.getKey().startsWith("texture."))
-                {
-                    copyFileSafe(resource.getValue(), modelDestDir);
-                }
-            }
-
-            // Use the destination directory as the model directory to use from now on.
-            viewSet.setGeometryFile(new File(modelDestDir, geometryFile.getName()));
-
-            // Copy textures from the "original" file directory
-            copyTextures(geometryFile.getParentFile());
+            LOG.warn("Geometry file is null; no model or textures were copied.");
         }
     }
 

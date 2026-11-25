@@ -58,19 +58,19 @@ public class PageFrameController
     private final ObjectProperty<Page<?,?>> currentPage = new SimpleObjectProperty<>();
 
     private Window window;
-    private JavaFXState state;
+    private @Nullable JavaFXState state;
 
     public final Window getWindow()
     {
         return window;
     }
 
-    public final JavaFXState getState()
+    public final @NotNull JavaFXState getState()
     {
-        return state;
+        return Objects.requireNonNull(state, "Global state reference has not been injected.");
     }
 
-    public final void setState(JavaFXState state)
+    public final void setState(@Nullable JavaFXState state)
     {
         this.state = state;
     }

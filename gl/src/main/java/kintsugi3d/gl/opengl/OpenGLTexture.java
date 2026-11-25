@@ -20,6 +20,7 @@ import kintsugi3d.gl.core.ColorFormat.DataType;
 import kintsugi3d.gl.types.AbstractDataType;
 import kintsugi3d.gl.util.RadianceImageLoader.HDRImage;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 
 import java.awt.*;
@@ -89,8 +90,8 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     private final CompressionFormat compressionFormat;
     private final TextureType textureType;
 
-    private OpenGLTexture(OpenGLContext context, int textureTarget, ColorFormat colorFormat,
-        CompressionFormat compressionFormat, TextureType textureType, int precision, TextureParameters parameters)
+    private OpenGLTexture(OpenGLContext context, int textureTarget, @Nullable @Nullable ColorFormat colorFormat,
+                          @Nullable @Nullable CompressionFormat compressionFormat, TextureType textureType, int precision, TextureParameters parameters)
     {
         this.context = context;
         this.textureTarget = textureTarget;

@@ -19,10 +19,11 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.stream.GraphicsStreamResource;
+import org.jetbrains.annotations.Nullable;
 
 @FunctionalInterface
 public interface OptimizationMethod<ContextType extends Context<ContextType>>
 {
-    void optimize(GraphicsStreamResource<ContextType> stream, ProgressMonitor monitor)
+    void optimize(GraphicsStreamResource<ContextType> stream, @Nullable ProgressMonitor monitor)
         throws UserCancellationException;
 }

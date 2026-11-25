@@ -27,6 +27,7 @@ import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -39,7 +40,7 @@ public class SettingsModelDeserializer extends StdDeserializer<GeneralSettingsMo
         this(null);
     }
 
-    private SettingsModelDeserializer(Class<?> vc)
+    private SettingsModelDeserializer(@Nullable Class<?> vc)
     {
         super(vc);
     }

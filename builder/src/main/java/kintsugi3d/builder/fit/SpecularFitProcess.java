@@ -348,7 +348,7 @@ public abstract class SpecularFitProcess
         @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources,
         @NotNull TextureResolution resolution,
         @NotNull OptimizationMethod<ContextType> optimizationMethod,
-        ProgressMonitor monitor) throws IOException, UserCancellationException
+        @Nullable @Nullable ProgressMonitor monitor) throws IOException, UserCancellationException
     {
         SpecularFitResourcesWrapper<ContextType> resourcesWrapper = getResourcesWrapper();
 
@@ -411,7 +411,7 @@ public abstract class SpecularFitProcess
         private final ProgressMonitor monitor;
         private double maxProgress;
 
-        private BlockResourcesProgressMonitor(ProgressMonitor monitor)
+        private BlockResourcesProgressMonitor(@Nullable ProgressMonitor monitor)
         {
             this.monitor = monitor;
             maxProgress = 0.0;
@@ -445,7 +445,7 @@ public abstract class SpecularFitProcess
         private final int blockProgress;
         private double maxProgress;
 
-        private OptimizationProgressMonitor(ProgressMonitor monitor, int blockProgress)
+        private OptimizationProgressMonitor(@Nullable ProgressMonitor monitor, int blockProgress)
         {
             this.monitor = monitor;
             this.blockProgress = blockProgress;

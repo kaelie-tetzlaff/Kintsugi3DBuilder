@@ -120,32 +120,32 @@ public final class ViewSet implements ReadonlyViewSet
     /**
      * The directory to be used for loading images. It is an absolute file path.
      */
-    private volatile File fullResImageDirectory;
+    private volatile @Nullable File fullResImageDirectory;
 
     /**
      * The directory to be used for saving preview images.
      */
-    private volatile File previewImageDirectory;
+    private volatile @Nullable File previewImageDirectory;
 
     /**
      * The directory where the results of the texture / specular fitting are stored
      */
-    private volatile File supportingFilesDirectory;
+    private volatile @Nullable File supportingFilesDirectory;
 
     /**
      * The directory where thumbnail images are stored
      */
-    private volatile File thumbnailImageDirectory;
+    private volatile @Nullable File thumbnailImageDirectory;
 
     /**
      * The directory where the masks are stored, if any are present (null if no masks)
      */
-    private volatile File masksDirectory;
+    private volatile @Nullable File masksDirectory;
 
     /**
      * The mesh file.
      */
-    private volatile File geometryFile;
+    private volatile @Nullable File geometryFile;
 
     /**
      * The recommended near plane to use when rendering this view set.
@@ -208,7 +208,7 @@ public final class ViewSet implements ReadonlyViewSet
         return new ViewSetBuilder(rootDirectory, initialCapacity);
     }
 
-    public static @NotNull ViewSetBuilder getBuilder(File rootDirectory, File supportingFilesDirectory, int initialCapacity)
+    public static @NotNull ViewSetBuilder getBuilder(File rootDirectory, @Nullable File supportingFilesDirectory, int initialCapacity)
     {
         return new ViewSetBuilder(rootDirectory, supportingFilesDirectory, initialCapacity);
     }
@@ -684,7 +684,7 @@ public final class ViewSet implements ReadonlyViewSet
      *
      * @param supportingFilesDirectory The file path of the supporting files directory.
      */
-    public void setSupportingFilesDirectory(File supportingFilesDirectory)
+    public void setSupportingFilesDirectory(@Nullable File supportingFilesDirectory)
     {
         this.supportingFilesDirectory = supportingFilesDirectory;
 
@@ -705,7 +705,7 @@ public final class ViewSet implements ReadonlyViewSet
      *
      * @param absoluteImageDirectory The image file path.
      */
-    public void setFullResImageDirectory(File absoluteImageDirectory)
+    public void setFullResImageDirectory(@Nullable File absoluteImageDirectory)
     {
         fullResImageDirectory = absoluteImageDirectory;
     }
@@ -751,7 +751,7 @@ public final class ViewSet implements ReadonlyViewSet
                 .orElse(rootDirectory));
     }
 
-    public void setPreviewImageDirectory(File previewImageDirectory)
+    public void setPreviewImageDirectory(@Nullable File previewImageDirectory)
     {
         this.previewImageDirectory = previewImageDirectory;
     }
@@ -1406,12 +1406,12 @@ public final class ViewSet implements ReadonlyViewSet
     }
 
     @Override
-    public File getMasksDirectory()
+    public @Nullable File getMasksDirectory()
     {
         return masksDirectory;
     }
 
-    public void setMasksDirectory(File dir)
+    public void setMasksDirectory(@Nullable File dir)
     {
         masksDirectory = dir;
     }
@@ -1420,16 +1420,21 @@ public final class ViewSet implements ReadonlyViewSet
     public @Nullable String getRelativeMaskPathName()
     {
         File masksDirectoryRef = masksDirectory;
-
-        try
+        if (masksDirectoryRef == null)
         {
-            return getAbsoluteRootDirectory().relativize(masksDirectoryRef.toPath().toAbsolutePath()).toString();
+            return null;
         }
-        catch (RuntimeException e) // If the root and other directories are located under different drive letters on Windows
+        else
         {
-            LOG.warn("Could not relativize masks directory ({}) using root directory {}",
-                masksDirectoryRef, getAbsoluteRootDirectory(), e);
-            return masksDirectoryRef == null ? null : masksDirectoryRef.toString();
+            try
+            {
+                return getAbsoluteRootDirectory().relativize(masksDirectoryRef.toPath().toAbsolutePath()).toString();
+            }
+            catch (RuntimeException e) // If the root and other directories are located under different drive letters on Windows
+            {
+                LOG.warn("Could not relativize masks directory ({}) using root directory {}", masksDirectoryRef, getAbsoluteRootDirectory(), e);
+                return masksDirectoryRef.toString();
+            }
         }
     }
 
@@ -1479,21 +1484,26 @@ public final class ViewSet implements ReadonlyViewSet
     {
         // Grab reference for thread synchronization, just in case.
         File geometryFileRef = geometryFile;
-
-        try
+        if (geometryFileRef == null)
         {
-            return getAbsoluteRootDirectory().relativize(geometryFileRef.toPath().toAbsolutePath()).toString();
+            return null;
         }
-        catch (RuntimeException e) // If the root and other directories are located under different drive letters on windows
+        else
         {
-            LOG.warn("Could not relativize geometry file ({}) using root directory {}",
-                geometryFileRef, getAbsoluteRootDirectory(), e);
-            return geometryFileRef == null ? null : geometryFileRef.toString();
+            try
+            {
+                return getAbsoluteRootDirectory().relativize(geometryFileRef.toPath().toAbsolutePath()).toString();
+            }
+            catch (RuntimeException e) // If the root and other directories are located under different drive letters on windows
+            {
+                LOG.warn("Could not relativize geometry file ({}) using root directory {}", geometryFileRef, getAbsoluteRootDirectory(), e);
+                return geometryFileRef.toString();
+            }
         }
     }
 
     @Override
-    public File getGeometryFile()
+    public @Nullable File getGeometryFile()
     {
         return geometryFile;
     }
@@ -1503,7 +1513,7 @@ public final class ViewSet implements ReadonlyViewSet
      *
      * @param geometryFile The geometry file.
      */
-    public void setGeometryFile(File geometryFile)
+    public void setGeometryFile(@Nullable File geometryFile)
     {
         this.geometryFile = geometryFile;
     }

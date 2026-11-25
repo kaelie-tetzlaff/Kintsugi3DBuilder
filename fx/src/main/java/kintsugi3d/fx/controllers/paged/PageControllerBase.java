@@ -29,6 +29,7 @@ import javafx.scene.control.ButtonType;
 import kintsugi3d.builder.util.FXWindowHelper;
 import kintsugi3d.fx.core.JavaFXState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -61,7 +62,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
         this.pageFrameController = pageFrameController;
     }
 
-    protected final JavaFXState getState()
+    protected final @NotNull JavaFXState getState()
     {
         return pageFrameController.getState();
     }
@@ -106,7 +107,7 @@ abstract class PageControllerBase<T, PageType extends Page<?, ?>> implements Pag
         return advanceLabelOverrideProperty.get();
     }
 
-    protected final void setAdvanceLabelOverride(String advanceLabelOverride)
+    protected final void setAdvanceLabelOverride(@Nullable String advanceLabelOverride)
     {
         advanceLabelOverrideProperty.set(advanceLabelOverride);
     }

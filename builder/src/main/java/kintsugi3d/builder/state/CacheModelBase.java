@@ -71,11 +71,11 @@ public abstract class CacheModelBase implements CacheModel
      * @param newProjectSizes
      * @param onCompleteCallback Called after the cache sizes have been fully posted.  May run on a separate thread (i.e. the JavaFX thread).
      */
-    protected abstract void updateCacheSize(long newCacheSize, Map<String, Long> newProjectSizes, Runnable onCompleteCallback);
+    protected abstract void updateCacheSize(long newCacheSize, Map<String, Long> newProjectSizes, @Nullable Runnable onCompleteCallback);
 
     protected abstract void setCacheSizeCalcInProgress(boolean cacheSizeCalcInProgress);
 
-    protected abstract void addCacheSizeChangeCallback(DoubleConsumer cacheSizeChangeCallback);
+    protected abstract void addCacheSizeChangeCallback(@Nullable DoubleConsumer cacheSizeChangeCallback);
 
     protected abstract void removeAllCacheSizeChangeCallbacks();
 
@@ -622,7 +622,7 @@ public abstract class CacheModelBase implements CacheModel
      * @param projectID       The name of project whose cache size is being calculated.
      * @return The total size of the cache over all projects.
      */
-    private long getDirectorySize(@NotNull File directory, @NotNull Map<String, Long> newProjectSizes, String projectID)
+    private long getDirectorySize(@NotNull File directory, @NotNull Map<String, Long> newProjectSizes, @Nullable String projectID)
     {
         if (!Objects.equals(Thread.currentThread(), cacheSizeCalcThread))
         {
@@ -673,7 +673,7 @@ public abstract class CacheModelBase implements CacheModel
      * @param cacheSizeChangeCallback Runs only if the cache size changed.
      * @param onCompleteCallback      Always runs regardless of whether the cache size changed.  Also runs on the JavaFX thread.
      */
-    protected final void requestCacheSizeRefresh(DoubleConsumer cacheSizeChangeCallback, @Nullable Runnable onCompleteCallback)
+    protected final void requestCacheSizeRefresh(@Nullable @Nullable DoubleConsumer cacheSizeChangeCallback, @Nullable Runnable onCompleteCallback)
     {
         synchronized (cacheSizeCalcThreadLock)
         {

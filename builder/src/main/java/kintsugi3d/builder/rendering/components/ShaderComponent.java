@@ -49,7 +49,7 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
      * @param sceneViewportModel
      * @param sceneObjectTag
      */
-    protected ShaderComponent(ContextType context, SceneViewportModel sceneViewportModel, String sceneObjectTag)
+    protected ShaderComponent(ContextType context, @Nullable SceneViewportModel sceneViewportModel, @Nullable String sceneObjectTag)
     {
         this.context = context;
         this.sceneViewportModel = sceneViewportModel;

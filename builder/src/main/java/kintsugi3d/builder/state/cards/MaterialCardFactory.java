@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 
 public class MaterialCardFactory extends ProjectDataCardFactoryBase<BasisMaterialInfo>
 {
-    public MaterialCardFactory(ImageBasedGraphicsResources<? extends Context<?>> resources)
+    public MaterialCardFactory(@NotNull ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
         super(resources);
     }

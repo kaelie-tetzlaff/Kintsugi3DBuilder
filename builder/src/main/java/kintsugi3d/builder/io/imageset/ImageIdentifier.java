@@ -15,13 +15,15 @@
 
 package kintsugi3d.builder.io.imageset;
 
+import org.jetbrains.annotations.Nullable;
+
 public class ImageIdentifier
 {
     public final String name;
     public final String group;
     public final int id;
 
-    public ImageIdentifier(String name, int id, String group)
+    public ImageIdentifier(String name, int id, @Nullable @Nullable String group)
     {
         this.name = name;
         this.group = group;

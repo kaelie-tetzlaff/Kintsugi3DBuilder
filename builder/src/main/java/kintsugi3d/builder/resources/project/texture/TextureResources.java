@@ -65,7 +65,7 @@ public interface TextureResources<ContextType extends Context<ContextType>>
      * @param newTextureFile
      * @throws IOException
      */
-    void replaceTextureWithSpecificFile(TextureInfo key, File newTextureFile) throws IOException;
+    void replaceTextureWithSpecificFile(TextureInfo key, @Nullable File newTextureFile) throws IOException;
 
     /**
      * Refreshes a weightmap specified by its associated basis material using the default location for the given texture.
@@ -81,7 +81,7 @@ public interface TextureResources<ContextType extends Context<ContextType>>
      * @param newTextureFile
      * @throws IOException
      */
-    void replaceWeightMapWithSpecificFile(BasisMaterialInfo material, File newTextureFile) throws IOException;
+    void replaceWeightMapWithSpecificFile(BasisMaterialInfo material, @Nullable File newTextureFile) throws IOException;
 
     /**
      * Refreshes all textures (including weightmaps) using the default location for each texture.

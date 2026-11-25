@@ -95,7 +95,7 @@ public interface IO
      *
      * @throws IOException
      */
-    void saveProject(File projectFile, Runnable finishedCallback) throws IOException;
+    void saveProject(@Nullable @Nullable File projectFile, @Nullable @Nullable Runnable finishedCallback) throws IOException;
 
     /**
      * Saves the project, including textures and glTF model.  If the project file is not a .vset, the .vset will be created in a supporting files directory.

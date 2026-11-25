@@ -16,6 +16,7 @@
 package kintsugi3d.fx.controllers.paged;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -28,7 +29,7 @@ public class DataPageBuilder<InType, OutType, FinishType> extends SimplePageBuil
 
     @Override
     public final <ControllerType extends NonSupplierPageController<? super OutType>>
-    @NotNull SimplePageBuilder<OutType, OutType, FinishType> then(@NotNull String fxmlPath, Supplier<ControllerType> controllerConstructorOverride)
+    @NotNull SimplePageBuilder<OutType, OutType, FinishType> then(@NotNull String fxmlPath, @Nullable Supplier<ControllerType> controllerConstructorOverride)
     {
         return then(fxmlPath, SimpleDataReceiverPage<OutType, ControllerType>::new, controllerConstructorOverride);
     }

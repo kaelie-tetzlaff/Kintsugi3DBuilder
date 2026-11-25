@@ -15,7 +15,9 @@
 
 package kintsugi3d.builder.state.shader;
 
+import org.jetbrains.annotations.Nullable;
+
 public interface ActiveShaderModel extends ReadonlyActiveShaderModel
 {
-    void setActiveShader(ShaderInfo shaderInfo);
+    void setActiveShader(@Nullable ShaderInfo shaderInfo);
 }

@@ -17,6 +17,7 @@ package kintsugi3d.gl.core;
 
 import kintsugi3d.gl.vecmath.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A drawable entity for a GL context.
@@ -45,7 +46,7 @@ public interface DrawableResource<ContextType extends Context<ContextType>>
      * @param primitiveMode What type of primitives to use when interpreting vertex buffers.
      * @param framebuffer The framebuffer to render to.
      */
-    void draw(PrimitiveMode primitiveMode, Framebuffer<ContextType> framebuffer);
+    void draw(PrimitiveMode primitiveMode, @Nullable Framebuffer<ContextType> framebuffer);
 
     /**
      * Draws this to a particular framebuffer within a specified viewport rectangle.
@@ -344,5 +345,5 @@ public interface DrawableResource<ContextType extends Context<ContextType>>
      * @param name The name used to reference the vertex attribute within the shaders.
      * @param buffer The vertex buffer to bind to the vertex attribute.
      */
-    void addVertexBuffer(String name, ReadonlyVertexBuffer<ContextType> buffer);
+    void addVertexBuffer(String name, @Nullable @Nullable @Nullable @Nullable @Nullable ReadonlyVertexBuffer<ContextType> buffer);
 }

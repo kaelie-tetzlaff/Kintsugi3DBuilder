@@ -28,14 +28,14 @@ import java.util.stream.IntStream;
 
 public abstract class ProjectDataCardFactoryBase<T> implements ProjectDataCardFactory<T>
 {
-    private final ImageBasedGraphicsResources<? extends Context<?>> resources;
+    private final @NotNull ImageBasedGraphicsResources<? extends Context<?>> resources;
 
-    protected ProjectDataCardFactoryBase(ImageBasedGraphicsResources<? extends Context<?>> resources)
+    protected ProjectDataCardFactoryBase(@NotNull ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
         this.resources = resources;
     }
 
-    protected final ImageBasedGraphicsResources<? extends Context<?>> getResources()
+    protected final @NotNull ImageBasedGraphicsResources<? extends Context<?>> getResources()
     {
         return resources;
     }

@@ -17,6 +17,7 @@ package kintsugi3d.gl.core;
 
 import kintsugi3d.gl.vecmath.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Optional;
@@ -143,7 +144,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
      */
-    void setUniform(String name, Matrix4 value);
+    void setUniform(String name, @Nullable Matrix4 value);
 
     /**
      * Sets a uniform variable at a particular location in this shader program.
@@ -270,7 +271,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param name    The name used to reference the variable within the shaders.
      * @param texture The texture to use as this uniform variable.
      */
-    void setTexture(String name, Texture<ContextType> texture);
+    void setTexture(String name, @Nullable @Nullable @Nullable Texture<ContextType> texture);
 
     /**
      * Designates a uniform buffer to be used at a particular uniform block index in this shader program.

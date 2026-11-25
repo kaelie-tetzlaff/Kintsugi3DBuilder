@@ -52,7 +52,7 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
 
     // A reference to the position buffer for the object casting shadows.
     // Not managed or released by LightingResources
-    private ReadonlyVertexBuffer<ContextType> shadowCastingPositionBuffer;
+    private @Nullable ReadonlyVertexBuffer<ContextType> shadowCastingPositionBuffer;
 
     private @Nullable Texture2D<ContextType> backplateTexture;
     private @Nullable Cubemap<ContextType> environmentMap;
@@ -186,7 +186,7 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
      * Does not take ownership of this buffer.
      * @param positionBuffer
      */
-    public final void setShadowCastingPositionBuffer(ReadonlyVertexBuffer<ContextType> positionBuffer)
+    public final void setShadowCastingPositionBuffer(@Nullable ReadonlyVertexBuffer<ContextType> positionBuffer)
     {
         validateShadowDrawable().addVertexBuffer("position", positionBuffer);
         shadowCastingPositionBuffer = positionBuffer;

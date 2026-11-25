@@ -48,7 +48,7 @@ import static org.jengineering.sjmply.PLYType.*;
 public final class VertexGeometry implements ReadonlyVertexGeometry
 {
     private static final Logger LOG = LoggerFactory.getLogger(VertexGeometry.class);
-    private File filename;
+    private @Nullable File filename;
 
     private boolean hasNormals;
     private boolean hasTexCoords;
@@ -62,10 +62,10 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
     private Vector3 boundingBoxSize;
     private float boundingRadius;
 
-    private String materialFileName;
+    private @Nullable String materialFileName;
     private @Nullable ImportedMaterial material; // TODO support multiple materials
 
-    private VertexGeometry(File filename)
+    private VertexGeometry(@Nullable File filename)
     {
         this.filename = filename;
     }
@@ -360,7 +360,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         return createFromPLY(file, PLY.loadFromZip(zipStream, targetFileName));
     }
 
-    private static @NotNull VertexGeometry createFromPLY(File file, @NotNull PLY ply)
+    private static @NotNull VertexGeometry createFromPLY(@Nullable File file, @NotNull PLY ply)
     {
         PLYElementList vertex = ply.elements("vertex");
         boolean hasNormals = false;
@@ -472,7 +472,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
     }
 
     private static @NotNull VertexGeometry createFromArrays(
-        File file, boolean hasNormals, boolean hasTexCoords, @NotNull List<Vector3> vertexList, @NotNull List<Integer> vertexIndexList,
+        @Nullable File file, boolean hasNormals, boolean hasTexCoords, @NotNull List<Vector3> vertexList, @NotNull List<Integer> vertexIndexList,
         List<Vector3> normalList, List<Integer> normalIndexList, @NotNull List<Vector2> texCoordList, @NotNull List<Integer> texCoordIndexList)
     {
         VertexGeometry inst = new VertexGeometry(file);
@@ -838,7 +838,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
     }
 
     @Override
-    public String getMaterialFileName()
+    public @Nullable String getMaterialFileName()
     {
         return materialFileName;
     }
@@ -850,7 +850,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
     }
 
     @Override
-    public File getFilename()
+    public @Nullable File getFilename()
     {
         return filename;
     }

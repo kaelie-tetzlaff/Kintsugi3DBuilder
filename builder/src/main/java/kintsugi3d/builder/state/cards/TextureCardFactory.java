@@ -51,7 +51,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
      * assigns it to private variable in class
      * @param resources
      */
-    public TextureCardFactory(ImageBasedGraphicsResources<? extends Context<?>> resources)
+    public TextureCardFactory(@NotNull ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
         super(resources);
     }
@@ -151,31 +151,28 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
     {
         List<ProjectDataCard> textureCards = new ArrayList<>(8);
         ReadonlyImageBasedGraphicsResources<? extends Context<?>> resources = getResources();
-        if (resources != null)
+        ReadonlyTextureResources<? extends Context<?>> texResources = resources.getTextureResources();
+
+        var textures = texResources.getTextures();
+        if (textures != null)
         {
-            ReadonlyTextureResources<? extends Context<?>> texResources = resources.getTextureResources();
+            //noinspection RedundantComparatorComparing
+            textureCards = textures.entrySet().stream()
+                .sorted(Comparator.comparing(Entry::getKey))
+                .map(entry -> createCard(entry.getKey()))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        }
 
-            var textures = texResources.getTextures();
-            if (textures != null)
+        ReadonlyBasisResources<? extends Context<?>> basisResources = texResources.getBasisResources();
+        if (basisResources != null)
+        {
+            for (BasisMaterialInfo material : basisResources.getBasis().getMaterials())
             {
-                //noinspection RedundantComparatorComparing
-                textureCards = textures.entrySet().stream()
-                    .sorted(Comparator.comparing(Entry::getKey))
-                    .map(entry -> createCard(entry.getKey()))
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-            }
-
-            ReadonlyBasisResources<? extends Context<?>> basisResources = texResources.getBasisResources();
-            if (basisResources != null)
-            {
-                for (BasisMaterialInfo material : basisResources.getBasis().getMaterials())
+                ProjectDataCard card = createCard(new WeightmapTextureInfo(material));
+                if (card != null)
                 {
-                    ProjectDataCard card = createCard(new WeightmapTextureInfo(material));
-                    if (card != null)
-                    {
-                        textureCards.add(card);
-                    }
+                    textureCards.add(card);
                 }
             }
         }

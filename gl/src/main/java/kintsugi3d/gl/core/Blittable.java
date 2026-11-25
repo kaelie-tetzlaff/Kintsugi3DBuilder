@@ -16,6 +16,7 @@
 package kintsugi3d.gl.core;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface Blittable<SourceType extends TwoDimensional> extends TwoDimensional
 {
@@ -49,7 +50,7 @@ public interface Blittable<SourceType extends TwoDimensional> extends TwoDimensi
      *                        This may be ignored if linear filtering is not supported (i.e. for depth / stencil textures).
      */
     void blitCroppedAndScaled(int destX, int destY, int destWidth, int destHeight,
-        SourceType readSource, int srcX, int srcY, int srcWidth, int srcHeight, boolean linearFiltering);
+                              @Nullable SourceType readSource, int srcX, int srcY, int srcWidth, int srcHeight, boolean linearFiltering);
 
     /**
      * Copies pixels from one blittable to another.  The copying operation will be start at (x, y) within
@@ -122,7 +123,7 @@ public interface Blittable<SourceType extends TwoDimensional> extends TwoDimensi
      * @param width The width of the rectangle to copy.
      * @param height The height of the rectangle to copy.
      */
-    default void blitCropped(SourceType readSource, int srcX, int srcY, int width, int height)
+    default void blitCropped(@Nullable SourceType readSource, int srcX, int srcY, int width, int height)
     {
         blitCroppedAndScaled(0, 0, width, height, readSource, srcX, srcY, width, height, false);
     }

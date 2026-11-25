@@ -50,7 +50,7 @@ public interface MaterialBasis
 
     int getSpecularResolution();
 
-    void save(File outputDirectory, String filenameOverride);
+    void save(File outputDirectory, @Nullable @Nullable String filenameOverride);
 
     default void save(File outputDirectory)
     {

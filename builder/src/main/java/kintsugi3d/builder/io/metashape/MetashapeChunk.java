@@ -20,6 +20,7 @@ import kintsugi3d.builder.resources.project.MissingImagesException;
 import kintsugi3d.builder.util.UnzipHelper;
 import kintsugi3d.util.ImageFinder;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -45,10 +46,10 @@ public final class MetashapeChunk
     private int id;//TODO: is this optional?
 
     private Document chunkXML;
-    private Document frameXML;
+    private @Nullable Document frameXML;
 
     private @NotNull List<MetashapeModel> models = new ArrayList<>(8);
-    private Integer defaultModelID;
+    private @Nullable Integer defaultModelID;
     private MetashapeModel currentModel;
     private File thumbnailsDir;
     private File masksDir;
@@ -201,19 +202,19 @@ public final class MetashapeChunk
         currentModel = model;
     }
 
-    private @NotNull MetashapeChunk setChunkID(Integer chunkID)
+    private @NotNull MetashapeChunk setChunkID(@Nullable Integer chunkID)
     {
         id = Objects.requireNonNullElse(chunkID, -1);
         return this;
     }
 
-    private @NotNull MetashapeChunk setDefaultModelID(Integer defaultModelID)
+    private @NotNull MetashapeChunk setDefaultModelID(@Nullable Integer defaultModelID)
     {
         this.defaultModelID = defaultModelID;
         return this;
     }
 
-    private @NotNull MetashapeChunk setFrameXml(Document frameXML)
+    private @NotNull MetashapeChunk setFrameXml(@Nullable Document frameXML)
     {
         this.frameXML = frameXML;
         return this;
@@ -225,9 +226,9 @@ public final class MetashapeChunk
         return this;
     }
 
-    public Document getFrameXML()
+    public @NotNull Document getFrameXML()
     {
-        return frameXML;
+        return Objects.requireNonNull(frameXML, "No frame XML has been specified.");
     }
 
     public @NotNull String getChunkDirectoryPath()
@@ -248,7 +249,7 @@ public final class MetashapeChunk
     }
 
 
-    private MetashapeChunk(String label, MetashapeDocument parentDocument)
+    private MetashapeChunk(@Nullable String label, MetashapeDocument parentDocument)
     {
         this.label = label;
         metashapeDocument = parentDocument;
@@ -401,7 +402,7 @@ public final class MetashapeChunk
         return Collections.unmodifiableList(models);
     }
 
-    public String getLabel()
+    public @Nullable String getLabel()
     {
         return label;
     }
@@ -410,7 +411,7 @@ public final class MetashapeChunk
      * May be null.
      * @return
      */
-    public Integer getDefaultModelID()
+    public @Nullable Integer getDefaultModelID()
     {
         return defaultModelID;
     }
@@ -454,7 +455,7 @@ public final class MetashapeChunk
         //psx path is the same
         //selected models are equal
 
-        return label.equals(other.label) &&
+        return Objects.equals(label, other.label) &&
             metashapeDocument.getPsxFilePath().equals(other.metashapeDocument.getPsxFilePath());
     }
 

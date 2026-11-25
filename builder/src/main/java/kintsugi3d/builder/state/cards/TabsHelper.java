@@ -18,6 +18,7 @@ package kintsugi3d.builder.state.cards;
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +36,7 @@ public class TabsHelper
 
     private final List<TabInfo> factories = new ArrayList<>(4);
 
-    public TabsHelper(ImageBasedGraphicsResources<? extends Context<?>> resources)
+    public TabsHelper(@NotNull ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
         factories.add(new TabInfo(PHOTOS, new PhotoCardFactory(resources), null));
         factories.add(new TabInfo(MATERIALS, new MaterialCardFactory(resources),

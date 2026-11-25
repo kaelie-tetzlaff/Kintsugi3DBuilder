@@ -28,7 +28,7 @@ public interface TabsModel
      * @param path
      * @param <T> The backend type that the associated data cards represent.
      */
-    <T> void addTab(String tabName, ProjectDataCardFactory<T> cardFactory, String path);
+    <T> void addTab(String tabName, ProjectDataCardFactory<T> cardFactory, @Nullable String path);
 
     void clearTabs();
     CardsModel<?> getTab(String label);

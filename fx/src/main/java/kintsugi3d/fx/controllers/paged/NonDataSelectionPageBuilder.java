@@ -16,6 +16,7 @@
 package kintsugi3d.fx.controllers.paged;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -29,7 +30,7 @@ public class NonDataSelectionPageBuilder<FinishType> extends SelectionPageBuilde
     @Override
     public final <ControllerType extends SelectionPageController<Object>>
     @NotNull NonDataSelectionPageBuilder<FinishType> choiceSubSelect(
-        String choiceLabel, String subprompt, Supplier<ControllerType> controllerConstructorOverride)
+        String choiceLabel, String subprompt, @Nullable Supplier<ControllerType> controllerConstructorOverride)
     {
         SimpleNonDataSelectionPage<ControllerType> nextPage = getFrameController().createPage(
             SELECTION_PAGE_FXML, SimpleNonDataSelectionPage<ControllerType>::new, controllerConstructorOverride);

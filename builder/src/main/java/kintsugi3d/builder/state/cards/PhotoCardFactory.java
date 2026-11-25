@@ -37,7 +37,7 @@ public class PhotoCardFactory extends ProjectDataCardFactoryBase<View>
 {
     private static final Logger LOG = LoggerFactory.getLogger(PhotoCardFactory.class);
 
-    public PhotoCardFactory(ImageBasedGraphicsResources<? extends Context<?>> resources)
+    public PhotoCardFactory(@NotNull ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
         super(resources);
     }

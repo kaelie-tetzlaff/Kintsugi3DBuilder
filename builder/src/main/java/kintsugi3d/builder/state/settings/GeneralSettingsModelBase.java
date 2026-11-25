@@ -24,7 +24,7 @@ import java.util.NoSuchElementException;
 public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
 {
     protected abstract Object getUnchecked(String name);
-    protected abstract void setUnchecked(String name, Object value);
+    protected abstract void setUnchecked(String name, @Nullable Object value);
 
     @Override
     public final Object getObject(String name)

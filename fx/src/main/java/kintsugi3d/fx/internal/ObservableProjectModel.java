@@ -43,6 +43,7 @@ import kintsugi3d.fx.experience.ReplaceImage;
 import kintsugi3d.fx.util.StaticUtilities;
 import kintsugi3d.gl.vecmath.Vector3;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -149,7 +150,7 @@ public class ObservableProjectModel extends ProjectModelBase<
     }
 
     @Override
-    public final void setColorCheckerFile(File colorCheckerFile)
+    public final void setColorCheckerFile(@Nullable File colorCheckerFile)
     {
         this.colorCheckerFile.set(colorCheckerFile);
     }

@@ -16,6 +16,7 @@
 package kintsugi3d.builder.io.metashape;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
@@ -33,7 +34,7 @@ public final class MetashapeModel
 
     private final LoadPreferences loadPreferences = new LoadPreferences();
 
-    private MetashapeModel(MetashapeChunk chunk, Integer id, String label, String path)
+    private MetashapeModel(MetashapeChunk chunk, @Nullable Integer id, @Nullable String label, String path)
     {
         this.id = id;
         this.label = label;
@@ -68,7 +69,7 @@ public final class MetashapeModel
         return new MetashapeModel(chunk, modelID, tempLabel, path);
     }
 
-    private static @NotNull String findModelPath(@NotNull MetashapeChunk chunk, Integer modelID)
+    private static @NotNull String findModelPath(@NotNull MetashapeChunk chunk, @Nullable Integer modelID)
     {
         // TODO Figure out why NullPointException would be thrown, change to explicit null check,
         //  and remove inspection suppression.
@@ -114,7 +115,7 @@ public final class MetashapeModel
      * May be null.
      * @return
      */
-    public Integer getId()
+    public @Nullable Integer getId()
     {
         return id;
     }
@@ -124,7 +125,7 @@ public final class MetashapeModel
         return path;
     }
 
-    public String getLabel()
+    public @Nullable String getLabel()
     {
         return label;
     }
@@ -144,8 +145,8 @@ public final class MetashapeModel
 
         MetashapeModel other = (MetashapeModel) obj;
 
-        return id.equals(other.id) &&
-            label.equals(other.label) &&
+        return Objects.equals(id, other.id) &&
+            Objects.equals(label, other.label) &&
             path.equals(other.path);
     }
 

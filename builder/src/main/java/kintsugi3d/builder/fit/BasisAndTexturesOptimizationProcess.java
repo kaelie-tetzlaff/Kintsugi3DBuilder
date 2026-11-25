@@ -120,7 +120,7 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
     }
 
     private <ContextType extends Context<ContextType>> @NotNull SpecularFitOptimizable<ContextType> optimizeFit(
-        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, @NotNull SpecularDecompositionFromScratch decomposition, ProgressMonitor monitor)
+        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, @NotNull SpecularDecompositionFromScratch decomposition, @Nullable ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         SpecularFitResourcesWrapper<ContextType> programFactory = getResourcesWrapper();
@@ -194,7 +194,7 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
         private final ProgressMonitor monitor;
         private double maxProgress;
 
-        private CacheProgressMonitor(ProgressMonitor monitor)
+        private CacheProgressMonitor(@Nullable ProgressMonitor monitor)
         {
             this.monitor = monitor;
             maxProgress = 0.0;

@@ -64,7 +64,7 @@ public interface IOHandler
      * @param viewSetLoadOptions
      * @param imageLoadOptions
      */
-    void loadFromLooseFiles(File newProjectFile, String internalName, File xmlFile,
+    void loadFromLooseFiles(@Nullable File newProjectFile, String internalName, File xmlFile,
                             ViewSetLoadOptions viewSetLoadOptions, ReadonlyLoadOptionsModel imageLoadOptions)
         throws Exception;
 

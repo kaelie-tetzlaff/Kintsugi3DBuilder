@@ -80,7 +80,7 @@ public interface LoadableResource<CPUResourceType, GPUResourceType>
      *
      * @param resource The new GPU resource to apply, or {@code null} to clear the resource.
      */
-    void consume(GPUResourceType resource);
+    void consume(@Nullable GPUResourceType resource);
 
     /**
      * Returns a preview image derived from the loaded data, if any.

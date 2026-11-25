@@ -30,7 +30,7 @@ public interface GeneralSettingsModel extends ReadonlyGeneralSettingsModel
 {
     <T> void set(String name, T value);
     void copyAllFrom(ReadonlyGeneralSettingsModel other);
-    void createSetting(String name, Class<?> type, Object initialValue, boolean serialize);
+    void createSetting(String name, Class<?> type, @Nullable Object initialValue, boolean serialize);
     default void createBooleanSetting(String name, boolean initialValue)
     {
         createBooleanSetting(name, initialValue, false);

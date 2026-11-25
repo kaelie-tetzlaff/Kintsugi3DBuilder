@@ -19,6 +19,7 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.ProgramObject;
 import kintsugi3d.gl.core.Shader;
 import kintsugi3d.gl.core.ShaderType;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +31,7 @@ public interface ProgramBuilder<ContextType extends Context<ContextType>>
 
     ProgramBuilder<ContextType> define(String key, Object value);
     ProgramBuilder<ContextType> addShader(Shader<ContextType> shader);
-    ProgramBuilder<ContextType> addShader(ShaderType type, File shaderFile);
+    ProgramBuilder<ContextType> addShader(ShaderType type, @Nullable File shaderFile);
     ProgramBuilder<ContextType> addShader(ShaderType type, String shaderSource);
 
     ProgramObject<ContextType> createProgram() throws IOException;

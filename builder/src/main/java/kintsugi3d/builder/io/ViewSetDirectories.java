@@ -15,12 +15,14 @@
 
 package kintsugi3d.builder.io;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 
 public class ViewSetDirectories
 {
     private File projectRoot;
-    private File supportingFilesDirectory;
+    private @Nullable File supportingFilesDirectory;
     private File fullResImageDirectory;
     private boolean fullResImagesNeedUndistort;
 
@@ -34,12 +36,12 @@ public class ViewSetDirectories
         this.projectRoot = projectRoot;
     }
 
-    public final File getSupportingFilesDirectory()
+    public final @Nullable File getSupportingFilesDirectory()
     {
         return supportingFilesDirectory;
     }
 
-    public final void setSupportingFilesDirectory(File supportingFilesDirectory)
+    public final void setSupportingFilesDirectory(@Nullable File supportingFilesDirectory)
     {
         this.supportingFilesDirectory = supportingFilesDirectory;
     }

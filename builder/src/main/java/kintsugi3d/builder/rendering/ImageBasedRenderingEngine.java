@@ -296,13 +296,13 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
             // Currently the shaders tab is not expected to have changes other than when textures are processed,
             // which is handled separately via an event listener.
 
-            resources.texturesReplacedListeners().register(
-                event ->
+            @NotNull GraphicsResourcesImageSpace<ContextType> resourcesRef = resources;
+            resources.texturesReplacedListeners().register(event ->
             {
                 // Reload shaders in case preprocessor constants (i.e. number of basis functions) have changed
                 reloadShaders();
 
-                new TabsHelper(resources).refreshAllTabs();
+                new TabsHelper(resourcesRef).refreshAllTabs();
             });
         }
         catch (UserCancellationException e)

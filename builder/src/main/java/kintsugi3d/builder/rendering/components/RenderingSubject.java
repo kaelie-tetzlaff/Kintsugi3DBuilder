@@ -29,6 +29,7 @@ import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.ShadingParameterMode;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class RenderingSubject<ContextType extends Context<ContextType>> extends 
     private UniformBuffer<ContextType> weightBuffer;
 
     public RenderingSubject(@NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneViewportModel sceneViewportModel,
-                            SceneModel sceneModel, LightingResources<ContextType> lightingResources)
+                            SceneModel sceneModel, @Nullable LightingResources<ContextType> lightingResources)
     {
         super (resources, sceneViewportModel, "RenderingSubject", sceneModel, lightingResources);
     }

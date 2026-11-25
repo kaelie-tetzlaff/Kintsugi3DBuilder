@@ -16,6 +16,7 @@
 package kintsugi3d.builder.state.cards;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -34,7 +35,7 @@ public class ProjectDataCard
     private boolean isEnabled;
 
     public ProjectDataCard(
-        String internalName, String title, String fullResImageFilePath, String thumbnailPath,
+        String internalName, String title, @Nullable String fullResImageFilePath, String thumbnailPath,
         @NotNull Map<String, String> textFields, @NotNull Collection<? extends Map<String, Runnable>> actionGroups, boolean isEnabled)
     {
         this.internalName = internalName;

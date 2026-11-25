@@ -196,7 +196,7 @@ public class ZoomSafeImageView
         return fullImage;
     }
 
-    public final void setFullImage(Image fullImage)
+    public final void setFullImage(@Nullable Image fullImage)
     {
         this.fullImage.set(fullImage);
     }
@@ -211,7 +211,7 @@ public class ZoomSafeImageView
         return logicalViewport;
     }
 
-    public final void setLogicalViewport(Rectangle2D logicalViewport)
+    public final void setLogicalViewport(@Nullable Rectangle2D logicalViewport)
     {
         this.logicalViewport.set(logicalViewport);
     }

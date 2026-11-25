@@ -170,7 +170,7 @@ public abstract class ExperienceBase implements Experience
      */
     protected final <ControllerType extends NonSupplierPageController<Object>>
     PageFrameController openPagedModal(
-        @NotNull String firstPageURLString, Supplier<ControllerType> firstPageControllerConstructorOverride) throws IOException
+        @NotNull String firstPageURLString, @Nullable Supplier<ControllerType> firstPageControllerConstructorOverride) throws IOException
     {
         return buildPagedModal()
             .<SimpleNonDataPage<ControllerType>, Object, ControllerType>then(

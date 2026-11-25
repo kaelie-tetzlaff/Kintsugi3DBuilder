@@ -183,7 +183,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
      * Image and mask filenames come from a pre-built path map; disabled images already be filtered out of imagePathMap.
      */
     private static @NotNull ViewSetBuilder readFromMetashapeChunk(InputStream stream, @NotNull ViewSetDirectories directories, String modelID,
-                                                                  Map<Integer, String> imagePathMap, Map<Integer, String> maskPathMap) throws XMLStreamException
+                                                                  Map<Integer, String> imagePathMap, @Nullable Map<Integer, String> maskPathMap) throws XMLStreamException
     {
         return readFromStream(stream, directories, modelID, imagePathMap, maskPathMap, true);
     }
@@ -202,8 +202,8 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
      *                               transform drives projective texture mapping. When false (XML import),
      *                               the inverted global transform is used instead.
      */
-    private static @NotNull ViewSetBuilder readFromStream(InputStream stream, @NotNull ViewSetDirectories directories, String modelID,
-                                                          Map<Integer, String> imagePathMap, Map<Integer, String> maskPathMap, boolean ignoreGlobalTransforms)
+    private static @NotNull ViewSetBuilder readFromStream(InputStream stream, @NotNull ViewSetDirectories directories, @Nullable String modelID,
+                                                          @Nullable Map<Integer, String> imagePathMap, @Nullable Map<Integer, String> maskPathMap, boolean ignoreGlobalTransforms)
         throws XMLStreamException
     {
         Helper helper = new Helper(modelID);
@@ -309,7 +309,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
         private String imageFile = "";
         private boolean hasUnsupportedCorrections = false;
 
-        Helper(String modelID)
+        Helper(@Nullable String modelID)
         {
             this.modelID = modelID;
         }

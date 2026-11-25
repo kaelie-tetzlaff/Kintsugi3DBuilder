@@ -271,7 +271,7 @@ class PreviewImages
         }
     }
 
-    private static void logExists(File file)
+    private static void logExists(@Nullable File file)
     {
         LOG.info("Skipping {} : Already exists", file);
     }

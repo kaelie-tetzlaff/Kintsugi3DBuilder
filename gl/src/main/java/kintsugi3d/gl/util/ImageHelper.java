@@ -96,7 +96,7 @@ public final class ImageHelper
         return ICC_TRANSFORM_ENABLED ? raw.convertedICCToSRGB() : raw.forcedSRGB();
     }
 
-    private @NotNull ImageHelper validate(File file) throws IOException
+    private @NotNull ImageHelper validate(@Nullable File file) throws IOException
     {
         if (image == null)
         {

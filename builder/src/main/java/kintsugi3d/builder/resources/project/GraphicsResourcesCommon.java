@@ -264,14 +264,23 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
             textureResources = ImportedMaterialResourcesWrapper.wrap(
                 () ->
                 {
-                    try
+                    File geometryFile = viewSet.getGeometryFile();
+                    if (geometryFile != null)
                     {
-                        return ImportedMaterialResources.createFromMaterial(
-                            context, material, viewSet.getGeometryFile().getParentFile(), mtlLoadOptions);
+                        try
+                        {
+                            return ImportedMaterialResources.createFromMaterial(
+                                context, material, geometryFile.getParentFile(), mtlLoadOptions);
+                        }
+                        catch (IOException e)
+                        {
+                            LOG.error("An error occured while loading material resources (textures)", e);
+                            return ImportedMaterialResources.createNull();
+                        }
                     }
-                    catch (IOException e)
+                    else
                     {
-                        LOG.error("An error occured while loading material resources (textures)", e);
+                        LOG.warn("Geometry file is null; no material resources were imported.");
                         return ImportedMaterialResources.createNull();
                     }
                 });

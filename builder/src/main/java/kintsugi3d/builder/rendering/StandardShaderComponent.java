@@ -27,6 +27,7 @@ import kintsugi3d.gl.vecmath.Vector4;
 import kintsugi3d.util.SRGB;
 import kintsugi3d.util.ShadingParameterMode;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,11 +52,11 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
     private boolean lightCalibrationMode = false;
 
     // Set default shader to be the untextured IBR shader
-    private File fragmentShaderFile;
+    private @Nullable File fragmentShaderFile;
     private Supplier<Map<String, Optional<Object>>> fragmentShaderDefinesFactory;
 
     protected StandardShaderComponent(@NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneViewportModel sceneViewportModel, String sceneObjectTag,
-                                      SceneModel sceneModel, LightingResources<ContextType> lightingResources, File fragmentShaderFile)
+                                      SceneModel sceneModel, @Nullable LightingResources<ContextType> lightingResources, File fragmentShaderFile)
     {
         super(resources.getContext(), sceneViewportModel, sceneObjectTag);
         this.resources = resources;
@@ -65,7 +66,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
     }
 
     protected StandardShaderComponent(@NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneViewportModel sceneViewportModel, String sceneObjectTag,
-                                      SceneModel sceneModel, LightingResources<ContextType> lightingResources)
+                                      SceneModel sceneModel, @Nullable LightingResources<ContextType> lightingResources)
     {
         this(resources, sceneViewportModel, sceneObjectTag, sceneModel, lightingResources,
             new File(new File("shaders", "rendermodes"), "ibrUntextured.frag"));
@@ -108,13 +109,13 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         }
     }
 
-    public final void useFragmentShader(@SuppressWarnings("ParameterHidesMemberVariable") File fragmentShaderFile)
+    public final void useFragmentShader(@SuppressWarnings("ParameterHidesMemberVariable") @Nullable File fragmentShaderFile)
     {
         this.fragmentShaderFile = fragmentShaderFile;
         reloadShaders();
     }
 
-    public final File getFragmentShaderFile()
+    public final @Nullable File getFragmentShaderFile()
     {
         return fragmentShaderFile;
     }

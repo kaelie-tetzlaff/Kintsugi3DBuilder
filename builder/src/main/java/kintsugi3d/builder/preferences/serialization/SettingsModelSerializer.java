@@ -24,6 +24,7 @@ import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -36,7 +37,7 @@ public class SettingsModelSerializer extends StdSerializer<GeneralSettingsModel>
         this(null);
     }
 
-    protected SettingsModelSerializer(Class<GeneralSettingsModel> t)
+    protected SettingsModelSerializer(@Nullable Class<GeneralSettingsModel> t)
     {
         super(t);
     }
