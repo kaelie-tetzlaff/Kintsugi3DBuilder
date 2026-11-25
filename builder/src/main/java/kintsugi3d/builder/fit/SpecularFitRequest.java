@@ -204,47 +204,44 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
             // Create output directory
             outputDirectory.mkdirs();
 
-            if (resources.getViewSet() != null)
-            {
-                // Determine basis count and resolution based on the new specularFit.
-                // This will result in a program factory that overrides whatever basis count and resolution
-                // would be specified by the original resources.
-                ShaderProgramFactory<ContextType> programFactory = getProgramFactory(resources, specularFit);
-                FinalReconstruction<ContextType> reconstruction =
-                    new FinalReconstruction<>(resources, settings.getTextureResolution(), settings.getReconstructionSettings());
+            // Determine basis count and resolution based on the new specularFit.
+            // This will result in a program factory that overrides whatever basis count and resolution
+            // would be specified by the original resources.
+            ShaderProgramFactory<ContextType> programFactory = getProgramFactory(resources, specularFit);
+            FinalReconstruction<ContextType> reconstruction =
+                new FinalReconstruction<>(resources, settings.getTextureResolution(), settings.getReconstructionSettings());
 
-                // Reconstruct images both from basis functions and from fitted roughness
-                LOG.info("Reconstructing:");
-                List<Map<String, ReadonlyColorAppearanceRMSE>> rmseList = reconstruction.reconstruct(specularFit, Map.of(
-                        "basis", ReconstructionShaders.getBasisModelReconstructionProgramBuilder(programFactory, specularFit),
-                        "reflectivity", ReconstructionShaders.getReflectivityModelReconstructionProgramBuilder(programFactory, specularFit)),
-                    ReconstructionShaders.getIncidentRadianceProgramBuilder(programFactory),
-                    DEBUG_IMAGES ? outputDirectory : null,
-                    DEBUG_IMAGES ? new File(outputDirectory, "ground-truth") : null);
+            // Reconstruct images both from basis functions and from fitted roughness
+            LOG.info("Reconstructing:");
+            List<Map<String, ReadonlyColorAppearanceRMSE>> rmseList = reconstruction.reconstruct(specularFit, Map.of(
+                    "basis", ReconstructionShaders.getBasisModelReconstructionProgramBuilder(programFactory, specularFit),
+                    "reflectivity", ReconstructionShaders.getReflectivityModelReconstructionProgramBuilder(programFactory, specularFit)),
+                ReconstructionShaders.getIncidentRadianceProgramBuilder(programFactory),
+                DEBUG_IMAGES ? outputDirectory : null,
+                DEBUG_IMAGES ? new File(outputDirectory, "ground-truth") : null);
 
-                double reconstructionRMSE = Objects.requireNonNull(rmseList).stream()
-                    .mapToDouble(map ->
-                    {
-                        double rmse = map.get("basis").getEncodedGroundTruth();
-                        return rmse * rmse; // mean of mean-squared errors
-                    })
-                    .average().orElse(0.0);
-
-                double fittedRMSE = rmseList.stream().mapToDouble(map ->
-                    {
-                        double rmse = map.get("reflectivity").getEncodedGroundTruth();
-                        return rmse * rmse; // mean of mean-squared errors
-                    })
-                    .average().orElse(0.0);
-
-                if (!settings.getReconstructionSettings().shouldReconstructAll()) // Write to just one RMSE file if only doing a single image per reconstruction method
+            double reconstructionRMSE = Objects.requireNonNull(rmseList).stream()
+                .mapToDouble(map ->
                 {
-                    try (PrintStream rmseOut = new PrintStream(new File(outputDirectory, "rmse.txt"), StandardCharsets.UTF_8))
-                    // Text file containing error information
-                    {
-                        rmseOut.printf("basis, %s\n", reconstructionRMSE);
-                        rmseOut.printf("reflectivity, %s\n", fittedRMSE);
-                    }
+                    double rmse = map.get("basis").getEncodedGroundTruth();
+                    return rmse * rmse; // mean of mean-squared errors
+                })
+                .average().orElse(0.0);
+
+            double fittedRMSE = rmseList.stream().mapToDouble(map ->
+                {
+                    double rmse = map.get("reflectivity").getEncodedGroundTruth();
+                    return rmse * rmse; // mean of mean-squared errors
+                })
+                .average().orElse(0.0);
+
+            if (!settings.getReconstructionSettings().shouldReconstructAll()) // Write to just one RMSE file if only doing a single image per reconstruction method
+            {
+                try (PrintStream rmseOut = new PrintStream(new File(outputDirectory, "rmse.txt"), StandardCharsets.UTF_8))
+                // Text file containing error information
+                {
+                    rmseOut.printf("basis, %s\n", reconstructionRMSE);
+                    rmseOut.printf("reflectivity, %s\n", fittedRMSE);
                 }
             }
         }
