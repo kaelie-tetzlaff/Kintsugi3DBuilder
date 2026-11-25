@@ -341,11 +341,11 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
 
         // getViews makes a copy; save it here since we'll need it a couple times.
         // Includes both enabled and disabled views which will all be allocated on the GPU.
-        Collection<View> views = viewSet != null ? viewSet.getViews() : List.of();
+        Collection<View> views = viewSet.getViews();
 
         // Read the images from a file
-        if (loadOptions != null && loadOptions.areColorImagesRequested() &&
-            viewSet != null && viewSet.getFullResImageDirectory() != null && viewSet.getGPUBufferSize() > 0)
+        if (loadOptions != null && loadOptions.areColorImagesRequested() && viewSet.getFullResImageDirectory() != null
+            && viewSet.getGPUBufferSize() > 0)
         {
             Date timestamp = new Date();
 
@@ -433,7 +433,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         }
 
         // Store the camera projections in a uniform buffer
-        if ((viewSet != null) && (viewSet.getCameraProjectionData() != null))
+        if (viewSet.getCameraProjectionData() != null)
         {
             // Create the uniform buffer
             cameraProjectionBuffer = context.createUniformBuffer();
@@ -445,7 +445,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         }
 
         // Store the camera projection indices in a uniform buffer
-        if ((viewSet != null) && (viewSet.getCameraProjectionIndexData() != null))
+        if (viewSet.getCameraProjectionIndexData() != null)
         {
             cameraProjectionIndexBuffer = context.createUniformBuffer();
             cameraProjectionIndexBuffer.setData(viewSet.getCameraProjectionIndexData());
@@ -455,7 +455,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             cameraProjectionIndexBuffer = null;
         }
 
-        if ((viewSet != null) && (loadOptions != null) && (loadOptions.getDepthImageWidth() != 0) && (loadOptions.getDepthImageHeight() != 0))
+        if (loadOptions != null && loadOptions.getDepthImageWidth() != 0 && loadOptions.getDepthImageHeight() != 0)
         {
             if (loadOptions.areDepthImagesRequested())
             {
@@ -509,26 +509,23 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             shadowMatrixBuffer = null;
         }
 
-        if (viewSet != null)
+        viewSet.lightCalibrationChangedListeners().register(event ->
         {
-            viewSet.lightCalibrationChangedListeners().register(event ->
+            if (event.wereLightPositionsChanged())
             {
-                if (event.wereLightPositionsChanged())
+                Rendering.runLater(() ->
                 {
-                    Rendering.runLater(() ->
+                    try
                     {
-                        try
-                        {
-                            updateShadowTextures();
-                        }
-                        catch (IOException e)
-                        {
-                            LOG.error("Error updating light calibration:", e);
-                        }
-                    });
-                }
-            });
-        }
+                        updateShadowTextures();
+                    }
+                    catch (IOException e)
+                    {
+                        LOG.error("Error updating light calibration:", e);
+                    }
+                });
+            }
+        });
     }
 
     private double getMinDepthForView(@NotNull View view) throws IOException
