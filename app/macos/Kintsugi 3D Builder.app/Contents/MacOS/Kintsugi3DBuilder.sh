@@ -16,7 +16,6 @@
 #
 
 #  kintsugi3d.sh
-#
 
 cd "$(dirname "$0")/../Resources" || exit
-jre/Home/bin/java -Xdock:icon=Kintsugi3D.icns -jar Kintsugi3DBuilder-shaded.jar "$@"
+jre/Home/bin/java -Xdock:icon=Kintsugi3D.icns --module-path lib/javafx --add-modules javafx.base,javafx.graphics,javafx.controls,javafx.swing,javafx.fxml -jar Kintsugi3DBuilder-shaded.jar "$@"

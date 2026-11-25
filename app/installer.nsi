@@ -66,6 +66,9 @@ Section "Kintsugi 3D Builder (required)" SectionApp
     ; Remove any pre-existing JRE (i.e. old versions)
     RMDir /r "$INSTDIR\jre"
 
+    ; Remove any pre-existing JavaFX module jars (i.e. old versions)
+    RMDir /r "$INSTDIR\lib"
+
     ; Remove any pre-existing binary files (i.e. old versions)
     RMDir /r "$INSTDIR\bin"
 
@@ -113,8 +116,12 @@ Section "File Type Associations" SectionAssociation
         WriteRegStr HKCR ".vset" "" "Kintsugi3DBuilder.Viewset"
 
         WriteRegStr HKCR "Kintsugi3DBuilder.Viewset" "" "Kintsugi 3D Builder Viewset"
-        WriteRegStr HKCR "Kintsugi3DBuilder.Viewset\DefaultIcon" "" "$INSTDIR\Kintsugi3DBuilder.exe,0"
+        WriteRegStr HKCR "Kintsugi3DBuilder.Viewset\DefaultIcon" "" "$INSTDIR\Kintsugi3DViewer.exe,0"
         WriteRegStr HKCR "Kintsugi3DBuilder.Viewset\Shell\Open\Command" "" '"$INSTDIR\Kintsugi3DBuilder.exe" "%1"'
+
+        ; Associate .glb and .gltf files as Kintsugi 3D Builder Viewsets
+        WriteRegStr HKCR ".glb\OpenWithProgids" "Kintsugi3DViewer.glb" ""
+        WriteRegStr HKCR ".gltf\OpenWithProgids" "Kintsugi3DViewer.gltf" ""
 
     SectionGetFlags ${SectionViewer} $ViewerInstalled
     ${If} $ViewerInstalled == 1
@@ -126,8 +133,8 @@ Section "File Type Associations" SectionAssociation
         WriteRegStr HKCR "Kintsugi3DViewer.gltf" "" "Kintsugi 3D Viewer"
 
         WriteRegStr HKCR "Kintsugi3DViewer.glb\DefaultIcon" "" "$INSTDIR\Kintsugi3DViewer.exe,0"
-        WriteRegStr HKCR "Kintsugi3DViewer.glb\Shell\Open\Command" "" '"$INSTDIR\Kintsugi3DViewer.exe" "%1"'
         WriteRegStr HKCR "Kintsugi3DViewer.gltf\DefaultIcon" "" "$INSTDIR\Kintsugi3DViewer.exe,0"
+        WriteRegStr HKCR "Kintsugi3DViewer.glb\Shell\Open\Command" "" '"$INSTDIR\Kintsugi3DViewer.exe" "%1"'
         WriteRegStr HKCR "Kintsugi3DViewer.gltf\Shell\Open\Command" "" '"$INSTDIR\Kintsugi3DViewer.exe" "%1"'
 
         WriteRegStr HKCR "Applications\Kintsugi3DViewer.exe\DefaultIcon" "" "$INSTDIR\Kintsugi3DViewer.exe,0"
@@ -243,7 +250,6 @@ Function un.CachePageCreate
     ${NSD_CreateCheckbox} 10u 40u 100% 12u "Clear Kintsugi 3D Viewer preferences, logs, and local files list"
     Pop $Checkbox_ClearViewerPreferences
     ${NSD_Check} $Checkbox_ClearViewerPreferences
-    ${NSD_OnClick} $Checkbox_ClearViewerPreferences un.OnViewerPreferences
 
     ${NSD_CreateCheckbox} 10u 55u 100% 12u "Clear Kintsugi 3D Viewer cache"
     Pop $Checkbox_ClearViewerCache

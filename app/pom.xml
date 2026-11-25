@@ -45,11 +45,42 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Copy the OpenJFX jars (classifier matched to the current OS profile) to
+                 target/lib/javafx. JavaFX must be loaded as JPMS modules via --module-path
+                 and cannot be shaded into the application jar. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.8.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-javafx</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>org.openjfx</includeGroupIds>
+                            <outputDirectory>${project.build.directory}/lib/javafx</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
+                    <!-- Keep JavaFX out of the shaded jar; it ships in lib/javafx and is loaded
+                         from the module path by the launchers instead. -->
+                    <filters>
+                        <filter>
+                            <artifact>org.openjfx:*</artifact>
+                            <excludes>
+                                <exclude>**</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
                     <transformers>
                         <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                             <mainClass>kintsugi3d.app.Kintsugi3DBuilder</mainClass>
@@ -329,10 +360,15 @@
                                     <downloadUrl>https://adoptium.net/temurin/releases/?version=11</downloadUrl>
                                     <chdir>.</chdir>
                                     <stayAlive>true</stayAlive>
+                                    <!-- JavaFX ships as separate jars in lib/javafx and is loaded as JPMS modules -->
                                     <jre>
                                         <path>jre;%JAVA_HOME%;%PATH%</path>
                                         <minVersion>11.0.0</minVersion>
                                         <maxVersion>11.99.99</maxVersion>
+                                        <opts>
+                                            <opt>--module-path lib/javafx</opt>
+                                            <opt>--add-modules javafx.base,javafx.graphics,javafx.controls,javafx.swing,javafx.fxml</opt>
+                                        </opts>
                                     </jre>
                                 </configuration>
                             </execution>

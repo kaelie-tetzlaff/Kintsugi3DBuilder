@@ -56,12 +56,6 @@
             <fileMode>0755</fileMode>
             <lineEnding>unix</lineEnding>
         </file>
-        <file>
-            <source>${project.build.directory}/classes/Info.plist</source>
-            <outputDirectory>Kintsugi 3D Builder.app/Contents</outputDirectory>
-            <fileMode>0755</fileMode>
-            <lineEnding>unix</lineEnding>
-        </file>
     </files>
     <fileSets>
         <fileSet>
@@ -76,6 +70,13 @@
             <fileMode>0755</fileMode>
             <lineEnding>unix</lineEnding>
         </fileSet>
+        <!-- JavaFX jars for the JPMS module path (see Kintsugi3DBuilder.sh) -->
+        <fileSet>
+            <directory>${project.build.directory}/lib/javafx</directory>
+            <outputDirectory>Kintsugi 3D Builder.app/Contents/Resources/lib/javafx</outputDirectory>
+            <fileMode>0755</fileMode>
+            <lineEnding>unix</lineEnding>
+        </fileSet>
         <fileSet>
             <!-- Intentionally flatten the root "Contents" directory for the bundled JRE -->
             <directory>${project.build.directory}/jre/Contents</directory>
@@ -83,7 +84,7 @@
             <fileMode>0755</fileMode>
         </fileSet>
         <fileSet>
-            <directory>${vmaven.multiModuleProjectDirectory}/bin</directory>
+            <directory>${maven.multiModuleProjectDirectory}/bin</directory>
             <outputDirectory>Kintsugi 3D Builder.app/Contents/Resources/bin</outputDirectory>
             <fileMode>0755</fileMode>
             <includes>
