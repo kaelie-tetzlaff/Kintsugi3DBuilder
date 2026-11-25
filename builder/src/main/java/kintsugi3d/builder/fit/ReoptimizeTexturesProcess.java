@@ -31,6 +31,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Objects;
 
 public class ReoptimizeTexturesProcess extends SpecularFitProcess
 {
@@ -68,7 +69,7 @@ public class ReoptimizeTexturesProcess extends SpecularFitProcess
             monitor.setStage(0, "Performing high-res fit...");
         }
 
-        MaterialBasis basis = original.getBasisResources().getBasis();
+        MaterialBasis basis = Objects.requireNonNull(original.getBasisResources(), "No prior material basis exists.").getBasis();
         return optimizeFullResTexturesWithCache(cache, monitor, original, basis, start);
     }
 

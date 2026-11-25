@@ -48,7 +48,7 @@ public class ExportTexturesRequest implements ImageBasedGraphicsRequest
 
     private static @NotNull ExportSettings getExportSettingsFromProject()
     {
-        ReadonlyGeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
+        ReadonlyGeneralSettingsModel projectSettings = Global.io().getLoadedViewSet().getProjectSettings();
 
         ExportSettings exportSettings = new ExportSettings();
 

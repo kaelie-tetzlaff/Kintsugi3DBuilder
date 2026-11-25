@@ -34,7 +34,7 @@ public class CurrentProjectViewSelectable extends ViewSelectableBase
 
     public CurrentProjectViewSelectable(@NotNull Function<ViewSet, View> getInitialSelection, @Nullable ToDoubleFunction<ViewSet> getInitialRotationDegrees)
     {
-        ViewSet currentViewSet = Global.io().getLoadedViewSetOrThrow();
+        ViewSet currentViewSet = Global.io().getLoadedViewSet();
         initialView = getInitialSelection.apply(currentViewSet);
 
         if (getInitialRotationDegrees != null)

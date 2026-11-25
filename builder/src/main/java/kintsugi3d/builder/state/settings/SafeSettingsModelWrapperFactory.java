@@ -35,7 +35,7 @@ public final class SafeSettingsModelWrapperFactory
 
         @SuppressWarnings("unchecked")
         @Override
-        public final <T> @Nullable T get(String name, @NotNull Class<T> settingType)
+        public final <T> @Nullable T getOrNull(String name, @NotNull Class<T> settingType)
         {
             if (base.existsForGet(name, settingType))
             {

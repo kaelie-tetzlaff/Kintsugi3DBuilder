@@ -33,13 +33,18 @@ import kintsugi3d.builder.util.FXImageHelper;
 import kintsugi3d.fx.util.ZoomSafeImageView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public class ImageDetailsController
 {
+    private static final Logger LOG = LoggerFactory.getLogger(ImageDetailsController.class);
+
     @FXML private VBox detailBox;
     @FXML private HBox buttonRow;
 
@@ -150,9 +155,17 @@ public class ImageDetailsController
                 currentImage = FXImageHelper.loadFXImage(imageFile);
                 zoomSafeImageView.setFullImage(currentImage); // ImageView is set to currentImage
 
-                // Resets viewport
-                currentWidth = currentImage.getWidth();
-                currentHeight = currentImage.getHeight();
+                if (currentImage != null)
+                {
+                    // Resets viewport
+                    currentWidth = currentImage.getWidth();
+                    currentHeight = currentImage.getHeight();
+                }
+                else
+                {
+                    LOG.warn("Image was not successfully loaded by JavaFX: {}", imageFile);
+                }
+
                 currentX = 0;
                 currentY = 0;
 
@@ -270,14 +283,19 @@ public class ImageDetailsController
         refreshViewport();
     }
 
+    private Image validateImage()
+    {
+        return Objects.requireNonNull(currentImage, "No image is currently selected.");
+    }
+
     private double calculateViewportWidthFromHeight(double height)
     {
-        return Math.min(currentImage.getWidth(), height * (stackPane.getWidth() / stackPane.getHeight()));
+        return Math.min(validateImage().getWidth(), height * (stackPane.getWidth() / stackPane.getHeight()));
     }
 
     private double calculateViewportHeightFromWidth(double width)
     {
-        return Math.min(currentImage.getHeight(), width * (stackPane.getHeight() / stackPane.getWidth()));
+        return Math.min(validateImage().getHeight(), width * (stackPane.getHeight() / stackPane.getWidth()));
     }
 
     private void refreshViewport()
@@ -402,28 +420,31 @@ public class ImageDetailsController
         mousePressedX = event.getX();
         mousePressedY = event.getY();
 
-        // Initialize viewport if it hasn't been set yet
-        if (zoomSafeImageView.getLogicalViewport() == null)
+        if (currentImage != null)
         {
-            currentWidth = currentImage.getWidth();
-            currentHeight = currentImage.getHeight();
-            currentX = 0;
-            currentY = 0;
-            refreshViewport();
-        }
+            // Initialize viewport if it hasn't been set yet
+            if (zoomSafeImageView.getLogicalViewport() == null)
+            {
+                currentWidth = currentImage.getWidth();
+                currentHeight = currentImage.getHeight();
+                currentX = 0;
+                currentY = 0;
+                refreshViewport();
+            }
 
-        if (canPan) //If panning is active takes the current x any and assigns it to startViewport x and y
-        {
-            startViewportX = currentX;
-            startViewportY = currentY;
-        }
-        else if (canCrop) //If marquee is active we initiate selectionBox
-        {
-            selectionBox.setTranslateX(mousePressedX);
-            selectionBox.setTranslateY(mousePressedY);
-            selectionBox.setWidth(0);
-            selectionBox.setHeight(0);
-            selectionBox.setVisible(true);
+            if (canPan) //If panning is active takes the current x any and assigns it to startViewport x and y
+            {
+                startViewportX = currentX;
+                startViewportY = currentY;
+            }
+            else if (canCrop) //If marquee is active we initiate selectionBox
+            {
+                selectionBox.setTranslateX(mousePressedX);
+                selectionBox.setTranslateY(mousePressedY);
+                selectionBox.setWidth(0);
+                selectionBox.setHeight(0);
+                selectionBox.setVisible(true);
+            }
         }
     }
 

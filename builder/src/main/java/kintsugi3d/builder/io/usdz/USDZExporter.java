@@ -165,6 +165,6 @@ public abstract class USDZExporter extends MaterialExporter
     public final @NotNull File redirectOutputDirectory(File outputDirectory)
     {
         modelOutputDirectory = outputDirectory;
-        return new File(Global.io().getLoadedViewSetOrThrow().getSupportingFilesDirectory(), "temp");
+        return new File(Global.io().getLoadedViewSet().getSupportingFilesDirectory(), "temp");
     }
 }

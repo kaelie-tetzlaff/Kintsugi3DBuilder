@@ -369,7 +369,7 @@ public class RootLightSceneController implements Initializable
                 Vector3 equidistantLightTarget = cameraCenter
                     .plus(sceneViewport.getViewingDirection(newWindowPosition.x, newWindowPosition.y).times(currentDistance));
 
-                if (cameraCenter.distance(objectLightTarget) < currentDistance)
+                if (objectLightTarget != null && cameraCenter.distance(objectLightTarget) < currentDistance)
                 {
                     selectedLightGroup.addLight(lastSelectedIndex, objectLightTarget.x, objectLightTarget.y, objectLightTarget.z);
                 }

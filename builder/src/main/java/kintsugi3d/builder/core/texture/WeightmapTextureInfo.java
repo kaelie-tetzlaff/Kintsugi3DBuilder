@@ -60,7 +60,7 @@ public class WeightmapTextureInfo extends TextureInfo
     @Override
     public final @NotNull ImageReplacer getReplaceData(@NotNull ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
-        File supportingFilesDirectory = Global.io().getLoadedViewSetOrThrow().getSupportingFilesDirectory();
+        File supportingFilesDirectory = Global.io().getLoadedViewSet().getSupportingFilesDirectory();
         try
         {
             return new WeightmapReplacer(resources.getTextureResources(), material,

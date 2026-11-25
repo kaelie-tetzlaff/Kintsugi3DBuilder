@@ -16,6 +16,7 @@
 package kintsugi3d.builder.fit;
 
 import kintsugi3d.builder.fit.decomposition.BasisImageCreator;
+import kintsugi3d.builder.fit.decomposition.ReadonlyBasisResources;
 import kintsugi3d.builder.fit.decomposition.SpecularDecompositionFromScratch;
 import kintsugi3d.builder.fit.settings.ReadonlyBasisOptimizationSettings;
 import kintsugi3d.builder.fit.settings.ReadonlySpecularFitSettings;
@@ -158,11 +159,15 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
                 // write out diffuse texture for debugging
                 decomposition.saveDiffuseMap(getOutputDirectory());
 
-                // Save basis image visualization for reference and debugging
-                try (BasisImageCreator<ContextType> basisImageCreator =
-                        new BasisImageCreator<>(resources.getContext(), basisOptimizationSettings.getBasisResolution()))
+                ReadonlyBasisResources<ContextType> basisResources = specularFit.getBasisResources();
+                if (basisResources != null)
                 {
-                    basisImageCreator.createImages(specularFit.getBasisResources(), getOutputDirectory());
+                    // Save basis image visualization for reference and debugging
+                    try (BasisImageCreator<ContextType> basisImageCreator =
+                             new BasisImageCreator<>(resources.getContext(), basisOptimizationSettings.getBasisResolution()))
+                    {
+                        basisImageCreator.createImages(basisResources, getOutputDirectory());
+                    }
                 }
             }
 

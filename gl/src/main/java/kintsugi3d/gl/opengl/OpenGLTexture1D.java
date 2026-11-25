@@ -56,6 +56,7 @@ final class OpenGLTexture1D extends OpenGLTexture implements Texture1D<OpenGLCon
         {
             if (isInternalFormatCompressed())
             {
+                assert getInternalCompressionFormat() != null;
                 return new OpenGLTexture1D(
                     getContext(),
                     textureTarget,

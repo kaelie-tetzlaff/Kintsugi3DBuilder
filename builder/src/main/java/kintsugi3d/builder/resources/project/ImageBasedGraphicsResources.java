@@ -20,7 +20,6 @@ import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.ManagedResource;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public interface ImageBasedGraphicsResources<ContextType extends Context<ContextType>>
     extends ManagedResource, ReadonlyImageBasedGraphicsResources<ContextType>

@@ -15,6 +15,7 @@
 
 package kintsugi3d.builder.rendering;
 
+import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.rendering.components.ShaderComponent;
 import kintsugi3d.builder.resources.LightingResources;
 import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
@@ -188,7 +189,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         defineMap.put("RELIGHTING_ENABLED", Optional.of(sceneModel.getSettingsModel().getBoolean("relightingEnabled")
             && lightingResources != null && sceneModel.getLightingModel() != null));
 
-        if (sceneModel.getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM
+        if (sceneModel.getSettingsModel().getOrNull("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM
             && !sceneModel.getSettingsModel().getBoolean("relightingEnabled") && !lightCalibrationMode)
         {
             // Disable visibility / shadow test if weight mode is "uniform" and relighting is disabled.
@@ -205,7 +206,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         defineMap.put("PRECOMPUTED_VIEW_WEIGHTS_ENABLED",
             Optional.of(!sceneModel.getSettingsModel().getBoolean("relightingEnabled")
                     && !lightCalibrationMode
-                && sceneModel.getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM));
+                && sceneModel.getSettingsModel().getOrNull("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM));
 
         if (sceneModel.getLightingModel() != null && sceneModel.getSettingsModel().getBoolean("relightingEnabled")
             && lightingResources != null)
@@ -241,8 +242,9 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
             // Light intensity depends on distance to centroid using the subject's model matrix (regardless of what we're drawing right now)
             float lightDistance = sceneModel.getLightModelViewMatrix(lightIndex).times(sceneModel.getCentroid().asPosition()).getXYZ().length();
 
-            float lightScale = resources.getViewSet().getProjectSettings().getBoolean("infiniteLightSources") ? 1.0f :
-                resources.getViewSet().getPrimaryView().getCameraPose()
+            View primaryView = resources.getViewSet().getPrimaryView();
+            float lightScale = primaryView == null || resources.getViewSet().getProjectSettings().getBoolean("infiniteLightSources") ? 1.0f :
+                primaryView.getCameraPose()
                     .times(Objects.requireNonNull(resources.getGeometry()).getCentroid().asPosition())
                     .getXYZ().length();
             getDrawable().program().setUniform(String.format("lightIntensityVirtual[%d]", lightIndex),

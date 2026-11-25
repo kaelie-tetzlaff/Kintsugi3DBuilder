@@ -55,7 +55,7 @@ public class NamedTextureInfo extends TextureInfo
     public final @NotNull ImageReplacer getReplaceData(@NotNull ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
         return new NamedTextureReplacer(resources.getTextureResources(), this,
-            new File(Global.io().getLoadedViewSetOrThrow().getSupportingFilesDirectory(),
+            new File(Global.io().getLoadedViewSet().getSupportingFilesDirectory(),
                 TextureResources.getTextureFilename(name)));
     }
 }

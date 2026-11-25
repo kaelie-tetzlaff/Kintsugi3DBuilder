@@ -39,9 +39,9 @@ public class TabsHelper
     {
         factories.add(new TabInfo(PHOTOS, new PhotoCardFactory(resources), null));
         factories.add(new TabInfo(MATERIALS, new MaterialCardFactory(resources),
-            Global.io().getLoadedViewSetOrThrow().getSupportingFilesDirectory().getPath()));
+            Global.io().getLoadedViewSet().getSupportingFilesDirectory().getPath()));
         factories.add(new TabInfo(TEXTURES, new TextureCardFactory(resources),
-            Global.io().getLoadedViewSetOrThrow().getSupportingFilesDirectory().getPath()));
+            Global.io().getLoadedViewSet().getSupportingFilesDirectory().getPath()));
         factories.add(new TabInfo(SHADERS, new ShaderCardFactory(resources), null));
     }
 

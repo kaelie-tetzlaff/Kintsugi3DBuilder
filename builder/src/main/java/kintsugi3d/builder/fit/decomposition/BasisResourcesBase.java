@@ -134,7 +134,7 @@ public abstract class BasisResourcesBase<ContextType extends Context<ContextType
         // Save basis image visualization for cards
         try (BasisImageCreator<ContextType> basisImageCreator = new BasisImageCreator<>(context, basisResolution))
         {
-            basisImageCreator.createImages(this, Global.io().getLoadedViewSetOrThrow().getThumbnailImageDirectory());
+            basisImageCreator.createImages(this, Global.io().getLoadedViewSet().getThumbnailImageDirectory());
         }
         catch (IOException e)
         {

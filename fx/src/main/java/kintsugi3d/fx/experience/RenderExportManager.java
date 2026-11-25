@@ -41,12 +41,12 @@ public class RenderExportManager
 
     public final boolean isAnyModalOpen()
     {
-        return anyModalOpen.get();
+        return getAnyModalOpenProperty().get();
     }
 
-    public final @Nullable BooleanExpression getAnyModalOpenProperty()
+    public final @NotNull BooleanExpression getAnyModalOpenProperty()
     {
-        return anyModalOpen;
+        return Objects.requireNonNull(anyModalOpen, "Render export manager has not been initialized.");
     }
 
     public final @NotNull List<RenderExport> getList()

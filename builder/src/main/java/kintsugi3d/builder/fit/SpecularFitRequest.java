@@ -94,7 +94,7 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
 
     private static @NotNull ReadonlySpecularFitSettings getSettingsFromProject()
     {
-        ReadonlyGeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
+        ReadonlyGeneralSettingsModel projectSettings = Global.io().getLoadedViewSet().getProjectSettings();
 
         // Start with texture size
         int textureSize = projectSettings.getInt("textureSize");
@@ -128,7 +128,7 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
 
     private static @NotNull ReadonlyBasisOptimizationSettings getBasisOptimizationSettingsFromProject()
     {
-        ReadonlyGeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
+        ReadonlyGeneralSettingsModel projectSettings = Global.io().getLoadedViewSet().getProjectSettings();
 
         BasisOptimizationSettings settings = new BasisOptimizationSettings();
 
@@ -251,8 +251,8 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
         ShaderResources<ContextType> resources, @NotNull ReadonlyTextureResources<ContextType> specularFit)
     {
         ReadonlyBasisResources<ContextType> basisResources = specularFit.getBasisResources();
-        ReadonlyBasisSettings basisSettings = new SimpleBasisSettings(
-            basisResources.getActiveMaterialCount(), basisResources.getBasisResolution());
+        ReadonlyBasisSettings basisSettings = basisResources != null ?
+            new BasisSettings(basisResources.getActiveMaterialCount(), basisResources.getBasisResolution()) : new BasisSettings();
 
         return new SpecularFitResourcesWrapper<ContextType>(settings.isSmithMaskingShadowingEnabled(), basisSettings).wrap(resources);
     }

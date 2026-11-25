@@ -171,7 +171,9 @@ class ImageReconstructionTest
         progressMonitor = new ProgressMonitorImpl();
         ViewSetDirectories directories = new ViewSetDirectories();
         directories.setFullResImagesNeedUndistort(true);
-        potatoViewSet = ViewSetReaderFromVSET.getInstance().readFromStream(getClass().getClassLoader().getResourceAsStream("Structured34View.vset"), directories).finish();
+        potatoViewSet = ViewSetReaderFromVSET.getInstance()
+            .readFromStream(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("Structured34View.vset")), directories)
+            .finish();
         potatoViewSet.getProjectSettings().set("occlusionEnabled", false);
 
         potatoViewSetTonemapped = potatoViewSet.copy();

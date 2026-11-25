@@ -122,9 +122,10 @@ public final class FrontendIO
         }
     }
 
-    private static @Nullable CreateProject getCreateProjectExperience()
+    private static @NotNull CreateProject getCreateProjectExperience()
     {
-        return ExperienceManager.getInstance().getExperience(ExperienceManager.CREATE_PROJECT, CreateProject.class);
+        return Objects.requireNonNull(ExperienceManager.getInstance().getExperience(ExperienceManager.CREATE_PROJECT, CreateProject.class),
+            "Could not find create project experience.");
     }
 
     static boolean isCreateProjectWindowOpen()

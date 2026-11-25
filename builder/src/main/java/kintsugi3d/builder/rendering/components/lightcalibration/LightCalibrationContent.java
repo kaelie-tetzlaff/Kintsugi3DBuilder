@@ -15,6 +15,7 @@
 
 package kintsugi3d.builder.rendering.components.lightcalibration;
 
+import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.rendering.CameraViewport;
 import kintsugi3d.builder.rendering.RenderedComponent;
 import kintsugi3d.builder.rendering.SceneModel;
@@ -30,12 +31,16 @@ import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
 public class LightCalibrationContent <ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
-    private final @Nullable ContextType context;
+    private static final Logger LOG = LoggerFactory.getLogger(LightCalibrationContent.class);
+
+    private final @NotNull ContextType context;
     private final @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources;
     private final SceneModel sceneModel;
     private final SceneViewportModel sceneViewportModel;
@@ -102,15 +107,25 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
 
         try(UniformBuffer<ContextType> viewIndexBuffer = context.createUniformBuffer())
         {
-            // TODO byte ordering seems to be OS-dependent when setting up this uniform buffer, or perhaps less tolerant of incomplete GLSL types
-            int selectedCameraViewIndex = sceneModel.getCameraViewListModel().getSelectedView().getGPUViewIndex();
-            viewIndexBuffer.setData(NativeVectorBufferFactory
-                .createFromIntArray(false, 4, 1,
-                    selectedCameraViewIndex, selectedCameraViewIndex, selectedCameraViewIndex, selectedCameraViewIndex));
-            validatedRenderingSubject.setViewIndexBufferOverride(viewIndexBuffer);
+            View selectedView = sceneModel.getCameraViewListModel().getSelectedView();
 
-            // Draw the actual object, without model transformation for light calibration
-            validatedRenderingSubject.draw(framebuffer, cameraViewport.copyForView(lookAt));
+            if (selectedView != null)
+            {
+                int selectedCameraViewIndex = selectedView.getGPUViewIndex();
+
+                // TODO byte ordering seems to be OS-dependent when setting up this uniform buffer, or perhaps less tolerant of incomplete GLSL types
+                viewIndexBuffer.setData(NativeVectorBufferFactory
+                    .createFromIntArray(false, 4, 1,
+                        selectedCameraViewIndex, selectedCameraViewIndex, selectedCameraViewIndex, selectedCameraViewIndex));
+                validatedRenderingSubject.setViewIndexBufferOverride(viewIndexBuffer);
+
+                // Draw the actual object, without model transformation for light calibration
+                validatedRenderingSubject.draw(framebuffer, cameraViewport.copyForView(lookAt));
+            }
+            else
+            {
+                LOG.warn("No view is selected.");
+            }
         }
 
         context.flush();

@@ -74,7 +74,7 @@ public final class UnzipHelper
      * @return
      * @throws IOException
      */
-    public static @Nullable Document unzipToDocument(@NotNull File zipFile) throws IOException
+    public static @NotNull Document unzipToDocument(@NotNull File zipFile) throws IOException
     {
         return convertStringToDocument(unzipToString(zipFile));
     }
@@ -115,7 +115,7 @@ public final class UnzipHelper
      * @return
      * @throws IOException
      */
-    public static @Nullable Document unzipToDocument(@NotNull File zipFile, String targetFileName) throws IOException
+    public static @NotNull Document unzipToDocument(@NotNull File zipFile, String targetFileName) throws IOException
     {
         return convertStringToDocument(unzipToString(zipFile, targetFileName));
     }
@@ -134,17 +134,16 @@ public final class UnzipHelper
         return s.toString();
     }
 
-    private static @Nullable Document convertStringToDocument(@NotNull String xmlStr)
+    private static @NotNull Document convertStringToDocument(@NotNull String xmlStr) throws IOException
     {
         try
         {
             return XMLHelper.getDocumentBuilder().parse(new InputSource(new StringReader(xmlStr)));
         }
-        catch (RuntimeException | IOException | ParserConfigurationException | SAXException e)
+        catch (ParserConfigurationException | SAXException e)
         {
-            LOG.error("Error converting document:", e);
+            throw new IOException("Error converting XML document", e);
         }
-        return null;
     }
 
     public static @NotNull List<Image> unzipImages(@NotNull File zipFile)

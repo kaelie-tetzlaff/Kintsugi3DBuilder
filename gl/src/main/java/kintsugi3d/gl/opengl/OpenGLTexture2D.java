@@ -77,31 +77,33 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
 
             if (isInternalFormatCompressed())
             {
+                assert getInternalCompressionFormat() != null;
                 return new OpenGLTexture2D(
                     getContext(),
-                        textureTarget,
-                        getInternalCompressionFormat(),
-                        width,
-                        height,
-                        textureData,
-                        isLinearFilteringEnabled(),
-                        areMipmapsEnabled(),
-                        getMaxMipmapLevel(),
-                        getMaxAnisotropy());
+                    textureTarget,
+                    getInternalCompressionFormat(),
+                    width,
+                    height,
+                    textureData,
+                    isLinearFilteringEnabled(),
+                    areMipmapsEnabled(),
+                    getMaxMipmapLevel(),
+                    getMaxAnisotropy());
             }
             else
             {
+                assert getInternalColorFormat() != null;
                 return new OpenGLTexture2D(
                     getContext(),
-                        textureTarget,
-                        getInternalColorFormat(),
-                        width,
-                        height,
-                        textureData,
-                        isLinearFilteringEnabled(),
-                        areMipmapsEnabled(),
-                        getMaxMipmapLevel(),
-                        getMaxAnisotropy());
+                    textureTarget,
+                    getInternalColorFormat(),
+                    width,
+                    height,
+                    textureData,
+                    isLinearFilteringEnabled(),
+                    areMipmapsEnabled(),
+                    getMaxMipmapLevel(),
+                    getMaxAnisotropy());
             }
         }
     }
@@ -152,6 +154,7 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
 
             if (isInternalFormatCompressed())
             {
+                assert getInternalCompressionFormat() != null;
                 return new OpenGLTexture2D(
                     getContext(),
                     textureTarget,
@@ -211,31 +214,33 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
 
             if (isInternalFormatCompressed())
             {
+                assert getInternalCompressionFormat() != null;
                 return new OpenGLTexture2D(
                     getContext(),
-                        textureTarget,
-                        getInternalCompressionFormat(),
-                        width,
-                        height,
-                        textureData,
-                        isLinearFilteringEnabled(),
-                        areMipmapsEnabled(),
-                        getMaxMipmapLevel(),
-                        getMaxAnisotropy());
+                    textureTarget,
+                    getInternalCompressionFormat(),
+                    width,
+                    height,
+                    textureData,
+                    isLinearFilteringEnabled(),
+                    areMipmapsEnabled(),
+                    getMaxMipmapLevel(),
+                    getMaxAnisotropy());
             }
             else
             {
+                assert getInternalColorFormat() != null;
                 return new OpenGLTexture2D(
                     getContext(),
-                        textureTarget,
-                        getInternalColorFormat(),
-                        width,
-                        height,
-                        textureData,
-                        isLinearFilteringEnabled(),
-                        areMipmapsEnabled(),
-                        getMaxMipmapLevel(),
-                        getMaxAnisotropy());
+                    textureTarget,
+                    getInternalColorFormat(),
+                    width,
+                    height,
+                    textureData,
+                    isLinearFilteringEnabled(),
+                    areMipmapsEnabled(),
+                    getMaxMipmapLevel(),
+                    getMaxAnisotropy());
             }
         }
     }
@@ -265,17 +270,18 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
         {
             if (isInternalFormatCompressed())
             {
+                assert getInternalCompressionFormat() != null;
                 return new OpenGLTexture2D(
                     getContext(),
-                        textureTarget,
-                        getInternalCompressionFormat(),
-                        width,
-                        height,
-                        bundleTextureData(dimensions, false, type, buffer),
-                        isLinearFilteringEnabled(),
-                        areMipmapsEnabled(),
-                        getMaxMipmapLevel(),
-                        getMaxAnisotropy());
+                    textureTarget,
+                    getInternalCompressionFormat(),
+                    width,
+                    height,
+                    bundleTextureData(dimensions, false, type, buffer),
+                    isLinearFilteringEnabled(),
+                    areMipmapsEnabled(),
+                    getMaxMipmapLevel(),
+                    getMaxAnisotropy());
             }
             else
             {
@@ -315,19 +321,20 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
         {
             if (isInternalFormatCompressed())
             {
+                assert getInternalCompressionFormat() != null;
                 return new OpenGLTexture2D(
                     getContext(),
-                        textureTarget,
-                        getMultisamples(),
-                        getInternalCompressionFormat(),
-                        width,
-                        height,
-                        GL_RGBA,
-                        areMultisampleLocationsFixed(),
-                        isLinearFilteringEnabled(),
-                        areMipmapsEnabled(),
-                        getMaxMipmapLevel(),
-                        getMaxAnisotropy());
+                    textureTarget,
+                    getMultisamples(),
+                    getInternalCompressionFormat(),
+                    width,
+                    height,
+                    GL_RGBA,
+                    areMultisampleLocationsFixed(),
+                    isLinearFilteringEnabled(),
+                    areMipmapsEnabled(),
+                    getMaxMipmapLevel(),
+                    getMaxAnisotropy());
             }
             else
             {

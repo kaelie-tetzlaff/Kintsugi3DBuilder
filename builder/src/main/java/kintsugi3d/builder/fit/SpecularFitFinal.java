@@ -30,8 +30,6 @@ import kintsugi3d.gl.core.ReadonlyTexture2D;
 import kintsugi3d.gl.core.Texture2D;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,8 +47,6 @@ import java.util.stream.Collectors;
 public final class SpecularFitFinal<ContextType extends Context<ContextType>>
     extends TextureResourcesBase<ContextType>
 {
-    private static final Logger LOG = LoggerFactory.getLogger(SpecularFitFinal.class);
-
     private final @NotNull Map<TextureInfo, Texture2D<ContextType>> managedTextures;
     private final @Nullable AlbedoORMOptimization<ContextType> albedoORMOptimization;
 
@@ -118,17 +114,14 @@ public final class SpecularFitFinal<ContextType extends Context<ContextType>>
         // TODO store a list of non-standard textures in the project file rather than hard-coding here.
         addTexture(FinalDiffuseOptimization.CONSTANT_TRANSLUCENCY_MAP, priorSolutionDirectory);
 
-        AlbedoORMOptimization<ContextType> albedoORMOptimizationTemp = null;
         try
         {
-            albedoORMOptimizationTemp = AlbedoORMOptimization.loadFromPriorSolution(context, priorSolutionDirectory);
+            albedoORMOptimization = AlbedoORMOptimization.loadFromPriorSolution(context, priorSolutionDirectory);
         }
         catch (IOException e)
         {
-            LOG.error("Error loading albedo / ORM maps", e);
+            throw new IOException("Error loading albedo / ORM maps", e);
         }
-
-        albedoORMOptimization = albedoORMOptimizationTemp;
     }
 
     private SpecularFitFinal(@NotNull ContextType context, File priorSolutionDirectory) throws IOException
@@ -186,10 +179,17 @@ public final class SpecularFitFinal<ContextType extends Context<ContextType>>
     public @NotNull Map<TextureInfo, Texture2D<ContextType>> getTextures()
     {
         Map<TextureInfo, Texture2D<ContextType>> mergedMaps =
-            new HashMap<>(base.getSpecularTextureCount() + managedTextures.size() + albedoORMOptimization.getTextureCount());
+            new HashMap<>(base.getSpecularTextureCount() + managedTextures.size()
+                + (albedoORMOptimization == null ? 0 : albedoORMOptimization.getTextureCount()));
+
         mergedMaps.putAll(base.getTextures());
         mergedMaps.putAll(managedTextures);
-        mergedMaps.putAll(albedoORMOptimization.getTextures());
+
+        if (albedoORMOptimization != null)
+        {
+            mergedMaps.putAll(albedoORMOptimization.getTextures());
+        }
+
         return Collections.unmodifiableMap(mergedMaps);
     }
 

@@ -48,10 +48,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ForkJoinPool;
 
 /**
@@ -214,7 +211,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             return this;
         }
 
-        private void loadAndValidateGeometry() throws IOException, MeshImportException
+        private @NotNull VertexGeometry loadAndValidateGeometry() throws IOException, MeshImportException
         {
             if (viewSet.getGeometryFile() != null)
             {
@@ -234,6 +231,8 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
                 {
                     throw new MeshImportException("Imported Object has no Texture Coordinates");
                 }
+
+                return geometry;
             }
             else
             {
@@ -299,7 +298,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             return this;
         }
 
-        public @NotNull GraphicsResourcesImageSpace<ContextType> create() throws IOException, UserCancellationException
+        public @NotNull GraphicsResourcesImageSpace<ContextType> create() throws IOException, MeshImportException, UserCancellationException
         {
             if ((linearLuminanceValues != null) && (encodedLuminanceValues != null))
             {
@@ -316,13 +315,19 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
                 viewSet.setOrientationViewByName(orientationViewName);
             }
 
-            if ((geometry == null) && (viewSet.getGeometryFile() != null))
+            VertexGeometry validatedGeometry;
+            if (geometry == null && viewSet.getGeometryFile() != null)
             {
                 // Load geometry if it wasn't specified but a view set was.
                 geometry = VertexGeometry.createFromGeometryFile(viewSet.getGeometryFile());
+                validatedGeometry = loadAndValidateGeometry();
+            }
+            else
+            {
+                validatedGeometry = geometry;
             }
 
-            return new GraphicsResourcesImageSpace<>(context, viewSet, geometry, imageLoadOptions, progressMonitor);
+            return new GraphicsResourcesImageSpace<>(context, viewSet, validatedGeometry, imageLoadOptions, progressMonitor);
         }
     }
 
@@ -331,7 +336,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         return new Builder<>(context);
     }
 
-    private GraphicsResourcesImageSpace(@NotNull ContextType context, @Nullable ViewSet viewSet, VertexGeometry geometry,
+    private GraphicsResourcesImageSpace(@NotNull ContextType context, @NotNull ViewSet viewSet, @NotNull VertexGeometry geometry,
                                         @Nullable ReadonlyLoadOptionsModel loadOptions, @Nullable ProgressMonitor progressMonitor) throws IOException, UserCancellationException
     {
         // IAN: This super call should be creating the geometry
@@ -729,7 +734,8 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         {
             try
             {
-                double primaryViewDistance = getMinDepthForView(viewSet.getPrimaryView());
+                double primaryViewDistance = getMinDepthForView(Objects.requireNonNull(viewSet.getPrimaryView(),
+                    "No primary view assigned; cannot determine global light intensity."));
                 return new Vector3((float) (primaryViewDistance * primaryViewDistance));
             }
             catch (IOException e)

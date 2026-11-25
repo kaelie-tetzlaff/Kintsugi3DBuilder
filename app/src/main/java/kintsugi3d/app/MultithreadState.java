@@ -28,7 +28,8 @@ import kintsugi3d.builder.state.shader.ActiveShaderModel;
 import kintsugi3d.fx.core.JavaFXState;
 import kintsugi3d.fx.multithread.*;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 public final class MultithreadState implements Kintsugi3DBuilderState
 {
@@ -49,7 +50,7 @@ public final class MultithreadState implements Kintsugi3DBuilderState
     private static MultithreadState instance;
 
     // TODO make private
-    public static @Nullable MultithreadState getInstance()
+    public static @NotNull MultithreadState getInstance()
     {
         if (instance == null)
         {
@@ -59,7 +60,7 @@ public final class MultithreadState implements Kintsugi3DBuilderState
             }
         }
         //noinspection StaticVariableUsedBeforeInitialization
-        return instance;
+        return Objects.requireNonNull(instance, "JavaFX state is not yet loaded.");
     }
 
     public static boolean isInitialized()

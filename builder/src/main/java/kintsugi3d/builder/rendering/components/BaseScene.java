@@ -36,7 +36,6 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class BaseScene<ContextType extends Context<ContextType>> extends LitContent<ContextType>

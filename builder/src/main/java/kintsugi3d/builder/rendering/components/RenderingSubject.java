@@ -72,7 +72,7 @@ public class RenderingSubject<ContextType extends Context<ContextType>> extends 
     {
         if (!getSceneModel().getSettingsModel().getBoolean("relightingEnabled")
             && !isLightCalibrationMode()
-            && getSceneModel().getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM)
+            && getSceneModel().getSettingsModel().getOrNull("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM)
         {
             if (weightBuffer == null)
             {

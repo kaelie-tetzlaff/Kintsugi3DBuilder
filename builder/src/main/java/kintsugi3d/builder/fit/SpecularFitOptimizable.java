@@ -24,9 +24,9 @@ import kintsugi3d.builder.fit.normal.NormalOptimization;
 import kintsugi3d.builder.fit.roughness.RoughnessOptimization;
 import kintsugi3d.builder.fit.settings.ReadonlyBasisOptimizationSettings;
 import kintsugi3d.builder.fit.settings.ReadonlyNormalOptimizationSettings;
+import kintsugi3d.builder.resources.project.texture.ReadonlyTextureSet;
 import kintsugi3d.gl.interactive.ShaderResources;
 import kintsugi3d.gl.interactive.ShaderProgramFactory;
-import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResourcesBase;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.gl.core.*;
@@ -59,7 +59,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
 {
     private static final Logger LOG = LoggerFactory.getLogger(SpecularFitOptimizable.class);
 
-    private final @Nullable ContextType context;
+    private final @NotNull ContextType context;
 
     private final @NotNull ShaderResources<ContextType> resources;
     private final @NotNull TextureResolution textureResolution;
@@ -99,7 +99,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
 
         errorCalculator = ShaderBasedErrorCalculator.create(resources.getContext(),
             () -> createErrorCalcProgram(wrappedResources),
-            program -> createErrorCalcDrawable(this, resources, program),
+            program -> createErrorCalcDrawable(this, program),
             textureResolution.width, textureResolution.height);
     }
 
@@ -180,14 +180,39 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
         return normalOptimization;
     }
 
+    /**
+     * Applies both basis resources and basis weight resources to the specified program if each is not null.
+     * @param program
+     */
+    public void validateAndUseAllBasisResources(@NotNull Program<ContextType> program)
+    {
+        ReadonlyBasisResources<ContextType> basisResources = getBasisResources();
+        if (basisResources != null)
+        {
+            basisResources.useWithShaderProgram(program);
+        }
+        else
+        {
+            LOG.warn("No basis resources found.");
+        }
 
-    private DrawableResource<ContextType> getNormalDrawable(@NotNull Program<ContextType> estimationProgram,
-                                                            @NotNull ShaderProgramFactory<ContextType> programFactory)
+        BasisWeightResources<ContextType> basisWeightResources = getBasisWeightResources();
+        if (basisWeightResources != null)
+        {
+            basisWeightResources.useWithShaderProgram(program);
+        }
+        else
+        {
+            LOG.warn("No basis weight resources found.");
+        }
+    }
+
+    private DrawableResource<ContextType> getNormalDrawable(
+        @NotNull Program<ContextType> estimationProgram, @NotNull ShaderProgramFactory<ContextType> programFactory)
     {
         DrawableResource<ContextType> drawable = resources.createDrawable(estimationProgram);
         programFactory.setupShaderProgram(estimationProgram);
-        getBasisResources().useWithShaderProgram(estimationProgram);
-        getBasisWeightResources().useWithShaderProgram(estimationProgram);
+        validateAndUseAllBasisResources(estimationProgram);
         return drawable;
     }
 
@@ -207,13 +232,12 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
         }
     }
 
-    private static <ContextType extends Context<ContextType>> DrawableResource<ContextType> createErrorCalcDrawable(
-        @NotNull ReadonlyTextureResources<ContextType> specularFit, @NotNull ShaderResources<ContextType> resources,
-        @NotNull Program<ContextType> errorCalcProgram)
+    private DrawableResource<ContextType> createErrorCalcDrawable(
+        @NotNull ReadonlyTextureSet<ContextType> specularFit, @NotNull Program<ContextType> errorCalcProgram)
     {
         DrawableResource<ContextType> errorCalcDrawable = resources.createDrawable(errorCalcProgram);
-        specularFit.getBasisResources().useWithShaderProgram(errorCalcProgram);
-        specularFit.getBasisWeightResources().useWithShaderProgram(errorCalcProgram);
+        validateAndUseAllBasisResources(errorCalcProgram);
+        
         errorCalcProgram.setTexture("tex_roughness", specularFit.getTexture(StandardTexture.ROUGHNESS));
         errorCalcProgram.setTexture("tex_normal", specularFit.getTexture(StandardTexture.NORMAL_MAP));
         errorCalcProgram.setUniform("sRGB", false);
@@ -307,15 +331,23 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
 
                 if (debugDirectory != null)
                 {
-                    // Save basis image visualization for reference and debugging
-                    try (BasisImageCreator<ContextType> basisImageCreator =
-                             new BasisImageCreator<>(context, 2 * basisOptimizationSettings.getBasisResolution() + 1))
+                    ReadonlyBasisResources<ContextType> basisResources = getBasisResources();
+                    if (basisResources != null)
                     {
-                        basisImageCreator.createImages(getBasisResources(), debugDirectory);
+                        // Save basis image visualization for reference and debugging
+                        try (BasisImageCreator<ContextType> basisImageCreator =
+                                 new BasisImageCreator<>(context, 2 * basisOptimizationSettings.getBasisResolution() + 1))
+                        {
+                            basisImageCreator.createImages(basisResources, debugDirectory);
+                        }
+                        catch (IOException e)
+                        {
+                            LOG.error("Error occurred while creating basis images:", e);
+                        }
                     }
-                    catch (IOException e)
+                    else
                     {
-                        LOG.error("Error occurred while creating basis images:", e);
+                        LOG.warn("No basis data found for which to create images.");
                     }
 
                     // write out diffuse texture for debugging
@@ -339,7 +371,11 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
         // Prepare for error calculation and then normal optimization on the GPU.
         // Weight maps will have changed.
         // TODO: do we need to do this when basis count == 1?  Not sure where they're initialized otherwise.
-        base.getBasisWeightResources().updateFromSolution(specularDecomposition);
+        BasisWeightResources<ContextType> basisWeightResources = base.getBasisWeightResources();
+        if (basisWeightResources != null)
+        {
+            basisWeightResources.updateFromSolution(specularDecomposition);
+        }
 
         // Use the current front normal buffer for calculating error.
         errorCalculator.getProgram().setTexture("tex_normal", getTexture(StandardTexture.NORMAL_MAP));
@@ -419,7 +455,11 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
 
         // Prepare for error calculation on the GPU.
         // Basis functions will have changed.
-        getBasisResources().refreshGraphicsResources();
+        ReadonlyBasisResources<ContextType> basisResources = getBasisResources();
+        if (basisResources != null)
+        {
+            basisResources.refreshGraphicsResources();
+        }
 
         LOG.debug("Calculating error...");
         errorCalculator.update();

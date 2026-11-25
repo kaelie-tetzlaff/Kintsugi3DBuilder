@@ -80,6 +80,11 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
         return primaryImgView.getRotate();
     }
 
+    private ViewSelectable validateData()
+    {
+        return Objects.requireNonNull(data, "View selection data missing.");
+    }
+
     @Override
     public final void initPage()
     {
@@ -87,7 +92,7 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
             imageName -> new ImageSelectionLoader(
                 imageName,
                 new ImageSelectionPreview(primaryImgView, imgViewText, cache),
-                data.getImageSetInfo()));
+                validateData().getImageSetInfo()));
 
         //TODO: temp hack to make text visible, need to change textflow css?
         imgViewText.setFill(Paint.valueOf("white"));
@@ -151,7 +156,7 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
     {
         // Set the initial selection to what is currently being used
         TreeItem<String> selectionItem = NONE_ITEM;
-        String viewName = data.getViewSelection();
+        String viewName = validateData().getViewSelection();
         if (viewName != null)
         {
             selectionItem = IntStream.range(0, searchableTreeView.getTreeView().getExpandedItemCount())
@@ -268,10 +273,11 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
                 // Hide orientation controls
                 orientationControls.setVisible(false);
 
-                if (data.getAdvanceLabelOverride() != null)
+                String advanceLabelOverride = validateData().getAdvanceLabelOverride();
+                if (advanceLabelOverride != null)
                 {
                     // Set confirm button text
-                    setAdvanceLabelOverride(data.getAdvanceLabelOverride());
+                    setAdvanceLabelOverride(advanceLabelOverride);
                 }
 
                 imgViewText.setText("Keep model orientation as imported.");

@@ -15,7 +15,7 @@
 
 package kintsugi3d.builder.io;
 
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Map;
@@ -23,5 +23,5 @@ import java.util.Map;
 @FunctionalInterface
 public interface TextureSupplier
 {
-    @Nullable Map<String, File> getTextures();
+    @NotNull Map<String, File> getTextures();
 }

@@ -32,10 +32,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 
@@ -383,7 +380,10 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
      */
     public final void replaceWeightMapWithSpecificFile(String materialName, File newTextureFile) throws IOException
     {
-        weightMaps.loadLayer(basis.getMaterial(materialName).getGPUIndex(), newTextureFile, true);
+        weightMaps.loadLayer(
+            Objects.requireNonNull(basis.getMaterial(materialName),
+                () -> String.format("Basis material not found: %s", materialName)).getGPUIndex(),
+            newTextureFile, true);
     }
 
     @Override

@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public abstract class TextureResourcesBase<ContextType extends Context<ContextType>> extends ReadonlyTextureResourcesBase<ContextType>
     implements TextureResources<ContextType>
@@ -54,6 +55,11 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
 
     protected abstract @Nullable BasisWeightResources<ContextType> getMutableBasisWeightResources();
 
+    private @NotNull BasisWeightResources<ContextType> validateMutableBasisWeightResources()
+    {
+        return Objects.requireNonNull(getMutableBasisWeightResources(), "Weight maps do not exist.");
+    }
+
     @Override
     public final ReadonlyBasisWeightResources<ContextType> getBasisWeightResources()
     {
@@ -68,7 +74,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
         {
             BasisMaterialInfo removed = basisResources.deleteBasisMaterial(materialName);
 
-            if (basisObservable != null)
+            if (basisObservable != null && removed != null)
             {
                 basisObservable.notify(new MappedChange<>(Type.REMOVED, materialName, removed));
             }
@@ -150,7 +156,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     @Override
     public final void replaceWeightMapWithDefaultFile(@NotNull BasisMaterialInfo material, File parentDirectory) throws IOException
     {
-        getMutableBasisWeightResources().replaceWeightMapWithDefaultFile(material.getName(), parentDirectory);
+        validateMutableBasisWeightResources().replaceWeightMapWithDefaultFile(material.getName(), parentDirectory);
 
         if (texturesObservable != null)
         {
@@ -162,7 +168,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     @Override
     public final void replaceWeightMapWithSpecificFile(@NotNull BasisMaterialInfo material, File newTextureFile) throws IOException
     {
-        getMutableBasisWeightResources().replaceWeightMapWithSpecificFile(material.getName(), newTextureFile);
+        validateMutableBasisWeightResources().replaceWeightMapWithSpecificFile(material.getName(), newTextureFile);
 
         // Save project so that the new weightmap is saved to disk and to ensure saved project consistency.
         Global.io().saveProject(() ->
@@ -192,7 +198,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
         {
             for (BasisMaterialInfo material : basisResources.getBasis().getMaterials())
             {
-                getMutableBasisWeightResources().replaceWeightMapWithDefaultFile(material.getName(), parentDirectory);
+                validateMutableBasisWeightResources().replaceWeightMapWithDefaultFile(material.getName(), parentDirectory);
             }
         }
 
@@ -284,9 +290,10 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
         // Blit weight maps, weight mask -- handled separately
         if (getBasisWeightResources() != null && readSource.getBasisWeightResources() != null)
         {
-            blitCroppedAndScaledSingle(getMutableBasisWeightResources().getWeightMaps(), destX, destY, destWidth, destHeight,
+            BasisWeightResources<ContextType> validatedBasisWeightResources = validateMutableBasisWeightResources();
+            blitCroppedAndScaledSingle(validatedBasisWeightResources.getWeightMaps(), destX, destY, destWidth, destHeight,
                 readSource, readSource.getBasisWeightResources().getWeightMaps(), srcX, srcY, srcWidth, srcHeight, linearFiltering);
-            blitCroppedAndScaledSingle(getMutableBasisWeightResources().getWeightMask(), destX, destY, destWidth, destHeight,
+            blitCroppedAndScaledSingle(validatedBasisWeightResources.getWeightMask(), destX, destY, destWidth, destHeight,
                 readSource, readSource.getBasisWeightResources().getWeightMask(), srcX, srcY, srcWidth, srcHeight, linearFiltering);
         }
 

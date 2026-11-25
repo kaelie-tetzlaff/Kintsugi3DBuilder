@@ -32,7 +32,8 @@ import javafx.scene.text.TextAlignment;
 import kintsugi3d.fx.internal.ObservableCardsModel;
 import kintsugi3d.fx.internal.ObservableTabsModel;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.*;
@@ -40,6 +41,8 @@ import java.util.Map.Entry;
 
 public class SideBarController
 {
+    private static final Logger LOG = LoggerFactory.getLogger(SideBarController.class);
+
     private static final int DEFAULT_WIDTH = 400;
     private static final int MINIMIZED_WIDTH = 23;
 
@@ -158,17 +161,25 @@ public class SideBarController
     private void addTab(@NotNull ObservableCardsModel<?> model)
     {
         RadioButton newButton = createButton(model.getLabel());
-        VBox newTab = createTab(model);
 
-        buttonBox.getChildren().add(newButton);
-        mainBox.getChildren().add(newTab);
+        try
+        {
+            VBox newTab = createTab(model);
 
-        buttonMap.put(model.getLabel(), newButton);
-        inverseButtonMap.put(newButton, model);
-        tabMap.put(model.getLabel(), newTab);
+            buttonBox.getChildren().add(newButton);
+            mainBox.getChildren().add(newTab);
 
-        newTab.visibleProperty().bind(newButton.selectedProperty());
-        newTab.managedProperty().bind(newButton.selectedProperty());
+            buttonMap.put(model.getLabel(), newButton);
+            inverseButtonMap.put(newButton, model);
+            tabMap.put(model.getLabel(), newTab);
+
+            newTab.visibleProperty().bind(newButton.selectedProperty());
+            newTab.managedProperty().bind(newButton.selectedProperty());
+        }
+        catch (IOException e)
+        {
+            LOG.error("Error loading FXML for tab.", e);
+        }
     }
 
     private @NotNull RadioButton createButton(String name)
@@ -200,24 +211,16 @@ public class SideBarController
         return button;
     }
 
-    private @Nullable VBox createTab(@NotNull ObservableCardsModel<?> model)
+    private VBox createTab(@NotNull ObservableCardsModel<?> model) throws IOException
     {
-        VBox newTab = null;
         FXMLLoader loader = new FXMLLoader();
-        try
-        {
-            loader.setLocation(getClass().getResource("/fxml/main/leftpanel/CardTab.fxml"));
-            newTab = loader.load();
-            CardTabController newTabController = loader.getController();
+        loader.setLocation(getClass().getResource("/fxml/main/leftpanel/CardTab.fxml"));
+        VBox newTab = loader.load();
+        CardTabController newTabController = loader.getController();
 
-            tabControllers.add(newTabController);
+        tabControllers.add(newTabController);
 
-            newTabController.init(model);
-        }
-        catch (IOException e)
-        {
-            // throw new RuntimeException(e);
-        }
+        newTabController.init(model);
         return newTab;
     }
 

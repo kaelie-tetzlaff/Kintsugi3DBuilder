@@ -104,7 +104,7 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
         }
     }
 
-    private static @Nullable String getFriendlyName(@NotNull String name)
+    private static @NotNull String getFriendlyName(@NotNull String name)
     {
         try
         {

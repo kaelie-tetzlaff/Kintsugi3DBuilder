@@ -66,14 +66,16 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
                 entry.getValue());
         }
 
-        if (getBasisResources() != null)
+        ReadonlyBasisResources<ContextType> basisResources = getBasisResources();
+        if (basisResources != null)
         {
-            getBasisResources().useWithShaderProgram(program);
+            basisResources.useWithShaderProgram(program);
         }
 
-        if (getBasisWeightResources() != null)
+        ReadonlyBasisWeightResources<ContextType> basisWeightResources = getBasisWeightResources();
+        if (basisWeightResources != null)
         {
-            getBasisWeightResources().useWithShaderProgram(program);
+            basisWeightResources.useWithShaderProgram(program);
         }
     }
 

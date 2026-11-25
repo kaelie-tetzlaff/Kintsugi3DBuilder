@@ -320,7 +320,7 @@ public class SmokeTest
             originalProcessedCount.set(PROCESSED_COUNTER.get());
             originalSaveCount.set(SAVE_COUNTER.get());
 
-            GeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
+            GeneralSettingsModel projectSettings = Global.io().getLoadedViewSet().getProjectSettings();
             projectSettings.set("textureSize", TEXTURE_RESOLUTION);
             projectSettings.set("textureSampledSize", TEXTURE_SAMPLED_SIZE);
             projectSettings.set("textureSubdivSize", TEXTURE_SUBDIV_SIZE);
@@ -360,11 +360,11 @@ public class SmokeTest
 
     private static void assertCameras(int expected)
     {
-        int numLoadedCameras = Global.io().getLoadedViewSetOrThrow().getViewCount();
+        int numLoadedCameras = Global.io().getLoadedViewSet().getViewCount();
         assertEquals(expected, numLoadedCameras);
-        int numEnabledCameras = Global.io().getLoadedViewSetOrThrow().getEnabledViewCount();
+        int numEnabledCameras = Global.io().getLoadedViewSet().getEnabledViewCount();
         assertEquals(expected, numEnabledCameras);
-        int numDisabledCameras = Global.io().getLoadedViewSetOrThrow().getDisabledViewCount();
+        int numDisabledCameras = Global.io().getLoadedViewSet().getDisabledViewCount();
         assertEquals(0, numDisabledCameras);
     }
 
@@ -567,8 +567,8 @@ public class SmokeTest
             "Rodin/Processed dark 25"
         );
 
-        assertEquals(Vector3.ZERO, Global.io().getLoadedViewSetOrThrow().getLightPosition(0));
-        assertEquals(new Vector3(29.082094f), Global.io().getLoadedViewSetOrThrow().getLightIntensity(0));
+        assertEquals(Vector3.ZERO, Global.io().getLoadedViewSet().getLightPosition(0));
+        assertEquals(new Vector3(29.082094f), Global.io().getLoadedViewSet().getLightIntensity(0));
 
         verifyProject(90);
     }
@@ -722,8 +722,8 @@ public class SmokeTest
             "KatrinaFuller/Downscaled25"
         );
 
-        assertEquals(Vector3.ZERO, Global.io().getLoadedViewSetOrThrow().getLightPosition(0));
-        assertEquals(new Vector3(3242.3916f), Global.io().getLoadedViewSetOrThrow().getLightIntensity(0));
+        assertEquals(Vector3.ZERO, Global.io().getLoadedViewSet().getLightPosition(0));
+        assertEquals(new Vector3(3242.3916f), Global.io().getLoadedViewSet().getLightIntensity(0));
 
         verifyProject(158);
     }
@@ -751,6 +751,7 @@ public class SmokeTest
     {
         MetashapeDocument doc = new MetashapeDocument(psxFile.getAbsolutePath());
         MetashapeChunk chunk = doc.getSelectedChunk();
+        assertNotNull(chunk);
         MetashapeModel model = chunk.getSelectedModel();
 
         // setting the image directory
@@ -774,7 +775,7 @@ public class SmokeTest
         waitForLoad();
 
         File imgDir = new File(Objects.requireNonNull(CLASS_LOADER.getResource(imageDirectory)).toURI());
-        Global.io().getLoadedViewSetOrThrow().setFullResImageDirectory(imgDir);
+        Global.io().getLoadedViewSet().setFullResImageDirectory(imgDir);
 
         // --- FIRST PROCESS ---
         if (mode == ReloadMode.FIRST_ONLY || mode == ReloadMode.BOTH)
@@ -811,7 +812,7 @@ public class SmokeTest
         waitForLoad();
 
         File imgDir =  new File(Objects.requireNonNull(CLASS_LOADER.getResource(imageDirectory)).toURI());
-        Global.io().getLoadedViewSetOrThrow().setFullResImageDirectory(imgDir);
+        Global.io().getLoadedViewSet().setFullResImageDirectory(imgDir);
 
         // --- PROCESS ---
         runSpecularFit();

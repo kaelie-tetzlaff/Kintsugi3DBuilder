@@ -270,12 +270,19 @@ public final class RenderingBootstrap
         {
             if (key == Key.F11)
             {
-                LOG.info("Reloading program...");
-
                 try
                 {
                     // reload shader programs
-                    renderableManager.getMainRenderable().reloadShaders();
+                    ImageBasedRenderable<OpenGLContext> mainRenderable = renderableManager.getMainRenderable();
+                    if (mainRenderable != null)
+                    {
+                        LOG.info("Reloading shaders...");
+                        mainRenderable.reloadShaders();
+                    }
+                    else
+                    {
+                        LOG.info("Shader reload key pressed but no shaders to reload.");
+                    }
                 }
                 catch (RuntimeException e)
                 {

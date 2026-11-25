@@ -256,7 +256,8 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
                 requestList.add(() ->
                 {
                     // Check again for null, just in case
-                    if (renderableManager.getMainRenderable() == null)
+                    ImageBasedRenderable<ContextType> mainRenderable = renderableManager.getMainRenderable();
+                    if (mainRenderable == null)
                     {
                         // Instance is currently null, wait for a load and then call this function again (recursive-ish)
                         renderableManager.addMainRenderableLoadCallback(
@@ -269,8 +270,8 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
                         //noinspection ErrorNotRethrown
                         try
                         {
-                            renderableManager.getMainRenderable().getResources().replaceTextureResources(
-                                request.executeRequest(renderableManager.getMainRenderable(), new DefaultProgressMonitor()));
+                            mainRenderable.getResources().replaceTextureResources(
+                                request.executeRequest(mainRenderable, new DefaultProgressMonitor()));
                         }
                         catch (UserCancellationException e)
                         {
@@ -318,7 +319,8 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
                     }
 
                     // Check again for null, just in case
-                    if (renderableManager.getMainRenderable() == null)
+                    ImageBasedRenderable<ContextType> mainRenderable = renderableManager.getMainRenderable();
+                    if (mainRenderable == null)
                     {
                         // Instance is currently null, wait for a load and then call this function again (recursive-ish)
                         renderableManager.addMainRenderableLoadCallback(
@@ -332,8 +334,8 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
                         try
                         {
 
-                            renderableManager.getMainRenderable().getResources().replaceTextureResources(
-                                request.executeRequest(renderableManager.getMainRenderable(), progressMonitor));
+                            mainRenderable.getResources().replaceTextureResources(
+                                request.executeRequest(mainRenderable, progressMonitor));
 
                             if (progressMonitor != null)
                             {

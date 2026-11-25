@@ -30,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Objects;
 
 public interface IO
 {
@@ -60,17 +61,9 @@ public interface IO
 
     @Nullable ViewSet getLoadedViewSetOrNull();
 
-    default @NotNull ViewSet getLoadedViewSetOrThrow()
+    default @NotNull ViewSet getLoadedViewSet()
     {
-        ViewSet viewSet = getLoadedViewSetOrNull();
-        if (viewSet == null)
-        {
-            throw new IllegalStateException("No project loaded.");
-        }
-        else
-        {
-            return viewSet;
-        }
+        return Objects.requireNonNull(getLoadedViewSetOrNull(), "No project loaded.");
     }
 
     @Nullable ReadonlyVertexGeometry getLoadedGeometry();

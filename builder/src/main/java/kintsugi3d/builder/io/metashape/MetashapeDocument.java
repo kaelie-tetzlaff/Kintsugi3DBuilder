@@ -73,11 +73,6 @@ public class MetashapeDocument
             //extract project.zip and open the doc.xml
             Document projectZipXML = UnzipHelper.unzipToDocument(new File(documentPathInfo));
 
-            if (projectZipXML == null)
-            {
-                return;
-            }
-
             //set active chunk id if the project has one
             NodeList chunksWrapper = projectZipXML.getElementsByTagName("chunks");
             if (chunksWrapper.getLength() > 0)

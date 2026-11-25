@@ -16,7 +16,6 @@
 package kintsugi3d.gl.core;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * A simple interface for a type that is associated with a Context implementation.

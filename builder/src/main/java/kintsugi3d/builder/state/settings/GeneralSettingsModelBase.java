@@ -66,12 +66,14 @@ public abstract class GeneralSettingsModelBase implements GeneralSettingsModel
             }
             else
             {
-                throw new NoSuchElementException("No setting called \"" + name + "\" exists that can be assigned from type " + value.getClass());
+                throw new NoSuchElementException(String.format("No setting called \"%s\" exists that can be assigned from type %s",
+                    name, value.getClass()));
             }
         }
         else
         {
-            throw new NoSuchElementException("No setting called \"" + name + "\" exists that can be assigned from type " + value.getClass());
+            throw new NoSuchElementException(String.format("No setting called \"%s\" exists that can be assigned from type %s",
+                name, value != null ? value.getClass() : "<null>"));
         }
     }
 

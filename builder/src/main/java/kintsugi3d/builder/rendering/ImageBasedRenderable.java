@@ -22,6 +22,7 @@ import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.InteractiveRenderableResource;
 import kintsugi3d.gl.interactive.ShaderBasedRenderable;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
@@ -33,6 +34,7 @@ public interface ImageBasedRenderable<ContextType extends Context<ContextType>>
     extends InteractiveRenderableResource<ContextType>, ReadonlyImageBasedRenderable<ContextType>, ShaderBasedRenderable<ContextType>
 {
     @Override
+    @NotNull
     ViewSet getViewSet();
 
     @Override

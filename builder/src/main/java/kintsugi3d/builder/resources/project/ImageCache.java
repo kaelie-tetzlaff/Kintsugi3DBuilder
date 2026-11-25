@@ -133,7 +133,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
         return context;
     }
 
-    public final @Nullable ReadonlyViewSet getViewSet()
+    public final @NotNull ReadonlyViewSet getViewSet()
     {
         return resources.getViewSet();
     }

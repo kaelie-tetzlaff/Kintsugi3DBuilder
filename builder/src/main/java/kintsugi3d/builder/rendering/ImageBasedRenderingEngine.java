@@ -135,19 +135,25 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     {
         return change ->
         {
-            CardsModel<V> texturesTab = Global.state().getTabModels().getTab(tabName, dataClass);
-
-            switch (change.getType())
+            CardsModel<V> tab = Global.state().getTabModels().getTab(tabName, dataClass);
+            if (tab != null)
             {
-                case ADDED:
-                    tabsHelper.refreshTab(tabName); // TODO implement support for adding individual card without rebuilding
-                    break;
-                case REMOVED:
-                    texturesTab.deleteCards(card -> change.getMap().get(keyConstructor.apply(card.getInternalName())) != null);
-                    break;
-                case MODIFIED:
-                    texturesTab.refreshCards(card -> change.getMap().get(keyConstructor.apply(card.getInternalName())));
-                    break;
+                switch (change.getType())
+                {
+                    case ADDED:
+                        tabsHelper.refreshTab(tabName); // TODO implement support for adding individual card without rebuilding
+                        break;
+                    case REMOVED:
+                        tab.deleteCards(card -> change.getMap().get(keyConstructor.apply(card.getInternalName())) != null);
+                        break;
+                    case MODIFIED:
+                        tab.refreshCards(card -> change.getMap().get(keyConstructor.apply(card.getInternalName())));
+                        break;
+                }
+            }
+            else
+            {
+                LOG.warn("Tab not found: {}", tabName);
             }
         };
     }
@@ -344,49 +350,39 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         {
             ReadonlyViewSet viewSet = getViewSet();
 
-            if (viewSet != null)
+            View orientationView = viewSet.getOrientationView();
+
+            // Inspection suppressed for now; remove suppression once scale handling has been investigated more.
+            //noinspection IfStatementWithIdenticalBranches
+            if (orientationView == null) // check for override
             {
-                View orientationView = viewSet.getOrientationView();
+                // Imported orientation and object center if no override
+                // For now, this is all that we're importing from Metashape;
+                // everything else should be the same as with a reference image override.
+                // This might change in the future.
+                sceneModel.setOrientation(Objects.requireNonNullElse(viewSet.getOrientationMatrix(), Matrix3.IDENTITY));
 
-                // Inspection suppressed for now; remove suppression once scale handling has been investigated more.
-                //noinspection IfStatementWithIdenticalBranches
-                if (orientationView == null) // check for override
-                {
-                    // Imported orientation and object center if no override
-                    // For now, this is all that we're importing from Metashape;
-                    // everything else should be the same as with a reference image override.
-                    // This might change in the future.
-                    sceneModel.setOrientation(Objects.requireNonNullElse(viewSet.getOrientationMatrix(), Matrix3.IDENTITY));
-
-                    // COMMENTED OUT: Object translation doesn't seem to be that meaningful coming from Metashape.
+                // COMMENTED OUT: Object translation doesn't seem to be that meaningful coming from Metashape.
 //                    sceneModel.setCentroid(sceneModel.getOrientation().transpose()
 //                        .times(Objects.requireNonNullElse(viewSet.getObjectTranslation(), Vector3.ZERO).negated()));
 
-                    // Just use true centroid instead
-                    sceneModel.setCentroid(geometry.getCentroid());
+                // Just use true centroid instead
+                sceneModel.setCentroid(geometry.getCentroid());
 
-                    // TODO figure out if we can use imported scale for user interaction without breaking things.
+                // TODO figure out if we can use imported scale for user interaction without breaking things.
 //                    // "Scene scale" is generally taken by the Kintsugi renderer to be world space to model space
 //                    // so we need to invert the imported global scale.
 //                    sceneModel.setScale(1.0f / viewSet.getObjectScale());
 //                    sceneModel.setScale((geometry.getBoundingRadius() + geometry.getCentroid().length()) * 2);
-                    sceneModel.setScale(geometry.getBoundingRadius() * 2);
-                }
-                else
-                {
-                    // reference image based override, replaces any imported reference frame
-                    // use centroid and scale based on geometry assuming the imported scale and center is invalid
-                    Matrix3 referenceCameraPose = orientationView.getCameraPose().getUpperLeft3x3();
-                    sceneModel.setOrientation(Matrix3.rotateZ(Math.toRadians(-viewSet.getOrientationViewRotationDegrees()))
-                        .times(referenceCameraPose));
-                    sceneModel.setCentroid(geometry.getCentroid());
-                    sceneModel.setScale(geometry.getBoundingRadius() * 2);
-                }
+                sceneModel.setScale(geometry.getBoundingRadius() * 2);
             }
             else
             {
-                // Defaults if there's no view set for some reason (identity for orientation and geometry-based centroid and scale)
-                sceneModel.setOrientation(Matrix3.IDENTITY);
+                // reference image based override, replaces any imported reference frame
+                // use centroid and scale based on geometry assuming the imported scale and center is invalid
+                Matrix3 referenceCameraPose = orientationView.getCameraPose().getUpperLeft3x3();
+                sceneModel.setOrientation(Matrix3.rotateZ(Math.toRadians(-viewSet.getOrientationViewRotationDegrees()))
+                    .times(referenceCameraPose));
                 sceneModel.setCentroid(geometry.getCentroid());
                 sceneModel.setScale(geometry.getBoundingRadius() * 2);
             }
@@ -603,7 +599,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final @Nullable ViewSet getViewSet()
+    public final @NotNull ViewSet getViewSet()
     {
         return getResources().getViewSet();
     }
@@ -670,11 +666,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
                 // Scale to imported scale from the photogrammetry project if that exists, otherwise at the original, raw scale
                 // ViewSet should default to scale of 1.0 if nothing was imported.
-                ViewSet viewSet = getViewSet();
-                if (viewSet != null)
-                {
-                    transform = Matrix4.scale(viewSet.getObjectScale()).times(transform);
-                }
+                transform = Matrix4.scale(getViewSet().getObjectScale()).times(transform);
 
                 ReadonlyTextureResources<ContextType> textureResources = getResources().getTextureResources();
 

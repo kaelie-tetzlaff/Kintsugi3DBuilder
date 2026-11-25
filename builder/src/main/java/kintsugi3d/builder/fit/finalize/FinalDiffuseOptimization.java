@@ -19,14 +19,13 @@ import kintsugi3d.builder.core.texture.NamedTextureInfo;
 import kintsugi3d.builder.core.texture.StandardTexture;
 import kintsugi3d.builder.core.texture.TextureInfo;
 import kintsugi3d.builder.core.texture.TextureResolution;
+import kintsugi3d.builder.fit.SpecularFitOptimizable;
 import kintsugi3d.gl.interactive.ShaderResources;
 import kintsugi3d.gl.interactive.ShaderProgramFactory;
-import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.gl.builders.framebuffer.FramebufferObjectBuilder;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.util.ShaderHoleFill;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +43,7 @@ public class FinalDiffuseOptimization<ContextType extends Context<ContextType>> 
             "An experimental texture for translucency fitting.");
 
     // Graphics context
-    private final @Nullable ContextType context;
+    private final @NotNull ContextType context;
 
     // Final diffuse estimation program
     private final ProgramObject<ContextType> estimationProgram;
@@ -89,11 +88,10 @@ public class FinalDiffuseOptimization<ContextType extends Context<ContextType>> 
         return builder.createFramebufferObject();
     }
 
-    public final void execute(@NotNull ReadonlyTextureResources<ContextType> specularFit)
+    public final void execute(@NotNull SpecularFitOptimizable<ContextType> specularFit)
     {
         // Set up diffuse estimation shader program
-        specularFit.getBasisResources().useWithShaderProgram(estimationProgram);
-        specularFit.getBasisWeightResources().useWithShaderProgram(estimationProgram);
+        specularFit.validateAndUseAllBasisResources(estimationProgram);
         estimationProgram.setTexture("tex_normal", specularFit.getTexture(StandardTexture.NORMAL_MAP));
         estimationProgram.setTexture("tex_roughness", specularFit.getTexture(StandardTexture.ROUGHNESS));
 

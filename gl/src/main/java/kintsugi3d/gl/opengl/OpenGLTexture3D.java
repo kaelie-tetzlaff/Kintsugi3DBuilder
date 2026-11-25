@@ -66,6 +66,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         {
             if (isInternalFormatCompressed())
             {
+                assert getInternalCompressionFormat() != null;
                 return new OpenGLTexture3D(
                     getContext(),
                     textureTarget,

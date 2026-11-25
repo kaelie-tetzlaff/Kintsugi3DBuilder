@@ -368,14 +368,14 @@ public class WelcomeWindowController
             File vsetFile = Global.io().getViewSetFileForProject(projFile);
             ViewSet viewSet = ViewSetReaderFromVSET.getInstance().readFromFile(vsetFile).finish();
             View representativeView = viewSet.getRepresentativeView();
-            File thumbnailImageFile = representativeView.getThumbnailImageFile();
+            File thumbnailImageFile = representativeView == null ? null : representativeView.getThumbnailImageFile();
 
-            if (!thumbnailImageFile.exists())
+            if (representativeView != null && !thumbnailImageFile.exists())
             {
                 thumbnailImageFile = representativeView.tryFindPreviewImageFile();
             }
 
-            if (thumbnailImageFile == null || !thumbnailImageFile.exists())
+            if (representativeView != null && (thumbnailImageFile == null || !thumbnailImageFile.exists()))
             {
                 thumbnailImageFile = representativeView.tryFindFullResImageFile();
             }

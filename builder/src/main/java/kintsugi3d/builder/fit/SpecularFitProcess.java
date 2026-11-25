@@ -23,6 +23,7 @@ import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.fit.decomposition.MaterialBasis;
 import kintsugi3d.builder.fit.decomposition.SpecularDecomposition;
 import kintsugi3d.builder.fit.decomposition.SpecularDecompositionFromExistingBasis;
+import kintsugi3d.builder.fit.finalize.AlbedoORMOptimization;
 import kintsugi3d.builder.fit.settings.ReadonlySpecularFitSettings;
 import kintsugi3d.builder.rendering.ImageReconstruction;
 import kintsugi3d.builder.rendering.ReconstructionView;
@@ -171,7 +172,11 @@ public abstract class SpecularFitProcess
             }
 
             // Generate albedo / ORM maps at full resolution (does not require loaded source images)
-            fullResolution.getAlbedoORMOptimization().execute(fullResolution);
+            AlbedoORMOptimization<ContextType> albedoORMOptimization = fullResolution.getAlbedoORMOptimization();
+            if (albedoORMOptimization != null)
+            {
+                albedoORMOptimization.execute(fullResolution);
+            }
 
             Duration duration = Duration.between(start, Instant.now());
             logProcessingTime(duration);

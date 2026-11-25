@@ -241,17 +241,20 @@ public final class ViewSetWriterToVSET implements ViewSetWriter
 
         if (viewSet.hasCustomLuminanceEncoding())
         {
-            out.println();
-            out.println("# Luminance encoding: Munsell 2/3.5/5.6.5/8/9.5");
-            out.println("#\tCIE-Y/100\tEncoded");
-
             double[] linearLuminanceValues = viewSet.getLinearLuminanceValues();
             byte[] encodedLuminanceValues = viewSet.getEncodedLuminanceValues();
 
-            for (int i = 0; i < linearLuminanceValues.length && i < encodedLuminanceValues.length; i++)
+            if (linearLuminanceValues != null && encodedLuminanceValues != null) // Double-check in case of race conditions
             {
-                out.printf("e\t%.8f\t\t%3d", linearLuminanceValues[i], 0x00FF & encodedLuminanceValues[i]);
                 out.println();
+                out.println("# Luminance encoding: Munsell 2/3.5/5.6.5/8/9.5");
+                out.println("#\tCIE-Y/100\tEncoded");
+
+                for (int i = 0; i < linearLuminanceValues.length && i < encodedLuminanceValues.length; i++)
+                {
+                    out.printf("e\t%.8f\t\t%3d", linearLuminanceValues[i], 0x00FF & encodedLuminanceValues[i]);
+                    out.println();
+                }
             }
         }
 

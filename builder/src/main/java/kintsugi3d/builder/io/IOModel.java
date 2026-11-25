@@ -358,8 +358,7 @@ public class IOModel implements IO
     @Override
     public final void saveProject(@NotNull File projectFile, Runnable finishedCallback) throws IOException
     {
-        ViewSet viewSet = getLoadedViewSetOrNull();
-
+        ViewSet viewSet = getLoadedViewSet();
         setViewsetDirectories(projectFile, viewSet);
 
         progressMonitor.setStage(0, "Saving project...");
@@ -397,10 +396,10 @@ public class IOModel implements IO
         // Export glTF for Kintsugi 3D Viewer even if not requested
         // TODO: ensure that GLTF texture filenames match default material texture names;
         //  otherwise might not work when launching Kintsugi 3D Viewer from Builder.
-        handler.saveGLTF(getLoadedViewSetOrNull().getSupportingFilesDirectory(), /* defaults */ new ExportSettings());
+        handler.saveGLTF(getLoadedViewSet().getSupportingFilesDirectory(), /* defaults */ new ExportSettings());
 
         // Save textures and basis funtions (will be deferred to graphics thread).
-        handler.saveAllMaterialFiles(getLoadedViewSetOrNull().getSupportingFilesDirectory(), finishedCallback);
+        handler.saveAllMaterialFiles(getLoadedViewSet().getSupportingFilesDirectory(), finishedCallback);
 
         // Add to recent files
         RecentProjects.getInstance().addToRecentFiles(projectFile.getAbsolutePath());
@@ -579,7 +578,7 @@ public class IOModel implements IO
      */
     private void copyMasks()
     {
-        ViewSet viewSet = getLoadedViewSetOrNull();
+        ViewSet viewSet = getLoadedViewSet();
         File masksSrcDir = viewSet.getMasksDirectory();
         if (masksSrcDir == null)
         {
@@ -655,7 +654,7 @@ public class IOModel implements IO
      */
     private void copyModelAndTextures()
     {
-        ViewSet viewSet = getLoadedViewSetOrNull();
+        ViewSet viewSet = getLoadedViewSet();
 
         // Grab reference first just in case for thread synchronization.
         File modelDestParentDir = viewSet.getSupportingFilesDirectory();
@@ -755,7 +754,7 @@ public class IOModel implements IO
     {
         if (originalFile != null && originalFile.exists())
         {
-            File outTex = TextureResources.getTextureFile(texName, getLoadedViewSetOrNull().getSupportingFilesDirectory());
+            File outTex = TextureResources.getTextureFile(texName, getLoadedViewSet().getSupportingFilesDirectory());
             try
             {
                 // Force conversion to PNG.

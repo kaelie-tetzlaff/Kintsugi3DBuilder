@@ -19,23 +19,42 @@ import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.fx.util.StaticUtilities;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Controller for the PrimaryViewSelector, which is now used as the orientation view selector
  */
 public class OrientationViewSelectController extends ViewSelectController
 {
+    private static final Logger LOG = LoggerFactory.getLogger(OrientationViewSelectController.class);
+
     @Override
     public final void initCustom()
     {
         setCanConfirm(true);
     }
 
+    private static void noDataWarning()
+    {
+        LOG.warn("View selection controller has no data.");
+    }
+
+
     @Override
     public final boolean tryAdvance()
     {
-        getData().selectView(getSelectedViewName(), getPrimaryViewRotation());
-        return true;
+        ViewSelectable data = getData();
+        if (data != null)
+        {
+            data.selectView(getSelectedViewName(), getPrimaryViewRotation());
+            return true;
+        }
+        else
+        {
+            noDataWarning();
+            return false;
+        }
     }
 
     @Override
@@ -43,22 +62,31 @@ public class OrientationViewSelectController extends ViewSelectController
     {
         // If a view set was already loaded, apply changes.
         ViewSet currentViewSet = Global.io().getLoadedViewSetOrNull();
-        if (currentViewSet != null)
+        ViewSelectable data = getData();
+        if (data != null)
         {
-            if (getData().getViewSelection() == null)
+            if (currentViewSet != null)
             {
-                currentViewSet.setOrientationView(null);
-            }
-            else
-            {
-                currentViewSet.setOrientationViewByName(getData().getViewSelection());
+                if (data.getViewSelection() == null)
+                {
+                    currentViewSet.setOrientationView(null);
+                }
+                else
+                {
+                    currentViewSet.setOrientationViewByName(data.getViewSelection());
+                }
+
+                currentViewSet.setOrientationViewRotationDegrees(data.getViewRotation());
             }
 
-            currentViewSet.setOrientationViewRotationDegrees(getData().getViewRotation());
+            // The input source will handle loading if a view set wasn't already loaded.
+            return data.confirm();
         }
-
-        // The input source will handle loading if a view set wasn't already loaded.
-        return getData().confirm();
+        else
+        {
+            noDataWarning();
+            return false;
+        }
     }
 
     @Override

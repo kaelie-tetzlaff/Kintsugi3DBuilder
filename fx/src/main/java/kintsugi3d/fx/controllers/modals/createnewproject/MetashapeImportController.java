@@ -95,12 +95,16 @@ public class MetashapeImportController extends ProjectImportController
             String id = getModelIDFromSelection(selection);
             Integer optId = id != null ? Integer.parseInt(id) : null;
 
-            for (MetashapeModel model : metashapeDocument.getSelectedChunk().getModels())
+            MetashapeChunk selectedChunk = metashapeDocument.getSelectedChunk();
+            if (selectedChunk != null)
             {
-                if (name.equals(model.getLabel()) &&
-                    Objects.equals(optId, model.getId()))
+                for (MetashapeModel model : selectedChunk.getModels())
                 {
-                    metashapeDocument.getSelectedChunk().selectModel(model);
+                    if (name.equals(model.getLabel()) &&
+                        Objects.equals(optId, model.getId()))
+                    {
+                        selectedChunk.selectModel(model);
+                    }
                 }
             }
         });
@@ -111,8 +115,16 @@ public class MetashapeImportController extends ProjectImportController
     @Override
     protected final @NotNull MetashapeProjectInputSource getData()
     {
-        return new MetashapeProjectInputSource(() -> FrontendIO.getInstance().showSaveProjectDialog(getPageFrameController().getWindow()))
-            .setMetashapeModel(metashapeDocument.getSelectedChunk().getSelectedModel());
+        MetashapeProjectInputSource inputSource = new MetashapeProjectInputSource(
+            () -> FrontendIO.getInstance().showSaveProjectDialog(getPageFrameController().getWindow()));
+
+        MetashapeChunk selectedChunk = metashapeDocument.getSelectedChunk();
+        if (selectedChunk != null)
+        {
+            inputSource.setMetashapeModel(selectedChunk.getSelectedModel());
+        }
+
+        return inputSource;
     }
 
     private static @Nullable String getModelIDFromSelection(@Nullable String selectionAsString)
@@ -172,55 +184,66 @@ public class MetashapeImportController extends ProjectImportController
             return;
         }
 
-        for (MetashapeModel model : metashapeDocument.getSelectedChunk().getModels())
+        MetashapeChunk selectedChunk = metashapeDocument.getSelectedChunk();
+        if (selectedChunk != null)
         {
-            String modelID = model.getId() != null ? String.valueOf(model.getId()) : NO_MODEL_ID_MSG;
-            String modelName = model.getLabel().isBlank() ? NO_MODEL_NAME_MSG : model.getLabel();
-            modelSelectionChoiceBox.getItems().add(String.format("%s%s%s", modelID, SPACER, modelName));
-        }
+            for (MetashapeModel model : selectedChunk.getModels())
+            {
+                String modelID = model.getId() != null ? String.valueOf(model.getId()) : NO_MODEL_ID_MSG;
+                String modelName = model.getLabel().isBlank() ? NO_MODEL_NAME_MSG : model.getLabel();
+                modelSelectionChoiceBox.getItems().add(String.format("%s%s%s", modelID, SPACER, modelName));
+            }
 
+            if (hasModels())
+            {
+                //initialize choice box to first option instead of null option
+                //then set to default model if the chunk has one
+                modelSelectionChoiceBox.setValue(modelSelectionChoiceBox.getItems().get(0));
+                modelSelectionChoiceBox.setDisable(false);
 
-        if (!hasModels())
-        {
-            error("Metashape chunk has no models.",
-                "Please select another chunk or import manually.");
-            return;
-        }
-
-        //initialize choice box to first option instead of null option
-        //then set to default model if the chunk has one
-        modelSelectionChoiceBox.setValue(modelSelectionChoiceBox.getItems().get(0));
-        modelSelectionChoiceBox.setDisable(false);
-
-        Integer defaultModelID = metashapeDocument.getSelectedChunk().getDefaultModelID();
-        if (defaultModelID != null)
-        {
-            modelSelectionChoiceBox.getItems().stream()
-                .filter(obj ->
+                Integer defaultModelID = selectedChunk.getDefaultModelID();
+                if (defaultModelID != null)
                 {
-                    String modelID = getModelIDFromSelection(obj);
-                    if (modelID != null)
-                    {
-                        int id = Integer.parseInt(modelID);
-                        return defaultModelID.equals(id);
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                })
-                .findFirst()
-                .ifPresent(modelSelectionChoiceBox::setValue);
+                    modelSelectionChoiceBox.getItems().stream()
+                        .filter(obj ->
+                        {
+                            String modelID = getModelIDFromSelection(obj);
+                            if (modelID != null)
+                            {
+                                int id = Integer.parseInt(modelID);
+                                return defaultModelID.equals(id);
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        })
+                        .findFirst()
+                        .ifPresent(modelSelectionChoiceBox::setValue);
+                }
+            }
+            else
+            {
+                error("Metashape chunk has no models.", "Please select another chunk or import manually.");
+            }
+        }
+        else
+        {
+            error("No Metashape chunk selected.", "Please select a chunk or import manually.");
         }
     }
 
     private boolean hasModels()
     {
-        if (metashapeDocument == null)
+        if (metashapeDocument != null)
+        {
+            MetashapeChunk selectedChunk = metashapeDocument.getSelectedChunk();
+            return selectedChunk != null && !selectedChunk.getModels().isEmpty();
+        }
+        else
         {
             return false;
         }
-        return !metashapeDocument.getSelectedChunk().getModels().isEmpty();
     }
 
     private void loadMetashapeDocument(@NotNull File psxFile)

@@ -144,10 +144,12 @@ final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGLContext
 
             if (isInternalFormatCompressed())
             {
+                assert getInternalCompressionFormat() != null;
                 return new OpenGLCubemap(getContext(), textureTarget, getInternalCompressionFormat(), faceSize, opt);
             }
             else
             {
+                assert internalColorFormat != null;
                 return new OpenGLCubemap(getContext(), textureTarget, internalColorFormat, faceSize, opt);
             }
         }
