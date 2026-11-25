@@ -592,7 +592,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final ReadonlyVertexGeometry getGeometry()
+    public final @NotNull ReadonlyVertexGeometry getGeometry()
     {
         return getResources().getGeometry();
     }

@@ -447,7 +447,7 @@ public abstract class CacheModelBase implements CacheModel
         }
     }
 
-    private static File @NotNull [] listFiles(File directory)
+    private static File @NotNull [] listFiles(@NotNull File directory)
     {
         return Objects.requireNonNull(directory.listFiles(), "An error occurred while listing files in the cache directory.");
     }

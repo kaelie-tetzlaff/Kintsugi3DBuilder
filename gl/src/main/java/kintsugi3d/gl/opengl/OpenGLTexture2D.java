@@ -52,7 +52,7 @@ final class OpenGLTexture2D extends OpenGLTexture implements Texture2D<OpenGLCon
         private final BufferedImage colorImg;
         private final boolean flipVertical;
 
-        OpenGLTexture2DFromFileBuilder(OpenGLContext context, int textureTarget, BufferedImage colorImg, BufferedImage maskImg, boolean flipVertical)
+        OpenGLTexture2DFromFileBuilder(OpenGLContext context, int textureTarget, @NotNull BufferedImage colorImg, BufferedImage maskImg, boolean flipVertical)
         {
             super(context);
             this.textureTarget = textureTarget;

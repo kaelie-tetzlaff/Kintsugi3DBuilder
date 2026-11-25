@@ -18,6 +18,7 @@ package kintsugi3d.gl.interactive;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Drawable;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
+import org.jetbrains.annotations.NotNull;
 
 public interface ReadonlyShaderBasedRenderable<ContextType extends Context<ContextType>> extends Drawable<ContextType>
 {
@@ -26,7 +27,7 @@ public interface ReadonlyShaderBasedRenderable<ContextType extends Context<Conte
      *
      * @return The geometry mesh.
      */
-    default ReadonlyVertexGeometry getGeometry()
+    default @NotNull ReadonlyVertexGeometry getGeometry()
     {
         return getResources().getGeometry();
     }

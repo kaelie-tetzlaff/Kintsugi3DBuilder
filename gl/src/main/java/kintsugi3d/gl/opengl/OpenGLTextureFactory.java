@@ -65,7 +65,7 @@ class OpenGLTextureFactory implements TextureFactory<OpenGLContext>
 
     @Override
     public final @NotNull ColorTextureBuilder<OpenGLContext, ? extends Texture2D<OpenGLContext>> build2DColorTextureFromImageWithMask(
-        BufferedImage colorImage, BufferedImage maskImage, boolean flipVertical)
+        @NotNull BufferedImage colorImage, BufferedImage maskImage, boolean flipVertical)
     {
         return new OpenGLTexture2DFromFileBuilder(context, GL_TEXTURE_2D, colorImage, maskImage, flipVertical);
     }

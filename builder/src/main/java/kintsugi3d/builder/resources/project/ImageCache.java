@@ -138,7 +138,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
         return resources.getViewSet();
     }
 
-    public final ReadonlyVertexGeometry getGeometry()
+    public final @NotNull ReadonlyVertexGeometry getGeometry()
     {
         return resources.getGeometry();
     }
