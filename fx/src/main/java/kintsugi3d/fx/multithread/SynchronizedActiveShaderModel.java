@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 
 public class SynchronizedActiveShaderModel implements ActiveShaderModel
 {
-    private final ActiveShaderModel base;
+    private final @NotNull ActiveShaderModel base;
 
     private final @NotNull SynchronizedValue<ShaderInfo> activeShader;
 

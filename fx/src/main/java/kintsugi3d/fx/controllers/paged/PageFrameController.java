@@ -325,7 +325,7 @@ public class PageFrameController
     private static final class NextButtonTextBinding extends ObjectBinding<String>
     {
         private final BooleanBinding shouldConfirm;
-        private final StringExpression advanceLabelOverride;
+        private final @NotNull StringExpression advanceLabelOverride;
         private final BooleanBinding advanceLabelOverrideNotNull;
 
         private NextButtonTextBinding(BooleanBinding shouldConfirm, @NotNull StringExpression advanceLabelOverride)

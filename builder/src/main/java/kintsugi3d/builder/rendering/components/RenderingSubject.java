@@ -38,7 +38,7 @@ public class RenderingSubject<ContextType extends Context<ContextType>> extends 
     private UniformBuffer<ContextType> viewIndexBufferOverride;
     private UniformBuffer<ContextType> weightBuffer;
 
-    public RenderingSubject(ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneViewportModel sceneViewportModel,
+    public RenderingSubject(@NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneViewportModel sceneViewportModel,
                             SceneModel sceneModel, LightingResources<ContextType> lightingResources)
     {
         super (resources, sceneViewportModel, "RenderingSubject", sceneModel, lightingResources);

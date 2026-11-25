@@ -76,7 +76,7 @@ public class MutableBasisResources<ContextType extends Context<ContextType>> ext
         return basis;
     }
 
-    public final BasisWeightResources<ContextType> getWeightResources()
+    public final @Nullable BasisWeightResources<ContextType> getWeightResources()
     {
         return weightResources;
     }
@@ -87,7 +87,7 @@ public class MutableBasisResources<ContextType extends Context<ContextType>> ext
         refreshGraphicsResources();
     }
 
-    public final BasisMaterialInfo deleteBasisMaterial(String name)
+    public final @Nullable BasisMaterialInfo deleteBasisMaterial(String name)
     {
         // Delete the basis materials themselves and the corresponding weight maps
         BasisMaterialInfo deleted = basis.deleteMaterial(name);

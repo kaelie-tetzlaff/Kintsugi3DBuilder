@@ -34,7 +34,7 @@ public class SequentialViewRenderStream<ContextType extends Context<ContextType>
 {
     private final @NotNull Collection<View> views;
     private final DrawableResource<ContextType> drawable;
-    private final ReadableFramebuffer<ContextType> framebuffer;
+    private final @NotNull ReadableFramebuffer<ContextType> framebuffer;
     private final int attachmentCount;
     private final ColorNativeBufferList @NotNull [] framebufferData;
 

@@ -185,7 +185,7 @@ public class ObservableCardsModel<T> implements CardsModel<T>
     }
 
     @Override
-    public final List<? extends Map<String, Runnable>> getGlobalActions()
+    public final @NotNull List<? extends Map<String, Runnable>> getGlobalActions()
     {
         return cardFactory.getGlobalActions();
     }

@@ -31,7 +31,7 @@ public abstract class BasisResourcesBase<ContextType extends Context<ContextType
 {
     private final int basisResolution;
 
-    private final ContextType context;
+    private final @NotNull ContextType context;
     private final UniformBuffer<ContextType> diffuseUniformBuffer;
     private Texture2D<ContextType> basisMaps;
 
@@ -58,7 +58,7 @@ public abstract class BasisResourcesBase<ContextType extends Context<ContextType
     }
 
     @Override
-    public final ContextType getContext()
+    public final @NotNull ContextType getContext()
     {
         return context;
     }

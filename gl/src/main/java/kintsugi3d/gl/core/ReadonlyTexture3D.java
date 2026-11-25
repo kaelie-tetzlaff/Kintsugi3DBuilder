@@ -80,7 +80,7 @@ public interface ReadonlyTexture3D<ContextType extends Context<ContextType>>
      * @return The new cropped texture.
      */
     @Override
-    default Texture3D<ContextType> crop(int x, int y, int cropWidth, int cropHeight)
+    default @NotNull Texture3D<ContextType> crop(int x, int y, int cropWidth, int cropHeight)
     {
         return crop(x, y, 0, cropWidth, cropHeight, getDepth());
     }

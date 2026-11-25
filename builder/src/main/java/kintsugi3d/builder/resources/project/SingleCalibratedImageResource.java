@@ -37,7 +37,7 @@ import java.io.IOException;
  */
 public class SingleCalibratedImageResource<ContextType extends Context<ContextType>> implements ManagedResource
 {
-    private final View view;
+    private final @NotNull View view;
     private final @NotNull GeometryResources<ContextType> geometryResources;
     private final boolean geometryResourcesOwned;
     private final @Nullable Texture2D<ContextType> colorTexture;

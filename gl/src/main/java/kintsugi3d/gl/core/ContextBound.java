@@ -15,6 +15,7 @@
 
 package kintsugi3d.gl.core;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -29,5 +30,5 @@ public interface ContextBound<ContextType extends Context<ContextType>>
      * Gets the associated graphics context.
      * @return A graphics context associated with this object.
      */
-    @Nullable ContextType getContext();
+    @NotNull ContextType getContext();
 }

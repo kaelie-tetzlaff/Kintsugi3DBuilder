@@ -40,7 +40,7 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
     extends ReadonlyTextureResourcesBase<ContextType> implements ManagedResource
 {
     private final ContextType context;
-    private final BasisResources<ContextType> basisResources;
+    private final @Nullable BasisResources<ContextType> basisResources;
     private final BasisWeightResources<ContextType> basisWeightResources;
     private final @Nullable RoughnessOptimization<ContextType> roughnessOptimization;
 
@@ -104,7 +104,7 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final ContextType getContext()
+    public final @NotNull ContextType getContext()
     {
         return context;
     }
@@ -152,7 +152,7 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final Map<TextureInfo, Texture2D<ContextType>> getTextures()
+    public final @NotNull Map<TextureInfo, Texture2D<ContextType>> getTextures()
     {
         return StandardTexture.convertEnumMapToObjectMap(getStandardTextures());
     }

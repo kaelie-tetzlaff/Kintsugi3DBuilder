@@ -26,8 +26,8 @@ import org.jetbrains.annotations.NotNull;
 public class CameraViewport
 {
     private final Matrix4 view;
-    private final Matrix4 fullProjection;
-    private final Matrix4 viewportCrop;
+    private final @NotNull Matrix4 fullProjection;
+    private final @NotNull Matrix4 viewportCrop;
     private final @NotNull Matrix4 viewportProjection;
     private final int x;
     private final int y;
@@ -84,7 +84,7 @@ public class CameraViewport
      * Will be equal to viewportCrop * fullProjection.
      * @return
      */
-    public final Matrix4 getViewportProjection()
+    public final @NotNull Matrix4 getViewportProjection()
     {
         return viewportProjection;
     }

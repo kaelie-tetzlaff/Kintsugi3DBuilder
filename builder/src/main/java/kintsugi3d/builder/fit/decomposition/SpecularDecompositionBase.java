@@ -63,7 +63,7 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
     }
 
     @Override
-    public final TextureResolution getTextureResolution()
+    public final @NotNull TextureResolution getTextureResolution()
     {
         return textureResolution;
     }
@@ -239,7 +239,7 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
 
     private static class SpecularDecompositionWeights implements SpecularBasisWeights
     {
-        private final SpecularDecompositionBase specularDecomposition;
+        private final @NotNull SpecularDecompositionBase specularDecomposition;
         private final MaterialBasis basis;
 
         SpecularDecompositionWeights(@NotNull SpecularDecompositionBase specularDecomposition)

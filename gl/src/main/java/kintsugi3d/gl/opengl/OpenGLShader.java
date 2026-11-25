@@ -215,7 +215,7 @@ class OpenGLShader implements Shader<OpenGLContext>
     }
 
     @Override
-    public final OpenGLContext getContext()
+    public final @NotNull OpenGLContext getContext()
     {
         return context;
     }

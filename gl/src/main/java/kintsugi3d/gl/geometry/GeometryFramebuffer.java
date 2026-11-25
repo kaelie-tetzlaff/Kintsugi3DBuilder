@@ -24,7 +24,7 @@ import java.io.IOException;
 
 public class GeometryFramebuffer<ContextType extends Context<ContextType>> implements GeometryTextures<ContextType> {
     private final FramebufferObject<ContextType> fbo;
-    private final ContextType context;
+    private final @NotNull ContextType context;
 
     public static <ContextType extends Context<ContextType>> @NotNull GeometryFramebuffer<ContextType> createEmpty(
         @NotNull ContextType contextType, int width, int height)
@@ -114,7 +114,7 @@ public class GeometryFramebuffer<ContextType extends Context<ContextType>> imple
     }
 
     @Override
-    public final ContextType getContext()
+    public final @NotNull ContextType getContext()
     {
         return context;
     }

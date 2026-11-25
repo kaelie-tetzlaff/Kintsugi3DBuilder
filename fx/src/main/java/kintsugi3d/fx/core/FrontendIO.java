@@ -30,6 +30,7 @@ import kintsugi3d.fx.experience.CreateProject;
 import kintsugi3d.fx.util.StaticUtilities;
 import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -72,13 +73,13 @@ public final class FrontendIO
             }
 
             @Override
-            public void fail(Throwable e)
+            public void fail(@NotNull Throwable e)
             {
                 ExceptionHandling.error("An error occurred during the operation", e);
             }
 
             @Override
-            public void warn(Throwable e)
+            public void warn(@NotNull Throwable e)
             {
                 ExceptionHandling.warn("A potential problem occurred during the operation", e);
             }

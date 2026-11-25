@@ -25,6 +25,7 @@ import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.util.EncodableColorImage;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -49,8 +50,8 @@ public interface IO
     EventListeners<ProjectClosedListener> projectClosedListeners();
 
     boolean isProjectOpen();
-    File getViewSetFile();
-    File getProjectFile();
+    @Nullable File getViewSetFile();
+    @Nullable File getProjectFile();
 
     default boolean isProjectProcessed()
     {

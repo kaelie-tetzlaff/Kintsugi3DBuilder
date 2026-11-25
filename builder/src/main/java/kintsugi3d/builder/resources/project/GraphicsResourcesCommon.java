@@ -104,9 +104,9 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
     private final @NotNull LuminanceMapResources<ContextType> luminanceMapResources;
 
-    private final ContextType context;
+    private final @NotNull ContextType context;
 
-    private final ViewSet viewSet;
+    private final @Nullable ViewSet viewSet;
 
     private float @Nullable @Unmodifiable [] viewWeights;
 
@@ -430,7 +430,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
      *
      * @return Vertex buffers for positions, tex coords, normals, tangents
      */
-    public GeometryResources<ContextType> getGeometryResources()
+    public @NotNull GeometryResources<ContextType> getGeometryResources()
     {
         return geometryResources;
     }
@@ -443,7 +443,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         return textureResources;
     }
 
-    public LuminanceMapResources<ContextType> getLuminanceMapResources()
+    public @NotNull LuminanceMapResources<ContextType> getLuminanceMapResources()
     {
         return luminanceMapResources;
     }

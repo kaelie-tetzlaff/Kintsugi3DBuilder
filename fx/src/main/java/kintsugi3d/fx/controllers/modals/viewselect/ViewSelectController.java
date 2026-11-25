@@ -341,7 +341,7 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
         return null;
     }
 
-    protected final ViewSelectable getData()
+    protected final @Nullable ViewSelectable getData()
     {
         return data;
     }

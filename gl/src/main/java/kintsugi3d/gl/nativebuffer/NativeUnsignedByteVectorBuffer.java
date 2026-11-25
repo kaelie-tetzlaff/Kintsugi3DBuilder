@@ -136,7 +136,7 @@ class NativeUnsignedByteVectorBuffer implements NativeVectorBuffer
     }
 
     @Override
-    public final ByteBuffer getBuffer()
+    public final @NotNull ByteBuffer getBuffer()
     {
         return buffer;
     }

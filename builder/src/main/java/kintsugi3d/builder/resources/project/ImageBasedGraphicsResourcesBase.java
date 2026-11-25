@@ -32,6 +32,7 @@ import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.vecmath.IntVector2;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -56,13 +57,13 @@ abstract class ImageBasedGraphicsResourcesBase<ContextType extends Context<Conte
     }
 
     @Override
-    public final ContextType getContext()
+    public final @NotNull ContextType getContext()
     {
         return commonResources.getContext();
     }
 
     @Override
-    public final ViewSet getViewSet()
+    public final @Nullable ViewSet getViewSet()
     {
         return commonResources.getViewSet();
     }
@@ -126,13 +127,13 @@ abstract class ImageBasedGraphicsResourcesBase<ContextType extends Context<Conte
     }
 
     @Override
-    public final EventListeners<ProjectProcessedListener> weightMapsProcessedListeners()
+    public final @NotNull EventListeners<ProjectProcessedListener> weightMapsProcessedListeners()
     {
         return commonResources.weightMapsProcessedListeners();
     }
 
     @Override
-    public final EventListeners<TexturesReplacedListener> texturesReplacedListeners()
+    public final @NotNull EventListeners<TexturesReplacedListener> texturesReplacedListeners()
     {
         return commonResources.texturesReplacedListeners();
     }
@@ -153,12 +154,12 @@ abstract class ImageBasedGraphicsResourcesBase<ContextType extends Context<Conte
         }
     }
 
-    public final EventListeners<Observer<MappedChange<String, BasisMaterialInfo>>> basisListeners()
+    public final @NotNull EventListeners<Observer<MappedChange<String, BasisMaterialInfo>>> basisListeners()
     {
         return commonResources.basisListeners();
     }
 
-    public final EventListeners<Observer<MappedChange<String, TextureInfo>>> texturesListeners()
+    public final @NotNull EventListeners<Observer<MappedChange<String, TextureInfo>>> texturesListeners()
     {
         return commonResources.texturesListeners();
     }

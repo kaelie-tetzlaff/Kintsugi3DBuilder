@@ -40,7 +40,7 @@ public class ParallelViewRenderStream<ContextType extends Context<ContextType>> 
     private static final Logger LOG = LoggerFactory.getLogger(ParallelViewRenderStream.class);
     private final @NotNull Collection<View> views;
     private final DrawableResource<ContextType> drawable;
-    private final ReadableFramebuffer<ContextType> framebuffer;
+    private final @NotNull ReadableFramebuffer<ContextType> framebuffer;
     private final int attachmentCount;
     private final int maxRunningThreads;
 

@@ -77,7 +77,7 @@ public final class NonNegativeLeastSquaresSinglePrecision
         return sForP;
     }
 
-    public static SimpleMatrix solve(@NotNull SimpleMatrix mA, @NotNull SimpleMatrix b, double epsilon)
+    public static @NotNull SimpleMatrix solve(@NotNull SimpleMatrix mA, @NotNull SimpleMatrix b, double epsilon)
     {
         if (b.numCols() != 1 || b.numRows() != mA.numRows())
         {

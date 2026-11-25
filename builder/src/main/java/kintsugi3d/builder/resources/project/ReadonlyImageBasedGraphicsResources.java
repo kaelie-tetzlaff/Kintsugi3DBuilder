@@ -27,6 +27,7 @@ import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.vecmath.IntVector2;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -36,7 +37,7 @@ public interface ReadonlyImageBasedGraphicsResources<ContextType extends Context
      * The view set that these resources were loaded from.
      * @return A read-only view of the view set
      */
-    ReadonlyViewSet getViewSet();
+    @Nullable ReadonlyViewSet getViewSet();
 
     /**
      * Diffuse, normal, specular, roughness maps

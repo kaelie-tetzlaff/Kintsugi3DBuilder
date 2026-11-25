@@ -57,7 +57,7 @@ public final class RenderRefreshable
     }
 
     @Override
-    public ContextType getContext()
+    public @NotNull ContextType getContext()
     {
         return context;
     }

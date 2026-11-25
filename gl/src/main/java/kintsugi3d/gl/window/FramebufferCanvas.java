@@ -28,10 +28,10 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     implements ControllableCanvas3D<ContextType>, PollableCanvas3D<ContextType>,
                 SwapObservable<ReadableFramebuffer<ContextType>>, ResizeObservable<Framebuffer<ContextType>>
 {
-    private final DoubleFramebufferObject<ContextType> framebuffer;
+    private final @NotNull DoubleFramebufferObject<ContextType> framebuffer;
 
     private CanvasSize canvasSize;
-    private CanvasPosition canvasPosition = new CanvasPosition(0, 0);
+    private @NotNull CanvasPosition canvasPosition = new CanvasPosition(0, 0);
 
     private final Map<Key, KeyState> keyStates = new EnumMap<>(Key.class);
     private ModifierKeys lastModifierKeys = ModifierKeys.NONE;
@@ -77,7 +77,7 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     }
 
     @Override
-    protected WindowListenerManager getListenerManager()
+    protected @NotNull WindowListenerManager getListenerManager()
     {
         return eventCollector.getListenerManager();
     }
@@ -105,7 +105,7 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public ContextType getContext()
+    public @NotNull ContextType getContext()
     {
         return framebuffer.getContext();
     }

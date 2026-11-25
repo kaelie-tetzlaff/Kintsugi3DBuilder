@@ -37,7 +37,7 @@ public final class DoubleFramebufferFactory
     private static class DoubleFramebufferObjectImpl<ContextType extends Context<ContextType>>
         implements DoubleFramebufferObject<ContextType>
     {
-        private final ContextType context;
+        private final @NotNull ContextType context;
         private FramebufferObject<ContextType> fbo1;
         private FramebufferObject<ContextType> fbo2;
 
@@ -131,7 +131,7 @@ public final class DoubleFramebufferFactory
         }
 
         @Override
-        public final ContextType getContext()
+        public final @NotNull ContextType getContext()
         {
             return context;
         }

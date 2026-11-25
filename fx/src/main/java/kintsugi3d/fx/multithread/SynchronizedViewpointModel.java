@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class SynchronizedViewpointModel extends ViewpointModelBase
 {
-    private final ManipulableViewpointModel baseModel;
+    private final @NotNull ManipulableViewpointModel baseModel;
 
     private final @NotNull SynchronizedValue<Vector3> target;
     private final @NotNull SynchronizedValue<Float> azimuth;

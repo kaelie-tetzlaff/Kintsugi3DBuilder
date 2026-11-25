@@ -108,7 +108,7 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
         }
     }
 
-    public final <ContextType extends Context<ContextType>> SpecularFitOptimizable<ContextType> optimizeFit(
+    public final <ContextType extends Context<ContextType>> @NotNull SpecularFitOptimizable<ContextType> optimizeFit(
         @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {

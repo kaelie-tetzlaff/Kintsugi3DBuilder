@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class SynchronizedEnvironmentModel implements EnvironmentModel
 {
-    private final EnvironmentModel baseModel;
+    private final @NotNull EnvironmentModel baseModel;
     private final @NotNull SynchronizedValue<Float> environmentRotation;
     private final @NotNull SynchronizedValue<Float> environmentIntensity;
     private final @NotNull SynchronizedValue<Float> backgroundIntensity;

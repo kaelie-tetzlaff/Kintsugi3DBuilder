@@ -34,8 +34,8 @@ public class Lights<ContextType extends Context<ContextType>> extends ShaderComp
 {
     private static final String SCENE_OBJECT_TAG_FORMAT = "Light.%d";
 
-    private final SceneViewportModel sceneViewportModel;
-    private final SceneModel sceneModel;
+    private final @NotNull SceneViewportModel sceneViewportModel;
+    private final @NotNull SceneModel sceneModel;
 
     private ReadonlyTexture2D<ContextType> lightTexture;
 

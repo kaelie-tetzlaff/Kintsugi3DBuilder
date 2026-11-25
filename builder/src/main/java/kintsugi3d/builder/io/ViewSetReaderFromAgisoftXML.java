@@ -1052,7 +1052,7 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
      * @param masksZipFile The masks zip to inspect.
      * @return A camera-ID → mask path map containing one entry per {@code <mask>} element in the document.
      */
-    private static @NotNull Map<Integer, String> extractMaskFilenames(File masksZipFile) throws IOException
+    private static @NotNull Map<Integer, String> extractMaskFilenames(@NotNull File masksZipFile) throws IOException
     {
         LOG.info("Unzipping masks folder...");
         Document docXml = UnzipHelper.unzipToDocument(masksZipFile, "doc.xml");

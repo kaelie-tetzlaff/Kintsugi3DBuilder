@@ -78,7 +78,7 @@ public class CurrentProjectViewSelectable extends ViewSelectableBase
     }
 
     @Override
-    public final ImageSetInfo getImageSetInfo()
+    public final @NotNull ImageSetInfo getImageSetInfo()
     {
         return imageSetInfo;
     }

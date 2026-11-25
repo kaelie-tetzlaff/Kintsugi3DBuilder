@@ -52,7 +52,7 @@ public class SpecularWeightOptimization
         return weightBlockSize;
     }
 
-    public final void execute(GraphicsStream<ReflectanceData> viewStream, @NotNull SpecularDecomposition solution, int pStart)
+    public final void execute(@NotNull GraphicsStream<ReflectanceData> viewStream, @NotNull SpecularDecomposition solution, int pStart)
     {
         LOG.info("Building weight fitting matrices...");
 
@@ -96,7 +96,7 @@ public class SpecularWeightOptimization
         LOG.info("DONE!");
     }
 
-    public final void execute(GraphicsStream<ReflectanceData> viewStream, @NotNull SpecularDecomposition solution)
+    public final void execute(@NotNull GraphicsStream<ReflectanceData> viewStream, @NotNull SpecularDecomposition solution)
     {
         // Start at p=0 by default
         execute(viewStream, solution, 0);

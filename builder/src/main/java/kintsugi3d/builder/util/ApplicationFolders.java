@@ -122,7 +122,7 @@ public final class ApplicationFolders
      *
      * @return system app folder
      */
-    public static Path getSystemAppDirectory()
+    public static @NotNull Path getSystemAppDirectory()
     {
         if (OS == OperatingSystem.WINDOWS)
         {

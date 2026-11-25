@@ -36,7 +36,7 @@ public class ZoomSafeImageView
 
     private static final int MAX_CROP_SCREEN_PIXELS = Short.MAX_VALUE;
 
-    private final ImageView imageView;
+    private final @NotNull ImageView imageView;
 
     private final ObjectProperty<Image> fullImage = new SimpleObjectProperty<>();
     private final ObjectProperty<Rectangle2D> logicalViewport = new SimpleObjectProperty<>();

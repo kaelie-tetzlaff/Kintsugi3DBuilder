@@ -90,65 +90,65 @@ public final class MultithreadState implements Kintsugi3DBuilderState
     }
 
     @Override
-    public ManipulableCameraModel getCameraModel()
+    public @NotNull ManipulableCameraModel getCameraModel()
     {
         return cameraModel;
     }
 
     @Override
-    public ManipulableLightingEnvironmentModel getLightingModel()
+    public @NotNull ManipulableLightingEnvironmentModel getLightingModel()
     {
         return lightingModel;
     }
 
     @Override
-    public ManipulableObjectPoseModel getObjectModel()
+    public @NotNull ManipulableObjectPoseModel getObjectModel()
     {
         return objectModel;
     }
 
     @Override
-    public ActiveShaderModel getUserShaderModel()
+    public @NotNull ActiveShaderModel getUserShaderModel()
     {
         return activeShaderModel;
     }
 
     @Override
-    public SelectableViewListModel getViewListModel()
+    public @NotNull SelectableViewListModel getViewListModel()
     {
         return viewListModel;
     }
 
     @Override
-    public TabsModel getTabModels() {
+    public @NotNull TabsModel getTabModels() {
         return tabsModel;
     }
 
     @Override
-    public GeneralSettingsModel getSettingsModel()
+    public @NotNull GeneralSettingsModel getSettingsModel()
     {
         return settingsModel;
     }
 
     @Override
-    public ProjectModel getProjectModel()
+    public @NotNull ProjectModel getProjectModel()
     {
         return projectModel;
     }
 
     @Override
-    public CarouselModel getCarouselModel()
+    public @NotNull CarouselModel getCarouselModel()
     {
         return carouselModel;
     }
 
     @Override
-    public CacheModel getCacheModel()
+    public @NotNull CacheModel getCacheModel()
     {
         return cacheModel;
     }
 
-    public LoadOptionsModel getLoadOptionsModel()
+    public @NotNull LoadOptionsModel getLoadOptionsModel()
     {
         return loadOptionsModel;
     }

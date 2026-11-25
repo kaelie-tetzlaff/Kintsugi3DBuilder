@@ -164,13 +164,13 @@ public class IOModel implements IO
     }
 
     @Override
-    public final ViewSet getLoadedViewSetOrNull()
+    public final @Nullable ViewSet getLoadedViewSetOrNull()
     {
         return handler.getLoadedViewSet();
     }
 
     @Override
-    public final ReadonlyVertexGeometry getLoadedGeometry()
+    public final @Nullable ReadonlyVertexGeometry getLoadedGeometry()
     {
         return handler.getLoadedGeometry();
     }
@@ -497,7 +497,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public final EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException
+    public final @Nullable EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException
     {
         return handler.loadEnvironmentMap(environmentMapFile);
     }

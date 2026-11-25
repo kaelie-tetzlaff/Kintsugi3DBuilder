@@ -44,7 +44,7 @@ public final class ImportedMaterialResources<ContextType extends Context<Context
     private final Map<StandardTexture, Texture2D<ContextType>> textures = new EnumMap<>(StandardTexture.class);
 
     @Override
-    public @Nullable ContextType getContext()
+    public @NotNull ContextType getContext()
     {
         return context;
     }

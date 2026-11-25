@@ -176,7 +176,7 @@ public class ViewSnap<ContextType extends Context<ContextType>> implements Rende
     }
 
     @Override
-    public final void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight, @NotNull CameraViewport cameraViewport)
+    public final void drawInSubdivisions(@NotNull FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight, @NotNull CameraViewport cameraViewport)
     {
         contentRoot.drawInSubdivisions(framebuffer, subdivWidth, subdivHeight, cameraViewport.copyForView(viewSnap));
     }

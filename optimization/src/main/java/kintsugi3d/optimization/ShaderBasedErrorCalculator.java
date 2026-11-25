@@ -69,7 +69,7 @@ public final class ShaderBasedErrorCalculator<ContextType extends Context<Contex
         return framebuffer.getColorAttachmentTexture(0);
     }
 
-    public ReadonlyErrorReport getReport()
+    public @NotNull ReadonlyErrorReport getReport()
     {
         return report;
     }

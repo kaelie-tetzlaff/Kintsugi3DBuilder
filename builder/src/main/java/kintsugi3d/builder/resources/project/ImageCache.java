@@ -59,9 +59,9 @@ public class ImageCache<ContextType extends Context<ContextType>>
 {
     private static final Logger LOG = LoggerFactory.getLogger(ImageCache.class);
 
-    private final ContextType context;
+    private final @NotNull ContextType context;
     private final @NotNull ImageBasedGraphicsResourcesBase<ContextType> resources;
-    private final ReadonlyImageCacheSettings settings;
+    private final @NotNull ReadonlyImageCacheSettings settings;
 
     private final @NotNull File cacheDirectory;
 
@@ -118,7 +118,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
         }
     }
 
-    public final File getCacheDirectory()
+    public final @NotNull File getCacheDirectory()
     {
         return cacheDirectory;
     }

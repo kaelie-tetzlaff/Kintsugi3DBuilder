@@ -49,7 +49,7 @@ public abstract class ProjectSettingsControllerBase extends NonDataPageControlle
         this.projectSettingsManager = projectSettingsManager;
     }
 
-    protected final ReadonlyObservableGeneralSettingsModel getLocalSettingsModel()
+    protected final @NotNull ReadonlyObservableGeneralSettingsModel getLocalSettingsModel()
     {
         return projectSettingsManager.getLocalSettingsModel();
     }

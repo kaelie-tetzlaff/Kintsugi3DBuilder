@@ -35,7 +35,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     }
 
     @Override
-    public final OpenGLContext getContext()
+    public final @NotNull OpenGLContext getContext()
     {
         return context;
     }
@@ -52,7 +52,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
         abstract int getId();
 
         @Override
-        public final OpenGLContext getContext()
+        public final @NotNull OpenGLContext getContext()
         {
             return framebuffer.context;
         }

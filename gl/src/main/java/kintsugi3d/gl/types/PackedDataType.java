@@ -115,7 +115,7 @@ public enum PackedDataType implements AbstractDataType<Iterable<? extends Number
     }
 
     @Override
-    public @NotNull Consumer<Iterable<? extends Number>> wrapByteBuffer(ByteBuffer baseBuffer)
+    public @NotNull Consumer<Iterable<? extends Number>> wrapByteBuffer(@NotNull ByteBuffer baseBuffer)
     {
         Consumer<Number> packedConsumer = AbstractDataTypeFactory.wrapByteBuffer(baseBuffer, nativeDataType);
         return components -> packedConsumer.accept(getPackedValue(components));
@@ -124,7 +124,7 @@ public enum PackedDataType implements AbstractDataType<Iterable<? extends Number
 
 
     @Override
-    public @NotNull BiConsumer<Integer, Iterable<? extends Number>> wrapIndexedByteBuffer(ByteBuffer baseBuffer)
+    public @NotNull BiConsumer<Integer, Iterable<? extends Number>> wrapIndexedByteBuffer(@NotNull ByteBuffer baseBuffer)
     {
         BiConsumer<Integer, Number> packedConsumer = AbstractDataTypeFactory.wrapIndexedByteBuffer(baseBuffer, nativeDataType);
         return (index, components) -> packedConsumer.accept(index, getPackedValue(components));

@@ -33,7 +33,7 @@ import java.io.IOException;
 public class SynchronizedProjectModel implements ProjectModel
 {
     public static final String NULL_PROJECT_NAME = "No Project";
-    private final ProjectModel baseModel;
+    private final @NotNull ProjectModel baseModel;
     private final @NotNull SynchronizedValue<File> colorCheckerFile;
 
     public SynchronizedProjectModel(@NotNull ProjectModel baseModel)

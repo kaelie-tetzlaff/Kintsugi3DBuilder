@@ -33,7 +33,7 @@ public class CameraWidgetGroup<ContextType extends Context<ContextType>> impleme
 {
     private View currentView;
 
-    private final ReadonlyImageBasedGraphicsResources<ContextType> resources;
+    private final @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources;
     private final SceneModel sceneModel;
 
     private final @NotNull CameraVisual<ContextType> cameraVisual;
@@ -75,7 +75,7 @@ public class CameraWidgetGroup<ContextType extends Context<ContextType>> impleme
     }
 
     @Override
-    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(@NotNull FramebufferObject<ContextType> framebuffer, @NotNull CameraViewport cameraViewport)
     {
         if (sceneModel.getSettingsModel().getBoolean("isCameraVisualEnabled"))
         {

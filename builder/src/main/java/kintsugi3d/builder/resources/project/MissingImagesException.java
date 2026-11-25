@@ -40,7 +40,7 @@ public class MissingImagesException extends Exception
         this.imgDirectory = imgDirectory;
     }
 
-    public final Collection<File> getMissingImgs()
+    public final @NotNull Collection<File> getMissingImgs()
     {
         return missingImgs;
     }

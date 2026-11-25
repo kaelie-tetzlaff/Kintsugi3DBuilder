@@ -34,8 +34,8 @@ public class LightCenters<ContextType extends Context<ContextType>> extends Shad
 {
     private static final String SCENE_OBJECT_TAG_FORMAT = "Light.%d.Center";
 
-    private final SceneViewportModel sceneViewportModel;
-    private final SceneModel sceneModel;
+    private final @NotNull SceneViewportModel sceneViewportModel;
+    private final @NotNull SceneModel sceneModel;
 
     private Texture2D<ContextType> lightCenterTexture;
 

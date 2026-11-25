@@ -38,8 +38,8 @@ public class LightWidgets<ContextType extends Context<ContextType>> extends Shad
     public static final String INCLINATION_TAG_FORMAT = "Light.%d.Inclination";
     public static final String DISTANCE_TAG_FORMAT = "Light.%d.Distance";
 
-    private final SceneViewportModel sceneViewportModel;
-    private final SceneModel sceneModel;
+    private final @NotNull SceneViewportModel sceneViewportModel;
+    private final @NotNull SceneModel sceneModel;
 
     private LightWidgetInfo[] widgetInfo;
 

@@ -28,7 +28,7 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
 {
     private final ContextType context;
     private final @NotNull LightingResources<ContextType> lightingResources;
-    private final LitContent<ContextType> litContentRoot;
+    private final @NotNull LitContent<ContextType> litContentRoot;
 
     /**
      * x
@@ -45,7 +45,7 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
         litContentRoot.initWithLightingResources(lightingResources);
     }
 
-    public final LightingResources<ContextType> getLightingResources()
+    public final @NotNull LightingResources<ContextType> getLightingResources()
     {
         return lightingResources;
     }
@@ -79,7 +79,7 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
     }
 
     @Override
-    public final void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight,
+    public final void drawInSubdivisions(@NotNull FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight,
                                          @NotNull CameraViewport cameraViewport)
     {
         setupForDraw(cameraViewport);

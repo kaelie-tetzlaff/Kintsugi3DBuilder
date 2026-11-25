@@ -78,7 +78,7 @@ public class ObservableCacheModel extends CacheModelBase
     }
 
     @Override
-    public final Map<String, Long> getProjectSizes()
+    public final @NotNull Map<String, Long> getProjectSizes()
     {
         // Should already be unmodifiable.
         //noinspection AssignmentOrReturnOfFieldWithMutableType

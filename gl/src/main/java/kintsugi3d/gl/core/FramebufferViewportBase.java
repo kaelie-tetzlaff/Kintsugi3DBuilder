@@ -37,7 +37,7 @@ abstract class FramebufferViewportBase<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final ContextType getContext()
+    public final @NotNull ContextType getContext()
     {
         return fullFramebuffer.getContext();
     }
@@ -139,7 +139,7 @@ abstract class FramebufferViewportBase<ContextType extends Context<ContextType>>
         }
 
         @Override
-        public final ContextType getContext()
+        public final @NotNull ContextType getContext()
         {
             return framebufferViewport.getContext();
         }

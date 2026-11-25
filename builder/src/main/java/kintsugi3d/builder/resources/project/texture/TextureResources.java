@@ -190,7 +190,7 @@ public interface TextureResources<ContextType extends Context<ContextType>>
         return new TextureResources<>()
         {
             @Override
-            public ContextType getContext()
+            public @NotNull ContextType getContext()
             {
                 return context;
             }

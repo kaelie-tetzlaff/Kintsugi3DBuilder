@@ -42,7 +42,7 @@ public final class FXLogMessageAppender extends LogMessageAppenderBase
 
     private final ObservableList<LogMessage> messages = FXCollections.observableArrayList();
 
-    private FXLogMessageAppender(String name, Filter filter, Layout<String> layout)
+    private FXLogMessageAppender(@NotNull String name, Filter filter, Layout<String> layout)
     {
         super(name, filter, layout);
 
@@ -52,7 +52,7 @@ public final class FXLogMessageAppender extends LogMessageAppenderBase
 
     @PluginFactory
     public static @NotNull FXLogMessageAppender createAppender(
-            @PluginAttribute("name") String name,
+            @PluginAttribute("name") @NotNull String name,
             @PluginElement("Filter") Filter filter,
             @PluginElement("PatternLayout") PatternLayout layout)
     {

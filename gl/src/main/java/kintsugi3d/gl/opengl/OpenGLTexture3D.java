@@ -658,7 +658,7 @@ final class OpenGLTexture3D extends OpenGLTexture implements Texture3D<OpenGLCon
         }
 
         @Override
-        public final OpenGLContext getContext()
+        public final @NotNull OpenGLContext getContext()
         {
             return texture.getContext();
         }

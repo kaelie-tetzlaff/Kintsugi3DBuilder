@@ -104,7 +104,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
     }
 
     @Override
-    public ContextType getContext()
+    public @NotNull ContextType getContext()
     {
         return base.getContext();
     }
@@ -171,7 +171,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
     /**
      * Final diffuse estimate
      */
-    public FinalDiffuseOptimization<ContextType> getDiffuseOptimization()
+    public @NotNull FinalDiffuseOptimization<ContextType> getDiffuseOptimization()
     {
         return diffuseOptimization;
     }
@@ -179,7 +179,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
     /**
      * Estimated surface normals
      */
-    public NormalOptimization<ContextType> getNormalOptimization()
+    public @NotNull NormalOptimization<ContextType> getNormalOptimization()
     {
         return normalOptimization;
     }
@@ -235,7 +235,7 @@ public final class SpecularFitOptimizable<ContextType extends Context<ContextTyp
             programFactory, textureResolution, normalOptimizationSettings, includeConstantTerm);
     }
 
-    public TextureResolution getTextureResolution()
+    public @NotNull TextureResolution getTextureResolution()
     {
         return textureResolution;
     }

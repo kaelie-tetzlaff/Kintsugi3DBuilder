@@ -43,7 +43,7 @@ public class ViewSelectionImpl implements ViewSelection
     }
 
     @Override
-    public final View getSelectedView()
+    public final @Nullable View getSelectedView()
     {
         View override = getSelectedViewOverride();
         return override != null ? override : sceneModel.getCameraViewListModel().getSelectedView();

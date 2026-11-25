@@ -28,7 +28,7 @@ import java.io.IOException;
 
 public class ImageUndistorter<ContextType extends Context<ContextType>> implements ManagedResource
 {
-    private final Context<ContextType> context;
+    private final @NotNull Context<ContextType> context;
     private final ProgramObject<ContextType> program;
     private final VertexBuffer<ContextType> rect;
     private final DrawableResource<ContextType> drawable;

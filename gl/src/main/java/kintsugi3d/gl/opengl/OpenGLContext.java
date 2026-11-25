@@ -75,7 +75,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
     }
 
     @Override
-    public final OpenGLContextState getState()
+    public final @NotNull OpenGLContextState getState()
     {
         return state;
     }
@@ -147,7 +147,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
     }
 
     @Override
-    public final TextureFactory<OpenGLContext> getTextureFactory()
+    public final @NotNull TextureFactory<OpenGLContext> getTextureFactory()
     {
         return textureFactory;
     }

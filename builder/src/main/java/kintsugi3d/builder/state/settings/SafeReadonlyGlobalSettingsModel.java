@@ -21,7 +21,7 @@ public interface SafeReadonlyGlobalSettingsModel
 {
     <T> @Nullable T get(String name, Class<T> settingType);
 
-    default Object getObject(String name)
+    default @Nullable Object getObject(String name)
     {
         return get(name, Object.class);
     }

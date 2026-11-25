@@ -63,7 +63,7 @@ public class ImageDetailsController
     private ToggleGroup toggleGroup;
 
     // Current image and its current logical viewport.
-    private Image currentImage;
+    private @Nullable Image currentImage;
     private double currentWidth;
     private double currentHeight;
     private double currentX;

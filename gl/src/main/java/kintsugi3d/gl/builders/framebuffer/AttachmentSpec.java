@@ -15,6 +15,8 @@
 
 package kintsugi3d.gl.builders.framebuffer;
 
+import org.jetbrains.annotations.NotNull;
+
 public class AttachmentSpec
 {
     private int multisamples = 1;
@@ -47,6 +49,7 @@ public class AttachmentSpec
     }
 
     @SuppressWarnings("DesignForExtension")
+    @NotNull
     AttachmentSpec setMultisamples(int samples, boolean fixedSampleLocations)
     {
         // TODO should this be a property of the framebuffer object builder?
@@ -57,6 +60,7 @@ public class AttachmentSpec
     }
 
     @SuppressWarnings("DesignForExtension")
+    @NotNull
     AttachmentSpec setMipmapsEnabled(boolean enabled)
     {
         mipmapsEnabled = enabled;
@@ -64,6 +68,7 @@ public class AttachmentSpec
     }
 
     @SuppressWarnings("DesignForExtension")
+    @NotNull
     AttachmentSpec setLinearFilteringEnabled(boolean enabled)
     {
         linearFilteringEnabled = enabled;

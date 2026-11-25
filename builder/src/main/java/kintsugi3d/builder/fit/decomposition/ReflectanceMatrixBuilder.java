@@ -51,7 +51,7 @@ final class ReflectanceMatrixBuilder
      * Underlying matrix builder utility.
      */
     private final @NotNull MatrixBuilder matrixBuilder;
-    private final ReadonlyBasisOptimizationSettings basisSettings;
+    private final @NotNull ReadonlyBasisOptimizationSettings basisSettings;
 
     /**
      * Stores both the LHS and RHS of the system to be solved.

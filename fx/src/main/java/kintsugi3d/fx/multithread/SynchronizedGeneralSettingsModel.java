@@ -118,7 +118,7 @@ public class SynchronizedGeneralSettingsModel extends GeneralSettingsModelBase
 
     private static class SynchronizedGeneralSettingsIterator implements Iterator<Setting>
     {
-        private final SynchronizedGeneralSettingsModel settings;
+        private final @NotNull SynchronizedGeneralSettingsModel settings;
         private final @NotNull Iterator<String> base;
 
         SynchronizedGeneralSettingsIterator(@NotNull SynchronizedGeneralSettingsModel settingsModel)

@@ -26,6 +26,7 @@ import kintsugi3d.gl.window.PollableCanvas3D;
 import kintsugi3d.gl.window.PollableWindow;
 import kintsugi3d.gl.window.WindowSpecification;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class Standalone3DWindow<ContextType extends Context<ContextType>> implements PollableWindow
 {
@@ -148,7 +149,7 @@ public class Standalone3DWindow<ContextType extends Context<ContextType>> implem
     }
 
     @Override
-    public final PollableCanvas3D<? extends Context<?>> getCanvas()
+    public final @Nullable PollableCanvas3D<? extends Context<?>> getCanvas()
     {
         return framebufferView.getCanvas();
     }

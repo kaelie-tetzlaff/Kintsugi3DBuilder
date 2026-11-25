@@ -246,7 +246,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             return viewSet;
         }
 
-        public VertexGeometry getGeometry()
+        public @Nullable VertexGeometry getGeometry()
         {
             return geometry;
         }

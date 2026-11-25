@@ -30,20 +30,20 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
 import kintsugi3d.gl.vecmath.Vector3;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class BaseScene<ContextType extends Context<ContextType>> extends LitContent<ContextType>
 {
     private static final Logger LOG = LoggerFactory.getLogger(BaseScene.class);
 
-    private final @Nullable ContextType context;
+    private final @NotNull ContextType context;
     private final SceneModel sceneModel;
     private final SceneViewportModel sceneViewportModel;
     private final Collection<RenderedComponent<ContextType>> components = new ArrayList<>(5);
@@ -154,7 +154,7 @@ public class BaseScene<ContextType extends Context<ContextType>> extends LitCont
         components.clear();
     }
 
-    protected final ContextType getContext()
+    protected final @NotNull ContextType getContext()
     {
         return context;
     }
@@ -179,7 +179,7 @@ public class BaseScene<ContextType extends Context<ContextType>> extends LitCont
         components.add(component);
     }
 
-    protected final ReadonlyImageBasedGraphicsResources<ContextType> getResources()
+    protected final @NotNull ReadonlyImageBasedGraphicsResources<ContextType> getResources()
     {
         return resources;
     }

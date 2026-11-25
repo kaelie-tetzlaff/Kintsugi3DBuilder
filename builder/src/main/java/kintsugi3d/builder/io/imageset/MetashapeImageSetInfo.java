@@ -109,7 +109,7 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
     }
 
     //metashape import path
-    public MetashapeImageSetInfo(@NotNull MetashapeModel model, Collection<File> disabledImageFiles)
+    public MetashapeImageSetInfo(@NotNull MetashapeModel model, @NotNull Collection<File> disabledImageFiles)
             throws MissingImagesException, FileNotFoundException
     {
         MetashapeChunk parentChunk = model.getChunk();

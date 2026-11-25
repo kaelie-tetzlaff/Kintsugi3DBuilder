@@ -486,7 +486,7 @@ final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGLContext
         }
 
         @Override
-        public final OpenGLContext getContext()
+        public final @NotNull OpenGLContext getContext()
         {
             return context;
         }

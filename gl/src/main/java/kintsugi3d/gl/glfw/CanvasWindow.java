@@ -246,7 +246,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    protected final WindowListenerManager getListenerManager()
+    protected final @NotNull WindowListenerManager getListenerManager()
     {
         return listenerManager;
     }

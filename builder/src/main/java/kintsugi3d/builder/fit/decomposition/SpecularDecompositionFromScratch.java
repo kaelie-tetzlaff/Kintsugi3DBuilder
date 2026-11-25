@@ -65,17 +65,17 @@ public class SpecularDecompositionFromScratch extends SpecularDecompositionBase
         diffuseAlbedos[basisIndex] = diffuseAlbedo;
     }
 
-    public final SimpleMatrix getSpecularRed()
+    public final @NotNull SimpleMatrix getSpecularRed()
     {
         return specularRed;
     }
 
-    public final SimpleMatrix getSpecularGreen()
+    public final @NotNull SimpleMatrix getSpecularGreen()
     {
         return specularGreen;
     }
 
-    public final SimpleMatrix getSpecularBlue()
+    public final @NotNull SimpleMatrix getSpecularBlue()
     {
         return specularBlue;
     }
@@ -90,7 +90,7 @@ public class SpecularDecompositionFromScratch extends SpecularDecompositionBase
         }
 
         @Override
-        public final Collection<BasisMaterialInfo> getMaterials()
+        public final @NotNull Collection<BasisMaterialInfo> getMaterials()
         {
             return getIndexableMaterialList();
         }

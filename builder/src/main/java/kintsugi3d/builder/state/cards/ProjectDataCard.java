@@ -52,7 +52,7 @@ public class ProjectDataCard
         return internalName;
     }
 
-    public final UUID getCardId()
+    public final @NotNull UUID getCardId()
     {
         return cardId;
     }
@@ -80,12 +80,12 @@ public class ProjectDataCard
         return textFields.get(key);
     }
 
-    public final Map<String, String> getTextContent()
+    public final @NotNull Map<String, String> getTextContent()
     {
         return textFields;
     }
 
-    public final Collection<? extends Map<String, Runnable>> getActions()
+    public final @NotNull Collection<? extends Map<String, Runnable>> getActions()
     {
         return actionGroups;
     }

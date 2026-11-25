@@ -67,7 +67,7 @@ public class MatrixSystem
         return lhs.solve(rhs[rhsIndex]);
     }
 
-    public final SimpleMatrix solveNonNegative(int rhsIndex, double toleranceScale)
+    public final @NotNull SimpleMatrix solveNonNegative(int rhsIndex, double toleranceScale)
     {
         double medianATy = IntStream.range(0, rhs[rhsIndex].getNumElements())
                 .mapToDouble(rhs[rhsIndex]::get)

@@ -174,7 +174,7 @@ class ManualImportControllerBase extends ProjectImportController
 
     @SuppressWarnings("DesignForExtension")
     @Override
-    protected ManualInputSource getData()
+    protected @NotNull ManualInputSource getData()
     {
         return new ManualInputSource(() -> FrontendIO.getInstance().showSaveProjectDialog(getPageFrameController().getWindow()))
             .setCameraFile(cameraFile)

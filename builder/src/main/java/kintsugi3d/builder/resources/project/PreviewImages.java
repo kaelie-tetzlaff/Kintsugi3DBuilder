@@ -40,10 +40,10 @@ class PreviewImages
 
     private static final int MAX_THUMBNAIL_SIZE = 450;
 
-    private final View view;
-    private final ProgressMonitor progressMonitor;
-    private final AtomicInteger finishedCount;
-    private final AtomicInteger failedCount;
+    private final @NotNull View view;
+    private final @NotNull ProgressMonitor progressMonitor;
+    private final @NotNull AtomicInteger finishedCount;
+    private final @NotNull AtomicInteger failedCount;
 
     private boolean missingPreview;
     private boolean missingThumbnail;

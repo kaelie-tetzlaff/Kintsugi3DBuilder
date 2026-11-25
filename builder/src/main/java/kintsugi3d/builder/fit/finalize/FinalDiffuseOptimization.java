@@ -48,7 +48,7 @@ public class FinalDiffuseOptimization<ContextType extends Context<ContextType>> 
 
     // Final diffuse estimation program
     private final ProgramObject<ContextType> estimationProgram;
-    private final TextureResolution textureResolution;
+    private final @NotNull TextureResolution textureResolution;
 
     private final boolean includeConstant;
 

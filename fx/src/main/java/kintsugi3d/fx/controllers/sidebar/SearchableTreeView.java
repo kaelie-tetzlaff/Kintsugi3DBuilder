@@ -175,7 +175,7 @@ public final class SearchableTreeView extends SearchableView
         }
     }
 
-    public TreeView<String> getTreeView()
+    public @NotNull TreeView<String> getTreeView()
     {
         return treeView;
     }

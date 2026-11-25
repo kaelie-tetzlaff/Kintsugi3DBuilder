@@ -31,7 +31,7 @@ public class SimpleBasisResources<ContextType extends Context<ContextType>> exte
     }
 
     @Override
-    public final MaterialBasis getBasis()
+    public final @NotNull MaterialBasis getBasis()
     {
         return materialBasis;
     }

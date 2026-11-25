@@ -86,7 +86,7 @@ public abstract class ColorTextureReaderBase implements ColorTextureReader
     }
 
     @Override
-    public final void saveToFile(@NotNull String fileFormat, @NotNull File file, Function<IntVector4, IntVector4> tonemapper) throws IOException
+    public final void saveToFile(@NotNull String fileFormat, @NotNull File file, @NotNull Function<IntVector4, IntVector4> tonemapper) throws IOException
     {
         int[] pixels = readARGB();
         BufferedImage outImg = BufferedImageBuilder.build()
@@ -100,7 +100,7 @@ public abstract class ColorTextureReaderBase implements ColorTextureReader
     }
 
     @Override
-    public final void saveToFile(@NotNull String fileFormat, @NotNull File file, BiFunction<IntVector4, Integer, IntVector4> tonemapper) throws IOException
+    public final void saveToFile(@NotNull String fileFormat, @NotNull File file, @NotNull BiFunction<IntVector4, Integer, IntVector4> tonemapper) throws IOException
     {
         int[] pixels = readARGB();
         BufferedImage outImg = BufferedImageBuilder.build()
@@ -127,7 +127,7 @@ public abstract class ColorTextureReaderBase implements ColorTextureReader
     }
 
     @Override
-    public final void saveToFile(int x, int y, int width, int height, @NotNull String fileFormat, @NotNull File file, Function<IntVector4, IntVector4> tonemapper) throws IOException
+    public final void saveToFile(int x, int y, int width, int height, @NotNull String fileFormat, @NotNull File file, @NotNull Function<IntVector4, IntVector4> tonemapper) throws IOException
     {
         int[] pixels = readARGB(x, y, width, height);
         BufferedImage outImg = BufferedImageBuilder.build()
@@ -141,7 +141,7 @@ public abstract class ColorTextureReaderBase implements ColorTextureReader
     }
 
     @Override
-    public final void saveToFile(int x, int y, int width, int height, @NotNull String fileFormat, @NotNull File file, BiFunction<IntVector4, Integer, IntVector4> tonemapper) throws IOException
+    public final void saveToFile(int x, int y, int width, int height, @NotNull String fileFormat, @NotNull File file, @NotNull BiFunction<IntVector4, Integer, IntVector4> tonemapper) throws IOException
     {
         int[] pixels = readARGB(x, y, width, height);
         BufferedImage outImg = BufferedImageBuilder.build()

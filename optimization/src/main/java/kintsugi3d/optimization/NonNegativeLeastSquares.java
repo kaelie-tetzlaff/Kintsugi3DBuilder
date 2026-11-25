@@ -96,7 +96,7 @@ public final class NonNegativeLeastSquares
      * @param epsilon The allowed tolerance at which the algorithm will terminate.
      * @return The non-negative least squares solution.
      */
-    public static SimpleMatrix solve(@NotNull SimpleMatrix mA, @NotNull SimpleMatrix b, double epsilon)
+    public static @NotNull SimpleMatrix solve(@NotNull SimpleMatrix mA, @NotNull SimpleMatrix b, double epsilon)
     {
         if (b.numCols() != 1 || b.numRows() != mA.numRows())
         {
@@ -121,7 +121,7 @@ public final class NonNegativeLeastSquares
      * @param epsilon The allowed tolerance at which the algorithm will terminate.
      * @return The non-negative least squares solution.
      */
-    public static SimpleMatrix solvePremultiplied(@NotNull SimpleMatrix mATA, @NotNull SimpleMatrix vATb, double epsilon)
+    public static @NotNull SimpleMatrix solvePremultiplied(@NotNull SimpleMatrix mATA, @NotNull SimpleMatrix vATb, double epsilon)
     {
         return solvePremultipliedWithEqualityConstraints(mATA, vATb, epsilon, 0);
     }

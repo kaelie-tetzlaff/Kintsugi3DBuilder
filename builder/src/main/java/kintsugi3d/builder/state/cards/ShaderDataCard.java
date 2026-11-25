@@ -76,7 +76,7 @@ public class ShaderDataCard extends ProjectDataCard
      */
     public ShaderDataCard(
         String internalName, String title, ShaderInfo shader, String thumbnailPath, String fullResImageFilePath,
-        Map<String, String> textFields, @NotNull Collection<? extends Map<String, Runnable>> actionGroups, boolean isEnabled)
+        @NotNull Map<String, String> textFields, @NotNull Collection<? extends Map<String, Runnable>> actionGroups, boolean isEnabled)
     {
         super(internalName, title, fullResImageFilePath, thumbnailPath, textFields,
             Stream.concat(Stream.of(getActionMap(shader)), actionGroups.stream()).collect(Collectors.toList()),
@@ -96,7 +96,7 @@ public class ShaderDataCard extends ProjectDataCard
      */
     public ShaderDataCard(
         String internalName, @NotNull ShaderInfo shader, String thumbnailPath, String fullResImageFilePath,
-        Map<String, String> textFields, @NotNull Collection<? extends Map<String, Runnable>> actionGroups, boolean isEnabled)
+        @NotNull Map<String, String> textFields, @NotNull Collection<? extends Map<String, Runnable>> actionGroups, boolean isEnabled)
     {
         this(internalName, shader.getFriendlyName(), shader, thumbnailPath, fullResImageFilePath, textFields,
             actionGroups, isEnabled);

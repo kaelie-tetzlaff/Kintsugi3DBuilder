@@ -32,7 +32,7 @@ public class SimpleMaterialBasis implements MutableMaterialBasis
     /**
      * Uses LinkedHashMap to preserve insertion order.
      */
-    private final LinkedHashMap<String, MutableBasisMaterialInfo> basis;
+    private final @NotNull LinkedHashMap<String, MutableBasisMaterialInfo> basis;
 
     private final int specularResolution;
 

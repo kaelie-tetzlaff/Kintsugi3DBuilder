@@ -29,8 +29,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class LightVisualsGroup<ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
-    private final SceneModel sceneModel;
-    private final SceneViewportModel sceneViewportModel;
+    private final @NotNull SceneModel sceneModel;
+    private final @NotNull SceneViewportModel sceneViewportModel;
 
     private final @NotNull Lights<ContextType> lights;
     private final @NotNull LightCenters<ContextType> lightCenters;

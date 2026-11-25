@@ -27,8 +27,8 @@ import java.io.IOException;
 
 public class TextureBlockResourceFactory<ContextType extends Context<ContextType>> implements ManagedResource
 {
-    private final ImageCache<ContextType> imageCache;
-    private final GraphicsResourcesCommon<ContextType> commonResources;
+    private final @NotNull ImageCache<ContextType> imageCache;
+    private final @NotNull GraphicsResourcesCommon<ContextType> commonResources;
     private final @NotNull GeometryTextures<ContextType> fullGeometryTextures;
 
     TextureBlockResourceFactory(@NotNull GraphicsResourcesCommon<ContextType> commonResources, @NotNull ImageCache<ContextType> imageCache)

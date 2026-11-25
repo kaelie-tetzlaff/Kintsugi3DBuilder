@@ -26,7 +26,6 @@ import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.gl.vecmath.IntVector2;
 import kintsugi3d.util.ImageFinder;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +43,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
     implements ManagedResource, ReadonlyBasisWeightResources<ContextType>
 {
     private static final Logger LOG = LoggerFactory.getLogger(BasisWeightResources.class);
-    private final @Nullable ContextType context;
+    private final @NotNull ContextType context;
 
     private Texture3D<ContextType> weightMaps;
     private final Texture2D<ContextType> weightMask;
@@ -54,7 +53,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
     private final int width;
     private final int height;
 
-    private final MaterialBasis basis;
+    private final @NotNull MaterialBasis basis;
 
     public BasisWeightResources(@NotNull ContextType context, int width, int height, @NotNull MaterialBasis basis)
     {
@@ -103,7 +102,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final ContextType getContext()
+    public final @NotNull ContextType getContext()
     {
         return context;
     }

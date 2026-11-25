@@ -55,7 +55,7 @@ public class SpecularFitSettings implements ReadonlySpecularFitSettings
     }
 
     @Override
-    public final TextureResolution getTextureResolution()
+    public final @NotNull TextureResolution getTextureResolution()
     {
         return textureResolution;
     }

@@ -62,7 +62,7 @@ public class SceneModel implements ReadonlySceneModel
     }
 
     @Override
-    public final SafeReadonlyGlobalSettingsModel getSettingsModel()
+    public final @NotNull SafeReadonlyGlobalSettingsModel getSettingsModel()
     {
         return settingsModel;
     }

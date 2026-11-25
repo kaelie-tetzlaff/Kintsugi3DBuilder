@@ -56,17 +56,17 @@ public final class FastPartialSVD
         return svd;
     }
 
-    public SimpleMatrix getU()
+    public @NotNull SimpleMatrix getU()
     {
         return transpose ? v : u;
     }
 
-    public SimpleMatrix getV()
+    public @NotNull SimpleMatrix getV()
     {
         return transpose ? u : v;
     }
 
-    public SimpleMatrix getError()
+    public @NotNull SimpleMatrix getError()
     {
         return matrix;
     }

@@ -353,7 +353,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
         this.fragmentShaderDefinesFactory = fragmentShaderDefinesFactory;
     }
 
-    protected final ReadonlyImageBasedGraphicsResources<ContextType> getResources()
+    protected final @NotNull ReadonlyImageBasedGraphicsResources<ContextType> getResources()
     {
         return resources;
     }

@@ -42,7 +42,7 @@ public class RoughnessOptimizationIterative<ContextType extends Context<ContextT
         extends RoughnessOptimizationBase<ContextType>
 {
     private static final Logger LOG = LoggerFactory.getLogger(RoughnessOptimizationIterative.class);
-    private final TextureResolution settings;
+    private final @NotNull TextureResolution settings;
 
     private final @NotNull ShaderBasedOptimization<ContextType> roughnessOptimization;
 //    private Program<ContextType> errorCalcProgram;

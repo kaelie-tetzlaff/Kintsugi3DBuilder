@@ -44,7 +44,7 @@ public class RenderExportManager
         return anyModalOpen.get();
     }
 
-    public final BooleanExpression getAnyModalOpenProperty()
+    public final @Nullable BooleanExpression getAnyModalOpenProperty()
     {
         return anyModalOpen;
     }

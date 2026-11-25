@@ -22,6 +22,7 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.DrawableResource;
 import kintsugi3d.gl.core.Program;
 import kintsugi3d.gl.geometry.ReadonlyGeometryResources;
+import org.jetbrains.annotations.NotNull;
 
 final class SpecularFitResources<ContextType extends Context<ContextType>> implements ShaderResources<ContextType>
 {
@@ -68,7 +69,7 @@ final class SpecularFitResources<ContextType extends Context<ContextType>> imple
     }
 
     @Override
-    public ContextType getContext()
+    public @NotNull ContextType getContext()
     {
         return base.getContext();
     }

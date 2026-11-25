@@ -45,7 +45,7 @@ public final class LightWidgetInfo
     private final double azimuthArrowRotation;
     private final double inclinationArrowRotation;
 
-    public static LightWidgetInfo @NotNull [] calculate(@NotNull SceneViewportModel sceneViewportModel, @NotNull SceneModel sceneModel, @NotNull CameraViewport cameraViewport, FramebufferSize size)
+    public static LightWidgetInfo @NotNull [] calculate(@NotNull SceneViewportModel sceneViewportModel, @NotNull SceneModel sceneModel, @NotNull CameraViewport cameraViewport, @NotNull FramebufferSize size)
     {
         return IntStream.range(0, sceneModel.getLightingModel().getLightCount())
             .mapToObj(i -> new LightWidgetInfo(sceneViewportModel, sceneModel, cameraViewport, size, i))
@@ -53,7 +53,7 @@ public final class LightWidgetInfo
     }
 
     private LightWidgetInfo(
-        @NotNull SceneViewportModel sceneViewportModel, @NotNull ReadonlySceneModel sceneModel, @NotNull CameraViewport cameraViewport, FramebufferSize size, int lightIndex)
+        @NotNull SceneViewportModel sceneViewportModel, @NotNull ReadonlySceneModel sceneModel, @NotNull CameraViewport cameraViewport, @NotNull FramebufferSize size, int lightIndex)
     {
         transformation = cameraViewport.getView().times(sceneModel.getInverseLightViewMatrix(lightIndex));
         lightWidgetScale = sceneViewportModel.computeRawLightWidgetScale(cameraViewport.getView(), size);
@@ -94,7 +94,7 @@ public final class LightWidgetInfo
 
     }
 
-    public Matrix4 getTransformation()
+    public @NotNull Matrix4 getTransformation()
     {
         return transformation;
     }
@@ -104,17 +104,17 @@ public final class LightWidgetInfo
         return lightWidgetScale;
     }
 
-    public Vector3 getLightCenter()
+    public @NotNull Vector3 getLightCenter()
     {
         return lightCenter;
     }
 
-    public Vector3 getWidgetPosition()
+    public @NotNull Vector3 getWidgetPosition()
     {
         return widgetPosition;
     }
 
-    public Vector3 getWidgetDisplacement()
+    public @NotNull Vector3 getWidgetDisplacement()
     {
         return widgetDisplacement;
     }
@@ -124,7 +124,7 @@ public final class LightWidgetInfo
         return widgetDistance;
     }
 
-    public Vector3 getDistanceWidgetPosition()
+    public @NotNull Vector3 getDistanceWidgetPosition()
     {
         return distanceWidgetPosition;
     }
@@ -134,7 +134,7 @@ public final class LightWidgetInfo
         return perspectiveWidgetScale;
     }
 
-    public Vector3 getAzimuthRotationAxis()
+    public @NotNull Vector3 getAzimuthRotationAxis()
     {
         return azimuthRotationAxis;
     }
@@ -144,7 +144,7 @@ public final class LightWidgetInfo
         return lightDistanceAtInclination;
     }
 
-    public Vector3 getLightDisplacementWorld()
+    public @NotNull Vector3 getLightDisplacementWorld()
     {
         return lightDisplacementWorld;
     }

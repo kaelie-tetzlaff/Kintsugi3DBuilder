@@ -44,7 +44,7 @@ public final class Kintsugi3DViewerLauncher
      * Searches first in the PATH env variable, then the registry (Windows only), then by relative path
      * @return File to the viewer executable, if found
      */
-    private static Optional<File> getViewerExecutableLocation()
+    private static @NotNull Optional<File> getViewerExecutableLocation()
     {
         Optional<File> executable = getFromPath();
 
@@ -99,7 +99,7 @@ public final class Kintsugi3DViewerLauncher
         return Optional.empty();
     }
 
-    private static Optional<File> getFromRegistry() throws IOException, InterruptedException
+    private static @NotNull Optional<File> getFromRegistry() throws IOException, InterruptedException
     {
         if (OperatingSystem.getCurrentOS() != OperatingSystem.WINDOWS)
         {

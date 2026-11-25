@@ -41,7 +41,7 @@ abstract class OpenGLBuffer implements ContextBound<OpenGLContext>, ManagedResou
     }
 
     @Override
-    public final OpenGLContext getContext()
+    public final @NotNull OpenGLContext getContext()
     {
         return context;
     }

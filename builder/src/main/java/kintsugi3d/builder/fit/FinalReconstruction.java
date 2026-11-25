@@ -50,7 +50,7 @@ public class FinalReconstruction<ContextType extends Context<ContextType>>
 
     public final @Nullable List<Map<String, ReadonlyColorAppearanceRMSE>> reconstruct(ReadonlyTextureResources<ContextType> specularFit,
                                                                                       @NotNull Map<String, ProgramBuilder<ContextType>> reconstructionProgramBuilders,
-                                                                                      ProgramBuilder<ContextType> incidentRadianceProgramBuilder,
+                                                                                      @NotNull ProgramBuilder<ContextType> incidentRadianceProgramBuilder,
                                                                                       @Nullable File debugDirectory, @Nullable File groundTruthDirectory)
     {
         if (debugDirectory != null)

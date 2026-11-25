@@ -46,7 +46,7 @@ public class MappedChange<K, V>
         return type;
     }
 
-    public final Map<K, V> getMap()
+    public final @NotNull Map<K, V> getMap()
     {
         return map;
     }

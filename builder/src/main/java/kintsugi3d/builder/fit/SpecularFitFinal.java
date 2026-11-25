@@ -177,7 +177,7 @@ public final class SpecularFitFinal<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public ContextType getContext()
+    public @NotNull ContextType getContext()
     {
         return base.getContext();
     }
@@ -205,7 +205,7 @@ public final class SpecularFitFinal<ContextType extends Context<ContextType>>
         return base.getBasisWeightResources();
     }
 
-    public AlbedoORMOptimization<ContextType> getAlbedoORMOptimization()
+    public @Nullable AlbedoORMOptimization<ContextType> getAlbedoORMOptimization()
     {
         return albedoORMOptimization;
     }

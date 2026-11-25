@@ -35,7 +35,7 @@ public final class DepthMapGenerator<ContextType extends Context<ContextType>> i
 {
     private final ProgramObject<ContextType> depthRenderingProgram;
     private final DrawableResource<ContextType> depthDrawable;
-    private final ReadonlyGeometryResources<ContextType> geometryResources;
+    private final @NotNull ReadonlyGeometryResources<ContextType> geometryResources;
 
     /**
      *

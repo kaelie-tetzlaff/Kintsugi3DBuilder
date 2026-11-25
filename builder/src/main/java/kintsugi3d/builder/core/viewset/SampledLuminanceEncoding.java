@@ -229,7 +229,7 @@ public class SampledLuminanceEncoding
                 .createTexture();
     }
 
-    public final <ContextType extends Context<ContextType>> @NotNull LuminanceMapResources<ContextType> createResources(ContextType context)
+    public final <ContextType extends Context<ContextType>> @NotNull LuminanceMapResources<ContextType> createResources(@NotNull ContextType context)
     {
         return LuminanceMapResources.createFromEncoding(context, this);
     }

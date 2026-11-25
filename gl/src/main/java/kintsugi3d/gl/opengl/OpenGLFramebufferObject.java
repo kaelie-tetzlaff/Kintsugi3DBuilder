@@ -39,9 +39,9 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
     private final int height;
     private final @NotNull AbstractCollection<ManagedResource> ownedAttachments;
     private final OpenGLFramebufferAttachment @NotNull [] colorAttachments;
-    private OpenGLFramebufferAttachment depthAttachment;
-    private OpenGLFramebufferAttachment stencilAttachment;
-    private OpenGLFramebufferAttachment depthStencilAttachment;
+    private @Nullable OpenGLFramebufferAttachment depthAttachment;
+    private @Nullable OpenGLFramebufferAttachment stencilAttachment;
+    private @Nullable OpenGLFramebufferAttachment depthStencilAttachment;
     private boolean live = true;
 
     public static class OpenGLFramebufferObjectBuilder extends FramebufferObjectBuilderBase<OpenGLContext>

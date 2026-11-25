@@ -133,7 +133,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public OpenGLContext getContext()
+    public @NotNull OpenGLContext getContext()
     {
         return context;
     }

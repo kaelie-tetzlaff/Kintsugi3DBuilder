@@ -40,7 +40,7 @@ public interface IOHandler
 
 
     boolean isRenderableLoaded();
-    ReadonlyImageBasedRenderable<?> getMainRenderable();
+    @Nullable ReadonlyImageBasedRenderable<?> getMainRenderable();
     ReadonlyImageBasedRenderable<? extends Context<?>> getRenderableForShader(ShaderInfo shader);
 
     EventListeners<ProjectLoadedListener> projectLoadedListeners();

@@ -76,21 +76,21 @@ public final class ImageHelper
         throw unsupportedFormatException(file);
     }
 
-    public static ImageHelper read(@NotNull File file) throws IOException
+    public static @NotNull ImageHelper read(@NotNull File file) throws IOException
     {
         ImageHelper raw = new ImageHelper(ImageIO.read(file));
         raw.validate(file);
         return ICC_TRANSFORM_ENABLED ? raw.convertedICCToSRGB() : raw.forcedSRGB();
     }
 
-    public static ImageHelper read(@NotNull InputStream input) throws IOException
+    public static @NotNull ImageHelper read(@NotNull InputStream input) throws IOException
     {
         ImageHelper raw = new ImageHelper(ImageIO.read(input));
         raw.validate(null);
         return ICC_TRANSFORM_ENABLED ? raw.convertedICCToSRGB() : raw.forcedSRGB();
     }
 
-    public static ImageHelper wrap(BufferedImage image)
+    public static @NotNull ImageHelper wrap(BufferedImage image)
     {
         ImageHelper raw = new ImageHelper(image);
         Objects.requireNonNull(image);
@@ -158,7 +158,7 @@ public final class ImageHelper
         }
     }
 
-    public ImageHelper withAlphaMask(@Nullable InputStream maskStream) throws IOException
+    public @NotNull ImageHelper withAlphaMask(@Nullable InputStream maskStream) throws IOException
     {
         if (maskStream != null)
         {
@@ -171,7 +171,7 @@ public final class ImageHelper
         }
     }
 
-    public ImageHelper withAlphaMask(@Nullable File maskFile) throws IOException
+    public @NotNull ImageHelper withAlphaMask(@Nullable File maskFile) throws IOException
     {
         if (maskFile != null && maskFile.exists())
         {
@@ -184,7 +184,7 @@ public final class ImageHelper
         }
     }
 
-    public ImageHelper scaledBy(double factorX, double factorY)
+    public @NotNull ImageHelper scaledBy(double factorX, double factorY)
     {
         //noinspection FloatingPointEquality
         if (factorX == 1.0 && factorY == 1.0)

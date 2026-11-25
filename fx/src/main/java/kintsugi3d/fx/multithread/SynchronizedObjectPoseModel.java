@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class SynchronizedObjectPoseModel extends ObjectPoseModelBase
 {
-    private final ManipulableObjectPoseModel baseModel;
+    private final @NotNull ManipulableObjectPoseModel baseModel;
     private final @NotNull SynchronizedValue<Vector3> center;
     private final @NotNull SynchronizedValue<Float> rotationX;
     private final @NotNull SynchronizedValue<Float> rotationY;

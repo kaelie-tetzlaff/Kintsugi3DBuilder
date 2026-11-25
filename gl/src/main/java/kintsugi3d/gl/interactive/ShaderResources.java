@@ -20,9 +20,17 @@ import kintsugi3d.gl.core.DrawableResource;
 import kintsugi3d.gl.core.Program;
 import kintsugi3d.gl.geometry.ReadonlyGeometryResources;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public interface ShaderResources<ContextType extends Context<ContextType>> extends ShaderProgramFactory<ContextType>
 {
+    default @NotNull ContextType validateContext()
+    {
+        return Objects.requireNonNull(getContext(), "Resources have not been initialized with a valid context.");
+    }
+
     default ReadonlyVertexGeometry getGeometry()
     {
         return getGeometryResources().getGeometry();

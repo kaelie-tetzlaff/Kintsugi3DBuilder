@@ -37,7 +37,7 @@ public class SafeLogScaleNumberStringConverter extends StringConverter<Number>
     }
 
     @Override
-    public final Number fromString(String string)
+    public final @NotNull Number fromString(String string)
     {
         Number raw = base.fromString(string);
         if (raw.doubleValue() == 0.0)

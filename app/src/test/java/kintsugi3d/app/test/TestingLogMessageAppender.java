@@ -42,7 +42,7 @@ public final class TestingLogMessageAppender extends LogMessageAppenderBase
 
     private final List<LogMessage> messages = new ArrayList<>(16);
 
-    private TestingLogMessageAppender(String name, Filter filter, Layout<String> layout)
+    private TestingLogMessageAppender(@NotNull String name, Filter filter, Layout<String> layout)
     {
         super(name, filter, layout);
 
@@ -52,7 +52,7 @@ public final class TestingLogMessageAppender extends LogMessageAppenderBase
 
     @PluginFactory
     public static @NotNull TestingLogMessageAppender createAppender(
-            @PluginAttribute("name") String name,
+            @PluginAttribute("name") @NotNull String name,
             @PluginElement("Filter") Filter filter,
             @PluginElement("PatternLayout") PatternLayout layout)
     {

@@ -634,14 +634,14 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final SceneViewport getSceneViewport()
+    public final @NotNull SceneViewport getSceneViewport()
     {
         return sceneViewportModel;
     }
 
 
     @Override
-    public final SceneModel getSceneModel()
+    public final @NotNull SceneModel getSceneModel()
     {
         return sceneModel;
     }

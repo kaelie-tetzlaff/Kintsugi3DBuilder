@@ -338,7 +338,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
 
     @Override
     public final void loadFromVSETFile(
-        String internalName, File vsetFile, File supportingFilesDirectory, ReadonlyLoadOptionsModel loadOptions)
+        String internalName, @NotNull File vsetFile, File supportingFilesDirectory, ReadonlyLoadOptionsModel loadOptions)
         throws UserCancellationException, MeshImportException, IOException
     {
         if (progressMonitor.isConflictingProcess())
@@ -429,8 +429,8 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public final void loadFromLooseFiles(File newProjectFile, String internalName, File xmlFile,
-                                         ViewSetLoadOptions viewSetLoadOptions, ReadonlyLoadOptionsModel imageLoadOptions)
+    public final void loadFromLooseFiles(File newProjectFile, String internalName, @NotNull File xmlFile,
+                                         @NotNull ViewSetLoadOptions viewSetLoadOptions, ReadonlyLoadOptionsModel imageLoadOptions)
         throws Exception
     {
         if (progressMonitor.isConflictingProcess())
