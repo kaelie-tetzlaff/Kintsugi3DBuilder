@@ -94,127 +94,124 @@ public final class FastPartialSVD
 
     private void compute()
     {
-        if (matrix != null)
-        {
-            Random random = new SecureRandom();
-            //SimpleMatrix a = new SimpleMatrix(this.matrix.numCols(), this.matrix.numCols(), FMatrixRMaj.class);
-            double toleranceSq = tolerance * tolerance;
+        Random random = new SecureRandom();
+        //SimpleMatrix a = new SimpleMatrix(this.matrix.numCols(), this.matrix.numCols(), FMatrixRMaj.class);
+        double toleranceSq = tolerance * tolerance;
 
-            // Use procedural framework to save memory for this step.
+        // Use procedural framework to save memory for this step.
 //            multInner(this.matrix.getMatrix(), a.getMatrix());
 
-            for (int k = 0; k < singularValueCount; k++)
+        for (int k = 0; k < singularValueCount; k++)
+        {
+            SimpleMatrix vk = SimpleMatrix.random32(v.numRows(), 1, -1, 1, random);
+            divide(vk.getMatrix(), (float)vk.normF());
+
+            double ev;
+            double sqError;
+            int numIterations;
+            int numAttempts = 0;
+
+            SimpleMatrix vkLast = new SimpleMatrix(v.numRows(), 1, FMatrixRMaj.class);
+            SimpleMatrix diff = new SimpleMatrix(v.numRows(), 1, FMatrixRMaj.class);
+            SimpleMatrix intermediateProduct = new SimpleMatrix(u.numRows(), 1, FMatrix.class);
+
+            do
             {
-                SimpleMatrix vk = SimpleMatrix.random32(v.numRows(), 1, -1, 1, random);
-                divide(vk.getMatrix(), (float)vk.normF());
-
-                double ev;
-                double sqError;
-                int numIterations;
-                int numAttempts = 0;
-
-                SimpleMatrix vkLast = new SimpleMatrix(v.numRows(), 1, FMatrixRMaj.class);
-                SimpleMatrix diff = new SimpleMatrix(v.numRows(), 1, FMatrixRMaj.class);
-                SimpleMatrix intermediateProduct = new SimpleMatrix(u.numRows(), 1, FMatrix.class);
+                numIterations = 0;
 
                 do
                 {
-                    numIterations = 0;
+                    SimpleMatrix tmp = vkLast;
+                    vkLast = vk;
+                    vk = tmp;
 
-                    do
+                    if (transpose)
                     {
-                        SimpleMatrix tmp = vkLast;
-                        vkLast = vk;
-                        vk = tmp;
-
-                        if (transpose)
-                        {
-                            multTransA(matrix.getMatrix(), vkLast.getMatrix(), intermediateProduct.getMatrix());
-                            mult(matrix.getMatrix(), intermediateProduct.getMatrix(), vk.getMatrix());
-                        }
-                        else
-                        {
-                            mult(matrix.getMatrix(), vkLast.getMatrix(), intermediateProduct.getMatrix());
-                            multTransA(matrix.getMatrix(), intermediateProduct.getMatrix(), vk.getMatrix());
-                        }
-
-                        //vk = a.mult(vkLast);
-
-                        ev = vk.normF();
-                        divide(vk.getMatrix(), (float)ev); // Procedural framework: in place divide for efficiency
-                        subtract(vk.getMatrix(), vkLast.getMatrix(), diff.getMatrix());
-                        numIterations++;
-
-                        sqError = dot(diff.getMatrix(), diff.getMatrix());
+                        multTransA(matrix.getMatrix(), vkLast.getMatrix(), intermediateProduct.getMatrix());
+                        mult(matrix.getMatrix(), intermediateProduct.getMatrix(), vk.getMatrix());
                     }
-                    while (ev > 0.0 && sqError > toleranceSq && numIterations < maxIterations);
+                    else
+                    {
+                        mult(matrix.getMatrix(), vkLast.getMatrix(), intermediateProduct.getMatrix());
+                        multTransA(matrix.getMatrix(), intermediateProduct.getMatrix(), vk.getMatrix());
+                    }
 
-                    numAttempts++;
-                }
-                while(numIterations == maxIterations && numAttempts < maxAttempts);
+                    //vk = a.mult(vkLast);
 
-                if (ev == 0.0)
-                {
-                    singularValueCount = k;
+                    ev = vk.normF();
+                    divide(vk.getMatrix(), (float)ev); // Procedural framework: in place divide for efficiency
+                    subtract(vk.getMatrix(), vkLast.getMatrix(), diff.getMatrix());
+                    numIterations++;
+
+                    sqError = dot(diff.getMatrix(), diff.getMatrix());
                 }
-                else if (sqError > toleranceSq)
+                while (ev > 0.0 && sqError > toleranceSq && numIterations < maxIterations);
+
+                numAttempts++;
+            }
+            while(numIterations == maxIterations && numAttempts < maxAttempts);
+
+            if (ev == 0.0)
+            {
+                singularValueCount = k;
+            }
+            else if (sqError > toleranceSq)
+            {
+                throw new DecompositionFailureException
+                    (String.format("Max iterations exceeded. (Squared error: %s)", sqError));
+            }
+            else
+            {
+                float sv = (float)Math.sqrt(ev);
+                singularValues[k] = sv;
+
+                SimpleMatrix uk = new SimpleMatrix(u.numRows(), 1, FMatrixRMaj.class);
+
+                if (transpose)
                 {
-                    throw new DecompositionFailureException
-                        (String.format("Max iterations exceeded. (Squared error: %s)", sqError));
+                    multTransA(matrix.getMatrix(), vk.getMatrix(), uk.getMatrix());
                 }
                 else
                 {
-                    float sv = (float)Math.sqrt(ev);
-                    singularValues[k] = sv;
+                    mult(matrix.getMatrix(), vk.getMatrix(), uk.getMatrix());
+                }
 
-                    SimpleMatrix uk = new SimpleMatrix(u.numRows(), 1, FMatrixRMaj.class);
+                divide(uk.getMatrix(), (float)uk.normF()); // Procedural framework: in place divide for efficiency
 
-                    if (transpose)
-                    {
-                        multTransA(matrix.getMatrix(), vk.getMatrix(), uk.getMatrix());
-                    }
-                    else
-                    {
-                        mult(matrix.getMatrix(), vk.getMatrix(), uk.getMatrix());
-                    }
+                for (int i = 0; i < u.numRows(); i++)
+                {
+                    u.set(i, k, uk.get(i));
+                }
 
-                    divide(uk.getMatrix(), (float)uk.normF()); // Procedural framework: in place divide for efficiency
+                for (int i = 0; i < v.numRows(); i++)
+                {
+                    v.set(i, k, vk.get(i));
+                }
 
-                    for (int i = 0; i < u.numRows(); i++)
-                    {
-                        u.set(i, k, uk.get(i));
-                    }
+                FMatrixRMaj matrixTransposeTimesUk = new FMatrixRMaj(v.numRows(), 1);
 
-                    for (int i = 0; i < v.numRows(); i++)
-                    {
-                        v.set(i, k, vk.get(i));
-                    }
-
-                    FMatrixRMaj matrixTransposeTimesUk = new FMatrixRMaj(v.numRows(), 1);
-
-                    if (transpose)
-                    {
-                        mult(matrix.getMatrix(), uk.getMatrix(), matrixTransposeTimesUk);
-                    }
-                    else
-                    {
-                        multTransA(matrix.getMatrix(), uk.getMatrix(), matrixTransposeTimesUk);
-                    }
+                if (transpose)
+                {
+                    mult(matrix.getMatrix(), uk.getMatrix(), matrixTransposeTimesUk);
+                }
+                else
+                {
+                    multTransA(matrix.getMatrix(), uk.getMatrix(), matrixTransposeTimesUk);
+                }
 
 //                    // Update matrix A = M'M (using procedural framework for efficiency)
 //                    multAddTransB(-sv, matrixTransposeTimesUk, vk.getMatrix(), a.getMatrix());
 //                    multAddTransB(-sv, vk.getMatrix(), matrixTransposeTimesUk, a.getMatrix());
 //                    multAddTransB(ev, vk.getMatrix(), vk.getMatrix(), a.getMatrix());
 
-                    // Update original matrix M (using procedural framework for efficiency)
-                    if (transpose)
-                    {
-                        multAddTransB(-sv, vk.getMatrix(), uk.getMatrix(), matrix.getMatrix());
-                    }
-                    else
-                    {
-                        multAddTransB(-sv, uk.getMatrix(), vk.getMatrix(), matrix.getMatrix());
-                    }
+                // Update original matrix M (using procedural framework for efficiency)
+                if (transpose)
+                {
+                    multAddTransB(-sv, vk.getMatrix(), uk.getMatrix(), matrix.getMatrix());
+                }
+                else
+                {
+                    multAddTransB(-sv, uk.getMatrix(), vk.getMatrix(), matrix.getMatrix());
                 }
             }
         }

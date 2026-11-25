@@ -65,9 +65,6 @@ public class TextureBlockResourceFactory<ContextType extends Context<ContextType
     @Override
     public final void close()
     {
-        if (fullGeometryTextures != null)
-        {
-            fullGeometryTextures.close();
-        }
+        fullGeometryTextures.close();
     }
 }

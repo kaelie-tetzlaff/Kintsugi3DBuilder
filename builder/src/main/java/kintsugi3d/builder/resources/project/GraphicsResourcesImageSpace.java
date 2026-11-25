@@ -455,40 +455,33 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             cameraProjectionIndexBuffer = null;
         }
 
-        if (getGeometryResources() != null)
+        if ((viewSet != null) && (loadOptions != null) && (loadOptions.getDepthImageWidth() != 0) && (loadOptions.getDepthImageHeight() != 0))
         {
-            if ((viewSet != null) && (loadOptions != null) && (loadOptions.getDepthImageWidth() != 0) && (loadOptions.getDepthImageHeight() != 0))
+            if (loadOptions.areDepthImagesRequested())
             {
-                if (loadOptions.areDepthImagesRequested())
-                {
-                    // Build depth textures for each view
-                    depthTextures = context.getTextureFactory().build2DDepthTextureArray(
-                            loadOptions.getDepthImageWidth(), loadOptions.getDepthImageHeight(), viewSet.getGPUBufferSize())
-                        .createTexture();
-                    
-                    try
-                    (
-                        // Don't automatically generate any texture attachments for this framebuffer object
-                        FramebufferObject<ContextType> depthRenderingFBO =
-                            context.buildFramebufferObject(loadOptions.getDepthImageWidth(), loadOptions.getDepthImageHeight())
-                                .createFramebufferObject();
+                // Build depth textures for each view
+                depthTextures = context.getTextureFactory().build2DDepthTextureArray(
+                        loadOptions.getDepthImageWidth(), loadOptions.getDepthImageHeight(), viewSet.getGPUBufferSize())
+                    .createTexture();
 
-                        // Create a depth map generator -- includes the depth map program and drawable
-                        DepthMapGenerator<ContextType> depthMapGenerator =
-                            DepthMapGenerator.createFromGeometryResources(getGeometryResources())
-                    )
-                    {
-                        // Render each depth texture
-                        for (View view : views)
-                        {
-                            depthRenderingFBO.setDepthAttachment(depthTextures.getLayerAsFramebufferAttachment(view.getGPUViewIndex()));
-                            depthMapGenerator.generateDepthMap(view, depthRenderingFBO);
-                        }
-                    }
-                }
-                else
+                try
+                (
+                    // Don't automatically generate any texture attachments for this framebuffer object
+                    FramebufferObject<ContextType> depthRenderingFBO =
+                        context.buildFramebufferObject(loadOptions.getDepthImageWidth(), loadOptions.getDepthImageHeight())
+                            .createFramebufferObject();
+
+                    // Create a depth map generator -- includes the depth map program and drawable
+                    DepthMapGenerator<ContextType> depthMapGenerator =
+                        DepthMapGenerator.createFromGeometryResources(getGeometryResources())
+                )
                 {
-                    depthTextures = null;
+                    // Render each depth texture
+                    for (View view : views)
+                    {
+                        depthRenderingFBO.setDepthAttachment(depthTextures.getLayerAsFramebufferAttachment(view.getGPUViewIndex()));
+                        depthMapGenerator.generateDepthMap(view, depthRenderingFBO);
+                    }
                 }
             }
             else

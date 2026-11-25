@@ -65,7 +65,7 @@ public class CameraViewport
      * The full projection matrix that would fill the entire window
      * @return
      */
-    public final Matrix4 getFullProjection()
+    public final @NotNull Matrix4 getFullProjection()
     {
         return fullProjection;
     }
@@ -74,7 +74,7 @@ public class CameraViewport
      * The matrix which crops the full clip space into the viewport being rendered.
      * @return
      */
-    public final Matrix4 getViewportCrop()
+    public final @NotNull Matrix4 getViewportCrop()
     {
         return viewportCrop;
     }

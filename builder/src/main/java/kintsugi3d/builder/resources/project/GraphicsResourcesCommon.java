@@ -416,12 +416,12 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         return maxMinDistance;
     }
 
-    public ContextType getContext()
+    public @NotNull ContextType getContext()
     {
         return context;
     }
 
-    public ViewSet getViewSet()
+    public @Nullable ViewSet getViewSet()
     {
         return viewSet;
     }

@@ -256,7 +256,7 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
         // Report the event on the frontend.
         eventCollector.canvasSize(l -> l.canvasResized(this, size.width, size.height));
 
-        if (canvasPosition == null || position.x != canvasPosition.x || position.y != canvasPosition.y)
+        if (position.x != canvasPosition.x || position.y != canvasPosition.y)
         {
             // Also update position
             canvasPosition = position;

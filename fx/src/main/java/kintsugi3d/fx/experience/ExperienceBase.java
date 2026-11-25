@@ -25,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -219,8 +220,8 @@ public abstract class ExperienceBase implements Experience
      * Gets the state-related data that the experience has access to
      * @return The state object.
      */
-    protected final JavaFXState getState()
+    protected final @NotNull JavaFXState getState()
     {
-        return state;
+        return Objects.requireNonNull(state, "Experience has not been initialized.");
     }
 }

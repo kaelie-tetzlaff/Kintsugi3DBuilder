@@ -278,14 +278,11 @@ public class MetashapeImportController extends ProjectImportController
             chunkSelectionChoiceBox.setDisable(false);
 
             //set chunk to default chunk if it has one
-            Integer activeChunkID = metashapeDocument.getActiveChunkID();
-            if (activeChunkID != null)
+            int activeChunkID = metashapeDocument.getActiveChunkID();
+            String chunkName = metashapeDocument.getChunkNameFromID(activeChunkID);
+            if (chunkSelectionChoiceBox.getItems().contains(chunkName))
             {
-                String chunkName = metashapeDocument.getChunkNameFromID(activeChunkID);
-                if (chunkSelectionChoiceBox.getItems().contains(chunkName))
-                {
-                    chunkSelectionChoiceBox.setValue(chunkName);
-                }
+                chunkSelectionChoiceBox.setValue(chunkName);
             }
         }
     }

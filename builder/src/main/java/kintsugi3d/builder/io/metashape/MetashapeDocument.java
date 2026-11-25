@@ -141,7 +141,7 @@ public class MetashapeDocument
         }
     }
 
-    public final @NotNull Integer getActiveChunkID()
+    public final int getActiveChunkID()
     {
         return activeChunkID;
     }
@@ -169,16 +169,10 @@ public class MetashapeDocument
 
     public final void selectChunk(String selectedChunkLabel)
     {
-        Optional<MetashapeChunk> selectedChunk = chunks.stream()
+        chunks.stream()
             .filter(chunk -> chunk.getLabel().equals(selectedChunkLabel))
-            .findFirst();
-
-        if (selectedChunk.isEmpty())
-        {
-            return;
-        }
-
-        activeChunkID = selectedChunk.get().getID();
+            .findFirst()
+            .ifPresent(metashapeChunk -> activeChunkID = metashapeChunk.getID());
     }
 
     public final @Nullable MetashapeChunk getSelectedChunk()

@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Objects;
 
 // TODO Use more information from the material.  Currently just pulling texture names.
 // TODO use glTF instead of / in addition to OBJ material?
@@ -46,7 +47,7 @@ public final class ImportedMaterialResources<ContextType extends Context<Context
     @Override
     public @NotNull ContextType getContext()
     {
-        return context;
+        return Objects.requireNonNull(context, "Imported material resources are null.");
     }
 
     public @NotNull Map<StandardTexture, Texture2D<ContextType>> getTextures()

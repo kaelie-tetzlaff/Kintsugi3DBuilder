@@ -191,7 +191,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     {
         return Objects.requireNonNull(resources, "Renderable has not been initialized.");
     }
-    @Override
+
     public final @Nullable GraphicsResourcesImageSpace<ContextType> getResourcesOrNull()
     {
         return resources;

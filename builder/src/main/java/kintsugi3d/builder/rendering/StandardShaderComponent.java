@@ -178,44 +178,41 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
             defineMap.put("VIEW_COUNT", Optional.of(1));
         }
 
-        if (sceneModel.getSettingsModel() != null)
+        defineMap.put("PHYSICALLY_BASED_MASKING_SHADOWING",
+            Optional.of(sceneModel.getSettingsModel().getBoolean("pbrGeometricAttenuationEnabled")));
+        defineMap.put("FRESNEL_EFFECT_ENABLED", Optional.of(sceneModel.getSettingsModel().getBoolean("fresnelEnabled")));
+        defineMap.put("SHADOWS_ENABLED", Optional.of(sceneModel.getSettingsModel().getBoolean("shadowsEnabled")));
+
+        defineMap.put("BUEHLER_ALGORITHM", Optional.of(sceneModel.getSettingsModel().getBoolean("buehlerAlgorithm")));
+        defineMap.put("SORTING_SAMPLE_COUNT", Optional.of(sceneModel.getSettingsModel().getInt("buehlerViewCount")));
+        defineMap.put("RELIGHTING_ENABLED", Optional.of(sceneModel.getSettingsModel().getBoolean("relightingEnabled")
+            && lightingResources != null && sceneModel.getLightingModel() != null));
+
+        if (sceneModel.getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM
+            && !sceneModel.getSettingsModel().getBoolean("relightingEnabled") && !lightCalibrationMode)
         {
-            defineMap.put("PHYSICALLY_BASED_MASKING_SHADOWING",
-                Optional.of(sceneModel.getSettingsModel().getBoolean("pbrGeometricAttenuationEnabled")));
-            defineMap.put("FRESNEL_EFFECT_ENABLED", Optional.of(sceneModel.getSettingsModel().getBoolean("fresnelEnabled")));
-            defineMap.put("SHADOWS_ENABLED", Optional.of(sceneModel.getSettingsModel().getBoolean("shadowsEnabled")));
+            // Disable visibility / shadow test if weight mode is "uniform" and relighting is disabled.
+            defineMap.put("VISIBILITY_TEST_ENABLED", Optional.of(false));
+            defineMap.put("SHADOW_TEST_ENABLED", Optional.of(false));
+        }
 
-            defineMap.put("BUEHLER_ALGORITHM", Optional.of(sceneModel.getSettingsModel().getBoolean("buehlerAlgorithm")));
-            defineMap.put("SORTING_SAMPLE_COUNT", Optional.of(sceneModel.getSettingsModel().getInt("buehlerViewCount")));
-            defineMap.put("RELIGHTING_ENABLED", Optional.of(sceneModel.getSettingsModel().getBoolean("relightingEnabled")
-                && lightingResources != null && sceneModel.getLightingModel() != null));
+        if (lightingResources == null)
+        {
+            // Disable shadow test if lighting resources are not available.
+            defineMap.put("SHADOW_TEST_ENABLED", Optional.of(false));
+        }
 
-            if (sceneModel.getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM
-                && !sceneModel.getSettingsModel().getBoolean("relightingEnabled") && !lightCalibrationMode)
-            {
-                // Disable visibility / shadow test if weight mode is "uniform" and relighting is disabled.
-                defineMap.put("VISIBILITY_TEST_ENABLED", Optional.of(false));
-                defineMap.put("SHADOW_TEST_ENABLED", Optional.of(false));
-            }
+        defineMap.put("PRECOMPUTED_VIEW_WEIGHTS_ENABLED",
+            Optional.of(!sceneModel.getSettingsModel().getBoolean("relightingEnabled")
+                    && !lightCalibrationMode
+                && sceneModel.getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM));
 
-            if (lightingResources == null)
-            {
-                // Disable shadow test if lighting resources are not available.
-                defineMap.put("SHADOW_TEST_ENABLED", Optional.of(false));
-            }
-
-            defineMap.put("PRECOMPUTED_VIEW_WEIGHTS_ENABLED",
-                Optional.of(!sceneModel.getSettingsModel().getBoolean("relightingEnabled")
-                        && !lightCalibrationMode
-                    && sceneModel.getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM));
-
-            if (sceneModel.getLightingModel() != null && sceneModel.getSettingsModel().getBoolean("relightingEnabled")
-                && lightingResources != null)
-            {
-                defineMap.put("VIRTUAL_LIGHT_COUNT", Optional.of(sceneModel.getLightingModel().getLightCount()));
-                defineMap.put("ENVIRONMENT_ILLUMINATION_ENABLED", Optional.of(!Objects.equals(sceneModel.getLightingModel().getAmbientLightColor(), Vector3.ZERO)));
-                defineMap.put("ENVIRONMENT_TEXTURE_ENABLED", Optional.of(lightingResources.getEnvironmentMap() != null && sceneModel.getLightingModel().isEnvironmentMappingEnabled()));
-            }
+        if (sceneModel.getLightingModel() != null && sceneModel.getSettingsModel().getBoolean("relightingEnabled")
+            && lightingResources != null)
+        {
+            defineMap.put("VIRTUAL_LIGHT_COUNT", Optional.of(sceneModel.getLightingModel().getLightCount()));
+            defineMap.put("ENVIRONMENT_ILLUMINATION_ENABLED", Optional.of(!Objects.equals(sceneModel.getLightingModel().getAmbientLightColor(), Vector3.ZERO)));
+            defineMap.put("ENVIRONMENT_TEXTURE_ENABLED", Optional.of(lightingResources.getEnvironmentMap() != null && sceneModel.getLightingModel().isEnvironmentMappingEnabled()));
         }
 
         if (fragmentShaderDefinesFactory != null)

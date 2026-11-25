@@ -64,11 +64,6 @@ public class View
          int gpuViewIndex, @NotNull File imageFile, File maskFile, ReadonlyViewRMSE viewErrorMetric,
          ReadonlyViewSet containingViewSet)
     {
-        if (imageFile == null)
-        {
-            throw new IllegalArgumentException("Image file cannot be null.");
-        }
-
         this.cameraPose = cameraPose;
         this.cameraPoseInverse = cameraPoseInverse;
         this.cameraProjectionIndex = cameraProjectionIndex;

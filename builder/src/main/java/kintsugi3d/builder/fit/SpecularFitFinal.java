@@ -194,7 +194,7 @@ public final class SpecularFitFinal<ContextType extends Context<ContextType>>
     }
 
     @Override
-    protected MutableBasisResources<ContextType> getMutableBasisResources()
+    protected @Nullable MutableBasisResources<ContextType> getMutableBasisResources()
     {
         return mutableBasisResources;
     }

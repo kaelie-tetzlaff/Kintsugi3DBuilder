@@ -16,11 +16,12 @@
 package kintsugi3d.fx.controllers.modals.createnewproject;
 
 import kintsugi3d.fx.controllers.modals.createnewproject.inputsources.ManualInputSource;
+import org.jetbrains.annotations.NotNull;
 
 public final class HotSwapController extends ManualImportControllerBase
 {
     @Override
-    public ManualInputSource getData()
+    public @NotNull ManualInputSource getData()
     {
         return super.getData().setHotSwap(true);
     }

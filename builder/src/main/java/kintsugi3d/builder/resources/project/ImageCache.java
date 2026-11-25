@@ -128,7 +128,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
         return new File(cacheDirectory, String.format("%d_%d", i, j));
     }
 
-    public final ContextType getContext()
+    public final @NotNull ContextType getContext()
     {
         return context;
     }
@@ -143,7 +143,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
         return resources.getGeometry();
     }
 
-    public final ReadonlyImageCacheSettings getSettings()
+    public final @NotNull ReadonlyImageCacheSettings getSettings()
     {
         return settings;
     }
