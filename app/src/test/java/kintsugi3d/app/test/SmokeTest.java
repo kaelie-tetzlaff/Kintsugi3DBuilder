@@ -944,11 +944,12 @@ public class SmokeTest
 
             if (hadCustomEncoding)
             {
-                viewSet.setLuminanceEncoding(
-                    origLinear,
-                    origEncoded);
+                assertNotNull(origLinear);
+                assertNotNull(origEncoded);
+                viewSet.setLuminanceEncoding(origLinear, origEncoded);
             }
-            else {
+            else
+            {
                 viewSet.clearLuminanceEncoding();
             }
         }
