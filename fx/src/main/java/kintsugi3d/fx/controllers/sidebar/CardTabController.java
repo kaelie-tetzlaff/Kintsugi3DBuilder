@@ -496,7 +496,7 @@ public class CardTabController
             }
             else
             {
-                System.err.println("The folder does not exist.");
+                LOG.error("The folder does not exist.");
             }
         }
     }

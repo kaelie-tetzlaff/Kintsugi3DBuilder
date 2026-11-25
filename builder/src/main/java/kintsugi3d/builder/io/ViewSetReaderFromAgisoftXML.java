@@ -493,14 +493,14 @@ public final class ViewSetReaderFromAgisoftXML implements ViewSetReader
                         if (("transform".equals(name) && components.length < 16) ||
                             ("rotation".equals(name) && components.length < 9))
                         {
-                            System.err.println("Error: Not enough components in the transform/rotation matrix");
+                            LOG.error("Error: Not enough components in the transform/rotation matrix");
                         }
                         else
                         {
                             int expectedSize = "rotation".equals(name) ? 9 : 16;
                             if (components.length > expectedSize)
                             {
-                                System.err.println("Warning: Too many components in the transform/rotation matrix, ignoring extras.");
+                                LOG.error("Warning: Too many components in the transform/rotation matrix, ignoring extras.");
                             }
 
                             float[] m = new float[expectedSize];

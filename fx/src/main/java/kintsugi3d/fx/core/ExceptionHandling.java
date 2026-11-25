@@ -62,7 +62,7 @@ public final class ExceptionHandling
         }
         catch (IllegalStateException ex)
         {
-            System.err.println("Error: " + ex.getMessage());
+            LOG.error("Error: {}", ex.getMessage());
         }
     }
 }

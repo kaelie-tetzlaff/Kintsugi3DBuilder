@@ -158,6 +158,8 @@ public class SmokeTest
         // Set system properties, etc. that need to be set before anything touches LWJGL
         // (which could happen indirectly i.e. by loading Kintsugi's matrix math classes)
         Configuration.DEBUG.set(true);
+
+        //noinspection UseOfSystemOutOrSystemErr
         Configuration.DEBUG_STREAM.set(System.out);
 
         // Attach log listener

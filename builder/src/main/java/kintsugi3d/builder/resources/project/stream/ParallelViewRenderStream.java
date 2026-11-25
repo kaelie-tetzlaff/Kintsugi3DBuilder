@@ -51,8 +51,9 @@ public class ParallelViewRenderStream<ContextType extends Context<ContextType>> 
 
     private final @NotNull Deque<ColorNativeBufferList[]> unusedColorBuffers;
 
-    ParallelViewRenderStream(@NotNull Collection<View> views, DrawableResource<ContextType> drawable, @NotNull ReadableFramebuffer<ContextType> framebuffer, int attachmentCount,
-                             int maxRunningThreads)
+    ParallelViewRenderStream(
+        @NotNull Collection<View> views, DrawableResource<ContextType> drawable,
+        @NotNull ReadableFramebuffer<ContextType> framebuffer, int attachmentCount, int maxRunningThreads)
     {
         this.views = Collections.unmodifiableCollection(views);
         this.drawable = drawable;
@@ -66,7 +67,9 @@ public class ParallelViewRenderStream<ContextType extends Context<ContextType>> 
             .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
-    ParallelViewRenderStream(@NotNull Collection<View> views, DrawableResource<ContextType> drawable, @NotNull ReadableFramebuffer<ContextType> framebuffer, int attachmentCount)
+    ParallelViewRenderStream(
+        @NotNull Collection<View> views, DrawableResource<ContextType> drawable,
+        @NotNull ReadableFramebuffer<ContextType> framebuffer, int attachmentCount)
     {
         this(views, drawable, framebuffer, attachmentCount, DEFAULT_MAX_RUNNING_THREADS);
     }

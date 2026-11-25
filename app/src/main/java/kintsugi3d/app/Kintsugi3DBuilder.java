@@ -67,6 +67,8 @@ public final class Kintsugi3DBuilder
         }
 
         Configuration.DEBUG.set(true);
+
+        //noinspection UseOfSystemOutOrSystemErr
         Configuration.DEBUG_STREAM.set(System.out);
 
         JavaFXApplication.setArgs(args);
@@ -119,6 +121,7 @@ public final class Kintsugi3DBuilder
 
         private TeeErrorStream(OutputStream redirect)
         {
+            //noinspection UseOfSystemOutOrSystemErr
             original = System.err;
             this.redirect = redirect;
         }

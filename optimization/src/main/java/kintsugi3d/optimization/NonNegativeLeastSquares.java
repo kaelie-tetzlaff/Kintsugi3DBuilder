@@ -303,7 +303,7 @@ public final class NonNegativeLeastSquares
         if (sizeP < p.length && maxW > epsilon)
         {
             // Loop timed out.
-            System.err.println("Not technically a singular matrix, but NNLS failed to converge.");
+            LOG.error("Not technically a singular matrix, but NNLS failed to converge.");
         }
 
         return x;

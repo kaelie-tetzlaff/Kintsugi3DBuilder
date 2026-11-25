@@ -180,7 +180,7 @@ public class ImageDetailsController
             else
             {
                 // System error message if the image is not found
-                System.err.println("Error: File not found at " + imageFile.getAbsolutePath());
+                LOG.error("Error: File not found at {}", imageFile.getAbsolutePath());
             }
         }
         else
