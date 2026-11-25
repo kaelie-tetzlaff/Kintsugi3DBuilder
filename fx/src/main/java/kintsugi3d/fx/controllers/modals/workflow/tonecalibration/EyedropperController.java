@@ -46,6 +46,7 @@ import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.io.IO;
 import kintsugi3d.builder.io.RecentProjects;
+import kintsugi3d.builder.rendering.ReadonlyImageBasedRenderable;
 import kintsugi3d.builder.rendering.Rendering;
 import kintsugi3d.fx.controllers.modals.LiveProjectSettingsManager;
 import kintsugi3d.fx.controllers.paged.NonDataPageControllerBase;
@@ -319,8 +320,16 @@ public class EyedropperController extends NonDataPageControllerBase
         Rendering.runLater(() ->
         {
             IO io = Global.io();
-            Vector3 lightIntensity = io.getMainRenderable().getResources().determineGlobalLightIntensity();
-            io.getLoadedViewSet().setAllLightIntensities(lightIntensity);
+            ReadonlyImageBasedRenderable<?> mainRenderable = io.getMainRenderable();
+            if (mainRenderable != null)
+            {
+                Vector3 lightIntensity = mainRenderable.getResources().determineGlobalLightIntensity();
+                io.getLoadedViewSet().setAllLightIntensities(lightIntensity);
+            }
+            else
+            {
+                LOG.error("No project loaded: light intensity calibration skipped.");
+            }
         });
     }
 

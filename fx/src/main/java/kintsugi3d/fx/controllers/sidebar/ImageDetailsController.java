@@ -283,7 +283,7 @@ public class ImageDetailsController
         refreshViewport();
     }
 
-    private Image validateImage()
+    private @NotNull Image validateImage()
     {
         return Objects.requireNonNull(currentImage, "No image is currently selected.");
     }

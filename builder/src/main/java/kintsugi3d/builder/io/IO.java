@@ -56,7 +56,15 @@ public interface IO
 
     default boolean isProjectProcessed()
     {
-        return hasLoadedRenderable() && getMainRenderable().getResources().hasProcessedWeightMaps();
+        if (hasLoadedRenderable())
+        {
+            ReadonlyImageBasedRenderable<?> mainRenderable = getMainRenderable();
+            return mainRenderable != null && mainRenderable.getResources().hasProcessedWeightMaps();
+        }
+        else
+        {
+            return false;
+        }
     }
 
     @Nullable ViewSet getLoadedViewSetOrNull();
@@ -67,7 +75,7 @@ public interface IO
     }
 
     @Nullable ReadonlyVertexGeometry getLoadedGeometry();
-    ReadonlyImageBasedRenderable<?> getMainRenderable();
+    @Nullable ReadonlyImageBasedRenderable<?> getMainRenderable();
     ReadonlyImageBasedRenderable<?> getRenderableForShader(ShaderInfo shader);
     void loadFromLooseFiles(File newProjectFile, String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions);
     void hotSwapLooseFiles(String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions);

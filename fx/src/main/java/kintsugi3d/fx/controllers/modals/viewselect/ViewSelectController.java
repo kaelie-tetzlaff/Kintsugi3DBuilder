@@ -80,7 +80,7 @@ public abstract class ViewSelectController extends DataReceiverPageControllerBas
         return primaryImgView.getRotate();
     }
 
-    private ViewSelectable validateData()
+    private @NotNull ViewSelectable validateData()
     {
         return Objects.requireNonNull(data, "View selection data missing.");
     }

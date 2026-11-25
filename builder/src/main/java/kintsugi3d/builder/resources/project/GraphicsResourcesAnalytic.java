@@ -32,7 +32,7 @@ public class GraphicsResourcesAnalytic<ContextType extends Context<ContextType>>
     private final Function<ProgramBuilder<ContextType>, ProgramBuilder<ContextType>> definesInjection;
 
     public GraphicsResourcesAnalytic(
-        @NotNull ContextType context, ViewSet viewSet, VertexGeometry geometry,
+        @NotNull ContextType context, @NotNull ViewSet viewSet, @NotNull VertexGeometry geometry,
         Function<ProgramBuilder<ContextType>, ProgramBuilder<ContextType>> definesInjection)
     {
         super(new GraphicsResourcesCommon<>(context, viewSet, geometry, new TextureLoadOptions()), true);
@@ -40,7 +40,7 @@ public class GraphicsResourcesAnalytic<ContextType extends Context<ContextType>>
     }
 
 
-    public GraphicsResourcesAnalytic(@NotNull ContextType context, ViewSet viewSet, VertexGeometry geometry)
+    public GraphicsResourcesAnalytic(@NotNull ContextType context, @NotNull ViewSet viewSet, @NotNull VertexGeometry geometry)
     {
         this(context, viewSet, geometry, Function.identity());
     }
