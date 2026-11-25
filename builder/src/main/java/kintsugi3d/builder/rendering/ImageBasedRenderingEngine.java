@@ -37,6 +37,7 @@ import kintsugi3d.builder.resources.DynamicResourceLoader;
 import kintsugi3d.builder.resources.DynamicResourceManager;
 import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace;
 import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace.Builder;
+import kintsugi3d.builder.resources.project.MeshImportException;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.builder.state.cards.CardsModel;
 import kintsugi3d.builder.state.cards.TabsHelper;
@@ -230,6 +231,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
                 context.flush();
             }
+
             assert resources != null;
 
             simpleTexDrawable = context.createDrawable(simpleTexProgram);
@@ -313,7 +315,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
             }
             throw new InitializationException(e);
         }
-        catch (RuntimeException|IOException e)
+        catch (RuntimeException|IOException|MeshImportException e)
         {
             LOG.error("Error occurred initializing ProjectRenderingEngine:", e);
             close();
