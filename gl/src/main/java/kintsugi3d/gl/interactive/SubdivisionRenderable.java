@@ -37,7 +37,8 @@ public interface SubdivisionRenderable<ContextType extends Context<ContextType>>
      * @param subdivHeight       The height of the rectangle of pixels to draw at once.  This can be set to a fraction of the
      *                           framebuffer height to reduce the likelihood of graphics card timeouts that would crash the application.
      */
-    void draw(Framebuffer<ContextType> framebuffer, @Nullable Matrix4 modelViewOverride, @Nullable @Nullable Matrix4 projectionOverride, int subdivWidth, int subdivHeight);
+    void draw(Framebuffer<ContextType> framebuffer, @Nullable Matrix4 modelViewOverride, @Nullable Matrix4 projectionOverride,
+              int subdivWidth, int subdivHeight);
 
     @Override
     default void draw(@NotNull Framebuffer<ContextType> framebuffer, Matrix4 modelViewOverride, Matrix4 projectionOverride)

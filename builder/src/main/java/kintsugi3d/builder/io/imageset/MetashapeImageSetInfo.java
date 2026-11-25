@@ -139,14 +139,14 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
     }
 
     @Override
-    public @NotNull Optional<String> findFullResImagePath(String imageName)
+    public @Nullable String findFullResImagePath(String imageName)
     {
         //find the camera (in chunk.xml) which holds the desired image
         //may have slightly different label from imageName --> "Processed\img123.jpg" vs. "img123.jpg"
         Element selectedItemCam = findTargetCamera(imageName);
         if (selectedItemCam == null)
         {
-            return Optional.empty();
+            return null;
         }
 
         //hopefully the camera is in the camera paths map and we don't really have to do much work
@@ -159,7 +159,7 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
                 String path = cameraIdToFullRes.get(id);
                 if (path != null)
                 {
-                    return Optional.of(path);
+                    return path;
                 }
             }
             catch (NumberFormatException nfe)
@@ -179,7 +179,7 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
         finalImgFile = ImageFinder.tryFindImageFile(imageFile);
         if (finalImgFile != null)
         {
-            return Optional.of(finalImgFile.getPath());
+            return finalImgFile.getPath();
         }
 
         //return file by searching canonical path
@@ -188,7 +188,7 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
             finalImgFile = ImageFinder.tryFindImageFile(new File(imageFile.getCanonicalPath()));
             if (finalImgFile != null)
             {
-                return Optional.of(finalImgFile.getPath());
+                return finalImgFile.getPath();
             }
         }
         catch (IOException e)
@@ -202,11 +202,11 @@ public final class MetashapeImageSetInfo implements ImageSetInfo
             .replace("../", "")));
         if (finalImgFile != null)
         {
-            return Optional.of(finalImgFile.getPath());
+            return finalImgFile.getPath();
         }
 
         //give up
-        return Optional.empty();
+        return null;
     }
 
     private static @NotNull List<ImageIdentifier> getViews(@NotNull Stream<Element> cameras)

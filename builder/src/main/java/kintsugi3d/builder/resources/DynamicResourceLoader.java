@@ -29,7 +29,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 public class DynamicResourceLoader<ContextType extends Context<ContextType>> implements DynamicResourceManager
@@ -47,7 +46,7 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
     private volatile @Nullable File desiredShaderFile;
 
     /** Read by the render thread in {@link #update()}; set by the JavaFX thread in {@link #requestFragmentShader(File)}. */
-    private volatile Supplier<Map<String, Optional<Object>>> shaderDefinesFactory;
+    private volatile Supplier<Map<String, @Nullable Object>> shaderDefinesFactory;
 
     public DynamicResourceLoader(ProgressMonitor progressMonitor, ContextType context,
         RenderingSubject<ContextType> subject, LightingResources<ContextType> lightingResources)
@@ -84,7 +83,7 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
     }
 
     @Override
-    public final void requestFragmentShader(File shaderFile, Supplier<Map<String, Optional<Object>>> extraDefinesFactory)
+    public final void requestFragmentShader(File shaderFile, Supplier<Map<String, @Nullable Object>> extraDefinesFactory)
     {
         desiredShaderFile = shaderFile;
         shaderDefinesFactory = extraDefinesFactory;

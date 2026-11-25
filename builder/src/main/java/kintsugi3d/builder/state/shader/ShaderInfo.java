@@ -15,9 +15,10 @@
 
 package kintsugi3d.builder.state.shader;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.util.Map;
-import java.util.Optional;
 
 public interface ShaderInfo
 {
@@ -29,5 +30,5 @@ public interface ShaderInfo
 
     File getFile();
 
-    Map<String, Optional<Object>> getDefines();
+    Map<String, @Nullable Object> getDefines();
 }

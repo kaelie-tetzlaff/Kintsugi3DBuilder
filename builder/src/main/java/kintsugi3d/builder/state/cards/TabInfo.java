@@ -23,7 +23,7 @@ public class TabInfo
     private final ProjectDataCardFactory<?> factory;
     private final String path;
 
-    public TabInfo(String label, ProjectDataCardFactory<?> factory, @Nullable @Nullable String path)
+    public TabInfo(String label, ProjectDataCardFactory<?> factory, @Nullable String path)
     {
         this.label = label;
         this.factory = factory;

@@ -90,8 +90,8 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     private final CompressionFormat compressionFormat;
     private final TextureType textureType;
 
-    private OpenGLTexture(OpenGLContext context, int textureTarget, @Nullable @Nullable ColorFormat colorFormat,
-                          @Nullable @Nullable CompressionFormat compressionFormat, TextureType textureType, int precision, TextureParameters parameters)
+    private OpenGLTexture(OpenGLContext context, int textureTarget, @Nullable ColorFormat colorFormat,
+                          @Nullable CompressionFormat compressionFormat, TextureType textureType, int precision, TextureParameters parameters)
     {
         this.context = context;
         this.textureTarget = textureTarget;

@@ -17,9 +17,9 @@ package kintsugi3d.gl.core;
 
 import kintsugi3d.gl.vecmath.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * An interface for a program that can be used for rendering.
@@ -46,7 +46,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param key The name of the #define in the shader.
      * @return The value that should be assigned to that name in the shader, if it has been specified.
      */
-    Optional<Object> getDefine(@NotNull String key);
+    @Nullable Object getDefine(@NotNull String key);
 
     /**
      * Gets all defines for this program.

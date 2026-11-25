@@ -25,6 +25,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,11 +46,11 @@ public final class Kintsugi3DViewerLauncher
      * Searches first in the PATH env variable, then the registry (Windows only), then by relative path
      * @return File to the viewer executable, if found
      */
-    private static @NotNull Optional<File> getViewerExecutableLocation()
+    private static @Nullable File getViewerExecutableLocation()
     {
-        Optional<File> executable = getFromPath();
+        File executable = getFromPath();
 
-        if (executable.isEmpty())
+        if (executable == null)
         {
             try
             {
@@ -59,18 +61,18 @@ public final class Kintsugi3DViewerLauncher
             }
         }
 
-        if (executable.isEmpty())
+        if (executable == null)
         {
             executable = getExecFromDirectory(new File("."));
         }
 
-        if (executable.isEmpty())
+        if (executable == null)
         {
             // Try Applications directory on MacOS.
             executable = getExecFromDirectory(new File("/Applications"));
         }
 
-        if (executable.isEmpty())
+        if (executable == null)
         {
             // Try the same folder as Builder on MacOS.
             executable = getExecFromDirectory(new File("../../.."));
@@ -79,38 +81,35 @@ public final class Kintsugi3DViewerLauncher
         return executable;
     }
 
-    private static @NotNull Optional<File> getFromPath()
+    private static @Nullable File getFromPath()
     {
         @SuppressWarnings("CallToSystemGetenv") String path = System.getenv("PATH");
 
         if (path != null)
         {
-            for (String dirStr : path.split(Pattern.quote(File.pathSeparator)))
-            {
-                File dir = new File(dirStr);
-                Optional<File> exec = getExecFromDirectory(dir);
-                if (exec.isPresent())
-                {
-                    return exec;
-                }
-            }
+            return Arrays.stream(path.split(Pattern.quote(File.pathSeparator)))
+                .map(File::new)
+                .map(Kintsugi3DViewerLauncher::getExecFromDirectory)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
         }
 
-        return Optional.empty();
+        return null;
     }
 
-    private static @NotNull Optional<File> getFromRegistry() throws IOException, InterruptedException
+    private static @Nullable File getFromRegistry() throws IOException, InterruptedException
     {
         if (OperatingSystem.getCurrentOS() != OperatingSystem.WINDOWS)
         {
-            return Optional.empty();
+            return null;
         }
 
         ProcessBuilder builder = new ProcessBuilder("reg", "query",
                 "HKEY_LOCAL_MACHINE\\SOFTWARE\\Kintsugi3DViewer");
         Process reg = builder.start();
 
-        Optional<String> viewerLocation;
+        Optional<@NotNull String> viewerLocation;
         try (BufferedReader output =
                  new BufferedReader(new InputStreamReader(reg.getInputStream(), StandardCharsets.UTF_8)))
         {
@@ -133,19 +132,19 @@ public final class Kintsugi3DViewerLauncher
             }
         }
 
-        return Optional.empty();
+        return null;
     }
 
-    private static @NotNull Optional<File> getExecFromDirectory(@NotNull File dir)
+    private static @Nullable File getExecFromDirectory(@NotNull File dir)
     {
         // Match "Kintsugi3DViewer", "Kintsugi3DViewer.exe" and "Kintsugi3DViewer.app"
         File[] foundFiles = dir.listFiles((dir1, name) -> KINTSUGI_3D_VIEWER.matcher(name).matches());
         if (foundFiles != null && foundFiles.length > 0)
         {
-            return Optional.of(foundFiles[0]);
+            return foundFiles[0];
         }
 
-        return Optional.empty();
+        return null;
     }
 
     /**
@@ -167,12 +166,11 @@ public final class Kintsugi3DViewerLauncher
      */
     public static void launchViewer(@Nullable File modelFile) throws IOException
     {
-        Optional<File> execOpt = getViewerExecutableLocation();
-        if (execOpt.isEmpty())
+        File executable = getViewerExecutableLocation();
+        if (executable == null)
         {
             throw new IllegalStateException("Kintsugi 3D Viewer is not installed, or the executable could not be found");
         }
-        File executable = execOpt.get();
 
         String parameter = "";
         if (modelFile != null)

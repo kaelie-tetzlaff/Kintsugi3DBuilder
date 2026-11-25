@@ -95,7 +95,7 @@ public class MetashapeDocument
 
     public final @Nullable String getChunkNameFromID(int id)
     {
-        Optional<MetashapeChunk> chunk = chunks.stream()
+        Optional<@NotNull MetashapeChunk> chunk = chunks.stream()
             .filter(c -> c.getID() == id)
             .findFirst();
 

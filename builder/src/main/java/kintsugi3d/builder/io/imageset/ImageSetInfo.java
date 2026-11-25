@@ -16,15 +16,15 @@
 package kintsugi3d.builder.io.imageset;
 
 import javafx.scene.image.Image;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public interface ImageSetInfo
 {
     String getName();
     List<ImageIdentifier> getViews();
     Map<Integer, Image> getThumbnailMap();
-    Optional<String> findFullResImagePath(String imageName);
+    @Nullable String findFullResImagePath(String imageName);
 }

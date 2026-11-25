@@ -55,7 +55,7 @@ public class ToneCalibrationViewSelectController extends ViewSelectController
         {
             Dialog<ButtonType> alert = StaticUtilities.createConfirmDialog("This will clear any previous tone calibration values!");
             alert.setHeaderText("Change tone calibration view?");
-            Optional<ButtonType> confirmResult = alert.showAndWait();
+            Optional<@NotNull ButtonType> confirmResult = alert.showAndWait();
             if (confirmResult.isEmpty() || !confirmResult.get().equals(ButtonType.OK))
             {
                 // Stay on this page

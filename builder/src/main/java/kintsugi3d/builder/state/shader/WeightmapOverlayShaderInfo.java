@@ -17,12 +17,12 @@ package kintsugi3d.builder.state.shader;
 
 import kintsugi3d.builder.fit.decomposition.BasisMaterialInfo;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 public class WeightmapOverlayShaderInfo implements ShaderInfo
 {
@@ -70,11 +70,11 @@ public class WeightmapOverlayShaderInfo implements ShaderInfo
     }
 
     @Override
-    public final @NotNull Map<String, Optional<Object>> getDefines()
+    public final @NotNull Map<String, @Nullable Object> getDefines()
     {
-        Map<String, Optional<Object>> defines = new HashMap<>(baseShader.getDefines());
-        defines.put("OVERLAY_MODE", Optional.of("OVERLAY_MODE_WEIGHTMAP"));
-        defines.put("OVERLAY_WEIGHTMAP_INDEX", Optional.of(weightmapMaterial.getGPUIndex()));
+        Map<String, @Nullable Object> defines = new HashMap<>(baseShader.getDefines());
+        defines.put("OVERLAY_MODE", "OVERLAY_MODE_WEIGHTMAP");
+        defines.put("OVERLAY_WEIGHTMAP_INDEX", weightmapMaterial.getGPUIndex());
         return defines;
     }
 

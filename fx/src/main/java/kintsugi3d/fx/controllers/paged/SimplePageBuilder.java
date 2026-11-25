@@ -83,7 +83,7 @@ public abstract class SimplePageBuilder<InType, OutType, FinishType> extends Pag
     }
 
     public final <PageType extends SelectionPage<OutType>, ControllerType extends PageController<OutType>>
-    @NotNull SelectionPageBuilder<? super OutType, FinishType> thenSelect(String prompt, @NotNull Function<FXMLLoader, PageType> pageConstructor, @Nullable @Nullable Supplier<ControllerType> controllerConstructorOverride)
+    @NotNull SelectionPageBuilder<? super OutType, FinishType> thenSelect(String prompt, @NotNull Function<FXMLLoader, PageType> pageConstructor, @Nullable Supplier<ControllerType> controllerConstructorOverride)
     {
         PageType nextPage = getFrameController().createPage(SELECTION_PAGE_FXML, pageConstructor, controllerConstructorOverride);
         nextPage.setPrompt(prompt);

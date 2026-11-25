@@ -349,7 +349,7 @@ public abstract class SpecularFitProcess
         @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources,
         @NotNull TextureResolution resolution,
         @NotNull OptimizationMethod<ContextType> optimizationMethod,
-        @Nullable @Nullable ProgressMonitor monitor) throws IOException, UserCancellationException
+        @Nullable ProgressMonitor monitor) throws IOException, UserCancellationException
     {
         SpecularFitResourcesWrapper<ContextType> resourcesWrapper = getResourcesWrapper();
 

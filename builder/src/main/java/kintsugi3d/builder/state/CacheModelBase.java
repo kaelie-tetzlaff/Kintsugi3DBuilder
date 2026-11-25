@@ -673,7 +673,7 @@ public abstract class CacheModelBase implements CacheModel
      * @param cacheSizeChangeCallback Runs only if the cache size changed.
      * @param onCompleteCallback      Always runs regardless of whether the cache size changed.  Also runs on the JavaFX thread.
      */
-    protected final void requestCacheSizeRefresh(@Nullable @Nullable DoubleConsumer cacheSizeChangeCallback, @Nullable Runnable onCompleteCallback)
+    protected final void requestCacheSizeRefresh(@Nullable DoubleConsumer cacheSizeChangeCallback, @Nullable Runnable onCompleteCallback)
     {
         synchronized (cacheSizeCalcThreadLock)
         {

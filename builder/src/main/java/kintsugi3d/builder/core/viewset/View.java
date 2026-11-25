@@ -41,7 +41,7 @@ public class View
     private final @NotNull File imageFile;
     private final ReadonlyViewRMSE viewErrorMetric;
 
-    private @Nullable @Nullable File maskFile;
+    private @Nullable File maskFile;
     private int gpuViewIndex;
     private boolean isEnabled;
 
@@ -61,7 +61,7 @@ public class View
      * @param containingViewSet
      */
     View(Matrix4 cameraPose, Matrix4 cameraPoseInverse, int cameraProjectionIndex, int lightIndex,
-         int gpuViewIndex, @NotNull File imageFile, @Nullable @Nullable File maskFile, ReadonlyViewRMSE viewErrorMetric,
+         int gpuViewIndex, @NotNull File imageFile, @Nullable File maskFile, ReadonlyViewRMSE viewErrorMetric,
          ReadonlyViewSet containingViewSet)
     {
         this.cameraPose = cameraPose;

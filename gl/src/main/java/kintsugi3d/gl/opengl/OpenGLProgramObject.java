@@ -121,9 +121,9 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public @NotNull Optional<Object> getDefine(@NotNull String key)
+    public @Nullable Object getDefine(@NotNull String key)
     {
-        return defines.containsKey(key) ? Optional.of(defines.get(key)) : Optional.empty();
+        return defines.get(key);
     }
 
     @Override

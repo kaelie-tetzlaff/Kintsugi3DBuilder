@@ -91,10 +91,10 @@ public final class MetashapeChunk
         //only one chunk in this inner chunk document, so no need for a for loop
         Element fullChunkElement = (Element) fullChunkDocument.getElementsByTagName("chunk").item(0);
 
-        Optional<String> chunkName = Optional.of(fullChunkElement.getAttribute("label"));
-        if (chunkName.get().isBlank())
+        String chunkName = fullChunkElement.getAttribute("label");
+        if (chunkName.isBlank())
         {
-            chunkName = Optional.empty();
+            chunkName = null;
         }
 
         //unzip frame.zip, use frame 0 by default
@@ -117,7 +117,7 @@ public final class MetashapeChunk
             LOG.error("An error occurred loading frame.xml for Metashape chunk:", e);
         }
 
-        MetashapeChunk returned = new MetashapeChunk(chunkName.orElse(null), document)
+        MetashapeChunk returned = new MetashapeChunk(chunkName, document)
             .setChunkXml(fullChunkDocument)
             .setFrameXml(frameXML)
             .setChunkID(chunkID)

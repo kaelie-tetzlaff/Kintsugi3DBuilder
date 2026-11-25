@@ -21,14 +21,13 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 public interface DynamicResourceManager
 {
     void requestFragmentShader(File shaderFile);
 
-    void requestFragmentShader(File shaderFile, Supplier<Map<String, Optional<Object>>> extraDefinesFactory);
+    void requestFragmentShader(File shaderFile, Supplier<Map<String, @Nullable Object>> extraDefinesFactory);
 
     /**
      * Load a new backplate image.

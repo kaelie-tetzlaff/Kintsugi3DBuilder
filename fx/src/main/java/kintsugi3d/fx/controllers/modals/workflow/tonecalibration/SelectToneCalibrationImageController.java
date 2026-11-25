@@ -160,7 +160,7 @@ public class SelectToneCalibrationImageController extends NonDataPageControllerB
             {
                 Dialog<ButtonType> alert = StaticUtilities.createConfirmDialog("This will clear any previous tone calibration values!");
                 alert.setHeaderText("Change tone calibration image?");
-                Optional<ButtonType> confirmResult = alert.showAndWait();
+                Optional<@NotNull ButtonType> confirmResult = alert.showAndWait();
                 if (confirmResult.isEmpty() || !Objects.equals(confirmResult.get(), ButtonType.OK))
                 {
                     return false;

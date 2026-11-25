@@ -23,7 +23,7 @@ public class ImageIdentifier
     public final String group;
     public final int id;
 
-    public ImageIdentifier(String name, int id, @Nullable @Nullable String group)
+    public ImageIdentifier(String name, int id, @Nullable String group)
     {
         this.name = name;
         this.group = group;

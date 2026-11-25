@@ -19,11 +19,11 @@ import javafx.scene.image.Image;
 import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.core.viewset.View;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public final class GenericImageSetInfo implements ImageSetInfo
@@ -61,16 +61,16 @@ public final class GenericImageSetInfo implements ImageSetInfo
     }
 
     @Override
-    public @NotNull Optional<String> findFullResImagePath(String imageName)
+    public @Nullable String findFullResImagePath(String imageName)
     {
         for (View view : views)
         {
             String fileName = view.getImageFile().getName();
-            if (fileName.matches(".*" + imageName + ".*"))
+            if (fileName.matches(String.format(".*%s.*", imageName)))
             {
-                return Optional.of(view.getFullResImageFile().getPath());
+                return view.getFullResImageFile().getPath();
             }
         }
-        return Optional.empty();
+        return null;
     }
 }
