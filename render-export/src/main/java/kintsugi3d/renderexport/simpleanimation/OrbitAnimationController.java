@@ -19,7 +19,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
-import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.io.RecentProjects;
 import kintsugi3d.builder.rendering.Rendering;
 import kintsugi3d.builder.util.FXWindowHelper;
@@ -66,11 +65,6 @@ public class OrbitAnimationController
     @FXML
     public final void run()
     {
-        if (Global.io().getAggregateProgressMonitor().isConflictingProcess())
-        {
-            return;
-        }
-
         Rendering.getRequestQueue().addImageBasedGraphicsRequest(
             OrbitAnimationRequest.getBuilder()
                 .setWidth(Integer.parseInt(widthTextField.getText()))

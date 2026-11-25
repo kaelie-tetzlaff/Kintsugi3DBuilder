@@ -148,8 +148,7 @@ final class CancellationMonitor implements ProgressMonitor
     }
 
     @Override
-    public boolean isConflictingProcess()
+    public void blocked()
     {
-        return false;
     }
 }

@@ -25,7 +25,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.io.RecentProjects;
 import kintsugi3d.builder.rendering.Rendering;
 import kintsugi3d.builder.util.FXWindowHelper;
@@ -66,11 +65,6 @@ public class GenericRenderRequestController implements Initializable
 
     public final void run()
     {
-        if (Global.io().getAggregateProgressMonitor().isConflictingProcess())
-        {
-            return;
-        }
-
         File fragmentShader = new File(fragmentShaderField.getText());
         File outputDirectory = new File(exportDirectoryField.getText());
 

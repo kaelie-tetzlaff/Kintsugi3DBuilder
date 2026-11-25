@@ -15,6 +15,7 @@
 
 package kintsugi3d.builder.resources;
 
+import kintsugi3d.builder.rendering.Rendering;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.util.EncodableColorImage;
 import org.jetbrains.annotations.Nullable;
@@ -136,8 +137,13 @@ public class AsyncLoadedResource<CPUResourceType, GPUResourceType>
                     (!Objects.equals(file, currentFile) || lastModifiedNew != lastModified))
                 {
                     // Check for conflicting process only when we are about to do work
-                    if (progressMonitor != null && progressMonitor.isConflictingProcess())
+                    if (Rendering.isProcessingRequest())
                     {
+                        if (progressMonitor != null)
+                        {
+                            progressMonitor.blocked();
+                        }
+
                         return previewImage;
                     }
 

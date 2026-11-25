@@ -42,10 +42,18 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     private volatile RenderableManager<ContextType, ImageBasedRenderable<ContextType>> renderableManager;
     private volatile ProgressMonitor progressMonitor;
 
+    private volatile boolean processingRequest = false;
+
     public GraphicsRequestManager(ContextType context)
     {
         this.context = context;
         requestList = new LinkedList<>();
+    }
+
+    @Override
+    public final boolean isProcessingRequest()
+    {
+        return processingRequest;
     }
 
     /**
@@ -180,8 +188,9 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     @Override
     public final void addImageBasedGraphicsRequest(@NotNull ImageBasedGraphicsRequest request)
     {
-        if (progressMonitor.isConflictingProcess())
+        if (Rendering.isProcessingRequest())
         {
+            progressMonitor.blocked();
             return;
         }
 
@@ -298,8 +307,9 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     @Override
     public final void addTextureReplacementGraphicsRequest(@NotNull TextureReplacementGraphicsRequest request)
     {
-        if (progressMonitor.isConflictingProcess())
+        if (Rendering.isProcessingRequest())
         {
+            progressMonitor.blocked();
             return;
         }
 
@@ -410,8 +420,9 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
             {
                 if (progressMonitor != null)
                 {
-                    if (progressMonitor.isConflictingProcess())
+                    if (Rendering.isProcessingRequest())
                     {
+                        progressMonitor.blocked();
                         return;
                     }
 
@@ -463,6 +474,8 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
 
         while (!requestList.isEmpty())
         {
+            processingRequest = true;
+
             Runnable nextRequest;
 
             synchronized (requestList)
@@ -485,5 +498,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
                 }
             }
         }
+
+        processingRequest = false;
     }
 }

@@ -139,17 +139,11 @@ class AggregateProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public final boolean isConflictingProcess()
+    public final void blocked()
     {
-        boolean processing = false;
         for (ProgressMonitor monitor : subMonitors)
         {
-            if (monitor.isConflictingProcess())
-            {
-                processing = true;
-            }
+            monitor.blocked();
         }
-
-        return processing;
     }
 }

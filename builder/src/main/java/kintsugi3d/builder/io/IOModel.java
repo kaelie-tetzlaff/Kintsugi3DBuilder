@@ -272,8 +272,9 @@ public class IOModel implements IO
     public final void loadExistingProject(@NotNull File projectFile)
     {
         //need to check for conflicting process early so crucial info isn't unloaded
-        if (progressMonitor.isConflictingProcess())
+        if (Rendering.isProcessingRequest())
         {
+            progressMonitor.blocked();
             return;
         }
 
