@@ -244,8 +244,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
 
             View primaryView = resources.getViewSet().getPrimaryView();
             float lightScale = primaryView == null || resources.getViewSet().getProjectSettings().getBoolean("infiniteLightSources") ? 1.0f :
-                primaryView.getCameraPose()
-                    .times(Objects.requireNonNull(resources.getGeometry()).getCentroid().asPosition())
+                primaryView.getCameraPose().times(resources.getGeometry().getCentroid().asPosition())
                     .getXYZ().length();
             getDrawable().program().setUniform(String.format("lightIntensityVirtual[%d]", lightIndex),
                 controllerLightIntensity.times(lightDistance * lightDistance * resources.getViewSet().getLightIntensity(0).y / (lightScale * lightScale)));

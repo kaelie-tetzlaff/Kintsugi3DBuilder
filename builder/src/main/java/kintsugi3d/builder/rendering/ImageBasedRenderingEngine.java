@@ -347,47 +347,44 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
     private void updateWorldSpaceDefinition()
     {
+        ReadonlyViewSet viewSet = getViewSet();
         ReadonlyVertexGeometry geometry = getResources().getGeometry();
-        if (geometry != null)
+
+        View orientationView = viewSet.getOrientationView();
+
+        // Inspection suppressed for now; remove suppression once scale handling has been investigated more.
+        //noinspection IfStatementWithIdenticalBranches
+        if (orientationView == null) // check for override
         {
-            ReadonlyViewSet viewSet = getViewSet();
+            // Imported orientation and object center if no override
+            // For now, this is all that we're importing from Metashape;
+            // everything else should be the same as with a reference image override.
+            // This might change in the future.
+            sceneModel.setOrientation(Objects.requireNonNullElse(viewSet.getOrientationMatrix(), Matrix3.IDENTITY));
 
-            View orientationView = viewSet.getOrientationView();
-
-            // Inspection suppressed for now; remove suppression once scale handling has been investigated more.
-            //noinspection IfStatementWithIdenticalBranches
-            if (orientationView == null) // check for override
-            {
-                // Imported orientation and object center if no override
-                // For now, this is all that we're importing from Metashape;
-                // everything else should be the same as with a reference image override.
-                // This might change in the future.
-                sceneModel.setOrientation(Objects.requireNonNullElse(viewSet.getOrientationMatrix(), Matrix3.IDENTITY));
-
-                // COMMENTED OUT: Object translation doesn't seem to be that meaningful coming from Metashape.
+            // COMMENTED OUT: Object translation doesn't seem to be that meaningful coming from Metashape.
 //                    sceneModel.setCentroid(sceneModel.getOrientation().transpose()
 //                        .times(Objects.requireNonNullElse(viewSet.getObjectTranslation(), Vector3.ZERO).negated()));
 
-                // Just use true centroid instead
-                sceneModel.setCentroid(geometry.getCentroid());
+            // Just use true centroid instead
+            sceneModel.setCentroid(geometry.getCentroid());
 
-                // TODO figure out if we can use imported scale for user interaction without breaking things.
+            // TODO figure out if we can use imported scale for user interaction without breaking things.
 //                    // "Scene scale" is generally taken by the Kintsugi renderer to be world space to model space
 //                    // so we need to invert the imported global scale.
 //                    sceneModel.setScale(1.0f / viewSet.getObjectScale());
 //                    sceneModel.setScale((geometry.getBoundingRadius() + geometry.getCentroid().length()) * 2);
-                sceneModel.setScale(geometry.getBoundingRadius() * 2);
-            }
-            else
-            {
-                // reference image based override, replaces any imported reference frame
-                // use centroid and scale based on geometry assuming the imported scale and center is invalid
-                Matrix3 referenceCameraPose = orientationView.getCameraPose().getUpperLeft3x3();
-                sceneModel.setOrientation(Matrix3.rotateZ(Math.toRadians(-viewSet.getOrientationViewRotationDegrees()))
-                    .times(referenceCameraPose));
-                sceneModel.setCentroid(geometry.getCentroid());
-                sceneModel.setScale(geometry.getBoundingRadius() * 2);
-            }
+            sceneModel.setScale(geometry.getBoundingRadius() * 2);
+        }
+        else
+        {
+            // reference image based override, replaces any imported reference frame
+            // use centroid and scale based on geometry assuming the imported scale and center is invalid
+            Matrix3 referenceCameraPose = orientationView.getCameraPose().getUpperLeft3x3();
+            sceneModel.setOrientation(Matrix3.rotateZ(Math.toRadians(-viewSet.getOrientationViewRotationDegrees()))
+                .times(referenceCameraPose));
+            sceneModel.setCentroid(geometry.getCentroid());
+            sceneModel.setScale(geometry.getBoundingRadius() * 2);
         }
     }
 
@@ -649,12 +646,8 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     {
         if (outputDirectory != null)
         {
-            if (getGeometry() == null)
-            {
-                throw new IllegalArgumentException("Geometry is null; cannot export GLTF.");
-            }
-
             LOG.info("Starting glTF export...");
+
             if(progressMonitor != null)
             {
                 progressMonitor.setProcessName("Model Export");

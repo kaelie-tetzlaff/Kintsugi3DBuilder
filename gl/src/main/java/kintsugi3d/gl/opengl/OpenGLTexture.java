@@ -29,7 +29,6 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.IntStream;
@@ -414,7 +413,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
             case UNSIGNED_INTEGER_2D_ARRAY:
                 return GL_TEXTURE_2D_ARRAY;
             default:
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Unrecognized / unsupported texture sampler type.");
         }
     }
 
@@ -616,32 +615,30 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         return buffer;
     }
 
-    static @NotNull OpenGLTextureData bundleTextureData(int dimensions, boolean integer, int type, ByteBuffer buffer)
+    static @NotNull OpenGLTextureData bundleTextureData(int dimensions, boolean integer, int type, @NotNull ByteBuffer buffer)
     {
-        return new OpenGLTextureData(getPixelDataFormatFromDimensions(dimensions, integer), type, Objects.requireNonNull(buffer));
+        return new OpenGLTextureData(getPixelDataFormatFromDimensions(dimensions, integer), type, buffer);
     }
 
-    static @NotNull OpenGLTextureData bundleTextureData(@NotNull AbstractDataType<?> type, boolean integer, ByteBuffer buffer)
+    static @NotNull OpenGLTextureData bundleTextureData(@NotNull AbstractDataType<?> type, boolean integer, @NotNull ByteBuffer buffer)
     {
         return new OpenGLTextureData(getPixelDataFormatFromDimensions(type.getComponentCount(), integer),
-            OpenGLContext.getDataTypeConstant(type), Objects.requireNonNull(buffer));
+            OpenGLContext.getDataTypeConstant(type), buffer);
     }
 
-    static @NotNull OpenGLTextureData bundleTextureData(BufferedImage image, boolean flipVertical)
+    static @NotNull OpenGLTextureData bundleTextureData(@NotNull BufferedImage image, boolean flipVertical)
     {
-        return new OpenGLTextureData(GL_BGRA, GL_UNSIGNED_BYTE,
-            bufferedImageToNativeBuffer(Objects.requireNonNull(image), flipVertical));
+        return new OpenGLTextureData(GL_BGRA, GL_UNSIGNED_BYTE, bufferedImageToNativeBuffer(image, flipVertical));
     }
 
-    static @NotNull OpenGLTextureData bundleTextureData(HDRImage colorImg, BufferedImage maskImg)
+    static @NotNull OpenGLTextureData bundleTextureData(@NotNull HDRImage colorImg, @NotNull BufferedImage maskImg)
     {
-        return new OpenGLTextureData(GL_RGBA, GL_FLOAT,
-            hdrImageToNativeBuffer(Objects.requireNonNull(colorImg), Objects.requireNonNull(maskImg)));
+        return new OpenGLTextureData(GL_RGBA, GL_FLOAT, hdrImageToNativeBuffer(colorImg, maskImg));
     }
 
-    static @NotNull OpenGLTextureData bundleTextureData(HDRImage image)
+    static @NotNull OpenGLTextureData bundleTextureData(@NotNull HDRImage image)
     {
-        return new OpenGLTextureData(GL_RGB, GL_FLOAT, hdrImageToNativeBuffer(Objects.requireNonNull(image)));
+        return new OpenGLTextureData(GL_RGB, GL_FLOAT, hdrImageToNativeBuffer(image));
     }
 
     @Override

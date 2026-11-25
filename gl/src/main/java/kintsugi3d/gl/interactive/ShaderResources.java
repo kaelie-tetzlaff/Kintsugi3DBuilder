@@ -31,7 +31,7 @@ public interface ShaderResources<ContextType extends Context<ContextType>> exten
         return Objects.requireNonNull(getContext(), "Resources have not been initialized with a valid context.");
     }
 
-    default ReadonlyVertexGeometry getGeometry()
+    default @NotNull ReadonlyVertexGeometry getGeometry()
     {
         return getGeometryResources().getGeometry();
     }

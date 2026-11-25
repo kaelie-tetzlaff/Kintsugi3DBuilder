@@ -592,11 +592,16 @@ public final class ViewSet implements ReadonlyViewSet
         }
     }
 
+    private @NotNull View findViewOrThrow(@NotNull File image)
+    {
+        return Objects.requireNonNull(findViewByName(image.getName()), String.format("View not found: %s", image));
+    }
+
     public void setViewEnabled(@NotNull File image, boolean isEnabled)
     {
-        View view = findViewByName(image.getName());
+        View view = findViewOrThrow(image);
 
-        if (Objects.requireNonNull(view).isEnabled()) // Currently enabled, so disable camera
+        if (view.isEnabled()) // Currently enabled, so disable camera
         {
             view.setEnabled(isEnabled);
             if (!isEnabled)
@@ -623,8 +628,8 @@ public final class ViewSet implements ReadonlyViewSet
         {
             for (File image : images)
             {
-                View view = findViewByName(image.getName());
-                Objects.requireNonNull(view).setEnabled(isEnabled);
+                View view = findViewOrThrow(image);
+                view.setEnabled(isEnabled);
                 imageFilesModified.put(view.getImageFile(), view);
             }
         }

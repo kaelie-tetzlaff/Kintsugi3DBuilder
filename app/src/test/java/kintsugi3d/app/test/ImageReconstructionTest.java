@@ -172,7 +172,10 @@ class ImageReconstructionTest
         ViewSetDirectories directories = new ViewSetDirectories();
         directories.setFullResImagesNeedUndistort(true);
         potatoViewSet = ViewSetReaderFromVSET.getInstance()
-            .readFromStream(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("Structured34View.vset")), directories)
+            .readFromStream(
+                Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("Structured34View.vset"),
+                    "Could not find testing view set"),
+                directories)
             .finish();
         potatoViewSet.getProjectSettings().set("occlusionEnabled", false);
 
@@ -1029,15 +1032,19 @@ class ImageReconstructionTest
         imageLoadOptions.setColorImagesRequested(false); // don't generate/load preview images; not needed for this test
 
         ViewSetLoadOptions viewSetLoadOptions = new ViewSetLoadOptions();
-        viewSetLoadOptions.setGeometryFile(new File(Objects.requireNonNull(classLoader.getResource(geometry)).toURI()));
+        viewSetLoadOptions.setGeometryFile(
+            new File(Objects.requireNonNull(classLoader.getResource(geometry), "Could not find geometry for testing.").toURI()));
         viewSetLoadOptions.getMainDirectories().setFullResImageDirectory(
-            new File(Objects.requireNonNull(classLoader.getResource(imageDirectory)).toURI()));
+            new File(Objects.requireNonNull(classLoader.getResource(imageDirectory), "Could not find image directory for testing.").toURI()));
         viewSetLoadOptions.getMainDirectories().setFullResImagesNeedUndistort(true);
 
         try (GraphicsResourcesImageSpace<OpenGLContext> resources = GraphicsResourcesImageSpace.getBuilderForContext(context)
                 .setImageLoadOptions(imageLoadOptions)
                 .setProgressMonitor(progressMonitor)
-                .loadLooseFiles(new File(Objects.requireNonNull(classLoader.getResource(cameras)).toURI()), viewSetLoadOptions)
+                .loadLooseFiles(
+                    new File(Objects.requireNonNull(classLoader.getResource(cameras),
+                        "Could not find Metashape cameras file for testing.").toURI()),
+                    viewSetLoadOptions)
                 .create())
         {
             resources.getViewSet().setAllLightIntensities(resources.determineGlobalLightIntensity());

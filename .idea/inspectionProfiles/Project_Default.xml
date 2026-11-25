@@ -1,6 +1,7 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
     <option name="myName" value="Project Default" />
+    <inspection_tool class="2d83b1de-0a85-3a42-b6d4-9d1e69697df5" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AbsoluteAlignmentInUserInterface" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="AbstractClassNamingConvention" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="m_minLength" value="3" />
@@ -750,7 +751,14 @@
         <option name="m_maxLength" value="64" />
       </extension>
     </inspection_tool>
-    <inspection_tool class="NewExceptionWithoutArguments" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="NewExceptionWithoutArguments" enabled="true" level="WARNING" enabled_by_default="true" editorAttributes="WARNING_ATTRIBUTES">
+      <option name="exceptions">
+        <list>
+          <option value="java.lang.UnsupportedOperationException" />
+          <option value="kintsugi3d.gl.interactive.UserCancellationException" />
+        </list>
+      </option>
+    </inspection_tool>
     <inspection_tool class="NewMethodNamingConvention" enabled="true" level="WARNING" enabled_by_default="true">
       <extension name="InstanceMethodNamingConvention" enabled="true">
         <option name="m_regex" value="[a-z][A-Za-z\d]*" />
@@ -992,6 +1000,10 @@
       <replaceConfiguration name="Call to method with platform-dependent line separators" uuid="4784f4c3-8b84-3df6-ab80-0cd6464f2d6b" text="System.lineSeparator()" recursive="false" caseInsensitive="false" type="JAVA" pattern_context="default" reformatAccordingToStyle="false" shortenFQN="false" replacement="&quot;\n&quot;">
         <constraint name="__context__" within="" contains="" />
       </replaceConfiguration>
+      <searchConfiguration name="Call to Objects.requireNonNull without custom message." text="Objects.requireNonNull($obj$)" recursive="true" caseInsensitive="false" type="JAVA" pattern_context="default">
+        <constraint name="__context__" within="" contains="" />
+        <constraint name="obj" within="" contains="" />
+      </searchConfiguration>
     </inspection_tool>
     <inspection_tool class="SafeLock" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SameParameterValue" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />

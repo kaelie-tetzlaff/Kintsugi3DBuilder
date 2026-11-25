@@ -90,10 +90,9 @@ public final class ImageHelper
         return ICC_TRANSFORM_ENABLED ? raw.convertedICCToSRGB() : raw.forcedSRGB();
     }
 
-    public static @NotNull ImageHelper wrap(BufferedImage image)
+    public static @NotNull ImageHelper wrap(@NotNull BufferedImage image)
     {
         ImageHelper raw = new ImageHelper(image);
-        Objects.requireNonNull(image);
         return ICC_TRANSFORM_ENABLED ? raw.convertedICCToSRGB() : raw.forcedSRGB();
     }
 

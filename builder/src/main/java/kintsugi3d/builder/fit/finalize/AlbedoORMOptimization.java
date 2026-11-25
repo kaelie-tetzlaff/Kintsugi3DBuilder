@@ -173,7 +173,7 @@ public final class AlbedoORMOptimization<ContextType extends Context<ContextType
         framebuffer.clearColorBuffer(0, 0.0f, 0.0f, 0.0f, 0.0f);
         framebuffer.clearColorBuffer(1, 0.0f, 0.0f, 0.0f, 0.0f);
         framebuffer.clearColorBuffer(2, 0.0f, 0.0f, 0.0f, 0.0f);
-        Objects.requireNonNull(drawable).draw(framebuffer);
+        Objects.requireNonNull(drawable, "Drawable was not initialized.").draw(framebuffer);
 
         optimizedAlbedo = true;
         optimizedMetallicRoughness = true;

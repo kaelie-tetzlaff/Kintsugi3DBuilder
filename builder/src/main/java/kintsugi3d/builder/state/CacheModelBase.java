@@ -378,8 +378,8 @@ public abstract class CacheModelBase implements CacheModel
                     {
                         // Select only cache directories that are not in the recently opened projects welcome dialogue.
                         Collection<File> deletableProjects = new HashSet<>(0);
-                        List<File> nonRecentProjects = new ArrayList<>(Arrays.asList(Objects.requireNonNull(directory.listFiles())));
-                        List<File> oldProjects = new ArrayList<>(Arrays.asList(Objects.requireNonNull(directory.listFiles())));
+                        List<File> nonRecentProjects = new ArrayList<>(Arrays.asList(listFiles(directory)));
+                        List<File> oldProjects = new ArrayList<>(Arrays.asList(listFiles(directory)));
 
                         if (settingsModel.getBoolean("recentPromptEnabled"))
                         {
@@ -445,6 +445,11 @@ public abstract class CacheModelBase implements CacheModel
                 }
             }
         }
+    }
+
+    private static File @NotNull [] listFiles(File directory)
+    {
+        return Objects.requireNonNull(directory.listFiles(), "An error occurred while listing files in the cache directory.");
     }
 
     private static void filterByRecentProjectLimit(File directory, @NotNull List<File> oldProjects)
@@ -567,7 +572,7 @@ public abstract class CacheModelBase implements CacheModel
         // but all need to be cleaned up when cleaning down to a size limit.
         for (File directory : getDeleteMethods().keySet())
         {
-            for (File projectCacheDir : Objects.requireNonNull(directory.listFiles()))
+            for (File projectCacheDir : listFiles(directory))
             {
                 // The project cache directory name should be the same regardless of which cache (i.e. preview or fit) is being cleaned.
                 String projectID = projectCacheDir.getName();
@@ -777,14 +782,14 @@ public abstract class CacheModelBase implements CacheModel
     protected static int getNumCachedProjects()
     {
         return getCleanableCacheDirectories().stream()
-            .mapToInt(dir -> dir.exists() ? Objects.requireNonNull(dir.listFiles()).length : 0)
+            .mapToInt(dir -> dir.exists() ? listFiles(dir).length : 0)
             .max().orElse(0);
     }
 
     protected static boolean checkOldFilesExist()
     {
         Collection<File> cacheFiles = getCleanableCacheDirectories().stream()
-            .flatMap(dir -> dir.exists() ? Arrays.stream(Objects.requireNonNull(dir.listFiles())) : Stream.of())
+            .flatMap(dir -> dir.exists() ? Arrays.stream(listFiles(dir)) : Stream.of())
             .collect(Collectors.toList());
 
         Instant limit = LocalDateTime.now().minusDays(Global.state().getSettingsModel().getInt("fileAgeLimit"))

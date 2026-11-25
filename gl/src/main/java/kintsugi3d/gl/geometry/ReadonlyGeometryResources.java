@@ -16,6 +16,7 @@
 package kintsugi3d.gl.geometry;
 
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface ReadonlyGeometryResources<ContextType extends Context<ContextType>> extends ContextBound<ContextType>
@@ -24,7 +25,7 @@ public interface ReadonlyGeometryResources<ContextType extends Context<ContextTy
      *
      * @return The geometry for this instance that the vertex buffers were loaded from.
      */
-    ReadonlyVertexGeometry getGeometry();
+    @NotNull ReadonlyVertexGeometry getGeometry();
 
     /**
      *

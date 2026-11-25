@@ -18,12 +18,12 @@ package kintsugi3d.builder.util;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.gl.core.Context;
+import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
-import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -77,13 +77,15 @@ public class KNNViewWeightGenerator implements ViewWeightGenerator
 
         for (View view : activeViewList)
         {
+            ReadonlyVertexGeometry geometry = resources.getGeometry();
+
             Vector3 viewDir = view.getCameraPose().times(
-                    Objects.requireNonNull(resources.getGeometry()).getCentroid().asPosition())
+                    geometry.getCentroid().asPosition())
                 .getXYZ().negated().normalized();
 
             Vector3 targetDir = view.getCameraPose().times(
                 targetView.quickInverse(0.01f).getColumn(3).minus(
-                    Objects.requireNonNull(resources.getGeometry()).getCentroid().asPosition()))
+                    geometry.getCentroid().asPosition()))
                 .getXYZ().normalized();
 
             viewPriority.add(new WeightedView(view.getGPUViewIndex(), targetDir.dot(viewDir)));

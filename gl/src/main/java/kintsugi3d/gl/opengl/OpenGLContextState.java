@@ -100,7 +100,7 @@ public class OpenGLContextState implements ContextState
             case SRC_COLOR:
                 return GL_ONE_MINUS_SRC_COLOR;
             case ZERO: return GL_ZERO;
-            default: throw new IllegalArgumentException();
+            default: throw new IllegalArgumentException("Unrecognized / unsupported blend function.");
         }
     }
 

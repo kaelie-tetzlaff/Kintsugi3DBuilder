@@ -87,7 +87,9 @@ public class Modal
         stage.getIcons().add(AppIcon.getImage());
         stage.setTitle(title);
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(Objects.requireNonNull(Modal.class.getResource("/fxml/kintsugi.css")).toExternalForm());
+        scene.getStylesheets().add(
+            Objects.requireNonNull(Modal.class.getResource("/fxml/kintsugi.css"), "Could not load stylesheet for Kintsugi 3D Builder")
+                .toExternalForm());
         stage.setScene(scene);
         stage.initOwner(parentWindow);
         stage.setResizable(false);

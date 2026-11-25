@@ -58,7 +58,7 @@ public final class OptionalManagedResource<ResourceType extends ManagedResource>
     public static <ResourceType extends ManagedResource>
     @NotNull OptionalManagedResource<ResourceType> of(ResourceType resource)
     {
-        return new OptionalManagedResource<>(Objects.requireNonNull(resource));
+        return new OptionalManagedResource<>(Objects.requireNonNull(resource, "Specified managed resource is null."));
     }
 
     @Override

@@ -22,8 +22,6 @@ import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 public class PowerViewWeightGenerator implements ViewWeightGenerator
 {
     private final float power;
@@ -41,13 +39,11 @@ public class PowerViewWeightGenerator implements ViewWeightGenerator
 
         for (View view : activeViewList)
         {
-            Vector3 viewDir = view.getCameraPose().times(
-                    Objects.requireNonNull(resources.getGeometry()).getCentroid().asPosition())
-                .getXYZ().negated().normalized();
+            Vector3 viewDir = view.getCameraPose().times(resources.getGeometry().getCentroid().asPosition()).getXYZ()
+                .negated().normalized();
 
             Vector3 targetDir = view.getCameraPose().times(
-                    targetView.quickInverse(0.01f).getColumn(3)
-                        .minus(Objects.requireNonNull(resources.getGeometry()).getCentroid().asPosition()))
+                    targetView.quickInverse(0.01f).getColumn(3).minus(resources.getGeometry().getCentroid().asPosition()))
                 .getXYZ().normalized();
 
             int viewIndex = view.getGPUViewIndex();

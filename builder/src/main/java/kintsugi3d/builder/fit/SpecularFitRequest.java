@@ -42,7 +42,6 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public final class SpecularFitRequest implements TextureReplacementGraphicsRequest
 {
@@ -220,7 +219,7 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
                 DEBUG_IMAGES ? outputDirectory : null,
                 DEBUG_IMAGES ? new File(outputDirectory, "ground-truth") : null);
 
-            double reconstructionRMSE = Objects.requireNonNull(rmseList).stream()
+            double reconstructionRMSE = rmseList.stream()
                 .mapToDouble(map ->
                 {
                     double rmse = map.get("basis").getEncodedGroundTruth();

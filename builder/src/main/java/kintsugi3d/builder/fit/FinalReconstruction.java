@@ -48,10 +48,12 @@ public class FinalReconstruction<ContextType extends Context<ContextType>>
         this.reconstructionSettings = reconstructionSettings;
     }
 
-    public final @Nullable List<Map<String, ReadonlyColorAppearanceRMSE>> reconstruct(ReadonlyTextureResources<ContextType> specularFit,
-                                                                                      @NotNull Map<String, ProgramBuilder<ContextType>> reconstructionProgramBuilders,
-                                                                                      @NotNull ProgramBuilder<ContextType> incidentRadianceProgramBuilder,
-                                                                                      @Nullable File debugDirectory, @Nullable File groundTruthDirectory)
+    public final @NotNull List<Map<String, ReadonlyColorAppearanceRMSE>> reconstruct(
+        ReadonlyTextureResources<ContextType> specularFit,
+        @NotNull Map<String, ProgramBuilder<ContextType>> reconstructionProgramBuilders,
+        @NotNull ProgramBuilder<ContextType> incidentRadianceProgramBuilder,
+        @Nullable File debugDirectory, @Nullable File groundTruthDirectory)
+        throws IOException
     {
         if (debugDirectory != null)
         {
@@ -127,12 +129,6 @@ public class FinalReconstruction<ContextType extends Context<ContextType>>
             }
 
             return rmseOut;
-        }
-        // NoSuchElementException thrown if there's an error reading a ground truth image from the view set
-        catch (IOException | NoSuchElementException e)
-        {
-            LOG.error("An error occurred during reconstruction:", e);
-            return null;
         }
     }
 
