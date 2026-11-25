@@ -50,7 +50,6 @@ import kintsugi3d.gl.vecmath.IntVector2;
 import kintsugi3d.gl.vecmath.Vector3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,9 +105,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
     private final @NotNull ContextType context;
 
-    private final @Nullable ViewSet viewSet;
-
-    private float @Nullable @Unmodifiable [] viewWeights;
+    private final @NotNull ViewSet viewSet;
 
     private final EventDispatcher<ProjectProcessedListener, ProjectProcessedEvent> projectProcessed
         = new EventDispatcher<>(ProjectProcessedListener::onProjectProcessed);
@@ -119,20 +116,18 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
     private final Observable<MappedChange<String, BasisMaterialInfo>> basisObservable = new SimpleObservable<>();
     private final Observable<MappedChange<String, TextureInfo>> texturesObservable = new SimpleObservable<>();
 
-    GraphicsResourcesCommon(@NotNull ContextType context, @Nullable ViewSet viewSet, @Nullable VertexGeometry geometry, @NotNull TextureLoadOptions loadOptions)
+    GraphicsResourcesCommon(
+        @NotNull ContextType context, @NotNull ViewSet viewSet, @NotNull VertexGeometry geometry, @NotNull TextureLoadOptions loadOptions)
     {
         this.context = context;
         this.viewSet = viewSet;
 
-        if (viewSet != null)
-        {
-            viewSet.viewsChangedListeners().register(event -> Rendering.runNowOrLater(this::updateViewIndicesData));
-            viewSet.lightCalibrationChangedListeners().register(event -> Rendering.runNowOrLater(this::updateLightData));
-            viewSet.luminanceEncodingChangedListeners().register(event -> Rendering.runNowOrLater(this::updateLuminanceMap));
-        }
+        viewSet.viewsChangedListeners().register(event -> Rendering.runNowOrLater(this::updateViewIndicesData));
+        viewSet.lightCalibrationChangedListeners().register(event -> Rendering.runNowOrLater(this::updateLightData));
+        viewSet.luminanceEncodingChangedListeners().register(event -> Rendering.runNowOrLater(this::updateLuminanceMap));
 
         // Store the poses in a uniform buffer
-        if (viewSet != null && viewSet.getCameraPoseData() != null)
+        if (viewSet.getCameraPoseData() != null)
         {
             // Create the uniform buffer
             cameraPoseBuffer = context.createUniformBuffer();
@@ -144,7 +139,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         }
 
         // Store the light positions in a uniform buffer
-        if (viewSet != null && viewSet.getLightPositionData() != null)
+        if (viewSet.getLightPositionData() != null)
         {
             // Create the uniform buffer
             lightPositionBuffer = context.createUniformBuffer();
@@ -156,7 +151,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         }
 
         // Store the light intensities in a uniform buffer
-        if (viewSet != null && viewSet.getLightIntensityData() != null)
+        if (viewSet.getLightIntensityData() != null)
         {
             // Create the uniform buffer
             lightIntensityBuffer = context.createUniformBuffer();
@@ -168,7 +163,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         }
 
         // Store the light indices in a uniform buffer
-        if (viewSet != null && viewSet.getLightIndexData() != null)
+        if (viewSet.getLightIndexData() != null)
         {
             lightIndexBuffer = context.createUniformBuffer();
             lightIndexBuffer.setData(viewSet.getLightIndexData());
@@ -179,7 +174,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         }
 
         // Store the view indices in a uniform buffer
-        if (viewSet != null && viewSet.getViewIndexData() != null)
+        if (viewSet.getViewIndexData() != null)
         {
             viewIndexBuffer = context.createUniformBuffer();
             viewIndexBuffer.setData(viewSet.getViewIndexData());
@@ -190,7 +185,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         }
 
         // Luminance map texture
-        if (viewSet != null && viewSet.hasCustomLuminanceEncoding())
+        if (viewSet.hasCustomLuminanceEncoding())
         {
             luminanceMapResources = viewSet.getLuminanceEncoding().createResources(context);
         }
@@ -199,110 +194,91 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
             luminanceMapResources = LuminanceMapResources.createNull(context);
         }
 
-        if (geometry != null)
+        geometryResources = geometry.createGraphicsResources(context);
+
+        viewWeightBuffer = context.createUniformBuffer(); // prereq for computeViewWeights
+        computeViewWeights();
+
+        ImportedMaterial material = geometry.getMaterial();
+        String geometryFileName = viewSet.getGeometryFileName();
+
+        if (viewSet.getSupportingFilesDirectory() != null) // Load texture fit from previous session
         {
-            geometryResources = geometry.createGraphicsResources(context);
-
-            if (viewSet != null)
+            TextureResources<ContextType> loadedFit;
+            try
             {
-                viewWeightBuffer = context.createUniformBuffer(); // prereq for computeViewWeights
-                computeViewWeights();
+                loadedFit = SpecularFitFinal.loadFromPriorSolution(context, viewSet.getSupportingFilesDirectory());
+            }
+            catch (IOException e)
+            {
+                LOG.error("An error occured while loading the previous specular fit (textures).", e);
+                loadedFit = TextureResources.makeNull(context);
+            }
+            textureResources = loadedFit;
+        }
+        else if (material != null && geometryFileName != null /* need an actual file path to load the textures */)
+        {
+            // Load material from OBJ file
 
-                ImportedMaterial material = geometry.getMaterial();
-                String geometryFileName = viewSet.getGeometryFileName();
+            // Default texture names if not specified by the material
+            String prefix = geometryFileName.split("\\.")[0];
 
-                if (viewSet.getSupportingFilesDirectory() != null) // Load texture fit from previous session
+            if (material.getDiffuseMap() == null || material.getDiffuseMap().getMapName() == null)
+            {
+                MaterialColorMap diffuseMap = new MaterialColorMap();
+                diffuseMap.setMapName(String.format("%s.png", prefix));
+                material.setDiffuseMap(diffuseMap);
+            }
+
+            if (material.getNormalMap() == null || material.getNormalMap().getMapName() == null)
+            {
+                MaterialTextureMap normalMap = new MaterialTextureMap();
+                normalMap.setMapName(String.format("%s_normal.png", prefix));
+                material.setNormalMap(normalMap);
+            }
+
+            if (material.getAmbientOcclusionMap() == null || material.getAmbientOcclusionMap().getMapName() == null)
+            {
+                MaterialScalarMap aoMap = new MaterialScalarMap();
+                aoMap.setMapName(String.format("%s_occlusion.png", prefix));
+                material.setAmbientOcclusionMap(aoMap);
+            }
+
+            if (material.getSpecularMap() == null || material.getSpecularMap().getMapName() == null)
+            {
+                MaterialColorMap specularMap = new MaterialColorMap();
+                specularMap.setMapName(String.format("%s_Ks.png", prefix));
+                material.setSpecularMap(specularMap);
+            }
+
+            if (material.getRoughnessMap() == null || material.getRoughnessMap().getMapName() == null)
+            {
+                MaterialScalarMap roughnessMap = new MaterialScalarMap();
+                roughnessMap.setMapName(String.format("%s_Pr.png", prefix));
+                material.setRoughnessMap(roughnessMap);
+            }
+
+            TextureLoadOptions mtlLoadOptions = new TextureLoadOptions();
+            mtlLoadOptions.setCompressionRequested(loadOptions.isCompressionRequested());
+            mtlLoadOptions.setMipmapsRequested(loadOptions.areMipmapsRequested());
+            textureResources = ImportedMaterialResourcesWrapper.wrap(
+                () ->
                 {
-                    TextureResources<ContextType> loadedFit;
                     try
                     {
-                        loadedFit = SpecularFitFinal.loadFromPriorSolution(context, viewSet.getSupportingFilesDirectory());
+                        return ImportedMaterialResources.createFromMaterial(
+                            context, material, viewSet.getGeometryFile().getParentFile(), mtlLoadOptions);
                     }
                     catch (IOException e)
                     {
-                        LOG.error("An error occured while loading the previous specular fit (textures).", e);
-                        loadedFit = TextureResources.makeNull(context);
+                        LOG.error("An error occured while loading material resources (textures)", e);
+                        return ImportedMaterialResources.createNull();
                     }
-                    textureResources = loadedFit;
-                }
-                else if (material != null && geometryFileName != null /* need an actual file path to load the textures */)
-                {
-                    // Load material from OBJ file
-
-                    // Default texture names if not specified by the material
-                    String prefix = geometryFileName.split("\\.")[0];
-
-                    if (material.getDiffuseMap() == null || material.getDiffuseMap().getMapName() == null)
-                    {
-                        MaterialColorMap diffuseMap = new MaterialColorMap();
-                        diffuseMap.setMapName(String.format("%s.png", prefix));
-                        material.setDiffuseMap(diffuseMap);
-                    }
-
-                    if (material.getNormalMap() == null || material.getNormalMap().getMapName() == null)
-                    {
-                        MaterialTextureMap normalMap = new MaterialTextureMap();
-                        normalMap.setMapName(String.format("%s_normal.png", prefix));
-                        material.setNormalMap(normalMap);
-                    }
-
-                    if (material.getAmbientOcclusionMap() == null || material.getAmbientOcclusionMap().getMapName() == null)
-                    {
-                        MaterialScalarMap aoMap = new MaterialScalarMap();
-                        aoMap.setMapName(String.format("%s_occlusion.png", prefix));
-                        material.setAmbientOcclusionMap(aoMap);
-                    }
-
-                    if (material.getSpecularMap() == null || material.getSpecularMap().getMapName() == null)
-                    {
-                        MaterialColorMap specularMap = new MaterialColorMap();
-                        specularMap.setMapName(String.format("%s_Ks.png", prefix));
-                        material.setSpecularMap(specularMap);
-                    }
-
-                    if (material.getRoughnessMap() == null || material.getRoughnessMap().getMapName() == null)
-                    {
-                        MaterialScalarMap roughnessMap = new MaterialScalarMap();
-                        roughnessMap.setMapName(String.format("%s_Pr.png", prefix));
-                        material.setRoughnessMap(roughnessMap);
-                    }
-
-                    TextureLoadOptions mtlLoadOptions = new TextureLoadOptions();
-                    mtlLoadOptions.setCompressionRequested(loadOptions.isCompressionRequested());
-                    mtlLoadOptions.setMipmapsRequested(loadOptions.areMipmapsRequested());
-                    textureResources = ImportedMaterialResourcesWrapper.wrap(
-                        () ->
-                        {
-                            try
-                            {
-                                return ImportedMaterialResources.createFromMaterial(
-                                    context, material, viewSet.getGeometryFile().getParentFile(), mtlLoadOptions);
-                            }
-                            catch (IOException e)
-                            {
-                                LOG.error("An error occured while loading material resources (textures)", e);
-                                return ImportedMaterialResources.createNull();
-                            }
-                        });
-                }
-                else
-                {
-                    // Neither a texture fit or an OBJ material: material is null
-                    textureResources = TextureResources.makeNull(context);
-                }
-            }
-            else
-            {
-                viewWeights = null;
-                viewWeightBuffer = null;
-                textureResources = TextureResources.makeNull(context);
-            }
+                });
         }
         else
         {
-            geometryResources = GeometryResources.createNullResources();
-            viewWeights = null;
-            viewWeightBuffer = null;
+            // Neither a texture fit or an OBJ material: material is null
             textureResources = TextureResources.makeNull(context);
         }
 
@@ -384,12 +360,10 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
             }
         }
 
-        viewWeights = newWeights;
-
         if (viewWeightBuffer != null)
         {
             viewWeightBuffer.setData(NativeVectorBufferFactory.createFromFloatArray(
-                1, viewSet.getGPUBufferSize(), viewWeights));
+                1, viewSet.getGPUBufferSize(), newWeights));
         }
     }
 
@@ -421,7 +395,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         return context;
     }
 
-    public @Nullable ViewSet getViewSet()
+    public @NotNull ViewSet getViewSet()
     {
         return viewSet;
     }
