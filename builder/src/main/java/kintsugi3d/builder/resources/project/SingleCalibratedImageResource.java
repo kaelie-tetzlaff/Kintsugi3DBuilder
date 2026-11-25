@@ -163,7 +163,7 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
         {
             program.setTexture("depthImage", depthTexture);
 
-            if (shadowTexture != null)
+            if (shadowTexture != null && shadowMatrix != null)
             {
                 program.setTexture("shadowImage", shadowTexture);
                 program.setUniform("shadowMatrix", shadowMatrix);

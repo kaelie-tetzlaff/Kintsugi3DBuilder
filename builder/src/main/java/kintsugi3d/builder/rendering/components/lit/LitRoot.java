@@ -113,7 +113,7 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
      * Must be called after initialize
      * @param shadowCaster
      */
-    public final void setShadowCaster(@Nullable ReadonlyVertexBuffer<ContextType> shadowCaster)
+    public final void setShadowCaster(@NotNull ReadonlyVertexBuffer<ContextType> shadowCaster)
     {
         lightingResources.setShadowCastingPositionBuffer(shadowCaster);
     }

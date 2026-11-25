@@ -35,7 +35,7 @@ public abstract class ViewpointModelBase implements ManipulableViewpointModel
     }
 
     @Override
-    public final void setLookMatrix(Matrix4 lookMatrix)
+    public final void setLookMatrix(@NotNull Matrix4 lookMatrix)
     {
         throw new UnsupportedOperationException();
     }

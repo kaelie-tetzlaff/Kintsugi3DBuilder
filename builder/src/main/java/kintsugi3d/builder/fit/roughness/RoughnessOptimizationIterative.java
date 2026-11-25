@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
@@ -95,8 +96,10 @@ public class RoughnessOptimizationIterative<ContextType extends Context<ContextT
         {
             // Bind previous estimate textures to the shader
             estimationProgram.setTexture("tex_diffuse", getDiffuseTexture.get());
-            estimationProgram.setTexture("tex_specular", getReflectivityTexture()); // front FBO, attachment 0
-            estimationProgram.setTexture("tex_roughness", getRoughnessTexture()); // front FBO, attachment 1
+            estimationProgram.setTexture("tex_specular",
+                Objects.requireNonNull(getReflectivityTexture(), "Reflectivity texture is null")); // front FBO, attachment 0
+            estimationProgram.setTexture("tex_roughness",
+                Objects.requireNonNull(getRoughnessTexture(), "Roughness texture is null")); // front FBO, attachment 1
             estimationProgram.setTexture("dampingTex", roughnessOptimization.getFrontFramebuffer().getColorAttachmentTexture(2));
 
             // Clear framebuffer

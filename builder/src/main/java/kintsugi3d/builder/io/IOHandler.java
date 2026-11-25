@@ -86,7 +86,7 @@ public interface IOHandler
      * @param materialDirectory
      * @param finishedCallback No guarantees are made about which thread the callback will run on.
      */
-    void saveAllMaterialFiles(File materialDirectory, Runnable finishedCallback);
+    void saveAllMaterialFiles(@NotNull File materialDirectory, @Nullable Runnable finishedCallback);
 
     void saveGLTF(@NotNull File outputDirectory, @NotNull ExportSettings settings);
 

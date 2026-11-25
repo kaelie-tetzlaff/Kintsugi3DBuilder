@@ -656,7 +656,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public final void saveAllMaterialFiles(File materialDirectory, @Nullable Runnable finishedCallback)
+    public final void saveAllMaterialFiles(@NotNull File materialDirectory, @Nullable Runnable finishedCallback)
     {
         ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
         if (currentInstance == null || currentInstance.getResourcesOrNull() == null)

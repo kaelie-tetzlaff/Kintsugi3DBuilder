@@ -246,13 +246,16 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 //            scene.setLightVisualsEnabled(true); // Enable light visuals when not in light calibration mode
             litRoot = new LitRoot<>(context, sceneModel, scene);
             litRoot.initialize();
-            litRoot.setShadowCaster(resources.getGeometryResources().getPositionBuffer());
+
+            ReadonlyVertexBuffer<ContextType> positionBuffer = Objects.requireNonNull(resources.getGeometryResources().getPositionBuffer(),
+                "Shadow casting geometry must have vertex positions.");
+            litRoot.setShadowCaster(positionBuffer);
 
             LightCalibration3DScene<ContextType> lightCalibScene =
                 new LightCalibration3DScene<>(resources, sceneModel, sceneViewportModel, viewSelection);
             lightCalibration3DRoot = new LitRoot<>(context, sceneModel, lightCalibScene);
             lightCalibration3DRoot.initialize();
-            lightCalibration3DRoot.setShadowCaster(resources.getGeometryResources().getPositionBuffer());
+            lightCalibration3DRoot.setShadowCaster(positionBuffer);
 
             lightCalibrationSplitScreen = new SplitScreenComponent<>(lightCalibration, lightCalibration3DRoot);
 

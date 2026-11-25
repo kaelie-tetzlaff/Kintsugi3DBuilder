@@ -115,13 +115,13 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public boolean hasDefine(String key)
+    public boolean hasDefine(@NotNull String key)
     {
         return defines.containsKey(key);
     }
 
     @Override
-    public @NotNull Optional<Object> getDefine(String key)
+    public @NotNull Optional<Object> getDefine(@NotNull String key)
     {
         return defines.containsKey(key) ? Optional.of(defines.get(key)) : Optional.empty();
     }
@@ -211,7 +211,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public void setTexture(int location, Texture<OpenGLContext> texture)
+    public void setTexture(int location, @NotNull Texture<OpenGLContext> texture)
     {
         if (texture instanceof OpenGLTexture)
         {
@@ -226,13 +226,13 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public void setTexture(@NotNull String name, Texture<OpenGLContext> texture)
+    public void setTexture(@NotNull String name, @NotNull Texture<OpenGLContext> texture)
     {
         setTexture(getUniformLocation(name), texture);
     }
 
     @Override
-    public void setUniformBuffer(int index, UniformBuffer<OpenGLContext> buffer)
+    public void setUniformBuffer(int index, @NotNull UniformBuffer<OpenGLContext> buffer)
     {
         if (buffer instanceof OpenGLUniformBuffer)
         {
@@ -251,7 +251,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public void setUniformBuffer(@NotNull String name, UniformBuffer<OpenGLContext> buffer)
+    public void setUniformBuffer(@NotNull String name, @NotNull UniformBuffer<OpenGLContext> buffer)
     {
         setUniformBuffer(getUniformBlockIndex(name), buffer);
     }

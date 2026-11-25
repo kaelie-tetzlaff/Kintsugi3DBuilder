@@ -56,7 +56,7 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
     private Supplier<Map<String, Optional<Object>>> fragmentShaderDefinesFactory;
 
     protected StandardShaderComponent(@NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneViewportModel sceneViewportModel, String sceneObjectTag,
-                                      SceneModel sceneModel, @Nullable LightingResources<ContextType> lightingResources, File fragmentShaderFile)
+                                      SceneModel sceneModel, @Nullable LightingResources<ContextType> lightingResources, @Nullable File fragmentShaderFile)
     {
         super(resources.getContext(), sceneViewportModel, sceneObjectTag);
         this.resources = resources;
@@ -299,7 +299,11 @@ public abstract class StandardShaderComponent<ContextType extends Context<Contex
 
         if (lightingResources != null)
         {
-            program.setTexture("shadowMaps", lightingResources.getShadowMaps());
+            ReadonlyTexture3D<ContextType> shadowMaps = lightingResources.getShadowMaps();
+            if (shadowMaps != null)
+            {
+                program.setTexture("shadowMaps", shadowMaps);
+            }
         }
 
         if (lightingResources == null || lightingResources.getEnvironmentMap() == null

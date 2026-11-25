@@ -254,7 +254,7 @@ public interface TextureResources<ContextType extends Context<ContextType>>
             @Override
             public void blitCroppedAndScaled(
                 int destX, int destY, int destWidth, int destHeight,
-                ReadonlyTextureResources<ContextType> readSource, int srcX, int srcY, int srcWidth, int srcHeight,
+                @NotNull ReadonlyTextureResources<ContextType> readSource, int srcX, int srcY, int srcWidth, int srcHeight,
                 boolean linearFiltering)
             {
                 // Do nothing

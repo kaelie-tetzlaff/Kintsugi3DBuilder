@@ -55,7 +55,7 @@ public class SynchronizedViewpointModel extends ViewpointModelBase
     }
 
     @Override
-    public final void setTarget(Vector3 target)
+    public final void setTarget(@NotNull Vector3 target)
     {
         this.target.setValue(target);
     }

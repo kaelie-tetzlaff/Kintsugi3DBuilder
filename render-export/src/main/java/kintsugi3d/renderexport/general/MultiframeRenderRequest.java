@@ -60,7 +60,8 @@ final class MultiframeRenderRequest extends RenderRequestBase
     }
 
     @Override
-    public <ContextType extends Context<ContextType>> void executeRequest(@NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @Nullable ProgressMonitor monitor)
+    public <ContextType extends Context<ContextType>> void executeRequest(
+        @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @Nullable ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         ReadonlyGraphicsResourcesImageSpace<ContextType> resources = renderable.getResources();

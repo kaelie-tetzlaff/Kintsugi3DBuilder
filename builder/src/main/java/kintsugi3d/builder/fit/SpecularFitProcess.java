@@ -289,13 +289,14 @@ public abstract class SpecularFitProcess
                         {
                             if (initialNormalMap.isPresent())
                             {
+                                assert initialNormalMap.get() != null;
+
                                 int x = settings.getImageCacheSettings().getBlockStartX(i);
                                 int y = settings.getImageCacheSettings().getBlockStartY(j);
                                 int width = settings.getImageCacheSettings().getBlockStartX(i + 1) - x;
                                 int height = settings.getImageCacheSettings().getBlockStartY(j + 1) - y;
 
-                                blockOptimization.getNormalOptimization().getNormalMap().blitCropped(
-                                    initialNormalMap.get(), x, y, width, height);
+                                blockOptimization.getNormalOptimization().getNormalMap().blitCropped(initialNormalMap.get(), x, y, width, height);
                             }
 
                             // Use basis functions previously optimized at a lower resolution

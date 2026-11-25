@@ -77,7 +77,7 @@ public interface Texture2D<ContextType extends Context<ContextType>>
      */
     @Override
     void blitCroppedAndScaled(int destX, int destY, int destWidth, int destHeight,
-        ReadonlyTexture2D<ContextType> readSource, int srcX, int srcY, int srcWidth, int srcHeight, boolean linearFiltering);
+                              @NotNull ReadonlyTexture2D<ContextType> readSource, int srcX, int srcY, int srcWidth, int srcHeight, boolean linearFiltering);
 
     @Override
     default @NotNull Texture2D<ContextType> crop(int x, int y, int cropWidth, int cropHeight)

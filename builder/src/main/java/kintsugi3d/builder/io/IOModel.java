@@ -356,7 +356,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public final void saveProject(@NotNull File projectFile, Runnable finishedCallback) throws IOException
+    public final void saveProject(@NotNull File projectFile, @Nullable Runnable finishedCallback) throws IOException
     {
         ViewSet viewSet = getLoadedViewSet();
         setViewsetDirectories(projectFile, viewSet);

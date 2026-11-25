@@ -381,7 +381,7 @@ public final class RenderingBootstrap
                     {
                         @Override
                         public <ContextType extends Context<ContextType>>
-                        void executeRequest(ReadonlyImageBasedRenderable<ContextType> instance, ProgressMonitor monitor)
+                        void executeRequest(@NotNull ReadonlyImageBasedRenderable<ContextType> instance, ProgressMonitor monitor)
                         {
                             WindowSynchronization.getInstance().quitWithoutConfirmation();
                         }

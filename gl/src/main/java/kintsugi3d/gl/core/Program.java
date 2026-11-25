@@ -17,7 +17,6 @@ package kintsugi3d.gl.core;
 
 import kintsugi3d.gl.vecmath.*;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Optional;
@@ -38,7 +37,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param key The name of the #define in the shader.
      * @return True if a #define of that name has been specified for this program; false otherwise.
      */
-    boolean hasDefine(String key);
+    boolean hasDefine(@NotNull String key);
 
     /**
      * Gets the value of a preprocessor #define has been specified to be injected into the code.
@@ -47,7 +46,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param key The name of the #define in the shader.
      * @return The value that should be assigned to that name in the shader, if it has been specified.
      */
-    Optional<Object> getDefine(String key);
+    Optional<Object> getDefine(@NotNull String key);
 
     /**
      * Gets all defines for this program.
@@ -61,7 +60,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
      */
-    void setUniform(String name, boolean value);
+    void setUniform(@NotNull String name, boolean value);
 
     /**
      * Sets a uniform variable by its shader name.
@@ -69,7 +68,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
      */
-    void setUniform(String name, Vector4 value);
+    void setUniform(@NotNull String name, @NotNull Vector4 value);
 
     /**
      * Sets a uniform variable by its shader name.
@@ -77,7 +76,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
      */
-    void setUniform(String name, Vector3 value);
+    void setUniform(@NotNull String name, @NotNull Vector3 value);
 
     /**
      * Sets a uniform variable by its shader name.
@@ -85,7 +84,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
      */
-    void setUniform(String name, Vector2 value);
+    void setUniform(@NotNull String name, @NotNull Vector2 value);
 
     /**
      * Sets a uniform variable by its shader name.
@@ -93,7 +92,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
      */
-    void setUniform(String name, float value);
+    void setUniform(@NotNull String name, float value);
 
     /**
      * Sets a uniform variable by its shader name.
@@ -101,7 +100,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
      */
-    void setUniform(String name, IntVector4 value);
+    void setUniform(@NotNull String name, @NotNull IntVector4 value);
 
     /**
      * Sets a uniform variable by its shader name.
@@ -109,7 +108,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
      */
-    void setUniform(String name, IntVector3 value);
+    void setUniform(@NotNull String name, @NotNull IntVector3 value);
 
     /**
      * Sets a uniform variable by its shader name.
@@ -117,7 +116,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
      */
-    void setUniform(String name, IntVector2 value);
+    void setUniform(@NotNull String name, @NotNull IntVector2 value);
 
     /**
      * Sets a uniform variable by its shader name.
@@ -125,7 +124,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
      */
-    void setUniform(String name, int value);
+    void setUniform(@NotNull String name, int value);
 
     /**
      * Sets a uniform variable by its shader name.
@@ -133,7 +132,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
      */
-    default void setUniform(String name, @NotNull IntLike value)
+    default void setUniform(@NotNull String name, @NotNull IntLike value)
     {
         setUniform(name, value.getIntValue());
     }
@@ -144,7 +143,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param name  The name used to reference the variable within the shaders.
      * @param value The value to set the uniform variable to.
      */
-    void setUniform(String name, @Nullable Matrix4 value);
+    void setUniform(@NotNull String name, @NotNull Matrix4 value);
 
     /**
      * Sets a uniform variable at a particular location in this shader program.
@@ -160,7 +159,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param location The location of the uniform variable to set.
      * @param value    The value to set the uniform variable to.
      */
-    void setUniform(int location, Vector4 value);
+    void setUniform(int location, @NotNull Vector4 value);
 
     /**
      * Sets a uniform variable at a particular location in this shader program.
@@ -168,7 +167,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param location The location of the uniform variable to set.
      * @param value    The value to set the uniform variable to.
      */
-    void setUniform(int location, Vector3 value);
+    void setUniform(int location, @NotNull Vector3 value);
 
     /**
      * Sets a uniform variable at a particular location in this shader program.
@@ -176,7 +175,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param location The location of the uniform variable to set.
      * @param value    The value to set the uniform variable to.
      */
-    void setUniform(int location, Vector2 value);
+    void setUniform(int location, @NotNull Vector2 value);
 
     /**
      * Sets a uniform variable at a particular location in this shader program.
@@ -192,7 +191,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param location The location of the uniform variable to set.
      * @param value    The value to set the uniform variable to.
      */
-    void setUniform(int location, IntVector4 value);
+    void setUniform(int location, @NotNull IntVector4 value);
 
     /**
      * Sets a uniform variable at a particular location in this shader program.
@@ -200,7 +199,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param location The location of the uniform variable to set.
      * @param value    The value to set the uniform variable to.
      */
-    void setUniform(int location, IntVector3 value);
+    void setUniform(int location, @NotNull IntVector3 value);
 
     /**
      * Sets a uniform variable at a particular location in this shader program.
@@ -208,7 +207,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param location The location of the uniform variable to set.
      * @param value    The value to set the uniform variable to.
      */
-    void setUniform(int location, IntVector2 value);
+    void setUniform(int location, @NotNull IntVector2 value);
 
     /**
      * Sets a uniform variable at a particular location in this shader program.
@@ -235,7 +234,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param location The location of the uniform variable to set.
      * @param value    The value to set the uniform variable to.
      */
-    void setUniform(int location, Matrix4 value);
+    void setUniform(int location, @NotNull Matrix4 value);
 
     /**
      * Gets the location of a uniform variable with a particular name within this shader program.
@@ -243,7 +242,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param name The name used to reference the variable within the shaders.
      * @return The location of the uniform variable.
      */
-    int getUniformLocation(String name);
+    int getUniformLocation(@NotNull String name);
 
     /**
      * Gets the location of a vertex attribute with a particular name within this shader program.
@@ -251,7 +250,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param name The name used to reference the vertex attribute within the shaders.
      * @return The location of the vertex attribute.
      */
-    int getVertexAttribLocation(String name);
+    int getVertexAttribLocation(@NotNull String name);
 
     /**
      * Designates a texture to be used as a uniform variable at a particular location in this shader program.
@@ -261,7 +260,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param location The location of the uniform variable to set.
      * @param texture  The texture to use as this uniform variable.
      */
-    void setTexture(int location, Texture<ContextType> texture);
+    void setTexture(int location, @NotNull Texture<ContextType> texture);
 
     /**
      * Designates a texture to be used as the uniform variable with a particular shader name.
@@ -271,7 +270,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param name    The name used to reference the variable within the shaders.
      * @param texture The texture to use as this uniform variable.
      */
-    void setTexture(String name, @Nullable @Nullable @Nullable Texture<ContextType> texture);
+    void setTexture(@NotNull String name, @NotNull Texture<ContextType> texture);
 
     /**
      * Designates a uniform buffer to be used at a particular uniform block index in this shader program.
@@ -281,7 +280,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param index  The index of the uniform block to set.
      * @param buffer The uniform buffer to use.
      */
-    void setUniformBuffer(int index, UniformBuffer<ContextType> buffer);
+    void setUniformBuffer(int index, @NotNull UniformBuffer<ContextType> buffer);
 
     /**
      * Designates a uniform buffer to be used at a particular uniform block index in this shader program.
@@ -291,7 +290,7 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param name   The name used to reference the uniform block within the shaders.
      * @param buffer The uniform buffer to use.
      */
-    void setUniformBuffer(String name, UniformBuffer<ContextType> buffer);
+    void setUniformBuffer(@NotNull String name, @NotNull UniformBuffer<ContextType> buffer);
 
     /**
      * Gets the index of a uniform block with a particular name within this shader program.
@@ -299,5 +298,5 @@ public interface Program<ContextType extends Context<ContextType>> extends Conte
      * @param name The name used to reference the uniform block within the shaders.
      * @return The index of the uniform block.
      */
-    int getUniformBlockIndex(String name);
+    int getUniformBlockIndex(@NotNull String name);
 }

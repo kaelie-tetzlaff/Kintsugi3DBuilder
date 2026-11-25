@@ -54,6 +54,11 @@ public interface IO
     @Nullable File getViewSetFile();
     @Nullable File getProjectFile();
 
+    private @NotNull File validateProjectFile()
+    {
+        return Objects.requireNonNull(getProjectFile(), "No project is open.");
+    }
+
     default boolean isProjectProcessed()
     {
         if (hasLoadedRenderable())
@@ -95,7 +100,7 @@ public interface IO
      *
      * @throws IOException
      */
-    void saveProject(@Nullable @Nullable File projectFile, @Nullable @Nullable Runnable finishedCallback) throws IOException;
+    void saveProject(@NotNull File projectFile, @Nullable Runnable finishedCallback) throws IOException;
 
     /**
      * Saves the project, including textures and glTF model.  If the project file is not a .vset, the .vset will be created in a supporting files directory.
@@ -124,7 +129,7 @@ public interface IO
      */
     default void saveProject(Runnable finishedCallback) throws IOException
     {
-        saveProject(getProjectFile(), finishedCallback);
+        saveProject(validateProjectFile(), finishedCallback);
     }
 
     /**
@@ -137,7 +142,7 @@ public interface IO
      */
     default void saveProject() throws IOException
     {
-        saveProject(getProjectFile(), null);
+        saveProject(validateProjectFile(), null);
     }
 
     @Nullable EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException;

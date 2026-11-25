@@ -132,10 +132,27 @@ public class GeometryResources<ContextType extends Context<ContextType>>
     public final @NotNull DrawableResource<ContextType> createDrawable(@NotNull Program<ContextType> program)
     {
         DrawableResource<ContextType> drawable = program.getContext().createDrawable(program);
-        drawable.addVertexBuffer("position", positionBuffer);
-        drawable.addVertexBuffer("texCoord", texCoordBuffer);
-        drawable.addVertexBuffer("normal", normalBuffer);
-        drawable.addVertexBuffer("tangent", tangentBuffer);
+
+        if (positionBuffer != null)
+        {
+            drawable.addVertexBuffer("position", positionBuffer);
+        }
+
+        if (texCoordBuffer != null)
+        {
+            drawable.addVertexBuffer("texCoord", texCoordBuffer);
+        }
+
+        if (normalBuffer != null)
+        {
+            drawable.addVertexBuffer("normal", normalBuffer);
+        }
+
+        if (tangentBuffer != null)
+        {
+            drawable.addVertexBuffer("tangent", tangentBuffer);
+        }
+
         return drawable;
     }
 

@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * Encapsulates the process of generating a depth map for occlusion / shadow culling with image-based rendering
@@ -52,9 +53,13 @@ public final class DepthMapGenerator<ContextType extends Context<ContextType>> i
     private DepthMapGenerator(@NotNull ReadonlyGeometryResources<ContextType> geometryResources) throws IOException
     {
         this.geometryResources = geometryResources;
+
+        ReadonlyVertexBuffer<ContextType> positionBuffer = geometryResources.getPositionBuffer();
+        Objects.requireNonNull(positionBuffer, "Geometry must have vertex positions.");
+
         depthRenderingProgram = getDepthMapProgramBuilder(geometryResources.getContext()).createProgram();
         depthDrawable = depthRenderingProgram.getContext().createDrawable(depthRenderingProgram);
-        depthDrawable.addVertexBuffer("position", geometryResources.getPositionBuffer());
+        depthDrawable.addVertexBuffer("position", positionBuffer);
     }
 
     private static <ContextType extends Context<ContextType>> ProgramBuilder<ContextType> getDepthMapProgramBuilder(@NotNull ContextType context)

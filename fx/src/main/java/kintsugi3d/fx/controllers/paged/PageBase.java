@@ -87,11 +87,11 @@ abstract class PageBase<InType, OutType, ControllerType extends PageController<?
 
     @SuppressWarnings("DesignForExtension")
     @Override
-    public void setNextPage(@NotNull Page<? super OutType, ?> page)
+    public void setNextPage(@Nullable Page<? super OutType, ?> page)
     {
         nextPageProperty.set(page);
 
-        if (page.getPrevPage() == null)
+        if (page != null && page.getPrevPage() == null)
         {
             // set default link back (useful for fallback pages which weren't accessed via next button)
             page.setPrevPage(this);

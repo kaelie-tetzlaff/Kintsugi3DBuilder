@@ -186,7 +186,7 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
      * Does not take ownership of this buffer.
      * @param positionBuffer
      */
-    public final void setShadowCastingPositionBuffer(@Nullable ReadonlyVertexBuffer<ContextType> positionBuffer)
+    public final void setShadowCastingPositionBuffer(@NotNull ReadonlyVertexBuffer<ContextType> positionBuffer)
     {
         validateShadowDrawable().addVertexBuffer("position", positionBuffer);
         shadowCastingPositionBuffer = positionBuffer;
@@ -270,7 +270,7 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
         validateShadowFramebuffer().clearDepthBuffer();
 
         validatedShadowProgram.setUniform("model_view", sceneModel.getLightModelViewMatrix(lightIndex));
-        validateShadowDrawable().draw(PrimitiveMode.TRIANGLES, shadowFramebuffer);
+        validateShadowDrawable().draw(PrimitiveMode.TRIANGLES, Objects.requireNonNull(shadowFramebuffer, UNINITIALIZED_MESSAGE));
     }
 
     public final ReadonlyTexture2D<ContextType> getScreenSpaceDepthTexture()

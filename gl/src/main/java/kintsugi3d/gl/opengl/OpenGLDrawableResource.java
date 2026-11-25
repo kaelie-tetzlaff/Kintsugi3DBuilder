@@ -124,7 +124,7 @@ class OpenGLDrawableResource extends DrawableResourceBase<OpenGLContext>
     }
 
     @Override
-    public final void addVertexBuffer(int location, ReadonlyVertexBuffer<OpenGLContext> buffer)
+    public final void addVertexBuffer(int location, @NotNull ReadonlyVertexBuffer<OpenGLContext> buffer)
     {
         if (buffer instanceof OpenGLVertexBuffer)
         {
@@ -140,7 +140,7 @@ class OpenGLDrawableResource extends DrawableResourceBase<OpenGLContext>
     }
 
     @Override
-    public final void addVertexBuffer(@NotNull String name, ReadonlyVertexBuffer<OpenGLContext> buffer)
+    public final void addVertexBuffer(@NotNull String name, @NotNull ReadonlyVertexBuffer<OpenGLContext> buffer)
     {
         addVertexBuffer(program.getVertexAttribLocation(name), buffer);
     }

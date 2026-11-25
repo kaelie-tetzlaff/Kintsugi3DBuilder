@@ -859,7 +859,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
      * Sets the mesh filename.
      * @param filename The new filename of the mesh.
      */
-    public void setFilename(File filename)
+    public void setFilename(@Nullable File filename)
     {
         this.filename = filename;
     }
