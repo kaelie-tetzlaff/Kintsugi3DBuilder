@@ -37,6 +37,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -80,7 +81,8 @@ public final class SpecularFitFinal<ContextType extends Context<ContextType>>
             .collect(Collectors.toMap(Entry::getKey,
                 entry -> context.getTextureFactory()
                     .build2DColorTexture(textureResolution.width, textureResolution.height)
-                    .setInternalFormat(entry.getValue().getInternalUncompressedColorFormat()) // copy format of the original.
+                    .setInternalFormat(Objects.requireNonNull(entry.getValue().getInternalUncompressedColorFormat(),
+                        "Compressed texture formats are not supported for specular fit.")) // copy format of the original.
                     .setLinearFilteringEnabled(true)
                     .createTexture())));
 

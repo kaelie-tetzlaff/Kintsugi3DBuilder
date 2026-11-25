@@ -23,7 +23,7 @@ import java.util.Map;
 
 public interface ImageSetInfo
 {
-    String getName();
+    @Nullable String getName();
     List<ImageIdentifier> getViews();
     Map<Integer, Image> getThumbnailMap();
     @Nullable String findFullResImagePath(String imageName);

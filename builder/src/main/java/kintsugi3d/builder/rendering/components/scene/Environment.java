@@ -72,9 +72,9 @@ public class Environment<ContextType extends Context<ContextType>> extends Shade
             getDrawable().program().setUniform("envMapMatrix", envMapMatrix);
             getDrawable().program().setUniform("envMapIntensity", sceneModel.getClearColor());
 
+            ColorFormat uncompressedColorFormat = lightingResources.getEnvironmentMap().getInternalUncompressedColorFormat();
             getDrawable().program().setUniform("sRGBEncoded",
-                lightingResources.getEnvironmentMap().isInternalFormatCompressed() ||
-                    lightingResources.getEnvironmentMap().getInternalUncompressedColorFormat().dataType != DataType.FLOATING_POINT);
+                uncompressedColorFormat == null || uncompressedColorFormat.dataType != DataType.FLOATING_POINT);
 
             getContext().getState().disableDepthTest();
             getDrawable().draw(PrimitiveMode.TRIANGLE_FAN, framebuffer);
