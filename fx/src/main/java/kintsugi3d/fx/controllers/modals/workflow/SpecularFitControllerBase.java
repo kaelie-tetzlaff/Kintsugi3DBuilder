@@ -23,7 +23,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
-import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.fit.SpecularFitRequest;
 import kintsugi3d.builder.rendering.Rendering;
 import kintsugi3d.fx.controllers.modals.ProjectSettingsControllerBase;
@@ -105,7 +104,7 @@ abstract class SpecularFitControllerBase extends ProjectSettingsControllerBase
         // Apply settings so they're seen by the SpecularFitRequest and also remembered for later.
         applySettings();
 
-        if (Global.io().getAggregateProgressMonitor().isConflictingProcess())
+        if (Rendering.isProcessingRequest())
         {
             error("Failed to start process", "Another process is already running.");
             return false;

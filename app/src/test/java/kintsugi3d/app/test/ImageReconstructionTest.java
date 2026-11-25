@@ -159,9 +159,8 @@ class ImageReconstructionTest
         }
 
         @Override
-        public final boolean isConflictingProcess()
+        public final void blocked()
         {
-            return false;
         }
     }
 

@@ -18,10 +18,7 @@ package kintsugi3d.builder.rendering;
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.fit.settings.ExportSettings;
-import kintsugi3d.builder.io.IOHandler;
-import kintsugi3d.builder.io.ReadonlyLoadOptionsModel;
-import kintsugi3d.builder.io.ViewSetLoadOptions;
-import kintsugi3d.builder.io.ViewSetWriterToVSET;
+import kintsugi3d.builder.io.*;
 import kintsugi3d.builder.io.events.ProjectLoadedEvent;
 import kintsugi3d.builder.io.events.ProjectLoadedListener;
 import kintsugi3d.builder.io.events.ProjectProcessedEvent;
@@ -341,8 +338,9 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         String internalName, @NotNull File vsetFile, File supportingFilesDirectory, ReadonlyLoadOptionsModel loadOptions)
         throws UserCancellationException, MeshImportException, IOException
     {
-        if (progressMonitor.isConflictingProcess())
+        if (Rendering.isProcessingRequest())
         {
+            progressMonitor.blocked();
             return;
         }
 
@@ -383,9 +381,9 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     public final void loadFromMetashapeModel(File newProjectFile, @NotNull MetashapeModel model, ReadonlyLoadOptionsModel loadOptionsModel)
         throws UserCancellationException, MissingImagesException, MeshImportException, IOException, XMLStreamException
     {
-
-        if (progressMonitor.isConflictingProcess())
+        if (Rendering.isProcessingRequest())
         {
+            progressMonitor.blocked();
             return;
         }
 
@@ -433,8 +431,9 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                                          @NotNull ViewSetLoadOptions viewSetLoadOptions, ReadonlyLoadOptionsModel imageLoadOptions)
         throws Exception
     {
-        if (progressMonitor.isConflictingProcess())
+        if (Rendering.isProcessingRequest())
         {
+            progressMonitor.blocked();
             return;
         }
         progressMonitor.start();

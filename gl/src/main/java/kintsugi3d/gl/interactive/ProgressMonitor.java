@@ -113,9 +113,7 @@ public interface ProgressMonitor
     }
 
     /**
-     * Usually a call to ProgressBarsController.getInstance().isProcessing().
-     * Used to stop multiple processes from conflicting with each other.
-     * @return true if a process is in progress.
+     * Used to indicate tot he user that a process did not run in order to prevent multiple processes from conflicting with each other.
      */
-    boolean isConflictingProcess();
+    void blocked();
 }

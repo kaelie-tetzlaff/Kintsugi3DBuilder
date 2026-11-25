@@ -144,12 +144,11 @@ class BackendProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public final boolean isConflictingProcess()
+    public final void blocked()
     {
-        if (base == null)
+        if (base != null)
         {
-            return false;
+            base.blocked();
         }
-        return base.isConflictingProcess();
     }
 }

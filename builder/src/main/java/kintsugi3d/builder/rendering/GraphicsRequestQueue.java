@@ -17,6 +17,8 @@ package kintsugi3d.builder.rendering;
 
 public interface GraphicsRequestQueue
 {
+    boolean isProcessingRequest();
+
     boolean isEmpty();
 
     void addRequestAddedListener(Runnable listener);
