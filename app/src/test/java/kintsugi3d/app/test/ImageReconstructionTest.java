@@ -965,7 +965,7 @@ class ImageReconstructionTest
     }
 
     @SuppressWarnings("unused")
-    private void testFitSynthetic(ViewSet viewSet, Function<ProgramBuilder<OpenGLContext>, ProgramBuilder<OpenGLContext>> injectDefines,
+    private void testFitSynthetic(@NotNull ViewSet viewSet, Function<ProgramBuilder<OpenGLContext>, ProgramBuilder<OpenGLContext>> injectDefines,
                                   @NotNull Consumer<ReadonlyTextureResources<? extends Context<?>>> fitValidation, @NotNull Consumer<ReadonlyColorAppearanceRMSE> rmseValidation, @NotNull String testName)
     {
         try (ImageBasedGraphicsResources<OpenGLContext> resources = new GraphicsResourcesAnalytic<>(context, viewSet, potatoGeometry, injectDefines))
