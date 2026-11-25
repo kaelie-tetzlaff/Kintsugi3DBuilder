@@ -46,7 +46,7 @@
                 </executions>
             </plugin>
             <!-- Copy the OpenJFX jars (classifier matched to the current OS profile) to
-                 target/lib/javafx. JavaFX must be loaded as JPMS modules via --module-path
+                 target/lib/javafx. JavaFX must be loaded as JPMS modules on the module path
                  and cannot be shaded into the application jar. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
