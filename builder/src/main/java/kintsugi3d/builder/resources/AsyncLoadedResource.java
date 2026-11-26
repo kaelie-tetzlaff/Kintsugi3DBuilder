@@ -15,7 +15,6 @@
 
 package kintsugi3d.builder.resources;
 
-import kintsugi3d.builder.rendering.Rendering;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.util.EncodableColorImage;
 import org.jetbrains.annotations.Nullable;
