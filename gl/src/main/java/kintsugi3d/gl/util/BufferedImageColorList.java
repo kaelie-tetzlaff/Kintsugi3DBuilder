@@ -16,6 +16,7 @@
 package kintsugi3d.gl.util;
 
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.image.BufferedImage;
 import java.util.AbstractList;
@@ -32,7 +33,7 @@ public class BufferedImageColorList extends AbstractList<Vector4> implements Col
         this.img = img;
     }
 
-    @Override public final Vector4 get(int index)
+    @Override public final @NotNull Vector4 get(int index)
     {
         // flip vertical
         int rgb = img.getRGB(index % img.getWidth(), img.getHeight() - 1 - index / img.getWidth());

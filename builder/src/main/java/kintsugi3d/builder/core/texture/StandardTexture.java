@@ -15,6 +15,8 @@
 
 package kintsugi3d.builder.core.texture;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
@@ -49,13 +51,13 @@ public enum StandardTexture
         this.details = details;
     }
 
-    public static <TextureType> Map<TextureInfo, TextureType> convertEnumMapToObjectMap(Map<StandardTexture, TextureType> original)
+    public static <TextureType> @NotNull Map<TextureInfo, TextureType> convertEnumMapToObjectMap(@NotNull Map<StandardTexture, TextureType> original)
     {
         return original.entrySet().stream().collect(Collectors.toMap(
             entry -> entry.getKey().details, Entry::getValue));
     }
 
-    public static <TextureType> Map<StandardTexture, TextureType> convertObjectMapToEnumMap(Map<TextureInfo, TextureType> original)
+    public static <TextureType> @NotNull Map<StandardTexture, TextureType> convertObjectMapToEnumMap(@NotNull Map<TextureInfo, TextureType> original)
     {
         Map<StandardTexture, TextureType> standardTextures = new EnumMap<>(StandardTexture.class);
         for (StandardTexture textureID : values())

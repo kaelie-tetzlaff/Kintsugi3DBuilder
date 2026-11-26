@@ -17,6 +17,7 @@ package kintsugi3d.util;
 
 import kintsugi3d.gl.window.Key;
 import kintsugi3d.gl.window.ModifierKeys;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -46,7 +47,7 @@ public class KeyPress
     }
 
     @Override
-    public final String toString()
+    public final @NotNull String toString()
     {
         StringBuilder builder = new StringBuilder(40);
 

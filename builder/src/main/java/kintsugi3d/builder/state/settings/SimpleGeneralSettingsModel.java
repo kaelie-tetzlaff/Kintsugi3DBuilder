@@ -66,8 +66,9 @@ public class SimpleGeneralSettingsModel extends GeneralSettingsModelBase
     @Override
     protected final void setUnchecked(String name, Object value)
     {
+        //noinspection DataFlowIssue
         settingMap.compute(name, (n, old) ->
-            new GeneralSetting(name, Objects.requireNonNull(old).getType(), value, old.shouldSerialize()));
+            new GeneralSetting(name, old.getType(), value, old.shouldSerialize()));
     }
 
     @Override

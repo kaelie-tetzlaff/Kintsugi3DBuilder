@@ -38,11 +38,11 @@ public class SentinelPage<T> extends PageBase<Object, T, PageController<? super 
     }
 
     @Override
-    public final void setNextPage(Page<? super T, ?> page)
+    public final void setNextPage(@Nullable Page<? super T, ?> page)
     {
         super.setNextPage(page);
 
-        if (Objects.equals(page.getPrevPage(), this))
+        if (page != null && Objects.equals(page.getPrevPage(), this))
         {
             // don't link back to this page
             page.setPrevPage(null);

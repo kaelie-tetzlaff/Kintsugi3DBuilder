@@ -31,6 +31,7 @@ import kintsugi3d.fx.internal.ReadonlyObservableGeneralSettingsModel;
 import kintsugi3d.fx.util.SafeFloatStringConverter;
 import kintsugi3d.fx.util.SafeNumberStringConverter;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -43,14 +44,14 @@ public class ProjectSettingsManager
     private final ObservableGeneralSettingsModel localSettingsModel = getDefaultSettingsModel();
     private final Set<String> trackedSettings = new HashSet<>(8);
 
-    protected static ObservableGeneralSettingsModel getDefaultSettingsModel()
+    protected static @NotNull ObservableGeneralSettingsModel getDefaultSettingsModel()
     {
         ObservableGeneralSettingsModel settingsModel = new ObservableGeneralSettingsModel();
         DefaultSettings.applyProjectDefaults(settingsModel);
         return settingsModel;
     }
 
-    public final ReadonlyObservableGeneralSettingsModel getLocalSettingsModel()
+    public final @NotNull ReadonlyObservableGeneralSettingsModel getLocalSettingsModel()
     {
         return localSettingsModel;
     }
@@ -60,7 +61,7 @@ public class ProjectSettingsManager
         return projectSettingsModel;
     }
 
-    public final Set<String> getTrackedSettings()
+    public final @NotNull Set<String> getTrackedSettings()
     {
         return Collections.unmodifiableSet(trackedSettings);
     }
@@ -124,7 +125,7 @@ public class ProjectSettingsManager
     {
     }
 
-    public final void bindFloatSetting(TextField textField, String settingName, float minValue, float maxValue)
+    public final void bindFloatSetting(@NotNull TextField textField, String settingName, float minValue, float maxValue)
     {
         trackSetting(settingName);
         StaticUtilities.makeClampedNumeric(minValue, maxValue, textField);
@@ -133,12 +134,12 @@ public class ProjectSettingsManager
         textField.textProperty().bindBidirectional(localSettingsModel.getNumericProperty(settingName), converter);
     }
 
-    public final void bindNormalizedSetting(TextField textField, String settingName)
+    public final void bindNormalizedSetting(@NotNull TextField textField, String settingName)
     {
         bindFloatSetting(textField, settingName, 0, 1);
     }
 
-    public final void bindIntegerSetting(TextField textField, String settingName, int minValue, int maxValue)
+    public final void bindIntegerSetting(@NotNull TextField textField, String settingName, int minValue, int maxValue)
     {
         trackSetting(settingName);
         StaticUtilities.makeClampedInteger(minValue, maxValue, textField);
@@ -147,29 +148,29 @@ public class ProjectSettingsManager
         textField.textProperty().bindBidirectional(localSettingsModel.getNumericProperty(settingName), converter);
     }
 
-    public final void bindNumericSetting(Slider slider, String settingName)
+    public final void bindNumericSetting(@NotNull Slider slider, String settingName)
     {
         trackSetting(settingName);
         slider.setValue(localSettingsModel.getDouble(settingName));
         slider.valueProperty().bindBidirectional(localSettingsModel.getNumericProperty(settingName));
     }
 
-    public final void bindBooleanSetting(CheckBox checkBox, String settingName)
+    public final void bindBooleanSetting(@NotNull CheckBox checkBox, String settingName)
     {
         trackSetting(settingName);
         checkBox.setSelected(localSettingsModel.getBoolean(settingName));
         checkBox.selectedProperty().bindBidirectional(localSettingsModel.getBooleanProperty(settingName));
     }
 
-    public final void bindBooleanSetting(BooleanProperty property, String settingName)
+    public final void bindBooleanSetting(@NotNull BooleanProperty property, String settingName)
     {
         trackSetting(settingName);
         property.set(localSettingsModel.getBoolean(settingName));
         property.bindBidirectional(localSettingsModel.getBooleanProperty(settingName));
     }
 
-    public final <T> void bindNumericComboBox(ComboBox<T> comboBox, String settingName,
-                                              Function<Number, T> choiceConstructor, Function<T, Number> extractNumeric)
+    public final <T> void bindNumericComboBox(@NotNull ComboBox<T> comboBox, String settingName,
+                                              @NotNull Function<Number, T> choiceConstructor, @NotNull Function<T, Number> extractNumeric)
     {
         trackSetting(settingName);
 
@@ -183,8 +184,8 @@ public class ProjectSettingsManager
         comboBox.setValue(choiceConstructor.apply(localSettingsModel.get(settingName, Number.class)));
     }
 
-    public final <T> void bindTextComboBox(ComboBox<T> comboBox, String settingName,
-                                           Function<String, T> choiceConstructor, Function<T, String> extractText)
+    public final <T> void bindTextComboBox(@NotNull ComboBox<T> comboBox, String settingName,
+                                           @NotNull Function<String, T> choiceConstructor, @NotNull Function<T, String> extractText)
     {
         trackSetting(settingName);
 
@@ -198,12 +199,12 @@ public class ProjectSettingsManager
         comboBox.setValue(choiceConstructor.apply(localSettingsModel.get(settingName, String.class)));
     }
 
-    public final void bindTextComboBox(ComboBox<String> comboBox, String settingName)
+    public final void bindTextComboBox(@NotNull ComboBox<String> comboBox, String settingName)
     {
         bindTextComboBox(comboBox, settingName, Function.identity(), Function.identity());
     }
 
-    public final <T> void bindObjectComboBox(ComboBox<T> comboBox, String settingName, Class<T> objectClass)
+    public final <T> void bindObjectComboBox(@NotNull ComboBox<T> comboBox, String settingName, @NotNull Class<T> objectClass)
     {
         trackSetting(settingName);
 

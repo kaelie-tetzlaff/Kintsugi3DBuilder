@@ -19,6 +19,7 @@ import de.javagl.jgltf.impl.v2.MaterialNormalTextureInfo;
 import de.javagl.jgltf.impl.v2.MaterialOcclusionTextureInfo;
 import de.javagl.jgltf.impl.v2.TextureInfo;
 import kintsugi3d.builder.core.texture.StandardTexture;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Base class for glTF material export that ensures a PBR fallback that should look presentable for most models in typical viewers
@@ -33,7 +34,7 @@ public class PBRExporter extends MaterialExporter
     }
 
     @StandardTextureExport(StandardTexture.ORM)
-    public final void orm(TextureInfo orm)
+    public final void orm(@NotNull TextureInfo orm)
     {
         getAsset().getGltf().getMaterials().forEach(material ->
         {

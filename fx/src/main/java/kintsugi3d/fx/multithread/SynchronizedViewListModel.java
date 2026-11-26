@@ -17,17 +17,18 @@ package kintsugi3d.fx.multithread;
 
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.state.SelectableViewListModel;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class SynchronizedViewListModel implements SelectableViewListModel
 {
-    private final SynchronizedValue<View> selectedCameraView;
-    private final SynchronizedValue<List<View>> cameraViewList;
-    private final SynchronizedValue<Boolean> cameraViewSnapEnabled;
-    private final SelectableViewListModel baseModel;
+    private final @NotNull SynchronizedValue<View> selectedCameraView;
+    private final @NotNull SynchronizedValue<List<View>> cameraViewList;
+    private final @NotNull SynchronizedValue<Boolean> cameraViewSnapEnabled;
+    private final @NotNull SelectableViewListModel baseModel;
 
-    public SynchronizedViewListModel(SelectableViewListModel baseModel)
+    public SynchronizedViewListModel(@NotNull SelectableViewListModel baseModel)
     {
         selectedCameraView = SynchronizedValue.createFromFunctions(baseModel::getSelectedView, baseModel::setSelectedView);
         cameraViewList = SynchronizedValue.createFromFunctions(baseModel::getViewList, baseModel::setViewList);

@@ -17,6 +17,7 @@ package kintsugi3d.gl.core;
 
 import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
 import kintsugi3d.gl.types.AbstractDataType;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.File;
@@ -193,7 +194,7 @@ public interface Texture3D<ContextType extends Context<ContextType>>
      */
     @Override
     default void blitCroppedAndScaled(int destX, int destY, int destWidth, int destHeight,
-        ReadonlyTexture3D<ContextType> readSource, int srcX, int srcY, int srcWidth, int srcHeight, boolean linearFiltering)
+                                      @NotNull ReadonlyTexture3D<ContextType> readSource, int srcX, int srcY, int srcWidth, int srcHeight, boolean linearFiltering)
     {
         blitCroppedAndScaled(destX, destY, 0, destWidth, destHeight,
             readSource, srcX, srcY, 0, srcWidth, srcHeight, readSource.getDepth(), linearFiltering);
@@ -243,7 +244,7 @@ public interface Texture3D<ContextType extends Context<ContextType>>
      * @return the texture reader
      */
     @Override
-    default ColorTextureReader getColorTextureReader(int layerIndex)
+    default @NotNull ColorTextureReader getColorTextureReader(int layerIndex)
     {
         return new ColorTextureReader3D<>(this, layerIndex);
     }
@@ -254,7 +255,7 @@ public interface Texture3D<ContextType extends Context<ContextType>>
      * @return the texture reader
      */
     @Override
-    default DepthTextureReader getDepthTextureReader(int layerIndex)
+    default @NotNull DepthTextureReader getDepthTextureReader(int layerIndex)
     {
         return new DepthTextureReader3D<>(this, layerIndex);
     }

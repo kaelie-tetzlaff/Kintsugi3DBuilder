@@ -20,11 +20,12 @@ import javafx.beans.value.ObservableValue;
 import kintsugi3d.builder.state.project.SerializableLightSettings;
 import kintsugi3d.builder.state.scene.DiscreteLightModelFromSettings;
 import kintsugi3d.fx.controllers.scene.lights.ObservableLightSettings;
+import org.jetbrains.annotations.NotNull;
 
 public class ObservableDiscreteLightModel extends DiscreteLightModelFromSettings
 {
     private ObservableValue<ObservableLightSettings> lightInstanceSetting;
-    private final SerializableLightSettings sentinel;
+    private final @NotNull SerializableLightSettings sentinel;
 
     public ObservableDiscreteLightModel()
     {

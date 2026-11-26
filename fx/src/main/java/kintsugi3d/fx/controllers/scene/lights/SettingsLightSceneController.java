@@ -28,6 +28,7 @@ import javafx.util.StringConverter;
 import kintsugi3d.fx.util.SafeLogScaleNumberStringConverter;
 import kintsugi3d.fx.util.SafeNumberStringConverter;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.URL;
@@ -42,7 +43,7 @@ public class SettingsLightSceneController implements Initializable
 
         StringConverter<Double> pow10converter = new StringConverter<>() {
             @Override
-            public String toString(Double object) {
+            public @NotNull String toString(@NotNull Double object) {
                 String s = logScaleNumberStringConverter.toString(object);
                 if (s.length() > 4) {
                     return s.substring(0, 4);
@@ -121,7 +122,7 @@ public class SettingsLightSceneController implements Initializable
         }
     };
 
-    public final ChangeListener<ObservableLightSettings> getChangeListener()
+    public final @NotNull ChangeListener<ObservableLightSettings> getChangeListener()
     {
         return changeListener;
     }
@@ -131,7 +132,7 @@ public class SettingsLightSceneController implements Initializable
         root.setDisable(disabled);
     }
 
-    private void bind(ObservableLightSettings setting)
+    private void bind(@NotNull ObservableLightSettings setting)
     {
         xCenterTextField.textProperty().bindBidirectional(setting.targetX(), numberStringConverter);
         yCenterTextField.textProperty().bindBidirectional(setting.targetY(), numberStringConverter);
@@ -154,7 +155,7 @@ public class SettingsLightSceneController implements Initializable
         colorPicker.valueProperty().bindBidirectional(setting.color());
     }
 
-    private void unbind(ObservableLightSettings setting)
+    private void unbind(@NotNull ObservableLightSettings setting)
     {
         xCenterTextField.textProperty().unbindBidirectional(setting.targetX());
         yCenterTextField.textProperty().unbindBidirectional(setting.targetY());

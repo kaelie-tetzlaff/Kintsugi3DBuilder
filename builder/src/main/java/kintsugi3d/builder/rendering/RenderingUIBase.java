@@ -17,6 +17,7 @@ package kintsugi3d.builder.rendering;
 
 import kintsugi3d.gl.interactive.EventPollable;
 import kintsugi3d.gl.interactive.InteractiveApplication;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +31,7 @@ public abstract class RenderingUIBase implements RenderingUI
     private final SleepPollable sleepPollable = new SleepPollable();
 
     @Override
-    public final void initialize(InteractiveApplication app)
+    public final void initialize(@NotNull InteractiveApplication app)
     {
         // Keep the graphics thread paused while the window is minimized.
         app.addPollable(sleepPollable);
@@ -75,6 +76,7 @@ public abstract class RenderingUIBase implements RenderingUI
         {
             synchronized (waitForRenderingWork)
             {
+                //noinspection NakedNotify
                 waitForRenderingWork.notifyAll();
             }
         }

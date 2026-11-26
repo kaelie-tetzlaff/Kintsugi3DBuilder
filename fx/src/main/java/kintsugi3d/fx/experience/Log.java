@@ -17,13 +17,14 @@ package kintsugi3d.fx.experience;
 
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
 public class Log extends ExperienceBase
 {
     @Override
-    public final String getName()
+    public final @NotNull String getName()
     {
         return "Log";
     }

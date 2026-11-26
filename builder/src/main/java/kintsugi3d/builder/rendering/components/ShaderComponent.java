@@ -19,6 +19,7 @@ import kintsugi3d.builder.rendering.RenderedComponent;
 import kintsugi3d.builder.rendering.SceneViewportModel;
 import kintsugi3d.gl.core.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 
 public abstract class ShaderComponent<ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
@@ -34,12 +36,12 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
     private final ContextType context;
     private Map<String, VertexBuffer<ContextType>> vertexBuffers;
     private final Collection<ManagedResource> otherManagedResources = new ArrayList<>(8);
-    private ProgramObject<ContextType> program;
-    private DrawableResource<ContextType> drawable;
+    private @Nullable ProgramObject<ContextType> program;
+    private @Nullable DrawableResource<ContextType> drawable;
 
-    private final SceneViewportModel sceneViewportModel;
+    private final @Nullable SceneViewportModel sceneViewportModel;
 
-    private final String sceneObjectTag;
+    private final @Nullable String sceneObjectTag;
 
     /**
      * Creates a shader component using object ID managed by scene viewport model and scene object tag for framebuffer writes
@@ -47,7 +49,7 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
      * @param sceneViewportModel
      * @param sceneObjectTag
      */
-    protected ShaderComponent(ContextType context, SceneViewportModel sceneViewportModel, String sceneObjectTag)
+    protected ShaderComponent(ContextType context, @Nullable SceneViewportModel sceneViewportModel, @Nullable String sceneObjectTag)
     {
         this.context = context;
         this.sceneViewportModel = sceneViewportModel;
@@ -68,7 +70,7 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
         this(context, null, null);
     }
 
-    protected final String getSceneObjectTag()
+    protected final @Nullable String getSceneObjectTag()
     {
         return sceneObjectTag;
     }
@@ -162,14 +164,19 @@ public abstract class ShaderComponent<ContextType extends Context<ContextType>> 
         return context;
     }
 
-    public final DrawableResource<ContextType> getDrawable()
+    public final @NotNull DrawableResource<ContextType> getDrawable()
+    {
+        return Objects.requireNonNull(drawable, "Shader component does not have a valid drawable.");
+    }
+
+    public final @Nullable DrawableResource<ContextType> getDrawableOrNull()
     {
         return drawable;
     }
 
     public final Program<ContextType> getProgram()
     {
-        return drawable.program();
+        return getDrawable().program();
     }
 
     /**

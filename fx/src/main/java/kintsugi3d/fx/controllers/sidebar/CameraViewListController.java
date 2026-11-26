@@ -21,6 +21,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.fx.internal.ObservableViewListModel;
+import org.jetbrains.annotations.NotNull;
 
 public class CameraViewListController
 {
@@ -30,7 +31,7 @@ public class CameraViewListController
 
     private SearchableListView<View> searchableListView;
 
-    public final void init(ObservableViewListModel cameraViewListModel)
+    public final void init(@NotNull ObservableViewListModel cameraViewListModel)
     {
         cameraViewListModel.setSelectedCameraViewModel(cameraViewList.getSelectionModel());
         cameraViewListModel.setCameraViewListProperty(cameraViewList.itemsProperty());

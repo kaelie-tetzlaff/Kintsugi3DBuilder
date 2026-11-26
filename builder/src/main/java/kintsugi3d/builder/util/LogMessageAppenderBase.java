@@ -22,6 +22,7 @@ import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.apache.logging.log4j.core.config.Property;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.event.Level;
 
 import java.io.Serializable;
@@ -35,13 +36,13 @@ public abstract class LogMessageAppenderBase extends AbstractAppender
     public static final int MESSAGE_TRUNC_SIZE = 10;
     private final Collection<LogMessageListener> listeners = new ArrayList<>(1);
 
-    protected LogMessageAppenderBase(String name, Filter filter, Layout<? extends Serializable> layout)
+    protected LogMessageAppenderBase(@NotNull String name, Filter filter, Layout<? extends Serializable> layout)
     {
         super(name, filter, layout, true, Property.EMPTY_ARRAY);
     }
 
     @SuppressWarnings("MethodMayBeStatic")
-    public final boolean isLevelDisabled(Level level)
+    public final boolean isLevelDisabled(@NotNull Level level)
     {
         return !LogManager.getRootLogger().isEnabled(org.apache.logging.log4j.Level.toLevel(level.name()));
     }

@@ -24,6 +24,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
 
 public class SelectionPageController<T> extends PageControllerBase<T, SelectionPage<T>>
 {
@@ -94,7 +95,7 @@ public class SelectionPageController<T> extends PageControllerBase<T, SelectionP
         }
     }
 
-    private void onButtonAction(Toggle button, Page<? super T, ?> page)
+    private void onButtonAction(@NotNull Toggle button, Page<? super T, ?> page)
     {
         if (button.isSelected())
         {

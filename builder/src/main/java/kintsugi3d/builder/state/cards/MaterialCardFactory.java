@@ -28,6 +28,7 @@ import kintsugi3d.builder.state.shader.WeightmapOverlayShaderInfo;
 import kintsugi3d.builder.util.AppIcon;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,13 +40,13 @@ import java.util.stream.Collectors;
 
 public class MaterialCardFactory extends ProjectDataCardFactoryBase<BasisMaterialInfo>
 {
-    public MaterialCardFactory(ImageBasedGraphicsResources<? extends Context<?>> resources)
+    public MaterialCardFactory(@NotNull ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
         super(resources);
     }
 
     @Override
-    public final List<? extends Map<String, Runnable>> getGlobalActions()
+    public final @NotNull List<? extends Map<String, Runnable>> getGlobalActions()
     {
         return List.of(Map.of(
             "Disable All", () ->
@@ -81,13 +82,13 @@ public class MaterialCardFactory extends ProjectDataCardFactoryBase<BasisMateria
     }
 
     @Override
-    public final Class<BasisMaterialInfo> getDataClass()
+    public final @NotNull Class<BasisMaterialInfo> getDataClass()
     {
         return BasisMaterialInfo.class;
     }
 
     @Override
-    public final ProjectDataCard createCard(BasisMaterialInfo material)
+    public final @NotNull ProjectDataCard createCard(@NotNull BasisMaterialInfo material)
     {
         String name = material.getName();
 
@@ -153,7 +154,7 @@ public class MaterialCardFactory extends ProjectDataCardFactoryBase<BasisMateria
     }
 
     @Override
-    public final List<ProjectDataCard> createAllCards()
+    public final @NotNull List<ProjectDataCard> createAllCards()
     {
         ReadonlyBasisResources<? extends Context<?>> basisResources = getResources().getTextureResources().getBasisResources();
         if (basisResources != null)

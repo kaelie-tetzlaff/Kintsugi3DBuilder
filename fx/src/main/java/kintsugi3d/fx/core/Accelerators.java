@@ -16,6 +16,7 @@
 package kintsugi3d.fx.core;
 
 import javafx.scene.Scene;
+import org.jetbrains.annotations.NotNull;
 
 public final class Accelerators
 {
@@ -23,7 +24,7 @@ public final class Accelerators
     {
     }
 
-    public static void initForScene(Scene scene)
+    public static void initForScene(@NotNull Scene scene)
     {
         MainWindowController.getInstance().initAccelerators(scene);
     }

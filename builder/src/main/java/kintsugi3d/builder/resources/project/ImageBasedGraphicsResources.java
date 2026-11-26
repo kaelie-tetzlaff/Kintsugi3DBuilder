@@ -19,11 +19,13 @@ import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.ManagedResource;
+import org.jetbrains.annotations.NotNull;
 
 public interface ImageBasedGraphicsResources<ContextType extends Context<ContextType>>
     extends ManagedResource, ReadonlyImageBasedGraphicsResources<ContextType>
 {
     @Override
+    @NotNull
     ViewSet getViewSet();
 
     @Override

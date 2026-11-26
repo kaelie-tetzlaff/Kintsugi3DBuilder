@@ -23,6 +23,7 @@ import kintsugi3d.builder.io.ViewSetReaderFromRealityCaptureCSV;
 import kintsugi3d.builder.io.imageset.GenericImageSetInfo;
 import kintsugi3d.builder.io.imageset.ImageSetInfo;
 import kintsugi3d.builder.io.imageset.MetashapeImageSetInfo;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.text.MessageFormat;
@@ -48,7 +49,7 @@ public class ManualInputSource extends NonValidatedInputSourceBase
         return cameraFile;
     }
 
-    public final ManualInputSource setCameraFile(File cameraFile)
+    public final @NotNull ManualInputSource setCameraFile(File cameraFile)
     {
         this.cameraFile = cameraFile;
         return this;
@@ -59,7 +60,7 @@ public class ManualInputSource extends NonValidatedInputSourceBase
         return meshFile;
     }
 
-    public final ManualInputSource setMeshFile(File meshFile)
+    public final @NotNull ManualInputSource setMeshFile(File meshFile)
     {
         this.meshFile = meshFile;
         return this;
@@ -71,19 +72,19 @@ public class ManualInputSource extends NonValidatedInputSourceBase
     }
 
     @Override
-    public final ManualInputSource overrideFullResImageDirectory(File directory)
+    public final @NotNull ManualInputSource overrideFullResImageDirectory(File directory)
     {
         photosDir = directory;
         return this;
     }
 
     @Override
-    public final ValidatedInputSource validate() throws Exception
+    public final @NotNull ValidatedInputSource validate() throws Exception
     {
         return new ValidatedManualInputSource(this);
     }
 
-    private ImageSetInfo loadImageSetInfo() throws Exception
+    private @NotNull ImageSetInfo loadImageSetInfo() throws Exception
     {
         if (cameraFile.getName().endsWith(".xml")) // Agisoft Metashape
         {
@@ -111,7 +112,7 @@ public class ManualInputSource extends NonValidatedInputSourceBase
         }
     }
 
-    public final ManualInputSource setNeedsUndistort(boolean needsUndistort)
+    public final @NotNull ManualInputSource setNeedsUndistort(boolean needsUndistort)
     {
         this.needsUndistort = needsUndistort;
         return this;
@@ -122,7 +123,7 @@ public class ManualInputSource extends NonValidatedInputSourceBase
         return hotSwap;
     }
 
-    public final ManualInputSource setHotSwap(boolean hotSwap)
+    public final @NotNull ManualInputSource setHotSwap(boolean hotSwap)
     {
         this.hotSwap = hotSwap;
         return this;
@@ -162,7 +163,7 @@ public class ManualInputSource extends NonValidatedInputSourceBase
     {
         ManualInputSource original;
 
-        ValidatedManualInputSource(ManualInputSource original) throws Exception
+        ValidatedManualInputSource(@NotNull ManualInputSource original) throws Exception
         {
             super(original, original.loadImageSetInfo());
             this.original = original;
@@ -192,7 +193,7 @@ public class ManualInputSource extends NonValidatedInputSourceBase
             }
         }
 
-        private ViewSetLoadOptions getViewSetLoadOptions()
+        private @NotNull ViewSetLoadOptions getViewSetLoadOptions()
         {
             ViewSetLoadOptions loadOptions = new ViewSetLoadOptions();
             loadOptions.getMainDirectories().setProjectRoot(original.cameraFile.getParentFile());

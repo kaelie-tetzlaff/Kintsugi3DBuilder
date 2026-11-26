@@ -27,6 +27,8 @@ import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import kintsugi3d.builder.util.logging.LogMessage;
 import kintsugi3d.fx.util.ScrollBarHelper;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
@@ -131,7 +133,7 @@ public class LoggerController implements Initializable
         messageListView.setItems(items.filtered(this::doesLogMessagePassFilter));
     }
 
-    private boolean doesLogMessagePassFilter(LogMessage message)
+    private boolean doesLogMessagePassFilter(@NotNull LogMessage message)
     {
         switch (message.getLogLevel())
         {
@@ -164,12 +166,12 @@ public class LoggerController implements Initializable
     private static class LogMessageCellFactory implements Callback<ListView<LogMessage>, ListCell<LogMessage>>
     {
         @Override
-        public final ListCell<LogMessage> call(ListView<LogMessage> logMessageListView)
+        public final @NotNull ListCell<LogMessage> call(ListView<LogMessage> logMessageListView)
         {
             return new LogMessageCell();
         }
 
-        private static String strStackTrace(Throwable thrown)
+        private static @NotNull String strStackTrace(@Nullable Throwable thrown)
         {
             if (thrown == null)
             {
@@ -182,7 +184,7 @@ public class LoggerController implements Initializable
             return sw.toString().trim();
         }
 
-        private static String formatTooltip(LogMessage message)
+        private static @NotNull String formatTooltip(@NotNull LogMessage message)
         {
             StringBuilder sb = new StringBuilder("Logged by ");
             sb.append(message.getSourceClassName());
@@ -195,7 +197,7 @@ public class LoggerController implements Initializable
         private static class LogMessageCell extends ListCell<LogMessage>
         {
             @Override
-            public final void updateItem(LogMessage message, boolean empty)
+            public final void updateItem(@Nullable LogMessage message, boolean empty)
             {
                 super.updateItem(message, empty);
                 if (empty || message == null)

@@ -26,6 +26,8 @@ import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.geometry.GeometryResources;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
 import kintsugi3d.gl.vecmath.Matrix4;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,13 +37,13 @@ import java.io.IOException;
  */
 public class SingleCalibratedImageResource<ContextType extends Context<ContextType>> implements ManagedResource
 {
-    private final View view;
-    private GeometryResources<ContextType> geometryResources;
+    private final @NotNull View view;
+    private final @NotNull GeometryResources<ContextType> geometryResources;
     private final boolean geometryResourcesOwned;
-    private Texture2D<ContextType> colorTexture;
-    private Texture2D<ContextType> depthTexture;
-    private Texture2D<ContextType> shadowTexture;
-    private final Matrix4 shadowMatrix;
+    private final @Nullable Texture2D<ContextType> colorTexture;
+    private final @Nullable Texture2D<ContextType> depthTexture;
+    private final @Nullable Texture2D<ContextType> shadowTexture;
+    private final @Nullable Matrix4 shadowMatrix;
 
     /**
      * Creates a calibrated image resource, loading the geometry onto the GPU as a new resource owned by this resource (if and only if geometry is not null).
@@ -51,16 +53,16 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
      * @param loadOptions
      * @throws IOException
      */
-    SingleCalibratedImageResource(ContextType context, View view, ReadonlyVertexGeometry geometry,
-                                  ReadonlyLoadOptionsModel loadOptions) throws IOException
+    SingleCalibratedImageResource(@NotNull ContextType context, @NotNull View view, @Nullable ReadonlyVertexGeometry geometry,
+                                  @NotNull ReadonlyLoadOptionsModel loadOptions) throws IOException
     {
         this(context, view,
             geometry == null ? GeometryResources.createNullResources() : geometry.createGraphicsResources(context),
             true, loadOptions);
     }
 
-    private SingleCalibratedImageResource(ContextType context, View view,
-        GeometryResources<ContextType> geometryResources, boolean geometryResourcesOwned, ReadonlyLoadOptionsModel loadOptions) throws IOException
+    private SingleCalibratedImageResource(@NotNull ContextType context, @NotNull View view,
+                                          @NotNull GeometryResources<ContextType> geometryResources, boolean geometryResourcesOwned, @NotNull ReadonlyLoadOptionsModel loadOptions) throws IOException
     {
         this.view = view;
         this.geometryResources = geometryResources;
@@ -135,7 +137,7 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
     }
 
     public static <ContextType extends Context<ContextType>> ProgramBuilder<ContextType> getShaderProgramBuilder(
-        ContextType context, ReadonlyViewSet viewSet, ReadonlyLoadOptionsModel loadOptions)
+        ContextType context, @NotNull ReadonlyViewSet viewSet, @NotNull ReadonlyLoadOptionsModel loadOptions)
     {
         ProgramBuilder<ContextType> builder = viewSet.getShaderProgramBuilder(context);
 
@@ -148,7 +150,7 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
         return builder;
     }
 
-    public final void setupShaderProgram(Program<ContextType> program)
+    public final void setupShaderProgram(@NotNull Program<ContextType> program)
     {
         view.getContainingViewSet().setupShaderProgram(program);
 
@@ -161,7 +163,7 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
         {
             program.setTexture("depthImage", depthTexture);
 
-            if (shadowTexture != null)
+            if (shadowTexture != null && shadowMatrix != null)
             {
                 program.setTexture("shadowImage", shadowTexture);
                 program.setUniform("shadowMatrix", shadowMatrix);
@@ -179,7 +181,7 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
      * @param program The program to use to construct the Drawable.
      * @return A Drawable for rendering this instance using the specified shader program.
      */
-    public final DrawableResource<ContextType> createDrawable(Program<ContextType> program)
+    public final @NotNull DrawableResource<ContextType> createDrawable(@NotNull Program<ContextType> program)
     {
         return geometryResources.createDrawable(program);
     }
@@ -187,28 +189,24 @@ public class SingleCalibratedImageResource<ContextType extends Context<ContextTy
     @Override
     public final void close()
     {
-        if (geometryResources != null && geometryResourcesOwned)
+        if (geometryResourcesOwned)
         {
             geometryResources.close();
-            geometryResources = null;
         }
 
         if (colorTexture != null)
         {
             colorTexture.close();
-            colorTexture = null;
         }
 
         if (depthTexture != null)
         {
             depthTexture.close();
-            depthTexture = null;
         }
 
         if (shadowTexture != null)
         {
             shadowTexture.close();
-            shadowTexture = null;
         }
     }
 }

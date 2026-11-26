@@ -18,6 +18,7 @@ package kintsugi3d.app;
 import kintsugi3d.builder.rendering.SceneViewport;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 class SceneViewportSafeWrapper implements SceneViewport
@@ -31,25 +32,25 @@ class SceneViewportSafeWrapper implements SceneViewport
         }
 
         @Override
-        public Vector3 get3DPositionAtCoordinates(double x, double y)
+        public @NotNull Vector3 get3DPositionAtCoordinates(double x, double y)
         {
             return Vector3.ZERO;
         }
 
         @Override
-        public Vector3 getViewingDirection(double x, double y)
+        public @NotNull Vector3 getViewingDirection(double x, double y)
         {
             return Vector3.ZERO;
         }
 
         @Override
-        public Vector3 getViewportCenter()
+        public @NotNull Vector3 getViewportCenter()
         {
             return Vector3.ZERO;
         }
 
         @Override
-        public Vector2 projectPoint(Vector3 point)
+        public @NotNull Vector2 projectPoint(Vector3 point)
         {
             return Vector2.ZERO;
         }

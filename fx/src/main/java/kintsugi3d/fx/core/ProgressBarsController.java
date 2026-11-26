@@ -28,6 +28,8 @@ import kintsugi3d.builder.core.Global;
 import kintsugi3d.fx.util.Stopwatch;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,7 +111,7 @@ public class ProgressBarsController
      * Target expiry instant for the countdown — the moment when the countdown reaches zero.
      * Null means no active countdown.
      */
-    private Instant countdownExpiry;
+    private @Nullable Instant countdownExpiry;
 
     /**
      * Periodic timer for updating elapsed time and ticking down the countdown.
@@ -122,7 +124,7 @@ public class ProgressBarsController
         return instance;
     }
 
-    public final void init(@SuppressWarnings("ParameterHidesMemberVariable") Stage stage)
+    public final void init(@SuppressWarnings("ParameterHidesMemberVariable") @NotNull Stage stage)
     {
         this.stage = stage;
         defaultOverallText = overallTextLabel.getText();
@@ -312,7 +314,7 @@ public class ProgressBarsController
         updateTimeEstimationLabel(estimatedRemaining);
     }
 
-    private static String nanosecToFormatTime(long nanoTime, boolean useSeconds)
+    private static @NotNull String nanosecToFormatTime(long nanoTime, boolean useSeconds)
     {
         long hours = TimeUnit.NANOSECONDS.toHours(nanoTime);
 
@@ -377,7 +379,7 @@ public class ProgressBarsController
         return processingProperty.getValue();
     }
 
-    public final ReadOnlyBooleanProperty getProcessingProperty()
+    public final @NotNull ReadOnlyBooleanProperty getProcessingProperty()
     {
         return processingProperty;
     }

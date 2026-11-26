@@ -15,6 +15,7 @@
 
 package kintsugi3d.util;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,7 @@ public final class ImageFinder
     {
     }
 
-    public static Set<String> getSupportedImgFormats()
+    public static @NotNull Set<String> getSupportedImgFormats()
     {
         return IMG_FORMATS;
     }
@@ -55,7 +56,7 @@ public final class ImageFinder
      * @param extension The desired extension
      * @return The image file's name with the requested extension.
      */
-    public static String getImageFileNameWithExtension(String imageFileName, String extension)
+    public static @NotNull String getImageFileNameWithExtension(@NotNull String imageFileName, @NotNull String extension)
     {
         if (imageFileName.endsWith(extension))
         {
@@ -81,12 +82,12 @@ public final class ImageFinder
         }
     }
 
-    private static void logFound(File requestedFile, File actualFile)
+    private static void logFound(@NotNull File requestedFile, File actualFile)
     {
         LOG.debug("Search for '{}'; found: {}", requestedFile.getName(), actualFile);
     }
 
-    public static File findImageFile(File requestedFile, String... suffixes) throws FileNotFoundException
+    public static @NotNull File findImageFile(@NotNull File requestedFile, String @Nullable ... suffixes) throws FileNotFoundException
     {
         if (requestedFile.exists())
         {
@@ -175,7 +176,7 @@ public final class ImageFinder
      * @param suffixes
      * @return The file, or null if not found.
      */
-    public static @Nullable File tryFindImageFile(File requestedFile, String... suffixes)
+    public static @Nullable File tryFindImageFile(@NotNull File requestedFile, String... suffixes)
     {
         try
         {

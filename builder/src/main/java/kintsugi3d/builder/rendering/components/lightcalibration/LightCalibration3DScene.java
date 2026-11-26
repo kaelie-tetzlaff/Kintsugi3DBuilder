@@ -22,6 +22,7 @@ import kintsugi3d.builder.rendering.components.snap.ViewSelection;
 import kintsugi3d.builder.resources.LightingResources;
 import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.NotNull;
 
 public class LightCalibration3DScene<ContextType extends Context<ContextType>> extends BaseScene<ContextType>
 {
@@ -34,7 +35,7 @@ public class LightCalibration3DScene<ContextType extends Context<ContextType>> e
      * @param sceneViewportModel
      * @param viewSelection Will be used to determine where the light visual is shown (corresponding to the current snapped view)
      */
-    public LightCalibration3DScene(ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel,
+    public LightCalibration3DScene(@NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel,
                                    SceneViewportModel sceneViewportModel, ViewSelection viewSelection)
     {
         super(resources, sceneModel, sceneViewportModel);

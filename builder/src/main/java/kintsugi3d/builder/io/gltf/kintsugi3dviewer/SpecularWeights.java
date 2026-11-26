@@ -16,6 +16,7 @@
 package kintsugi3d.builder.io.gltf.kintsugi3dviewer;
 
 import de.javagl.jgltf.impl.v2.TextureInfo;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,7 +29,7 @@ public class SpecularWeights
     // Used by glTF exporter, via reflection presumably
     private final Collection<TextureInfo> textures = new ArrayList<>(8);
 
-    public final Collection<TextureInfo> getTextures()
+    public final @NotNull Collection<TextureInfo> getTextures()
     {
         return Collections.unmodifiableCollection(textures);
     }

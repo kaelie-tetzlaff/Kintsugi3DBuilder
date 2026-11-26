@@ -25,6 +25,7 @@ import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,10 +48,12 @@ public class FinalReconstruction<ContextType extends Context<ContextType>>
         this.reconstructionSettings = reconstructionSettings;
     }
 
-    public final @Nullable List<Map<String, ReadonlyColorAppearanceRMSE>> reconstruct(ReadonlyTextureResources<ContextType> specularFit,
-                                                                                      Map<String, ProgramBuilder<ContextType>> reconstructionProgramBuilders,
-                                                                                      ProgramBuilder<ContextType> incidentRadianceProgramBuilder,
-                                                                                      File debugDirectory, File groundTruthDirectory)
+    public final @NotNull List<Map<String, ReadonlyColorAppearanceRMSE>> reconstruct(
+        ReadonlyTextureResources<ContextType> specularFit,
+        @NotNull Map<String, ProgramBuilder<ContextType>> reconstructionProgramBuilders,
+        @NotNull ProgramBuilder<ContextType> incidentRadianceProgramBuilder,
+        @Nullable File debugDirectory, @Nullable File groundTruthDirectory)
+        throws IOException
     {
         if (debugDirectory != null)
         {
@@ -127,20 +130,14 @@ public class FinalReconstruction<ContextType extends Context<ContextType>>
 
             return rmseOut;
         }
-        // NoSuchElementException thrown if there's an error reading a ground truth image from the view set
-        catch (IOException | NoSuchElementException e)
-        {
-            LOG.error("An error occurred during reconstruction:", e);
-            return null;
-        }
     }
 
-    private void saveImageToFile(File outputDirectory, int k, ReadableFramebuffer<ContextType> framebuffer)
+    private void saveImageToFile(File outputDirectory, int k, @NotNull ReadableFramebuffer<ContextType> framebuffer)
     {
         saveImageToFile(outputDirectory, String.format("%04d.png", k), framebuffer);
     }
 
-    private void saveImageToFile(File outputDirectory, String filename, ReadableFramebuffer<ContextType> framebuffer)
+    private void saveImageToFile(File outputDirectory, @NotNull String filename, @NotNull ReadableFramebuffer<ContextType> framebuffer)
     {
         try
         {

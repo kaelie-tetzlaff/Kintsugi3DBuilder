@@ -37,6 +37,7 @@ import kintsugi3d.builder.resources.DynamicResourceLoader;
 import kintsugi3d.builder.resources.DynamicResourceManager;
 import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace;
 import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace.Builder;
+import kintsugi3d.builder.resources.project.MeshImportException;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.builder.state.cards.CardsModel;
 import kintsugi3d.builder.state.cards.TabsHelper;
@@ -56,6 +57,8 @@ import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.SRGB;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,15 +79,15 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     private volatile ProgressMonitor progressMonitor;
     private boolean logErrors = true;
 
-    private final Builder<ContextType> resourceBuilder;
-    private GraphicsResourcesImageSpace<ContextType> resources;
+    private final @Nullable Builder<ContextType> resourceBuilder;
+    private @Nullable GraphicsResourcesImageSpace<ContextType> resources;
     private final boolean managedResources;
 
     private VertexBuffer<ContextType> rectangleVertices;
 
     private final String internalName;
 
-    private final SceneModel sceneModel;
+    private final @NotNull SceneModel sceneModel;
 
     private ProgramObject<ContextType> simpleTexProgram;
     private DrawableResource<ContextType> simpleTexDrawable;
@@ -97,7 +100,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     private RenderingSubject<ContextType> subject;
 
     private DynamicResourceLoader<ContextType> dynamicResourceLoader;
-    private final SceneViewportModel sceneViewportModel;
+    private final @NotNull SceneViewportModel sceneViewportModel;
 
     private static final int SHADING_FRAMEBUFFER_COUNT = 2;
     private final Collection<FramebufferObject<ContextType>> shadingFramebuffers = new ArrayList<>(SHADING_FRAMEBUFFER_COUNT);
@@ -107,7 +110,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
     private boolean loaded = false;
 
-    ImageBasedRenderingEngine(String internalName, ContextType context, Builder<ContextType> resourceBuilder)
+    ImageBasedRenderingEngine(String internalName, ContextType context, @Nullable Builder<ContextType> resourceBuilder)
     {
         this.internalName = internalName;
         this.context = context;
@@ -117,7 +120,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         sceneViewportModel = createSceneViewportModel(sceneModel);
     }
 
-    ImageBasedRenderingEngine(String internalName, ContextType context, GraphicsResourcesImageSpace<ContextType> resources)
+    ImageBasedRenderingEngine(String internalName, ContextType context, @Nullable GraphicsResourcesImageSpace<ContextType> resources)
     {
         this.internalName = internalName;
         this.context = context;
@@ -128,30 +131,36 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         sceneViewportModel = createSceneViewportModel(sceneModel);
     }
 
-    private static <K, V> Observer<MappedChange<K, V>> getMappedChangeObserver(
-        TabsHelper tabsHelper, String tabName, Class<V> dataClass, Function<String, K> keyConstructor)
+    private static <K, V> @NotNull Observer<MappedChange<K, V>> getMappedChangeObserver(
+        @NotNull TabsHelper tabsHelper, String tabName, Class<V> dataClass, @NotNull Function<String, K> keyConstructor)
     {
         return change ->
         {
-            CardsModel<V> texturesTab = Global.state().getTabModels().getTab(tabName, dataClass);
-
-            switch (change.getType())
+            CardsModel<V> tab = Global.state().getTabModels().getTab(tabName, dataClass);
+            if (tab != null)
             {
-                case ADDED:
-                    tabsHelper.refreshTab(tabName); // TODO implement support for adding individual card without rebuilding
-                    break;
-                case REMOVED:
-                    texturesTab.deleteCards(card -> change.getMap().get(keyConstructor.apply(card.getInternalName())) != null);
-                    break;
-                case MODIFIED:
-                    texturesTab.refreshCards(card -> change.getMap().get(keyConstructor.apply(card.getInternalName())));
-                    break;
+                switch (change.getType())
+                {
+                    case ADDED:
+                        tabsHelper.refreshTab(tabName); // TODO implement support for adding individual card without rebuilding
+                        break;
+                    case REMOVED:
+                        tab.deleteCards(card -> change.getMap().get(keyConstructor.apply(card.getInternalName())) != null);
+                        break;
+                    case MODIFIED:
+                        tab.refreshCards(card -> change.getMap().get(keyConstructor.apply(card.getInternalName())));
+                        break;
+                }
+            }
+            else
+            {
+                LOG.warn("Tab not found: {}", tabName);
             }
         };
     }
 
-    private static <V> Observer<MappedChange<String, V>> getMappedChangeObserver(
-        TabsHelper tabsHelper, String tabName, Class<V> dataClass)
+    private static <V> @NotNull Observer<MappedChange<String, V>> getMappedChangeObserver(
+        @NotNull TabsHelper tabsHelper, String tabName, Class<V> dataClass)
     {
         return getMappedChangeObserver(tabsHelper, tabName, dataClass, Function.identity());
     }
@@ -161,7 +170,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         return loaded;
     }
 
-    private static SceneViewportModel createSceneViewportModel(SceneModel sceneModel)
+    private static @NotNull SceneViewportModel createSceneViewportModel(SceneModel sceneModel)
     {
         SceneViewportModel sceneViewportModel = new SceneViewportModel(sceneModel);
         sceneViewportModel.addSceneObjectType("SceneObject");
@@ -174,7 +183,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         return internalName;
     }
 
-    public final EventListeners<ProjectLoadedListener> projectLoadedListeners()
+    public final @NotNull EventListeners<ProjectLoadedListener> projectLoadedListeners()
     {
         return projectLoaded;
     }
@@ -185,7 +194,12 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final GraphicsResourcesImageSpace<ContextType> getResources()
+    public final @NotNull GraphicsResourcesImageSpace<ContextType> getResources()
+    {
+        return Objects.requireNonNull(resources, "Renderable has not been initialized.");
+    }
+
+    public final @Nullable GraphicsResourcesImageSpace<ContextType> getResourcesOrNull()
     {
         return resources;
     }
@@ -218,6 +232,8 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
                 context.flush();
             }
 
+            assert resources != null;
+
             simpleTexDrawable = context.createDrawable(simpleTexProgram);
             simpleTexDrawable.addVertexBuffer("position", rectangleVertices);
 
@@ -230,13 +246,16 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 //            scene.setLightVisualsEnabled(true); // Enable light visuals when not in light calibration mode
             litRoot = new LitRoot<>(context, sceneModel, scene);
             litRoot.initialize();
-            litRoot.setShadowCaster(resources.getGeometryResources().getPositionBuffer());
+
+            ReadonlyVertexBuffer<ContextType> positionBuffer = Objects.requireNonNull(resources.getGeometryResources().getPositionBuffer(),
+                "Shadow casting geometry must have vertex positions.");
+            litRoot.setShadowCaster(positionBuffer);
 
             LightCalibration3DScene<ContextType> lightCalibScene =
                 new LightCalibration3DScene<>(resources, sceneModel, sceneViewportModel, viewSelection);
             lightCalibration3DRoot = new LitRoot<>(context, sceneModel, lightCalibScene);
             lightCalibration3DRoot.initialize();
-            lightCalibration3DRoot.setShadowCaster(resources.getGeometryResources().getPositionBuffer());
+            lightCalibration3DRoot.setShadowCaster(positionBuffer);
 
             lightCalibrationSplitScreen = new SplitScreenComponent<>(lightCalibration, lightCalibration3DRoot);
 
@@ -280,13 +299,13 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
             // Currently the shaders tab is not expected to have changes other than when textures are processed,
             // which is handled separately via an event listener.
 
-            resources.texturesReplacedListeners().register(
-                event ->
+            @NotNull GraphicsResourcesImageSpace<ContextType> resourcesRef = resources;
+            resources.texturesReplacedListeners().register(event ->
             {
                 // Reload shaders in case preprocessor constants (i.e. number of basis functions) have changed
                 reloadShaders();
 
-                new TabsHelper(resources).refreshAllTabs();
+                new TabsHelper(resourcesRef).refreshAllTabs();
             });
         }
         catch (UserCancellationException e)
@@ -299,7 +318,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
             }
             throw new InitializationException(e);
         }
-        catch (RuntimeException|IOException e)
+        catch (RuntimeException|IOException|MeshImportException e)
         {
             LOG.error("Error occurred initializing ProjectRenderingEngine:", e);
             close();
@@ -331,60 +350,48 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
     private void updateWorldSpaceDefinition()
     {
-        if (resources.getGeometry() != null)
+        ReadonlyViewSet viewSet = getViewSet();
+        ReadonlyVertexGeometry geometry = getResources().getGeometry();
+
+        View orientationView = viewSet.getOrientationView();
+
+        // Inspection suppressed for now; remove suppression once scale handling has been investigated more.
+        //noinspection IfStatementWithIdenticalBranches
+        if (orientationView == null) // check for override
         {
-            ReadonlyViewSet viewSet = getViewSet();
+            // Imported orientation and object center if no override
+            // For now, this is all that we're importing from Metashape;
+            // everything else should be the same as with a reference image override.
+            // This might change in the future.
+            sceneModel.setOrientation(Objects.requireNonNullElse(viewSet.getOrientationMatrix(), Matrix3.IDENTITY));
 
-            if (viewSet != null)
-            {
-                View orientationView = viewSet.getOrientationView();
-
-                // Inspection suppressed for now; remove suppression once scale handling has been investigated more.
-                //noinspection IfStatementWithIdenticalBranches
-                if (orientationView == null) // check for override
-                {
-                    // Imported orientation and object center if no override
-                    // For now, this is all that we're importing from Metashape;
-                    // everything else should be the same as with a reference image override.
-                    // This might change in the future.
-                    sceneModel.setOrientation(Objects.requireNonNullElse(viewSet.getOrientationMatrix(), Matrix3.IDENTITY));
-
-                    // COMMENTED OUT: Object translation doesn't seem to be that meaningful coming from Metashape.
+            // COMMENTED OUT: Object translation doesn't seem to be that meaningful coming from Metashape.
 //                    sceneModel.setCentroid(sceneModel.getOrientation().transpose()
 //                        .times(Objects.requireNonNullElse(viewSet.getObjectTranslation(), Vector3.ZERO).negated()));
 
-                    // Just use true centroid instead
-                    sceneModel.setCentroid(resources.getGeometry().getCentroid());
+            // Just use true centroid instead
+            sceneModel.setCentroid(geometry.getCentroid());
 
-                    // TODO figure out if we can use imported scale for user interaction without breaking things.
+            // TODO figure out if we can use imported scale for user interaction without breaking things.
 //                    // "Scene scale" is generally taken by the Kintsugi renderer to be world space to model space
 //                    // so we need to invert the imported global scale.
 //                    sceneModel.setScale(1.0f / viewSet.getObjectScale());
-//                    sceneModel.setScale((resources.getGeometry().getBoundingRadius() + resources.getGeometry().getCentroid().length()) * 2);
-                    sceneModel.setScale(resources.getGeometry().getBoundingRadius() * 2);
-                }
-                else
-                {
-                    // reference image based override, replaces any imported reference frame
-                    // use centroid and scale based on geometry assuming the imported scale and center is invalid
-                    Matrix3 referenceCameraPose = orientationView.getCameraPose().getUpperLeft3x3();
-                    sceneModel.setOrientation(Matrix3.rotateZ(Math.toRadians(-viewSet.getOrientationViewRotationDegrees()))
-                        .times(referenceCameraPose));
-                    sceneModel.setCentroid(resources.getGeometry().getCentroid());
-                    sceneModel.setScale(resources.getGeometry().getBoundingRadius() * 2);
-                }
-            }
-            else
-            {
-                // Defaults if there's no view set for some reason (identity for orientation and geometry-based centroid and scale)
-                sceneModel.setOrientation(Matrix3.IDENTITY);
-                sceneModel.setCentroid(resources.getGeometry().getCentroid());
-                sceneModel.setScale(resources.getGeometry().getBoundingRadius() * 2);
-            }
+//                    sceneModel.setScale((geometry.getBoundingRadius() + geometry.getCentroid().length()) * 2);
+            sceneModel.setScale(geometry.getBoundingRadius() * 2);
+        }
+        else
+        {
+            // reference image based override, replaces any imported reference frame
+            // use centroid and scale based on geometry assuming the imported scale and center is invalid
+            Matrix3 referenceCameraPose = orientationView.getCameraPose().getUpperLeft3x3();
+            sceneModel.setOrientation(Matrix3.rotateZ(Math.toRadians(-viewSet.getOrientationViewRotationDegrees()))
+                .times(referenceCameraPose));
+            sceneModel.setCentroid(geometry.getCentroid());
+            sceneModel.setScale(geometry.getBoundingRadius() * 2);
         }
     }
 
-    private Matrix4 getProjectionMatrix(FramebufferSize size)
+    private @NotNull Matrix4 getProjectionMatrix(@NotNull FramebufferSize size)
     {
         float scale = sceneModel.getScale();
 
@@ -393,9 +400,9 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
                 0.01f * scale, 100.0f * scale);
     }
 
-    private Vector3 calculateClearColor()
+    private @NotNull Vector3 calculateClearColor()
     {
-        float maxLuminance = (float) SRGB.fromLinear(resources.getViewSet().getLuminanceEncoding().getDecodeFunction().applyAsDouble(255.0));
+        float maxLuminance = (float) SRGB.fromLinear(getResources().getViewSet().getLuminanceEncoding().getDecodeFunction().applyAsDouble(255.0));
         return new Vector3(
                 sceneModel.getLightingModel().getBackgroundColor().x / maxLuminance,
                 sceneModel.getLightingModel().getBackgroundColor().y / maxLuminance,
@@ -403,7 +410,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final void draw(Framebuffer<ContextType> framebuffer, Matrix4 modelViewOverride, Matrix4 projectionOverride,
+    public final void draw(@NotNull Framebuffer<ContextType> framebuffer, @Nullable Matrix4 modelViewOverride, @Nullable Matrix4 projectionOverride,
                            int subdivWidth, int subdivHeight)
     {
         try
@@ -525,7 +532,8 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
                     // TODO support multiple light sources.
                     if (Vector3.ZERO.equals(getViewSet().getLightIntensity(0)))
                     {
-                        resources.getViewSet().setAllLightIntensities(resources.determineGlobalLightIntensity());
+                        GraphicsResourcesImageSpace<ContextType> validatedResources = getResources();
+                        validatedResources.getViewSet().setAllLightIntensities(validatedResources.determineGlobalLightIntensity());
                     }
 
                     if (progressMonitor != null)
@@ -559,44 +567,14 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
             if (managedResources && resources != null)
             {
                 resources.close();
-                resources = null;
             }
 
-            if (rectangleVertices != null)
-            {
-                rectangleVertices.close();
-                rectangleVertices = null;
-            }
-
-            if (simpleTexProgram != null)
-            {
-                simpleTexProgram.close();
-                simpleTexProgram = null;
-            }
-
-            if (simpleTexDrawable != null)
-            {
-                simpleTexDrawable.close();
-                simpleTexDrawable = null;
-            }
-
-            if (lightCalibration != null)
-            {
-                lightCalibration.close();
-                lightCalibration = null;
-            }
-
-            if (litRoot != null)
-            {
-                litRoot.close();
-                litRoot = null;
-            }
-
-            if (lightCalibration3DRoot != null)
-            {
-                lightCalibration3DRoot.close();
-                lightCalibration3DRoot = null;
-            }
+            rectangleVertices.close();
+            simpleTexProgram.close();
+            simpleTexDrawable.close();
+            lightCalibration.close();
+            litRoot.close();
+            lightCalibration3DRoot.close();
 
             for (FramebufferObject<ContextType> fbo : shadingFramebuffers)
             {
@@ -617,19 +595,19 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final ReadonlyVertexGeometry getGeometry()
+    public final @NotNull ReadonlyVertexGeometry getGeometry()
     {
-        return resources.getGeometry();
+        return getResources().getGeometry();
     }
 
     @Override
-    public final ViewSet getViewSet()
+    public final @NotNull ViewSet getViewSet()
     {
-        return resources.getViewSet();
+        return getResources().getViewSet();
     }
 
     @Override
-    public final String toString()
+    public final @NotNull String toString()
     {
         return internalName.length() > 32
                 ? String.format("...%s", internalName.substring(internalName.length() - 31))
@@ -654,76 +632,65 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final SceneViewport getSceneViewport()
+    public final @NotNull SceneViewport getSceneViewport()
     {
         return sceneViewportModel;
     }
 
 
     @Override
-    public final SceneModel getSceneModel()
+    public final @NotNull SceneModel getSceneModel()
     {
         return sceneModel;
     }
 
     @Override
-    public final void saveGLTF(File outputDirectory, String filename, ExportSettings settings, Runnable finishedCallback)
+    public final void saveGLTF(@NotNull File outputDirectory, @NotNull String filename, @NotNull ExportSettings settings, @Nullable Runnable finishedCallback)
     {
-        if (outputDirectory != null)
+        LOG.info("Starting glTF export...");
+
+        if(progressMonitor != null)
         {
-            if (getGeometry() == null)
+            progressMonitor.setProcessName("Model Export");
+        }
+
+        try
+        {
+            updateWorldSpaceDefinition();
+
+            Matrix4 transform = sceneModel.getFullModelMatrix();
+
+            // Scale to imported scale from the photogrammetry project if that exists, otherwise at the original, raw scale
+            // ViewSet should default to scale of 1.0 if nothing was imported.
+            transform = Matrix4.scale(getViewSet().getObjectScale()).times(transform);
+
+            ReadonlyTextureResources<ContextType> textureResources = getResources().getTextureResources();
+
+            ModelExporter exporter = ModelExporter.fromVertexGeometry(getGeometry(), transform);
+            settings.applyToExporter(exporter, textureResources, filename);
+
+            outputDirectory.mkdirs();
+            File modelFile = new File(outputDirectory, filename);
+
+            if (settings.shouldSaveTextures())
             {
-                throw new IllegalArgumentException("Geometry is null; cannot export GLTF.");
+                exporter.exportWithTextures(modelFile, finishedCallback);
             }
-
-            LOG.info("Starting glTF export...");
-            if(progressMonitor != null)
+            else  // not saving textures
             {
-                progressMonitor.setProcessName("Model Export");
-            }
+                exporter.exportModelOnly(modelFile);
 
-            try
-            {
-                updateWorldSpaceDefinition();
-
-                Matrix4 transform = sceneModel.getFullModelMatrix();
-
-                // Scale to imported scale from the photogrammetry project if that exists, otherwise at the original, raw scale
-                // ViewSet should default to scale of 1.0 if nothing was imported.
-                ViewSet viewSet = getViewSet();
-                if (viewSet != null)
+                if (finishedCallback != null)
                 {
-                    transform = Matrix4.scale(viewSet.getObjectScale()).times(transform);
+                    finishedCallback.run();
                 }
-
-                ReadonlyTextureResources<ContextType> textureResources = resources.getTextureResources();
-
-                ModelExporter exporter = ModelExporter.fromVertexGeometry(getGeometry(), transform);
-                settings.applyToExporter(exporter, textureResources, filename);
-
-                outputDirectory.mkdirs();
-                File modelFile = new File(outputDirectory, filename);
-
-                if (settings.shouldSaveTextures())
-                {
-                    exporter.exportWithTextures(modelFile, finishedCallback);
-                }
-                else  // not saving textures
-                {
-                    exporter.exportModelOnly(modelFile);
-
-                    if (finishedCallback != null)
-                    {
-                        finishedCallback.run();
-                    }
-                }
-
-                LOG.info("DONE!");
             }
-            catch (IOException e)
-            {
-                LOG.error("Error occurred during glTF export:", e);
-            }
+
+            LOG.info("DONE!");
+        }
+        catch (IOException e)
+        {
+            LOG.error("Error occurred during glTF export:", e);
         }
     }
 }

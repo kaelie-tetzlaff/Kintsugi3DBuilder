@@ -18,6 +18,7 @@ package kintsugi3d.builder.util;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import kintsugi3d.gl.util.ImageHelper;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,17 +39,17 @@ public final class FXImageHelper
     {
     }
 
-    public static Image loadFXImage(File imageFile)
+    public static @Nullable Image loadFXImage(@NotNull File imageFile)
     {
         return loadFXImage(new FileSource(imageFile), imageFile.getAbsolutePath());
     }
 
-    public static Image loadFXImage(InputStream imageStream, String imageFileName)
+    public static @Nullable Image loadFXImage(InputStream imageStream, @NotNull String imageFileName)
     {
         return loadFXImage(new StreamSource(imageStream), imageFileName);
     }
 
-    private static @Nullable Image loadFXImage(Source source, String imageFileName)
+    private static @Nullable Image loadFXImage(@NotNull Source source, @NotNull String imageFileName)
     {
         // convert tiff image if necessary
         if (TIFF_PATTERN.matcher(imageFileName.toLowerCase(Locale.ROOT)).matches())
@@ -101,7 +102,7 @@ public final class FXImageHelper
          * @return
          */
         @Override
-        public final Image getStandardImage()
+        public final @NotNull Image getStandardImage()
         {
             return new Image(file.toURI().toString());
         }
@@ -113,7 +114,7 @@ public final class FXImageHelper
          * @throws IOException
          */
         @Override
-        public final ImageHelper getImageHelper() throws IOException
+        public final @NotNull ImageHelper getImageHelper() throws IOException
         {
             return ImageHelper.read(file);
         }
@@ -134,7 +135,7 @@ public final class FXImageHelper
          * @return
          */
         @Override
-        public final Image getStandardImage()
+        public final @NotNull Image getStandardImage()
         {
             return new Image(inputStream);
         }
@@ -146,7 +147,7 @@ public final class FXImageHelper
          * @throws IOException
          */
         @Override
-        public final ImageHelper getImageHelper() throws IOException
+        public final @NotNull ImageHelper getImageHelper() throws IOException
         {
             return ImageHelper.read(inputStream);
         }

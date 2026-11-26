@@ -16,6 +16,7 @@
 package kintsugi3d.builder.io;
 
 import kintsugi3d.builder.core.viewset.ViewSetBuilder;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,7 +42,7 @@ public interface ViewSetReader
      * @return The view set
      * @throws Exception If errors occur while reading the file.
      */
-    default ViewSetBuilder readFromFile(File cameraFile, ViewSetDirectories directories) throws Exception
+    default ViewSetBuilder readFromFile(@NotNull File cameraFile, @NotNull ViewSetDirectories directories) throws Exception
     {
         try (InputStream stream = new FileInputStream(cameraFile))
         {
@@ -58,7 +59,7 @@ public interface ViewSetReader
      * @return The view set
      * @throws Exception If errors occur while reading the file.
      */
-    default ViewSetBuilder readFromFile(File cameraFile, ViewSetLoadOptions loadOptions) throws Exception
+    default @NotNull ViewSetBuilder readFromFile(@NotNull File cameraFile, @NotNull ViewSetLoadOptions loadOptions) throws Exception
     {
         ViewSetBuilder builder = readFromFile(cameraFile, loadOptions.getMainDirectories())
             .removeViewsByImageFilename(loadOptions.getDisabledImages());

@@ -156,7 +156,7 @@ public class ExportModelController extends ProjectSettingsControllerBase
         }
     }
 
-    private void setCurrentDirectoryFile(File currentDirectoryFile)
+    private void setCurrentDirectoryFile(@Nullable File currentDirectoryFile)
     {
         // Sets FileChooser defaults
         if (currentDirectoryFile != null)
@@ -169,7 +169,7 @@ public class ExportModelController extends ProjectSettingsControllerBase
     private static class ExportTypeStringConverter extends StringConverter<ExportType>
     {
         @Override
-        public final String toString(ExportType type)
+        public final String toString(@Nullable ExportType type)
         {
             return (type != null) ? type.toString() : "";
         }

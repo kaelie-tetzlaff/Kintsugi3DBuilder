@@ -16,6 +16,7 @@
 package kintsugi3d.gl.opengl;
 
 import kintsugi3d.gl.core.IndexBuffer;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.BufferUtils;
 
 import java.nio.ByteBuffer;
@@ -38,7 +39,7 @@ class OpenGLIndexBuffer extends OpenGLBuffer implements IndexBuffer<OpenGLContex
         this(context, GL_STATIC_DRAW);
     }
 
-    private static ByteBuffer convertToByteBuffer(int... data)
+    private static @NotNull ByteBuffer convertToByteBuffer(int @NotNull ... data)
     {
         ByteBuffer buffer = BufferUtils.createByteBuffer(data.length * 4);
         buffer.asIntBuffer().put(data);
@@ -59,7 +60,7 @@ class OpenGLIndexBuffer extends OpenGLBuffer implements IndexBuffer<OpenGLContex
     }
 
     @Override
-    public final OpenGLIndexBuffer setData(int... data)
+    public final @NotNull OpenGLIndexBuffer setData(int @NotNull ... data)
     {
         setData(convertToByteBuffer(data));
         count = data.length;

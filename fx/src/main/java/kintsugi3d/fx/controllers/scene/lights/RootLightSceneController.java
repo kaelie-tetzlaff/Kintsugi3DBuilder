@@ -35,6 +35,7 @@ import kintsugi3d.fx.internal.ObservableProjectModel;
 import kintsugi3d.fx.util.StaticUtilities;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -141,7 +142,7 @@ public class RootLightSceneController implements Initializable
         selectedLight.addListener(settingsController.getChangeListener());
     }
 
-    private InvalidationListener generateLightChangeListener(ObservableLightGroupSettings lightGroup)
+    private @NotNull InvalidationListener generateLightChangeListener(@NotNull ObservableLightGroupSettings lightGroup)
     {
         return observable ->
         {
@@ -155,7 +156,7 @@ public class RootLightSceneController implements Initializable
         };
     }
 
-    public final void injectDependencies(ObservableLightingEnvironmentModel lightingModel,
+    public final void injectDependencies(@NotNull ObservableLightingEnvironmentModel lightingModel,
                                          ObservableProjectModel injectedProjectModel, SceneViewport injectedSceneViewport)
     {
         projectModel = injectedProjectModel;
@@ -368,7 +369,7 @@ public class RootLightSceneController implements Initializable
                 Vector3 equidistantLightTarget = cameraCenter
                     .plus(sceneViewport.getViewingDirection(newWindowPosition.x, newWindowPosition.y).times(currentDistance));
 
-                if (cameraCenter.distance(objectLightTarget) < currentDistance)
+                if (objectLightTarget != null && cameraCenter.distance(objectLightTarget) < currentDistance)
                 {
                     selectedLightGroup.addLight(lastSelectedIndex, objectLightTarget.x, objectLightTarget.y, objectLightTarget.z);
                 }

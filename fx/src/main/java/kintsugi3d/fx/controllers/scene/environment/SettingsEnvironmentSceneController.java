@@ -35,6 +35,8 @@ import kintsugi3d.fx.util.ImageFactory;
 import kintsugi3d.fx.util.SafeNumberStringConverter;
 import kintsugi3d.fx.util.StaticUtilities;
 import kintsugi3d.util.EncodableColorImage;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.net.URL;
@@ -113,7 +115,7 @@ public class SettingsEnvironmentSceneController implements Initializable
         root.setDisable(value);
     }
 
-    private void bind(ObservableEnvironmentSettings envSetting)
+    private void bind(@NotNull ObservableEnvironmentSettings envSetting)
     {
         envUseImageCheckBox.selectedProperty().bindBidirectional(envSetting.envUseImageProperty());
         envUseColorCheckBox.selectedProperty().bindBidirectional(envSetting.envUseColorProperty());
@@ -145,7 +147,7 @@ public class SettingsEnvironmentSceneController implements Initializable
         gpSizeTextField.textProperty().bindBidirectional(trueGPSize, numberStringConverter);
     }
 
-    private void unbind(ObservableEnvironmentSettings envSetting)
+    private void unbind(@NotNull ObservableEnvironmentSettings envSetting)
     {
         envUseImageCheckBox.selectedProperty().unbindBidirectional(envSetting.envUseImageProperty());
         envUseColorCheckBox.selectedProperty().unbindBidirectional(envSetting.envUseColorProperty());
@@ -245,7 +247,7 @@ public class SettingsEnvironmentSceneController implements Initializable
         setDisabled(true);
     }
 
-    final void updateEnvironmentMapImage(EncodableColorImage environmentMapImage)
+    final void updateEnvironmentMapImage(@Nullable EncodableColorImage environmentMapImage)
     {
         if (environmentMapImage == null)
         {
@@ -307,7 +309,7 @@ public class SettingsEnvironmentSceneController implements Initializable
         this.environmentMapModel = environmentMapModel;
     }
 
-    public final ChangeListener<ObservableEnvironmentSettings> getChangeListener()
+    public final @NotNull ChangeListener<ObservableEnvironmentSettings> getChangeListener()
     {
         return changeListener;
     }

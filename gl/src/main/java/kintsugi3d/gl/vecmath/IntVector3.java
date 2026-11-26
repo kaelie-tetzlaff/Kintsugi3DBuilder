@@ -51,32 +51,32 @@ public class IntVector3 implements Iterable<Integer>
         this(value, value, value);
     }
 
-    public final IntVector4 asVector4(int w)
+    public final @NotNull IntVector4 asVector4(int w)
     {
         return new IntVector4(x, y, z, w);
     }
 
-    public final Vector3 asFloatingPoint()
+    public final @NotNull Vector3 asFloatingPoint()
     {
         return new Vector3(x, y, z);
     }
 
-    public final Vector3 asFloatingPointNormalized()
+    public final @NotNull Vector3 asFloatingPointNormalized()
     {
         return new Vector3(x / 255.0f, y / 255.0f, z / 255.0f);
     }
 
-    public final DoubleVector3 asDoubleFloatingPoint()
+    public final @NotNull DoubleVector3 asDoubleFloatingPoint()
     {
         return new DoubleVector3(x, y, z);
     }
 
-    public final DoubleVector3 asDoubleFloatingPointNormalized()
+    public final @NotNull DoubleVector3 asDoubleFloatingPointNormalized()
     {
         return new DoubleVector3(x / 255.0, y / 255.0, z / 255.0);
     }
 
-    public final IntVector2 getXY()
+    public final @NotNull IntVector2 getXY()
     {
         return new IntVector2(x, y);
     }
@@ -101,7 +101,7 @@ public class IntVector3 implements Iterable<Integer>
         return 31 * (31 * (31 + x) + y) + z;
     }
 
-    public final IntVector3 plus(IntVector3 other)
+    public final @NotNull IntVector3 plus(@NotNull IntVector3 other)
     {
         return new IntVector3(
             x + other.x,
@@ -110,7 +110,7 @@ public class IntVector3 implements Iterable<Integer>
         );
     }
 
-    public final IntVector3 minus(IntVector3 other)
+    public final @NotNull IntVector3 minus(@NotNull IntVector3 other)
     {
         return new IntVector3(
             x - other.x,
@@ -119,27 +119,27 @@ public class IntVector3 implements Iterable<Integer>
         );
     }
 
-    public final IntVector3 negated()
+    public final @NotNull IntVector3 negated()
     {
         return new IntVector3(-x, -y, -z);
     }
 
-    public final IntVector3 times(int s)
+    public final @NotNull IntVector3 times(int s)
     {
         return new IntVector3(s* x, s* y, s* z);
     }
 
-    public final IntVector3 dividedBy(int s)
+    public final @NotNull IntVector3 dividedBy(int s)
     {
         return new IntVector3(x/s, y/s, z/s);
     }
 
-    public final int dot(IntVector3 other)
+    public final int dot(@NotNull IntVector3 other)
     {
         return x * other.x + y * other.y + z * other.z;
     }
 
-    public final IntVector3 cross(IntVector3 other)
+    public final @NotNull IntVector3 cross(@NotNull IntVector3 other)
     {
         return new IntVector3(
             y * other.z - z * other.y,
@@ -153,18 +153,18 @@ public class IntVector3 implements Iterable<Integer>
         return Math.sqrt(dot(this));
     }
 
-    public final double distance(IntVector3 other)
+    public final double distance(@NotNull IntVector3 other)
     {
         return minus(other).length();
     }
 
-    public final IntVector3 applyOperator(IntUnaryOperator operator)
+    public final @NotNull IntVector3 applyOperator(@NotNull IntUnaryOperator operator)
     {
         return new IntVector3(operator.applyAsInt(x), operator.applyAsInt(y), operator.applyAsInt(z));
     }
 
     @Override
-    public final String toString()
+    public final @NotNull String toString()
     {
         return String.format("IntVector3{x=%d, y=%d, z=%d}", x, y, z);
     }

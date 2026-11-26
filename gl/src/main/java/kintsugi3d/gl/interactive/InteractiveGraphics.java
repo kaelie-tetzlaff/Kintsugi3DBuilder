@@ -16,6 +16,7 @@
 package kintsugi3d.gl.interactive;
 
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A singleton factory object for binding together the given ContextType and InteractiveRenderable as
@@ -43,8 +44,8 @@ public final class InteractiveGraphics
      * @return A new  InteractiveApplication with the given InteractiveRenderable and ContextType bound together
      *            as its Refreshable.
      */
-    public static <ContextType extends Context<ContextType>> InteractiveApplication createApplication(
-        EventPollable pollable, ContextType context, InteractiveRenderableResource<ContextType> renderable)
+    public static <ContextType extends Context<ContextType>> @NotNull InteractiveApplication createApplication(
+        EventPollable pollable, @NotNull ContextType context, @NotNull InteractiveRenderableResource<ContextType> renderable)
     {
         if (renderable.getOwningApp() != null)
         {

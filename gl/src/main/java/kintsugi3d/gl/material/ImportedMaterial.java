@@ -16,6 +16,8 @@
 package kintsugi3d.gl.material;
 
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,23 +45,23 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     private Vector3 clearcoat;
     private float clearcoatRoughness;
 
-    private ReadonlyMaterialColorMap ambientMap;
-    private ReadonlyMaterialColorMap diffuseMap;
-    private ReadonlyMaterialColorMap specularMap;
-    private ReadonlyMaterialColorMap emissionMap;
-    private ReadonlyMaterialScalarMap exponentMap;
-    private ReadonlyMaterialScalarMap roughnessMap;
-    private ReadonlyMaterialScalarMap opacityMap;
-    private ReadonlyMaterialScalarMap transparencyMap;
-    private ReadonlyMaterialScalarMap translucencyMap;
-    private ReadonlyMaterialScalarMap metallicMap;
-    private ReadonlyMaterialColorMap sheenMap;
-    private ReadonlyMaterialScalarMap anisotropyMap;
-    private ReadonlyMaterialScalarMap anisotropyRotationMap;
-    private ReadonlyMaterialBumpMap bumpMap;
-    private ReadonlyMaterialTextureMap normalMap;
-    private ReadonlyMaterialScalarMap displacementMap;
-    private ReadonlyMaterialScalarMap ambientOcclusionMap;
+    private @Nullable ReadonlyMaterialColorMap ambientMap;
+    private @Nullable ReadonlyMaterialColorMap diffuseMap;
+    private @Nullable ReadonlyMaterialColorMap specularMap;
+    private @Nullable ReadonlyMaterialColorMap emissionMap;
+    private @Nullable ReadonlyMaterialScalarMap exponentMap;
+    private @Nullable ReadonlyMaterialScalarMap roughnessMap;
+    private @Nullable ReadonlyMaterialScalarMap opacityMap;
+    private @Nullable ReadonlyMaterialScalarMap transparencyMap;
+    private @Nullable ReadonlyMaterialScalarMap translucencyMap;
+    private @Nullable ReadonlyMaterialScalarMap metallicMap;
+    private @Nullable ReadonlyMaterialColorMap sheenMap;
+    private @Nullable ReadonlyMaterialScalarMap anisotropyMap;
+    private @Nullable ReadonlyMaterialScalarMap anisotropyRotationMap;
+    private @Nullable ReadonlyMaterialBumpMap bumpMap;
+    private @Nullable ReadonlyMaterialTextureMap normalMap;
+    private @Nullable ReadonlyMaterialScalarMap displacementMap;
+    private @Nullable ReadonlyMaterialScalarMap ambientOcclusionMap;
 
     private ImportedMaterial(String name)
     {
@@ -78,7 +80,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
         clearcoatRoughness = 0.0f;
     }
 
-    public static Map<String, ImportedMaterial> loadFromMTLFile(File mtlFile) throws IOException
+    public static @NotNull Map<String, ImportedMaterial> loadFromMTLFile(@NotNull File mtlFile) throws IOException
     {
         Map<String, ImportedMaterial> materials = new HashMap<>(1);
         ImportedMaterial currentMaterial = null;
@@ -293,7 +295,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
         return materials;
     }
 
-    private static void processTextureOption(Scanner scanner, MaterialTextureMap texture, String option)
+    private static void processTextureOption(@NotNull Scanner scanner, @NotNull MaterialTextureMap texture, @NotNull String option)
     {
         try
         {
@@ -372,7 +374,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
         }
     }
 
-    private static ReadonlyMaterialTextureMap parseTextureStatement(Scanner scanner)
+    private static @NotNull ReadonlyMaterialTextureMap parseTextureStatement(@NotNull Scanner scanner)
     {
         MaterialTextureMap texture = new MaterialTextureMap();
 
@@ -399,7 +401,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
         return texture;
     }
 
-    private static ReadonlyMaterialColorMap parseColorMapStatement(Scanner scanner)
+    private static @NotNull ReadonlyMaterialColorMap parseColorMapStatement(@NotNull Scanner scanner)
     {
         MaterialColorMap texture = new MaterialColorMap();
 
@@ -436,7 +438,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
         return texture;
     }
 
-    private static MaterialScalarMap parseScalarMapStatement(Scanner scanner)
+    private static @NotNull MaterialScalarMap parseScalarMapStatement(@NotNull Scanner scanner)
     {
         MaterialScalarMap texture = new MaterialScalarMap();
 
@@ -471,7 +473,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
         return texture;
     }
 
-    private static MaterialBumpMap parseBumpMapStatement(Scanner scanner)
+    private static @NotNull MaterialBumpMap parseBumpMapStatement(@NotNull Scanner scanner)
     {
         MaterialBumpMap texture = new MaterialBumpMap();
 
@@ -517,7 +519,7 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
         return texture;
     }
 
-    private static void parseChannel(String channel, MaterialScalarMap texture)
+    private static void parseChannel(@NotNull String channel, @NotNull MaterialScalarMap texture)
     {
         switch(channel.toLowerCase(Locale.ROOT))
         {
@@ -699,188 +701,188 @@ public final class ImportedMaterial implements ReadonlyImportedMaterial
     }
 
     @Override
-    public ReadonlyMaterialColorMap getAmbientMap()
+    public @Nullable ReadonlyMaterialColorMap getAmbientMap()
     {
         return ambientMap;
     }
 
-    public void setAmbientMap(ReadonlyMaterialColorMap ambientMap)
+    public void setAmbientMap(@Nullable ReadonlyMaterialColorMap ambientMap)
     {
         this.ambientMap = ambientMap;
     }
 
     @Override
-    public ReadonlyMaterialColorMap getDiffuseMap()
+    public @Nullable ReadonlyMaterialColorMap getDiffuseMap()
     {
         return diffuseMap;
     }
 
-    public void setDiffuseMap(ReadonlyMaterialColorMap diffuseMap)
+    public void setDiffuseMap(@Nullable ReadonlyMaterialColorMap diffuseMap)
     {
         this.diffuseMap = diffuseMap;
     }
 
     @Override
-    public ReadonlyMaterialColorMap getSpecularMap()
+    public @Nullable ReadonlyMaterialColorMap getSpecularMap()
     {
         return specularMap;
     }
 
-    public void setSpecularMap(ReadonlyMaterialColorMap specularMap)
+    public void setSpecularMap(@Nullable ReadonlyMaterialColorMap specularMap)
     {
         this.specularMap = specularMap;
     }
 
     @Override
-    public ReadonlyMaterialScalarMap getExponentMap()
+    public @Nullable ReadonlyMaterialScalarMap getExponentMap()
     {
         return exponentMap;
     }
 
-    public void setExponentMap(ReadonlyMaterialScalarMap exponentMap)
+    public void setExponentMap(@Nullable ReadonlyMaterialScalarMap exponentMap)
     {
         this.exponentMap = exponentMap;
     }
 
     @Override
-    public ReadonlyMaterialScalarMap getRoughnessMap()
+    public @Nullable ReadonlyMaterialScalarMap getRoughnessMap()
     {
         return roughnessMap;
     }
 
-    public void setRoughnessMap(ReadonlyMaterialScalarMap roughnessMap)
+    public void setRoughnessMap(@Nullable ReadonlyMaterialScalarMap roughnessMap)
     {
         this.roughnessMap = roughnessMap;
     }
 
     @Override
-    public ReadonlyMaterialScalarMap getOpacityMap()
+    public @Nullable ReadonlyMaterialScalarMap getOpacityMap()
     {
         return opacityMap;
     }
 
-    public void setOpacityMap(ReadonlyMaterialScalarMap opacityMap)
+    public void setOpacityMap(@Nullable ReadonlyMaterialScalarMap opacityMap)
     {
         this.opacityMap = opacityMap;
     }
 
     @Override
-    public ReadonlyMaterialScalarMap getTransparencyMap()
+    public @Nullable ReadonlyMaterialScalarMap getTransparencyMap()
     {
         return transparencyMap;
     }
 
-    public void setTransparencyMap(ReadonlyMaterialScalarMap transparencyMap)
+    public void setTransparencyMap(@Nullable ReadonlyMaterialScalarMap transparencyMap)
     {
         this.transparencyMap = transparencyMap;
     }
 
     @Override
-    public ReadonlyMaterialScalarMap getTranslucencyMap()
+    public @Nullable ReadonlyMaterialScalarMap getTranslucencyMap()
     {
         return translucencyMap;
     }
 
-    public void setTranslucencyMap(ReadonlyMaterialScalarMap translucencyMap)
+    public void setTranslucencyMap(@Nullable ReadonlyMaterialScalarMap translucencyMap)
     {
         this.translucencyMap = translucencyMap;
     }
 
     @Override
-    public ReadonlyMaterialColorMap getEmissionMap()
+    public @Nullable ReadonlyMaterialColorMap getEmissionMap()
     {
         return emissionMap;
     }
 
-    public void setEmissionMap(ReadonlyMaterialColorMap emissionMap)
+    public void setEmissionMap(@Nullable ReadonlyMaterialColorMap emissionMap)
     {
         this.emissionMap = emissionMap;
     }
 
     @Override
-    public ReadonlyMaterialScalarMap getMetallicMap()
+    public @Nullable ReadonlyMaterialScalarMap getMetallicMap()
     {
         return metallicMap;
     }
 
-    public void setMetallicMap(ReadonlyMaterialScalarMap metallicMap)
+    public void setMetallicMap(@Nullable ReadonlyMaterialScalarMap metallicMap)
     {
         this.metallicMap = metallicMap;
     }
 
     @Override
-    public ReadonlyMaterialColorMap getSheenMap()
+    public @Nullable ReadonlyMaterialColorMap getSheenMap()
     {
         return sheenMap;
     }
 
-    public void setSheenMap(ReadonlyMaterialColorMap sheenMap)
+    public void setSheenMap(@Nullable ReadonlyMaterialColorMap sheenMap)
     {
         this.sheenMap = sheenMap;
     }
 
     @Override
-    public ReadonlyMaterialScalarMap getAnisotropyMap()
+    public @Nullable ReadonlyMaterialScalarMap getAnisotropyMap()
     {
         return anisotropyMap;
     }
 
-    public void setAnisotropyMap(ReadonlyMaterialScalarMap anisotropyMap)
+    public void setAnisotropyMap(@Nullable ReadonlyMaterialScalarMap anisotropyMap)
     {
         this.anisotropyMap = anisotropyMap;
     }
 
     @Override
-    public ReadonlyMaterialScalarMap getAnisotropyRotationMap()
+    public @Nullable ReadonlyMaterialScalarMap getAnisotropyRotationMap()
     {
         return anisotropyRotationMap;
     }
 
-    public void setAnisotropyRotationMap(ReadonlyMaterialScalarMap anisotropyRotationMap)
+    public void setAnisotropyRotationMap(@Nullable ReadonlyMaterialScalarMap anisotropyRotationMap)
     {
         this.anisotropyRotationMap = anisotropyRotationMap;
     }
 
     @Override
-    public ReadonlyMaterialBumpMap getBumpMap()
+    public @Nullable ReadonlyMaterialBumpMap getBumpMap()
     {
         return bumpMap;
     }
 
-    public void setBumpMap(ReadonlyMaterialBumpMap bumpMap)
+    public void setBumpMap(@Nullable ReadonlyMaterialBumpMap bumpMap)
     {
         this.bumpMap = bumpMap;
     }
 
     @Override
-    public ReadonlyMaterialTextureMap getNormalMap()
+    public @Nullable ReadonlyMaterialTextureMap getNormalMap()
     {
         return normalMap;
     }
 
-    public void setNormalMap(ReadonlyMaterialTextureMap normalMap)
+    public void setNormalMap(@Nullable ReadonlyMaterialTextureMap normalMap)
     {
         this.normalMap = normalMap;
     }
 
     @Override
-    public ReadonlyMaterialScalarMap getDisplacementMap()
+    public @Nullable ReadonlyMaterialScalarMap getDisplacementMap()
     {
         return displacementMap;
     }
 
-    public void setDisplacementMap(ReadonlyMaterialScalarMap displacmentMap)
+    public void setDisplacementMap(@Nullable ReadonlyMaterialScalarMap displacmentMap)
     {
         displacementMap = displacmentMap;
     }
 
     @Override
-    public ReadonlyMaterialScalarMap getAmbientOcclusionMap()
+    public @Nullable ReadonlyMaterialScalarMap getAmbientOcclusionMap()
     {
         return ambientOcclusionMap;
     }
 
-    public void setAmbientOcclusionMap(ReadonlyMaterialScalarMap ambientOcclusionMap)
+    public void setAmbientOcclusionMap(@Nullable ReadonlyMaterialScalarMap ambientOcclusionMap)
     {
         this.ambientOcclusionMap = ambientOcclusionMap;
     }

@@ -25,6 +25,8 @@ import kintsugi3d.gl.core.FramebufferObject;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +51,7 @@ public class ResampleRequest implements ImageBasedGraphicsRequest
 
     @Override
     public final <ContextType extends Context<ContextType>> void executeRequest(
-        ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor) throws IOException, UserCancellationException
+        @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @Nullable ProgressMonitor monitor) throws IOException, UserCancellationException
     {
         ReadonlyViewSet targetViewSet = ViewSetReaderFromVSET.getInstance().readFromFile(resampleVSETFile).finish();
 
@@ -98,9 +100,14 @@ public class ResampleRequest implements ImageBasedGraphicsRequest
             Files.copy(resampleVSETFile.toPath(),
                 new File(resampleExportPath, resampleVSETFile.getName()).toPath(),
                 StandardCopyOption.REPLACE_EXISTING);
-            Files.copy(renderable.getViewSet().getGeometryFile().toPath(),
-                new File(resampleExportPath, renderable.getViewSet().getGeometryFile().getName()).toPath(),
-                StandardCopyOption.REPLACE_EXISTING);
+
+            File geometryFile = renderable.getViewSet().getGeometryFile();
+            if (geometryFile != null)
+            {
+                Files.copy(geometryFile.toPath(),
+                    new File(resampleExportPath, geometryFile.getName()).toPath(),
+                    StandardCopyOption.REPLACE_EXISTING);
+            }
         }
     }
 }

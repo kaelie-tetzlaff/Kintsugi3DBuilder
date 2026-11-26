@@ -23,6 +23,7 @@ import kintsugi3d.builder.resources.project.ImportedMaterialResources;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.ReadonlyTexture2D;
 import kintsugi3d.gl.core.Texture2D;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -33,24 +34,24 @@ public final class ImportedMaterialResourcesWrapper<ContextType extends Context<
 {
     private final ImportedMaterialResources<ContextType> importedResources;
 
-    private ImportedMaterialResourcesWrapper(Supplier<ImportedMaterialResources<ContextType>> resourcesFactory)
+    private ImportedMaterialResourcesWrapper(@NotNull Supplier<ImportedMaterialResources<ContextType>> resourcesFactory)
     {
         importedResources = resourcesFactory.get();
     }
 
-    public static <ContextType extends Context<ContextType>> ImportedMaterialResourcesWrapper<ContextType> wrap(
-        Supplier<ImportedMaterialResources<ContextType>> resourcesFactory)
+    public static <ContextType extends Context<ContextType>> @NotNull ImportedMaterialResourcesWrapper<ContextType> wrap(
+        @NotNull Supplier<ImportedMaterialResources<ContextType>> resourcesFactory)
     {
         return new ImportedMaterialResourcesWrapper<>(resourcesFactory);
     }
 
-    public static <ContextType extends Context<ContextType>> ImportedMaterialResourcesWrapper<ContextType> createNull()
+    public static <ContextType extends Context<ContextType>> @NotNull ImportedMaterialResourcesWrapper<ContextType> createNull()
     {
         return new ImportedMaterialResourcesWrapper<>(ImportedMaterialResources::createNull);
     }
 
     @Override
-    public ContextType getContext()
+    public @NotNull ContextType getContext()
     {
         return importedResources.getContext();
     }
@@ -70,13 +71,13 @@ public final class ImportedMaterialResourcesWrapper<ContextType extends Context<
     }
 
     @Override
-    public Map<TextureInfo, Texture2D<ContextType>> getTextures()
+    public @NotNull Map<TextureInfo, Texture2D<ContextType>> getTextures()
     {
         return StandardTexture.convertEnumMapToObjectMap(getStandardTextures());
     }
 
     @Override
-    public Map<StandardTexture, Texture2D<ContextType>> getStandardTextures()
+    public @NotNull Map<StandardTexture, Texture2D<ContextType>> getStandardTextures()
     {
         return importedResources.getTextures();
     }

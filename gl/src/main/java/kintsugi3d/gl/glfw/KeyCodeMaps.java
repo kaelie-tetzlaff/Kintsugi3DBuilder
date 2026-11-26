@@ -16,6 +16,7 @@
 package kintsugi3d.gl.glfw;
 
 import kintsugi3d.gl.window.Key;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -25,10 +26,10 @@ import static org.lwjgl.glfw.GLFW.*;
 final class KeyCodeMaps
 {
     @SuppressWarnings("StaticCollection")
-    private static final Map<Integer, Key> CODE_TO_KEY;
+    private static final @NotNull Map<Integer, Key> CODE_TO_KEY;
 
     @SuppressWarnings("StaticCollection")
-    private static final Map<Key, List<Integer>> KEY_TO_CODES;
+    private static final @NotNull Map<Key, List<Integer>> KEY_TO_CODES;
 
     static
     {

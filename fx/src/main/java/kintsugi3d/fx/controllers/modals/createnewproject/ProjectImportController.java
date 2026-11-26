@@ -30,6 +30,7 @@ import kintsugi3d.fx.controllers.modals.createnewproject.inputsources.NonValidat
 import kintsugi3d.fx.controllers.modals.createnewproject.inputsources.ValidatedInputSource;
 import kintsugi3d.fx.controllers.paged.DataSourcePageControllerBase;
 import kintsugi3d.fx.core.ExceptionHandling;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Collection;
@@ -38,7 +39,7 @@ public abstract class ProjectImportController extends DataSourcePageControllerBa
 {
     protected abstract NonValidatedInputSource getData();
 
-    private void showMissingImagesAlert(MissingImagesException exception, NonValidatedInputSource data)
+    private void showMissingImagesAlert(@NotNull MissingImagesException exception, @NotNull NonValidatedInputSource data)
     {
         Collection<File> missingImgs = exception.getMissingImgs();
 
@@ -82,7 +83,7 @@ public abstract class ProjectImportController extends DataSourcePageControllerBa
         alert.show();
     }
 
-    private static void handleGenericImportException(Exception e)
+    private static void handleGenericImportException(@NotNull Exception e)
     {
         ExceptionHandling.error("Error importing images", e);
     }
@@ -112,6 +113,7 @@ public abstract class ProjectImportController extends DataSourcePageControllerBa
     @Override
     public final boolean tryConfirm()
     {
-        return getPage().getOutData().confirm();
+        ValidatedInputSource outData = getPage().getOutData();
+        return outData != null && outData.confirm();
     }
 }

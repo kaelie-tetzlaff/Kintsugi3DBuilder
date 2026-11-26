@@ -26,6 +26,8 @@ import kintsugi3d.gl.geometry.GeometryTextures;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,17 +43,17 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
     /**
      * Array of image data pre-projected into texture space
      */
-    private Texture3D<ContextType> textureArray;
+    private final Texture3D<ContextType> textureArray;
 
     /**
      * Simple rectangle for draw calls
      */
-    private VertexBuffer<ContextType> rectangle;
+    private final VertexBuffer<ContextType> rectangle;
 
     /**
      * Textures storing pre-computed geometry information per-texel
      */
-    private GeometryTextures<ContextType> geometryTextures;
+    private final GeometryTextures<ContextType> geometryTextures;
 
     private final int texWidth;
     private final int texHeight;
@@ -67,9 +69,9 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
      * @param progressMonitor
      * @throws IOException
      */
-    GraphicsResourcesTextureSpace(GraphicsResourcesCommon<ContextType> sharedResources,
-        Supplier<GeometryTextures<ContextType>> geometryTextureFactory, File textureDirectory,
-        TextureLoadOptions loadOptions, int texWidth, int texHeight, ProgressMonitor progressMonitor)
+    GraphicsResourcesTextureSpace(@NotNull GraphicsResourcesCommon<ContextType> sharedResources,
+                                  @NotNull Supplier<GeometryTextures<ContextType>> geometryTextureFactory, File textureDirectory,
+                                  @NotNull TextureLoadOptions loadOptions, int texWidth, int texHeight, @Nullable ProgressMonitor progressMonitor)
             throws IOException, UserCancellationException
     {
         super(sharedResources, false);
@@ -162,7 +164,7 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
     }
 
     @Override
-    public final void setupShaderProgram(Program<ContextType> program)
+    public final void setupShaderProgram(@NotNull Program<ContextType> program)
     {
         getCommonResources().setupShaderProgram(program);
         geometryTextures.setupShaderProgram(program);
@@ -170,7 +172,7 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
     }
 
     @Override
-    public final DrawableResource<ContextType> createDrawable(Program<ContextType> program)
+    public final @NotNull DrawableResource<ContextType> createDrawable(Program<ContextType> program)
     {
         DrawableResource<ContextType> drawable = getCommonResources().getContext().createDrawable(program);
         drawable.addVertexBuffer("position", rectangle);
@@ -178,7 +180,7 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
         return drawable;
     }
 
-    public final TextureResolution getTextureResolution()
+    public final @NotNull TextureResolution getTextureResolution()
     {
         return new TextureResolution(texWidth, texHeight);
     }
@@ -188,22 +190,8 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
     {
         super.close();
 
-        if (geometryTextures != null)
-        {
-            geometryTextures.close();
-            geometryTextures = null;
-        }
-
-        if (rectangle != null)
-        {
-            rectangle.close();
-            rectangle = null;
-        }
-
-        if (textureArray != null)
-        {
-            textureArray.close();
-            textureArray = null;
-        }
+        geometryTextures.close();
+        rectangle.close();
+        textureArray.close();
     }
 }

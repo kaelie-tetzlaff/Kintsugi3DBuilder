@@ -23,6 +23,8 @@ import kintsugi3d.gl.vecmath.DoubleVector2;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.window.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -32,7 +34,7 @@ final class LightTool implements PickerTool
     private float inclinationOffset;
     private float distanceOffset;
 
-    private Consumer<DoubleVector2> updateFunction;
+    private @Nullable Consumer<DoubleVector2> updateFunction;
     private int lightIndex;
 
     private final ManipulableLightingEnvironmentModel lightingModel;
@@ -41,13 +43,13 @@ final class LightTool implements PickerTool
     private static class Builder extends ToolBuilderBase<LightTool>
     {
         @Override
-        public final LightTool create()
+        public final @NotNull LightTool create()
         {
             return new LightTool(getLightingEnvironmentModel(), getSceneViewport());
         }
     }
 
-    static ToolBuilder<LightTool> getBuilder()
+    static @NotNull ToolBuilder<LightTool> getBuilder()
     {
         return new Builder();
     }
@@ -65,7 +67,7 @@ final class LightTool implements PickerTool
     }
 
     @Override
-    public void mouseButtonPressed(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods)
+    public void mouseButtonPressed(@NotNull Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods)
     {
         if (buttonIndex == 0)
         {
@@ -152,7 +154,7 @@ final class LightTool implements PickerTool
     }
 
     @Override
-    public void mouseButtonReleased(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods)
+    public void mouseButtonReleased(@NotNull Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods)
     {
         if (buttonIndex == 0)
         {
@@ -172,7 +174,7 @@ final class LightTool implements PickerTool
     }
 
     @Override
-    public void cursorMoved(Canvas3D<? extends Context<?>> canvas, double xPos, double yPos)
+    public void cursorMoved(@NotNull Canvas3D<? extends Context<?>> canvas, double xPos, double yPos)
     {
         if (updateFunction == null)
         {
@@ -185,7 +187,7 @@ final class LightTool implements PickerTool
         }
     }
 
-    private void updateForHoverState(Canvas3D<? extends Context<?>> canvas, double xPos, double yPos)
+    private void updateForHoverState(@NotNull Canvas3D<? extends Context<?>> canvas, double xPos, double yPos)
     {
         for (int i = 0; i < lightingModel.getLightCount(); i++)
         {
@@ -238,7 +240,7 @@ final class LightTool implements PickerTool
         }
     }
 
-    private float getAzimuthAtWindowPosition(DoubleVector2 normalizedPosition)
+    private float getAzimuthAtWindowPosition(@NotNull DoubleVector2 normalizedPosition)
     {
         Vector3 viewportCenter = sceneViewport.getViewportCenter();
         Vector3 cursorDirection = sceneViewport.getViewingDirection(normalizedPosition.x, normalizedPosition.y);
@@ -257,7 +259,7 @@ final class LightTool implements PickerTool
         return (float) StrictMath.atan2(-newAzimuthDirectionNormalized.x, newAzimuthDirectionNormalized.y);
     }
 
-    private float getInclinationAtWindowPosition(DoubleVector2 normalizedPosition)
+    private float getInclinationAtWindowPosition(@NotNull DoubleVector2 normalizedPosition)
     {
         Vector3 viewportCenter = sceneViewport.getViewportCenter();
         Vector3 cursorDirection = sceneViewport.getViewingDirection(normalizedPosition.x, normalizedPosition.y);
@@ -277,7 +279,7 @@ final class LightTool implements PickerTool
         return (float) StrictMath.atan2(newLightDirection.y, newLightDirection.dot(lightDirectionProjected));
     }
 
-    private float getDistanceAtWindowPosition(DoubleVector2 normalizedPosition)
+    private float getDistanceAtWindowPosition(@NotNull DoubleVector2 normalizedPosition)
     {
         Vector3 viewportCenter = sceneViewport.getViewportCenter();
         Vector3 cursorDirection = sceneViewport.getViewingDirection(normalizedPosition.x, normalizedPosition.y);
@@ -291,27 +293,31 @@ final class LightTool implements PickerTool
         return viewportCenter.minus(lightCenter).dot(normalDirection) / lightDirection.dot(normalDirection);
     }
 
-    private void updateAzimuth(DoubleVector2 normalizedPosition)
+    private void updateAzimuth(@NotNull DoubleVector2 normalizedPosition)
     {
         lightingModel.getLight(lightIndex).setAzimuth((azimuthOffset + getAzimuthAtWindowPosition(normalizedPosition)) * 180 / (float)Math.PI);
     }
 
-    private void updateInclination(DoubleVector2 normalizedPosition)
+    private void updateInclination(@NotNull DoubleVector2 normalizedPosition)
     {
         lightingModel.getLight(lightIndex).setInclination(Math.max(-90, Math.min(90,
             (inclinationOffset + getInclinationAtWindowPosition(normalizedPosition)) * 180 / (float)Math.PI)));
     }
 
-    private void updateDistance(DoubleVector2 normalizedPosition)
+    private void updateDistance(@NotNull DoubleVector2 normalizedPosition)
     {
         lightingModel.getLight(lightIndex).setDistance(Math.max(0.001f, distanceOffset + getDistanceAtWindowPosition(normalizedPosition)));
     }
 
-    private void updateCenter(DoubleVector2 normalizedPosition)
+    private void updateCenter(@NotNull DoubleVector2 normalizedPosition)
     {
         if ("RenderingSubject".equals(sceneViewport.getObjectAtCoordinates(normalizedPosition.x, normalizedPosition.y)))
         {
-            lightingModel.setLightCenter(lightIndex, sceneViewport.get3DPositionAtCoordinates(normalizedPosition.x, normalizedPosition.y));
+            Vector3 position = sceneViewport.get3DPositionAtCoordinates(normalizedPosition.x, normalizedPosition.y);
+            if (position != null)
+            {
+                lightingModel.setLightCenter(lightIndex, position);
+            }
         }
     }
 }

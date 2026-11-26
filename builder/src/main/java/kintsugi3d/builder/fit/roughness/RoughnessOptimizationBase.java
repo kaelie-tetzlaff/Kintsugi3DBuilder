@@ -20,6 +20,7 @@ import kintsugi3d.builder.fit.decomposition.ReadonlyBasisResources;
 import kintsugi3d.builder.fit.decomposition.ReadonlyBasisWeightResources;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,7 @@ abstract class RoughnessOptimizationBase<ContextType extends Context<ContextType
     private final VertexBuffer<ContextType> rect;
     private final DrawableResource<ContextType> specularRoughnessFitDrawable;
 
-    RoughnessOptimizationBase(ReadonlyBasisResources<ContextType> basisResources)
+    RoughnessOptimizationBase(@NotNull ReadonlyBasisResources<ContextType> basisResources)
         throws IOException
     {
         // Fit specular parameters from weighted basis functions
@@ -68,7 +69,7 @@ abstract class RoughnessOptimizationBase<ContextType extends Context<ContextType
     }
 
     @Override
-    public final void setInputWeights(ReadonlyBasisWeightResources<ContextType> weightResources)
+    public final void setInputWeights(@Nullable ReadonlyBasisWeightResources<ContextType> weightResources)
     {
         if (weightResources != null)
         {

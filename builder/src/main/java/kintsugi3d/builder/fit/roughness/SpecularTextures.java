@@ -17,9 +17,10 @@ package kintsugi3d.builder.fit.roughness;
 
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Texture2D;
+import org.jetbrains.annotations.Nullable;
 
 public interface SpecularTextures<ContextType extends Context<ContextType>>
 {
-    Texture2D<ContextType> getReflectivityTexture();
-    Texture2D<ContextType> getRoughnessTexture();
+    @Nullable Texture2D<ContextType> getReflectivityTexture();
+    @Nullable Texture2D<ContextType> getRoughnessTexture();
 }

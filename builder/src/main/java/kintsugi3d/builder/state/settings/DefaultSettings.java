@@ -19,6 +19,7 @@ import kintsugi3d.builder.io.ExportType;
 import kintsugi3d.builder.util.OperatingSystem;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.util.ShadingParameterMode;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +36,7 @@ public final class DefaultSettings
     {
     }
 
-    public static void applyGlobalDefaults(GeneralSettingsModel settingsModel)
+    public static void applyGlobalDefaults(@NotNull GeneralSettingsModel settingsModel)
     {
         // Application state
         settingsModel.createBooleanSetting("lightCalibrationMode", false);
@@ -112,12 +113,12 @@ public final class DefaultSettings
         }
     }
 
-    private static void setDefaultBlenderLocation(GeneralSettingsModel settingsModel)
+    private static void setDefaultBlenderLocation(@NotNull GeneralSettingsModel settingsModel)
     {
         settingsModel.createObjectSetting("blenderLocation", "");
     }
 
-    public static void applyProjectDefaults(GeneralSettingsModel settingsModel)
+    public static void applyProjectDefaults(@NotNull GeneralSettingsModel settingsModel)
     {
         // Mask / feathering settings
         settingsModel.createBooleanSetting("occlusionEnabled", true);

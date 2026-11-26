@@ -21,6 +21,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,7 +32,7 @@ public final class ActionButtonFactory
     {
     }
 
-    static void createActionButtons(Iterable<? extends Map<String, Runnable>> actions, VBox buttonBox,
+    static void createActionButtons(@NotNull Iterable<? extends Map<String, Runnable>> actions, @NotNull VBox buttonBox,
                                     String buttonClass, String separatorClass)
     {
         buttonBox.getChildren().clear();

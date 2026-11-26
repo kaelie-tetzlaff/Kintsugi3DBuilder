@@ -21,6 +21,8 @@ import kintsugi3d.builder.io.RecentProjects;
 import kintsugi3d.builder.io.ViewSetReaderFromVSET;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.util.ApplicationFolders;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,18 +45,18 @@ public abstract class CacheModelBase implements CacheModel
 {
     private static final Logger LOG = LoggerFactory.getLogger(CacheModelBase.class);
 
-    private final AtomicBoolean cacheCleanupInProgress;
+    private final @NotNull AtomicBoolean cacheCleanupInProgress;
 
     /**
      * Lock for multithreaded cache size calculation.
      */
-    private final Object cacheSizeCalcThreadLock;
+    private final @NotNull Object cacheSizeCalcThreadLock;
 
     /**
      * This thread will be set to a non-null value while running, and null otherwise
      * to prevent multiple thread running simultaneously.
      */
-    private volatile Thread cacheSizeCalcThread;
+    private volatile @Nullable Thread cacheSizeCalcThread;
 
     protected CacheModelBase()
     {
@@ -69,15 +71,15 @@ public abstract class CacheModelBase implements CacheModel
      * @param newProjectSizes
      * @param onCompleteCallback Called after the cache sizes have been fully posted.  May run on a separate thread (i.e. the JavaFX thread).
      */
-    protected abstract void updateCacheSize(long newCacheSize, Map<String, Long> newProjectSizes, Runnable onCompleteCallback);
+    protected abstract void updateCacheSize(long newCacheSize, Map<String, Long> newProjectSizes, @Nullable Runnable onCompleteCallback);
 
     protected abstract void setCacheSizeCalcInProgress(boolean cacheSizeCalcInProgress);
 
-    protected abstract void addCacheSizeChangeCallback(DoubleConsumer cacheSizeChangeCallback);
+    protected abstract void addCacheSizeChangeCallback(@Nullable DoubleConsumer cacheSizeChangeCallback);
 
     protected abstract void removeAllCacheSizeChangeCallbacks();
 
-    protected static Map<File, Consumer<File[]>> getDeleteMethods()
+    protected static @NotNull Map<File, Consumer<File[]>> getDeleteMethods()
     {
         File previewCacheDir = ApplicationFolders.getPreviewImagesRootDirectory().toFile();
         File fitCacheDir = ApplicationFolders.getFitCacheRootDirectory().toFile();
@@ -87,12 +89,12 @@ public abstract class CacheModelBase implements CacheModel
             fitCacheDir, files -> tryDeleteFitCacheFiles(fitCacheDir, files));
     }
 
-    private static Collection<File> getCleanableCacheDirectories()
+    private static @NotNull Collection<File> getCleanableCacheDirectories()
     {
         return getDeleteMethods().keySet();
     }
 
-    private static void handleCacheCleanupError(Exception e)
+    private static void handleCacheCleanupError(@NotNull Exception e)
     {
         LOG.error(e.toString());
         Global.state().getProjectModel().error(
@@ -138,7 +140,7 @@ public abstract class CacheModelBase implements CacheModel
         });
     }
 
-    private static void clearCache(File directory, Consumer<File[]> deleteMethod) throws IOException
+    private static void clearCache(@NotNull File directory, @NotNull Consumer<File[]> deleteMethod) throws IOException
     {
         if (!directory.isDirectory())
         {
@@ -153,7 +155,7 @@ public abstract class CacheModelBase implements CacheModel
         deleteMethod.accept(projects);
     }
 
-    private static void deletePreviewCacheFiles(File directory, File[] projects) throws IOException
+    private static void deletePreviewCacheFiles(@NotNull File directory, File @NotNull [] projects) throws IOException
     {
         for (File project : projects)
         {
@@ -215,7 +217,7 @@ public abstract class CacheModelBase implements CacheModel
         }
     }
 
-    private static void tryDeletePreviewCacheFiles(File directory, File[] projects)
+    private static void tryDeletePreviewCacheFiles(@NotNull File directory, File @NotNull [] projects)
     {
         try
         {
@@ -227,7 +229,7 @@ public abstract class CacheModelBase implements CacheModel
         }
     }
 
-    private static void deleteFitCacheFiles(File directory, File[] projects) throws IOException
+    private static void deleteFitCacheFiles(@NotNull File directory, File @NotNull [] projects) throws IOException
     {
         for (File project : projects)
         {
@@ -331,7 +333,7 @@ public abstract class CacheModelBase implements CacheModel
         }
     }
 
-    private static void tryDeleteFitCacheFiles(File directory, File[] projects)
+    private static void tryDeleteFitCacheFiles(@NotNull File directory, File @NotNull [] projects)
     {
         try
         {
@@ -344,7 +346,7 @@ public abstract class CacheModelBase implements CacheModel
     }
 
     @Override
-    public final void requestCleanUpBothCaches(Map<File, Consumer<File[]>> deleteMethods)
+    public final void requestCleanUpBothCaches(@NotNull Map<File, Consumer<File[]>> deleteMethods)
     {
         new Thread(() -> cleanCacheSubDirs(deleteMethods), "Clean Up Cache").start();
     }
@@ -354,7 +356,7 @@ public abstract class CacheModelBase implements CacheModel
      *
      * @param deleteMethods
      */
-    private void cleanCacheSubDirs(Map<File, Consumer<File[]>> deleteMethods)
+    private void cleanCacheSubDirs(@NotNull Map<File, Consumer<File[]>> deleteMethods)
     {
         if (cacheCleanupInProgress.compareAndSet(false, true))
         {
@@ -376,8 +378,8 @@ public abstract class CacheModelBase implements CacheModel
                     {
                         // Select only cache directories that are not in the recently opened projects welcome dialogue.
                         Collection<File> deletableProjects = new HashSet<>(0);
-                        List<File> nonRecentProjects = new ArrayList<>(Arrays.asList(Objects.requireNonNull(directory.listFiles())));
-                        List<File> oldProjects = new ArrayList<>(Arrays.asList(Objects.requireNonNull(directory.listFiles())));
+                        List<File> nonRecentProjects = new ArrayList<>(Arrays.asList(listFiles(directory)));
+                        List<File> oldProjects = new ArrayList<>(Arrays.asList(listFiles(directory)));
 
                         if (settingsModel.getBoolean("recentPromptEnabled"))
                         {
@@ -394,7 +396,7 @@ public abstract class CacheModelBase implements CacheModel
                         // Don't delete the current project.
                         deletableProjects.removeIf(file ->
                             Global.io().isProjectOpen() &&
-                                Objects.equals(file.getName(), Global.io().getLoadedViewSetOrThrow().getUUID().toString()));
+                                Objects.equals(file.getName(), Global.io().getLoadedViewSet().getUUID().toString()));
 
                         // Perform cache deletion on directories still in oldProjects.
                         File[] deletableProjectsArr = deletableProjects.toArray(File[]::new);
@@ -445,7 +447,12 @@ public abstract class CacheModelBase implements CacheModel
         }
     }
 
-    private static void filterByRecentProjectLimit(File directory, List<File> oldProjects)
+    private static File @NotNull [] listFiles(@NotNull File directory)
+    {
+        return Objects.requireNonNull(directory.listFiles(), "An error occurred while listing files in the cache directory.");
+    }
+
+    private static void filterByRecentProjectLimit(File directory, @NotNull List<File> oldProjects)
     {
         List<UUID> recentUUIDs = getRecentUUIDs(Global.state().getSettingsModel().getInt("recentProjectLimit"));
         for (UUID recentUUID : recentUUIDs)
@@ -462,7 +469,7 @@ public abstract class CacheModelBase implements CacheModel
         }
     }
 
-    private static void filterByFileAgeLimit(List<File> projects)
+    private static void filterByFileAgeLimit(@NotNull List<File> projects)
     {
         for (int i = projects.size() - 1; i >= 0; i--)
         {
@@ -542,7 +549,7 @@ public abstract class CacheModelBase implements CacheModel
             .filter(entry -> !retainedProjectIDSet.contains(entry.getKey()))
             .filter(entry ->
                 // Skip the current project
-                !Objects.equals(Global.io().getLoadedViewSetOrThrow().getUUID().toString(), entry.getKey()))
+                !Objects.equals(Global.io().getLoadedViewSet().getUUID().toString(), entry.getKey()))
             // Flatten to a stream of individual cache directories (for a specific project and a specific cache type)
             .flatMap(entry -> entry.getValue().stream())
             .collect(Collectors.toList());
@@ -556,7 +563,7 @@ public abstract class CacheModelBase implements CacheModel
         }
     }
 
-    private static Map<String, Collection<File>> getCleanableCacheProjects()
+    private static @NotNull Map<String, Collection<File>> getCleanableCacheProjects()
     {
         Map<String, Collection<File>> cleanableCacheProjects = new HashMap<>(getNumCachedProjects());
 
@@ -565,7 +572,7 @@ public abstract class CacheModelBase implements CacheModel
         // but all need to be cleaned up when cleaning down to a size limit.
         for (File directory : getDeleteMethods().keySet())
         {
-            for (File projectCacheDir : Objects.requireNonNull(directory.listFiles()))
+            for (File projectCacheDir : listFiles(directory))
             {
                 // The project cache directory name should be the same regardless of which cache (i.e. preview or fit) is being cleaned.
                 String projectID = projectCacheDir.getName();
@@ -581,7 +588,7 @@ public abstract class CacheModelBase implements CacheModel
         return cleanableCacheProjects;
     }
 
-    private static List<UUID> getRecentUUIDs(int numProjectsToKeep)
+    private static @NotNull List<UUID> getRecentUUIDs(int numProjectsToKeep)
     {
         List<String> recentProjects = RecentProjects.getInstance().getRecentProjectFilenames().stream().limit(numProjectsToKeep).collect(Collectors.toList());
         // Load view sets of recent projects to get their UUID.
@@ -615,7 +622,7 @@ public abstract class CacheModelBase implements CacheModel
      * @param projectID       The name of project whose cache size is being calculated.
      * @return The total size of the cache over all projects.
      */
-    private long getDirectorySize(File directory, Map<String, Long> newProjectSizes, String projectID)
+    private long getDirectorySize(@NotNull File directory, @NotNull Map<String, Long> newProjectSizes, @Nullable String projectID)
     {
         if (!Objects.equals(Thread.currentThread(), cacheSizeCalcThread))
         {
@@ -666,7 +673,7 @@ public abstract class CacheModelBase implements CacheModel
      * @param cacheSizeChangeCallback Runs only if the cache size changed.
      * @param onCompleteCallback      Always runs regardless of whether the cache size changed.  Also runs on the JavaFX thread.
      */
-    protected final void requestCacheSizeRefresh(DoubleConsumer cacheSizeChangeCallback, Runnable onCompleteCallback)
+    protected final void requestCacheSizeRefresh(@Nullable DoubleConsumer cacheSizeChangeCallback, @Nullable Runnable onCompleteCallback)
     {
         synchronized (cacheSizeCalcThreadLock)
         {
@@ -675,7 +682,7 @@ public abstract class CacheModelBase implements CacheModel
             if (cacheSizeCalcThread == null) // only want one thread running at a time.
             {
                 setCacheSizeCalcInProgress(true);
-                cacheSizeCalcThread = new Thread(() ->
+                Thread newThread = new Thread(() ->
                 {
                     try
                     {
@@ -709,7 +716,8 @@ public abstract class CacheModelBase implements CacheModel
                     }
                 }, "Cache Size Calculation");
 
-                cacheSizeCalcThread.start();
+                cacheSizeCalcThread = newThread;
+                newThread.start();
             }
 
             // If cache size calc thread is already running, then it should eventually trigger the listener registered above.
@@ -721,7 +729,7 @@ public abstract class CacheModelBase implements CacheModel
      * @param postNewCacheSizes Handles actually posting the new cache size and individual project sizes,
      *                          guaranteed to be invoked from a synchronized context.
      */
-    protected final void synchronizedCacheSizeCalcComplete(Runnable postNewCacheSizes)
+    protected final void synchronizedCacheSizeCalcComplete(@NotNull Runnable postNewCacheSizes)
     {
         // prevent race condition if another call to requestCacheSizeRefresh comes in
         // while updating and cleaning up listeners.
@@ -753,7 +761,7 @@ public abstract class CacheModelBase implements CacheModel
      * @param newProjectSizes Will be populated with updated individual project cache sizes.
      * @return The total size of the cache over all projects.
      */
-    private long calcCacheSize(Map<String, Long> newProjectSizes)
+    private long calcCacheSize(@NotNull Map<String, Long> newProjectSizes)
     {
         // Calculates both the total cache size as well as individual project sizes.
         return getCleanableCacheDirectories().stream()
@@ -774,14 +782,14 @@ public abstract class CacheModelBase implements CacheModel
     protected static int getNumCachedProjects()
     {
         return getCleanableCacheDirectories().stream()
-            .mapToInt(dir -> dir.exists() ? Objects.requireNonNull(dir.listFiles()).length : 0)
+            .mapToInt(dir -> dir.exists() ? listFiles(dir).length : 0)
             .max().orElse(0);
     }
 
     protected static boolean checkOldFilesExist()
     {
         Collection<File> cacheFiles = getCleanableCacheDirectories().stream()
-            .flatMap(dir -> dir.exists() ? Arrays.stream(Objects.requireNonNull(dir.listFiles())) : Stream.of())
+            .flatMap(dir -> dir.exists() ? Arrays.stream(listFiles(dir)) : Stream.of())
             .collect(Collectors.toList());
 
         Instant limit = LocalDateTime.now().minusDays(Global.state().getSettingsModel().getInt("fileAgeLimit"))

@@ -16,6 +16,8 @@ import kintsugi3d.builder.fit.settings.ExportSettings;
 import kintsugi3d.builder.resources.project.ReadonlyGraphicsResourcesImageSpace;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.SubdivisionRenderable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
@@ -27,7 +29,7 @@ public interface ReadonlyImageBasedRenderable<ContextType extends Context<Contex
      *
      * @return The view set.
      */
-    ReadonlyViewSet getViewSet();
+    @NotNull ReadonlyViewSet getViewSet();
 
     /**
      * Gets the resources used by this project instance.
@@ -85,5 +87,5 @@ public interface ReadonlyImageBasedRenderable<ContextType extends Context<Contex
      * @param settings
      * @param finishedCallback
      */
-    void saveGLTF(File outputDirectory, String filename, ExportSettings settings, Runnable finishedCallback);
+    void saveGLTF(@NotNull File outputDirectory, @NotNull String filename, @NotNull ExportSettings settings, @Nullable Runnable finishedCallback);
 }

@@ -26,6 +26,7 @@ import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,12 +38,12 @@ public class LightWidgets<ContextType extends Context<ContextType>> extends Shad
     public static final String INCLINATION_TAG_FORMAT = "Light.%d.Inclination";
     public static final String DISTANCE_TAG_FORMAT = "Light.%d.Distance";
 
-    private final SceneViewportModel sceneViewportModel;
-    private final SceneModel sceneModel;
+    private final @NotNull SceneViewportModel sceneViewportModel;
+    private final @NotNull SceneModel sceneModel;
 
     private LightWidgetInfo[] widgetInfo;
 
-    public LightWidgets(ContextType context, SceneViewportModel sceneViewportModel, SceneModel sceneModel)
+    public LightWidgets(ContextType context, @NotNull SceneViewportModel sceneViewportModel, @NotNull SceneModel sceneModel)
     {
         super(context);
         this.sceneViewportModel = sceneViewportModel;
@@ -56,17 +57,17 @@ public class LightWidgets<ContextType extends Context<ContextType>> extends Shad
         }
     }
 
-    private static String getAzimuthTag(int i)
+    private static @NotNull String getAzimuthTag(int i)
     {
         return String.format(AZIMUTH_TAG_FORMAT, i);
     }
 
-    private static String getInclinationTag(int i)
+    private static @NotNull String getInclinationTag(int i)
     {
         return String.format(INCLINATION_TAG_FORMAT, i);
     }
 
-    private static String getDistanceTag(int i)
+    private static @NotNull String getDistanceTag(int i)
     {
         return String.format(DISTANCE_TAG_FORMAT, i);
     }
@@ -81,7 +82,7 @@ public class LightWidgets<ContextType extends Context<ContextType>> extends Shad
     }
 
     @Override
-    protected final Map<String, VertexBuffer<ContextType>> createVertexBuffers()
+    protected final @NotNull Map<String, VertexBuffer<ContextType>> createVertexBuffers()
     {
         return Map.of("position",
             getContext().createVertexBuffer()
@@ -89,13 +90,13 @@ public class LightWidgets<ContextType extends Context<ContextType>> extends Shad
                     .createFromFloatArray(3, 3, -1, -1, 0, 1, -1, 0, 0, 1, 0)));
     }
 
-    public final void refreshWidgetInfo(LightWidgetInfo[] newWidgetInfo)
+    public final void refreshWidgetInfo(LightWidgetInfo @NotNull [] newWidgetInfo)
     {
         widgetInfo = newWidgetInfo.clone();
     }
 
     @Override
-    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(@NotNull FramebufferObject<ContextType> framebuffer, @NotNull CameraViewport cameraViewport)
     {
         if (sceneModel.getSettingsModel().getBoolean("relightingEnabled")
             && sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled")

@@ -15,6 +15,8 @@
 
 package kintsugi3d.gl.core;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Represents an internal color format to be used by a framebuffer or texture.
  * Implementations should attempt to match this format as much as possible; 
@@ -118,7 +120,7 @@ public final class ColorFormat
      * @param dataType The data type of each component in the color.
      * @return An object representing the requested color format.
      */
-    public static ColorFormat createCustom(int redBits, int greenBits, int blueBits, int alphaBits, DataType dataType)
+    public static @NotNull ColorFormat createCustom(int redBits, int greenBits, int blueBits, int alphaBits, DataType dataType)
     {
         return new ColorFormat(redBits, greenBits, blueBits, alphaBits, dataType);
     }

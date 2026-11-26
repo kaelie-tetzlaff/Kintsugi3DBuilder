@@ -21,6 +21,7 @@ import kintsugi3d.builder.state.scene.ReadonlyLightWidgetModel;
 import kintsugi3d.builder.state.scene.ReadonlyLightingEnvironmentModel;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 public class TestingLightingModel implements ReadonlyLightingEnvironmentModel
 {
@@ -61,7 +62,7 @@ public class TestingLightingModel implements ReadonlyLightingEnvironmentModel
     }
 
     @Override
-    public final Vector3 getAmbientLightColor()
+    public final @NotNull Vector3 getAmbientLightColor()
     {
         return Vector3.ZERO;
     }
@@ -73,7 +74,7 @@ public class TestingLightingModel implements ReadonlyLightingEnvironmentModel
     }
 
     @Override
-    public final Matrix4 getEnvironmentMapMatrix()
+    public final @NotNull Matrix4 getEnvironmentMapMatrix()
     {
         return Matrix4.IDENTITY;
     }
@@ -109,19 +110,19 @@ public class TestingLightingModel implements ReadonlyLightingEnvironmentModel
     }
 
     @Override
-    public final Vector3 getBackgroundColor()
+    public final @NotNull Vector3 getBackgroundColor()
     {
         return Vector3.ZERO;
     }
 
     @Override
-    public final BackgroundMode getBackgroundMode()
+    public final @NotNull BackgroundMode getBackgroundMode()
     {
         return BackgroundMode.NONE;
     }
 
     @Override
-    public final Vector3 getGroundPlaneColor()
+    public final @NotNull Vector3 getGroundPlaneColor()
     {
         return Vector3.ZERO;
     }

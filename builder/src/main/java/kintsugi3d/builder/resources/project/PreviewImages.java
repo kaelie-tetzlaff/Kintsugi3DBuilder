@@ -21,6 +21,8 @@ import kintsugi3d.builder.util.ImageUndistorter;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.util.ImageHelper;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +31,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 class PreviewImages
@@ -37,19 +40,19 @@ class PreviewImages
 
     private static final int MAX_THUMBNAIL_SIZE = 450;
 
-    private final View view;
-    private final ProgressMonitor progressMonitor;
-    private final AtomicInteger finishedCount;
-    private final AtomicInteger failedCount;
+    private final @NotNull View view;
+    private final @NotNull ProgressMonitor progressMonitor;
+    private final @NotNull AtomicInteger finishedCount;
+    private final @NotNull AtomicInteger failedCount;
 
     private boolean missingPreview;
     private boolean missingThumbnail;
 
-    private ImageHelper fullResImage;
+    private @Nullable ImageHelper fullResImage;
     private BufferedImage undistortedPreviewImage;
 
-    PreviewImages(View view, ProgressMonitor progressMonitor,
-                  AtomicInteger finishedCount, AtomicInteger failedCount)
+    PreviewImages(@NotNull View view, @NotNull ProgressMonitor progressMonitor,
+                  @NotNull AtomicInteger finishedCount, @NotNull AtomicInteger failedCount)
     {
         this.view = view;
         this.progressMonitor = progressMonitor;
@@ -107,7 +110,7 @@ class PreviewImages
         return view.getCameraProjection() instanceof DistortionProjection;
     }
 
-    final <ContextType extends Context<ContextType>> void tryGenerateUndistortedPreviewImage(ContextType context)
+    final <ContextType extends Context<ContextType>> void tryGenerateUndistortedPreviewImage(@NotNull ContextType context)
     {
         try
         {
@@ -126,7 +129,8 @@ class PreviewImages
 
             try (ImageUndistorter<?> undistort = new ImageUndistorter<>(context))
             {
-                undistortedPreviewImage = undistort.undistort(fullResImage.getBufferedImage(), distortion);
+                undistortedPreviewImage = undistort.undistort(
+                    validateFullResImage().getBufferedImage(), distortion);
             }
         }
         catch (IOException | RuntimeException ex)
@@ -136,11 +140,16 @@ class PreviewImages
         }
     }
 
+    private @NotNull ImageHelper validateFullResImage()
+    {
+        return Objects.requireNonNull(fullResImage, "Full resolution image does not exist.");
+    }
+
 
     /**
      * Uses graphics context to undistort if necessary, and resizes and saves as necessary.
      */
-    final <ContextType extends Context<ContextType>> void tryCreateMissingFiles(ContextType context)
+    final <ContextType extends Context<ContextType>> void tryCreateMissingFiles(@NotNull ContextType context)
     {
         if (needsUndistortion() && missingPreview && undistortedPreviewImage == null)
         {
@@ -177,7 +186,7 @@ class PreviewImages
                         Resolution thumbnailResolution = getThumbnailResolution();
 
                         // Thumbnail doesn't need undistortion.
-                        fullResImage.saveAtResolution("PNG", view.getThumbnailImageFile(),
+                        validateFullResImage().saveAtResolution("PNG", view.getThumbnailImageFile(),
                             thumbnailResolution.width, thumbnailResolution.height);
                         logFinished(view.getThumbnailImageFile());
                     }
@@ -209,10 +218,11 @@ class PreviewImages
         }
     }
 
-    private Resolution getThumbnailResolution()
+    private @NotNull Resolution getThumbnailResolution()
     {
-        int fullWidth = fullResImage.getBufferedImage().getWidth();
-        int fullHeight = fullResImage.getBufferedImage().getHeight();
+        ImageHelper validatedFullResImage = validateFullResImage();
+        int fullWidth = validatedFullResImage.getBufferedImage().getWidth();
+        int fullHeight = validatedFullResImage.getBufferedImage().getHeight();
 
         int thumbnailWidth;
         int thumbnailHeight;
@@ -239,7 +249,7 @@ class PreviewImages
             // Use PNG to ensure losslessness
             if (missingPreview)
             {
-                fullResImage.saveAtResolution("PNG", view.getPreviewImageFile("png"),
+                validateFullResImage().saveAtResolution("PNG", view.getPreviewImageFile("png"),
                     view.getContainingViewSet().getPreviewWidth(), view.getContainingViewSet().getPreviewHeight());
                 logFinished(view.getPreviewImageFile());
             }
@@ -247,7 +257,7 @@ class PreviewImages
             if (missingThumbnail)
             {
                 Resolution thumbnailResolution = getThumbnailResolution();
-                fullResImage.saveAtResolution("PNG", view.getThumbnailImageFile("png"),
+                validateFullResImage().saveAtResolution("PNG", view.getThumbnailImageFile("png"),
                     thumbnailResolution.width, thumbnailResolution.height);
                 logFinished(view.getThumbnailImageFile());
             }
@@ -261,7 +271,7 @@ class PreviewImages
         }
     }
 
-    private static void logExists(File file)
+    private static void logExists(@Nullable File file)
     {
         LOG.info("Skipping {} : Already exists", file);
     }

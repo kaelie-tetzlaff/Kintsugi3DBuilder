@@ -16,6 +16,7 @@
 package kintsugi3d.util;
 
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class ShaderHoleFill<ContextType extends Context<ContextType>> implements
     // Drawable
     private final DrawableResource<ContextType> drawable;
 
-    public ShaderHoleFill(ContextType context) throws IOException
+    public ShaderHoleFill(@NotNull ContextType context) throws IOException
     {
         program = context.getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File("shaders/common/texture.vert"))
@@ -53,8 +54,8 @@ public class ShaderHoleFill<ContextType extends Context<ContextType>> implements
         rect.close();
     }
 
-    public final FramebufferObject<ContextType> execute(
-        FramebufferObject<ContextType> initFrontFramebuffer, FramebufferObject<ContextType> initBackFramebuffer)
+    public final @NotNull FramebufferObject<ContextType> execute(
+        @NotNull FramebufferObject<ContextType> initFrontFramebuffer, FramebufferObject<ContextType> initBackFramebuffer)
     {
         FramebufferObject<ContextType> frontFramebuffer = initFrontFramebuffer;
         FramebufferObject<ContextType> backFramebuffer = initBackFramebuffer;

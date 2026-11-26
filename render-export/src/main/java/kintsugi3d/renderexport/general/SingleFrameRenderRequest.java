@@ -21,6 +21,8 @@ import kintsugi3d.builder.rendering.ReadonlyImageBasedRenderable;
 import kintsugi3d.builder.resources.project.ReadonlyGraphicsResourcesImageSpace;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.interactive.ProgressMonitor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +50,7 @@ final class SingleFrameRenderRequest extends RenderRequestBase
         }
 
         @Override
-        public final ImageBasedGraphicsRequest create()
+        public final @NotNull ImageBasedGraphicsRequest create()
         {
             return new SingleFrameRenderRequest(getWidth(), getHeight(), outputImageName, getShaderSetupCallback(),
                 getVertexShader(), getFragmentShader(), getOutputDirectory());
@@ -57,7 +59,7 @@ final class SingleFrameRenderRequest extends RenderRequestBase
 
     @Override
     public <ContextType extends Context<ContextType>> void executeRequest(
-        ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor) throws IOException
+        @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @Nullable ProgressMonitor monitor) throws IOException
     {
         ReadonlyGraphicsResourcesImageSpace<ContextType> resources = renderable.getResources();
 

@@ -25,10 +25,13 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.CancellationPassthroughMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Objects;
 
 public class ReoptimizeTexturesProcess extends SpecularFitProcess
 {
@@ -37,8 +40,8 @@ public class ReoptimizeTexturesProcess extends SpecularFitProcess
         super(settings, outputDirectory);
     }
 
-    public final <ContextType extends Context<ContextType>> TextureResources<ContextType> reoptimizeTexturesWithCache(
-        ReadonlyImageBasedGraphicsResources<ContextType> resources, ProgressMonitor monitor)
+    public final <ContextType extends Context<ContextType>> @NotNull TextureResources<ContextType> reoptimizeTexturesWithCache(
+        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, @Nullable ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         // Get cache (should already be generated).
@@ -48,8 +51,8 @@ public class ReoptimizeTexturesProcess extends SpecularFitProcess
        return reoptimizeTexturesWithCache(cache, resources.getTextureResources(), monitor);
     }
 
-    private <ContextType extends Context<ContextType>> TextureResources<ContextType> reoptimizeTexturesWithCache(
-        ImageCache<ContextType> cache, ReadonlyTextureResources<ContextType> original, ProgressMonitor monitor)
+    private <ContextType extends Context<ContextType>> @NotNull TextureResources<ContextType> reoptimizeTexturesWithCache(
+        @NotNull ImageCache<ContextType> cache, @NotNull ReadonlyTextureResources<ContextType> original, @Nullable ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         Instant start = Instant.now();
@@ -66,12 +69,12 @@ public class ReoptimizeTexturesProcess extends SpecularFitProcess
             monitor.setStage(0, "Performing high-res fit...");
         }
 
-        MaterialBasis basis = original.getBasisResources().getBasis();
+        MaterialBasis basis = Objects.requireNonNull(original.getBasisResources(), "No prior material basis exists.").getBasis();
         return optimizeFullResTexturesWithCache(cache, monitor, original, basis, start);
     }
 
     @Override
-    protected final <ContextType extends Context<ContextType>> SpecularFitResourcesWrapper<ContextType> getResourcesWrapper()
+    protected final <ContextType extends Context<ContextType>> @NotNull SpecularFitResourcesWrapper<ContextType> getResourcesWrapper()
     {
         return new SpecularFitResourcesWrapper<>(getSettings().isSmithMaskingShadowingEnabled());
     }

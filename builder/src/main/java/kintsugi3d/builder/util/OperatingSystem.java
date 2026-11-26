@@ -15,6 +15,8 @@
 
 package kintsugi3d.builder.util;
 
+import org.jetbrains.annotations.NotNull;
+
 public enum OperatingSystem
 {
     UNKNOWN,
@@ -25,7 +27,7 @@ public enum OperatingSystem
     @SuppressWarnings("AccessOfSystemProperties")
     private static final String OS = System.getProperty("os.name").toLowerCase();
 
-    public static OperatingSystem getCurrentOS()
+    public static @NotNull OperatingSystem getCurrentOS()
     {
         // Windows
         if (OS.contains("win"))

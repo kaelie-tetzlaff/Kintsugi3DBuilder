@@ -17,16 +17,18 @@ package kintsugi3d.builder.resources.project;
 
 import kintsugi3d.builder.core.viewset.SampledLuminanceEncoding;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class LuminanceMapResources<ContextType extends Context<ContextType>> implements ManagedResource, ReadonlyLuminanceMapResources<ContextType>
 {
     private final ContextType context;
 
-    private Texture1D<ContextType> luminanceMap;
+    private @Nullable Texture1D<ContextType> luminanceMap;
 
-    private Texture1D<ContextType> inverseLuminanceMap;
+    private @Nullable Texture1D<ContextType> inverseLuminanceMap;
 
-    public static <ContextType extends Context<ContextType>> LuminanceMapResources<ContextType> createNull(ContextType context)
+    public static <ContextType extends Context<ContextType>> @NotNull LuminanceMapResources<ContextType> createNull(ContextType context)
     {
         return new LuminanceMapResources<>(context);
     }
@@ -38,13 +40,13 @@ public final class LuminanceMapResources<ContextType extends Context<ContextType
         inverseLuminanceMap = null;
     }
 
-    public static <ContextType extends Context<ContextType>> LuminanceMapResources<ContextType> createFromEncoding(
-            ContextType context, SampledLuminanceEncoding luminanceEncoding)
+    public static <ContextType extends Context<ContextType>> @NotNull LuminanceMapResources<ContextType> createFromEncoding(
+        @NotNull ContextType context, @NotNull SampledLuminanceEncoding luminanceEncoding)
     {
         return new LuminanceMapResources<>(context, luminanceEncoding);
     }
 
-    private LuminanceMapResources(ContextType context, SampledLuminanceEncoding luminanceEncoding)
+    private LuminanceMapResources(@NotNull ContextType context, @NotNull SampledLuminanceEncoding luminanceEncoding)
     {
         this.context = context;
         luminanceMap = luminanceEncoding.createLuminanceMap(context);
@@ -55,7 +57,7 @@ public final class LuminanceMapResources<ContextType extends Context<ContextType
      * A 1D texture defining how encoded RGB values should be converted to linear luminance.
      */
     @Override
-    public ReadonlyTexture1D<ContextType> getLuminanceMap()
+    public @Nullable ReadonlyTexture1D<ContextType> getLuminanceMap()
     {
         return luminanceMap;
     }
@@ -64,12 +66,12 @@ public final class LuminanceMapResources<ContextType extends Context<ContextType
      * A 1D texture defining how encoded RGB values should be converted to linear luminance.
      */
     @Override
-    public ReadonlyTexture1D<ContextType> getInverseLuminanceMap()
+    public @Nullable ReadonlyTexture1D<ContextType> getInverseLuminanceMap()
     {
         return inverseLuminanceMap;
     }
 
-    public void update(SampledLuminanceEncoding luminanceEncoding)
+    public void update(@Nullable SampledLuminanceEncoding luminanceEncoding)
     {
         if (luminanceMap != null)
         {
@@ -91,7 +93,7 @@ public final class LuminanceMapResources<ContextType extends Context<ContextType
     }
 
     @Override
-    public void setupShaderProgram(Program<ContextType> program)
+    public void setupShaderProgram(@NotNull Program<ContextType> program)
     {
         if (luminanceMap == null)
         {

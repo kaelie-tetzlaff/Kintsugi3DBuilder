@@ -16,58 +16,43 @@
 package kintsugi3d.builder.core.texture;
 
 import kintsugi3d.builder.resources.project.texture.TextureResources;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 
 public abstract class ImageReplacer
 {
-    private final TextureResources<?> resources;
-    private File currentImage;
-    private File newImage;
+    private final @NotNull TextureResources<?> resources;
+    private final @NotNull File currentImage;
+    private @Nullable File newImage;
 
-    protected ImageReplacer()
-    {
-        resources = null;
-        currentImage = null;
-        newImage = null;
-    }
-
-    protected ImageReplacer(TextureResources<?> resources)
+    protected ImageReplacer(@NotNull TextureResources<?> resources, @NotNull File currentImage)
     {
         this.resources = resources;
-        currentImage = null;
-        newImage = null;
+        this.currentImage = currentImage;
+        newImage = currentImage;
     }
 
     public abstract void replace() throws IOException;
 
-    protected final TextureResources<?> getResources()
+    protected final @NotNull TextureResources<?> getResources()
     {
         return resources;
     }
 
-    public final File getCurrentImage()
+    public final @NotNull File getCurrentImage()
     {
         return currentImage;
     }
 
-    final void setCurrentImage(File currentTexture)
-    {
-        currentImage = currentTexture;
-
-        if (newImage == null)
-        {
-            newImage = currentTexture;
-        }
-    }
-
-    public final File getNewImage()
+    public final @Nullable File getNewImage()
     {
         return newImage;
     }
 
-    public final void setNewImage(File newImage)
+    public final void setNewImage(@Nullable File newImage)
     {
         this.newImage = newImage;
     }

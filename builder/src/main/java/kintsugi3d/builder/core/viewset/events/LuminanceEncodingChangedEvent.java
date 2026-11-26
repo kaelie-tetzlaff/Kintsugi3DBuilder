@@ -15,6 +15,8 @@
 
 package kintsugi3d.builder.core.viewset.events;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Triggered when the luminance encoding / tone calibration changes.
  */
@@ -23,14 +25,14 @@ public class LuminanceEncodingChangedEvent
     /**
      * The reference linear luminance values used for decoding pixel colors.
      */
-    private final double[] linearLuminanceValues;
+    private final double @Nullable [] linearLuminanceValues;
 
     /**
      * The reference encoded luminance values used for decoding pixel colors.
      */
-    private final byte[] encodedLuminanceValues;
+    private final byte @Nullable [] encodedLuminanceValues;
 
-    public LuminanceEncodingChangedEvent(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
+    public LuminanceEncodingChangedEvent(double @Nullable [] linearLuminanceValues, byte @Nullable [] encodedLuminanceValues)
     {
         if (linearLuminanceValues != null)
         {
@@ -51,13 +53,13 @@ public class LuminanceEncodingChangedEvent
         }
     }
 
-    public final double[] getLinearLuminanceValues()
+    public final double @Nullable [] getLinearLuminanceValues()
     {
-        return linearLuminanceValues.clone();
+        return linearLuminanceValues != null ? linearLuminanceValues.clone() : null;
     }
 
-    public final byte[] getEncodedLuminanceValues()
+    public final byte @Nullable [] getEncodedLuminanceValues()
     {
-        return encodedLuminanceValues.clone();
+        return encodedLuminanceValues != null ? encodedLuminanceValues.clone() : null;
     }
 }

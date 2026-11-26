@@ -20,6 +20,7 @@ import kintsugi3d.gl.core.ColorFormat;
 import kintsugi3d.gl.core.CompressionFormat;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Texture;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A package-private internal class in the hierarchy that allows us to have both the Texture1/2/3D implementations inheriting from this,
@@ -31,15 +32,15 @@ import kintsugi3d.gl.core.Texture;
 abstract class ColorTextureBuilderBaseInternal<ContextType extends Context<ContextType>, TextureType extends Texture<ContextType>>
     extends TextureBuilderBase<ContextType, TextureType> implements ColorTextureBuilder<ContextType, TextureType>
 {
-    private ColorFormat internalColorFormat = ColorFormat.RGBA8;
-    private CompressionFormat internalCompressionFormat;
+    private @Nullable ColorFormat internalColorFormat = ColorFormat.RGBA8;
+    private @Nullable CompressionFormat internalCompressionFormat;
 
-    protected final ColorFormat getInternalColorFormat()
+    protected final @Nullable ColorFormat getInternalColorFormat()
     {
         return internalColorFormat;
     }
 
-    protected final CompressionFormat getInternalCompressionFormat()
+    protected final @Nullable CompressionFormat getInternalCompressionFormat()
     {
         return internalCompressionFormat;
     }

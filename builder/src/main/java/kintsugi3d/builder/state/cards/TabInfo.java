@@ -15,13 +15,15 @@
 
 package kintsugi3d.builder.state.cards;
 
+import org.jetbrains.annotations.Nullable;
+
 public class TabInfo
 {
     private final String label;
     private final ProjectDataCardFactory<?> factory;
-    private final String path;
+    private final @Nullable String path;
 
-    public TabInfo(String label, ProjectDataCardFactory<?> factory, String path)
+    public TabInfo(String label, ProjectDataCardFactory<?> factory, @Nullable String path)
     {
         this.label = label;
         this.factory = factory;
@@ -38,7 +40,7 @@ public class TabInfo
         return factory;
     }
 
-    public final String getPath()
+    public final @Nullable String getPath()
     {
         return path;
     }

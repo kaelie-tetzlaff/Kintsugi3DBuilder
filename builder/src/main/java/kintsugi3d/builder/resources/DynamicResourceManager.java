@@ -16,18 +16,18 @@
 package kintsugi3d.builder.resources;
 
 import kintsugi3d.util.EncodableColorImage;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 public interface DynamicResourceManager
 {
     void requestFragmentShader(File shaderFile);
 
-    void requestFragmentShader(File shaderFile, Supplier<Map<String, Optional<Object>>> extraDefinesFactory);
+    void requestFragmentShader(File shaderFile, Supplier<Map<String, @Nullable Object>> extraDefinesFactory);
 
     /**
      * Load a new backplate image.
@@ -41,5 +41,5 @@ public interface DynamicResourceManager
      * @param environmentFile The environment map image file.
      * @throws FileNotFoundException If the environment map image is not found.
      */
-    EncodableColorImage loadEnvironmentMap(File environmentFile) throws FileNotFoundException;
+    @Nullable EncodableColorImage loadEnvironmentMap(File environmentFile) throws FileNotFoundException;
 }

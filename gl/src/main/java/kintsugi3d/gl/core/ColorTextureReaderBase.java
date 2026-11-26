@@ -17,6 +17,7 @@ package kintsugi3d.gl.core;
 
 import kintsugi3d.gl.util.BufferedImageBuilder;
 import kintsugi3d.gl.vecmath.IntVector4;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.BufferUtils;
 
 import javax.imageio.ImageIO;
@@ -72,7 +73,7 @@ public abstract class ColorTextureReaderBase implements ColorTextureReader
     }
 
     @Override
-    public final void saveToFile(String fileFormat, File file) throws IOException
+    public final void saveToFile(@NotNull String fileFormat, @NotNull File file) throws IOException
     {
         int[] pixels = readARGB();
         BufferedImage outImg = BufferedImageBuilder.build()
@@ -85,21 +86,7 @@ public abstract class ColorTextureReaderBase implements ColorTextureReader
     }
 
     @Override
-    public final void saveToFile(String fileFormat, File file, Function<IntVector4, IntVector4> tonemapper) throws IOException
-    {
-        int[] pixels = readARGB();
-        BufferedImage outImg = BufferedImageBuilder.build()
-            .setBufferedImageType("JPEG".equals(fileFormat) ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB)
-            .setDataFromArray(pixels, getWidth(), getHeight())
-            .tonemap(tonemapper)
-            .flipVertical()
-            .create();
-        file.getParentFile().mkdirs(); // make sure the directory structure exists
-        ImageIO.write(outImg, fileFormat, file);
-    }
-
-    @Override
-    public final void saveToFile(String fileFormat, File file, BiFunction<IntVector4, Integer, IntVector4> tonemapper) throws IOException
+    public final void saveToFile(@NotNull String fileFormat, @NotNull File file, @NotNull Function<IntVector4, IntVector4> tonemapper) throws IOException
     {
         int[] pixels = readARGB();
         BufferedImage outImg = BufferedImageBuilder.build()
@@ -113,7 +100,21 @@ public abstract class ColorTextureReaderBase implements ColorTextureReader
     }
 
     @Override
-    public final void saveToFile(int x, int y, int width, int height, String fileFormat, File file) throws IOException
+    public final void saveToFile(@NotNull String fileFormat, @NotNull File file, @NotNull BiFunction<IntVector4, Integer, IntVector4> tonemapper) throws IOException
+    {
+        int[] pixels = readARGB();
+        BufferedImage outImg = BufferedImageBuilder.build()
+            .setBufferedImageType("JPEG".equals(fileFormat) ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB)
+            .setDataFromArray(pixels, getWidth(), getHeight())
+            .tonemap(tonemapper)
+            .flipVertical()
+            .create();
+        file.getParentFile().mkdirs(); // make sure the directory structure exists
+        ImageIO.write(outImg, fileFormat, file);
+    }
+
+    @Override
+    public final void saveToFile(int x, int y, int width, int height, @NotNull String fileFormat, @NotNull File file) throws IOException
     {
         int[] pixels = readARGB(x, y, width, height);
         BufferedImage outImg = BufferedImageBuilder.build()
@@ -126,7 +127,7 @@ public abstract class ColorTextureReaderBase implements ColorTextureReader
     }
 
     @Override
-    public final void saveToFile(int x, int y, int width, int height, String fileFormat, File file, Function<IntVector4, IntVector4> tonemapper) throws IOException
+    public final void saveToFile(int x, int y, int width, int height, @NotNull String fileFormat, @NotNull File file, @NotNull Function<IntVector4, IntVector4> tonemapper) throws IOException
     {
         int[] pixels = readARGB(x, y, width, height);
         BufferedImage outImg = BufferedImageBuilder.build()
@@ -140,7 +141,7 @@ public abstract class ColorTextureReaderBase implements ColorTextureReader
     }
 
     @Override
-    public final void saveToFile(int x, int y, int width, int height, String fileFormat, File file, BiFunction<IntVector4, Integer, IntVector4> tonemapper) throws IOException
+    public final void saveToFile(int x, int y, int width, int height, @NotNull String fileFormat, @NotNull File file, @NotNull BiFunction<IntVector4, Integer, IntVector4> tonemapper) throws IOException
     {
         int[] pixels = readARGB(x, y, width, height);
         BufferedImage outImg = BufferedImageBuilder.build()

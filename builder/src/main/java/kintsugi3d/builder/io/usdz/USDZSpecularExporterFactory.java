@@ -19,6 +19,7 @@ import kintsugi3d.builder.io.gltf.MaterialExporter;
 import kintsugi3d.builder.io.gltf.MaterialExporterFactory;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.NotNull;
 
 public final class USDZSpecularExporterFactory implements MaterialExporterFactory
 {
@@ -34,7 +35,7 @@ public final class USDZSpecularExporterFactory implements MaterialExporterFactor
     }
 
     @Override
-    public MaterialExporter getExporter(ReadonlyTextureResources<? extends Context<?>> resources)
+    public @NotNull MaterialExporter getExporter(ReadonlyTextureResources<? extends Context<?>> resources)
     {
         USDZSpecularExporter exporter = new USDZSpecularExporter();
         exporter.setTextureResources(resources);

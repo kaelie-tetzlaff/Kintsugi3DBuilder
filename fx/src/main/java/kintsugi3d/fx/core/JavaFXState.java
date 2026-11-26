@@ -16,21 +16,22 @@
 package kintsugi3d.fx.core;
 
 import kintsugi3d.fx.internal.*;
+import org.jetbrains.annotations.NotNull;
 
 public final class JavaFXState
 {
-    private final ObservableCameraModel cameraModel;
-    private final ObservableEnvironmentModel environmentModel;
-    private final ObservableLightingEnvironmentModel lightingModel;
-    private final ObservableObjectPoseModel objectModel;
-    private final ObservableActiveShaderModel userShaderModel;
-    private final ObservableViewListModel cameraViewListModel;
-    private final ObservableLoadOptionsModel loadOptionsModel;
-    private final ObservableGeneralSettingsModel settingsModel;
-    private final ObservableProjectModel projectModel;
-    private final ObservableTabsModel tabModels;
-    private final ObservableCarouselModel carouselModel;
-    private final ObservableCacheModel cacheModel;
+    private final @NotNull ObservableCameraModel cameraModel;
+    private final @NotNull ObservableEnvironmentModel environmentModel;
+    private final @NotNull ObservableLightingEnvironmentModel lightingModel;
+    private final @NotNull ObservableObjectPoseModel objectModel;
+    private final @NotNull ObservableActiveShaderModel userShaderModel;
+    private final @NotNull ObservableViewListModel cameraViewListModel;
+    private final @NotNull ObservableLoadOptionsModel loadOptionsModel;
+    private final @NotNull ObservableGeneralSettingsModel settingsModel;
+    private final @NotNull ObservableProjectModel projectModel;
+    private final @NotNull ObservableTabsModel tabModels;
+    private final @NotNull ObservableCarouselModel carouselModel;
+    private final @NotNull ObservableCacheModel cacheModel;
 
     private JavaFXState()
     {
@@ -48,67 +49,67 @@ public final class JavaFXState
         cacheModel = new ObservableCacheModel();
     }
 
-    public static JavaFXState create()
+    public static @NotNull JavaFXState create()
     {
         return new JavaFXState();
     }
 
-    public ObservableCameraModel getCameraModel()
+    public @NotNull ObservableCameraModel getCameraModel()
     {
         return cameraModel;
     }
 
-    public ObservableLightingEnvironmentModel getLightingModel()
+    public @NotNull ObservableLightingEnvironmentModel getLightingModel()
     {
         return lightingModel;
     }
 
-    public ObservableObjectPoseModel getObjectModel()
+    public @NotNull ObservableObjectPoseModel getObjectModel()
     {
         return objectModel;
     }
 
-    public ObservableActiveShaderModel getUserShaderModel()
+    public @NotNull ObservableActiveShaderModel getUserShaderModel()
     {
         return userShaderModel;
     }
 
-    public ObservableViewListModel getCameraViewListModel()
+    public @NotNull ObservableViewListModel getCameraViewListModel()
     {
         return cameraViewListModel;
     }
 
-    public ObservableTabsModel getTabModels()
+    public @NotNull ObservableTabsModel getTabModels()
     {
         return tabModels;
     }
 
-    public ObservableLoadOptionsModel getLoadOptionsModel()
+    public @NotNull ObservableLoadOptionsModel getLoadOptionsModel()
     {
         return loadOptionsModel;
     }
 
-    public ObservableGeneralSettingsModel getSettingsModel()
+    public @NotNull ObservableGeneralSettingsModel getSettingsModel()
     {
         return settingsModel;
     }
 
-    public ObservableEnvironmentModel getEnvironmentModel()
+    public @NotNull ObservableEnvironmentModel getEnvironmentModel()
     {
         return environmentModel;
     }
 
-    public ObservableProjectModel getProjectModel()
+    public @NotNull ObservableProjectModel getProjectModel()
     {
         return projectModel;
     }
 
-    public ObservableCarouselModel getCarouselModel()
+    public @NotNull ObservableCarouselModel getCarouselModel()
     {
         return carouselModel;
     }
 
-    public ObservableCacheModel getCacheModel()
+    public @NotNull ObservableCacheModel getCacheModel()
     {
         return cacheModel;
     }

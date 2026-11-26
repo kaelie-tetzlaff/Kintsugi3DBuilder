@@ -22,6 +22,7 @@ import kintsugi3d.gl.vecmath.DoubleMatrix4;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -73,7 +74,7 @@ public final class ViewSetReaderFromRealityCaptureCSV implements ViewSetReader
         @CsvBindByName float t1;
         @CsvBindByName float t2;
 
-        public Matrix4 getPose()
+        public @NotNull Matrix4 getPose()
         {
             // Expecting a world-to-camera space transformation, so we need to invert.
             return Matrix4.fromDoublePrecision(
@@ -83,7 +84,7 @@ public final class ViewSetReaderFromRealityCaptureCSV implements ViewSetReader
                     .times(DoubleMatrix4.translate(-x, -y, -alt)));
         }
 
-        public DistortionProjection getDistortionProjection(File imageRootDirectory) throws IOException
+        public @NotNull DistortionProjection getDistortionProjection(File imageRootDirectory) throws IOException
         {
             File imageFile = ImageFinder.findImageFile(new File(imageRootDirectory, name));
 
@@ -113,7 +114,7 @@ public final class ViewSetReaderFromRealityCaptureCSV implements ViewSetReader
     }
 
     @Override
-    public ViewSetBuilder readFromStream(InputStream stream, ViewSetDirectories directories) throws IOException
+    public @NotNull ViewSetBuilder readFromStream(@NotNull InputStream stream, @NotNull ViewSetDirectories directories) throws IOException
     {
         List<Camera> cameras = new CsvToBeanBuilder<Camera>(new InputStreamReader(stream, StandardCharsets.UTF_8))
             .withType(Camera.class).build().parse();

@@ -17,6 +17,7 @@ package kintsugi3d.util;
 
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 public final class OrbitPolarConverter
 {
@@ -24,7 +25,7 @@ public final class OrbitPolarConverter
     {
     }
 
-    public static Matrix4 convertToOrbitMatrix(Vector3 polarCoordinatesDegrees)
+    public static @NotNull Matrix4 convertToOrbitMatrix(@NotNull Vector3 polarCoordinatesDegrees)
     {
         Vector3 polarCoordinatesRadians = polarCoordinatesDegrees.applyOperator(Math::toRadians);
 
@@ -33,7 +34,7 @@ public final class OrbitPolarConverter
                 .times(Matrix4.rotateY(polarCoordinatesRadians.x)));
     }
     
-    public static Vector3 convertToPolarCoordinates(Matrix4 orbitMatrix)
+    public static @NotNull Vector3 convertToPolarCoordinates(@NotNull Matrix4 orbitMatrix)
     {
         double azimuth;//all in radians until very end
         double inclination;

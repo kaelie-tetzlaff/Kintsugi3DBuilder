@@ -17,6 +17,7 @@ package kintsugi3d.builder.state.scene;
 
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class DiscreteLightModelBase implements DiscreteLightModel
 {
@@ -40,7 +41,7 @@ public abstract class DiscreteLightModelBase implements DiscreteLightModel
     }
 
     @Override
-    public final void setLookMatrix(Matrix4 lookMatrix)
+    public final void setLookMatrix(@NotNull Matrix4 lookMatrix)
     {
         lightCameraModel.setLookMatrix(lookMatrix);
     }
@@ -76,7 +77,7 @@ public abstract class DiscreteLightModelBase implements DiscreteLightModel
     }
 
     @Override
-    public final void setTarget(Vector3 target)
+    public final void setTarget(@NotNull Vector3 target)
     {
         lightCameraModel.setTarget(target);
     }

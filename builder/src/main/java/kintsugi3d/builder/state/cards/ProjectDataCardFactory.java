@@ -15,6 +15,9 @@
 
 package kintsugi3d.builder.state.cards;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +27,7 @@ import java.util.Map;
  */
 public interface ProjectDataCardFactory<T>
 {
-    default List<? extends Map<String, Runnable>> getGlobalActions()
+    default @NotNull List<? extends Map<String, Runnable>> getGlobalActions()
     {
         return List.of();
     }
@@ -35,7 +38,7 @@ public interface ProjectDataCardFactory<T>
      * Creates a single card.
      * @return
      */
-    ProjectDataCard createCard(T data);
+    @Nullable ProjectDataCard createCard(T data);
 
     /**
      * Creates all cards from scratch.

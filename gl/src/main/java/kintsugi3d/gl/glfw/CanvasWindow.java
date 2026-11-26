@@ -19,6 +19,8 @@ import kintsugi3d.gl.core.DoubleFramebuffer;
 import kintsugi3d.gl.core.FramebufferSize;
 import kintsugi3d.gl.exceptions.GLFWException;
 import kintsugi3d.gl.window.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -45,13 +47,13 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
 {
     private static final Logger LOG = LoggerFactory.getLogger(CanvasWindow.class);
     private final long handle;
-    private final WindowListenerManager listenerManager;
+    private final @NotNull WindowListenerManager listenerManager;
 
     private final ContextType context;
 
-    CanvasWindow(ContextFactory<ContextType> contextFactory,
-        Function<ContextType, DoubleFramebuffer<ContextType>> createDefaultFramebuffer,
-        WindowSpecification windowSpec)
+    CanvasWindow(@NotNull ContextFactory<ContextType> contextFactory,
+                 @Nullable Function<ContextType, DoubleFramebuffer<ContextType>> createDefaultFramebuffer,
+                 @NotNull WindowSpecification windowSpec)
     {
         LOG.info("LWJGL version: {}.{}.{}{}",
             Version.VERSION_MAJOR, Version.VERSION_MINOR, Version.VERSION_REVISION, getVersionBuildType()
@@ -184,7 +186,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
         }
     }
 
-    private static String getVersionBuildType()
+    private static @NotNull String getVersionBuildType()
     {
         switch (Version.BUILD_TYPE)
         {
@@ -197,7 +199,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
         }
     }
 
-    private static void initGLFWWithWindowHints(WindowSpecification windowSpec)
+    private static void initGLFWWithWindowHints(@NotNull WindowSpecification windowSpec)
     {
         if (!glfwInit())
         {
@@ -238,13 +240,13 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public final PollableCanvas3D<ContextType> getCanvas()
+    public final @NotNull PollableCanvas3D<ContextType> getCanvas()
     {
         return this;
     }
 
     @Override
-    protected final WindowListenerManager getListenerManager()
+    protected final @NotNull WindowListenerManager getListenerManager()
     {
         return listenerManager;
     }
@@ -313,7 +315,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public final CanvasSize getSize()
+    public final @NotNull CanvasSize getSize()
     {
         IntBuffer widthBuffer = BufferUtils.createIntBuffer(1);
         IntBuffer heightBuffer = BufferUtils.createIntBuffer(1);
@@ -324,13 +326,13 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public final CanvasSize getSizeForDisplay()
+    public final @NotNull CanvasSize getSizeForDisplay()
     {
         return getSize();
     }
 
     @Override
-    public final CanvasPosition getPosition()
+    public final @NotNull CanvasPosition getPosition()
     {
         IntBuffer xBuffer = BufferUtils.createIntBuffer(1);
         IntBuffer yBuffer = BufferUtils.createIntBuffer(1);
@@ -353,13 +355,13 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public final void setWindowTitle(String title)
+    public final void setWindowTitle(@NotNull String title)
     {
         glfwSetWindowTitle(handle, title);
     }
 
     @Override
-    public final MouseButtonState getMouseButtonState(int buttonIndex)
+    public final @NotNull MouseButtonState getMouseButtonState(int buttonIndex)
     {
         switch (glfwGetMouseButton(handle, buttonIndex))
         {
@@ -369,7 +371,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
         }
     }
 
-    private KeyState getKeyState(int keycode)
+    private @NotNull KeyState getKeyState(int keycode)
     {
         switch (glfwGetKey(handle, keycode))
         {
@@ -380,7 +382,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public final KeyState getKeyState(Key key)
+    public final @NotNull KeyState getKeyState(Key key)
     {
         for (int code : KeyCodeMaps.keyToCodes(key))
         {
@@ -394,7 +396,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public final CursorPosition getCursorPosition()
+    public final @NotNull CursorPosition getCursorPosition()
     {
         DoubleBuffer xBuffer = BufferUtils.createDoubleBuffer(1);
         DoubleBuffer yBuffer = BufferUtils.createDoubleBuffer(1);
@@ -405,7 +407,7 @@ public class CanvasWindow<ContextType extends WindowContextBase<ContextType>>
     }
 
     @Override
-    public final ModifierKeys getModifierKeys()
+    public final @NotNull ModifierKeys getModifierKeys()
     {
         return new GLFWModifierKeys(
             getKeyState(GLFW_KEY_LEFT_SHIFT) == KeyState.PRESSED || getKeyState(GLFW_KEY_RIGHT_SHIFT) == KeyState.PRESSED,

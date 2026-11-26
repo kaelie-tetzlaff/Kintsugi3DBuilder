@@ -15,6 +15,7 @@
 
 package kintsugi3d.gl.interactive;
 
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,8 +27,8 @@ import java.util.List;
 public class InteractiveApplication
 {
     private static final Logger LOG = LoggerFactory.getLogger(InteractiveApplication.class);
-    private final List<EventPollable> pollables;
-    private final List<Refreshable> refreshables;
+    private final @NotNull List<EventPollable> pollables;
+    private final @NotNull List<Refreshable> refreshables;
 
     private double fpsCap = Double.POSITIVE_INFINITY;
 
@@ -175,7 +176,7 @@ public class InteractiveApplication
         }
     }
 
-    public static void runSimultaneous(Iterable<InteractiveApplication> apps) throws InitializationException
+    public static void runSimultaneous(@NotNull Iterable<InteractiveApplication> apps) throws InitializationException
     {
         Collection<InteractiveApplication> activeApps = new ArrayList<>(16);
         for (InteractiveApplication app : apps)

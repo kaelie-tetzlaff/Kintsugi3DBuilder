@@ -18,6 +18,7 @@ package kintsugi3d.gl.core;
 import kintsugi3d.gl.util.ColorList;
 import kintsugi3d.gl.util.ColorNativeBufferList;
 import kintsugi3d.gl.vecmath.IntVector4;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -154,7 +155,7 @@ public interface ColorTextureReader
      * The entire framebuffer will be read.
      * @return An array containing the pixels as floating point numbers.
      */
-    default ColorList readColorListRGBA(int x, int y, int readWidth, int readHeight)
+    default @NotNull ColorList readColorListRGBA(int x, int y, int readWidth, int readHeight)
     {
         ColorNativeBufferList list = new ColorNativeBufferList(readWidth * readHeight);
         readFloatingPointRGBA(list.getBuffer(), x, y, readWidth, readHeight);
@@ -166,7 +167,7 @@ public interface ColorTextureReader
      * The entire framebuffer will be read.
      * @return An array containing the pixels as floating point numbers.
      */
-    default ColorList readColorListRGBA()
+    default @NotNull ColorList readColorListRGBA()
     {
         ColorNativeBufferList list = new ColorNativeBufferList(getWidth() * getHeight());
         readFloatingPointRGBA(list.getBuffer());

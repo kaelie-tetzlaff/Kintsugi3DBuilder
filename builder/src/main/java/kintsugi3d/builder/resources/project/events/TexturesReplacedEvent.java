@@ -16,16 +16,17 @@
 package kintsugi3d.builder.resources.project.events;
 
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
+import org.jetbrains.annotations.Nullable;
 
 public final class TexturesReplacedEvent
 {
-    private final ReadonlyTextureResources<?> newTextures;
+    private final @Nullable ReadonlyTextureResources<?> newTextures;
 
-    public TexturesReplacedEvent(ReadonlyTextureResources<?> newTextures)
+    public TexturesReplacedEvent(@Nullable ReadonlyTextureResources<?> newTextures)
     {
         this.newTextures = newTextures;
     }
-    public ReadonlyTextureResources<?> getNewTextures()
+    public @Nullable ReadonlyTextureResources<?> getNewTextures()
     {
         return newTextures;
     }

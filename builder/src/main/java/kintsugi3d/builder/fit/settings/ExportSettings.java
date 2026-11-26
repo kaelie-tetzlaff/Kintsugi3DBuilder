@@ -21,6 +21,7 @@ import kintsugi3d.builder.io.gltf.ModelExporter;
 import kintsugi3d.builder.io.gltf.kintsugi3dviewer.Kintsugi3DViewerExporterFactory;
 import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResources;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
@@ -113,7 +114,7 @@ public class ExportSettings implements ReadonlyExportSettings
     }
 
     @Override
-    public final void applyToExporter(ModelExporter exporter, ReadonlyTextureResources<? extends Context<?>> textureResources, String filename)
+    public final void applyToExporter(@NotNull ModelExporter exporter, ReadonlyTextureResources<? extends Context<?>> textureResources, String filename)
     {
         MaterialExporter materialExporter = exporterFactory.getExporter(textureResources);
         exporter.setMaterialExporter(materialExporter);

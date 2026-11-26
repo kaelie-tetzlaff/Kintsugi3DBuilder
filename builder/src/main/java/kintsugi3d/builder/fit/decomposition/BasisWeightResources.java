@@ -25,16 +25,14 @@ import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
 import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.gl.vecmath.IntVector2;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 
@@ -42,7 +40,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
     implements ManagedResource, ReadonlyBasisWeightResources<ContextType>
 {
     private static final Logger LOG = LoggerFactory.getLogger(BasisWeightResources.class);
-    private final ContextType context;
+    private final @NotNull ContextType context;
 
     private Texture3D<ContextType> weightMaps;
     private final Texture2D<ContextType> weightMask;
@@ -52,9 +50,9 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
     private final int width;
     private final int height;
 
-    private final MaterialBasis basis;
+    private final @NotNull MaterialBasis basis;
 
-    public BasisWeightResources(ContextType context, int width, int height, MaterialBasis basis)
+    public BasisWeightResources(@NotNull ContextType context, int width, int height, @NotNull MaterialBasis basis)
     {
         this(
             // Weight maps (including disabled materials -- enabled materials should precede disabled ones):
@@ -68,7 +66,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
     }
 
     private static <ContextType extends Context<ContextType>>
-    Texture3D<ContextType> createWeightMaps(ContextType context, int width, int height, int materialCount)
+    Texture3D<ContextType> createWeightMaps(@NotNull ContextType context, int width, int height, int materialCount)
     {
         return context.getTextureFactory().build2DColorTextureArray(width, height, materialCount)
             .setInternalFormat(ColorFormat.R32F)
@@ -81,7 +79,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
      * @param weightMaps
      * @param weightMask
      */
-    private BasisWeightResources(Texture3D<ContextType> weightMaps, Texture2D<ContextType> weightMask, MaterialBasis basis)
+    private BasisWeightResources(@NotNull Texture3D<ContextType> weightMaps, Texture2D<ContextType> weightMask, @NotNull MaterialBasis basis)
     {
         context = weightMaps.getContext();
         width = weightMaps.getWidth();
@@ -101,7 +99,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final ContextType getContext()
+    public final @NotNull ContextType getContext()
     {
         return context;
     }
@@ -130,7 +128,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
         return weightMask;
     }
 
-    public final void updateFromSolution(SpecularDecomposition solution)
+    public final void updateFromSolution(@NotNull SpecularDecomposition solution)
     {
         weightMapLocations.clear();
 
@@ -178,7 +176,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
         }
     }
 
-    public static File findWeightmap(File solutionDirectory, String materialName) throws FileNotFoundException
+    public static @NotNull File findWeightmap(File solutionDirectory, @NotNull String materialName) throws FileNotFoundException
     {
         File file = new File(solutionDirectory, getUnpackedWeightMapFilename(materialName));
 
@@ -221,8 +219,8 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
      * @param basis
      * @throws IOException If a part of the solution cannot be loaded form file.
      */
-    public static <ContextType extends Context<ContextType>> BasisWeightResources<ContextType> loadFromPriorSolution(
-        ContextType context, File priorSolutionDirectory, MaterialBasis basis)
+    public static <ContextType extends Context<ContextType>> @NotNull BasisWeightResources<ContextType> loadFromPriorSolution(
+        @NotNull ContextType context, File priorSolutionDirectory, @NotNull MaterialBasis basis)
             throws IOException
     {
         String testImageName = basis.getMaterials().stream()
@@ -266,7 +264,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final void savePacked(int weightsPerImage, String format, File outputDirectory, IntFunction<String> filenameGenerator)
+    public final void savePacked(int weightsPerImage, String format, File outputDirectory, @NotNull IntFunction<String> filenameGenerator)
     {
         // Save the packed weight maps for used by external viewer
         try
@@ -281,7 +279,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final void saveUnpacked(String format, File outputDirectory, String filenamePrefix)
+    public final void saveUnpacked(@NotNull String format, File outputDirectory, String filenamePrefix)
     {
         List<? extends BasisMaterialInfo> materialList = basis.getIndexableMaterialList();
 
@@ -299,7 +297,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
         }
     }
 
-    private void save(int weightsPerImage, int materialCount, String format, File outputDirectory, IntFunction<String> filenameGenerator)
+    private void save(int weightsPerImage, int materialCount, String format, File outputDirectory, @NotNull IntFunction<String> filenameGenerator)
         throws IOException
     {
         // Save the unpacked weight maps for reloading the project in the future
@@ -315,7 +313,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final void useWithShaderProgram(Program<ContextType> program)
+    public final void useWithShaderProgram(@NotNull Program<ContextType> program)
     {
         program.setTexture("weightMaps", weightMaps);
         program.setTexture("weightMask", weightMask);
@@ -359,7 +357,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final BasisWeightResources<ContextType> crop(int x, int y, int cropWidth, int cropHeight)
+    public final @NotNull BasisWeightResources<ContextType> crop(int x, int y, int cropWidth, int cropHeight)
     {
         return new BasisWeightResources<>(
             weightMaps.crop(x, y, cropWidth, cropHeight), weightMask.crop(x, y, cropWidth, cropHeight), basis);
@@ -370,7 +368,7 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
      * @param materialName
      * @param parentDirectory
      */
-    public final void replaceWeightMapWithDefaultFile(String materialName, File parentDirectory) throws IOException
+    public final void replaceWeightMapWithDefaultFile(@NotNull String materialName, File parentDirectory) throws IOException
     {
         replaceWeightMapWithSpecificFile(materialName, findWeightmap(parentDirectory, materialName));
     }
@@ -382,7 +380,10 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
      */
     public final void replaceWeightMapWithSpecificFile(String materialName, File newTextureFile) throws IOException
     {
-        weightMaps.loadLayer(basis.getMaterial(materialName).getGPUIndex(), newTextureFile, true);
+        weightMaps.loadLayer(
+            Objects.requireNonNull(basis.getMaterial(materialName),
+                () -> String.format("Basis material not found: %s", materialName)).getGPUIndex(),
+            newTextureFile, true);
     }
 
     @Override
@@ -393,22 +394,22 @@ public class BasisWeightResources<ContextType extends Context<ContextType>>
         weightMapLocations.clear();
     }
 
-    private static String getUnpackedWeightMapFilename(String materialName, String format, String filenamePrefix)
+    private static @NotNull String getUnpackedWeightMapFilename(String materialName, @NotNull String format, String filenamePrefix)
     {
         return TextureResources.getTextureFilename(getUnpackedWeightMapName(materialName), format, filenamePrefix);
     }
 
-    private static String getUnpackedWeightMapFilename(String materialName, String format)
+    private static @NotNull String getUnpackedWeightMapFilename(String materialName, @NotNull String format)
     {
         return getUnpackedWeightMapFilename(materialName, format, "");
     }
 
-    public static String getUnpackedWeightMapFilename(String materialName)
+    public static @NotNull String getUnpackedWeightMapFilename(String materialName)
     {
         return getUnpackedWeightMapFilename(materialName, "PNG");
     }
 
-    public static String getUnpackedWeightMapName(String materialName)
+    public static @NotNull String getUnpackedWeightMapName(String materialName)
     {
         return String.format("weights%s", materialName);
     }

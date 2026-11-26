@@ -15,6 +15,8 @@
 
 package kintsugi3d.fx.controllers.modals.createnewproject.inputsources;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,13 +41,13 @@ public abstract class NonValidatedInputSourceBase implements NonValidatedInputSo
     }
 
     @Override
-    public final Collection<File> getDisabledImages()
+    public final @NotNull Collection<File> getDisabledImages()
     {
         return Collections.unmodifiableCollection(disabledImages);
     }
 
     @Override
-    public final void disableImages(Collection<File> imagesToDisable)
+    public final void disableImages(@NotNull Collection<File> imagesToDisable)
     {
         disabledImages.addAll(imagesToDisable);
     }

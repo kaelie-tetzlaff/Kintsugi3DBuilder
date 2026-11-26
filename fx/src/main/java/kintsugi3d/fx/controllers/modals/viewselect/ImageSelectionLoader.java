@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 class ImageSelectionLoader implements Runnable
 {
@@ -74,7 +75,7 @@ class ImageSelectionLoader implements Runnable
         {
             try
             {
-                String path = model.findFullResImagePath(imageName).orElse("");
+                String path = Objects.requireNonNullElse(model.findFullResImagePath(imageName), "");
                 File imgFile = ImageFinder.findImageFile(new File(path));
 
                 if (stopRequested)

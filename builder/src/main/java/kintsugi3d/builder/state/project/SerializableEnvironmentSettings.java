@@ -16,6 +16,7 @@
 package kintsugi3d.builder.state.project;
 
 import javafx.scene.paint.Color;
+import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -24,8 +25,8 @@ import java.util.function.Supplier;
 
 public abstract class SerializableEnvironmentSettings implements DOMConvertable, EnvironmentSettings
 {
-    static <EnvironmentSettingType extends SerializableEnvironmentSettings> EnvironmentSettingType
-    createNoEnvironment(Supplier<EnvironmentSettingType> environmentSettingConstructor)
+    static <EnvironmentSettingType extends SerializableEnvironmentSettings> @NotNull EnvironmentSettingType
+    createNoEnvironment(@NotNull Supplier<EnvironmentSettingType> environmentSettingConstructor)
     {
         EnvironmentSettingType noEnvironment = environmentSettingConstructor.get();
         noEnvironment.setName("No Environment");
@@ -49,7 +50,7 @@ public abstract class SerializableEnvironmentSettings implements DOMConvertable,
     }
 
     @Override
-    public final Element toDOMElement(Document document)
+    public final @NotNull Element toDOMElement(@NotNull Document document)
     {
         Element element = document.createElement("Environment");
         element.setAttribute("envUseImage", Boolean.toString(isEnvironmentImageEnabled()));
@@ -89,7 +90,7 @@ public abstract class SerializableEnvironmentSettings implements DOMConvertable,
     }
 
     public static <EnvironmentSettingType extends SerializableEnvironmentSettings>
-    EnvironmentSettingType fromDOMElement(Element element, Supplier<EnvironmentSettingType> environmentSettingConstructor)
+    @NotNull EnvironmentSettingType fromDOMElement(@NotNull Element element, @NotNull Supplier<EnvironmentSettingType> environmentSettingConstructor)
     {
         EnvironmentSettingType newEnvironment = environmentSettingConstructor.get();
         newEnvironment.setEnvironmentImageEnabled(Boolean.parseBoolean(element.getAttribute("envUseImage")));

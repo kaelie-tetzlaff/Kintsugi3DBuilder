@@ -15,10 +15,12 @@
 
 package kintsugi3d.builder.state.shader;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 public class SimpleShaderInfo implements ShaderInfo
 {
@@ -52,15 +54,16 @@ public class SimpleShaderInfo implements ShaderInfo
     }
 
     @Override
-    public final File getFile()
+    public final @NotNull File getFile()
     {
         return new File(SHADER_DIR, filename);
     }
 
     @SuppressWarnings("DesignForExtension")
     @Override
-    public Map<String, Optional<Object>> getDefines()
+    public @NotNull Map<String, @Nullable Object> getDefines()
     {
+        //noinspection NullableProblems
         return Map.of();
     }
 

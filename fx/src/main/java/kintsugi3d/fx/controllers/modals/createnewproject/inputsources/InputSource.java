@@ -15,6 +15,8 @@
 
 package kintsugi3d.fx.controllers.modals.createnewproject.inputsources;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.util.Collection;
 
@@ -27,7 +29,7 @@ public interface InputSource
      */
     File getMasksDirectory();
 
-    void setMasksDirectory(File file);
+    void setMasksDirectory(@Nullable File file);
 
     /**
      * For setting the initial directory of the masks directory chooser. Not guaranteed to be the actual masks directory.

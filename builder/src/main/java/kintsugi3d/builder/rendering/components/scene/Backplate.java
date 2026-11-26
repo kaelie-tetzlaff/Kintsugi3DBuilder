@@ -21,6 +21,7 @@ import kintsugi3d.builder.rendering.components.ShaderComponent;
 import kintsugi3d.builder.resources.LightingResources;
 import kintsugi3d.builder.state.scene.BackgroundMode;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,13 +49,13 @@ public class Backplate<ContextType extends Context<ContextType>> extends ShaderC
     }
 
     @Override
-    protected final Map<String, VertexBuffer<ContextType>> createVertexBuffers()
+    protected final @NotNull Map<String, VertexBuffer<ContextType>> createVertexBuffers()
     {
         return Map.of("position", getContext().createRectangle());
     }
 
     @Override
-    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(@NotNull FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
     {
         if (lightingResources.getBackplateTexture() != null && sceneModel.getLightingModel().getBackgroundMode() == BackgroundMode.IMAGE)
         {

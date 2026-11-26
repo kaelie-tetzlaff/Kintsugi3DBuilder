@@ -20,6 +20,7 @@ import kintsugi3d.builder.core.texture.StandardTexture;
 import kintsugi3d.builder.core.texture.TextureInfo;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.ReadonlyTexture2D;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -32,7 +33,7 @@ public interface ReadonlyTextureSet<ContextType extends Context<ContextType>>
      * Returns a map containing only the standard textures
      * @return
      */
-    default Map<StandardTexture, ? extends ReadonlyTexture2D<ContextType>> getStandardTextures()
+    default @NotNull Map<StandardTexture, ? extends ReadonlyTexture2D<ContextType>> getStandardTextures()
     {
         return StandardTexture.convertObjectMapToEnumMap(getTextures());
     }
@@ -47,7 +48,7 @@ public interface ReadonlyTextureSet<ContextType extends Context<ContextType>>
         return getTextures().get(tex);
     }
 
-    default ReadonlyTexture2D<ContextType> getTexture(StandardTexture tex)
+    default ReadonlyTexture2D<ContextType> getTexture(@NotNull StandardTexture tex)
     {
         return getTextures().get(tex.getDetails());
     }

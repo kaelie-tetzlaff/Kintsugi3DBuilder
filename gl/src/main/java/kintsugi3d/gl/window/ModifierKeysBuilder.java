@@ -15,6 +15,8 @@
 
 package kintsugi3d.gl.window;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ModifierKeysBuilder
 {
     private boolean shiftModifier;
@@ -22,36 +24,36 @@ public class ModifierKeysBuilder
     private boolean altModifier;
     private boolean superModifier;
 
-    public static ModifierKeysBuilder begin()
+    public static @NotNull ModifierKeysBuilder begin()
     {
         return new ModifierKeysBuilder();
     }
 
-    public final ModifierKeysBuilder shift()
+    public final @NotNull ModifierKeysBuilder shift()
     {
         shiftModifier = true;
         return this;
     }
 
-    public final ModifierKeysBuilder control()
+    public final @NotNull ModifierKeysBuilder control()
     {
         controlModifier = true;
         return this;
     }
 
-    public final ModifierKeysBuilder alt()
+    public final @NotNull ModifierKeysBuilder alt()
     {
         altModifier = true;
         return this;
     }
 
-    public final ModifierKeysBuilder superKey()
+    public final @NotNull ModifierKeysBuilder superKey()
     {
         superModifier = true;
         return this;
     }
 
-    public final ModifierKeys end()
+    public final @NotNull ModifierKeys end()
     {
         return new SimpleModifierKeys(shiftModifier, controlModifier, altModifier, superModifier);
     }

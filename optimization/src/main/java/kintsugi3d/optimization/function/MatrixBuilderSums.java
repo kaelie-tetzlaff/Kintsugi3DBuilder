@@ -17,6 +17,7 @@ package kintsugi3d.optimization.function;
 
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.simple.SimpleMatrix;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
@@ -36,62 +37,62 @@ public class MatrixBuilderSums
      * Stores a running total (for each pair of basis functions) of the weighted sum of analytic functions.
      * This total will NOT be cleared when clearNonCumulativeSums() is called.
      */
-    private final SimpleMatrix weightedAnalyticCumulative;
+    private final @NotNull SimpleMatrix weightedAnalyticCumulative;
     /**
      * Stores a running total (for each pair of basis functions) of the weighted sum of analytic functions.
      * This total WILL be cleared when clearNonCumulativeSums() is called.
      */
-    private final SimpleMatrix weightedAnalytic;
+    private final @NotNull SimpleMatrix weightedAnalytic;
 
     /**
      * Stores a running total (for each pair of basis functions) of the weighted sum of analytic functions.
      * This total WILL be cleared when clearNonCumulativeSums() is called.
      */
-    private final SimpleMatrix weightedAnalyticBlended;
+    private final @NotNull SimpleMatrix weightedAnalyticBlended;
 
     /**
      * Stores a running total (for each pair of basis functions) of the weighted sum of squared analytic functions.
      * This total will NOT be cleared when clearNonCumulativeSums() is called.
      */
-    private final SimpleMatrix weightedAnalyticSquaredCumulative;
+    private final @NotNull SimpleMatrix weightedAnalyticSquaredCumulative;
 
     /**
      * Stores a running total (for each pair of basis functions) of the weighted sum of squared analytic functions.
      * This total WILL be cleared when clearNonCumulativeSums() is called.
      */
-    private final SimpleMatrix weightedAnalyticSquared;
+    private final @NotNull SimpleMatrix weightedAnalyticSquared;
 
     /**
      *  Stores a running total (for each pair of basis functions) of the weighted sum of squared analytic functions
      *  with additional linear interpolation weights.
      * This total WILL be cleared when clearNonCumulativeSums() is called.
      */
-    private final SimpleMatrix weightedAnalyticSquaredBlended;
+    private final @NotNull SimpleMatrix weightedAnalyticSquaredBlended;
     /**
      *  Stores a running total (for each pair of basis functions) of the weighted sum of squared analytic functions
      *  with additional linear interpolation weights which are squared (i.e. multiplication by t^2).
      * This total WILL be cleared when clearNonCumulativeSums() is called.
      */
-    private final SimpleMatrix weightedAnalyticSquaredBlendedSquared;
+    private final @NotNull SimpleMatrix weightedAnalyticSquaredBlendedSquared;
 
     /**
      * Stores a running total (for each basis function) of the weighted sum of observed values times the analytic function.
      * This total will NOT be cleared when clearNonCumulativeSums() is called.
      */
-    private final SimpleMatrix[] weightedAnalyticTimesObservedCumulative;
+    private final SimpleMatrix @NotNull [] weightedAnalyticTimesObservedCumulative;
 
     /**
      * Stores a running total (for each basis function) of the weighted sum of observed values times the analytic function.
      * This total WILL be cleared when clearNonCumulativeSums() is called.
      */
-    private final SimpleMatrix[] weightedAnalyticTimesObserved;
+    private final SimpleMatrix @NotNull [] weightedAnalyticTimesObserved;
 
     /**
      * Stores a running total (for each basis function) of the weighted sum of observed values times the analytic function
      * with additional linear interpolation weights.
      * This total WILL be cleared when clearNonCumulativeSums() is called.
      */
-    private final SimpleMatrix[] weightedAnalyticTimesObservedBlended;
+    private final SimpleMatrix @NotNull [] weightedAnalyticTimesObservedBlended;
 
     /**
      * Initialize running totals.
@@ -119,7 +120,7 @@ public class MatrixBuilderSums
         Arrays.setAll(weightedAnalyticTimesObservedBlended, i -> new SimpleMatrix(instanceCount, 1, DMatrixRMaj.class));
     }
 
-    public final void accept(MatrixBuilderSample sample)
+    public final void accept(@NotNull MatrixBuilderSample sample)
     {
         int instanceCount = weightedAnalyticCumulative.numRows();
 

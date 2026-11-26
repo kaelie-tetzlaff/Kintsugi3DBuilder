@@ -16,6 +16,8 @@
 package kintsugi3d.app.test;
 
 import kintsugi3d.builder.state.CacheModelBase;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +60,7 @@ public class TestingCacheModel extends CacheModelBase
     }
 
     @Override
-    protected final void updateCacheSize(long newCacheSize, Map<String, Long> newProjectSizes, Runnable onCompleteCallback)
+    protected final void updateCacheSize(long newCacheSize, @NotNull Map<String, Long> newProjectSizes, @Nullable Runnable onCompleteCallback)
     {
         try
         {
@@ -108,7 +110,7 @@ public class TestingCacheModel extends CacheModelBase
     }
 
     @Override
-    protected final void addCacheSizeChangeCallback(DoubleConsumer cacheSizeChangeCallback)
+    protected final void addCacheSizeChangeCallback(@Nullable DoubleConsumer cacheSizeChangeCallback)
     {
         if (cacheSizeChangeCallback != null)
         {

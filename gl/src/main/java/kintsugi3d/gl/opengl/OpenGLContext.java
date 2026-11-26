@@ -25,6 +25,7 @@ import kintsugi3d.gl.opengl.OpenGLFramebufferObject.OpenGLFramebufferObjectBuild
 import kintsugi3d.gl.opengl.OpenGLProgramObject.OpenGLProgramBuilder;
 import kintsugi3d.gl.types.AbstractDataType;
 import kintsugi3d.gl.types.PackedDataType;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,11 +40,11 @@ import static org.lwjgl.opengl.GL43.*;
 
 public class OpenGLContext extends WindowContextBase<OpenGLContext>
 {
-    private final OpenGLContextState state;
-    private final OpenGLTextureFactory textureFactory;
+    private final @NotNull OpenGLContextState state;
+    private final @NotNull OpenGLTextureFactory textureFactory;
 
-    private final Map<Integer, OpenGLTexture> textureBindings;
-    private final Map<Integer, OpenGLUniformBuffer> uniformBufferBindings;
+    private final @NotNull Map<Integer, OpenGLTexture> textureBindings;
+    private final @NotNull Map<Integer, OpenGLUniformBuffer> uniformBufferBindings;
 
     private DoubleFramebuffer<OpenGLContext> defaultFramebuffer;
 
@@ -74,25 +75,25 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
     }
 
     @Override
-    public final OpenGLContextState getState()
+    public final @NotNull OpenGLContextState getState()
     {
         return state;
     }
 
     @Override
-    public final Shader<OpenGLContext> createShader(ShaderType type, String source)
+    public final @NotNull Shader<OpenGLContext> createShader(@NotNull ShaderType type, @NotNull String source)
     {
         return new OpenGLShader(this, getShaderType(type), source);
     }
 
     @Override
-    public final Shader<OpenGLContext> createShader(ShaderType type, File file, Map<String, Object> defines) throws IOException
+    public final @NotNull Shader<OpenGLContext> createShader(@NotNull ShaderType type, @NotNull File file, @NotNull Map<String, Object> defines) throws IOException
     {
         return new OpenGLShader(this, getShaderType(type), file, defines);
     }
 
     @Override
-    public final ProgramBuilder<OpenGLContext> getShaderProgramBuilder()
+    public final @NotNull ProgramBuilder<OpenGLContext> getShaderProgramBuilder()
     {
         return new OpenGLProgramBuilder(this);
     }
@@ -109,25 +110,25 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
     }
 
     @Override
-    public final VertexBuffer<OpenGLContext> createVertexBuffer()
+    public final @NotNull VertexBuffer<OpenGLContext> createVertexBuffer()
     {
         return new OpenGLVertexBuffer(this);
     }
 
     @Override
-    public final IndexBuffer<OpenGLContext> createIndexBuffer()
+    public final @NotNull IndexBuffer<OpenGLContext> createIndexBuffer()
     {
         return new OpenGLIndexBuffer(this);
     }
 
     @Override
-    public final UniformBuffer<OpenGLContext> createUniformBuffer()
+    public final @NotNull UniformBuffer<OpenGLContext> createUniformBuffer()
     {
         return new OpenGLUniformBuffer(this);
     }
 
     @Override
-    public final DrawableResource<OpenGLContext> createDrawable(Program<OpenGLContext> program)
+    public final @NotNull DrawableResource<OpenGLContext> createDrawable(Program<OpenGLContext> program)
     {
         if (program instanceof OpenGLProgramObject)
         {
@@ -140,18 +141,18 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
     }
 
     @Override
-    public final FramebufferObjectBuilder<OpenGLContext> buildFramebufferObject(int width, int height)
+    public final @NotNull FramebufferObjectBuilder<OpenGLContext> buildFramebufferObject(int width, int height)
     {
         return new OpenGLFramebufferObjectBuilder(this, width, height);
     }
 
     @Override
-    public final TextureFactory<OpenGLContext> getTextureFactory()
+    public final @NotNull TextureFactory<OpenGLContext> getTextureFactory()
     {
         return textureFactory;
     }
 
-    static int getDataTypeConstant(NativeDataType dataType)
+    static int getDataTypeConstant(@NotNull NativeDataType dataType)
     {
         switch(dataType)
         {
@@ -194,7 +195,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         }
     }
 
-    final void bindTextureToUnit(int textureUnitIndex, OpenGLTexture texture)
+    final void bindTextureToUnit(int textureUnitIndex, @NotNull OpenGLTexture texture)
     {
         glActiveTexture(GL_TEXTURE0 + textureUnitIndex);
         errorCheck();
@@ -205,7 +206,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         textureBindings.put(textureUnitIndex, texture);
     }
 
-    final void bindUniformBufferToIndex(int bufferBindingIndex, OpenGLUniformBuffer buffer)
+    final void bindUniformBufferToIndex(int bufferBindingIndex, @NotNull OpenGLUniformBuffer buffer)
     {
         if (buffer.hasData())
         {
@@ -221,8 +222,8 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         }
     }
 
-    private static <T> void updateBindingsGeneric(Map<Integer, T> oldBindings, List<T> newBindings,
-        BiPredicate<T, T> needsUnbindPredicate, BiConsumer<Integer, T> unbindFunction, BiConsumer<Integer, T> bindFunction)
+    private static <T> void updateBindingsGeneric(@NotNull Map<Integer, T> oldBindings, @NotNull List<T> newBindings,
+                                                  @NotNull BiPredicate<T, T> needsUnbindPredicate, @NotNull BiConsumer<Integer, T> unbindFunction, @NotNull BiConsumer<Integer, T> bindFunction)
     {
         // Iterate through all of the previous bindings and unbind any that will not be overwritten otherwise.
         Iterator<Entry<Integer, T>> iterator = oldBindings.entrySet().iterator();
@@ -254,7 +255,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         }
     }
 
-    final void updateTextureBindings(List<OpenGLTexture> newTextureBindings)
+    final void updateTextureBindings(@NotNull List<OpenGLTexture> newTextureBindings)
     {
         updateBindingsGeneric(textureBindings, newTextureBindings,
             (oldTexture, newTexture) -> oldTexture.getTextureTarget() != newTexture.getTextureTarget(),
@@ -269,7 +270,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
             (textureUnitIndex, textureToBind) -> textureToBind.bindToTextureUnit(textureUnitIndex));
     }
 
-    final void updateUniformBufferBindings(List<OpenGLUniformBuffer> newUniformBufferBindings)
+    final void updateUniformBufferBindings(@NotNull List<OpenGLUniformBuffer> newUniformBufferBindings)
     {
         updateBindingsGeneric(uniformBufferBindings, newUniformBufferBindings,
             (oldBuffer, newBuffer) -> oldBuffer.getBufferTarget() != newBuffer.getBufferTarget(),
@@ -281,7 +282,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
             (bindingIndex, bufferToBind) -> bufferToBind.bindToIndex(bindingIndex));
     }
 
-    protected static int getInternalColorFormat(ColorFormat format)
+    protected static int getInternalColorFormat(@NotNull ColorFormat format)
     {
         if (format.alphaBits > 0)
         {
@@ -585,7 +586,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         }
     }
 
-    protected static int getCompressionFormat(CompressionFormat format)
+    protected static int getCompressionFormat(@NotNull CompressionFormat format)
     {
         switch(format)
         {
@@ -603,7 +604,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         }
     }
 
-    private static int getShaderType(ShaderType type)
+    private static int getShaderType(@NotNull ShaderType type)
     {
         switch(type)
         {
@@ -618,7 +619,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         return 0;
     }
 
-    protected static int getBufferUsage(BufferAccessType accessType, BufferAccessFrequency accessFreq)
+    protected static int getBufferUsage(@NotNull BufferAccessType accessType, @NotNull BufferAccessFrequency accessFreq)
     {
         switch(accessFreq)
         {
@@ -633,7 +634,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         }
     }
 
-    private static int getStreamBufferUsage(BufferAccessType accessType)
+    private static int getStreamBufferUsage(@NotNull BufferAccessType accessType)
     {
         switch(accessType)
         {
@@ -649,7 +650,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
     }
 
 
-    private static int getStaticBufferUsage(BufferAccessType accessType)
+    private static int getStaticBufferUsage(@NotNull BufferAccessType accessType)
     {
         switch(accessType)
         {
@@ -664,7 +665,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         }
     }
 
-    private static int getDynamicBufferUsage(BufferAccessType accessType)
+    private static int getDynamicBufferUsage(@NotNull BufferAccessType accessType)
     {
         switch(accessType)
         {
@@ -679,7 +680,7 @@ public class OpenGLContext extends WindowContextBase<OpenGLContext>
         }
     }
 
-    private static String getFramebufferStatusString(String framebufferName, int statusID)
+    private static @NotNull String getFramebufferStatusString(String framebufferName, int statusID)
     {
         switch(statusID)
         {

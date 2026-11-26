@@ -16,6 +16,7 @@
 package kintsugi3d.builder.state.project;
 
 import javafx.scene.paint.Color;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
@@ -47,11 +48,11 @@ public interface EnvironmentSettings
 
     File getEnvironmentImageFile();
 
-    void setEnvironmentImageFile(File envImageFile);
+    void setEnvironmentImageFile(@Nullable File envImageFile);
 
     File getBackplateImageFile();
 
-    void setBackplateImageFile(File bpImageFile);
+    void setBackplateImageFile(@Nullable File bpImageFile);
 
     double getBackgroundIntensity();
 

@@ -23,6 +23,7 @@ import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.fit.decomposition.MaterialBasis;
 import kintsugi3d.builder.fit.decomposition.SpecularDecomposition;
 import kintsugi3d.builder.fit.decomposition.SpecularDecompositionFromExistingBasis;
+import kintsugi3d.builder.fit.finalize.AlbedoORMOptimization;
 import kintsugi3d.builder.fit.settings.ReadonlySpecularFitSettings;
 import kintsugi3d.builder.rendering.ImageReconstruction;
 import kintsugi3d.builder.rendering.ReconstructionView;
@@ -42,6 +43,8 @@ import kintsugi3d.gl.util.BufferedImageColorList;
 import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.util.ImageFinder;
 import org.ejml.simple.SimpleMatrix;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,7 +86,7 @@ public abstract class SpecularFitProcess
     }
 
     public final <ContextType extends Context<ContextType>> void reconstructAll(
-        ReadonlyImageBasedGraphicsResources<ContextType> resources, BiConsumer<ReconstructionView<ContextType>, ReadonlyColorAppearanceRMSE> reconstructionCallback)
+        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, @NotNull BiConsumer<ReconstructionView<ContextType>, ReadonlyColorAppearanceRMSE> reconstructionCallback)
         throws IOException
     {
         ReadonlyViewSet viewSet = resources.getViewSet();
@@ -137,9 +140,9 @@ public abstract class SpecularFitProcess
         }
     }
 
-    protected final <ContextType extends Context<ContextType>> SpecularFitFinal<ContextType> optimizeFullResTexturesWithCache(
-        ImageCache<ContextType> cache, ProgressMonitor monitor, ReadonlyTextureResources<ContextType> original,
-        MaterialBasis basis, Temporal start) throws IOException, UserCancellationException
+    protected final <ContextType extends Context<ContextType>> @NotNull SpecularFitFinal<ContextType> optimizeFullResTexturesWithCache(
+        @NotNull ImageCache<ContextType> cache, @Nullable ProgressMonitor monitor, @NotNull ReadonlyTextureResources<ContextType> original,
+        @NotNull MaterialBasis basis, @NotNull Temporal start) throws IOException, UserCancellationException
     {
         // Create space for the solution.
         // Complete "specular fit": includes basis representation on GPU, roughness / reflectivity fit, normal fit, and final diffuse fit.
@@ -169,7 +172,11 @@ public abstract class SpecularFitProcess
             }
 
             // Generate albedo / ORM maps at full resolution (does not require loaded source images)
-            fullResolution.getAlbedoORMOptimization().execute(fullResolution);
+            AlbedoORMOptimization<ContextType> albedoORMOptimization = fullResolution.getAlbedoORMOptimization();
+            if (albedoORMOptimization != null)
+            {
+                albedoORMOptimization.execute(fullResolution);
+            }
 
             Duration duration = Duration.between(start, Instant.now());
             logProcessingTime(duration);
@@ -208,7 +215,7 @@ public abstract class SpecularFitProcess
     }
 
     private static <ContextType extends Context<ContextType>>
-    Texture2D<ContextType> loadInitialNormalMap(ContextType context, int targetWidth, int targetHeight, File inputNormalMapFile)
+    Texture2D<ContextType> loadInitialNormalMap(@NotNull ContextType context, int targetWidth, int targetHeight, @Nullable File inputNormalMapFile)
         throws IOException
     {
         Texture2D<ContextType> normalMap = context.getTextureFactory()
@@ -237,11 +244,11 @@ public abstract class SpecularFitProcess
     }
 
     private <ContextType extends Context<ContextType>> void optimizeBlocks(
-        Blittable<ReadonlyTextureResources<ContextType>> fullResolutionDestination,
-        ImageCache<ContextType> cache,
-        MaterialBasis basis,
-        File inputNormalMapFile,
-        ProgressMonitor monitor)
+        @NotNull Blittable<ReadonlyTextureResources<ContextType>> fullResolutionDestination,
+        @NotNull ImageCache<ContextType> cache,
+        @NotNull MaterialBasis basis,
+        @Nullable File inputNormalMapFile,
+        @Nullable ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         SpecularFitResourcesWrapper<ContextType> resourcesWrapper = getResourcesWrapper();
@@ -282,13 +289,14 @@ public abstract class SpecularFitProcess
                         {
                             if (initialNormalMap.isPresent())
                             {
+                                assert initialNormalMap.get() != null;
+
                                 int x = settings.getImageCacheSettings().getBlockStartX(i);
                                 int y = settings.getImageCacheSettings().getBlockStartY(j);
                                 int width = settings.getImageCacheSettings().getBlockStartX(i + 1) - x;
                                 int height = settings.getImageCacheSettings().getBlockStartY(j + 1) - y;
 
-                                blockOptimization.getNormalOptimization().getNormalMap().blitCropped(
-                                    initialNormalMap.get(), x, y, width, height);
+                                blockOptimization.getNormalOptimization().getNormalMap().blitCropped(initialNormalMap.get(), x, y, width, height);
                             }
 
                             // Use basis functions previously optimized at a lower resolution
@@ -326,7 +334,6 @@ public abstract class SpecularFitProcess
                             blockOptimization.getDiffuseOptimization().execute(blockOptimization);
 
                             // Fit specular textures after filling holes
-                            assert blockOptimization.getRoughnessOptimization() != null;
                             blockOptimization.getRoughnessOptimization().execute();
 
                             // Copy partial solution into the full solution.
@@ -339,10 +346,10 @@ public abstract class SpecularFitProcess
     }
 
     protected final <ContextType extends Context<ContextType>> void optimizeTexSpaceFit(
-        ReadonlyImageBasedGraphicsResources<ContextType> resources,
-        TextureResolution resolution,
-        OptimizationMethod<ContextType> optimizationMethod,
-        ProgressMonitor monitor) throws IOException, UserCancellationException
+        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources,
+        @NotNull TextureResolution resolution,
+        @NotNull OptimizationMethod<ContextType> optimizationMethod,
+        @Nullable ProgressMonitor monitor) throws IOException, UserCancellationException
     {
         SpecularFitResourcesWrapper<ContextType> resourcesWrapper = getResourcesWrapper();
 
@@ -391,7 +398,7 @@ public abstract class SpecularFitProcess
 //    }
 
     private static <ContextType extends Context<ContextType>>
-    ProgramBuilder<ContextType> getReflectanceProgramBuilder(ShaderProgramFactory<ContextType> programFactory)
+    ProgramBuilder<ContextType> getReflectanceProgramBuilder(@NotNull ShaderProgramFactory<ContextType> programFactory)
     {
         return programFactory.getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File("shaders/common/texspace_dynamic.vert"))
@@ -402,10 +409,10 @@ public abstract class SpecularFitProcess
 
     private static final class BlockResourcesProgressMonitor extends DefaultProgressMonitor
     {
-        private final ProgressMonitor monitor;
+        private final @Nullable ProgressMonitor monitor;
         private double maxProgress;
 
-        private BlockResourcesProgressMonitor(ProgressMonitor monitor)
+        private BlockResourcesProgressMonitor(@Nullable ProgressMonitor monitor)
         {
             this.monitor = monitor;
             maxProgress = 0.0;
@@ -435,11 +442,11 @@ public abstract class SpecularFitProcess
 
     private static final class OptimizationProgressMonitor extends DefaultProgressMonitor
     {
-        private final ProgressMonitor monitor;
+        private final @Nullable ProgressMonitor monitor;
         private final int blockProgress;
         private double maxProgress;
 
-        private OptimizationProgressMonitor(ProgressMonitor monitor, int blockProgress)
+        private OptimizationProgressMonitor(@Nullable ProgressMonitor monitor, int blockProgress)
         {
             this.monitor = monitor;
             this.blockProgress = blockProgress;

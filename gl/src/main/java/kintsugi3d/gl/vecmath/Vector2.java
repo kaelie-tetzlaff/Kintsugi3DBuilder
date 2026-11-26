@@ -59,42 +59,42 @@ public class Vector2 implements Iterable<Float>
         this(value, value);
     }
 
-    public final Vector3 asVector3()
+    public final @NotNull Vector3 asVector3()
     {
         return asVector3(0.0f);
     }
 
-    public final Vector3 asVector3(float z)
+    public final @NotNull Vector3 asVector3(float z)
     {
         return new Vector3(x, y, z);
     }
 
-    public final Vector4 asPosition()
+    public final @NotNull Vector4 asPosition()
     {
         return asVector4(0.0f, 1.0f);
     }
 
-    public final Vector4 asDirection()
+    public final @NotNull Vector4 asDirection()
     {
         return asVector4(0.0f, 0.0f);
     }
 
-    public final Vector4 asVector4(float z, float w)
+    public final @NotNull Vector4 asVector4(float z, float w)
     {
         return new Vector4(x, y, z, w);
     }
 
-    public final IntVector2 rounded()
+    public final @NotNull IntVector2 rounded()
     {
         return new IntVector2(Math.round(x), Math.round(y));
     }
 
-    public final IntVector2 truncated()
+    public final @NotNull IntVector2 truncated()
     {
         return new IntVector2((int) x, (int) y);
     }
 
-    public final DoubleVector2 asDoublePrecision()
+    public final @NotNull DoubleVector2 asDoublePrecision()
     {
         return new DoubleVector2(x, y);
     }
@@ -133,7 +133,7 @@ public class Vector2 implements Iterable<Float>
      * @param other The vector to add.
      * @return A new vector that is the mathematical (componentwise) sum of this and 'other'.
      */
-    public final Vector2 plus(Vector2 other)
+    public final @NotNull Vector2 plus(@NotNull Vector2 other)
     {
         return new Vector2(
             x + other.x,
@@ -146,7 +146,7 @@ public class Vector2 implements Iterable<Float>
      * @param other The vector to add.
      * @return A new vector that is the mathematical (componentwise) subtraction of 'other' from this.
      */
-    public final Vector2 minus(Vector2 other)
+    public final @NotNull Vector2 minus(@NotNull Vector2 other)
     {
         return new Vector2(
             x - other.x,
@@ -158,7 +158,7 @@ public class Vector2 implements Iterable<Float>
      * Construct a new vector that is the negation of this.
      * @return A new vector with the values (-x, -y)
      */
-    public final Vector2 negated()
+    public final @NotNull Vector2 negated()
     {
         return new Vector2(-x, -y);
     }
@@ -168,7 +168,7 @@ public class Vector2 implements Iterable<Float>
      * @param s The scaler to multiply by.
      * @return A new vector equal to (s*x, s*y)
      */
-    public final Vector2 times(float s)
+    public final @NotNull Vector2 times(float s)
     {
         return new Vector2(s* x, s* y);
     }
@@ -178,17 +178,17 @@ public class Vector2 implements Iterable<Float>
      * @param s The scaler to divide by.
      * @return A new vector equal to (x/s, y/s)
      */
-    public final Vector2 dividedBy(float s)
+    public final @NotNull Vector2 dividedBy(float s)
     {
         return new Vector2(x/s, y/s);
     }
 
-    public final Vector2 times(Vector2 other)
+    public final @NotNull Vector2 times(@NotNull Vector2 other)
     {
         return new Vector2(x * other.x, y * other.y);
     }
 
-    public final Vector2 dividedBy(Vector2 other)
+    public final @NotNull Vector2 dividedBy(@NotNull Vector2 other)
     {
         return new Vector2(x / other.x, y / other.y);
     }
@@ -198,7 +198,7 @@ public class Vector2 implements Iterable<Float>
      * @param other The vector to use when computing the dot product.
      * @return A scaler value equal to the sum of x1*x2 and y1*y2.
      */
-    public final float dot(Vector2 other)
+    public final float dot(@NotNull Vector2 other)
     {
         return x * other.x + y * other.y;
     }
@@ -217,7 +217,7 @@ public class Vector2 implements Iterable<Float>
      * @param other The vector to compute the distance between.
      * @return A scaler value equal to the length of the different vector.
      */
-    public final float distance(Vector2 other)
+    public final float distance(@NotNull Vector2 other)
     {
         return minus(other).length();
     }
@@ -228,7 +228,7 @@ public class Vector2 implements Iterable<Float>
      * Do not attempt to normalize a zero-length vector.
      * @return A new vector equal to this vector divided by it's length.
      */
-    public final Vector2 normalized()
+    public final @NotNull Vector2 normalized()
     {
         return times(1.0f / length());
     }
@@ -238,7 +238,7 @@ public class Vector2 implements Iterable<Float>
      * magnitude (a length of 1.0).  If this vector has zero length, it will return itself.
      * @return A new vector equal to this vector divided by it's length except in cases of a zero-length vector.
      */
-    public final Vector2 normalizedSafe()
+    public final @NotNull Vector2 normalizedSafe()
     {
         float l = length();
         if (l == 0.0f)
@@ -251,13 +251,13 @@ public class Vector2 implements Iterable<Float>
         }
     }
 
-    public final Vector2 applyOperator(DoubleUnaryOperator operator)
+    public final @NotNull Vector2 applyOperator(@NotNull DoubleUnaryOperator operator)
     {
         return new Vector2((float)operator.applyAsDouble(x), (float)operator.applyAsDouble(y));
     }
 
     @Override
-    public final String toString()
+    public final @NotNull String toString()
     {
         return String.format("Vector2{x=%s, y=%s}", x, y);
     }

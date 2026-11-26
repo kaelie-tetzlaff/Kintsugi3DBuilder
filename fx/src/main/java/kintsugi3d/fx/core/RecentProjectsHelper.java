@@ -18,6 +18,7 @@ package kintsugi3d.fx.core;
 import javafx.scene.control.*;
 import kintsugi3d.builder.io.RecentProjects;
 import kintsugi3d.builder.util.OperatingSystem;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public final class RecentProjectsHelper
     {
     }
 
-    public static List<MenuItem> getMenuItems(Collection<String> items)
+    public static @NotNull List<MenuItem> getMenuItems(@NotNull Collection<String> items)
     {
         List<MenuItem> customMenuItems = new ArrayList<>(items.size());
         int i = 0;
@@ -65,7 +66,7 @@ public final class RecentProjectsHelper
         return customMenuItems;
     }
 
-    private static void onMenuItemAction(String fileName)
+    private static void onMenuItemAction(@NotNull String fileName)
     {
         FrontendIO.openProjectFromFile(new File(fileName));
     }

@@ -18,6 +18,7 @@ package kintsugi3d.builder.state.cards;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.resources.project.ImageBasedGraphicsResources;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
@@ -27,25 +28,25 @@ import java.util.stream.IntStream;
 
 public abstract class ProjectDataCardFactoryBase<T> implements ProjectDataCardFactory<T>
 {
-    private final ImageBasedGraphicsResources<? extends Context<?>> resources;
+    private final @NotNull ImageBasedGraphicsResources<? extends Context<?>> resources;
 
-    protected ProjectDataCardFactoryBase(ImageBasedGraphicsResources<? extends Context<?>> resources)
+    protected ProjectDataCardFactoryBase(@NotNull ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
         this.resources = resources;
     }
 
-    protected final ImageBasedGraphicsResources<? extends Context<?>> getResources()
+    protected final @NotNull ImageBasedGraphicsResources<? extends Context<?>> getResources()
     {
         return resources;
     }
 
-    protected final ViewSet getViewSet()
+    protected final @NotNull ViewSet getViewSet()
     {
         return resources.getViewSet();
     }
 
     @Override
-    public final void refreshCards(List<ProjectDataCard> mutableCardList, RefreshFunction<T> refreshedData)
+    public final void refreshCards(@NotNull List<ProjectDataCard> mutableCardList, @NotNull RefreshFunction<T> refreshedData)
     {
         // Generate cards in parallel for efficiency
         List<Entry<Integer, ProjectDataCard>> entryList = IntStream.range(0, mutableCardList.size())

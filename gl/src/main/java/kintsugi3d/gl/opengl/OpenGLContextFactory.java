@@ -17,6 +17,7 @@ package kintsugi3d.gl.opengl;
 
 import kintsugi3d.gl.core.DoubleFramebuffer;
 import kintsugi3d.gl.glfw.ContextFactory;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
@@ -30,7 +31,7 @@ public class OpenGLContextFactory implements ContextFactory<OpenGLContext>
     }
 
     @Override
-    public final OpenGLContext createContext(long glfwHandle)
+    public final @NotNull OpenGLContext createContext(long glfwHandle)
     {
         OpenGLContext context = new OpenGLContext(glfwHandle);
         context.setDefaultFramebuffer(new OpenGLDefaultFramebuffer(context));
@@ -38,7 +39,7 @@ public class OpenGLContextFactory implements ContextFactory<OpenGLContext>
     }
 
     @Override
-    public final OpenGLContext createContext(long glfwHandle, Function<OpenGLContext, DoubleFramebuffer<OpenGLContext>> createDefaultFramebuffer)
+    public final @NotNull OpenGLContext createContext(long glfwHandle, @NotNull Function<OpenGLContext, DoubleFramebuffer<OpenGLContext>> createDefaultFramebuffer)
     {
         OpenGLContext context = new OpenGLContext(glfwHandle);
         context.makeContextCurrent();

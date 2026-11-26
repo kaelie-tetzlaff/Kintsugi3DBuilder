@@ -20,8 +20,7 @@ import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
-
-import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 public class PowerViewWeightGenerator implements ViewWeightGenerator
 {
@@ -33,20 +32,18 @@ public class PowerViewWeightGenerator implements ViewWeightGenerator
     }
 
     @Override
-    public final float[] generateWeights(ReadonlyImageBasedGraphicsResources<? extends Context<?>> resources, Iterable<View> activeViewList, Matrix4 targetView)
+    public final float[] generateWeights(@NotNull ReadonlyImageBasedGraphicsResources<? extends Context<?>> resources, @NotNull Iterable<View> activeViewList, @NotNull Matrix4 targetView)
     {
         float[] viewWeights = new float[resources.getViewSet().getGPUBufferSize()];
         float viewWeightSum = 0.0f;
 
         for (View view : activeViewList)
         {
-            Vector3 viewDir = view.getCameraPose().times(
-                    Objects.requireNonNull(resources.getGeometry()).getCentroid().asPosition())
-                .getXYZ().negated().normalized();
+            Vector3 viewDir = view.getCameraPose().times(resources.getGeometry().getCentroid().asPosition()).getXYZ()
+                .negated().normalized();
 
             Vector3 targetDir = view.getCameraPose().times(
-                    targetView.quickInverse(0.01f).getColumn(3)
-                        .minus(Objects.requireNonNull(resources.getGeometry()).getCentroid().asPosition()))
+                    targetView.quickInverse(0.01f).getColumn(3).minus(resources.getGeometry().getCentroid().asPosition()))
                 .getXYZ().normalized();
 
             int viewIndex = view.getGPUViewIndex();

@@ -27,6 +27,7 @@ import kintsugi3d.builder.util.AppIcon;
 import kintsugi3d.builder.util.FXWindowHelper;
 import kintsugi3d.fx.core.Accelerators;
 import kintsugi3d.fx.core.MainWindowController;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -49,7 +50,7 @@ public class Modal
         this.parentWindow = parentWindow;
     }
 
-    public final BooleanExpression getOpenProperty()
+    public final @NotNull BooleanExpression getOpenProperty()
     {
         return openProperty;
     }
@@ -73,12 +74,12 @@ public class Modal
      * @param <ControllerType>
      * @throws IOException
      */
-    public final <ControllerType> ControllerType create(String title, String urlString) throws IOException
+    public final <ControllerType> ControllerType create(String title, @NotNull String urlString) throws IOException
     {
         return create(title, getFXMLLoader(urlString));
     }
 
-    public final <ControllerType> ControllerType create(String title, FXMLLoader fxmlLoader) throws IOException
+    public final <ControllerType> ControllerType create(String title, @NotNull FXMLLoader fxmlLoader) throws IOException
     {
         Parent root = fxmlLoader.load();
 
@@ -86,7 +87,9 @@ public class Modal
         stage.getIcons().add(AppIcon.getImage());
         stage.setTitle(title);
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(Objects.requireNonNull(Modal.class.getResource("/fxml/kintsugi.css")).toExternalForm());
+        scene.getStylesheets().add(
+            Objects.requireNonNull(Modal.class.getResource("/fxml/kintsugi.css"), "Could not load stylesheet for Kintsugi 3D Builder")
+                .toExternalForm());
         stage.setScene(scene);
         stage.initOwner(parentWindow);
         stage.setResizable(false);
@@ -106,7 +109,7 @@ public class Modal
         FXWindowHelper.requestClose(stage);
     }
 
-    private static FXMLLoader getFXMLLoader(String urlString) throws FileNotFoundException
+    private static @NotNull FXMLLoader getFXMLLoader(@NotNull String urlString) throws FileNotFoundException
     {
         URL url = MainWindowController.class.getResource(urlString);
         if (url == null)

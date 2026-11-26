@@ -23,6 +23,8 @@ import kintsugi3d.builder.state.settings.Setting;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -35,13 +37,13 @@ public class SettingsModelSerializer extends StdSerializer<GeneralSettingsModel>
         this(null);
     }
 
-    protected SettingsModelSerializer(Class<GeneralSettingsModel> t)
+    protected SettingsModelSerializer(@Nullable Class<GeneralSettingsModel> t)
     {
         super(t);
     }
 
     @Override
-    public final void serialize(GeneralSettingsModel settingsModel, JsonGenerator jGen, SerializerProvider serializerProvider) throws IOException
+    public final void serialize(@NotNull GeneralSettingsModel settingsModel, @NotNull JsonGenerator jGen, SerializerProvider serializerProvider) throws IOException
     {
         jGen.writeStartObject();
 
@@ -68,7 +70,7 @@ public class SettingsModelSerializer extends StdSerializer<GeneralSettingsModel>
         jGen.writeEndObject();
     }
 
-    private static boolean shouldStandardSerialize(Class<?> type)
+    private static boolean shouldStandardSerialize(@NotNull Class<?> type)
     {
         return type.isAssignableFrom(Boolean.class) || type.isAssignableFrom(Number.class)
             || type.isAssignableFrom(String.class) || type.isAssignableFrom(Vector2.class)

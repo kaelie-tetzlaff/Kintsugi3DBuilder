@@ -32,6 +32,7 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +42,6 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public final class SpecularFitRequest implements TextureReplacementGraphicsRequest
 {
@@ -50,7 +50,7 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
     private static final boolean DEBUG_IMAGES = false;
 
     private final ReadonlySpecularFitSettings settings;
-    private final ReadonlyBasisOptimizationSettings basisOptimizationSettings;
+    private final @Nullable ReadonlyBasisOptimizationSettings basisOptimizationSettings;
 
     private File outputDirectory;
 
@@ -62,7 +62,7 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
     }
 
     private SpecularFitRequest(ReadonlySpecularFitSettings settings,
-                               ReadonlyBasisOptimizationSettings basisOptimizationSettings)
+                               @Nullable ReadonlyBasisOptimizationSettings basisOptimizationSettings)
     {
         this.settings = settings;
         this.basisOptimizationSettings = basisOptimizationSettings;
@@ -74,26 +74,26 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
      * @param args args[0] is the project name; args[1] is the name of this class; args[2] is the output directory
      * @return the request object
      */
-    public static SpecularFitRequest create(String... args)
+    public static @NotNull SpecularFitRequest create(String @NotNull ... args)
     {
         SpecularFitSettings params = new SpecularFitSettings(2048, 2048, 256, 256);
         File outputDirectory = new File(args[2]);
         return new SpecularFitRequest(params, new BasisOptimizationSettings(), outputDirectory);
     }
 
-    public static SpecularFitRequest createReoptimizeTexturesRequest()
+    public static @NotNull SpecularFitRequest createReoptimizeTexturesRequest()
     {
         return new SpecularFitRequest(getSettingsFromProject(), null);
     }
 
-    public static SpecularFitRequest createBasisAndTexturesOptimizationRequest()
+    public static @NotNull SpecularFitRequest createBasisAndTexturesOptimizationRequest()
     {
         return new SpecularFitRequest(getSettingsFromProject(), getBasisOptimizationSettingsFromProject());
     }
 
-    private static ReadonlySpecularFitSettings getSettingsFromProject()
+    private static @NotNull ReadonlySpecularFitSettings getSettingsFromProject()
     {
-        ReadonlyGeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
+        ReadonlyGeneralSettingsModel projectSettings = Global.io().getLoadedViewSet().getProjectSettings();
 
         // Start with texture size
         int textureSize = projectSettings.getInt("textureSize");
@@ -125,9 +125,9 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
         return settings;
     }
 
-    private static ReadonlyBasisOptimizationSettings getBasisOptimizationSettingsFromProject()
+    private static @NotNull ReadonlyBasisOptimizationSettings getBasisOptimizationSettingsFromProject()
     {
-        ReadonlyGeneralSettingsModel projectSettings = Global.io().getLoadedViewSetOrThrow().getProjectSettings();
+        ReadonlyGeneralSettingsModel projectSettings = Global.io().getLoadedViewSet().getProjectSettings();
 
         BasisOptimizationSettings settings = new BasisOptimizationSettings();
 
@@ -164,7 +164,7 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
      */
     @Override
     public <ContextType extends Context<ContextType>>
-    TextureResources<ContextType> executeRequest(ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
+    @NotNull TextureResources<ContextType> executeRequest(@NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @Nullable ProgressMonitor monitor)
         throws UserCancellationException, IOException
     {
         if (outputDirectory == null) // If the output directory wasn't overridden
@@ -195,7 +195,7 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
 
     @SuppressWarnings("unused")
     private <ContextType extends Context<ContextType>> void performReconstruction(
-        ReadonlyImageBasedGraphicsResources<ContextType> resources, ReadonlyTextureResources<ContextType> specularFit)
+        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, @NotNull ReadonlyTextureResources<ContextType> specularFit)
         throws IOException
     {
         if (outputDirectory != null)
@@ -203,58 +203,55 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
             // Create output directory
             outputDirectory.mkdirs();
 
-            if (resources.getViewSet() != null)
-            {
-                // Determine basis count and resolution based on the new specularFit.
-                // This will result in a program factory that overrides whatever basis count and resolution
-                // would be specified by the original resources.
-                ShaderProgramFactory<ContextType> programFactory = getProgramFactory(resources, specularFit);
-                FinalReconstruction<ContextType> reconstruction =
-                    new FinalReconstruction<>(resources, settings.getTextureResolution(), settings.getReconstructionSettings());
+            // Determine basis count and resolution based on the new specularFit.
+            // This will result in a program factory that overrides whatever basis count and resolution
+            // would be specified by the original resources.
+            ShaderProgramFactory<ContextType> programFactory = getProgramFactory(resources, specularFit);
+            FinalReconstruction<ContextType> reconstruction =
+                new FinalReconstruction<>(resources, settings.getTextureResolution(), settings.getReconstructionSettings());
 
-                // Reconstruct images both from basis functions and from fitted roughness
-                LOG.info("Reconstructing:");
-                List<Map<String, ReadonlyColorAppearanceRMSE>> rmseList = reconstruction.reconstruct(specularFit, Map.of(
-                        "basis", ReconstructionShaders.getBasisModelReconstructionProgramBuilder(programFactory, specularFit),
-                        "reflectivity", ReconstructionShaders.getReflectivityModelReconstructionProgramBuilder(programFactory, specularFit)),
-                    ReconstructionShaders.getIncidentRadianceProgramBuilder(programFactory),
-                    DEBUG_IMAGES ? outputDirectory : null,
-                    DEBUG_IMAGES ? new File(outputDirectory, "ground-truth") : null);
+            // Reconstruct images both from basis functions and from fitted roughness
+            LOG.info("Reconstructing:");
+            List<Map<String, ReadonlyColorAppearanceRMSE>> rmseList = reconstruction.reconstruct(specularFit, Map.of(
+                    "basis", ReconstructionShaders.getBasisModelReconstructionProgramBuilder(programFactory, specularFit),
+                    "reflectivity", ReconstructionShaders.getReflectivityModelReconstructionProgramBuilder(programFactory, specularFit)),
+                ReconstructionShaders.getIncidentRadianceProgramBuilder(programFactory),
+                DEBUG_IMAGES ? outputDirectory : null,
+                DEBUG_IMAGES ? new File(outputDirectory, "ground-truth") : null);
 
-                double reconstructionRMSE = Objects.requireNonNull(rmseList).stream()
-                    .mapToDouble(map ->
-                    {
-                        double rmse = map.get("basis").getEncodedGroundTruth();
-                        return rmse * rmse; // mean of mean-squared errors
-                    })
-                    .average().orElse(0.0);
-
-                double fittedRMSE = rmseList.stream().mapToDouble(map ->
-                    {
-                        double rmse = map.get("reflectivity").getEncodedGroundTruth();
-                        return rmse * rmse; // mean of mean-squared errors
-                    })
-                    .average().orElse(0.0);
-
-                if (!settings.getReconstructionSettings().shouldReconstructAll()) // Write to just one RMSE file if only doing a single image per reconstruction method
+            double reconstructionRMSE = rmseList.stream()
+                .mapToDouble(map ->
                 {
-                    try (PrintStream rmseOut = new PrintStream(new File(outputDirectory, "rmse.txt"), StandardCharsets.UTF_8))
-                    // Text file containing error information
-                    {
-                        rmseOut.printf("basis, %s\n", reconstructionRMSE);
-                        rmseOut.printf("reflectivity, %s\n", fittedRMSE);
-                    }
+                    double rmse = map.get("basis").getEncodedGroundTruth();
+                    return rmse * rmse; // mean of mean-squared errors
+                })
+                .average().orElse(0.0);
+
+            double fittedRMSE = rmseList.stream().mapToDouble(map ->
+                {
+                    double rmse = map.get("reflectivity").getEncodedGroundTruth();
+                    return rmse * rmse; // mean of mean-squared errors
+                })
+                .average().orElse(0.0);
+
+            if (!settings.getReconstructionSettings().shouldReconstructAll()) // Write to just one RMSE file if only doing a single image per reconstruction method
+            {
+                try (PrintStream rmseOut = new PrintStream(new File(outputDirectory, "rmse.txt"), StandardCharsets.UTF_8))
+                // Text file containing error information
+                {
+                    rmseOut.printf("basis, %s\n", reconstructionRMSE);
+                    rmseOut.printf("reflectivity, %s\n", fittedRMSE);
                 }
             }
         }
     }
 
     private <ContextType extends Context<ContextType>> @NotNull ShaderProgramFactory<ContextType> getProgramFactory(
-        ShaderResources<ContextType> resources, ReadonlyTextureResources<ContextType> specularFit)
+        ShaderResources<ContextType> resources, @NotNull ReadonlyTextureResources<ContextType> specularFit)
     {
         ReadonlyBasisResources<ContextType> basisResources = specularFit.getBasisResources();
-        ReadonlyBasisSettings basisSettings = new SimpleBasisSettings(
-            basisResources.getActiveMaterialCount(), basisResources.getBasisResolution());
+        ReadonlyBasisSettings basisSettings = basisResources != null ?
+            new BasisSettings(basisResources.getActiveMaterialCount(), basisResources.getBasisResolution()) : new BasisSettings();
 
         return new SpecularFitResourcesWrapper<ContextType>(settings.isSmithMaskingShadowingEnabled(), basisSettings).wrap(resources);
     }

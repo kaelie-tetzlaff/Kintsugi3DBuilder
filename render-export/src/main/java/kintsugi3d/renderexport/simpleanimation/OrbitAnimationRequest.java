@@ -16,6 +16,7 @@
 package kintsugi3d.renderexport.simpleanimation;
 
 import kintsugi3d.gl.vecmath.Matrix4;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
@@ -28,13 +29,13 @@ public final class OrbitAnimationRequest extends AnimationRequest
         }
 
         @Override
-        public OrbitAnimationRequest create()
+        public @NotNull OrbitAnimationRequest create()
         {
             return new OrbitAnimationRequest(getWidth(), getHeight(), getFrameCount(), getExportPath());
         }
     }
 
-    static Builder getBuilder()
+    static @NotNull Builder getBuilder()
     {
         return new Builder();
     }
@@ -45,7 +46,7 @@ public final class OrbitAnimationRequest extends AnimationRequest
     }
 
     @Override
-    protected Matrix4 getViewMatrix(int frame, Matrix4 baseViewMatrix)
+    protected @NotNull Matrix4 getViewMatrix(int frame, @NotNull Matrix4 baseViewMatrix)
     {
         return baseViewMatrix.times(Matrix4.rotateY(frame * 2 * Math.PI / getFrameCount()));
     }

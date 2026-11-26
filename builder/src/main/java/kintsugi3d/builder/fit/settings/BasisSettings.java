@@ -20,6 +20,16 @@ public class BasisSettings implements ReadonlyBasisSettings
     private int materialCount = 8;
     private int basisResolution = 90;
 
+    public BasisSettings()
+    {
+    }
+
+    public BasisSettings(int materialCount, int basisResolution)
+    {
+        this.materialCount = materialCount;
+        this.basisResolution = basisResolution;
+    }
+
     /**
      * @return The number of basis functions to use for the specular lobe.
      */

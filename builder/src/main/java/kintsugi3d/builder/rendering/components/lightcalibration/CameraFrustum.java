@@ -26,6 +26,7 @@ import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,11 +34,11 @@ import java.util.Map;
 
 public class CameraFrustum<ContextType extends Context<ContextType>> extends ShaderComponent<ContextType>
 {
-    private final ShaderProgramFactory<ContextType> programFactory;
+    private final @NotNull ShaderProgramFactory<ContextType> programFactory;
 
     private ViewSelection viewSelection;
 
-    public CameraFrustum(ShaderProgramFactory<ContextType> programFactory, SceneViewportModel sceneViewportModel)
+    public CameraFrustum(@NotNull ShaderProgramFactory<ContextType> programFactory, SceneViewportModel sceneViewportModel)
     {
         super(programFactory.getContext());
         this.programFactory = programFactory;
@@ -53,7 +54,7 @@ public class CameraFrustum<ContextType extends Context<ContextType>> extends Sha
     }
 
     @Override
-    protected final Map<String, VertexBuffer<ContextType>> createVertexBuffers()
+    protected final @NotNull Map<String, VertexBuffer<ContextType>> createVertexBuffers()
     {
         float[] frustum =
         {
@@ -73,7 +74,7 @@ public class CameraFrustum<ContextType extends Context<ContextType>> extends Sha
     }
 
     @Override
-    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(@NotNull FramebufferObject<ContextType> framebuffer, @NotNull CameraViewport cameraViewport)
     {
         if (programFactory instanceof GraphicsResourcesImageSpace)
         {

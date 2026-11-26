@@ -16,6 +16,7 @@
 package kintsugi3d.gl.util;
 
 import kintsugi3d.gl.vecmath.IntVector4;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
@@ -32,13 +33,13 @@ public class BufferedImageBuilder
     private int height;
     private int bufferedImageType = BufferedImage.TYPE_INT_ARGB;
 
-    public static BufferedImageBuilder build()
+    public static @NotNull BufferedImageBuilder build()
     {
         return new BufferedImageBuilder();
     }
 
     @SuppressWarnings({"AssignmentOrReturnOfFieldWithMutableType", "ParameterHidesMemberVariable"})
-    public final BufferedImageBuilder setDataFromArray(int[] data, int width, int height)
+    public final @NotNull BufferedImageBuilder setDataFromArray(int[] data, int width, int height)
     {
         this.data = data;
         this.width = width;
@@ -46,7 +47,7 @@ public class BufferedImageBuilder
         return this;
     }
 
-    public final BufferedImageBuilder loadDataFromFile(File file) throws IOException
+    public final @NotNull BufferedImageBuilder loadDataFromFile(@NotNull File file) throws IOException
     {
         BufferedImage img = ImageHelper.read(file).getBufferedImage();
         width = img.getWidth();
@@ -55,7 +56,7 @@ public class BufferedImageBuilder
         return this;
     }
 
-    public final BufferedImageBuilder flipVertical()
+    public final @NotNull BufferedImageBuilder flipVertical()
     {
         for (int y = 0; y < height / 2; y++)
         {
@@ -70,18 +71,18 @@ public class BufferedImageBuilder
         return this;
     }
 
-    public final BufferedImageBuilder setBufferedImageType(int bufferedImageType)
+    public final @NotNull BufferedImageBuilder setBufferedImageType(int bufferedImageType)
     {
         this.bufferedImageType = bufferedImageType;
         return this;
     }
 
-    public final BufferedImageBuilder tonemap(Function<IntVector4, IntVector4> mapper)
+    public final @NotNull BufferedImageBuilder tonemap(@NotNull Function<IntVector4, IntVector4> mapper)
     {
         return tonemap((color, index) -> mapper.apply(color));
     }
 
-    public final BufferedImageBuilder tonemap(BiFunction<IntVector4, Integer, IntVector4> mapper)
+    public final @NotNull BufferedImageBuilder tonemap(@NotNull BiFunction<IntVector4, Integer, IntVector4> mapper)
     {
         RenderedImage test = new BufferedImage(1, 1, bufferedImageType); // need a BufferedImage to convert imageType to ColorModel.
         ColorModel colorModel = test.getColorModel();
@@ -100,7 +101,7 @@ public class BufferedImageBuilder
         return this;
     }
 
-    public final BufferedImage create()
+    public final @NotNull BufferedImage create()
     {
         BufferedImage img = new BufferedImage(width, height, bufferedImageType);
         img.setRGB(0, 0, width, height, data, 0, width);

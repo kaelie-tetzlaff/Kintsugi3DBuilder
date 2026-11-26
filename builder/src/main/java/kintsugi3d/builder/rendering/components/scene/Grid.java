@@ -22,6 +22,7 @@ import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +48,7 @@ public class Grid<ContextType extends Context<ContextType>> extends ShaderCompon
     }
 
     @Override
-    protected final Map<String, VertexBuffer<ContextType>> createVertexBuffers()
+    protected final @NotNull Map<String, VertexBuffer<ContextType>> createVertexBuffers()
     {
         float[] grid = new float[252];
         for (int i = 0; i < 21; i++)
@@ -75,7 +76,7 @@ public class Grid<ContextType extends Context<ContextType>> extends ShaderCompon
     }
 
     @Override
-    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(@NotNull FramebufferObject<ContextType> framebuffer, @NotNull CameraViewport cameraViewport)
     {
         // Draw grid
         if (sceneModel.getSettingsModel().getBoolean("is3DGridEnabled"))

@@ -18,6 +18,7 @@ package kintsugi3d.fx.util;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
@@ -75,7 +76,7 @@ public class Stopwatch
         return initTime;
     }
 
-    public final ReadOnlyBooleanProperty runningProperty()
+    public final @NotNull ReadOnlyBooleanProperty runningProperty()
     {
         return running;
     }

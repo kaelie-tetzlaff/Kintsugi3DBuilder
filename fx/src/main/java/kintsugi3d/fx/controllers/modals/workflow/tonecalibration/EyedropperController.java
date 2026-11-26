@@ -46,6 +46,7 @@ import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.io.IO;
 import kintsugi3d.builder.io.RecentProjects;
+import kintsugi3d.builder.rendering.ReadonlyImageBasedRenderable;
 import kintsugi3d.builder.rendering.Rendering;
 import kintsugi3d.fx.controllers.modals.LiveProjectSettingsManager;
 import kintsugi3d.fx.controllers.paged.NonDataPageControllerBase;
@@ -54,6 +55,8 @@ import kintsugi3d.fx.util.StaticUtilities;
 import kintsugi3d.fx.util.ZoomSafeImageView;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.SRGB;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,7 +101,7 @@ public class EyedropperController extends NonDataPageControllerBase
 
     @FXML private ImageDetailsController imageDetailsController;
 
-    private Button sourceButton;
+    private @Nullable Button sourceButton;
 
     private List<Rectangle> finalSelectRectangles;
 
@@ -115,7 +118,7 @@ public class EyedropperController extends NonDataPageControllerBase
     private final LiveProjectSettingsManager projectSettingsManager = new LiveProjectSettingsManager();
 
     // Use short to avoid sign issues
-    private byte[] prevEncodedLuminanceValues;
+    private byte @Nullable [] prevEncodedLuminanceValues;
 
     private double anchorX;
     private double anchorY;
@@ -207,7 +210,7 @@ public class EyedropperController extends NonDataPageControllerBase
                 IO io = Global.io();
 
                 // Initialize from loaded view set (projectSettingsManager will handle flatfieldCorrected)
-                ViewSet viewSet = io.getLoadedViewSetOrThrow();
+                ViewSet viewSet = io.getLoadedViewSet();
                 useCurveCheckbox.setSelected(viewSet.hasCustomLuminanceEncoding());
 
                 // Refresh the text fields and retrieve their new values.
@@ -223,6 +226,10 @@ public class EyedropperController extends NonDataPageControllerBase
                     // If somehow a trivial encoding was previously stored, this could be considered a bit of "housekeeping"
                     // as that encoding has no effect and could have a small impact on memory usage / performance
                     double[] prevLinearLuminanceValues = viewSet.getLinearLuminanceValues();
+
+                    assert prevEncodedLuminanceValues != null;
+                    assert prevLinearLuminanceValues != null;
+
                     //noinspection FloatingPointEquality
                     if (prevEncodedLuminanceValues.length == 1 && prevLinearLuminanceValues[0] == 1.0 && (0x00FF & prevEncodedLuminanceValues[0]) == 255)
                     {
@@ -258,7 +265,7 @@ public class EyedropperController extends NonDataPageControllerBase
         autoApply();
     }
 
-    private File getColorCheckerFile()
+    private @Nullable File getColorCheckerFile()
     {
         File colorCheckerFile = getState().getProjectModel().getColorCheckerFile();
 
@@ -268,8 +275,8 @@ public class EyedropperController extends NonDataPageControllerBase
         }
         else
         {
-            ViewSet viewSet = Global.io().getLoadedViewSetOrThrow();
-            return viewSet.getPrimaryView().tryFindFullResImageFile();
+            View primaryView = Global.io().getLoadedViewSet().getPrimaryView();
+            return primaryView == null ? null : primaryView.tryFindFullResImageFile();
         }
     }
 
@@ -293,11 +300,11 @@ public class EyedropperController extends NonDataPageControllerBase
             // revert the tone calibration to what it was when the page was opened.
             if (prevEncodedLuminanceValues != null)
             {
-                Global.io().getLoadedViewSetOrThrow().setLuminanceEncoding(LINEAR_LUMINANCE_VALUES, prevEncodedLuminanceValues);
+                Global.io().getLoadedViewSet().setLuminanceEncoding(LINEAR_LUMINANCE_VALUES, prevEncodedLuminanceValues);
             }
             else
             {
-                Global.io().getLoadedViewSetOrThrow().clearLuminanceEncoding();
+                Global.io().getLoadedViewSet().clearLuminanceEncoding();
             }
 
             return true;
@@ -313,8 +320,16 @@ public class EyedropperController extends NonDataPageControllerBase
         Rendering.runLater(() ->
         {
             IO io = Global.io();
-            Vector3 lightIntensity = io.getMainRenderable().getResources().determineGlobalLightIntensity();
-            io.getLoadedViewSetOrThrow().setAllLightIntensities(lightIntensity);
+            ReadonlyImageBasedRenderable<?> mainRenderable = io.getMainRenderable();
+            if (mainRenderable != null)
+            {
+                Vector3 lightIntensity = mainRenderable.getResources().determineGlobalLightIntensity();
+                io.getLoadedViewSet().setAllLightIntensities(lightIntensity);
+            }
+            else
+            {
+                LOG.error("No project loaded: light intensity calibration skipped.");
+            }
         });
     }
 
@@ -326,7 +341,7 @@ public class EyedropperController extends NonDataPageControllerBase
         rectangleForTextField.put(textField, rectangle);
     }
 
-    private static Rectangle2D getDefaultViewport(ZoomSafeImageView imageView)
+    private static @NotNull Rectangle2D getDefaultViewport(@NotNull ZoomSafeImageView imageView)
     {
         Image image = imageView.getFullImage();
         return new Rectangle2D(0, 0, image.getWidth(), image.getHeight());
@@ -340,7 +355,7 @@ public class EyedropperController extends NonDataPageControllerBase
      * @param event
      */
     @FXML
-    private void handleMousePressed(MouseEvent event)
+    private void handleMousePressed(@NotNull MouseEvent event)
     {
         if (isSelecting) //In selection state
         {
@@ -367,7 +382,7 @@ public class EyedropperController extends NonDataPageControllerBase
      * @param event
      */
     @FXML
-    private void handleMouseDragged(MouseEvent event)
+    private void handleMouseDragged(@NotNull MouseEvent event)
     {
         if (isSelecting) // In selection state
         {
@@ -448,7 +463,7 @@ public class EyedropperController extends NonDataPageControllerBase
         }
     }
 
-    private Color getAvgColorFromSelection()
+    private @NotNull Color getAvgColorFromSelection()
     {
         ZoomSafeImageView imageView = imageDetailsController.getDisplayImage(); //Image details imageview
 
@@ -519,7 +534,7 @@ public class EyedropperController extends NonDataPageControllerBase
         return calculateAverageColor(selectedColors);
     }
 
-    private static Color calculateAverageColor(Collection<Color> colors)
+    private static @NotNull Color calculateAverageColor(@NotNull Collection<Color> colors)
     {
         double redSum = 0;
         double greenSum = 0;
@@ -540,7 +555,7 @@ public class EyedropperController extends NonDataPageControllerBase
         return Color.color(averageRed, averageGreen, averageBlue);
     }
 
-    private static double getGreyScaleDouble(Color color)
+    private static double getGreyScaleDouble(@NotNull Color color)
     {
         //new calculation uses weighted scaling
         double redVal = color.getRed();
@@ -561,7 +576,7 @@ public class EyedropperController extends NonDataPageControllerBase
     }
 
     //returns false if the color is null or has already been added
-    private void addSelectedColor(Color newColor)
+    private void addSelectedColor(@NotNull Color newColor)
     {
         if (sourceButton != null)
         {
@@ -594,7 +609,7 @@ public class EyedropperController extends NonDataPageControllerBase
         }
     }
 
-    private void updateFinalSelectRect(Rectangle rect)
+    private void updateFinalSelectRect(@NotNull Rectangle rect)
     {
         // when a text field is updated, update the rectangle beside it
         TextField txtField = textFieldForRectangle.get(rect);
@@ -632,7 +647,7 @@ public class EyedropperController extends NonDataPageControllerBase
     }
 
     @FXML
-    private void updatesFromTextField(KeyEvent event)
+    private void updatesFromTextField(@NotNull KeyEvent event)
     {
         //whenever a text field is updated, update its partner color rectangle and change the visibility of the Apply button
         //if all text fields contain valid info, make the Apply button functional
@@ -664,7 +679,7 @@ public class EyedropperController extends NonDataPageControllerBase
             {
                 try
                 {
-                    Global.io().getLoadedViewSetOrThrow().setLuminanceEncoding(
+                    Global.io().getLoadedViewSet().setLuminanceEncoding(
                         LINEAR_LUMINANCE_VALUES,
                         new byte[]
                         {
@@ -689,7 +704,7 @@ public class EyedropperController extends NonDataPageControllerBase
         else
         {
             // tone curve is disabled
-            Global.io().getLoadedViewSetOrThrow().clearLuminanceEncoding();
+            Global.io().getLoadedViewSet().clearLuminanceEncoding();
         }
     }
 
@@ -701,7 +716,7 @@ public class EyedropperController extends NonDataPageControllerBase
     }
 
     @FXML
-    private void enterColorSelectionMode(ActionEvent actionEvent)
+    private void enterColorSelectionMode(@NotNull ActionEvent actionEvent)
     {
         if (sourceButton != null)
         {
@@ -722,7 +737,7 @@ public class EyedropperController extends NonDataPageControllerBase
         setOverlayActive(true);
     }
 
-    private void refreshToneValueTextFields(DoubleUnaryOperator luminanceEncoding)
+    private void refreshToneValueTextFields(@NotNull DoubleUnaryOperator luminanceEncoding)
     {
         // Calculate starting encoded luminance values and remember them so we can cancel.
         byte[] newEncodedLuminanceValues = new byte[LINEAR_LUMINANCE_VALUES.length];
@@ -747,7 +762,7 @@ public class EyedropperController extends NonDataPageControllerBase
     }
 
     @FXML
-    private void selectImage(ActionEvent actionEvent)
+    private void selectImage(@NotNull ActionEvent actionEvent)
     {
         if (showMultiImageWarning)
         {
@@ -805,7 +820,7 @@ public class EyedropperController extends NonDataPageControllerBase
         }
     }
 
-    private void setImage(File file)
+    private void setImage(@Nullable File file)
     {
         if (file != null)
         {
@@ -822,7 +837,7 @@ public class EyedropperController extends NonDataPageControllerBase
     public final void reset()
     {
         // Clear tonemapping and reset text fields to a standard curve
-        Global.io().getLoadedViewSetOrThrow().clearLuminanceEncoding();
+        Global.io().getLoadedViewSet().clearLuminanceEncoding();
         refreshToneValueTextFields(new SampledLuminanceEncoding().getEncodeFunction());
 
         // Disable curve

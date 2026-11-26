@@ -17,13 +17,14 @@ package kintsugi3d.builder.state.scene;
 
 import kintsugi3d.builder.state.project.ObjectPoseSettings;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class ObjectPoseModelFromSettings extends ObjectPoseModelBase
 {
     protected abstract ObjectPoseSettings getObjectPoseSettings();
 
     @Override
-    public final Vector3 getCenter()
+    public final @NotNull Vector3 getCenter()
     {
         return new Vector3((float) getObjectPoseSettings().getCenterX(),
             (float) getObjectPoseSettings().getCenterY(),
@@ -31,7 +32,7 @@ public abstract class ObjectPoseModelFromSettings extends ObjectPoseModelBase
     }
 
     @Override
-    public final void setCenter(Vector3 center)
+    public final void setCenter(@NotNull Vector3 center)
     {
         if (!getObjectPoseSettings().isLocked())
         {

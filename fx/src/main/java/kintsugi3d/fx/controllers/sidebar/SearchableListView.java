@@ -27,7 +27,7 @@ import java.util.List;
 
 public final class SearchableListView<T> extends SearchableView
 {
-    private final ListView<T> listView;
+    private final @NotNull ListView<T> listView;
     private List<T> backup;
 
     private SearchableListView(@NotNull ListView<T> listView, @NotNull TextField searchTextField, @Nullable CheckBox regexMode)
@@ -36,18 +36,18 @@ public final class SearchableListView<T> extends SearchableView
         this.listView = listView;
     }
 
-    public static <T> SearchableListView<T> createUnboundInstance(ListView<T> viewList, TextField searchTxtField)
+    public static <T> @NotNull SearchableListView<T> createUnboundInstance(@NotNull ListView<T> viewList, @NotNull TextField searchTxtField)
     {
         return new SearchableListView<>(viewList, searchTxtField, null);
     }
 
-    public static <T> SearchableListView<T> createUnboundInstance(ListView<T> viewList, TextField searchTxtField, CheckBox regexMode)
+    public static <T> @NotNull SearchableListView<T> createUnboundInstance(@NotNull ListView<T> viewList, @NotNull TextField searchTxtField, CheckBox regexMode)
     {
         return new SearchableListView<>(viewList, searchTxtField, regexMode);
     }
 
     @Override
-    public SearchableView bind()
+    public @NotNull SearchableView bind()
     {
         backup = new ArrayList<>(listView.getItems());
 
@@ -87,7 +87,7 @@ public final class SearchableListView<T> extends SearchableView
 
     }
 
-    private @NotNull FilteredList<T> getFilteredItems(String searchTxt)
+    private @NotNull FilteredList<T> getFilteredItems(@NotNull String searchTxt)
     {
         FilteredList<T> filteredItems = new FilteredList<>(listView.getItems(), visibility->true);
 

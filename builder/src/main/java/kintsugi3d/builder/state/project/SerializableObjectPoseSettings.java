@@ -15,6 +15,7 @@
 
 package kintsugi3d.builder.state.project;
 
+import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -23,7 +24,7 @@ import java.util.function.Supplier;
 public abstract class SerializableObjectPoseSettings implements DOMConvertable, ObjectPoseSettings
 {
     @Override
-    public final Element toDOMElement(Document document)
+    public final @NotNull Element toDOMElement(@NotNull Document document)
     {
         Element element = document.createElement("Camera");
         element.setAttribute("centerX", Double.toString(getCenterX()));
@@ -39,7 +40,7 @@ public abstract class SerializableObjectPoseSettings implements DOMConvertable, 
     }
 
     public static <ObjectPoseSettingType extends SerializableObjectPoseSettings>
-    ObjectPoseSettingType fromDOMElement(Element element, Supplier<ObjectPoseSettingType> objectPoseSettingConstructor)
+    @NotNull ObjectPoseSettingType fromDOMElement(@NotNull Element element, @NotNull Supplier<ObjectPoseSettingType> objectPoseSettingConstructor)
     {
         ObjectPoseSettingType setting = objectPoseSettingConstructor.get();
         setting.setName(element.getAttribute("name"));

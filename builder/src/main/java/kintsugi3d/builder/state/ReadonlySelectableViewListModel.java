@@ -12,12 +12,13 @@
 package kintsugi3d.builder.state;
 
 import kintsugi3d.builder.core.viewset.View;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public interface ReadonlySelectableViewListModel
 {
-    View getSelectedView();
+    @Nullable View getSelectedView();
 
     List<View> getViewList();
 

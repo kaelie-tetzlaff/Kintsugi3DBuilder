@@ -16,6 +16,7 @@
 package kintsugi3d.fx.controllers.paged;
 
 import javafx.fxml.FXMLLoader;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -60,7 +61,7 @@ public abstract class SelectionPageBase<T, ControllerType extends SelectionPageC
     }
 
     @Override
-    public final void addChoice(String choiceLabel, Page<? super T, ?> page)
+    public final void addChoice(String choiceLabel, @NotNull Page<? super T, ?> page)
     {
         choicePages.put(choiceLabel, page);
 
@@ -78,7 +79,7 @@ public abstract class SelectionPageBase<T, ControllerType extends SelectionPageC
     }
 
     @Override
-    public final Set<Entry<String, Page<? super T, ?>>> getChoices()
+    public final @NotNull Set<Entry<String, Page<? super T, ?>>> getChoices()
     {
         return Collections.unmodifiableSet(choicePages.entrySet());
     }

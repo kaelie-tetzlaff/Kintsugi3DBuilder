@@ -17,6 +17,7 @@ package kintsugi3d.gl.util;
 
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.AbstractList;
 
@@ -30,12 +31,12 @@ public class ColorArrayList extends AbstractList<Vector4> implements ColorList
         this.colorData = colorData;
     }
 
-    @Override public final Vector4 get(int index)
+    @Override public final @NotNull Vector4 get(int index)
     {
         return new Vector4(colorData[4 * index], colorData[4 * index + 1], colorData[4 * index + 2], colorData[4 * index + 3]);
     }
 
-    public final Vector3 getRGB(int index)
+    public final @NotNull Vector3 getRGB(int index)
     {
         return new Vector3(colorData[4 * index], colorData[4 * index + 1], colorData[4 * index + 2]);
     }

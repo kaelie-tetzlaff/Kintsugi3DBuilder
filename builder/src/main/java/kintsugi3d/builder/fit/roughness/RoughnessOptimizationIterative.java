@@ -23,12 +23,14 @@ import kintsugi3d.gl.builders.framebuffer.ColorAttachmentSpec;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.optimization.ErrorReport;
 import kintsugi3d.optimization.ShaderBasedOptimization;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
@@ -41,9 +43,9 @@ public class RoughnessOptimizationIterative<ContextType extends Context<ContextT
         extends RoughnessOptimizationBase<ContextType>
 {
     private static final Logger LOG = LoggerFactory.getLogger(RoughnessOptimizationIterative.class);
-    private final TextureResolution settings;
+    private final @NotNull TextureResolution settings;
 
-    private final ShaderBasedOptimization<ContextType> roughnessOptimization;
+    private final @NotNull ShaderBasedOptimization<ContextType> roughnessOptimization;
 //    private Program<ContextType> errorCalcProgram;
 
     private final double convergenceTolerance;
@@ -54,9 +56,9 @@ public class RoughnessOptimizationIterative<ContextType extends Context<ContextT
      * @param basisWeightResources Used for the initial estimate
      * @throws FileNotFoundException
      */
-    public RoughnessOptimizationIterative(BasisResources<ContextType> basisResources,
-                                          ReadonlyBasisWeightResources<ContextType> basisWeightResources, TextureResolution settings,
-                                          Supplier<ReadonlyTexture2D<ContextType>> getDiffuseTexture, double convergenceTolerance, int unsuccessfulLMIterationsAllowed)
+    public RoughnessOptimizationIterative(@NotNull BasisResources<ContextType> basisResources,
+                                          ReadonlyBasisWeightResources<ContextType> basisWeightResources, @NotNull TextureResolution settings,
+                                          @NotNull Supplier<ReadonlyTexture2D<ContextType>> getDiffuseTexture, double convergenceTolerance, int unsuccessfulLMIterationsAllowed)
             throws IOException
     {
         // Inherit from base class to facilitate initial fit.
@@ -94,8 +96,10 @@ public class RoughnessOptimizationIterative<ContextType extends Context<ContextT
         {
             // Bind previous estimate textures to the shader
             estimationProgram.setTexture("tex_diffuse", getDiffuseTexture.get());
-            estimationProgram.setTexture("tex_specular", getReflectivityTexture()); // front FBO, attachment 0
-            estimationProgram.setTexture("tex_roughness", getRoughnessTexture()); // front FBO, attachment 1
+            estimationProgram.setTexture("tex_specular",
+                Objects.requireNonNull(getReflectivityTexture(), "Reflectivity texture is null")); // front FBO, attachment 0
+            estimationProgram.setTexture("tex_roughness",
+                Objects.requireNonNull(getRoughnessTexture(), "Roughness texture is null")); // front FBO, attachment 1
             estimationProgram.setTexture("dampingTex", roughnessOptimization.getFrontFramebuffer().getColorAttachmentTexture(2));
 
             // Clear framebuffer
@@ -148,7 +152,7 @@ public class RoughnessOptimizationIterative<ContextType extends Context<ContextT
 
     private static <ContextType extends Context<ContextType>>
     ProgramBuilder<ContextType> getRoughnessEstimationProgramBuilder(
-            ContextType context)
+        @NotNull ContextType context)
     {
         return context.getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File("shaders/common/texture.vert"))

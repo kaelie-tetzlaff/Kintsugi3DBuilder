@@ -16,12 +16,13 @@
 package kintsugi3d.builder.state.scene;
 
 import kintsugi3d.builder.state.project.LightGroupSettings;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.IntFunction;
 
 public abstract class LightingEnvironmentModelFromSettings<LightType extends DiscreteLightModel> extends LightingEnvironmentModelBase<LightType>
 {
-    protected LightingEnvironmentModelFromSettings(int lightCount, IntFunction<LightType> lightInstanceCreator, EnvironmentModel environmentModel)
+    protected LightingEnvironmentModelFromSettings(int lightCount, @NotNull IntFunction<LightType> lightInstanceCreator, EnvironmentModel environmentModel)
     {
         super(lightCount, lightInstanceCreator, environmentModel);
     }

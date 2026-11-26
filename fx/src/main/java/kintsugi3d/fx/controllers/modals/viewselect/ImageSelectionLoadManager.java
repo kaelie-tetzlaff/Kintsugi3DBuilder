@@ -15,6 +15,7 @@
 
 package kintsugi3d.fx.controllers.modals.viewselect;
 
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,9 +28,9 @@ class ImageSelectionLoadManager
     private final Function<String, ImageSelectionLoader> imageLoaderFactory;
 
     private ImageSelectionLoader runningImageLoader;
-    private ImageSelectionLoader queuedImageLoader;
+    private @Nullable ImageSelectionLoader queuedImageLoader;
     private Thread runningThread;
-    private Thread queuedThread;
+    private @Nullable Thread queuedThread;
     private final Object imageLoaderLock = new Object();
 
     ImageSelectionLoadManager(Function<String, ImageSelectionLoader> imageLoaderFactory)
@@ -101,7 +102,7 @@ class ImageSelectionLoadManager
                 runningImageLoader.stopThread();
             }
 
-            if (queuedImageLoader != null)
+            if (queuedImageLoader != null && queuedThread != null)
             {
                 // Stop any previously queued image loader before it starts
                 queuedImageLoader.stopThread();

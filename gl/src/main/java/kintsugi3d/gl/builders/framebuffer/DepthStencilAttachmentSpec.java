@@ -15,6 +15,8 @@
 
 package kintsugi3d.gl.builders.framebuffer;
 
+import org.jetbrains.annotations.NotNull;
+
 public final class DepthStencilAttachmentSpec extends AttachmentSpec
 {
     public final boolean floatingPointDepth;
@@ -24,32 +26,32 @@ public final class DepthStencilAttachmentSpec extends AttachmentSpec
         this.floatingPointDepth = floatingPointDepth;
     }
 
-    public static DepthStencilAttachmentSpec createWithFixedPointDepth()
+    public static @NotNull DepthStencilAttachmentSpec createWithFixedPointDepth()
     {
         return new DepthStencilAttachmentSpec(true);
     }
 
-    public static DepthStencilAttachmentSpec createWithFloatingPointDepth()
+    public static @NotNull DepthStencilAttachmentSpec createWithFloatingPointDepth()
     {
         return new DepthStencilAttachmentSpec(false);
     }
 
     @Override
-    public DepthStencilAttachmentSpec setMultisamples(int samples, boolean fixedSampleLocations)
+    public @NotNull DepthStencilAttachmentSpec setMultisamples(int samples, boolean fixedSampleLocations)
     {
         super.setMultisamples(samples, fixedSampleLocations);
         return this;
     }
 
     @Override
-    public DepthStencilAttachmentSpec setMipmapsEnabled(boolean enabled)
+    public @NotNull DepthStencilAttachmentSpec setMipmapsEnabled(boolean enabled)
     {
         super.setMipmapsEnabled(enabled);
         return this;
     }
 
     @Override
-    public DepthStencilAttachmentSpec setLinearFilteringEnabled(boolean enabled)
+    public @NotNull DepthStencilAttachmentSpec setLinearFilteringEnabled(boolean enabled)
     {
         super.setLinearFilteringEnabled(enabled);
         return this;

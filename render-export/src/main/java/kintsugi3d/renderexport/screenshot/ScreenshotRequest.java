@@ -20,6 +20,8 @@ import kintsugi3d.builder.rendering.ReadonlyImageBasedRenderable;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
 import kintsugi3d.gl.interactive.ProgressMonitor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,31 +58,31 @@ public final class ScreenshotRequest implements ImageBasedGraphicsRequest
             return exportFile;
         }
 
-        public Builder setWidth(int width)
+        public @NotNull Builder setWidth(int width)
         {
             this.width = width;
             return this;
         }
 
-        public Builder setHeight(int height)
+        public @NotNull Builder setHeight(int height)
         {
             this.height = height;
             return this;
         }
 
-        public Builder setExportFile(File exportFile)
+        public @NotNull Builder setExportFile(File exportFile)
         {
             this.exportFile = exportFile;
             return this;
         }
 
-        public ScreenshotRequest create()
+        public @NotNull ScreenshotRequest create()
         {
             return new ScreenshotRequest(width, height, exportFile);
         }
     }
 
-    public static Builder getBuilder()
+    public static @NotNull Builder getBuilder()
     {
         return new Builder();
     }
@@ -94,7 +96,7 @@ public final class ScreenshotRequest implements ImageBasedGraphicsRequest
 
     @Override
     public <ContextType extends Context<ContextType>> void executeRequest(
-        ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor) throws IOException
+        @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @Nullable ProgressMonitor monitor) throws IOException
     {
         try
         (

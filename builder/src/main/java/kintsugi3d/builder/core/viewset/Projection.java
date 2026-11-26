@@ -18,6 +18,7 @@ package kintsugi3d.builder.core.viewset;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An interface for a definition of 3D to 2D projection that can be expressed as a projective transformation matrix.
@@ -36,7 +37,7 @@ public interface Projection
     float getVerticalFieldOfView();
     float getAspectRatio();
 
-    default Vector2 getCenter()
+    default @NotNull Vector2 getCenter()
     {
         return Vector2.ZERO;
     }
@@ -45,7 +46,7 @@ public interface Projection
      * Gets normalized frustum dimensions for visualizing this camera projection.
      * @return
      */
-    default Vector3 getNormalizedFrustumDimensions()
+    default @NotNull Vector3 getNormalizedFrustumDimensions()
     {
         float aspectRatio = getAspectRatio();
         float fy = 1.0f / (float) StrictMath.tan(getVerticalFieldOfView() / 2);

@@ -20,6 +20,7 @@ import kintsugi3d.builder.core.texture.ImageReplacer;
 import kintsugi3d.builder.state.project.*;
 import kintsugi3d.fx.controllers.scene.environment.ObservableEnvironmentSettings;
 import kintsugi3d.gl.interactive.DefaultProgressMonitor;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,28 +85,28 @@ public class TestingProjectModel extends ProjectModelBase<SerializableCameraSett
 
     @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     @Override
-    public final List<SerializableCameraSettings> getCameraList()
+    public final @NotNull List<SerializableCameraSettings> getCameraList()
     {
         return cameraList;
     }
 
     @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     @Override
-    public final List<SerializableEnvironmentSettings> getEnvironmentList()
+    public final @NotNull List<SerializableEnvironmentSettings> getEnvironmentList()
     {
         return environmentList;
     }
 
     @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     @Override
-    public final List<SerializableLightGroupSettings<SerializableLightSettings>> getLightGroupList()
+    public final @NotNull List<SerializableLightGroupSettings<SerializableLightSettings>> getLightGroupList()
     {
         return lightList;
     }
 
     @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     @Override
-    public final List<SerializableObjectPoseSettings> getObjectPoseList()
+    public final @NotNull List<SerializableObjectPoseSettings> getObjectPoseList()
     {
         return objectList;
     }
@@ -117,7 +118,7 @@ public class TestingProjectModel extends ProjectModelBase<SerializableCameraSett
     }
 
     @Override
-    protected final SerializableEnvironmentSettings constructEnvironmentSetting()
+    protected final @NotNull SerializableEnvironmentSettings constructEnvironmentSetting()
     {
         return new ObservableEnvironmentSettings();
     }
@@ -182,12 +183,12 @@ public class TestingProjectModel extends ProjectModelBase<SerializableCameraSett
     {
     }
 
-    public final List<ErrorMessage> getErrors()
+    public final @NotNull List<ErrorMessage> getErrors()
     {
         return Collections.unmodifiableList(errors);
     }
 
-    public final List<ErrorMessage> getWarnings()
+    public final @NotNull List<ErrorMessage> getWarnings()
     {
         return Collections.unmodifiableList(warnings);
     }

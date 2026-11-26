@@ -35,6 +35,8 @@ import javafx.scene.shape.Rectangle;
 import kintsugi3d.builder.state.cards.ProjectDataCard;
 import kintsugi3d.builder.util.AppIcon;
 import kintsugi3d.fx.internal.ObservableCardsModel;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.Locale;
@@ -65,9 +67,9 @@ public class CardController
 
     private final ObjectProperty<Image> previewImage = new SimpleObjectProperty<>(AppIcon.getImage());
     private File currentPreviewImageFile;
-    private File loadedPreviewImageFile;
+    private @Nullable File loadedPreviewImageFile;
 
-    public final void init(@SuppressWarnings("ParameterHidesMemberVariable") ObservableCardsModel<?> cardsModel, ProjectDataCard dataCard)
+    public final void init(@SuppressWarnings("ParameterHidesMemberVariable") ObservableCardsModel<?> cardsModel, @NotNull ProjectDataCard dataCard)
     {
         this.cardsModel = cardsModel;
 
@@ -104,7 +106,7 @@ public class CardController
         }
     }
 
-    public final void refresh(ProjectDataCard refreshedDataCard)
+    public final void refresh(@NotNull ProjectDataCard refreshedDataCard)
     {
         cardId = refreshedDataCard.getCardId();
 
@@ -188,7 +190,7 @@ public class CardController
         dataCardPane.setVisible(visibility);
     }
 
-    public final boolean doesTitleContainString(String str)
+    public final boolean doesTitleContainString(@NotNull String str)
     {
         return cardTitle.getText().toLowerCase(Locale.ROOT).contains(str.toLowerCase(Locale.ROOT));
     }
@@ -207,7 +209,7 @@ public class CardController
     }
 
     @FXML
-    public final void expansionToggleClicked(MouseEvent e)
+    public final void expansionToggleClicked(@NotNull MouseEvent e)
     {
         cardClicked();
         e.consume();
@@ -242,7 +244,7 @@ public class CardController
      * @param iView
      * @param cBox
      */
-    private static void createBindings(ImageView iView, CheckBox cBox)
+    private static void createBindings(@NotNull ImageView iView, @NotNull CheckBox cBox)
     {
         //Gets double binding from createImageBinding methods
         DoubleBinding imageWidth = createImageBindingWidth(iView);
@@ -265,7 +267,7 @@ public class CardController
      * @param iView
      * @param rBox
      */
-    private static void createBindings(ImageView iView, Rectangle rBox)
+    private static void createBindings(@NotNull ImageView iView, @NotNull Rectangle rBox)
     {
         rBox.widthProperty().bind(createImageBindingWidth(iView));
         rBox.heightProperty().bind(createImageBindingHeight(iView));
@@ -276,7 +278,7 @@ public class CardController
      * @param iView
      * @return
      */
-    private static DoubleBinding createImageBindingWidth(ImageView iView)
+    private static @NotNull DoubleBinding createImageBindingWidth(@NotNull ImageView iView)
     {
         return Bindings.createDoubleBinding(() -> iView.getLayoutBounds().getWidth(), iView.layoutBoundsProperty());
     }
@@ -286,7 +288,7 @@ public class CardController
      * @param iView
      * @return
      */
-    private static DoubleBinding createImageBindingHeight(ImageView iView)
+    private static @NotNull DoubleBinding createImageBindingHeight(@NotNull ImageView iView)
     {
         return Bindings.createDoubleBinding(() -> iView.getLayoutBounds().getHeight(), iView.layoutBoundsProperty());
     }

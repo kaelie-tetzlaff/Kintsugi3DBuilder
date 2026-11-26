@@ -37,6 +37,8 @@ import javafx.util.Duration;
 import javafx.util.converter.CharacterStringConverter;
 import kintsugi3d.gl.core.FramebufferSize;
 import kintsugi3d.gl.window.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,14 +50,14 @@ import java.util.OptionalInt;
 public final class FramebufferView extends Region
 {
     private static final Logger LOG = LoggerFactory.getLogger(FramebufferView.class);
-    private final ImageView imageView;
-    private FramebufferCanvas<?> canvas;
+    private final @NotNull ImageView imageView;
+    private @Nullable FramebufferCanvas<?> canvas;
 
     private WritableImage frontImage;
     private WritableImage backImage;
 
     private volatile boolean copyThreadRunning = false;
-    private Thread nextCopyThread;
+    private @Nullable Thread nextCopyThread;
     private final Object nextCopyThreadLock = new Object();
 
     private volatile boolean frontImagePending = false;
@@ -217,7 +219,7 @@ public final class FramebufferView extends Region
      * Registers for key and window events from the stage
      * @param stage
      */
-    public void registerKeyAndWindowEventsFromStage(Stage stage)
+    public void registerKeyAndWindowEventsFromStage(@NotNull Stage stage)
     {
         stage.getScene().setOnKeyPressed(event ->
         {
@@ -284,12 +286,12 @@ public final class FramebufferView extends Region
         });
     }
 
-    public PollableCanvas3D<?> getCanvas()
+    public @Nullable PollableCanvas3D<?> getCanvas()
     {
         return canvas;
     }
 
-    public void setCanvas(FramebufferCanvas<?> canvas)
+    public void setCanvas(@Nullable FramebufferCanvas<?> canvas)
     {
         this.canvas = canvas;
 
@@ -440,8 +442,11 @@ public final class FramebufferView extends Region
 
     public void closeCanvas()
     {
-        canvas.close();
-        canvas = null;
+        if (canvas != null)
+        {
+            canvas.close();
+            canvas = null;
+        }
     }
 
     private void handleWindowEvent()
@@ -464,7 +469,7 @@ public final class FramebufferView extends Region
         }
     }
 
-    private static OptionalInt getButtonIndex(MouseButton button)
+    private static @NotNull OptionalInt getButtonIndex(@NotNull MouseButton button)
     {
         switch(button)
         {
@@ -475,7 +480,7 @@ public final class FramebufferView extends Region
         }
     }
 
-    private static ModifierKeys getModifierKeys(KeyEvent event)
+    private static @NotNull ModifierKeys getModifierKeys(@NotNull KeyEvent event)
     {
         return new ModifierKeysInstance(
             event.isShiftDown(),
@@ -484,7 +489,7 @@ public final class FramebufferView extends Region
             event.isMetaDown());
     }
 
-    private static ModifierKeys getModifierKeys(MouseEvent event)
+    private static @NotNull ModifierKeys getModifierKeys(@NotNull MouseEvent event)
     {
         return new ModifierKeysInstance(
             event.isShiftDown(),
@@ -493,7 +498,7 @@ public final class FramebufferView extends Region
             event.isMetaDown());
     }
 
-    private CursorPosition getCursorPosition(MouseEvent event)
+    private @NotNull CursorPosition getCursorPosition(@NotNull MouseEvent event)
     {
         try
         {

@@ -30,6 +30,7 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.gl.vecmath.IntVector2;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,19 +51,19 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
      * assigns it to private variable in class
      * @param resources
      */
-    public TextureCardFactory(ImageBasedGraphicsResources<? extends Context<?>> resources)
+    public TextureCardFactory(@NotNull ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
         super(resources);
     }
 
     @Override
-    public final List<? extends Map<String, Runnable>> getGlobalActions()
+    public final @NotNull List<? extends Map<String, Runnable>> getGlobalActions()
     {
         return List.of(Map.of("Refresh All", this::refreshAll));
     }
 
     @Override
-    public final Class<TextureInfo> getDataClass()
+    public final @NotNull Class<TextureInfo> getDataClass()
     {
         return TextureInfo.class;
     }
@@ -75,7 +76,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
      * @return projectDataCard
      */
     @Override
-    public final @Nullable ProjectDataCard createCard(TextureInfo texture)
+    public final @Nullable ProjectDataCard createCard(@NotNull TextureInfo texture)
     {
         // Base Location where the .pngs and thumbnails folder are.
         File baseDirectory = getViewSet().getSupportingFilesDirectory();
@@ -146,34 +147,32 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
      * @return
      */
     @Override
-    public final List<ProjectDataCard> createAllCards()
+    public final @NotNull List<ProjectDataCard> createAllCards()
     {
         List<ProjectDataCard> textureCards = new ArrayList<>(8);
         ReadonlyImageBasedGraphicsResources<? extends Context<?>> resources = getResources();
-        if (resources != null)
+        ReadonlyTextureResources<? extends Context<?>> texResources = resources.getTextureResources();
+
+        var textures = texResources.getTextures();
+        if (textures != null)
         {
-            ReadonlyTextureResources<? extends Context<?>> texResources = resources.getTextureResources();
+            //noinspection RedundantComparatorComparing
+            textureCards = textures.entrySet().stream()
+                .sorted(Comparator.comparing(Entry::getKey))
+                .map(entry -> createCard(entry.getKey()))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        }
 
-            var textures = texResources.getTextures();
-            if (textures != null)
+        ReadonlyBasisResources<? extends Context<?>> basisResources = texResources.getBasisResources();
+        if (basisResources != null)
+        {
+            for (BasisMaterialInfo material : basisResources.getBasis().getMaterials())
             {
-                textureCards = textures.entrySet().stream()
-                    .sorted(Comparator.comparing(Entry::getKey))
-                    .map(entry -> createCard(entry.getKey()))
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-            }
-
-            ReadonlyBasisResources<? extends Context<?>> basisResources = texResources.getBasisResources();
-            if (basisResources != null)
-            {
-                for (BasisMaterialInfo material : basisResources.getBasis().getMaterials())
+                ProjectDataCard card = createCard(new WeightmapTextureInfo(material));
+                if (card != null)
                 {
-                    ProjectDataCard card = createCard(new WeightmapTextureInfo(material));
-                    if (card != null)
-                    {
-                        textureCards.add(card);
-                    }
+                    textureCards.add(card);
                 }
             }
         }
@@ -182,7 +181,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
         return textureCards;
     }
 
-    private void refreshTexture(TextureInfo texture)
+    private void refreshTexture(@NotNull TextureInfo texture)
     {
         // Texture replacement must happen on graphics thread.
         Rendering.runLater(() ->
@@ -217,7 +216,7 @@ public class TextureCardFactory extends ProjectDataCardFactoryBase<TextureInfo>
         });
     }
 
-    private void replaceTexture(TextureInfo texture)
+    private void replaceTexture(@NotNull TextureInfo texture)
     {
         Global.state().getProjectModel().requestUserImageReplacement(texture.getReplaceData(getResources()));
     }

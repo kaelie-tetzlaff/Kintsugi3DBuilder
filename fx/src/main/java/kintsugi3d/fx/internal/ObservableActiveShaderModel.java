@@ -19,6 +19,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import kintsugi3d.builder.state.shader.ActiveShaderModel;
 import kintsugi3d.builder.state.shader.ShaderInfo;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,7 +31,7 @@ public class ObservableActiveShaderModel implements ActiveShaderModel
 
     private final Collection<Consumer<ShaderInfo>> shaderHandlers = new ArrayList<>(1);
 
-    public final ObjectProperty<ShaderInfo> getUserShaderProperty()
+    public final @NotNull ObjectProperty<ShaderInfo> getUserShaderProperty()
     {
         return userShader;
     }

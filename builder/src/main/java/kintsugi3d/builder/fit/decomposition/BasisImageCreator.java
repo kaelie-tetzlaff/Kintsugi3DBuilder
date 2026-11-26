@@ -16,6 +16,7 @@
 package kintsugi3d.builder.fit.decomposition;
 
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +35,7 @@ public class BasisImageCreator<ContextType extends Context<ContextType>> impleme
     // Framebuffer for the basis images
     private final FramebufferObject<ContextType> framebuffer;
 
-    public BasisImageCreator(ContextType context, int resolution) throws IOException
+    public BasisImageCreator(@NotNull ContextType context, int resolution) throws IOException
     {
         program = context.getShaderProgramBuilder()
             .addShader(ShaderType.VERTEX, new File("shaders/common/texture.vert"))
@@ -52,7 +53,7 @@ public class BasisImageCreator<ContextType extends Context<ContextType>> impleme
             .createFramebufferObject();
     }
 
-    public final void createImages(ReadonlyBasisResources<ContextType> basisResources, File outputDirectory) throws IOException
+    public final void createImages(@NotNull ReadonlyBasisResources<ContextType> basisResources, File outputDirectory) throws IOException
     {
         basisResources.useWithShaderProgram(program);
 
@@ -69,7 +70,7 @@ public class BasisImageCreator<ContextType extends Context<ContextType>> impleme
         }
     }
 
-    public static String getBasisImageFilename(String materialName)
+    public static @NotNull String getBasisImageFilename(String materialName)
     {
         return String.format("basis_%s.png", materialName);
     }

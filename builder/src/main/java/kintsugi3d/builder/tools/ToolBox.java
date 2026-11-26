@@ -30,6 +30,7 @@ import kintsugi3d.gl.window.ModifierKeys;
 import kintsugi3d.gl.window.listeners.ScrollListener;
 import kintsugi3d.util.KeyPress;
 import kintsugi3d.util.MouseMode;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,11 +43,11 @@ import java.util.Objects;
 public final class ToolBox implements CanvasListener
 {
     private static final Logger LOG = LoggerFactory.getLogger(ToolBox.class);
-    private MouseMode currentMode;
+    private @Nullable MouseMode currentMode;
     private final ToolBindingModel toolBindingModel;
 
-    private final Map<DragToolType, DragTool> dragTools;
-    private final Map<KeyPressToolType, KeyPressTool> keyPressTools;
+    private final @NotNull Map<DragToolType, DragTool> dragTools;
+    private final @NotNull Map<KeyPressToolType, KeyPressTool> keyPressTools;
     private final LightTool lightTool;
 
     private final ScrollListener scrollTool;
@@ -88,7 +89,7 @@ public final class ToolBox implements CanvasListener
     }
 
     @Override
-    public void cursorMoved(Canvas3D<? extends Context<?>> canvas, double xPos, double yPos)
+    public void cursorMoved(@NotNull Canvas3D<? extends Context<?>> canvas, double xPos, double yPos)
     {
         try
         {
@@ -138,7 +139,7 @@ public final class ToolBox implements CanvasListener
     }
 
     @Override
-    public void mouseButtonPressed(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods)
+    public void mouseButtonPressed(@NotNull Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods)
     {
         if (getSelectedDragTool() == null) // Only do something if another drag isn't already in progress.
         {
@@ -169,7 +170,7 @@ public final class ToolBox implements CanvasListener
     }
 
     @Override
-    public void mouseButtonReleased(Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods)
+    public void mouseButtonReleased(@NotNull Canvas3D<? extends Context<?>> canvas, int buttonIndex, ModifierKeys mods)
     {
         try
         {
@@ -201,7 +202,7 @@ public final class ToolBox implements CanvasListener
     }
 
     //builder
-    private ToolBox(ManipulableViewpointModel cameraModel, ManipulableLightingEnvironmentModel lightingModel,
+    private ToolBox(ManipulableViewpointModel cameraModel, @NotNull ManipulableLightingEnvironmentModel lightingModel,
                     ManipulableObjectPoseModel objectModel, GeneralSettingsModel settingsModel,
                     ToolBindingModel toolBindingModel, SceneViewport sceneViewport)
     {
@@ -279,7 +280,7 @@ public final class ToolBox implements CanvasListener
         lightTool = dependencies.inject(LightTool.getBuilder()).create();
     }
 
-    public static Builder getBuilder()
+    public static @NotNull Builder getBuilder()
     {
         return new Builder();
     }
@@ -297,43 +298,43 @@ public final class ToolBox implements CanvasListener
         {
         }
 
-        public Builder setToolBindingModel(ToolBindingModel toolBindingModel)
+        public @NotNull Builder setToolBindingModel(ToolBindingModel toolBindingModel)
         {
             this.toolBindingModel = toolBindingModel;
             return this;
         }
 
-        public Builder setCameraModel(ManipulableViewpointModel cameraModel)
+        public @NotNull Builder setCameraModel(ManipulableViewpointModel cameraModel)
         {
             this.cameraModel = cameraModel;
             return this;
         }
 
-        public Builder setObjectModel(ManipulableObjectPoseModel objectModel)
+        public @NotNull Builder setObjectModel(ManipulableObjectPoseModel objectModel)
         {
             this.objectModel = objectModel;
             return this;
         }
 
-        public Builder setSettingsModel(GeneralSettingsModel settingsModel)
+        public @NotNull Builder setSettingsModel(GeneralSettingsModel settingsModel)
         {
             this.settingsModel = settingsModel;
             return this;
         }
 
-        public Builder setLightingModel(ManipulableLightingEnvironmentModel lightingModel)
+        public @NotNull Builder setLightingModel(ManipulableLightingEnvironmentModel lightingModel)
         {
             this.lightingModel = lightingModel;
             return this;
         }
 
-        public Builder setSceneViewport(SceneViewport sceneViewport)
+        public @NotNull Builder setSceneViewport(SceneViewport sceneViewport)
         {
             this.sceneViewport = sceneViewport;
             return this;
         }
 
-        public CanvasListener create()
+        public @NotNull CanvasListener create()
         {
             return new ToolBox(cameraModel, lightingModel, objectModel, settingsModel, toolBindingModel, sceneViewport);
         }
@@ -358,7 +359,7 @@ public final class ToolBox implements CanvasListener
             this.sceneViewport = sceneViewport;
         }
 
-        <ToolType> ToolBuilder<? extends ToolType> inject(ToolBuilder<ToolType> builder)
+        <ToolType> ToolBuilder<? extends ToolType> inject(@NotNull ToolBuilder<ToolType> builder)
         {
             return builder
                 .setCameraModel(cameraModel)

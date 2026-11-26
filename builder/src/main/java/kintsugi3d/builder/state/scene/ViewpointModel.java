@@ -17,11 +17,12 @@ package kintsugi3d.builder.state.scene;
 
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 public interface ViewpointModel extends ReadonlyViewpointModel
 {
-    void setLookMatrix(Matrix4 lookMatrix);
-    void setTarget(Vector3 target);
+    void setLookMatrix(@NotNull Matrix4 lookMatrix);
+    void setTarget(@NotNull Vector3 target);
     void setHorizontalFOV(float fov);
     void setOrthographic(boolean orthographic);
 }

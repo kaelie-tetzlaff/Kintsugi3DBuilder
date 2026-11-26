@@ -21,6 +21,7 @@ import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.window.CanvasSize;
 import kintsugi3d.gl.window.CursorPosition;
+import org.jetbrains.annotations.NotNull;
 
 /*
 not this work as intended at a zoom of 0.5
@@ -40,13 +41,13 @@ final class PanTool implements DragTool
     private static class Builder extends ToolBuilderBase<PanTool>
     {
         @Override
-        public final PanTool create()
+        public final @NotNull PanTool create()
         {
             return new PanTool(getCameraModel());
         }
     }
 
-    static ToolBuilder<PanTool> getBuilder()
+    static @NotNull ToolBuilder<PanTool> getBuilder()
     {
         return new Builder();
     }
@@ -57,7 +58,7 @@ final class PanTool implements DragTool
     }
 
     @Override
-    public void mouseButtonPressed(CursorPosition cursorPosition, CanvasSize canvasSize)
+    public void mouseButtonPressed(CursorPosition cursorPosition, @NotNull CanvasSize canvasSize)
     {
         mouseStart = cursorPosition;
 
@@ -68,7 +69,7 @@ final class PanTool implements DragTool
     }
 
     @Override
-    public void cursorDragged(CursorPosition cursorPosition, CanvasSize canvasSize)
+    public void cursorDragged(@NotNull CursorPosition cursorPosition, CanvasSize canvasSize)
     {
         Vector2 moveVector = new Vector2(
             (float) (cursorPosition.x - mouseStart.x) * panSensitivityAdjusted,

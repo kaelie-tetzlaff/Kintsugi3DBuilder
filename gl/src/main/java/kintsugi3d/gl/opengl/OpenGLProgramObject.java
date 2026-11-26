@@ -25,6 +25,7 @@ import kintsugi3d.gl.exceptions.ProgramLinkFailureException;
 import kintsugi3d.gl.exceptions.UnlinkedProgramException;
 import kintsugi3d.gl.util.ResourceManager;
 import kintsugi3d.gl.vecmath.*;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -51,7 +52,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
         }
 
         @Override
-        public final OpenGLProgramObject createProgram() throws IOException
+        public final @NotNull OpenGLProgramObject createProgram() throws IOException
         {
             OpenGLProgramObject program = new OpenGLProgramObject(getContext(), getDefines());
             Iterable<Shader<OpenGLContext>> compiledShaders = compileShaders();
@@ -114,25 +115,25 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public boolean hasDefine(String key)
+    public boolean hasDefine(@NotNull String key)
     {
         return defines.containsKey(key);
     }
 
     @Override
-    public Optional<Object> getDefine(String key)
+    public @Nullable Object getDefine(@NotNull String key)
     {
-        return defines.containsKey(key) ? Optional.of(defines.get(key)) : Optional.empty();
+        return defines.get(key);
     }
 
     @Override
-    public Map<String, Object> getDefines()
+    public @NotNull Map<String, Object> getDefines()
     {
         return Collections.unmodifiableMap(defines);
     }
 
     @Override
-    public OpenGLContext getContext()
+    public @NotNull OpenGLContext getContext()
     {
         return context;
     }
@@ -175,7 +176,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
         }
     }
 
-    void use(OpenGLVertexArray vao)
+    void use(@NotNull OpenGLVertexArray vao)
     {
         if (isLinked())
         {
@@ -210,7 +211,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public void setTexture(int location, Texture<OpenGLContext> texture)
+    public void setTexture(int location, @NotNull Texture<OpenGLContext> texture)
     {
         if (texture instanceof OpenGLTexture)
         {
@@ -225,13 +226,13 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public void setTexture(String name, Texture<OpenGLContext> texture)
+    public void setTexture(@NotNull String name, @NotNull Texture<OpenGLContext> texture)
     {
         setTexture(getUniformLocation(name), texture);
     }
 
     @Override
-    public void setUniformBuffer(int index, UniformBuffer<OpenGLContext> buffer)
+    public void setUniformBuffer(int index, @NotNull UniformBuffer<OpenGLContext> buffer)
     {
         if (buffer instanceof OpenGLUniformBuffer)
         {
@@ -250,13 +251,13 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public void setUniformBuffer(String name, UniformBuffer<OpenGLContext> buffer)
+    public void setUniformBuffer(@NotNull String name, @NotNull UniformBuffer<OpenGLContext> buffer)
     {
         setUniformBuffer(getUniformBlockIndex(name), buffer);
     }
 
     @Override
-    public int getUniformBlockIndex(String name)
+    public int getUniformBlockIndex(@NotNull String name)
     {
         int index = glGetUniformBlockIndex(programId, name);
         OpenGLContext.errorCheck();
@@ -279,7 +280,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public int getUniformLocation(String name)
+    public int getUniformLocation(@NotNull String name)
     {
         int location = glGetUniformLocation(programId, name);
         OpenGLContext.errorCheck();
@@ -299,7 +300,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public void setUniform(int location, IntVector2 value)
+    public void setUniform(int location, @NotNull IntVector2 value)
     {
         if (location >= 0)
         {
@@ -311,7 +312,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public void setUniform(int location, IntVector3 value)
+    public void setUniform(int location, @NotNull IntVector3 value)
     {
         if (location >= 0)
         {
@@ -323,7 +324,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public void setUniform(int location, IntVector4 value)
+    public void setUniform(int location, @NotNull IntVector4 value)
     {
         if (location >= 0)
         {
@@ -347,7 +348,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public void setUniform(int location, Vector2 value)
+    public void setUniform(int location, @NotNull Vector2 value)
     {
         if (location >= 0)
         {
@@ -359,7 +360,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public void setUniform(int location, Vector3 value)
+    public void setUniform(int location, @NotNull Vector3 value)
     {
         if (location >= 0)
         {
@@ -371,7 +372,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public void setUniform(int location, Vector4 value)
+    public void setUniform(int location, @NotNull Vector4 value)
     {
         if (location >= 0)
         {
@@ -389,61 +390,61 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public void setUniform(String name, boolean value)
+    public void setUniform(@NotNull String name, boolean value)
     {
         setUniform(getUniformLocation(name), value ? GL_TRUE : GL_FALSE);
     }
 
     @Override
-    public void setUniform(String name, int value)
+    public void setUniform(@NotNull String name, int value)
     {
         setUniform(getUniformLocation(name), value);
     }
 
     @Override
-    public void setUniform(String name, IntVector2 value)
+    public void setUniform(@NotNull String name, @NotNull IntVector2 value)
     {
         setUniform(getUniformLocation(name), value);
     }
 
     @Override
-    public void setUniform(String name, IntVector3 value)
+    public void setUniform(@NotNull String name, @NotNull IntVector3 value)
     {
         setUniform(getUniformLocation(name), value);
     }
 
     @Override
-    public void setUniform(String name, IntVector4 value)
+    public void setUniform(@NotNull String name, @NotNull IntVector4 value)
     {
         setUniform(getUniformLocation(name), value);
     }
 
     @Override
-    public void setUniform(String name, float value)
+    public void setUniform(@NotNull String name, float value)
     {
         setUniform(getUniformLocation(name), value);
     }
 
     @Override
-    public void setUniform(String name, Vector2 value)
+    public void setUniform(@NotNull String name, @NotNull Vector2 value)
     {
         setUniform(getUniformLocation(name), value);
     }
 
     @Override
-    public void setUniform(String name, Vector3 value)
+    public void setUniform(@NotNull String name, @NotNull Vector3 value)
     {
         setUniform(getUniformLocation(name), value);
     }
 
     @Override
-    public void setUniform(String name, Vector4 value)
+    public void setUniform(@NotNull String name, @NotNull Vector4 value)
     {
         setUniform(getUniformLocation(name), value);
     }
 
     @Override
-    public int getVertexAttribLocation(String name)
+    public int getVertexAttribLocation(@NotNull String name)
     {
         int location = glGetAttribLocation(programId, name);
         OpenGLContext.errorCheck();
@@ -451,7 +452,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public void setUniform(int location, Matrix4 value)
+    public void setUniform(int location, @NotNull Matrix4 value)
     {
         if (location >= 0)
         {
@@ -463,7 +464,7 @@ final class OpenGLProgramObject implements ProgramObject<OpenGLContext>
     }
 
     @Override
-    public void setUniform(String name, Matrix4 value)
+    public void setUniform(@NotNull String name, @NotNull Matrix4 value)
     {
         setUniform(getUniformLocation(name), value);
     }

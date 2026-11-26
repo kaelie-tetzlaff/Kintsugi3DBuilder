@@ -20,6 +20,7 @@ import kintsugi3d.builder.state.scene.ManipulableLightingEnvironmentModel;
 import kintsugi3d.builder.state.scene.ManipulableObjectPoseModel;
 import kintsugi3d.builder.state.scene.ManipulableViewpointModel;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
+import org.jetbrains.annotations.NotNull;
 
 abstract class ToolBuilderBase<ToolType> implements ToolBuilder<ToolType>
 {
@@ -34,35 +35,35 @@ abstract class ToolBuilderBase<ToolType> implements ToolBuilder<ToolType>
     }
 
     @Override
-    public final ToolBuilder<ToolType> setCameraModel(@SuppressWarnings("ParameterHidesMemberVariable") ManipulableViewpointModel cameraModel)
+    public final @NotNull ToolBuilder<ToolType> setCameraModel(@SuppressWarnings("ParameterHidesMemberVariable") ManipulableViewpointModel cameraModel)
     {
         this.cameraModel = cameraModel;
         return this;
     }
 
     @Override
-    public final ToolBuilder<ToolType> setLightingEnvironmentModel(ManipulableLightingEnvironmentModel lightingModel)
+    public final @NotNull ToolBuilder<ToolType> setLightingEnvironmentModel(ManipulableLightingEnvironmentModel lightingModel)
     {
         lightingEnvironmentModel = lightingModel;
         return this;
     }
 
     @Override
-    public final ToolBuilder<ToolType> setObjectModel(@SuppressWarnings("ParameterHidesMemberVariable") ManipulableObjectPoseModel objectModel)
+    public final @NotNull ToolBuilder<ToolType> setObjectModel(@SuppressWarnings("ParameterHidesMemberVariable") ManipulableObjectPoseModel objectModel)
     {
         this.objectModel = objectModel;
         return this;
     }
 
     @Override
-    public final ToolBuilder<ToolType> setSceneViewport(@SuppressWarnings("ParameterHidesMemberVariable") SceneViewport sceneViewport)
+    public final @NotNull ToolBuilder<ToolType> setSceneViewport(@SuppressWarnings("ParameterHidesMemberVariable") SceneViewport sceneViewport)
     {
         this.sceneViewport = sceneViewport;
         return this;
     }
 
     @Override
-    public final ToolBuilder<ToolType> setSettingsModel(@SuppressWarnings("ParameterHidesMemberVariable") GeneralSettingsModel settingsModel)
+    public final @NotNull ToolBuilder<ToolType> setSettingsModel(@SuppressWarnings("ParameterHidesMemberVariable") GeneralSettingsModel settingsModel)
     {
         this.settingsModel = settingsModel;
         return this;

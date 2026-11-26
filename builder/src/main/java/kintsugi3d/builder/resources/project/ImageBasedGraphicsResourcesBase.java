@@ -31,9 +31,9 @@ import kintsugi3d.gl.geometry.GeometryResources;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.vecmath.IntVector2;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.List;
 
 abstract class ImageBasedGraphicsResourcesBase<ContextType extends Context<ContextType>> implements ImageBasedGraphicsResources<ContextType>
 {
@@ -56,31 +56,19 @@ abstract class ImageBasedGraphicsResourcesBase<ContextType extends Context<Conte
     }
 
     @Override
-    public final ContextType getContext()
+    public final @NotNull ContextType getContext()
     {
         return commonResources.getContext();
     }
 
     @Override
-    public final ViewSet getViewSet()
+    public final @NotNull ViewSet getViewSet()
     {
         return commonResources.getViewSet();
     }
 
     @Override
-    public final float getCameraWeight(int index)
-    {
-        return commonResources.getViewWeight(index);
-    }
-
-    @Override
-    public final List<Float> getCameraWeights()
-    {
-        return commonResources.getViewWeights();
-    }
-
-    @Override
-    public final GeometryResources<ContextType> getGeometryResources()
+    public final @NotNull GeometryResources<ContextType> getGeometryResources()
     {
         return commonResources.getGeometryResources();
     }
@@ -92,7 +80,7 @@ abstract class ImageBasedGraphicsResourcesBase<ContextType extends Context<Conte
     }
 
     @Override
-    public final LuminanceMapResources<ContextType> getLuminanceMapResources()
+    public final @NotNull LuminanceMapResources<ContextType> getLuminanceMapResources()
     {
         return commonResources.getLuminanceMapResources();
     }
@@ -105,14 +93,14 @@ abstract class ImageBasedGraphicsResourcesBase<ContextType extends Context<Conte
      * @return
      * @throws IOException
      */
-    public final SingleCalibratedImageResource<ContextType> createSingleImageResource(View view, ReadonlyLoadOptionsModel loadOptions)
+    public final @NotNull SingleCalibratedImageResource<ContextType> createSingleImageResource(@NotNull View view, @NotNull ReadonlyLoadOptionsModel loadOptions)
         throws IOException
     {
         return new SingleCalibratedImageResource<>(getContext(), view, getGeometry(), loadOptions);
     }
 
     @Override
-    public final ImageCache<ContextType> cache(ReadonlyImageCacheSettings settings, ProgressMonitor monitor)
+    public final @NotNull ImageCache<ContextType> cache(@NotNull ReadonlyImageCacheSettings settings, ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         ImageCache<ContextType> cache = new ImageCache<>(this, settings);
@@ -132,19 +120,19 @@ abstract class ImageBasedGraphicsResourcesBase<ContextType extends Context<Conte
     }
 
     @Override
-    public final IntVector2 getProcessedWeightMapResolution()
+    public final @NotNull IntVector2 getProcessedWeightMapResolution()
     {
         return commonResources.getProcessedWeightMapResolution();
     }
 
     @Override
-    public final EventListeners<ProjectProcessedListener> weightMapsProcessedListeners()
+    public final @NotNull EventListeners<ProjectProcessedListener> weightMapsProcessedListeners()
     {
         return commonResources.weightMapsProcessedListeners();
     }
 
     @Override
-    public final EventListeners<TexturesReplacedListener> texturesReplacedListeners()
+    public final @NotNull EventListeners<TexturesReplacedListener> texturesReplacedListeners()
     {
         return commonResources.texturesReplacedListeners();
     }
@@ -165,12 +153,12 @@ abstract class ImageBasedGraphicsResourcesBase<ContextType extends Context<Conte
         }
     }
 
-    public final EventListeners<Observer<MappedChange<String, BasisMaterialInfo>>> basisListeners()
+    public final @NotNull EventListeners<Observer<MappedChange<String, BasisMaterialInfo>>> basisListeners()
     {
         return commonResources.basisListeners();
     }
 
-    public final EventListeners<Observer<MappedChange<String, TextureInfo>>> texturesListeners()
+    public final @NotNull EventListeners<Observer<MappedChange<String, TextureInfo>>> texturesListeners()
     {
         return commonResources.texturesListeners();
     }

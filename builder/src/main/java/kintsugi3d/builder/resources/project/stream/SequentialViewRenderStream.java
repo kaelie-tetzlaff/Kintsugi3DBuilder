@@ -23,6 +23,7 @@ import kintsugi3d.gl.stream.GraphicsStream;
 import kintsugi3d.gl.stream.GraphicsStreamBase;
 import kintsugi3d.gl.util.ColorList;
 import kintsugi3d.gl.util.ColorNativeBufferList;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -31,13 +32,13 @@ import java.util.stream.IntStream;
 
 public class SequentialViewRenderStream<ContextType extends Context<ContextType>> extends GraphicsStreamBase<ColorList[]>
 {
-    private final Collection<View> views;
+    private final @NotNull Collection<View> views;
     private final DrawableResource<ContextType> drawable;
-    private final ReadableFramebuffer<ContextType> framebuffer;
+    private final @NotNull ReadableFramebuffer<ContextType> framebuffer;
     private final int attachmentCount;
-    private final ColorNativeBufferList[] framebufferData;
+    private final ColorNativeBufferList @NotNull [] framebufferData;
 
-    SequentialViewRenderStream(Collection<View> views, DrawableResource<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer, int attachmentCount)
+    SequentialViewRenderStream(@NotNull Collection<View> views, DrawableResource<ContextType> drawable, @NotNull ReadableFramebuffer<ContextType> framebuffer, int attachmentCount)
     {
         this.views = Collections.unmodifiableCollection(views);
         this.drawable = drawable;
@@ -49,19 +50,19 @@ public class SequentialViewRenderStream<ContextType extends Context<ContextType>
     }
 
     @Override
-    public final GraphicsStream<ColorList[]> sequential()
+    public final @NotNull GraphicsStream<ColorList[]> sequential()
     {
         return this;
     }
 
     @Override
-    public final GraphicsStream<ColorList[]> parallel()
+    public final @NotNull GraphicsStream<ColorList[]> parallel()
     {
         return new ParallelViewRenderStream<>(views, drawable, framebuffer, attachmentCount);
     }
 
     @Override
-    public final GraphicsStream<ColorList[]> parallel(int maxRunningThreads)
+    public final @NotNull GraphicsStream<ColorList[]> parallel(int maxRunningThreads)
     {
         return new ParallelViewRenderStream<>(views, drawable, framebuffer, attachmentCount, maxRunningThreads);
     }
@@ -73,7 +74,7 @@ public class SequentialViewRenderStream<ContextType extends Context<ContextType>
     }
 
     @Override
-    public final void forEach(Consumer<? super ColorList[]> action)
+    public final void forEach(@NotNull Consumer<? super ColorList[]> action)
     {
         for (View view : views)
         {

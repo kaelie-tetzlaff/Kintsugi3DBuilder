@@ -48,6 +48,8 @@ import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
 import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
 import kintsugi3d.gl.vecmath.IntVector2;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,50 +64,48 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
      * A GPU buffer containing the camera poses defining the transformation from object space to camera space for each view.
      * These are necessary to determine view vectors, and for performing projective texture mapping with an image-space implementation.
      */
-    private final UniformBuffer<ContextType> cameraPoseBuffer;
+    private final @Nullable UniformBuffer<ContextType> cameraPoseBuffer;
 
     /**
      * A GPU buffer containing light source positions, used only for reflectance fields and illumination-dependent rendering (ignored for light
      * fields).
      * Assumed by convention to be in camera space.
      */
-    private final UniformBuffer<ContextType> lightPositionBuffer;
+    private final @Nullable UniformBuffer<ContextType> lightPositionBuffer;
 
     /**
      * A GPU buffer containing light source intensities, used only for reflectance fields and illumination-dependent rendering (ignored for light
      * fields).
      */
-    private final UniformBuffer<ContextType> lightIntensityBuffer;
+    private final @Nullable UniformBuffer<ContextType> lightIntensityBuffer;
 
     /**
      * A GPU buffer containing for every view an index designating the light source position and intensity that should be used for each view.
      */
-    private final UniformBuffer<ContextType> lightIndexBuffer;
+    private final @Nullable UniformBuffer<ContextType> lightIndexBuffer;
 
     /**
      * A GPU buffer containing the weights associated with all the views (determined by the distance from other views).
      */
-    private final UniformBuffer<ContextType> viewWeightBuffer;
+    private final @Nullable UniformBuffer<ContextType> viewWeightBuffer;
 
     /**
      * A GPU buffer containing the indices of enabled and non-deleted cameras
      */
-    private final UniformBuffer<ContextType> viewIndexBuffer;
+    private final @Nullable UniformBuffer<ContextType> viewIndexBuffer;
 
     /**
      * Contains the VBOs for positions, tex-coords, normals, and tangents
      */
-    private final GeometryResources<ContextType> geometryResources;
+    private final @NotNull GeometryResources<ContextType> geometryResources;
 
     private TextureResources<ContextType> textureResources;
 
-    private final LuminanceMapResources<ContextType> luminanceMapResources;
+    private final @NotNull LuminanceMapResources<ContextType> luminanceMapResources;
 
-    private final ContextType context;
+    private final @NotNull ContextType context;
 
-    private final ViewSet viewSet;
-
-    private float[] viewWeights;
+    private final @NotNull ViewSet viewSet;
 
     private final EventDispatcher<ProjectProcessedListener, ProjectProcessedEvent> projectProcessed
         = new EventDispatcher<>(ProjectProcessedListener::onProjectProcessed);
@@ -116,20 +116,18 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
     private final Observable<MappedChange<String, BasisMaterialInfo>> basisObservable = new SimpleObservable<>();
     private final Observable<MappedChange<String, TextureInfo>> texturesObservable = new SimpleObservable<>();
 
-    GraphicsResourcesCommon(ContextType context, ViewSet viewSet, VertexGeometry geometry, TextureLoadOptions loadOptions)
+    GraphicsResourcesCommon(
+        @NotNull ContextType context, @NotNull ViewSet viewSet, @NotNull VertexGeometry geometry, @NotNull TextureLoadOptions loadOptions)
     {
         this.context = context;
         this.viewSet = viewSet;
 
-        if (viewSet != null)
-        {
-            viewSet.viewsChangedListeners().register(event -> Rendering.runNowOrLater(this::updateViewIndicesData));
-            viewSet.lightCalibrationChangedListeners().register(event -> Rendering.runNowOrLater(this::updateLightData));
-            viewSet.luminanceEncodingChangedListeners().register(event -> Rendering.runNowOrLater(this::updateLuminanceMap));
-        }
+        viewSet.viewsChangedListeners().register(event -> Rendering.runNowOrLater(this::updateViewIndicesData));
+        viewSet.lightCalibrationChangedListeners().register(event -> Rendering.runNowOrLater(this::updateLightData));
+        viewSet.luminanceEncodingChangedListeners().register(event -> Rendering.runNowOrLater(this::updateLuminanceMap));
 
         // Store the poses in a uniform buffer
-        if (viewSet != null && viewSet.getCameraPoseData() != null)
+        if (viewSet.getCameraPoseData() != null)
         {
             // Create the uniform buffer
             cameraPoseBuffer = context.createUniformBuffer();
@@ -141,7 +139,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         }
 
         // Store the light positions in a uniform buffer
-        if (viewSet != null && viewSet.getLightPositionData() != null)
+        if (viewSet.getLightPositionData() != null)
         {
             // Create the uniform buffer
             lightPositionBuffer = context.createUniformBuffer();
@@ -153,7 +151,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         }
 
         // Store the light intensities in a uniform buffer
-        if (viewSet != null && viewSet.getLightIntensityData() != null)
+        if (viewSet.getLightIntensityData() != null)
         {
             // Create the uniform buffer
             lightIntensityBuffer = context.createUniformBuffer();
@@ -165,7 +163,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         }
 
         // Store the light indices in a uniform buffer
-        if (viewSet != null && viewSet.getLightIndexData() != null)
+        if (viewSet.getLightIndexData() != null)
         {
             lightIndexBuffer = context.createUniformBuffer();
             lightIndexBuffer.setData(viewSet.getLightIndexData());
@@ -176,7 +174,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         }
 
         // Store the view indices in a uniform buffer
-        if (viewSet != null && viewSet.getViewIndexData() != null)
+        if (viewSet.getViewIndexData() != null)
         {
             viewIndexBuffer = context.createUniformBuffer();
             viewIndexBuffer.setData(viewSet.getViewIndexData());
@@ -187,7 +185,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         }
 
         // Luminance map texture
-        if (viewSet != null && viewSet.hasCustomLuminanceEncoding())
+        if (viewSet.hasCustomLuminanceEncoding())
         {
             luminanceMapResources = viewSet.getLuminanceEncoding().createResources(context);
         }
@@ -196,110 +194,100 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
             luminanceMapResources = LuminanceMapResources.createNull(context);
         }
 
-        if (geometry != null)
+        geometryResources = geometry.createGraphicsResources(context);
+
+        viewWeightBuffer = context.createUniformBuffer(); // prereq for computeViewWeights
+        computeViewWeights();
+
+        ImportedMaterial material = geometry.getMaterial();
+        String geometryFileName = viewSet.getGeometryFileName();
+
+        if (viewSet.getSupportingFilesDirectory() != null) // Load texture fit from previous session
         {
-            geometryResources = geometry.createGraphicsResources(context);
-
-            if (viewSet != null)
+            TextureResources<ContextType> loadedFit;
+            try
             {
-                viewWeightBuffer = context.createUniformBuffer(); // prereq for computeViewWeights
-                viewWeights = computeViewWeights();
+                loadedFit = SpecularFitFinal.loadFromPriorSolution(context, viewSet.getSupportingFilesDirectory());
+            }
+            catch (IOException e)
+            {
+                LOG.error("An error occured while loading the previous specular fit (textures).", e);
+                loadedFit = TextureResources.makeNull(context);
+            }
+            textureResources = loadedFit;
+        }
+        else if (material != null && geometryFileName != null /* need an actual file path to load the textures */)
+        {
+            // Load material from OBJ file
 
-                ImportedMaterial material = geometry.getMaterial();
-                String geometryFileName = viewSet.getGeometryFileName();
+            // Default texture names if not specified by the material
+            String prefix = geometryFileName.split("\\.")[0];
 
-                if (viewSet.getSupportingFilesDirectory() != null) // Load texture fit from previous session
+            if (material.getDiffuseMap() == null || material.getDiffuseMap().getMapName() == null)
+            {
+                MaterialColorMap diffuseMap = new MaterialColorMap();
+                diffuseMap.setMapName(String.format("%s.png", prefix));
+                material.setDiffuseMap(diffuseMap);
+            }
+
+            if (material.getNormalMap() == null || material.getNormalMap().getMapName() == null)
+            {
+                MaterialTextureMap normalMap = new MaterialTextureMap();
+                normalMap.setMapName(String.format("%s_normal.png", prefix));
+                material.setNormalMap(normalMap);
+            }
+
+            if (material.getAmbientOcclusionMap() == null || material.getAmbientOcclusionMap().getMapName() == null)
+            {
+                MaterialScalarMap aoMap = new MaterialScalarMap();
+                aoMap.setMapName(String.format("%s_occlusion.png", prefix));
+                material.setAmbientOcclusionMap(aoMap);
+            }
+
+            if (material.getSpecularMap() == null || material.getSpecularMap().getMapName() == null)
+            {
+                MaterialColorMap specularMap = new MaterialColorMap();
+                specularMap.setMapName(String.format("%s_Ks.png", prefix));
+                material.setSpecularMap(specularMap);
+            }
+
+            if (material.getRoughnessMap() == null || material.getRoughnessMap().getMapName() == null)
+            {
+                MaterialScalarMap roughnessMap = new MaterialScalarMap();
+                roughnessMap.setMapName(String.format("%s_Pr.png", prefix));
+                material.setRoughnessMap(roughnessMap);
+            }
+
+            TextureLoadOptions mtlLoadOptions = new TextureLoadOptions();
+            mtlLoadOptions.setCompressionRequested(loadOptions.isCompressionRequested());
+            mtlLoadOptions.setMipmapsRequested(loadOptions.areMipmapsRequested());
+            textureResources = ImportedMaterialResourcesWrapper.wrap(
+                () ->
                 {
-                    TextureResources<ContextType> loadedFit;
-                    try
+                    File geometryFile = viewSet.getGeometryFile();
+                    if (geometryFile != null)
                     {
-                        loadedFit = SpecularFitFinal.loadFromPriorSolution(context, viewSet.getSupportingFilesDirectory());
-                    }
-                    catch (IOException e)
-                    {
-                        LOG.error("An error occured while loading the previous specular fit (textures).", e);
-                        loadedFit = TextureResources.makeNull(context);
-                    }
-                    textureResources = loadedFit;
-                }
-                else if (material != null && geometryFileName != null /* need an actual file path to load the textures */)
-                {
-                    // Load material from OBJ file
-
-                    // Default texture names if not specified by the material
-                    String prefix = geometryFileName.split("\\.")[0];
-
-                    if (material.getDiffuseMap() == null || material.getDiffuseMap().getMapName() == null)
-                    {
-                        MaterialColorMap diffuseMap = new MaterialColorMap();
-                        diffuseMap.setMapName(String.format("%s.png", prefix));
-                        material.setDiffuseMap(diffuseMap);
-                    }
-
-                    if (material.getNormalMap() == null || material.getNormalMap().getMapName() == null)
-                    {
-                        MaterialTextureMap normalMap = new MaterialTextureMap();
-                        normalMap.setMapName(String.format("%s_normal.png", prefix));
-                        material.setNormalMap(normalMap);
-                    }
-
-                    if (material.getAmbientOcclusionMap() == null || material.getAmbientOcclusionMap().getMapName() == null)
-                    {
-                        MaterialScalarMap aoMap = new MaterialScalarMap();
-                        aoMap.setMapName(String.format("%s_occlusion.png", prefix));
-                        material.setAmbientOcclusionMap(aoMap);
-                    }
-
-                    if (material.getSpecularMap() == null || material.getSpecularMap().getMapName() == null)
-                    {
-                        MaterialColorMap specularMap = new MaterialColorMap();
-                        specularMap.setMapName(String.format("%s_Ks.png", prefix));
-                        material.setSpecularMap(specularMap);
-                    }
-
-                    if (material.getRoughnessMap() == null || material.getRoughnessMap().getMapName() == null)
-                    {
-                        MaterialScalarMap roughnessMap = new MaterialScalarMap();
-                        roughnessMap.setMapName(String.format("%s_Pr.png", prefix));
-                        material.setRoughnessMap(roughnessMap);
-                    }
-
-                    TextureLoadOptions mtlLoadOptions = new TextureLoadOptions();
-                    mtlLoadOptions.setCompressionRequested(loadOptions.isCompressionRequested());
-                    mtlLoadOptions.setMipmapsRequested(loadOptions.areMipmapsRequested());
-                    textureResources = ImportedMaterialResourcesWrapper.wrap(
-                        () ->
+                        try
                         {
-                            try
-                            {
-                                return ImportedMaterialResources.createFromMaterial(
-                                    context, material, viewSet.getGeometryFile().getParentFile(), mtlLoadOptions);
-                            }
-                            catch (IOException e)
-                            {
-                                LOG.error("An error occured while loading material resources (textures)", e);
-                                return ImportedMaterialResources.createNull();
-                            }
-                        });
-                }
-                else
-                {
-                    // Neither a texture fit or an OBJ material: material is null
-                    textureResources = TextureResources.makeNull(context);
-                }
-            }
-            else
-            {
-                viewWeights = null;
-                viewWeightBuffer = null;
-                textureResources = TextureResources.makeNull(context);
-            }
+                            return ImportedMaterialResources.createFromMaterial(
+                                context, material, geometryFile.getParentFile(), mtlLoadOptions);
+                        }
+                        catch (IOException e)
+                        {
+                            LOG.error("An error occured while loading material resources (textures)", e);
+                            return ImportedMaterialResources.createNull();
+                        }
+                    }
+                    else
+                    {
+                        LOG.warn("Geometry file is null; no material resources were imported.");
+                        return ImportedMaterialResources.createNull();
+                    }
+                });
         }
         else
         {
-            geometryResources = GeometryResources.createNullResources();
-            viewWeights = null;
-            viewWeightBuffer = null;
+            // Neither a texture fit or an OBJ material: material is null
             textureResources = TextureResources.makeNull(context);
         }
 
@@ -307,7 +295,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         textureResources.setTexturesObservable(texturesObservable);
     }
 
-    private float[] computeViewWeights()
+    private void computeViewWeights()
     {
         // getViews makes a copy; save it here since we'll need it a couple times.
         Collection<View> views = viewSet.getEnabledViews();
@@ -369,25 +357,26 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
         LOG.info("View weights:");
 
-        viewWeights = new float[viewSet.getGPUBufferSize()];
+        float[] newWeights = new float[viewSet.getGPUBufferSize()];
 
         if (actualSampleCount > 0) // avoid divide by zero
         {
             for (View view : views)
             {
                 int index = view.getGPUViewIndex();
-                viewWeights[index] = (float) totals[index] / (float) actualSampleCount;
-                LOG.info("{}\t{}", view, viewWeights[index]);
+                newWeights[index] = (float) totals[index] / (float) actualSampleCount;
+                LOG.info("{}\t{}", view, newWeights[index]);
             }
         }
 
-        viewWeightBuffer.setData(NativeVectorBufferFactory.createFromFloatArray(
-            1, viewSet.getGPUBufferSize(), viewWeights));
-
-        return viewWeights;
+        if (viewWeightBuffer != null)
+        {
+            viewWeightBuffer.setData(NativeVectorBufferFactory.createFromFloatArray(
+                1, viewSet.getGPUBufferSize(), newWeights));
+        }
     }
 
-    private static double findMaxMinDistance(Vector3[] viewDirections)
+    private static double findMaxMinDistance(Vector3 @NotNull [] viewDirections)
     {
         double maxMinDistance = 0.0;
         for (int i = 0; i < viewDirections.length; i++)
@@ -410,58 +399,21 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         return maxMinDistance;
     }
 
-    public ContextType getContext()
+    public @NotNull ContextType getContext()
     {
         return context;
     }
 
-    public ViewSet getViewSet()
+    public @NotNull ViewSet getViewSet()
     {
         return viewSet;
-    }
-
-    public float getViewWeight(int index)
-    {
-        if (viewWeights != null)
-        {
-            return viewWeights[index];
-        }
-        else
-        {
-            throw new IllegalStateException("View weights are unavailable.");
-        }
-    }
-
-    public List<Float> getViewWeights()
-    {
-        if (viewWeights != null)
-        {
-            return Collections.unmodifiableList(new AbstractList<>()
-            {
-                @Override
-                public int size()
-                {
-                    return viewWeights.length;
-                }
-
-                @Override
-                public Float get(int index)
-                {
-                    return viewWeights[index];
-                }
-            });
-        }
-        else
-        {
-            throw new IllegalStateException("View weights are unavailable.");
-        }
     }
 
     /**
      *
      * @return Vertex buffers for positions, tex coords, normals, tangents
      */
-    public GeometryResources<ContextType> getGeometryResources()
+    public @NotNull GeometryResources<ContextType> getGeometryResources()
     {
         return geometryResources;
     }
@@ -474,7 +426,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         return textureResources;
     }
 
-    public LuminanceMapResources<ContextType> getLuminanceMapResources()
+    public @NotNull LuminanceMapResources<ContextType> getLuminanceMapResources()
     {
         return luminanceMapResources;
     }
@@ -531,7 +483,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
      *
      * @return The texture resolution of the weight maps if the project has been fully processed
      */
-    public IntVector2 getProcessedWeightMapResolution()
+    public @NotNull IntVector2 getProcessedWeightMapResolution()
     {
         ReadonlyBasisWeightResources<? extends Context<?>> basisWeightResources = textureResources.getBasisWeightResources();
         if (basisWeightResources != null)
@@ -544,17 +496,17 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         }
     }
 
-    public EventListeners<ProjectProcessedListener> weightMapsProcessedListeners()
+    public @NotNull EventListeners<ProjectProcessedListener> weightMapsProcessedListeners()
     {
         return projectProcessed;
     }
 
-    public EventListeners<TexturesReplacedListener> texturesReplacedListeners()
+    public @NotNull EventListeners<TexturesReplacedListener> texturesReplacedListeners()
     {
         return texturesReplaced;
     }
 
-    public void replaceTextureResources(TextureResources<ContextType> newTextureResources)
+    public void replaceTextureResources(@Nullable TextureResources<ContextType> newTextureResources)
     {
         textureResources.close();
         textureResources = newTextureResources == null ? TextureResources.makeNull(context) : newTextureResources;
@@ -616,7 +568,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
      * @return A program builder with all of the above preprocessor defines specified, ready to have the
      * vertex and fragment shaders added as well as any additional application-specific preprocessor definitions.
      */
-    public ProgramBuilder<ContextType> getShaderProgramBuilder()
+    public @NotNull ProgramBuilder<ContextType> getShaderProgramBuilder()
     {
         boolean basisEnabled = textureResources.getBasisResources() != null
             && textureResources.getBasisWeightResources() != null;
@@ -647,7 +599,7 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
         return builder;
     }
 
-    public void setupShaderProgram(Program<ContextType> program)
+    public void setupShaderProgram(@NotNull Program<ContextType> program)
     {
         viewSet.setupShaderProgram(program);
 
@@ -679,23 +631,47 @@ final class GraphicsResourcesCommon<ContextType extends Context<ContextType>>
 
     public void close()
     {
-        viewWeightBuffer.close();
-        cameraPoseBuffer.close();
-        lightPositionBuffer.close();
-        lightIntensityBuffer.close();
-        lightIndexBuffer.close();
+        if (viewWeightBuffer != null)
+        {
+            viewWeightBuffer.close();
+        }
+
+        if (cameraPoseBuffer != null)
+        {
+            cameraPoseBuffer.close();
+        }
+
+        if (lightPositionBuffer != null)
+        {
+            lightPositionBuffer.close();
+        }
+
+        if (lightIntensityBuffer != null)
+        {
+            lightIntensityBuffer.close();
+        }
+
+        if (lightIndexBuffer != null)
+        {
+            lightIndexBuffer.close();
+        }
+
         geometryResources.close();
         textureResources.close();
         luminanceMapResources.close();
-        viewIndexBuffer.close();
+
+        if (viewIndexBuffer != null)
+        {
+            viewIndexBuffer.close();
+        }
     }
 
-    public EventListeners<Observer<MappedChange<String, BasisMaterialInfo>>> basisListeners()
+    public @NotNull EventListeners<Observer<MappedChange<String, BasisMaterialInfo>>> basisListeners()
     {
         return basisObservable;
     }
 
-    public EventListeners<Observer<MappedChange<String, TextureInfo>>> texturesListeners()
+    public @NotNull EventListeners<Observer<MappedChange<String, TextureInfo>>> texturesListeners()
     {
         return texturesObservable;
     }

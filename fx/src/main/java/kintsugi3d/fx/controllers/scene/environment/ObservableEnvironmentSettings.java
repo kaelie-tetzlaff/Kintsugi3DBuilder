@@ -19,6 +19,7 @@ import javafx.beans.property.*;
 import javafx.scene.paint.Color;
 import kintsugi3d.builder.state.project.SerializableEnvironmentSettings;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
@@ -72,7 +73,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         }
     }
 
-    public final ObservableEnvironmentSettings duplicate()
+    public final @NotNull ObservableEnvironmentSettings duplicate()
     {
         ObservableEnvironmentSettings newEnvironment = new ObservableEnvironmentSettings();
         newEnvironment.envUseImage.setValue(envUseImage.getValue());
@@ -105,7 +106,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         return envUseImage.get();
     }
 
-    public final BooleanProperty envUseImageProperty()
+    public final @NotNull BooleanProperty envUseImageProperty()
     {
         return envUseImage;
     }
@@ -122,7 +123,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         return envUseColor.get();
     }
 
-    public final BooleanProperty envUseColorProperty()
+    public final @NotNull BooleanProperty envUseColorProperty()
     {
         return envUseColor;
     }
@@ -139,7 +140,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         return bpUseImage.get();
     }
 
-    public final BooleanProperty bpUseImageProperty()
+    public final @NotNull BooleanProperty bpUseImageProperty()
     {
         return bpUseImage;
     }
@@ -156,7 +157,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         return bpUseColor.get();
     }
 
-    public final BooleanProperty bpUseColorProperty()
+    public final @NotNull BooleanProperty bpUseColorProperty()
     {
         return bpUseColor;
     }
@@ -173,7 +174,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         return imagePathsRelative.get();
     }
 
-    public final BooleanProperty imagePathsRelativeProperty()
+    public final @NotNull BooleanProperty imagePathsRelativeProperty()
     {
         return imagePathsRelative;
     }
@@ -190,7 +191,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         return envImageFile.getValue();
     }
 
-    public final Property<File> envImageFileProperty()
+    public final @NotNull Property<File> envImageFileProperty()
     {
         return envImageFile;
     }
@@ -207,7 +208,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         return bpImageFile.getValue();
     }
 
-    public final Property<File> bpImageFileProperty()
+    public final @NotNull Property<File> bpImageFileProperty()
     {
         return bpImageFile;
     }
@@ -224,7 +225,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         return backgroundIntensity.get();
     }
 
-    public final DoubleProperty backgroundIntensityProperty()
+    public final @NotNull DoubleProperty backgroundIntensityProperty()
     {
         return backgroundIntensity;
     }
@@ -241,7 +242,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         return envColorIntensity.get();
     }
 
-    public final DoubleProperty envColorIntensityProperty()
+    public final @NotNull DoubleProperty envColorIntensityProperty()
     {
         return envColorIntensity;
     }
@@ -258,7 +259,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         return envRotation.get();
     }
 
-    public final DoubleProperty envRotationProperty()
+    public final @NotNull DoubleProperty envRotationProperty()
     {
         return envRotation;
     }
@@ -269,7 +270,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         this.envRotation.set(envRotation);
     }
 
-    public final DoubleProperty envFilteringBiasProperty()
+    public final @NotNull DoubleProperty envFilteringBiasProperty()
     {
         return envFilteringBias;
     }
@@ -292,7 +293,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         return envColor.getValue();
     }
 
-    public final Property<Color> envColorProperty()
+    public final @NotNull Property<Color> envColorProperty()
     {
         return envColor;
     }
@@ -309,7 +310,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         return bpColor.getValue();
     }
 
-    public final Property<Color> bpColorProperty()
+    public final @NotNull Property<Color> bpColorProperty()
     {
         return bpColor;
     }
@@ -326,7 +327,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         return name.get();
     }
 
-    public final StringProperty nameProperty()
+    public final @NotNull StringProperty nameProperty()
     {
         return name;
     }
@@ -343,7 +344,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         return locked.get();
     }
 
-    public final BooleanProperty lockedProperty()
+    public final @NotNull BooleanProperty lockedProperty()
     {
         return locked;
     }
@@ -360,7 +361,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         return envLoaded.get();
     }
 
-    public final BooleanProperty envLoadedProperty()
+    public final @NotNull BooleanProperty envLoadedProperty()
     {
         return envLoaded;
     }
@@ -377,7 +378,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         return bpLoaded.get();
     }
 
-    public final BooleanProperty bpLoadedProperty()
+    public final @NotNull BooleanProperty bpLoadedProperty()
     {
         return bpLoaded;
     }
@@ -394,7 +395,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         return gpEnabled.get();
     }
 
-    public final BooleanProperty gpEnabledProperty()
+    public final @NotNull BooleanProperty gpEnabledProperty()
     {
         return gpEnabled;
     }
@@ -411,7 +412,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         return gpColor.getValue();
     }
 
-    public final Property<Color> gpColorProperty()
+    public final @NotNull Property<Color> gpColorProperty()
     {
         return gpColor;
     }
@@ -428,7 +429,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         return gpHeight.getValue();
     }
 
-    public final DoubleProperty gpHeightProperty()
+    public final @NotNull DoubleProperty gpHeightProperty()
     {
         return gpHeight;
     }
@@ -445,7 +446,7 @@ public class ObservableEnvironmentSettings extends SerializableEnvironmentSettin
         return gpSize.getValue();
     }
 
-    public final DoubleProperty gpSizeProperty()
+    public final @NotNull DoubleProperty gpSizeProperty()
     {
         return gpSize;
     }

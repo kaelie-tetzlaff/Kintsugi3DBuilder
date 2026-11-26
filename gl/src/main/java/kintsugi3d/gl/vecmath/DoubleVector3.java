@@ -68,42 +68,42 @@ public class DoubleVector3 implements Iterable<Double>
         this(value, value, value);
     }
 
-    public final DoubleVector4 asVector4(double w)
+    public final @NotNull DoubleVector4 asVector4(double w)
     {
         return new DoubleVector4(x, y, z, w);
     }
 
-    public final DoubleVector4 asDirection()
+    public final @NotNull DoubleVector4 asDirection()
     {
         return new DoubleVector4(x, y, z, 0.0);
     }
 
-    public final DoubleVector4 asPosition()
+    public final @NotNull DoubleVector4 asPosition()
     {
         return new DoubleVector4(x, y, z, 1.0);
     }
 
-    public final DoubleVector2 getXY()
+    public final @NotNull DoubleVector2 getXY()
     {
         return new DoubleVector2(x, y);
     }
 
-    public final IntVector3 rounded()
+    public final @NotNull IntVector3 rounded()
     {
         return new IntVector3((int)Math.round(x), (int)Math.round(y), (int)Math.round(z));
     }
 
-    public final IntVector3 truncated()
+    public final @NotNull IntVector3 truncated()
     {
         return new IntVector3((int) x, (int) y, (int) z);
     }
 
-    public final Vector3 asSinglePrecision()
+    public final @NotNull Vector3 asSinglePrecision()
     {
         return new Vector3((float)x, (float)y, (float)z);
     }
 
-    public final DoubleVector3 plus(DoubleVector3 other)
+    public final @NotNull DoubleVector3 plus(@NotNull DoubleVector3 other)
     {
         return new DoubleVector3(
             x + other.x,
@@ -112,7 +112,7 @@ public class DoubleVector3 implements Iterable<Double>
         );
     }
 
-    public final DoubleVector3 minus(DoubleVector3 other)
+    public final @NotNull DoubleVector3 minus(@NotNull DoubleVector3 other)
     {
         return new DoubleVector3(
             x - other.x,
@@ -121,37 +121,37 @@ public class DoubleVector3 implements Iterable<Double>
         );
     }
 
-    public final DoubleVector3 negated()
+    public final @NotNull DoubleVector3 negated()
     {
         return new DoubleVector3(-x, -y, -z);
     }
 
-    public final DoubleVector3 times(double s)
+    public final @NotNull DoubleVector3 times(double s)
     {
         return new DoubleVector3(s* x, s* y, s* z);
     }
 
-    public final DoubleVector3 dividedBy(double s)
+    public final @NotNull DoubleVector3 dividedBy(double s)
     {
         return new DoubleVector3(x/s, y/s, z/s);
     }
 
-    public final DoubleVector3 times(DoubleVector3 other)
+    public final @NotNull DoubleVector3 times(@NotNull DoubleVector3 other)
     {
         return new DoubleVector3(x * other.x, y * other.y, z * other.z);
     }
 
-    public final DoubleVector3 dividedBy(DoubleVector3 other)
+    public final @NotNull DoubleVector3 dividedBy(@NotNull DoubleVector3 other)
     {
         return new DoubleVector3(x / other.x, y / other.y, z / other.z);
     }
 
-    public final double dot(DoubleVector3 other)
+    public final double dot(@NotNull DoubleVector3 other)
     {
         return x * other.x + y * other.y + z * other.z;
     }
 
-    public final DoubleVector3 cross(DoubleVector3 other)
+    public final @NotNull DoubleVector3 cross(@NotNull DoubleVector3 other)
     {
         return new DoubleVector3(
             y * other.z - z * other.y,
@@ -159,7 +159,7 @@ public class DoubleVector3 implements Iterable<Double>
             x * other.y - y * other.x
         );
     }
-    public final DoubleMatrix3 outerProduct(DoubleVector3 other)
+    public final @NotNull DoubleMatrix3 outerProduct(@NotNull DoubleVector3 other)
     {
         return DoubleMatrix3.fromColumns(
             new DoubleVector3(x * other.x, y * other.x, z * other.x),
@@ -173,12 +173,12 @@ public class DoubleVector3 implements Iterable<Double>
         return Math.sqrt(dot(this));
     }
 
-    public final double distance(DoubleVector3 other)
+    public final double distance(@NotNull DoubleVector3 other)
     {
         return minus(other).length();
     }
 
-    public final DoubleVector3 normalized()
+    public final @NotNull DoubleVector3 normalized()
     {
         return times(1.0 / length());
     }
@@ -187,7 +187,7 @@ public class DoubleVector3 implements Iterable<Double>
      * magnitude (a length of 1.0).  If this vector has zero length, it will return itself.
      * @return A new vector equal to this vector divided by it's length except in cases of a zero-length vector.
      */
-    public final DoubleVector3 normalizedSafe()
+    public final @NotNull DoubleVector3 normalizedSafe()
     {
         double l = length();
         if (l == 0.0f)
@@ -200,13 +200,13 @@ public class DoubleVector3 implements Iterable<Double>
         }
     }
 
-    public final DoubleVector3 applyOperator(DoubleUnaryOperator operator)
+    public final @NotNull DoubleVector3 applyOperator(@NotNull DoubleUnaryOperator operator)
     {
         return new DoubleVector3(operator.applyAsDouble(x), operator.applyAsDouble(y), operator.applyAsDouble(z));
     }
 
     @Override
-    public final String toString()
+    public final @NotNull String toString()
     {
         return String.format("DoubleVector3{x=%s, y=%s, z=%s}", x, y, z);
     }

@@ -23,6 +23,7 @@ import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 import org.apache.logging.log4j.core.layout.PatternLayout;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.event.Level;
 
 import java.time.Instant;
@@ -41,7 +42,7 @@ public final class TestingLogMessageAppender extends LogMessageAppenderBase
 
     private final List<LogMessage> messages = new ArrayList<>(16);
 
-    private TestingLogMessageAppender(String name, Filter filter, Layout<String> layout)
+    private TestingLogMessageAppender(@NotNull String name, Filter filter, Layout<String> layout)
     {
         super(name, filter, layout);
 
@@ -50,8 +51,8 @@ public final class TestingLogMessageAppender extends LogMessageAppenderBase
     }
 
     @PluginFactory
-    public static TestingLogMessageAppender createAppender(
-            @PluginAttribute("name") String name,
+    public static @NotNull TestingLogMessageAppender createAppender(
+            @PluginAttribute("name") @NotNull String name,
             @PluginElement("Filter") Filter filter,
             @PluginElement("PatternLayout") PatternLayout layout)
     {
@@ -65,7 +66,7 @@ public final class TestingLogMessageAppender extends LogMessageAppenderBase
     }
 
     @Override
-    public void append(LogEvent event)
+    public void append(@NotNull LogEvent event)
     {
         LogMessage message = new LogMessage(
                 Instant.ofEpochMilli(event.getTimeMillis()),
@@ -89,7 +90,7 @@ public final class TestingLogMessageAppender extends LogMessageAppenderBase
     }
 
     @Override
-    public List<LogMessage> getMessages()
+    public @NotNull List<LogMessage> getMessages()
     {
         return Collections.unmodifiableList(messages);
     }

@@ -16,6 +16,7 @@
 package kintsugi3d.optimization;
 
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -24,24 +25,24 @@ import java.util.stream.IntStream;
 public final class ShaderBasedErrorCalculator<ContextType extends Context<ContextType>> implements ManagedResource
 {
     // Compare fitted models against actual photographs
-    private ProgramObject<ContextType> program;
-    private DrawableResource<ContextType> drawable;
+    private final @NotNull ProgramObject<ContextType> program;
+    private final @NotNull DrawableResource<ContextType> drawable;
 
     // Framebuffer for calculating error and reconstructing 3D renderings of the object
-    private FramebufferObject<ContextType> framebuffer;
+    private final @NotNull FramebufferObject<ContextType> framebuffer;
 
-    private final ErrorReport report;
+    private final @NotNull ErrorReport report;
 
-    public static <ContextType extends Context<ContextType>> ShaderBasedErrorCalculator<ContextType> create(
-        ContextType context, Supplier<ProgramObject<ContextType>> programFactory,
-        Function<Program<ContextType>, DrawableResource<ContextType>> drawableFactory, int imageWidth, int imageHeight)
+    public static <ContextType extends Context<ContextType>> @NotNull ShaderBasedErrorCalculator<ContextType> create(
+        @NotNull ContextType context, @NotNull Supplier<ProgramObject<ContextType>> programFactory,
+        @NotNull Function<Program<ContextType>, DrawableResource<ContextType>> drawableFactory, int imageWidth, int imageHeight)
     {
         return new ShaderBasedErrorCalculator<>(context, programFactory, drawableFactory, imageWidth, imageHeight);
     }
 
     private ShaderBasedErrorCalculator(
-        ContextType context, Supplier<ProgramObject<ContextType>> programFactory,
-        Function<Program<ContextType>, DrawableResource<ContextType>> drawableFactory, int imageWidth, int imageHeight)
+        @NotNull ContextType context, @NotNull Supplier<ProgramObject<ContextType>> programFactory,
+        @NotNull Function<Program<ContextType>, DrawableResource<ContextType>> drawableFactory, int imageWidth, int imageHeight)
     {
         program = programFactory.get();
         drawable = drawableFactory.apply(program);
@@ -53,12 +54,12 @@ public final class ShaderBasedErrorCalculator<ContextType extends Context<Contex
         report = new ErrorReport(imageWidth * imageHeight);
     }
 
-    public Program<ContextType> getProgram()
+    public @NotNull Program<ContextType> getProgram()
     {
         return program;
     }
 
-    public FramebufferObject<ContextType> getFramebuffer()
+    public @NotNull FramebufferObject<ContextType> getFramebuffer()
     {
         return framebuffer;
     }
@@ -68,7 +69,7 @@ public final class ShaderBasedErrorCalculator<ContextType extends Context<Contex
         return framebuffer.getColorAttachmentTexture(0);
     }
 
-    public ReadonlyErrorReport getReport()
+    public @NotNull ReadonlyErrorReport getReport()
     {
         return report;
     }
@@ -125,22 +126,8 @@ public final class ShaderBasedErrorCalculator<ContextType extends Context<Contex
     @Override
     public void close()
     {
-        if (program != null)
-        {
-            program.close();
-            program = null;
-        }
-
-        if (drawable != null)
-        {
-            drawable.close();
-            drawable = null;
-        }
-
-        if (framebuffer != null)
-        {
-            framebuffer.close();
-            framebuffer = null;
-        }
+        program.close();
+        drawable.close();
+        framebuffer.close();
     }
 }

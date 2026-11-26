@@ -69,27 +69,27 @@ public class Vector4 implements Iterable<Float>
         this(value, value, value, value);
     }
 
-    public final Vector2 getXY()
+    public final @NotNull Vector2 getXY()
     {
         return new Vector2(x, y);
     }
 
-    public final Vector3 getXYZ()
+    public final @NotNull Vector3 getXYZ()
     {
         return new Vector3(x, y, z);
     }
 
-    public final IntVector4 rounded()
+    public final @NotNull IntVector4 rounded()
     {
         return new IntVector4(Math.round(x), Math.round(y), Math.round(z), Math.round(w));
     }
 
-    public final IntVector4 truncated()
+    public final @NotNull IntVector4 truncated()
     {
         return new IntVector4((int) x, (int) y, (int) z, (int) w);
     }
 
-    public final DoubleVector4 asDoublePrecision()
+    public final @NotNull DoubleVector4 asDoublePrecision()
     {
         return new DoubleVector4(x, y, z, w);
     }
@@ -130,7 +130,7 @@ public class Vector4 implements Iterable<Float>
      * @param other The vector to add.
      * @return A new vector that is the mathematical (componentwise) sum of this and 'other'.
      */
-    public final Vector4 plus(Vector4 other)
+    public final @NotNull Vector4 plus(@NotNull Vector4 other)
     {
         return new Vector4(
             x + other.x,
@@ -145,7 +145,7 @@ public class Vector4 implements Iterable<Float>
      * @param other The vector to add.
      * @return A new vector that is the mathematical (componentwise) subtraction of 'other' from this.
      */
-    public final Vector4 minus(Vector4 other)
+    public final @NotNull Vector4 minus(@NotNull Vector4 other)
     {
         return new Vector4(
             x - other.x,
@@ -159,7 +159,7 @@ public class Vector4 implements Iterable<Float>
      * Construct a new vector that is the negation of this.
      * @return A new vector with the values (-x, -y, -z, -w)
      */
-    public final Vector4 negated()
+    public final @NotNull Vector4 negated()
     {
         return new Vector4(-x, -y, -z, -w);
     }
@@ -169,7 +169,7 @@ public class Vector4 implements Iterable<Float>
      * @param s The scaler to multiply by.
      * @return A new vector equal to (s*x, s*y, s*z, s*w)
      */
-    public final Vector4 times(float s)
+    public final @NotNull Vector4 times(float s)
     {
         return new Vector4(s* x, s* y, s* z, s* w);
     }
@@ -179,17 +179,17 @@ public class Vector4 implements Iterable<Float>
      * @param s The scaler to divide by.
      * @return A new vector equal to (x/s, y/s, z/s, w/s)
      */
-    public final Vector4 dividedBy(float s)
+    public final @NotNull Vector4 dividedBy(float s)
     {
         return new Vector4(x/s, y/s, z/s, w/s);
     }
 
-    public final Vector4 times(Vector4 other)
+    public final @NotNull Vector4 times(@NotNull Vector4 other)
     {
         return new Vector4(x * other.x, y * other.y, z * other.z, w * other.w);
     }
 
-    public final Vector4 dividedBy(Vector4 other)
+    public final @NotNull Vector4 dividedBy(@NotNull Vector4 other)
     {
         return new Vector4(x / other.x, y / other.y, z / other.z, w * other.w);
     }
@@ -198,7 +198,7 @@ public class Vector4 implements Iterable<Float>
      * @param other The vector to use when computing the dot product.
      * @return A scaler value equal to the sum of x1*x2, y1*y2, z1*z2 and w1*w2.
      */
-    public final float dot(Vector4 other)
+    public final float dot(@NotNull Vector4 other)
     {
         return x * other.x + y * other.y + z * other.z + w * other.w;
     }
@@ -208,7 +208,7 @@ public class Vector4 implements Iterable<Float>
      * @param other The vector to use when computing the outer product.
      * @return The matrix that is the outer product of the vectors.
      */
-    public final Matrix4 outerProduct(Vector4 other)
+    public final @NotNull Matrix4 outerProduct(@NotNull Vector4 other)
     {
         return Matrix4.fromColumns(
             new Vector4(x * other.x, y * other.x, z * other.x, w * other.x),
@@ -232,7 +232,7 @@ public class Vector4 implements Iterable<Float>
      * @param other The vector to compute the distance between.
      * @return A scaler value equal to the length of the different vector.
      */
-    public final float distance(Vector4 other)
+    public final float distance(@NotNull Vector4 other)
     {
         return minus(other).length();
     }
@@ -243,7 +243,7 @@ public class Vector4 implements Iterable<Float>
      * Do not attempt to normalize a zero-length vector.
      * @return A new vector equal to this vector divided by it's length.
      */
-    public final Vector4 normalized()
+    public final @NotNull Vector4 normalized()
     {
         return times(1.0f / length());
     }
@@ -252,7 +252,7 @@ public class Vector4 implements Iterable<Float>
      * magnitude (a length of 1.0).  If this vector has zero length, it will return itself.
      * @return A new vector equal to this vector divided by it's length except in cases of a zero-length vector.
      */
-    public final Vector4 normalizedSafe()
+    public final @NotNull Vector4 normalizedSafe()
     {
         float l = length();
         if (l == 0.0f)
@@ -265,7 +265,7 @@ public class Vector4 implements Iterable<Float>
         }
     }
 
-    public final Vector4 applyOperator(DoubleUnaryOperator operator)
+    public final @NotNull Vector4 applyOperator(@NotNull DoubleUnaryOperator operator)
     {
         return new Vector4((float)operator.applyAsDouble(x), (float)operator.applyAsDouble(y), (float)operator.applyAsDouble(z), (float)operator.applyAsDouble(w));
     }
@@ -275,13 +275,13 @@ public class Vector4 implements Iterable<Float>
      * @param operator
      * @return
      */
-    public final Vector4 applyOperatorXYZ(DoubleUnaryOperator operator)
+    public final @NotNull Vector4 applyOperatorXYZ(@NotNull DoubleUnaryOperator operator)
     {
         return new Vector4((float)operator.applyAsDouble(x), (float)operator.applyAsDouble(y), (float)operator.applyAsDouble(z), w);
     }
 
     @Override
-    public final String toString()
+    public final @NotNull String toString()
     {
         return String.format("Vector4{x=%s, y=%s, z=%s, w=%s}", x, y, z, w);
     }

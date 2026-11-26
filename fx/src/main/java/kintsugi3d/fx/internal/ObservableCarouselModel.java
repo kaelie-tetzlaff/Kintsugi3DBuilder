@@ -28,6 +28,8 @@ import kintsugi3d.builder.state.shader.ShaderInfo;
 import kintsugi3d.fx.controllers.sidebar.CarouselCardController;
 import kintsugi3d.fx.controllers.sidebar.CarouselController;
 import kintsugi3d.gl.core.FramebufferSize;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -57,7 +59,7 @@ public class ObservableCarouselModel implements CarouselModel
      * @return
      */
     @Override
-    public final ObservableList<CarouselItem> getCarouselItems()
+    public final @NotNull ObservableList<CarouselItem> getCarouselItems()
     {
         return FXCollections.unmodifiableObservableList(carouselItems);
     }
@@ -67,7 +69,7 @@ public class ObservableCarouselModel implements CarouselModel
         return carouselHeight.get();
     }
 
-    public final DoubleProperty carouselHeightProperty()
+    public final @NotNull DoubleProperty carouselHeightProperty()
     {
         return carouselHeight;
     }
@@ -77,7 +79,7 @@ public class ObservableCarouselModel implements CarouselModel
         return carouselCardHeight.get();
     }
 
-    public final DoubleProperty carouselCardHeightProperty()
+    public final @NotNull DoubleProperty carouselCardHeightProperty()
     {
         return carouselCardHeight;
     }
@@ -164,7 +166,7 @@ public class ObservableCarouselModel implements CarouselModel
         }
     }
 
-    private void swapCards(int index1, int index2, CarouselController carouselController)
+    private void swapCards(int index1, int index2, @NotNull CarouselController carouselController)
     {
         ObservableList<CarouselItem> container = FXCollections.observableArrayList();
         container.addAll(carouselItems);
@@ -189,7 +191,7 @@ public class ObservableCarouselModel implements CarouselModel
         Platform.runLater(() -> carouselController.setHBarPosition(currentScrollPosition));
     }
 
-    private CarouselItem findCardByShader(ShaderInfo shader)
+    private @Nullable CarouselItem findCardByShader(@NotNull ShaderInfo shader)
     {
         // Check if the current item's shader matches this card.
         return carouselItems.stream()
@@ -198,7 +200,7 @@ public class ObservableCarouselModel implements CarouselModel
 
     }
 
-    public final void moveCardLeft(CarouselCardController card)
+    public final void moveCardLeft(@NotNull CarouselCardController card)
     {
         CarouselItem moveCard = findCardByShader(card.getShader());
         CarouselController carouselController = card.getCarouselController();
@@ -213,7 +215,7 @@ public class ObservableCarouselModel implements CarouselModel
         }
     }
 
-    public final void moveCardRight(CarouselCardController card)
+    public final void moveCardRight(@NotNull CarouselCardController card)
     {
         CarouselItem moveCard = findCardByShader(card.getShader());
         CarouselController carouselController = card.getCarouselController();

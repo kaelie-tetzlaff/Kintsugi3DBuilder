@@ -17,6 +17,7 @@ package kintsugi3d.builder.state.scene;
 
 import kintsugi3d.builder.state.project.CameraSettings;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class CameraModelFromSettings extends ViewpointModelBase implements ManipulableCameraModel
 {
@@ -38,7 +39,7 @@ public abstract class CameraModelFromSettings extends ViewpointModelBase impleme
     }
 
     @Override
-    public final Vector3 getTarget()
+    public final @NotNull Vector3 getTarget()
     {
         return new Vector3((float) getCameraSettings().getXCenter(),
             (float) getCameraSettings().getYCenter(),
@@ -46,7 +47,7 @@ public abstract class CameraModelFromSettings extends ViewpointModelBase impleme
     }
 
     @Override
-    public final void setTarget(Vector3 target)
+    public final void setTarget(@NotNull Vector3 target)
     {
         if (!getCameraSettings().isLocked())
         {

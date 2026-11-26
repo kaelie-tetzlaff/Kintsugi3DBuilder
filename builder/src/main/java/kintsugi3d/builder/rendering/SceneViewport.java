@@ -17,6 +17,7 @@ package kintsugi3d.builder.rendering;
 
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.Nullable;
 
 public interface SceneViewport
 {
@@ -26,7 +27,7 @@ public interface SceneViewport
      * @param y In normalized [0, 1] range
      * @return
      */
-    Object getObjectAtCoordinates(double x, double y);
+    @Nullable Object getObjectAtCoordinates(double x, double y);
 
     /**
      *
@@ -34,7 +35,7 @@ public interface SceneViewport
      * @param y In normalized [0, 1] range
      * @return
      */
-    Vector3 get3DPositionAtCoordinates(double x, double y);
+    @Nullable Vector3 get3DPositionAtCoordinates(double x, double y);
 
     /**
      *

@@ -16,6 +16,7 @@
 package kintsugi3d.gl.builders.framebuffer;
 
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,8 +28,8 @@ public final class DoubleFramebufferFactory
     {
     }
 
-    public static <ContextType extends Context<ContextType>> DoubleFramebufferObject<ContextType> create(
-        ContextType context, int initWidth, int initHeight)
+    public static <ContextType extends Context<ContextType>> @NotNull DoubleFramebufferObject<ContextType> create(
+        @NotNull ContextType context, int initWidth, int initHeight)
     {
         return new DoubleFramebufferObjectImpl<>(context, initWidth, initHeight);
     }
@@ -36,7 +37,7 @@ public final class DoubleFramebufferFactory
     private static class DoubleFramebufferObjectImpl<ContextType extends Context<ContextType>>
         implements DoubleFramebufferObject<ContextType>
     {
-        private final ContextType context;
+        private final @NotNull ContextType context;
         private FramebufferObject<ContextType> fbo1;
         private FramebufferObject<ContextType> fbo2;
 
@@ -52,7 +53,7 @@ public final class DoubleFramebufferFactory
         private final Collection<Consumer<ReadableFramebuffer<ContextType>>> swapListeners = new ArrayList<>(1);
         private final Collection<Consumer<Framebuffer<ContextType>>> resizeListeners = new ArrayList<>(1);
 
-        DoubleFramebufferObjectImpl(ContextType context, int initWidth, int initHeight)
+        DoubleFramebufferObjectImpl(@NotNull ContextType context, int initWidth, int initHeight)
         {
             this.context = context;
 
@@ -130,7 +131,7 @@ public final class DoubleFramebufferFactory
         }
 
         @Override
-        public final ContextType getContext()
+        public final @NotNull ContextType getContext()
         {
             return context;
         }

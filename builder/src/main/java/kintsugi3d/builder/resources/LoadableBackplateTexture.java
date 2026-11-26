@@ -19,6 +19,7 @@ import kintsugi3d.gl.core.CompressionFormat;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Texture2D;
 import kintsugi3d.gl.util.ImageHelper;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -36,13 +37,13 @@ class LoadableBackplateTexture<ContextType extends Context<ContextType>> impleme
     }
 
     @Override
-    public final String getProcessName()
+    public final @NotNull String getProcessName()
     {
         return "Load Backplate";
     }
 
     @Override
-    public final BufferedImage loadCPU(File file) throws IOException
+    public final BufferedImage loadCPU(@NotNull File file) throws IOException
     {
         return ImageHelper.read(file).getBufferedImage();
     }

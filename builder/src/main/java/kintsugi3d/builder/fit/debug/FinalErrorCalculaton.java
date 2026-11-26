@@ -24,6 +24,7 @@ import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.vecmath.DoubleVector2;
 import kintsugi3d.gl.vecmath.DoubleVector3;
 import kintsugi3d.optimization.ShaderBasedErrorCalculator;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.BufferUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +60,7 @@ public final class FinalErrorCalculaton
      * @param <ContextType>
      */
     public static <ContextType extends Context<ContextType>> void validateNormalMap(
-        ReadonlyImageBasedGraphicsResources<ContextType> resources, ReadonlyTextureResources<ContextType> specularFit, PrintStream rmseOut)
+        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, @NotNull ReadonlyTextureResources<ContextType> specularFit, @NotNull PrintStream rmseOut)
     {
         ReadonlyTexture2D<ContextType> priorNormalMap = resources.getTextureResources().getTexture(StandardTexture.NORMAL_MAP);
         if (CALCULATE_NORMAL_RMSE && priorNormalMap != null)
@@ -110,9 +111,9 @@ public final class FinalErrorCalculaton
     }
 
     public static <ContextType extends Context<ContextType>> void calculateFinalErrorMetrics(
-        ReadonlyImageBasedGraphicsResources<ContextType> resources, ShaderProgramFactory<ContextType> programFactory,
-        ReadonlyTextureResources<ContextType> specularFit, ShaderBasedErrorCalculator<ContextType> basisErrorCalculator,
-        PrintStream rmseOut)
+        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, @NotNull ShaderProgramFactory<ContextType> programFactory,
+        @NotNull ReadonlyTextureResources<ContextType> specularFit, @NotNull ShaderBasedErrorCalculator<ContextType> basisErrorCalculator,
+        @NotNull PrintStream rmseOut)
     {
         try (ProgramObject<ContextType> finalErrorCalcProgram = createFinalErrorCalcProgram(programFactory);
             DrawableResource<ContextType> finalErrorCalcDrawable = resources.createDrawable(finalErrorCalcProgram))
@@ -163,8 +164,8 @@ public final class FinalErrorCalculaton
      * @throws FileNotFoundException
      */
     private static <ContextType extends Context<ContextType>> void calculateGGXRMSE(
-        ReadonlyImageBasedGraphicsResources<ContextType> resources, ShaderProgramFactory<ContextType> programFactory,
-        ReadonlyTextureResources<ContextType> specularFit, ReadableFramebuffer<ContextType> scratchFramebuffer, PrintStream rmseOut)
+        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, @NotNull ShaderProgramFactory<ContextType> programFactory,
+        @NotNull ReadonlyTextureResources<ContextType> specularFit, @NotNull ReadableFramebuffer<ContextType> scratchFramebuffer, @NotNull PrintStream rmseOut)
         throws IOException
     {
         try (ProgramObject<ContextType> ggxErrorCalcProgram = createGGXErrorCalcProgram(programFactory);
@@ -198,7 +199,7 @@ public final class FinalErrorCalculaton
     }
 
     private static <ContextType extends Context<ContextType>>
-    double runFinalErrorCalculation(DrawableResource<ContextType> drawable, ReadableFramebuffer<ContextType> framebuffer, Iterable<View> views)
+    double runFinalErrorCalculation(@NotNull DrawableResource<ContextType> drawable, @NotNull ReadableFramebuffer<ContextType> framebuffer, @NotNull Iterable<View> views)
     {
         WeightedError errorTotal = new WeightedError(0, 0);
 
@@ -245,7 +246,7 @@ public final class FinalErrorCalculaton
     }
 
     private static <ContextType extends Context<ContextType>>
-    ProgramObject<ContextType> createFinalErrorCalcProgram(ShaderProgramFactory<ContextType> programFactory) throws IOException
+    ProgramObject<ContextType> createFinalErrorCalcProgram(@NotNull ShaderProgramFactory<ContextType> programFactory) throws IOException
     {
         return programFactory.createProgram(
             new File("shaders/colorappearance/imgspace_multi_as_single.vert"),
@@ -254,7 +255,7 @@ public final class FinalErrorCalculaton
     }
 
     private static <ContextType extends Context<ContextType>>
-    ProgramObject<ContextType> createGGXErrorCalcProgram(ShaderProgramFactory<ContextType> programFactory) throws IOException
+    ProgramObject<ContextType> createGGXErrorCalcProgram(@NotNull ShaderProgramFactory<ContextType> programFactory) throws IOException
     {
         return programFactory.createProgram(
             new File("shaders/colorappearance/imgspace_multi_as_single.vert"),

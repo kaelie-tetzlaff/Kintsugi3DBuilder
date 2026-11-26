@@ -16,6 +16,7 @@
 package kintsugi3d.gl.geometry;
 
 import kintsugi3d.gl.core.IntLike;
+import org.jetbrains.annotations.NotNull;
 
 public enum GeometryMode implements IntLike
 {
@@ -43,7 +44,7 @@ public enum GeometryMode implements IntLike
      * For preprocessor defines
      * @return the String form of the integer encoding of this instance
      */
-    public String toString()
+    public @NotNull String toString()
     {
         return Integer.toString(intValue);
     }

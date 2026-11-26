@@ -22,6 +22,7 @@ import kintsugi3d.builder.io.SimpleLoadOptionsModel;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.state.settings.ReadonlyGeneralSettingsModel;
 import kintsugi3d.builder.state.settings.SimpleGeneralSettingsModel;
+import org.jetbrains.annotations.NotNull;
 
 public final class UserPreferencesModel implements ReadOnlyUserPreferencesModel
 {
@@ -33,18 +34,9 @@ public final class UserPreferencesModel implements ReadOnlyUserPreferencesModel
 
     private UserPreferencesModel() {}
 
-    public static UserPreferencesModel createDefault()
+    public static @NotNull UserPreferencesModel createDefault()
     {
         return new UserPreferencesModel();
-    }
-
-    public static UserPreferencesModel createEmpty()
-    {
-        UserPreferencesModel model = new UserPreferencesModel();
-        model.loadOptionsModel = null;
-        model.directoryPreferencesModel = null;
-
-        return model;
     }
 
     @Override

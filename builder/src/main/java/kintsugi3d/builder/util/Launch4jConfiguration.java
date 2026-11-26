@@ -15,6 +15,7 @@
 
 package kintsugi3d.builder.util;
 
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,7 +74,7 @@ public final class Launch4jConfiguration
         pb.start();
     }
 
-    private void writeTo(Writer writer) throws IOException
+    private void writeTo(@NotNull Writer writer) throws IOException
     {
         if (enableMaxMemory)
         {
@@ -83,7 +84,7 @@ public final class Launch4jConfiguration
         writer.close();
     }
 
-    public static Launch4jConfiguration read() throws IOException
+    public static @NotNull Launch4jConfiguration read() throws IOException
     {
         if (! Files.exists(L4J_INI_FILE))
         {
@@ -106,12 +107,12 @@ public final class Launch4jConfiguration
         return config;
     }
 
-    public static Launch4jConfiguration empty()
+    public static @NotNull Launch4jConfiguration empty()
     {
         return new Launch4jConfiguration();
     }
 
-    private static int parseMegabytesFromHeap(CharSequence heapArg)
+    private static int parseMegabytesFromHeap(@NotNull CharSequence heapArg)
     {
         Pattern valPattern = Pattern.compile("\\d+");
         Matcher valMatcher = valPattern.matcher(heapArg);

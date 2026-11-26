@@ -18,6 +18,7 @@ package kintsugi3d.fx.core;
 import javafx.beans.binding.BooleanExpression;
 import javafx.stage.Window;
 import kintsugi3d.fx.experience.*;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -111,7 +112,7 @@ public final class ExperienceManager
         }
     }
 
-    public RenderExportManager getRenderExportManager()
+    public @NotNull RenderExportManager getRenderExportManager()
     {
         return renderExportManager;
     }

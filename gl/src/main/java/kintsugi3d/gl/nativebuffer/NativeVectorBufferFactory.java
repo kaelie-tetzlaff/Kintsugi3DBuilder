@@ -15,6 +15,8 @@
 
 package kintsugi3d.gl.nativebuffer;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.ByteBuffer;
 
 /**
@@ -32,7 +34,7 @@ public final class NativeVectorBufferFactory
      * @param dimensions The number of dimensions in each vector element.
      * @param count The number of vector elements in the list.
      */
-    public static NativeVectorBuffer createEmpty(NativeDataType dataType, int dimensions, int count)
+    public static @NotNull NativeVectorBuffer createEmpty(@NotNull NativeDataType dataType, int dimensions, int count)
     {
         switch(dataType)
         {
@@ -57,7 +59,7 @@ public final class NativeVectorBufferFactory
      * @param count The number of elements in the buffer.
      * @param buffer The buffer to use as storage.
      */
-    public static ReadonlyNativeVectorBuffer createFromExistingBuffer(NativeDataType dataType, int dimensions, int count, ByteBuffer buffer)
+    public static @NotNull ReadonlyNativeVectorBuffer createFromExistingBuffer(@NotNull NativeDataType dataType, int dimensions, int count, @NotNull ByteBuffer buffer)
     {
         switch(dataType)
         {
@@ -80,7 +82,7 @@ public final class NativeVectorBufferFactory
      * @param count The number of vector elements in the buffer.
      * @param byteArray The elements to use to initialize the vector buffer.
      */
-    public static ReadonlyNativeVectorBuffer createFromByteArray(NativeDataType dataType, int dimensions, int count, byte... byteArray)
+    public static @NotNull ReadonlyNativeVectorBuffer createFromByteArray(@NotNull NativeDataType dataType, int dimensions, int count, byte @NotNull ... byteArray)
     {
         switch(dataType)
         {
@@ -104,7 +106,7 @@ public final class NativeVectorBufferFactory
      * @param count The number of vector elements in the buffer.
      * @param shortArray The elements to use to initialize the vector buffer.
      */
-    public static ReadonlyNativeVectorBuffer createFromShortArray(boolean unsigned, int dimensions, int count, short... shortArray)
+    public static @NotNull ReadonlyNativeVectorBuffer createFromShortArray(boolean unsigned, int dimensions, int count, short @NotNull ... shortArray)
     {
         if (unsigned)
         {
@@ -124,7 +126,7 @@ public final class NativeVectorBufferFactory
      * @param count The number of vector elements in the buffer.
      * @param intArray The elements to use to initialize the vector buffer.
      */
-    public static ReadonlyNativeVectorBuffer createFromIntArray(boolean unsigned, int dimensions, int count, int... intArray)
+    public static @NotNull ReadonlyNativeVectorBuffer createFromIntArray(boolean unsigned, int dimensions, int count, int @NotNull ... intArray)
     {
         if (unsigned)
         {
@@ -143,7 +145,7 @@ public final class NativeVectorBufferFactory
      * @param count The number of vector elements in the buffer.
      * @param floatArray The elements to use to initialize the vector buffer.
      */
-    public static ReadonlyNativeVectorBuffer createFromFloatArray(int dimensions, int count, float... floatArray)
+    public static @NotNull ReadonlyNativeVectorBuffer createFromFloatArray(int dimensions, int count, float @NotNull ... floatArray)
     {
         return new NativeFloatVectorBuffer(dimensions, count, floatArray);
     }
@@ -155,7 +157,7 @@ public final class NativeVectorBufferFactory
      * @param count The number of vector elements in the buffer.
      * @param doubleArray The elements to use to initialize the vector buffer.
      */
-    public static ReadonlyNativeVectorBuffer createFromDoubleArray(int dimensions, int count, double... doubleArray)
+    public static @NotNull ReadonlyNativeVectorBuffer createFromDoubleArray(int dimensions, int count, double @NotNull ... doubleArray)
     {
         return new NativeDoubleVectorBuffer(dimensions, count, doubleArray);
     }

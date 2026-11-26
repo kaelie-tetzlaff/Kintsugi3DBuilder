@@ -21,6 +21,8 @@ import kintsugi3d.builder.state.project.EnvironmentSettings;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.EncodableColorImage;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,10 +41,10 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
 
     protected abstract EnvironmentSettings getEnvironmentSettings();
 
-    protected abstract void onEnvironmentMapImageLoaded(EncodableColorImage environmentMapImage);
+    protected abstract void onEnvironmentMapImageLoaded(@Nullable EncodableColorImage environmentMapImage);
 
     @Override
-    public final Vector3 getEnvironmentColor()
+    public final @NotNull Vector3 getEnvironmentColor()
     {
         if (isEnabled())
         {
@@ -69,7 +71,7 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     }
 
     @Override
-    public final Vector3 getBackgroundColor()
+    public final @NotNull Vector3 getBackgroundColor()
     {
         if (isEnabled())
         {
@@ -106,7 +108,7 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
         }
     }
 
-    public final void loadEnvironmentMap(File newFile)
+    public final void loadEnvironmentMap(@NotNull File newFile)
     {
         environmentMapLoaded = false;
         long lastModified = newFile.lastModified();
@@ -135,7 +137,7 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
         }).start();
     }
 
-    public final void loadBackplate(File newFile)
+    public final void loadBackplate(@NotNull File newFile)
     {
         backplateLoaded = false;
         lastBackplateTime = newFile.lastModified();
@@ -162,7 +164,7 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     }
 
     @Override
-    public final BackgroundMode getBackgroundMode()
+    public final @NotNull BackgroundMode getBackgroundMode()
     {
         EnvironmentSettings selectedEnvironment = getEnvironmentSettings();
         if (backplateLoaded && isEnabled() && selectedEnvironment.isBackplateImageEnabled())
@@ -190,7 +192,7 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     }
 
     @Override
-    public final Matrix4 getEnvironmentMapMatrix()
+    public final @NotNull Matrix4 getEnvironmentMapMatrix()
     {
         if (isEnabled())
         {
@@ -261,7 +263,7 @@ public abstract class EnvironmentModelFromSettings implements EnvironmentModel
     }
 
     @Override
-    public final Vector3 getGroundPlaneColor()
+    public final @NotNull Vector3 getGroundPlaneColor()
     {
         if (isEnabled())
         {

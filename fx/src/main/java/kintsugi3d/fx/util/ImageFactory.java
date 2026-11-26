@@ -20,6 +20,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import kintsugi3d.gl.vecmath.Vector4;
 import kintsugi3d.util.EncodableColorImage;
+import org.jetbrains.annotations.NotNull;
 
 public final class ImageFactory
 {
@@ -43,14 +44,14 @@ public final class ImageFactory
         }
 
         @Override
-        public final Color getColor(int x, int y)
+        public final @NotNull Color getColor(int x, int y)
         {
             Vector4 colorVector = image.getSRGBEncodedRGBA(x, y);
             return new Color(clamp(colorVector.x), clamp(colorVector.y), clamp(colorVector.z), clamp(colorVector.w));
         }
     }
 
-    public static Image createFromAbstractImage(EncodableColorImage image)
+    public static @NotNull Image createFromAbstractImage(@NotNull EncodableColorImage image)
     {
         return new WritableImage(new PixelReaderImpl(image), image.getWidth(), image.getHeight());
     }

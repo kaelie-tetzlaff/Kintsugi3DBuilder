@@ -19,6 +19,8 @@ import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.core.ColorFormat.DataType;
 import kintsugi3d.gl.types.AbstractDataType;
 import kintsugi3d.gl.util.RadianceImageLoader.HDRImage;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 
 import java.awt.*;
@@ -28,7 +30,6 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.IntStream;
@@ -85,12 +86,12 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     public final TextureParameters parameters;
 
     public final int precision;
-    private final ColorFormat colorFormat;
-    private final CompressionFormat compressionFormat;
+    private final @Nullable ColorFormat colorFormat;
+    private final @Nullable CompressionFormat compressionFormat;
     private final TextureType textureType;
 
-    private OpenGLTexture(OpenGLContext context, int textureTarget, ColorFormat colorFormat,
-        CompressionFormat compressionFormat, TextureType textureType, int precision, TextureParameters parameters)
+    private OpenGLTexture(OpenGLContext context, int textureTarget, @Nullable ColorFormat colorFormat,
+                          @Nullable CompressionFormat compressionFormat, TextureType textureType, int precision, TextureParameters parameters)
     {
         this.context = context;
         this.textureTarget = textureTarget;
@@ -127,19 +128,19 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
     }
 
     @Override
-    public final OpenGLContext getContext()
+    public final @NotNull OpenGLContext getContext()
     {
         return context;
     }
 
     @Override
-    public final ColorFormat getInternalUncompressedColorFormat()
+    public final @Nullable ColorFormat getInternalUncompressedColorFormat()
     {
         return colorFormat;
     }
 
     @Override
-    public final CompressionFormat getInternalCompressedColorFormat()
+    public final @Nullable CompressionFormat getInternalCompressedColorFormat()
     {
         return compressionFormat;
     }
@@ -310,7 +311,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         }
     }
 
-    static int getSpecialInternalFormat(TextureType textureType, int precision)
+    static int getSpecialInternalFormat(@NotNull TextureType textureType, int precision)
     {
         switch(textureType)
         {
@@ -367,7 +368,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         }
     }
 
-    static int translateWrapMode(TextureWrapMode wrapMode)
+    static int translateWrapMode(@NotNull TextureWrapMode wrapMode)
     {
         switch(wrapMode)
         {
@@ -379,7 +380,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         }
     }
 
-    static int translateSamplerType(SamplerType samplerType)
+    static int translateSamplerType(@NotNull SamplerType samplerType)
     {
         switch (samplerType)
         {
@@ -413,7 +414,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
             case UNSIGNED_INTEGER_2D_ARRAY:
                 return GL_TEXTURE_2D_ARRAY;
             default:
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Unrecognized / unsupported texture sampler type.");
         }
     }
 
@@ -455,10 +456,10 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
 
     final boolean hasIntegerInternalFormat()
     {
-        return !isInternalFormatCompressed() && colorFormat.isInteger();
+        return colorFormat != null && colorFormat.isInteger();
     }
 
-    private static Stream<Entry<Integer, int[]>> getScanlineStream(BufferedImage colorImg, boolean flipVertical)
+    private static Stream<Entry<Integer, int[]>> getScanlineStream(@NotNull BufferedImage colorImg, boolean flipVertical)
     {
         // Use parallel stream to accelerate image decoding / copy,
         IntStream scanlineRange = IntStream.range(0, colorImg.getHeight()).parallel();
@@ -486,7 +487,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
      * @param flipVertical
      * @return
      */
-    static ByteBuffer bufferedImageToNativeBuffer(BufferedImage colorImg, boolean flipVertical)
+    static @NotNull ByteBuffer bufferedImageToNativeBuffer(@NotNull BufferedImage colorImg, boolean flipVertical)
     {
         ByteBuffer buffer = BufferUtils.createByteBuffer(colorImg.getWidth() * colorImg.getHeight() * 4);
         IntBuffer intBuffer = buffer.asIntBuffer();
@@ -516,9 +517,9 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
      *                          This determines how large of a buffer will be allocated.
      * @return
      */
-    static ByteBuffer bufferedImageToNativeBuffer(
-        BufferedImage colorImg, boolean flipVertical,
-        Function<ByteBuffer, BiConsumer<Integer, Color>> bufferWrapperFunction, int mappedColorLength)
+    static @NotNull ByteBuffer bufferedImageToNativeBuffer(
+        @NotNull BufferedImage colorImg, boolean flipVertical,
+        @NotNull Function<ByteBuffer, BiConsumer<Integer, Color>> bufferWrapperFunction, int mappedColorLength)
     {
         ByteBuffer buffer = BufferUtils.createByteBuffer(colorImg.getWidth() * colorImg.getHeight() * mappedColorLength);
         BiConsumer<Integer, Color> wrappedBuffer = bufferWrapperFunction.apply(buffer);
@@ -547,9 +548,9 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
      * @return
      * @param <MappedType>
      */
-    static <MappedType> ByteBuffer bufferedImageToNativeBuffer(
-        BufferedImage colorImg, boolean flipVertical,
-        AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction)
+    static <MappedType> @NotNull ByteBuffer bufferedImageToNativeBuffer(
+        @NotNull BufferedImage colorImg, boolean flipVertical,
+        @NotNull AbstractDataType<? super MappedType> mappedType, @NotNull Function<Color, MappedType> mappingFunction)
     {
         int mappedColorLength = mappedType.getSizeInBytes();
         Function<ByteBuffer, BiConsumer<Integer, ? super MappedType>> bufferWrapperFunctionPartial = mappedType::wrapIndexedByteBuffer;
@@ -562,7 +563,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         return bufferedImageToNativeBuffer(colorImg, flipVertical, bufferWrapperFunctionFull, mappedColorLength);
     }
 
-    static ByteBuffer hdrImageToNativeBuffer(HDRImage colorImg)
+    static @NotNull ByteBuffer hdrImageToNativeBuffer(@NotNull HDRImage colorImg)
     {
         // Use parallel stream to accelerate image copy
         IntStream scanlineRange = IntStream.range(0, colorImg.height);
@@ -587,7 +588,7 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         return buffer;
     }
 
-    static ByteBuffer hdrImageToNativeBuffer(HDRImage colorImg, BufferedImage maskImg)
+    static @NotNull ByteBuffer hdrImageToNativeBuffer(@NotNull HDRImage colorImg, @NotNull BufferedImage maskImg)
     {
         // Use parallel stream to accelerate image copy
         IntStream scanlineRange = IntStream.range(0, colorImg.height);
@@ -615,32 +616,30 @@ abstract class OpenGLTexture implements Texture<OpenGLContext>, OpenGLFramebuffe
         return buffer;
     }
 
-    static OpenGLTextureData bundleTextureData(int dimensions, boolean integer, int type, ByteBuffer buffer)
+    static @NotNull OpenGLTextureData bundleTextureData(int dimensions, boolean integer, int type, @NotNull ByteBuffer buffer)
     {
-        return new OpenGLTextureData(getPixelDataFormatFromDimensions(dimensions, integer), type, Objects.requireNonNull(buffer));
+        return new OpenGLTextureData(getPixelDataFormatFromDimensions(dimensions, integer), type, buffer);
     }
 
-    static OpenGLTextureData bundleTextureData(AbstractDataType<?> type, boolean integer, ByteBuffer buffer)
+    static @NotNull OpenGLTextureData bundleTextureData(@NotNull AbstractDataType<?> type, boolean integer, @NotNull ByteBuffer buffer)
     {
         return new OpenGLTextureData(getPixelDataFormatFromDimensions(type.getComponentCount(), integer),
-            OpenGLContext.getDataTypeConstant(type), Objects.requireNonNull(buffer));
+            OpenGLContext.getDataTypeConstant(type), buffer);
     }
 
-    static OpenGLTextureData bundleTextureData(BufferedImage image, boolean flipVertical)
+    static @NotNull OpenGLTextureData bundleTextureData(@NotNull BufferedImage image, boolean flipVertical)
     {
-        return new OpenGLTextureData(GL_BGRA, GL_UNSIGNED_BYTE,
-            bufferedImageToNativeBuffer(Objects.requireNonNull(image), flipVertical));
+        return new OpenGLTextureData(GL_BGRA, GL_UNSIGNED_BYTE, bufferedImageToNativeBuffer(image, flipVertical));
     }
 
-    static OpenGLTextureData bundleTextureData(HDRImage colorImg, BufferedImage maskImg)
+    static @NotNull OpenGLTextureData bundleTextureData(@NotNull HDRImage colorImg, @NotNull BufferedImage maskImg)
     {
-        return new OpenGLTextureData(GL_RGBA, GL_FLOAT,
-            hdrImageToNativeBuffer(Objects.requireNonNull(colorImg), Objects.requireNonNull(maskImg)));
+        return new OpenGLTextureData(GL_RGBA, GL_FLOAT, hdrImageToNativeBuffer(colorImg, maskImg));
     }
 
-    static OpenGLTextureData bundleTextureData(HDRImage image)
+    static @NotNull OpenGLTextureData bundleTextureData(@NotNull HDRImage image)
     {
-        return new OpenGLTextureData(GL_RGB, GL_FLOAT, hdrImageToNativeBuffer(Objects.requireNonNull(image)));
+        return new OpenGLTextureData(GL_RGB, GL_FLOAT, hdrImageToNativeBuffer(image));
     }
 
     @Override

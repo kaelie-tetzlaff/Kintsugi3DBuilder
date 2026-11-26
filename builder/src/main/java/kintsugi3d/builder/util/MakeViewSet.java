@@ -19,6 +19,7 @@ import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.io.ViewSetWriterToVSET;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -32,7 +33,7 @@ public final class MakeViewSet
     {
     }
 
-    private static ReadonlyViewSet makeViewSet(int viewCount, float distance, float nearPlane, float aspect, float sensorWidth, float focal)
+    private static @NotNull ReadonlyViewSet makeViewSet(int viewCount, float distance, float nearPlane, float aspect, float sensorWidth, float focal)
     {
         List<Vector3> viewDirections = new ArrayList<>(viewCount);
 
@@ -57,7 +58,7 @@ public final class MakeViewSet
             nearPlane, aspect, sensorWidth, focal);
     }
 
-    public static void main(String[] args)
+    public static void main(String @NotNull [] args)
     {
         ReadonlyViewSet viewSet = makeViewSet(Integer.parseInt(args[0]), Float.parseFloat(args[1]),
             Float.parseFloat(args[2]), Float.parseFloat(args[3]), Float.parseFloat(args[4]), Float.parseFloat(args[5]));

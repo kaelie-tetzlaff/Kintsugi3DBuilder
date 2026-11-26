@@ -15,6 +15,8 @@
 
 package kintsugi3d.fx.controllers.paged;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.function.Supplier;
 
 public final class NonDataSentinelPageBuilder extends NonDataPageBuilder<PageFrameController>
@@ -24,7 +26,7 @@ public final class NonDataSentinelPageBuilder extends NonDataPageBuilder<PageFra
         super(new SentinelPage<>(), frameController, finisher);
     }
 
-    static NonDataSentinelPageBuilder of(PageFrameController frameController, Supplier<PageFrameController> finisher)
+    static @NotNull NonDataSentinelPageBuilder of(@NotNull PageFrameController frameController, Supplier<PageFrameController> finisher)
     {
         NonDataSentinelPageBuilder result = new NonDataSentinelPageBuilder(frameController, finisher);
 

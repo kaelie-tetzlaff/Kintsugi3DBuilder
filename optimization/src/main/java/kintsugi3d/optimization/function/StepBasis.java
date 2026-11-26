@@ -16,6 +16,7 @@
 package kintsugi3d.optimization.function;
 
 import kintsugi3d.optimization.MatrixSystem;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.IntToDoubleFunction;
 import java.util.function.ObjIntConsumer;
@@ -57,7 +58,7 @@ public class StepBasis implements BasisFunctions
 
     @Override
     public final void contributeToFittingSystem(int valueCurrent, int valueNext, int instanceCount,
-                                                MatrixBuilderSums sums, MatrixSystem fittingSystem)
+                                                @NotNull MatrixBuilderSums sums, @NotNull MatrixSystem fittingSystem)
     {
         // Add the running total to elements of the ATA matrix and the ATy vector corresponding to the next value
         // as well as any values skipped over.
@@ -158,7 +159,7 @@ public class StepBasis implements BasisFunctions
     }
 
     @Override
-    public final void evaluateSolution(double constantTerm, IntToDoubleFunction nonConstantSolution, ObjIntConsumer<Double> functionConsumer)
+    public final void evaluateSolution(double constantTerm, @NotNull IntToDoubleFunction nonConstantSolution, @NotNull ObjIntConsumer<Double> functionConsumer)
     {
         // Constant term
         double currentValue = constantTerm * metallicity;

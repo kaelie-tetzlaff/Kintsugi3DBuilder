@@ -17,6 +17,7 @@ package kintsugi3d.builder.io;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.jetbrains.annotations.NotNull;
 
 @JsonSerialize(as = LoadOptionsModel.class)
 @JsonDeserialize(as = SimpleLoadOptionsModel.class)
@@ -33,7 +34,7 @@ public interface LoadOptionsModel extends ReadonlyLoadOptionsModel
     void setPreviewImageHeight(int previewImageHeight);
     void setPreviewImageWidth(int previewImageWidth);
 
-    default void copyFrom(ReadonlyLoadOptionsModel otherModel)
+    default void copyFrom(@NotNull ReadonlyLoadOptionsModel otherModel)
     {
         setColorImagesRequested(otherModel.areColorImagesRequested());
         setMipmapsRequested(otherModel.areMipmapsRequested());

@@ -15,6 +15,8 @@
 
 package kintsugi3d.optimization.function;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.function.IntToDoubleFunction;
 
 /**
@@ -73,7 +75,7 @@ public class MatrixBuilderSample
     private final double[] observed;
 
     @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
-    public MatrixBuilderSample(double actual, BasisFunctions basisLibrary, double analytic, double sampleWeight,
+    public MatrixBuilderSample(double actual, @NotNull BasisFunctions basisLibrary, double analytic, double sampleWeight,
                                IntToDoubleFunction weightByInstance, double... observed)
     {
         this.actual = actual;

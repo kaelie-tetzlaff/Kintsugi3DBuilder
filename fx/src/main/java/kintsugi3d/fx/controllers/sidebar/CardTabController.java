@@ -36,6 +36,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import kintsugi3d.builder.state.cards.ProjectDataCard;
 import kintsugi3d.fx.internal.ObservableCardsModel;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,7 +84,7 @@ public class CardTabController
     private static final double WIDTH_TOLERANCE = 2.0;
     private double lastSidebarWidth = -1;
 
-    public final void init(@SuppressWarnings("ParameterHidesMemberVariable") ObservableCardsModel<?> cardsModel)
+    public final void init(@SuppressWarnings("ParameterHidesMemberVariable") @NotNull ObservableCardsModel<?> cardsModel)
     {
         this.cardsModel = cardsModel;
 
@@ -254,7 +255,7 @@ public class CardTabController
         });
     }
 
-    private CardController createDataCard(ProjectDataCard card) throws IOException
+    private @NotNull CardController createDataCard(@NotNull ProjectDataCard card) throws IOException
     {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/fxml/main/leftpanel/DataCard.fxml"));
@@ -495,7 +496,7 @@ public class CardTabController
             }
             else
             {
-                System.err.println("The folder does not exist.");
+                LOG.error("The folder does not exist.");
             }
         }
     }

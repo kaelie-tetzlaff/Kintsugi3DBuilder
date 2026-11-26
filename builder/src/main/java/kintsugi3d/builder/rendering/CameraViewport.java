@@ -18,6 +18,7 @@ package kintsugi3d.builder.rendering;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Framebuffer;
 import kintsugi3d.gl.vecmath.Matrix4;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Class for representing a portion of a camera's view, i.e. for rendering a perspective scene in subdivisions.
@@ -25,15 +26,15 @@ import kintsugi3d.gl.vecmath.Matrix4;
 public class CameraViewport
 {
     private final Matrix4 view;
-    private final Matrix4 fullProjection;
-    private final Matrix4 viewportCrop;
-    private final Matrix4 viewportProjection;
+    private final @NotNull Matrix4 fullProjection;
+    private final @NotNull Matrix4 viewportCrop;
+    private final @NotNull Matrix4 viewportProjection;
     private final int x;
     private final int y;
     private final int width;
     private final int height;
 
-    public CameraViewport(Matrix4 view, Matrix4 fullProjection, Matrix4 viewportCrop, int x, int y, int width, int height)
+    public CameraViewport(Matrix4 view, @NotNull Matrix4 fullProjection, @NotNull Matrix4 viewportCrop, int x, int y, int width, int height)
     {
         this.view = view;
         this.fullProjection = fullProjection;
@@ -50,7 +51,7 @@ public class CameraViewport
      * @param newView
      * @return
      */
-    public final CameraViewport copyForView(Matrix4 newView)
+    public final @NotNull CameraViewport copyForView(Matrix4 newView)
     {
         return new CameraViewport(newView, fullProjection, viewportCrop, x, y, width, height);
     }
@@ -64,7 +65,7 @@ public class CameraViewport
      * The full projection matrix that would fill the entire window
      * @return
      */
-    public final Matrix4 getFullProjection()
+    public final @NotNull Matrix4 getFullProjection()
     {
         return fullProjection;
     }
@@ -73,7 +74,7 @@ public class CameraViewport
      * The matrix which crops the full clip space into the viewport being rendered.
      * @return
      */
-    public final Matrix4 getViewportCrop()
+    public final @NotNull Matrix4 getViewportCrop()
     {
         return viewportCrop;
     }
@@ -83,7 +84,7 @@ public class CameraViewport
      * Will be equal to viewportCrop * fullProjection.
      * @return
      */
-    public final Matrix4 getViewportProjection()
+    public final @NotNull Matrix4 getViewportProjection()
     {
         return viewportProjection;
     }
@@ -108,7 +109,7 @@ public class CameraViewport
         return height;
     }
 
-    public final <ContextType extends Context<ContextType>> Framebuffer<ContextType> ofFramebuffer(Framebuffer<ContextType> framebuffer)
+    public final <ContextType extends Context<ContextType>> Framebuffer<ContextType> ofFramebuffer(@NotNull Framebuffer<ContextType> framebuffer)
     {
         return framebuffer.getViewport(x, y, width, height);
     }

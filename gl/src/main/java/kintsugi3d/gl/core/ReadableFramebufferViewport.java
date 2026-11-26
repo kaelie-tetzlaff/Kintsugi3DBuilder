@@ -16,6 +16,7 @@
 package kintsugi3d.gl.core;
 
 import kintsugi3d.gl.vecmath.IntVector2;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -39,7 +40,7 @@ class ReadableFramebufferViewport<ContextType extends Context<ContextType>>
         }
 
         @Override
-        public final ContextType getContext()
+        public final @NotNull ContextType getContext()
         {
             return framebufferViewport.getContext();
         }
@@ -79,19 +80,19 @@ class ReadableFramebufferViewport<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final FramebufferReadContents<ContextType> getReadContents()
+    public final @NotNull FramebufferReadContents<ContextType> getReadContents()
     {
         return new ReadContents<>(this, framebuffer.getReadContents());
     }
 
     @Override
-    public final ColorTextureReader getTextureReaderForColorAttachment(int attachmentIndex)
+    public final @NotNull ColorTextureReader getTextureReaderForColorAttachment(int attachmentIndex)
     {
         return new FramebufferViewportColorTextureReader<>(this, attachmentIndex);
     }
 
     @Override
-    public final DepthTextureReader getTextureReaderForDepthAttachment()
+    public final @NotNull DepthTextureReader getTextureReaderForDepthAttachment()
     {
         return new FramebufferViewportDepthTextureReader<>(this);
     }
@@ -105,7 +106,7 @@ class ReadableFramebufferViewport<ContextType extends Context<ContextType>>
      * @return
      */
     @Override
-    public final FramebufferViewport<ContextType> getViewport(int x, int y, int viewportWidth, int viewportHeight)
+    public final @NotNull FramebufferViewport<ContextType> getViewport(int x, int y, int viewportWidth, int viewportHeight)
     {
         return new ReadableFramebufferViewport<>(this,
             new IntVector2(x + getOffset().x, y + getOffset().y), new FramebufferSize(viewportWidth, viewportHeight));

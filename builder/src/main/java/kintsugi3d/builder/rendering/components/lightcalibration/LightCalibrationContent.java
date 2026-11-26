@@ -15,6 +15,7 @@
 
 package kintsugi3d.builder.rendering.components.lightcalibration;
 
+import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.rendering.CameraViewport;
 import kintsugi3d.builder.rendering.RenderedComponent;
 import kintsugi3d.builder.rendering.SceneModel;
@@ -28,23 +29,36 @@ import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
 
 public class LightCalibrationContent <ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
-    private final ContextType context;
-    private final ReadonlyImageBasedGraphicsResources<ContextType> resources;
+    private static final Logger LOG = LoggerFactory.getLogger(LightCalibrationContent.class);
+
+    private final @NotNull ContextType context;
+    private final @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources;
     private final SceneModel sceneModel;
     private final SceneViewportModel sceneViewportModel;
 
-    private RenderingSubject<ContextType> renderingSubject;
+    private @Nullable RenderingSubject<ContextType> renderingSubject;
 
-    public LightCalibrationContent(ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel,
+    public LightCalibrationContent(@NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel,
                                    SceneViewportModel sceneViewportModel)
     {
         context = resources.getContext();
         this.resources = resources;
         this.sceneModel = sceneModel;
         this.sceneViewportModel = sceneViewportModel;
+    }
+
+    private @NotNull RenderingSubject<ContextType> validateRenderingSubject()
+    {
+        return Objects.requireNonNull(renderingSubject, "Rendered component has not been initialized.");
     }
 
     @Override
@@ -60,17 +74,17 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
     @Override
     public final void reloadShaders()
     {
-        renderingSubject.reloadShaders();
+        validateRenderingSubject().reloadShaders();
     }
 
     @Override
     public final void update()
     {
-        renderingSubject.update();
+        validateRenderingSubject().update();
     }
 
     @Override
-    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(@NotNull FramebufferObject<ContextType> framebuffer, @NotNull CameraViewport cameraViewport)
     {
         Vector3 lightPosition = sceneModel.getSettingsModel().get("currentLightCalibration", Vector2.class).asVector3();
         Matrix4 lightTransform = Matrix4.translate(lightPosition.negated());
@@ -78,7 +92,8 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
         // Only draw the rendering subject for light calibration, no other components like backplate, grid, ground plane, etc.
 
         // Hole fill color depends on whether in light calibration mode or not.
-        renderingSubject.getProgram().setUniform("holeFillColor", new Vector3(0.5f));
+        RenderingSubject<ContextType> validatedRenderingSubject = validateRenderingSubject();
+        validatedRenderingSubject.getProgram().setUniform("holeFillColor", new Vector3(0.5f));
 
         Matrix4 lightView = lightTransform.times(cameraViewport.getView());
         Vector3 lightPosWorldSpace = lightView.getUpperLeft3x3().transpose().times(lightView.getColumn(3).getXYZ().negated());
@@ -92,15 +107,25 @@ public class LightCalibrationContent <ContextType extends Context<ContextType>> 
 
         try(UniformBuffer<ContextType> viewIndexBuffer = context.createUniformBuffer())
         {
-            // TODO byte ordering seems to be OS-dependent when setting up this uniform buffer, or perhaps less tolerant of incomplete GLSL types
-            int selectedCameraViewIndex = sceneModel.getCameraViewListModel().getSelectedView().getGPUViewIndex();
-            viewIndexBuffer.setData(NativeVectorBufferFactory
-                .createFromIntArray(false, 4, 1,
-                    selectedCameraViewIndex, selectedCameraViewIndex, selectedCameraViewIndex, selectedCameraViewIndex));
-            renderingSubject.setViewIndexBufferOverride(viewIndexBuffer);
+            View selectedView = sceneModel.getCameraViewListModel().getSelectedView();
 
-            // Draw the actual object, without model transformation for light calibration
-            renderingSubject.draw(framebuffer, cameraViewport.copyForView(lookAt));
+            if (selectedView != null)
+            {
+                int selectedCameraViewIndex = selectedView.getGPUViewIndex();
+
+                // TODO byte ordering seems to be OS-dependent when setting up this uniform buffer, or perhaps less tolerant of incomplete GLSL types
+                viewIndexBuffer.setData(NativeVectorBufferFactory
+                    .createFromIntArray(false, 4, 1,
+                        selectedCameraViewIndex, selectedCameraViewIndex, selectedCameraViewIndex, selectedCameraViewIndex));
+                validatedRenderingSubject.setViewIndexBufferOverride(viewIndexBuffer);
+
+                // Draw the actual object, without model transformation for light calibration
+                validatedRenderingSubject.draw(framebuffer, cameraViewport.copyForView(lookAt));
+            }
+            else
+            {
+                LOG.warn("No view is selected.");
+            }
         }
 
         context.flush();

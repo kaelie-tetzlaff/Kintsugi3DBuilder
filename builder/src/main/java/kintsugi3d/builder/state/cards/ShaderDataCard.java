@@ -17,6 +17,8 @@ package kintsugi3d.builder.state.cards;
 
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.state.shader.ShaderInfo;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
@@ -36,7 +38,7 @@ public class ShaderDataCard extends ProjectDataCard
      * Used in initialization
      * @param shader
      */
-    private static Map<String, Runnable> getActionMap(ShaderInfo shader)
+    private static @NotNull Map<String, Runnable> getActionMap(ShaderInfo shader)
     {
         Runnable viewShader = () ->
         {
@@ -74,8 +76,8 @@ public class ShaderDataCard extends ProjectDataCard
      * @param isEnabled
      */
     public ShaderDataCard(
-        String internalName, String title, ShaderInfo shader, String thumbnailPath, String fullResImageFilePath,
-        Map<String, String> textFields, Collection<? extends Map<String, Runnable>> actionGroups, boolean isEnabled)
+        String internalName, String title, ShaderInfo shader, String thumbnailPath, @Nullable String fullResImageFilePath,
+        @NotNull Map<String, String> textFields, @NotNull Collection<? extends Map<String, Runnable>> actionGroups, boolean isEnabled)
     {
         super(internalName, title, fullResImageFilePath, thumbnailPath, textFields,
             Stream.concat(Stream.of(getActionMap(shader)), actionGroups.stream()).collect(Collectors.toList()),
@@ -94,8 +96,8 @@ public class ShaderDataCard extends ProjectDataCard
      * @param isEnabled
      */
     public ShaderDataCard(
-        String internalName, ShaderInfo shader, String thumbnailPath, String fullResImageFilePath,
-        Map<String, String> textFields, Collection<? extends Map<String, Runnable>> actionGroups, boolean isEnabled)
+        String internalName, @NotNull ShaderInfo shader, String thumbnailPath, @Nullable String fullResImageFilePath,
+        @NotNull Map<String, String> textFields, @NotNull Collection<? extends Map<String, Runnable>> actionGroups, boolean isEnabled)
     {
         this(internalName, shader.getFriendlyName(), shader, thumbnailPath, fullResImageFilePath, textFields,
             actionGroups, isEnabled);

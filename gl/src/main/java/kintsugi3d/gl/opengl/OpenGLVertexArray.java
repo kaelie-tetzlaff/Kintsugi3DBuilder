@@ -19,6 +19,7 @@ import kintsugi3d.gl.core.ContextBound;
 import kintsugi3d.gl.core.ManagedResource;
 import kintsugi3d.gl.core.ReadonlyVertexBuffer;
 import kintsugi3d.gl.exceptions.NoSpecifiedVertexBuffersException;
+import org.jetbrains.annotations.NotNull;
 
 import static org.lwjgl.opengl.GL30.*;
 
@@ -106,7 +107,7 @@ class OpenGLVertexArray implements ManagedResource, ContextBound<OpenGLContext>
     }
 
     @Override
-    public final OpenGLContext getContext()
+    public final @NotNull OpenGLContext getContext()
     {
         return context;
     }

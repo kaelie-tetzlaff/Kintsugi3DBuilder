@@ -22,6 +22,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.MultipleSelectionModel;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.state.SelectableViewListModel;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -45,13 +46,13 @@ public class ObservableViewListModel implements SelectableViewListModel
     }
 
     @Override
-    public final List<View> getViewList()
+    public final @NotNull List<View> getViewList()
     {
         return Collections.unmodifiableList(cameraViewListProperty.getValue());
     }
 
     @Override
-    public final void setViewList(List<View> cameraViewList)
+    public final void setViewList(@NotNull List<View> cameraViewList)
     {
         cameraViewListProperty.setValue(FXCollections.observableList(cameraViewList));
     }

@@ -22,10 +22,11 @@ import kintsugi3d.builder.rendering.components.scene.light.LightVisualsGroup;
 import kintsugi3d.builder.resources.LightingResources;
 import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.NotNull;
 
 public class StandardScene<ContextType extends Context<ContextType>> extends BaseScene<ContextType>
 {
-    public StandardScene(ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel, SceneViewportModel sceneViewportModel)
+    public StandardScene(@NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneModel sceneModel, SceneViewportModel sceneViewportModel)
     {
         super(resources, sceneModel, sceneViewportModel);
     }

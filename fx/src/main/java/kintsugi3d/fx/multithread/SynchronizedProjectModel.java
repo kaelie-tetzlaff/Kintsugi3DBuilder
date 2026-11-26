@@ -18,6 +18,7 @@ package kintsugi3d.fx.multithread;
 import javafx.application.Platform;
 import kintsugi3d.builder.core.texture.ImageReplacer;
 import kintsugi3d.builder.state.project.ProjectModel;
+import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -32,10 +33,10 @@ import java.io.IOException;
 public class SynchronizedProjectModel implements ProjectModel
 {
     public static final String NULL_PROJECT_NAME = "No Project";
-    private final ProjectModel baseModel;
-    private final SynchronizedValue<File> colorCheckerFile;
+    private final @NotNull ProjectModel baseModel;
+    private final @NotNull SynchronizedValue<File> colorCheckerFile;
 
-    public SynchronizedProjectModel(ProjectModel baseModel)
+    public SynchronizedProjectModel(@NotNull ProjectModel baseModel)
     {
         this.baseModel = baseModel;
         colorCheckerFile = SynchronizedValue.createFromFunctions(baseModel::getColorCheckerFile, baseModel::setColorCheckerFile);

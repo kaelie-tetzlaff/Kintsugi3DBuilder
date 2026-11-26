@@ -17,6 +17,8 @@ package kintsugi3d.gl.opengl;
 
 import kintsugi3d.gl.builders.base.FramebufferObjectBuilderBase;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 
 import java.nio.ByteBuffer;
@@ -35,11 +37,11 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
     private final int id;
     private final int width;
     private final int height;
-    private final AbstractCollection<ManagedResource> ownedAttachments;
-    private final OpenGLFramebufferAttachment[] colorAttachments;
-    private OpenGLFramebufferAttachment depthAttachment;
-    private OpenGLFramebufferAttachment stencilAttachment;
-    private OpenGLFramebufferAttachment depthStencilAttachment;
+    private final @NotNull AbstractCollection<ManagedResource> ownedAttachments;
+    private final OpenGLFramebufferAttachment @NotNull [] colorAttachments;
+    private @Nullable OpenGLFramebufferAttachment depthAttachment;
+    private @Nullable OpenGLFramebufferAttachment stencilAttachment;
+    private @Nullable OpenGLFramebufferAttachment depthStencilAttachment;
     private boolean live = true;
 
     public static class OpenGLFramebufferObjectBuilder extends FramebufferObjectBuilderBase<OpenGLContext>
@@ -50,7 +52,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         }
 
         @Override
-        public final FramebufferObject<OpenGLContext> createFramebufferObject()
+        public final @NotNull FramebufferObject<OpenGLContext> createFramebufferObject()
         {
             if (getColorAttachmentCount() > GL_MAX_COLOR_ATTACHMENTS)
             {
@@ -133,12 +135,12 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
     }
 
     private OpenGLFramebufferObject(
-            OpenGLContext context,
-            int width, int height,
-            OpenGLTexture2D[] colorAttachments,
-            OpenGLTexture2D depthAttachment,
-            OpenGLTexture2D stencilAttachment,
-            OpenGLTexture2D depthStencilAttachment)
+        OpenGLContext context,
+        int width, int height,
+        OpenGLTexture2D @NotNull [] colorAttachments,
+        @Nullable OpenGLTexture2D depthAttachment,
+        @Nullable OpenGLTexture2D stencilAttachment,
+        @Nullable OpenGLTexture2D depthStencilAttachment)
     {
         super(context);
 
@@ -187,7 +189,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
     }
 
     @Override
-    public FramebufferSize getSize()
+    public @NotNull FramebufferSize getSize()
     {
         return new FramebufferSize(width, height);
     }
@@ -209,7 +211,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
     }
 
     @Override
-    public FramebufferSize getSizeForRead()
+    public @NotNull FramebufferSize getSizeForRead()
     {
         return getSize();
     }
@@ -221,13 +223,13 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
     }
 
     @Override
-    public ColorTextureReader getTextureReaderForColorAttachment(int attachmentIndex)
+    public @NotNull ColorTextureReader getTextureReaderForColorAttachment(int attachmentIndex)
     {
         return new ColorFBOReader(this, attachmentIndex);
     }
 
     @Override
-    public DepthTextureReader getTextureReaderForDepthAttachment()
+    public @NotNull DepthTextureReader getTextureReaderForDepthAttachment()
     {
         return new DepthFBOReader(this);
     }
@@ -283,7 +285,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
     }
 
     @Override
-    public OpenGLTexture2D getDepthAttachmentTexture()
+    public @NotNull OpenGLTexture2D getDepthAttachmentTexture()
     {
         if (depthAttachment == null || !(depthAttachment instanceof OpenGLTexture2D))
         {
@@ -325,7 +327,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
     }
 
     @Override
-    public OpenGLTexture2D getStencilAttachmentTexture()
+    public @NotNull OpenGLTexture2D getStencilAttachmentTexture()
     {
         if (stencilAttachment == null || !(stencilAttachment instanceof OpenGLTexture2D))
         {
@@ -368,7 +370,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
     }
 
     @Override
-    public OpenGLTexture2D getDepthStencilAttachmentTexture()
+    public @NotNull OpenGLTexture2D getDepthStencilAttachmentTexture()
     {
         if (depthStencilAttachment == null || !(depthStencilAttachment instanceof OpenGLTexture2D))
         {
@@ -455,7 +457,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         }
 
         @Override
-        public final void readARGB(ByteBuffer destination, int x, int y, int readWidth, int readHeight)
+        public final void readARGB(@NotNull ByteBuffer destination, int x, int y, int readWidth, int readHeight)
         {
             if (destination.remaining() < readWidth * readHeight * 4)
             {
@@ -478,7 +480,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         }
 
         @Override
-        public final void readFloatingPointRGBA(FloatBuffer destination, int x, int y, int readWidth, int readHeight)
+        public final void readFloatingPointRGBA(@NotNull FloatBuffer destination, int x, int y, int readWidth, int readHeight)
         {
             if (destination.remaining() < readWidth * readHeight * 4)
             {
@@ -500,7 +502,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         }
 
         @Override
-        public final void readIntegerRGBA(IntBuffer destination, int x, int y, int readWidth, int readHeight)
+        public final void readIntegerRGBA(@NotNull IntBuffer destination, int x, int y, int readWidth, int readHeight)
         {
             if (destination.remaining() < readWidth * readHeight * 4)
             {
@@ -544,7 +546,7 @@ final class OpenGLFramebufferObject extends OpenGLFramebuffer implements Framebu
         }
 
         @Override
-        public final void read(ShortBuffer destination, int x, int y, int width, int height)
+        public final void read(@NotNull ShortBuffer destination, int x, int y, int width, int height)
         {
             if (destination.remaining() < width * height)
             {

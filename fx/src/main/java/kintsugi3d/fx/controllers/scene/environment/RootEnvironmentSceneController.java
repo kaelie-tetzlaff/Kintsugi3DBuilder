@@ -25,6 +25,7 @@ import javafx.scene.layout.VBox;
 import kintsugi3d.fx.internal.ObservableEnvironmentModel;
 import kintsugi3d.fx.internal.ObservableProjectModel;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +52,7 @@ public class RootEnvironmentSceneController
 
     private ObservableProjectModel projectModel;
 
-    public final void injectDependencies(ObservableEnvironmentModel environmentMapModel, ObservableProjectModel injectedProjectModel)
+    public final void injectDependencies(@NotNull ObservableEnvironmentModel environmentMapModel, ObservableProjectModel injectedProjectModel)
     {
         projectModel = injectedProjectModel;
 

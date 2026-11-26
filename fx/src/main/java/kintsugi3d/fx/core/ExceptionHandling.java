@@ -21,6 +21,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.ButtonType;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,19 +33,19 @@ public final class ExceptionHandling
     {
     }
 
-    public static void error(String message, Throwable e)
+    public static void error(String message, @NotNull Throwable e)
     {
         LOG.error("{}: {}", message, e, e);
         showAlert(message, e);
     }
 
-    public static void warn(String message, Throwable e)
+    public static void warn(String message, @NotNull Throwable e)
     {
         LOG.warn("{}: {}", message, e, e);
         showAlert(message, e);
     }
 
-    private static void showAlert(String message, Throwable e)
+    private static void showAlert(String message, @NotNull Throwable e)
     {
         try
         {
@@ -61,7 +62,7 @@ public final class ExceptionHandling
         }
         catch (IllegalStateException ex)
         {
-            System.err.println("Error: " + ex.getMessage());
+            LOG.error("Error: {}", ex.getMessage());
         }
     }
 }

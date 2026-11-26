@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import kintsugi3d.builder.preferences.ReadOnlyUserPreferencesModel;
 import kintsugi3d.builder.preferences.UserPreferencesModel;
 import kintsugi3d.builder.util.ApplicationFolders;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -74,12 +75,12 @@ public class JacksonUserPreferencesSerializer implements UserPreferencesSerializ
     }
 
     @Override
-    public final List<Exception> getStartupExceptions()
+    public final @NotNull List<Exception> getStartupExceptions()
     {
         return Collections.unmodifiableList(startupExceptions);
     }
 
-    public static File getPreferencesFile()
+    public static @NotNull File getPreferencesFile()
     {
         return new File(DIRECTORY, FILE_NAME);
     }

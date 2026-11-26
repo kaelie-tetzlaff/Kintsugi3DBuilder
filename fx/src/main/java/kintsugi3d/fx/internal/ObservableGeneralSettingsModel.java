@@ -36,7 +36,7 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
 {
     private static final class TypedProperty implements Property<Object>
     {
-        private final ObjectProperty<Object> base;
+        private final @NotNull ObjectProperty<Object> base;
         private final Class<?> type;
         private final boolean serialize;
 
@@ -221,26 +221,26 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
     }
 
     @Override
-    public final Observable getObservable(String name)
+    public final @NotNull Observable getObservable(String name)
     {
         return getObjectProperty(name, Object.class);
     }
 
     @Override
-    public final Property<Boolean> getBooleanProperty(String name)
+    public final @NotNull Property<Boolean> getBooleanProperty(String name)
     {
         return getObjectProperty(name, Boolean.class);
     }
 
     @Override
-    public final Property<Number> getNumericProperty(String name)
+    public final @NotNull Property<Number> getNumericProperty(String name)
     {
         return getObjectProperty(name, Number.class);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public final <T> Property<T> getObjectProperty(String name, Class<T> settingType)
+    public final <T> @NotNull Property<T> getObjectProperty(String name, @NotNull Class<T> settingType)
     {
         if (settingsMap.containsKey(name))
         {
@@ -255,7 +255,7 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
     }
 
     @Override
-    public final void createSetting(String name, Class<?> type, Object initialValue, boolean serialize)
+    public final void createSetting(String name, @NotNull Class<?> type, Object initialValue, boolean serialize)
     {
         if(settingsMap.containsKey(name))
         {
@@ -289,7 +289,7 @@ public class ObservableGeneralSettingsModel extends GeneralSettingsModelBase imp
         }
 
         @Override
-        public final Setting next()
+        public final @NotNull Setting next()
         {
             Entry<String, TypedProperty> nextEntry = innerIterator.next();
 

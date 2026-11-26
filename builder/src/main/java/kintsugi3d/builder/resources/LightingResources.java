@@ -21,11 +21,14 @@ import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 public class LightingResources<ContextType extends Context<ContextType>> implements ManagedResource
 {
@@ -36,22 +39,24 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
      */
     public static final float CLIP_PLANE_SCALE_MULTIPLIER = 0.28867513f;
 
+    public static final String UNINITIALIZED_MESSAGE = "Lighting resources have not been initialized.";
+
     private final ContextType context;
     private final SceneModel sceneModel;
 
-    private ProgramObject<ContextType> shadowProgram;
+    private @Nullable ProgramObject<ContextType> shadowProgram;
 
-    private Texture3D<ContextType> shadowMaps;
-    private FramebufferObject<ContextType> shadowFramebuffer;
-    private DrawableResource<ContextType> shadowDrawable;
+    private @Nullable Texture3D<ContextType> shadowMaps;
+    private @Nullable FramebufferObject<ContextType> shadowFramebuffer;
+    private @Nullable DrawableResource<ContextType> shadowDrawable;
 
     // A reference to the position buffer for the object casting shadows.
     // Not managed or released by LightingResources
-    private ReadonlyVertexBuffer<ContextType> shadowCastingPositionBuffer;
+    private @Nullable ReadonlyVertexBuffer<ContextType> shadowCastingPositionBuffer;
 
-    private Texture2D<ContextType> backplateTexture;
-    private Cubemap<ContextType> environmentMap;
-    private FramebufferObject<ContextType> screenSpaceDepthFBO;
+    private @Nullable Texture2D<ContextType> backplateTexture;
+    private @Nullable Cubemap<ContextType> environmentMap;
+    private @Nullable FramebufferObject<ContextType> screenSpaceDepthFBO;
 
 
     public LightingResources(ContextType context, SceneModel sceneModel)
@@ -113,7 +118,7 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
         }
     }
 
-    public final ReadonlyTexture2D<ContextType> getBackplateTexture()
+    public final @Nullable ReadonlyTexture2D<ContextType> getBackplateTexture()
     {
         return backplateTexture;
     }
@@ -132,7 +137,7 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
         backplateTexture = newBackplateTexture;
     }
 
-    public final Cubemap<ContextType> getEnvironmentMap()
+    public final @Nullable Cubemap<ContextType> getEnvironmentMap()
     {
         return environmentMap;
     }
@@ -151,18 +156,43 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
         environmentMap = newEnvironmentMap;
     }
 
+    private @NotNull Program<ContextType> validateShadowProgram()
+    {
+        return Objects.requireNonNull(shadowProgram, UNINITIALIZED_MESSAGE);
+    }
+
+    private @NotNull DrawableResource<ContextType> validateShadowDrawable()
+    {
+        return Objects.requireNonNull(shadowDrawable, UNINITIALIZED_MESSAGE);
+    }
+
+    private @NotNull Texture3D<ContextType> validateShadowMaps()
+    {
+        return Objects.requireNonNull(shadowMaps, UNINITIALIZED_MESSAGE);
+    }
+
+    private @NotNull FramebufferObject<ContextType> validateShadowFramebuffer()
+    {
+        return Objects.requireNonNull(shadowFramebuffer, UNINITIALIZED_MESSAGE);
+    }
+
+    private @NotNull FramebufferObject<ContextType> validateScreenSpaceDepthFBO()
+    {
+        return Objects.requireNonNull(screenSpaceDepthFBO, UNINITIALIZED_MESSAGE);
+    }
+
     /**
      * Used for generating shadow maps.
      * Does not take ownership of this buffer.
      * @param positionBuffer
      */
-    public final void setShadowCastingPositionBuffer(ReadonlyVertexBuffer<ContextType> positionBuffer)
+    public final void setShadowCastingPositionBuffer(@NotNull ReadonlyVertexBuffer<ContextType> positionBuffer)
     {
-        shadowDrawable.addVertexBuffer("position", positionBuffer);
+        validateShadowDrawable().addVertexBuffer("position", positionBuffer);
         shadowCastingPositionBuffer = positionBuffer;
     }
 
-    public final Matrix4 getLightProjection(int lightIndex)
+    public final @NotNull Matrix4 getLightProjection(int lightIndex)
     {
         Matrix4 lightMatrix = sceneModel.getLightModelViewMatrix(lightIndex);
 
@@ -197,7 +227,7 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
         return Matrix4.perspective(fov, 1.0f, nearPlane, farPlane);
     }
 
-    public final ReadonlyTexture3D<ContextType> getShadowMaps()
+    public final @Nullable ReadonlyTexture3D<ContextType> getShadowMaps()
     {
         return shadowMaps;
     }
@@ -205,9 +235,10 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
     public final void refreshShadowMaps()
     {
         // Too many lights; need to re-allocate shadow maps
-        if (shadowMaps.getDepth() < sceneModel.getLightingModel().getLightCount())
+        Texture3D<ContextType> validatedShadowMaps = validateShadowMaps();
+        if (validatedShadowMaps.getDepth() < sceneModel.getLightingModel().getLightCount())
         {
-            shadowMaps.close();
+            validatedShadowMaps.close();
             shadowMaps = null;
             shadowMaps = createShadowMaps();
         }
@@ -230,34 +261,38 @@ public class LightingResources<ContextType extends Context<ContextType>> impleme
     {
         Matrix4 lightProj = getLightProjection(lightIndex);
 
-        shadowProgram.setUniform("projection", lightProj);
+        Program<ContextType> validatedShadowProgram = validateShadowProgram();
+        validatedShadowProgram.setUniform("projection", lightProj);
 
-        FramebufferAttachment<ContextType> attachment = shadowMaps.getLayerAsFramebufferAttachment(lightIndex);
+        FramebufferAttachment<ContextType> attachment = validateShadowMaps().getLayerAsFramebufferAttachment(lightIndex);
 
-        shadowFramebuffer.setDepthAttachment(attachment);
-        shadowFramebuffer.clearDepthBuffer();
+        validateShadowFramebuffer().setDepthAttachment(attachment);
+        validateShadowFramebuffer().clearDepthBuffer();
 
-        shadowProgram.setUniform("model_view", sceneModel.getLightModelViewMatrix(lightIndex));
-        shadowDrawable.draw(PrimitiveMode.TRIANGLES, shadowFramebuffer);
+        validatedShadowProgram.setUniform("model_view", sceneModel.getLightModelViewMatrix(lightIndex));
+        validateShadowDrawable().draw(PrimitiveMode.TRIANGLES, Objects.requireNonNull(shadowFramebuffer, UNINITIALIZED_MESSAGE));
     }
 
     public final ReadonlyTexture2D<ContextType> getScreenSpaceDepthTexture()
     {
-        return screenSpaceDepthFBO.getDepthAttachmentTexture();
+        return validateScreenSpaceDepthFBO().getDepthAttachmentTexture();
     }
 
-    public final void refreshScreenSpaceDepthFBO(Matrix4 view, Matrix4 projection)
+    public final void refreshScreenSpaceDepthFBO(@NotNull Matrix4 view, @NotNull Matrix4 projection)
     {
         context.getState().disableBackFaceCulling();
 
-        shadowProgram.setUniform("projection", projection);
-        screenSpaceDepthFBO.clearDepthBuffer();
+        Program<ContextType> validatedShadowProgram = validateShadowProgram();
+        validatedShadowProgram.setUniform("projection", projection);
+
+        FramebufferObject<ContextType> validatedScreenSpaceDepthFBO = validateScreenSpaceDepthFBO();
+        validatedScreenSpaceDepthFBO.clearDepthBuffer();
 
         Matrix4 modelView = sceneModel.getModelViewMatrix(view);
 
-        shadowProgram.setUniform("model_view", modelView);
-        shadowProgram.setUniform("viewPos", modelView.quickInverse(0.01f).getColumn(3).getXYZ());
-        shadowDrawable.draw(PrimitiveMode.TRIANGLES, screenSpaceDepthFBO);
+        validatedShadowProgram.setUniform("model_view", modelView);
+        validatedShadowProgram.setUniform("viewPos", modelView.quickInverse(0.01f).getColumn(3).getXYZ());
+        validateShadowDrawable().draw(PrimitiveMode.TRIANGLES, validatedScreenSpaceDepthFBO);
 
         context.getState().enableBackFaceCulling();
     }

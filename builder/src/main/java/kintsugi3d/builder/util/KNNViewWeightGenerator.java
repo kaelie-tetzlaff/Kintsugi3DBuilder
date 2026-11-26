@@ -18,11 +18,12 @@ package kintsugi3d.builder.util;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.resources.project.ReadonlyImageBasedGraphicsResources;
 import kintsugi3d.gl.core.Context;
+import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
-import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -47,7 +48,7 @@ public class KNNViewWeightGenerator implements ViewWeightGenerator
         }
 
         @Override
-        public int compareTo(WeightedView o)
+        public int compareTo(@NotNull WeightedView o)
         {
             return Float.compare(weight, o.weight);
         }
@@ -68,7 +69,7 @@ public class KNNViewWeightGenerator implements ViewWeightGenerator
     }
 
     @Override
-    public final float[] generateWeights(ReadonlyImageBasedGraphicsResources<? extends Context<?>> resources, Iterable<View> activeViewList, Matrix4 targetView)
+    public final float[] generateWeights(@NotNull ReadonlyImageBasedGraphicsResources<? extends Context<?>> resources, @NotNull Iterable<View> activeViewList, @NotNull Matrix4 targetView)
     {
         float[] viewWeights = new float[resources.getViewSet().getGPUBufferSize()];
 
@@ -76,13 +77,15 @@ public class KNNViewWeightGenerator implements ViewWeightGenerator
 
         for (View view : activeViewList)
         {
+            ReadonlyVertexGeometry geometry = resources.getGeometry();
+
             Vector3 viewDir = view.getCameraPose().times(
-                    Objects.requireNonNull(resources.getGeometry()).getCentroid().asPosition())
+                    geometry.getCentroid().asPosition())
                 .getXYZ().negated().normalized();
 
             Vector3 targetDir = view.getCameraPose().times(
                 targetView.quickInverse(0.01f).getColumn(3).minus(
-                    Objects.requireNonNull(resources.getGeometry()).getCentroid().asPosition()))
+                    geometry.getCentroid().asPosition()))
                 .getXYZ().normalized();
 
             viewPriority.add(new WeightedView(view.getGPUViewIndex(), targetDir.dot(viewDir)));
