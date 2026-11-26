@@ -47,7 +47,9 @@
             </plugin>
             <!-- Copy the OpenJFX jars (classifier matched to the current OS profile) to
                  target/lib/javafx. JavaFX must be loaded as JPMS modules on the module path
-                 and cannot be shaded into the application jar. -->
+                 and cannot be shaded into the application jar.
+                 Runs in generate-resources so the IDE run configuration (whose BeforeRunTask
+                 invokes this goal) has the module-path jars available without a full package. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -55,7 +57,7 @@
                 <executions>
                     <execution>
                         <id>copy-javafx</id>
-                        <phase>package</phase>
+                        <phase>generate-resources</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
@@ -114,7 +116,9 @@
                 <artifactId>download-maven-plugin</artifactId>
                 <version>1.13.0</version>
                 <executions>
-                    <!-- Download JRE -->
+                    <!-- Download JRE. Note: a full JDK image is downloaded rather than the smaller
+                         JRE, because javafx.swing requires the jdk.unsupported.desktop module and
+                         the trimmed Temurin JRE image does not ship it. -->
                     <execution>
                         <id>download-jre</id>
                         <phase>prepare-package</phase>
@@ -123,7 +127,7 @@
                         </goals>
                         <configuration>
                             <url>
-                                https://api.adoptium.net/v3/binary/latest/${java.version}/ga/${jre.os}/${jre.arch}/jre/hotspot/normal/eclipse
+                                https://api.adoptium.net/v3/binary/latest/${java.version}/ga/${jre.os}/${jre.arch}/jdk/hotspot/normal/eclipse
                             </url>
                             <outputDirectory>
                                 ${project.build.directory}
