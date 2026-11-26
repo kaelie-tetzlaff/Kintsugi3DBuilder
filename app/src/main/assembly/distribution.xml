@@ -47,14 +47,10 @@
             <directory>${maven.multiModuleProjectDirectory}/shaders</directory>
             <outputDirectory>shaders</outputDirectory>
         </fileSet>
+        <!-- jlink-generated runtime image, with the JavaFX modules linked in -->
         <fileSet>
             <directory>${project.build.directory}/jre</directory>
             <outputDirectory>jre</outputDirectory>
-        </fileSet>
-        <!-- JavaFX jars for the JPMS module path (see launch4j VM options) -->
-        <fileSet>
-            <directory>${project.build.directory}/lib/javafx</directory>
-            <outputDirectory>lib/javafx</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>${maven.multiModuleProjectDirectory}/bin</directory>
