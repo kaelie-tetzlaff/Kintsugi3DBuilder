@@ -30,6 +30,7 @@ import kintsugi3d.fx.controllers.sidebar.CarouselController;
 import kintsugi3d.gl.core.FramebufferSize;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Objects;
 
@@ -46,6 +47,7 @@ public class ObservableCarouselModel implements CarouselModel
     private static final int CARD_SAFE_REGION_BOTTOM_OFFSET = 30;
 
     private final ObservableList<CarouselItem> carouselItems = FXCollections.observableArrayList();
+    private final @Unmodifiable ObservableList<CarouselItem> unmodifiableCarouselItems = FXCollections.unmodifiableObservableList(carouselItems);
 
     private final DoubleProperty carouselHeight = new SimpleDoubleProperty(DEFAULT_CARD_HEIGHT);
     private final DoubleProperty carouselCardHeight = new SimpleDoubleProperty(DEFAULT_CARD_HEIGHT);
@@ -59,9 +61,9 @@ public class ObservableCarouselModel implements CarouselModel
      * @return
      */
     @Override
-    public final @NotNull ObservableList<CarouselItem> getCarouselItems()
+    public final @NotNull @Unmodifiable ObservableList<CarouselItem> getCarouselItems()
     {
-        return FXCollections.unmodifiableObservableList(carouselItems);
+        return unmodifiableCarouselItems;
     }
 
     public final double getCarouselHeight()

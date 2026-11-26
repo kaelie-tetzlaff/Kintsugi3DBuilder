@@ -245,77 +245,80 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         newInstance.setLoadingMonitor(new BackendProgressMonitor(newInstance, progressMonitor));
 
         // Use the runLater system so that the rendering loop knows that an operation that might take longer is queued.
-        Rendering.runLater(() ->
+        Rendering.runLater(() -> initializeInstance(newInstance));
+    }
+
+    private void initializeInstance(@NotNull ImageBasedRenderingEngine<ContextType> newInstance)
+    {
+        // If a new instance was just loaded, initialize it.
+        try
         {
-            // If a new instance was just loaded, initialize it.
-            try
+            newInstance.initialize();
+            newInstance.setupTabs();
+
+            // Check for an old instance just to be safe
+            ImageBasedRenderingEngine<ContextType> oldInstance = renderableInstance;
+            if (oldInstance != null)
             {
-                newInstance.initialize();
-
-                // Check for an old instance just to be safe
-                ImageBasedRenderingEngine<ContextType> oldInstance = renderableInstance;
-                if (oldInstance != null)
-                {
-                    oldInstance.close();
-                }
-
-                // Use the new instance as the active instance if initialization was successful
-                renderableInstance = newInstance;
-
-                synchronized (instanceLoadCallbacks)
-                {
-                    // Invoke callbacks
-                    for (Consumer<InteractiveRenderable<? extends Context<?>>> callback : instanceLoadCallbacks)
-                    {
-                        callback.accept(renderableInstance);
-                    }
-
-                    // Clear the list of callbacks for the next load.
-                    instanceLoadCallbacks.clear();
-                }
-
-                // Notify listeners that project has loaded
-                projectLoaded.notify(new ProjectLoadedEvent(geometry.getBoundingBoxSize()));
-
-                GraphicsResourcesImageSpace<ContextType> resources =
-                    Objects.requireNonNull(newInstance.getResources(), "Builder did not yield a valid renderable instance.");
-                if (resources.hasProcessedWeightMaps())
-                {
-                    // Project has been processed previously; notify listeners
-                    IntVector2 weightMapResolution = resources.getProcessedWeightMapResolution();
-                    projectProcessed.notify(new ProjectProcessedEvent(
-                        weightMapResolution.x, weightMapResolution.y));
-                }
-
-                // Ensure that the listeners are also notified if the project is processed in the future.
-                resources.weightMapsProcessedListeners().register(projectProcessed::notify);
-
-                // Update once before drawing
-                newInstance.update();
-
-                // Force GPU resources to be fully loaded / flushed by rendering once to a small throwaway FBO.
-                try(FramebufferObject<ContextType> tempFBO = context.buildFramebufferObject(256, 256)
-                    .addColorAttachment()
-                    .addDepthAttachment()
-                    .createFramebufferObject())
-                {
-                    newInstance.draw(tempFBO);
-                }
+                oldInstance.close();
             }
-            catch (InitializationException e)
+
+            // Use the new instance as the active instance if initialization was successful
+            renderableInstance = newInstance;
+
+            synchronized (instanceLoadCallbacks)
             {
-                if (e.getCause() instanceof UserCancellationException)
+                // Invoke callbacks
+                for (Consumer<InteractiveRenderable<? extends Context<?>>> callback : instanceLoadCallbacks)
                 {
-                    LOG.info("Cancellation occurred while initializing new instance.", e);
-                }
-                else
-                {
-                    LOG.error("Error occurred while initializing new instance.", e);
+                    callback.accept(newInstance);
                 }
 
-                newInstance.close();
+                // Clear the list of callbacks for the next load.
+                instanceLoadCallbacks.clear();
             }
-        });
+
+            // Notify listeners that project has loaded
+            projectLoaded.notify(new ProjectLoadedEvent(newInstance.getGeometry().getBoundingBoxSize()));
+
+            GraphicsResourcesImageSpace<ContextType> resources =
+                Objects.requireNonNull(newInstance.getResources(), "Builder did not yield a valid renderable instance.");
+            if (resources.hasProcessedWeightMaps())
+            {
+                // Project has been processed previously; notify listeners
+                IntVector2 weightMapResolution = resources.getProcessedWeightMapResolution();
+                projectProcessed.notify(new ProjectProcessedEvent(
+                    weightMapResolution.x, weightMapResolution.y));
+            }
+
+            // Ensure that the listeners are also notified if the project is processed in the future.
+            resources.weightMapsProcessedListeners().register(projectProcessed::notify);
+
+            // Update once before drawing
+            newInstance.update();
+
+            // Force GPU resources to be fully loaded / flushed by rendering once to a small throwaway FBO.
+            try(FramebufferObject<ContextType> tempFBO = context.buildFramebufferObject(256, 256)
+                .addColorAttachment()
+                .addDepthAttachment()
+                .createFramebufferObject())
+            {
+                newInstance.draw(tempFBO);
+            }
+        }
+        catch (InitializationException e)
+        {
+            if (e.getCause() instanceof UserCancellationException)
+            {
+                LOG.info("Cancellation occurred while initializing new instance.", e);
+            }
+            else
+            {
+                LOG.error("Error occurred while initializing new instance.", e);
+            }
+
+            newInstance.close();
+        }
     }
 
     /**
@@ -712,10 +715,11 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     @Override
     public final void initialize() throws InitializationException
     {
+        VertexGeometry currentGeometry = loadedGeometry;
         ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
-        if (currentInstance != null)
+        if (currentGeometry != null && currentInstance != null)
         {
-            currentInstance.initialize();
+            initializeInstance(currentInstance);
         }
     }
 

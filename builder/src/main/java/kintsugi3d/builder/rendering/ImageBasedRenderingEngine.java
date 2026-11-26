@@ -279,31 +279,6 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 //
 //            // Flush to prevent timeout
 //            context.flush();
-
-            ViewSet viewSet = getViewSet();
-
-            // Wait to refresh the tabs manager until we're about to actually initialize the new instance.
-            TabsHelper tabsHelper = new TabsHelper(resources);
-            tabsHelper.rebuildTabs();
-
-            // Register observer for changes in each tab
-            viewSet.viewsChangedListeners().register(
-                getMappedChangeObserver(tabsHelper, TabsHelper.PHOTOS, View.class, File::new));
-            resources.basisListeners().register(
-                getMappedChangeObserver(tabsHelper, TabsHelper.MATERIALS, BasisMaterialInfo.class));
-            resources.texturesListeners().register(
-                getMappedChangeObserver(tabsHelper, TabsHelper.TEXTURES, TextureInfo.class));
-            // Currently the shaders tab is not expected to have changes other than when textures are processed,
-            // which is handled separately via an event listener.
-
-            @NotNull GraphicsResourcesImageSpace<ContextType> resourcesRef = resources;
-            resources.texturesReplacedListeners().register(event ->
-            {
-                // Reload shaders in case preprocessor constants (i.e. number of basis functions) have changed
-                reloadShaders();
-
-                new TabsHelper(resourcesRef).refreshAllTabs();
-            });
         }
         catch (UserCancellationException e)
         {
@@ -319,6 +294,34 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
             loadingMonitor.fail(e);
             throw new InitializationException(e);
         }
+    }
+
+    final void setupTabs()
+    {
+        ViewSet viewSet = getViewSet();
+
+        // Wait to refresh the tabs manager until we're about to actually initialize the new instance.
+        GraphicsResourcesImageSpace<ContextType> validatedResources = getResources();
+        TabsHelper tabsHelper = new TabsHelper(validatedResources);
+        tabsHelper.rebuildTabs();
+
+        // Register observer for changes in each tab
+        viewSet.viewsChangedListeners().register(
+            getMappedChangeObserver(tabsHelper, TabsHelper.PHOTOS, View.class, File::new));
+        validatedResources.basisListeners().register(
+            getMappedChangeObserver(tabsHelper, TabsHelper.MATERIALS, BasisMaterialInfo.class));
+        validatedResources.texturesListeners().register(
+            getMappedChangeObserver(tabsHelper, TabsHelper.TEXTURES, TextureInfo.class));
+        // Currently the shaders tab is not expected to have changes other than when textures are processed,
+        // which is handled separately via an event listener.
+
+        validatedResources.texturesReplacedListeners().register(event ->
+        {
+            // Reload shaders in case preprocessor constants (i.e. number of basis functions) have changed
+            reloadShaders();
+
+            new TabsHelper(validatedResources).refreshAllTabs();
+        });
     }
 
     @Override
