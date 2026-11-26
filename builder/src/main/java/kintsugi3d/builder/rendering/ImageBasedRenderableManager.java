@@ -180,8 +180,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         ViewSet viewSet = Objects.requireNonNull(builder.getViewSet(), "Builder must have a view set assigned.");
         loadedViewSet = viewSet;
 
-        VertexGeometry geometry = Objects.requireNonNull(builder.getGeometry(), "Builder must have geometry assigned.");
-        loadedGeometry = geometry;
+        loadedGeometry = Objects.requireNonNull(builder.getGeometry(), "Builder must have geometry assigned.");
 
         int gpuBufferSize = viewSet.getGPUBufferSize();
         if (gpuBufferSize > 1024)
@@ -245,79 +244,82 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         newInstance.setLoadingMonitor(new BackendProgressMonitor(newInstance, progressMonitor));
 
         // Use the runLater system so that the rendering loop knows that an operation that might take longer is queued.
-        Rendering.runLater(() -> initializeInstance(newInstance));
-    }
-
-    private void initializeInstance(@NotNull ImageBasedRenderingEngine<ContextType> newInstance)
-    {
-        // If a new instance was just loaded, initialize it.
-        try
+        Rendering.runLater(() ->
         {
-            newInstance.initialize();
-            newInstance.setupTabs();
-
-            // Check for an old instance just to be safe
-            ImageBasedRenderingEngine<ContextType> oldInstance = renderableInstance;
-            if (oldInstance != null)
+            try
             {
-                oldInstance.close();
+                initializeInstance(newInstance);
             }
-
-            // Use the new instance as the active instance if initialization was successful
-            renderableInstance = newInstance;
-
-            synchronized (instanceLoadCallbacks)
+            catch (InitializationException e)
             {
-                // Invoke callbacks
-                for (Consumer<InteractiveRenderable<? extends Context<?>>> callback : instanceLoadCallbacks)
+                if (e.getCause() instanceof UserCancellationException)
                 {
-                    callback.accept(newInstance);
+                    LOG.info("Cancellation occurred while initializing new instance.", e);
+                }
+                else
+                {
+                    LOG.error("Error occurred while initializing new instance.", e);
                 }
 
-                // Clear the list of callbacks for the next load.
-                instanceLoadCallbacks.clear();
+                newInstance.close();
             }
+        });
+    }
 
-            // Notify listeners that project has loaded
-            projectLoaded.notify(new ProjectLoadedEvent(newInstance.getGeometry().getBoundingBoxSize()));
+    private void initializeInstance(@NotNull ImageBasedRenderingEngine<ContextType> newInstance) throws InitializationException
+    {
+        // If a new instance was just loaded, initialize it.
+        newInstance.initialize();
+        newInstance.setupTabs();
 
-            GraphicsResourcesImageSpace<ContextType> resources =
-                Objects.requireNonNull(newInstance.getResources(), "Builder did not yield a valid renderable instance.");
-            if (resources.hasProcessedWeightMaps())
-            {
-                // Project has been processed previously; notify listeners
-                IntVector2 weightMapResolution = resources.getProcessedWeightMapResolution();
-                projectProcessed.notify(new ProjectProcessedEvent(
-                    weightMapResolution.x, weightMapResolution.y));
-            }
-
-            // Ensure that the listeners are also notified if the project is processed in the future.
-            resources.weightMapsProcessedListeners().register(projectProcessed::notify);
-
-            // Update once before drawing
-            newInstance.update();
-
-            // Force GPU resources to be fully loaded / flushed by rendering once to a small throwaway FBO.
-            try(FramebufferObject<ContextType> tempFBO = context.buildFramebufferObject(256, 256)
-                .addColorAttachment()
-                .addDepthAttachment()
-                .createFramebufferObject())
-            {
-                newInstance.draw(tempFBO);
-            }
-        }
-        catch (InitializationException e)
+        // Check for an old instance just to be safe
+        ImageBasedRenderingEngine<ContextType> oldInstance = renderableInstance;
+        if (oldInstance != null)
         {
-            if (e.getCause() instanceof UserCancellationException)
+            oldInstance.close();
+        }
+
+        // Use the new instance as the active instance if initialization was successful
+        renderableInstance = newInstance;
+
+        synchronized (instanceLoadCallbacks)
+        {
+            // Invoke callbacks
+            for (Consumer<InteractiveRenderable<? extends Context<?>>> callback : instanceLoadCallbacks)
             {
-                LOG.info("Cancellation occurred while initializing new instance.", e);
-            }
-            else
-            {
-                LOG.error("Error occurred while initializing new instance.", e);
+                callback.accept(newInstance);
             }
 
-            newInstance.close();
+            // Clear the list of callbacks for the next load.
+            instanceLoadCallbacks.clear();
+        }
+
+        // Notify listeners that project has loaded
+        projectLoaded.notify(new ProjectLoadedEvent(newInstance.getGeometry().getBoundingBoxSize()));
+
+        GraphicsResourcesImageSpace<ContextType> resources =
+            Objects.requireNonNull(newInstance.getResources(), "Builder did not yield a valid renderable instance.");
+        if (resources.hasProcessedWeightMaps())
+        {
+            // Project has been processed previously; notify listeners
+            IntVector2 weightMapResolution = resources.getProcessedWeightMapResolution();
+            projectProcessed.notify(new ProjectProcessedEvent(
+                weightMapResolution.x, weightMapResolution.y));
+        }
+
+        // Ensure that the listeners are also notified if the project is processed in the future.
+        resources.weightMapsProcessedListeners().register(projectProcessed::notify);
+
+        // Update once before drawing
+        newInstance.update();
+
+        // Force GPU resources to be fully loaded / flushed by rendering once to a small throwaway FBO.
+        try(FramebufferObject<ContextType> tempFBO = context.buildFramebufferObject(256, 256)
+            .addColorAttachment()
+            .addDepthAttachment()
+            .createFramebufferObject())
+        {
+            newInstance.draw(tempFBO);
         }
     }
 
