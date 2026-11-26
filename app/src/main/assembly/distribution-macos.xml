@@ -70,12 +70,12 @@
             <fileMode>0755</fileMode>
             <lineEnding>unix</lineEnding>
         </fileSet>
-        <!-- JavaFX jars for the JPMS module path (see Kintsugi3DBuilder.sh) -->
+        <!-- JavaFX jars for the JPMS module path (see Kintsugi3DBuilder.sh).
+             Binary jars: no line-ending transformation. -->
         <fileSet>
             <directory>${project.build.directory}/lib/javafx</directory>
             <outputDirectory>Kintsugi 3D Builder.app/Contents/Resources/lib/javafx</outputDirectory>
             <fileMode>0755</fileMode>
-            <lineEnding>unix</lineEnding>
         </fileSet>
         <fileSet>
             <!-- Intentionally flatten the root "Contents" directory for the bundled JRE -->

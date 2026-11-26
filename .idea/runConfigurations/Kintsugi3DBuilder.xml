@@ -2,6 +2,9 @@
   <configuration default="false" name="Kintsugi3DBuilder" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="ALTERNATIVE_JRE_PATH" value="temurin-11" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <!-- JavaFX jars are loaded from the JPMS module path instead of the classpath, which avoids the
+         'Unsupported JavaFX configuration: classes were loaded from unnamed module' warning. -->
+    <option name="VM_PARAMETERS" value="--module-path $MODULE_LIB_DIR$/../../../fx/target/../../app/target/lib/javafx --add-modules javafx.base,javafx.graphics,javafx.controls,javafx.swing,javafx.fxml" />
     <envs>
       <env name="KINTSUGI3D_LOG_LEVEL" value="debug" />
     </envs>
