@@ -42,6 +42,8 @@ import kintsugi3d.fx.core.FrontendIO;
 import kintsugi3d.fx.experience.ReplaceImage;
 import kintsugi3d.fx.util.StaticUtilities;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,52 +83,52 @@ public class ObservableProjectModel extends ProjectModelBase<
 
     @Override
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
-    public final ObservableList<ObservableCameraSettings> getCameraList()
+    public final @NotNull ObservableList<ObservableCameraSettings> getCameraList()
     {
         return cameraList;
     }
 
     @Override
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
-    public final ObservableList<ObservableEnvironmentSettings> getEnvironmentList()
+    public final @NotNull ObservableList<ObservableEnvironmentSettings> getEnvironmentList()
     {
         return environmentList;
     }
 
     @Override
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
-    public final ObservableList<ObservableLightGroupSettings> getLightGroupList()
+    public final @NotNull ObservableList<ObservableLightGroupSettings> getLightGroupList()
     {
         return lightGroupList;
     }
 
     @Override
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
-    public final ObservableList<ObservableObjectPoseSettings> getObjectPoseList()
+    public final @NotNull ObservableList<ObservableObjectPoseSettings> getObjectPoseList()
     {
         return objectPoseList;
     }
 
     @Override
-    protected final ObservableCameraSettings constructCameraSetting()
+    protected final @NotNull ObservableCameraSettings constructCameraSetting()
     {
         return new ObservableCameraSettings();
     }
 
     @Override
-    protected final ObservableEnvironmentSettings constructEnvironmentSetting()
+    protected final @NotNull ObservableEnvironmentSettings constructEnvironmentSetting()
     {
         return new ObservableEnvironmentSettings();
     }
 
     @Override
-    protected final ObservableLightGroupSettings constructLightGroupSetting()
+    protected final @NotNull ObservableLightGroupSettings constructLightGroupSetting()
     {
         return new ObservableLightGroupSettings();
     }
 
     @Override
-    protected final ObservableObjectPoseSettings constructObjectPoseSetting()
+    protected final @NotNull ObservableObjectPoseSettings constructObjectPoseSetting()
     {
         return new ObservableObjectPoseSettings();
     }
@@ -148,7 +150,7 @@ public class ObservableProjectModel extends ProjectModelBase<
     }
 
     @Override
-    public final void setColorCheckerFile(File colorCheckerFile)
+    public final void setColorCheckerFile(@Nullable File colorCheckerFile)
     {
         this.colorCheckerFile.set(colorCheckerFile);
     }
@@ -163,7 +165,7 @@ public class ObservableProjectModel extends ProjectModelBase<
         this.projectOpen.set(projectOpen);
     }
 
-    public final BooleanExpression getProjectOpenProperty()
+    public final @NotNull BooleanExpression getProjectOpenProperty()
     {
         return projectOpen;
     }
@@ -178,7 +180,7 @@ public class ObservableProjectModel extends ProjectModelBase<
         this.projectName.set(projectName);
     }
 
-    public final StringExpression getProjectNameProperty()
+    public final @NotNull StringExpression getProjectNameProperty()
     {
         return projectName;
     }
@@ -193,7 +195,7 @@ public class ObservableProjectModel extends ProjectModelBase<
         this.projectLoaded.set(projectLoaded);
     }
 
-    public final BooleanExpression getProjectLoadedProperty()
+    public final @NotNull BooleanExpression getProjectLoadedProperty()
     {
         return projectLoaded;
     }
@@ -208,7 +210,7 @@ public class ObservableProjectModel extends ProjectModelBase<
         this.projectProcessed.set(projectProcessed);
     }
 
-    public final BooleanExpression getProjectProcessedProperty()
+    public final @NotNull BooleanExpression getProjectProcessedProperty()
     {
         return projectProcessed;
     }
@@ -233,12 +235,12 @@ public class ObservableProjectModel extends ProjectModelBase<
         this.processedTextureHeight.set(processedTextureHeight);
     }
 
-    public final IntegerExpression getProcessedTextureWidthProperty()
+    public final @NotNull IntegerExpression getProcessedTextureWidthProperty()
     {
         return processedTextureWidth;
     }
 
-    public final IntegerExpression getProcessedTextureHeightProperty()
+    public final @NotNull IntegerExpression getProcessedTextureHeightProperty()
     {
         return processedTextureHeight;
     }
@@ -253,7 +255,7 @@ public class ObservableProjectModel extends ProjectModelBase<
         this.modelSize.set(modelSize);
     }
 
-    public final ObjectProperty<Vector3> getModelSizeProperty()
+    public final @NotNull ObjectProperty<Vector3> getModelSizeProperty()
     {
         return modelSize;
     }
@@ -264,13 +266,13 @@ public class ObservableProjectModel extends ProjectModelBase<
     }
 
     @Override
-    public final void error(String message, Throwable e)
+    public final void error(String message, @NotNull Throwable e)
     {
         ExceptionHandling.error(message, e);
     }
 
     @Override
-    public final void warn(String message, Throwable e)
+    public final void warn(String message, @NotNull Throwable e)
     {
         ExceptionHandling.warn(message, e);
     }
@@ -285,7 +287,7 @@ public class ObservableProjectModel extends ProjectModelBase<
     }
 
     @Override
-    public final void confirm(String title, String header, String message, Runnable onConfirm)
+    public final void confirm(String title, String header, String message, @NotNull Runnable onConfirm)
     {
         // Temp solution -- will eventually create a custom modal.
         Dialog<ButtonType> alert = StaticUtilities.createConfirmDialog(message);

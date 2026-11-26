@@ -17,6 +17,7 @@ package kintsugi3d.gl.interactive;
 
 import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,7 +47,7 @@ public interface ShaderProgramFactory<ContextType extends Context<ContextType>> 
     void setupShaderProgram(Program<ContextType> program);
 
     default ProgramObject<ContextType> createProgram(File vertexShader, File fragmentShader,
-                                                     Map<String, Object> additionalDefines)
+                                                     @NotNull Map<String, Object> additionalDefines)
         throws IOException
     {
         // Common definitions for all specular fitting related shaders.

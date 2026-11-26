@@ -48,6 +48,7 @@ import kintsugi3d.fx.internal.ObservableCarouselModel;
 import kintsugi3d.fx.internal.ObservableGeneralSettingsModel;
 import kintsugi3d.fx.util.StaticUtilities;
 import kintsugi3d.gl.window.FramebufferCanvas;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +75,7 @@ public class JavaFXApplication extends Application
     // Keep a reference to the main window to inject the canvas when the rendering thread has loaded
     private static MainWindowController mainWindowController;
 
-    static JavaFXState getState()
+    static @NotNull JavaFXState getState()
     {
         if (state != null)
         {
@@ -87,7 +88,7 @@ public class JavaFXApplication extends Application
         }
     }
 
-    public static void setArgs(String[] args)
+    public static void setArgs(String @NotNull [] args)
     {
         arguments = args.clone();
     }
@@ -176,7 +177,7 @@ public class JavaFXApplication extends Application
     }
 
     @Override
-    public final void start(Stage primaryStage) throws IOException
+    public final void start(@NotNull Stage primaryStage) throws IOException
     {
         //noinspection AssignmentToStaticFieldFromInstanceMethod
         state = JavaFXState.create();
@@ -402,7 +403,7 @@ public class JavaFXApplication extends Application
         }
     }
 
-    private static void setupCarouselListeners(ObservableCarouselModel carouselModel)
+    private static void setupCarouselListeners(@NotNull ObservableCarouselModel carouselModel)
     {
         ObservableList<CarouselItem> items = carouselModel.getCarouselItems();
         items.addListener((Observable observable) ->

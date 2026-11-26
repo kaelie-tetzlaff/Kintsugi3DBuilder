@@ -17,6 +17,7 @@ package kintsugi3d.app.test;
 
 import kintsugi3d.builder.state.scene.ObjectPoseModel;
 import kintsugi3d.gl.vecmath.Matrix4;
+import org.jetbrains.annotations.NotNull;
 
 public class TestingObjectModel implements ObjectPoseModel
 {
@@ -27,7 +28,7 @@ public class TestingObjectModel implements ObjectPoseModel
     }
 
     @Override
-    public final Matrix4 getTransformationMatrix()
+    public final @NotNull Matrix4 getTransformationMatrix()
     {
         return Matrix4.IDENTITY;
     }

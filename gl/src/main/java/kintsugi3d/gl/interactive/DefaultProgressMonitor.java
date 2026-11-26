@@ -76,8 +76,7 @@ public class DefaultProgressMonitor implements ProgressMonitor
     }
 
     @Override
-    public final boolean isConflictingProcess()
+    public final void blocked()
     {
-        return false;
     }
 }

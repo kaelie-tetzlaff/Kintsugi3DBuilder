@@ -19,6 +19,7 @@ import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.io.imageset.MetashapeImageSetInfo;
 import kintsugi3d.builder.io.metashape.MetashapeModel;
 import kintsugi3d.builder.resources.project.MissingImagesException;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -59,7 +60,7 @@ public class MetashapeProjectInputSource extends NonValidatedInputSourceBase
         model.getChunk().setMasksDirectoryOverride(file);
     }
 
-    public final MetashapeProjectInputSource setMetashapeModel(MetashapeModel model)
+    public final @NotNull MetashapeProjectInputSource setMetashapeModel(MetashapeModel model)
     {
         this.model = model;
         return this;
@@ -72,23 +73,23 @@ public class MetashapeProjectInputSource extends NonValidatedInputSourceBase
     }
 
     @Override
-    public final MetashapeProjectInputSource overrideFullResImageDirectory(File directory)
+    public final @NotNull MetashapeProjectInputSource overrideFullResImageDirectory(File directory)
     {
         model.getLoadPreferences().setFullResOverride(directory);
         return this;
     }
 
     @Override
-    public final ValidatedInputSource validate() throws FileNotFoundException, MissingImagesException
+    public final @NotNull ValidatedInputSource validate() throws FileNotFoundException, MissingImagesException
     {
         return new ValidatedMetashapeProjectInputSource(this);
     }
 
     private static class ValidatedMetashapeProjectInputSource extends ValidatedInputSourceBase
     {
-        private final MetashapeProjectInputSource original;
+        private final @NotNull MetashapeProjectInputSource original;
 
-        ValidatedMetashapeProjectInputSource(MetashapeProjectInputSource original)
+        ValidatedMetashapeProjectInputSource(@NotNull MetashapeProjectInputSource original)
             throws FileNotFoundException, MissingImagesException
         {
             super(original, new MetashapeImageSetInfo(original.model, original.getDisabledImages()));
@@ -105,7 +106,7 @@ public class MetashapeProjectInputSource extends NonValidatedInputSourceBase
                 original.model.getLoadPreferences().setOrientationViewName(getViewSelection());
                 original.model.getLoadPreferences().setOrientationViewRotateDegrees(getViewRotation());
                 original.model.getLoadPreferences().setDisabledImageFiles(getDisabledImages());
-                Global.io().loadFromMetashapeModel(projectFileToSave, original.model);
+                Global.io().requestLoadFromMetashapeModel(projectFileToSave, original.model);
                 return true;
             }
             else

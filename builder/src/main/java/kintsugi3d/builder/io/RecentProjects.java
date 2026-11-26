@@ -16,6 +16,7 @@
 package kintsugi3d.builder.io;
 
 import kintsugi3d.builder.util.ApplicationFolders;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,7 @@ public final class RecentProjects
 
     private static final RecentProjects INSTANCE = new RecentProjects();
 
-    private final File recentProjectsFile;
+    private final @NotNull File recentProjectsFile;
     private final Collection<Runnable> recentFilesChangedListeners = new ArrayList<>(1);
 
     private File recentDirectory;
@@ -51,7 +52,7 @@ public final class RecentProjects
         return INSTANCE;
     }
 
-    public List<String> getRecentProjectFilenames()
+    public @NotNull List<String> getRecentProjectFilenames()
     {
         List<String> projectItems = List.of();
 
@@ -71,7 +72,7 @@ public final class RecentProjects
         return new ArrayList<>(new LinkedHashSet<>(projectItems));
     }
 
-    public static String shortenedPath(String path)
+    public static @NotNull String shortenedPath(@NotNull String path)
     {
         File file = new File(path);
         File ancestorFile = getAncestorFile(file);
@@ -79,7 +80,7 @@ public final class RecentProjects
         return String.format("%s...%s%s", ancestorFile.getAbsolutePath(), File.separator, file.getName());
     }
 
-    private static File getAncestorFile(File file)
+    private static @NotNull File getAncestorFile(File file)
     {
         File ancestorFile = file;
         while (ancestorFile.getParentFile() != null)
@@ -105,7 +106,7 @@ public final class RecentProjects
         refreshRecentProjectsFile(existingFileNames);
     }
 
-    public void refreshRecentProjectsFile(Iterable<String> existingFileNames)
+    public void refreshRecentProjectsFile(@NotNull Iterable<String> existingFileNames)
     {
         // Make sure that parent directory exists.
         boolean failed = !recentProjectsFile.getParentFile().mkdirs();

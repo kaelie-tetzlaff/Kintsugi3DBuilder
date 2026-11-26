@@ -17,6 +17,7 @@ package kintsugi3d.builder.resources;
 
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.util.EncodableColorImage;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,13 +60,13 @@ public class AsyncLoadedResource<CPUResourceType, GPUResourceType>
     private volatile boolean newDataAvailable;
 
     /** Only accessed within {@code synchronized(lock)} blocks. */
-    private CPUResourceType newData;
+    private @Nullable CPUResourceType newData;
 
     /** Flag checked by the consumer thread; set by a worker thread or caller. */
     private volatile boolean unloadRequested = false;
 
     /** Only accessed within {@code synchronized(lock)} blocks. */
-    private File currentFile;
+    private @Nullable File currentFile;
 
     /** Only accessed within {@code synchronized(lock)} blocks. */
     private long lastModified;
@@ -74,7 +75,7 @@ public class AsyncLoadedResource<CPUResourceType, GPUResourceType>
     private volatile File desiredFile;
 
     /** Optional preview image (e.g. panorama image); only accessed within {@code synchronized(lock)} blocks. */
-    private EncodableColorImage previewImage;
+    private @Nullable EncodableColorImage previewImage;
 
     /** Lock for synchronized access to resource data. */
     private final Object lock = new Object();
@@ -101,7 +102,7 @@ public class AsyncLoadedResource<CPUResourceType, GPUResourceType>
      *         empty if no side-effect was produced or the load was skipped.
      * @throws FileNotFoundException If the file does not exist.
      */
-    public final @Nullable EncodableColorImage load(File file, ProgressMonitor progressMonitor) throws FileNotFoundException
+    public final @Nullable EncodableColorImage load(@Nullable File file, @NotNull ProgressMonitor progressMonitor) throws FileNotFoundException
     {
         if (file == null)
         {
@@ -135,18 +136,9 @@ public class AsyncLoadedResource<CPUResourceType, GPUResourceType>
                 if (Objects.equals(file, desiredFile) &&
                     (!Objects.equals(file, currentFile) || lastModifiedNew != lastModified))
                 {
-                    // Check for conflicting process only when we are about to do work
-                    if (progressMonitor != null && progressMonitor.isConflictingProcess())
-                    {
-                        return previewImage;
-                    }
-
-                    if (progressMonitor != null)
-                    {
-                        progressMonitor.start();
-                        progressMonitor.setMaxProgress(0.0);
-                        progressMonitor.setProcessName(loadable.getProcessName());
-                    }
+                    progressMonitor.start();
+                    progressMonitor.setMaxProgress(0.0);
+                    progressMonitor.setProcessName(loadable.getProcessName());
 
                     try
                     {
@@ -191,7 +183,7 @@ public class AsyncLoadedResource<CPUResourceType, GPUResourceType>
      *
      * @param progressMonitor Optional progress monitor; {@code complete()} is called if data was consumed.
      */
-    public final void consume(ProgressMonitor progressMonitor)
+    public final void consume(@NotNull ProgressMonitor progressMonitor)
     {
         if (unloadRequested)
         {
@@ -228,10 +220,7 @@ public class AsyncLoadedResource<CPUResourceType, GPUResourceType>
             {
                 newDataAvailable = false;
 
-                if (progressMonitor != null)
-                {
-                    progressMonitor.complete();
-                }
+                progressMonitor.complete();
             }
         }
     }

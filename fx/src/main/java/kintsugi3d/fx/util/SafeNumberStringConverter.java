@@ -17,10 +17,11 @@ package kintsugi3d.fx.util;
 
 import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
+import org.jetbrains.annotations.NotNull;
 
 public class SafeNumberStringConverter extends StringConverter<Number>
 {
-    private final NumberStringConverter base;
+    private final @NotNull NumberStringConverter base;
     private final Number defaultValue;
 
     public SafeNumberStringConverter(Number defaultValue)

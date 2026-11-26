@@ -16,6 +16,7 @@
 package kintsugi3d.builder.resources.project;
 
 import kintsugi3d.gl.core.IntLike;
+import org.jetbrains.annotations.NotNull;
 
 public enum ColorAppearanceMode implements IntLike
 {
@@ -45,7 +46,7 @@ public enum ColorAppearanceMode implements IntLike
      * For preprocessor defines
      * @return the String form of the integer encoding of this instance
      */
-    public String toString()
+    public @NotNull String toString()
     {
         return Integer.toString(intValue);
     }

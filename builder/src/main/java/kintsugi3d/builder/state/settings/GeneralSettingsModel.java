@@ -19,6 +19,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import kintsugi3d.builder.preferences.serialization.SettingsModelDeserializer;
 import kintsugi3d.builder.preferences.serialization.SettingsModelSerializer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -28,7 +30,7 @@ public interface GeneralSettingsModel extends ReadonlyGeneralSettingsModel
 {
     <T> void set(String name, T value);
     void copyAllFrom(ReadonlyGeneralSettingsModel other);
-    void createSetting(String name, Class<?> type, Object initialValue, boolean serialize);
+    void createSetting(String name, Class<?> type, @Nullable Object initialValue, boolean serialize);
     default void createBooleanSetting(String name, boolean initialValue)
     {
         createBooleanSetting(name, initialValue, false);
@@ -54,7 +56,7 @@ public interface GeneralSettingsModel extends ReadonlyGeneralSettingsModel
         createSetting(name, Number.class, initialValue, serialize);
     }
 
-    default void createObjectSetting(String name, Object initialValue, boolean serialize)
+    default void createObjectSetting(String name, @Nullable Object initialValue, boolean serialize)
     {
         createSetting(name, initialValue == null ? Object.class : initialValue.getClass(), initialValue, serialize);
     }
@@ -63,7 +65,7 @@ public interface GeneralSettingsModel extends ReadonlyGeneralSettingsModel
 
     void copyFrom(ReadonlyGeneralSettingsModel other, String... settingNames);
 
-    default boolean existsForSet(String name, Class<?> settingType)
+    default boolean existsForSet(String name, @NotNull Class<?> settingType)
     {
         return exists(name) && getType(name).isAssignableFrom(settingType);
     }

@@ -33,6 +33,8 @@ import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -67,31 +69,31 @@ public final class ModelExporter
         return materialExporter;
     }
 
-    public void setMaterialExporter(MaterialExporter materialExporter)
+    public void setMaterialExporter(@NotNull MaterialExporter materialExporter)
     {
         this.materialExporter = materialExporter;
         materialExporter.setAsset(asset);
     }
 
-    public void setTranslation(Vector3 translation)
+    public void setTranslation(@NotNull Vector3 translation)
     {
         GlTF gltf = asset.getGltf();
         gltf.getNodes().get(modelNodeIndex).setTranslation(new float[]{translation.x, translation.y, translation.z});
     }
 
-    public void setRotation(Vector4 quaternion)
+    public void setRotation(@NotNull Vector4 quaternion)
     {
         GlTF gltf = asset.getGltf();
         gltf.getNodes().get(modelNodeIndex).setRotation(new float[]{quaternion.x, quaternion.y, quaternion.z, quaternion.w});
     }
 
-    public void setScale(Vector3 scale)
+    public void setScale(@NotNull Vector3 scale)
     {
         GlTF gltf = asset.getGltf();
         gltf.getNodes().get(modelNodeIndex).setScale(new float[]{scale.x, scale.y, scale.z});
     }
 
-    public void setTransform(Matrix4 transform)
+    public void setTransform(@NotNull Matrix4 transform)
     {
         GlTF gltf = asset.getGltf();
         gltf.getNodes().get(modelNodeIndex).setMatrix(new float[]{
@@ -102,7 +104,7 @@ public final class ModelExporter
         });
     }
 
-    public void exportWithTextures(File modelFile, Runnable finishedCallback) throws IOException
+    public void exportWithTextures(@NotNull File modelFile, @Nullable Runnable finishedCallback) throws IOException
     {
         exportModelOnly(modelFile);
 
@@ -124,7 +126,7 @@ public final class ModelExporter
         }
     }
 
-    public void exportModelOnly(File file) throws IOException
+    public void exportModelOnly(@NotNull File file) throws IOException
     {
         // Apply materials to model before exporting.
         materialExporter.apply();
@@ -142,12 +144,12 @@ public final class ModelExporter
         materialExporter.export(outputDirectory);
     }
 
-    public static ModelExporter fromVertexGeometry(ReadonlyVertexGeometry geometry)
+    public static @NotNull ModelExporter fromVertexGeometry(@NotNull ReadonlyVertexGeometry geometry)
     {
         return fromVertexGeometry(geometry, Matrix4.IDENTITY);
     }
 
-    public static ModelExporter fromVertexGeometry(ReadonlyVertexGeometry geometry, Matrix4 transformation)
+    public static @NotNull ModelExporter fromVertexGeometry(@NotNull ReadonlyVertexGeometry geometry, @NotNull Matrix4 transformation)
     {
         GltfModelBuilder builder = GltfModelBuilder.create();
 

@@ -17,6 +17,7 @@ package kintsugi3d.gl.opengl;
 
 import kintsugi3d.gl.core.VertexBuffer;
 import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
+import org.jetbrains.annotations.NotNull;
 
 import static org.lwjgl.opengl.GL30.*;
 
@@ -51,8 +52,8 @@ class OpenGLVertexBuffer extends OpenGLBuffer implements VertexBuffer<OpenGLCont
     }
 
     @Override
-    public final OpenGLVertexBuffer setData(
-        ReadonlyNativeVectorBuffer data, @SuppressWarnings("ParameterHidesMemberVariable") boolean normalize)
+    public final @NotNull OpenGLVertexBuffer setData(
+        @NotNull ReadonlyNativeVectorBuffer data, @SuppressWarnings("ParameterHidesMemberVariable") boolean normalize)
     {
         setData(data.getBuffer());
         count = data.getCount();

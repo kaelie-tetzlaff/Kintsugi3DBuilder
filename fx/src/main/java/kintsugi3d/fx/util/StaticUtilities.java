@@ -24,6 +24,7 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.TextFormatter.Change;
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.fx.core.FrontendIO;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,7 @@ public final class StaticUtilities
     }
 
     //    this method takes in a double property, and prevents it from reaching outside of its bound.
-    public static <H extends Property<Number>> H wrapAround(double min, double max, H property)
+    public static <H extends Property<Number>> @NotNull H wrapAround(double min, double max, @NotNull H property)
     {
         property.addListener((observable, oldValue, newValue) ->
         {
@@ -56,7 +57,7 @@ public final class StaticUtilities
         return property;
     }
 
-    public static <H extends Property<Number>> H clamp(double min, double max, H property)
+    public static <H extends Property<Number>> @NotNull H clamp(double min, double max, @NotNull H property)
     {
         property.addListener((observable, oldValue, newValue) ->
         {
@@ -69,7 +70,7 @@ public final class StaticUtilities
     }
 
 
-    public static void makeWrapAroundNumeric(double min, double max, TextField textField)
+    public static void makeWrapAroundNumeric(double min, double max, @NotNull TextField textField)
     {
         makeNumeric(textField);
         textField.focusedProperty().addListener((ob, o, n) ->
@@ -89,7 +90,7 @@ public final class StaticUtilities
         });
     }
 
-    public static void makeClampedNumeric(double min, double max, TextField textField)
+    public static void makeClampedNumeric(double min, double max, @NotNull TextField textField)
     {
         makeNumeric(textField);
         textField.focusedProperty().addListener((ob, o, n) ->
@@ -109,12 +110,12 @@ public final class StaticUtilities
         });
     }
 
-    public static void makeNumeric(TextField textField)
+    public static void makeNumeric(@NotNull TextField textField)
     {
         textField.setTextFormatter(new TextFormatter<Double>(StaticUtilities::validateNumericChange));
     }
 
-    private static @Nullable Change validateNumericChange(Change change)
+    private static @Nullable Change validateNumericChange(@NotNull Change change)
     {
         if (change.isDeleted() && !change.isReplaced())
         {
@@ -139,7 +140,7 @@ public final class StaticUtilities
         }
     }
 
-    public static void makeClampedInteger(double min, double max, TextField textField)
+    public static void makeClampedInteger(double min, double max, @NotNull TextField textField)
     {
         makeNumeric(textField);
         textField.focusedProperty().addListener((ob, o, n) ->
@@ -159,13 +160,13 @@ public final class StaticUtilities
         });
     }
 
-    public static void bindLogScaleToLinear(DoubleProperty logScaleProperty, DoubleProperty linearScaleProperty)
+    public static void bindLogScaleToLinear(@NotNull DoubleProperty logScaleProperty, @NotNull DoubleProperty linearScaleProperty)
     {
         logScaleProperty.addListener((b, o, n) -> linearScaleProperty.set(StrictMath.pow(10, n.doubleValue())));
         linearScaleProperty.addListener((b, o, n) -> logScaleProperty.set(StrictMath.log10(n.doubleValue())));
     }
 
-    public static void makeSquareResolutionComboBox(ComboBox<SquareResolution> comboBox)
+    public static void makeSquareResolutionComboBox(@NotNull ComboBox<SquareResolution> comboBox)
     {
         comboBox.setItems(FXCollections.observableArrayList(
             new SquareResolution(256), new SquareResolution(512), new SquareResolution(1024),
@@ -219,7 +220,7 @@ public final class StaticUtilities
      * @param contentText
      * @return
      */
-    public static Dialog<ButtonType> createConfirmDialog(String contentText)
+    public static @NotNull Dialog<ButtonType> createConfirmDialog(String contentText)
     {
         Dialog<ButtonType> confirm = new Alert(AlertType.CONFIRMATION, contentText);
 
@@ -244,7 +245,7 @@ public final class StaticUtilities
         return confirm;
     }
 
-    public static Dialog<ButtonType> createConfirmDialog()
+    public static @NotNull Dialog<ButtonType> createConfirmDialog()
     {
         return createConfirmDialog("");
     }

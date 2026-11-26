@@ -16,6 +16,7 @@
 package kintsugi3d.fx.controllers.modals.createnewproject;
 
 import javafx.stage.FileChooser.ExtensionFilter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.List;
 public final class RealityCaptureImportController extends ManualImportControllerBase
 {
     @Override
-    public List<ExtensionFilter> getCameraExtensionFilters()
+    public @NotNull List<ExtensionFilter> getCameraExtensionFilters()
     {
         return Collections.singletonList(new ExtensionFilter("Reality Capture CSV file", "*.csv"));
     }

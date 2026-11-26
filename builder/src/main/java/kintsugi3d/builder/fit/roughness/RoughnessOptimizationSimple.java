@@ -27,17 +27,20 @@ import kintsugi3d.gl.core.ColorFormat;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
 import kintsugi3d.gl.core.Texture2D;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 public class RoughnessOptimizationSimple<ContextType extends Context<ContextType>> extends RoughnessOptimizationBase<ContextType>
 {
     private final FramebufferObject<ContextType> specularTexFramebuffer;
 
     public RoughnessOptimizationSimple(
-        BasisResources<ContextType> basisResources, ReadonlyBasisWeightResources<ContextType> weightResources,
-        TextureResolution settings)
+        @NotNull BasisResources<ContextType> basisResources, @Nullable ReadonlyBasisWeightResources<ContextType> weightResources,
+        @NotNull TextureResolution settings)
         throws IOException
     {
         super(basisResources);
@@ -52,21 +55,23 @@ public class RoughnessOptimizationSimple<ContextType extends Context<ContextType
     }
 
     public RoughnessOptimizationSimple(
-        ReadonlyBasisResources<ContextType> basisResources, ReadonlyBasisWeightResources<ContextType> weightResources,
+        @NotNull ReadonlyBasisResources<ContextType> basisResources, @Nullable ReadonlyBasisWeightResources<ContextType> weightResources,
         File priorSolutionDirectory)
         throws IOException
     {
         super(basisResources);
 
         // Load specular and roughness maps from files
-        Texture2D<ContextType> specularTex =
-            TextureResources.loadTexture(StandardTexture.SPECULAR_COLOR, priorSolutionDirectory, basisResources.getContext());
-        Texture2D<ContextType> roughnessTex =
-            TextureResources.loadTexture(StandardTexture.ROUGHNESS, priorSolutionDirectory, basisResources.getContext());
+        Texture2D<ContextType> specularTex = Objects.requireNonNull(
+            TextureResources.loadTexture(StandardTexture.SPECULAR_COLOR, priorSolutionDirectory, basisResources.getContext()),
+            "Specular texture not found.");
+        Texture2D<ContextType> roughnessTex = Objects.requireNonNull(
+            TextureResources.loadTexture(StandardTexture.ROUGHNESS, priorSolutionDirectory, basisResources.getContext()),
+            "Roughness texture not found.");
 
         // Framebuffer for fitting and storing the specular parameter estimates (specular Fresnel color and roughness)
-        FramebufferObjectBuilder<ContextType> fboBuilder = basisResources.getContext().buildFramebufferObject(
-                roughnessTex.getWidth(), roughnessTex.getHeight());
+        FramebufferObjectBuilder<ContextType> fboBuilder =
+            basisResources.getContext().buildFramebufferObject(roughnessTex.getWidth(), roughnessTex.getHeight());
 
         boolean needsBlit;
         if (specularTex.getWidth() != roughnessTex.getWidth() || specularTex.getHeight() != roughnessTex.getHeight())

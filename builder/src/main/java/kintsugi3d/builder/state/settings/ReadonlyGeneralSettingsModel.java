@@ -34,7 +34,7 @@ public interface ReadonlyGeneralSettingsModel extends Iterable<Setting>
     @NotNull
     Iterator<Setting> iterator();
 
-    default boolean existsForGet(String name, Class<?> settingType)
+    default boolean existsForGet(String name, @NotNull Class<?> settingType)
     {
         return exists(name) && settingType.isAssignableFrom(getType(name));
     }

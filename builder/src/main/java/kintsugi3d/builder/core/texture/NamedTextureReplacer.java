@@ -16,6 +16,7 @@
 package kintsugi3d.builder.core.texture;
 
 import kintsugi3d.builder.resources.project.texture.TextureResources;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,11 +25,10 @@ public class NamedTextureReplacer extends ImageReplacer
 {
     private final TextureInfo texture;
 
-    public NamedTextureReplacer(TextureResources<?> resources, TextureInfo texture, File currentImage)
+    public NamedTextureReplacer(@NotNull TextureResources<?> resources, TextureInfo texture, @NotNull File currentImage)
     {
-        super(resources);
+        super(resources, currentImage);
         this.texture = texture;
-        setCurrentImage(currentImage);
     }
 
     public final TextureInfo getTexture()

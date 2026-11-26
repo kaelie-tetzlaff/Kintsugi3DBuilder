@@ -24,6 +24,7 @@ import kintsugi3d.gl.core.BlendFunction.Weight;
 import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,18 +54,18 @@ public class LightWidgetCircles<ContextType extends Context<ContextType>> extend
     }
 
     @Override
-    protected final Map<String, VertexBuffer<ContextType>> createVertexBuffers()
+    protected final @NotNull Map<String, VertexBuffer<ContextType>> createVertexBuffers()
     {
         return Map.of("position", getContext().createRectangle());
     }
 
-    public final void refreshWidgetInfo(LightWidgetInfo[] newWidgetInfo)
+    public final void refreshWidgetInfo(LightWidgetInfo @NotNull [] newWidgetInfo)
     {
         widgetInfo = newWidgetInfo.clone();
     }
 
     @Override
-    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(@NotNull FramebufferObject<ContextType> framebuffer, @NotNull CameraViewport cameraViewport)
     {
         if (sceneModel.getSettingsModel().getBoolean("relightingEnabled")
             && sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled")

@@ -18,6 +18,8 @@ package kintsugi3d.gl.core;
 import kintsugi3d.gl.builders.*;
 import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
 import kintsugi3d.gl.types.AbstractDataType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -35,7 +37,7 @@ public interface TextureFactory<ContextType extends Context<ContextType>>
      * @throws IOException Upon a File I/O problem when reading the images.
      */
     ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>>
-    build2DColorTextureFromStreamWithMask(InputStream imageStream, InputStream maskStream, boolean flipVertical) throws IOException;
+    build2DColorTextureFromStreamWithMask(InputStream imageStream, @Nullable InputStream maskStream, boolean flipVertical) throws IOException;
 
     /**
      * Gets a builder object for a 2D color texture to be loaded from an arbitrary input stream along with a separate stream containing an alpha mask.
@@ -51,7 +53,7 @@ public interface TextureFactory<ContextType extends Context<ContextType>>
      */
     <MappedType> ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>>
     build2DColorTextureFromStreamWithMask(
-        InputStream imageStream, InputStream maskStream, boolean flipVertical,
+        InputStream imageStream, @Nullable InputStream maskStream, boolean flipVertical,
         AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction) throws IOException;
 
     /**
@@ -63,7 +65,7 @@ public interface TextureFactory<ContextType extends Context<ContextType>>
      * @throws IOException Upon a File I/O problem when reading the images.
      */
     ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>>
-    build2DColorHDRTextureFromStreamWithMask(BufferedInputStream imageStream, InputStream maskStream, boolean flipVertical) throws IOException;
+    build2DColorHDRTextureFromStreamWithMask(BufferedInputStream imageStream, @Nullable InputStream maskStream, boolean flipVertical) throws IOException;
 
     /**
      * Gets a builder object for a 2D color texture to be loaded from an image along with a separate mask image.
@@ -73,7 +75,7 @@ public interface TextureFactory<ContextType extends Context<ContextType>>
      * @return The builder object for the texture.
      */
     ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>>
-    build2DColorTextureFromImageWithMask(BufferedImage colorImage, BufferedImage maskImage, boolean flipVertical);
+    build2DColorTextureFromImageWithMask(BufferedImage colorImage, @Nullable BufferedImage maskImage, boolean flipVertical);
 
     /**
      * Gets a builder object for a 2D color texture to be loaded from an image along with a separate mask image.
@@ -88,7 +90,7 @@ public interface TextureFactory<ContextType extends Context<ContextType>>
      */
     <MappedType> ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>>
     build2DColorTextureFromImageWithMask(
-        BufferedImage colorImage, BufferedImage maskImage, boolean flipVertical,
+        BufferedImage colorImage, @Nullable BufferedImage maskImage, boolean flipVertical,
         AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction);
 
     /**
@@ -132,7 +134,7 @@ public interface TextureFactory<ContextType extends Context<ContextType>>
      * @throws IOException Upon a File I/O problem when reading the images.
      */
     default ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>>
-    build2DColorTextureFromFileWithMask(File imageFile, File maskFile, boolean flipVertical) throws IOException
+    build2DColorTextureFromFileWithMask(@NotNull File imageFile, @NotNull File maskFile, boolean flipVertical) throws IOException
     {
         if (imageFile.getName().endsWith(".hdr"))
         {
@@ -158,7 +160,7 @@ public interface TextureFactory<ContextType extends Context<ContextType>>
      */
     default <MappedType> ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>>
     build2DColorTextureFromFileWithMask(
-        File imageFile, File maskFile, boolean flipVertical,
+        @NotNull File imageFile, @NotNull File maskFile, boolean flipVertical,
         AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction) throws IOException
     {
         return build2DColorTextureFromStreamWithMask(new FileInputStream(imageFile), new FileInputStream(maskFile), flipVertical,
@@ -186,7 +188,7 @@ public interface TextureFactory<ContextType extends Context<ContextType>>
      * @throws IOException Upon a File I/O problem when reading the images.
      */
     default ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>>
-    build2DColorTextureFromFile(File imageFile, boolean flipVertical) throws IOException
+    build2DColorTextureFromFile(@NotNull File imageFile, boolean flipVertical) throws IOException
     {
         if (imageFile.getName().endsWith(".hdr"))
         {
@@ -210,8 +212,8 @@ public interface TextureFactory<ContextType extends Context<ContextType>>
      * @throws IOException Upon a File I/O problem when reading the images.
      */
     default <MappedType> ColorTextureBuilder<ContextType, ? extends Texture2D<ContextType>>
-    build2DColorTextureFromFile(File imageFile, boolean flipVertical,
-        AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction) throws IOException
+    build2DColorTextureFromFile(@NotNull File imageFile, boolean flipVertical,
+                                AbstractDataType<? super MappedType> mappedType, Function<Color, MappedType> mappingFunction) throws IOException
     {
         return build2DColorTextureFromStream(new FileInputStream(imageFile), flipVertical, mappedType, mappingFunction);
     }

@@ -26,9 +26,9 @@ import kintsugi3d.gl.interactive.ShaderResources;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.vecmath.IntVector2;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.List;
 
 public interface ReadonlyImageBasedGraphicsResources<ContextType extends Context<ContextType>> extends ShaderResources<ContextType>
 {
@@ -36,7 +36,7 @@ public interface ReadonlyImageBasedGraphicsResources<ContextType extends Context
      * The view set that these resources were loaded from.
      * @return A read-only view of the view set
      */
-    ReadonlyViewSet getViewSet();
+    @NotNull ReadonlyViewSet getViewSet();
 
     /**
      * Diffuse, normal, specular, roughness maps
@@ -49,20 +49,6 @@ public interface ReadonlyImageBasedGraphicsResources<ContextType extends Context
      * @return
      */
     ReadonlyLuminanceMapResources<ContextType> getLuminanceMapResources();
-
-    /**
-     * Gets the weight associated with a given view/camera (determined by the distance from other views).
-     *
-     * @param index The index of the view for which to retrieve its weight.
-     * @return The weight for the specified view.
-     */
-    float getCameraWeight(int index);
-
-    /**
-     * Gets a read-only view of the whole list of camera weights
-     * @return
-     */
-    List<Float> getCameraWeights();
 
     boolean hasProcessedWeightMaps();
 
@@ -80,10 +66,10 @@ public interface ReadonlyImageBasedGraphicsResources<ContextType extends Context
      * Stream over enabled views only -- disabled views are not included.
      * @return
      */
-    default GraphicsStreamFactory<ContextType> streamFactory()
+    default @NotNull GraphicsStreamFactory<ContextType> streamFactory()
     {
         return new GraphicsStreamFactory<>(this);
     }
 
-    ImageCache<ContextType> cache(ReadonlyImageCacheSettings settings, ProgressMonitor monitor) throws IOException, UserCancellationException;
+    ImageCache<ContextType> cache(ReadonlyImageCacheSettings settings, @NotNull ProgressMonitor monitor) throws IOException, UserCancellationException;
 }

@@ -19,6 +19,7 @@ import kintsugi3d.gl.stream.GraphicsStream;
 import kintsugi3d.util.Counter;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.simple.SimpleMatrix;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -40,8 +41,8 @@ import java.util.stream.IntStream;
 @SuppressWarnings("PublicField")
 public class LeastSquaresMatrixBuilder
 {
-    public final SimpleMatrix[] weightsQTQAugmented;
-    public final SimpleMatrix[] weightsQTrAugmented;
+    public final SimpleMatrix @NotNull [] weightsQTQAugmented;
+    public final SimpleMatrix @NotNull [] weightsQTrAugmented;
 
     public final int systemCount;
     public final int weightCount;
@@ -64,7 +65,7 @@ public class LeastSquaresMatrixBuilder
      *                       The length of this list must match the length of constraintWeights.
      */
     public LeastSquaresMatrixBuilder(int systemCount, int weightCount,
-                                     List<IntToDoubleFunction> constraintWeights, List<Double> constraintsRHS)
+                                     @NotNull List<IntToDoubleFunction> constraintWeights, @NotNull List<Double> constraintsRHS)
     {
         this.systemCount = systemCount;
         this.weightCount = weightCount;
@@ -139,14 +140,14 @@ public class LeastSquaresMatrixBuilder
      *            components.  Alternatively, if it is desired for each dimension to be solved for separately, each one
      *            should be its own system and the definition of a "system index" can be redefined accordingly.
      */
-    public final <S, T> void buildMatrices(GraphicsStream<S> viewStream, LeastSquaresModel<S, T> leastSquaresModel,
-                                           IntConsumer sampleValidator)
+    public final <S, T> void buildMatrices(@NotNull GraphicsStream<S> viewStream, @NotNull LeastSquaresModel<S, T> leastSquaresModel,
+                                           @NotNull IntConsumer sampleValidator)
     {
         buildMatrices(viewStream, leastSquaresModel, sampleValidator, 0, systemCount);
     }
 
-    public final <S, T> void buildMatrices(GraphicsStream<S> viewStream, LeastSquaresModel<S, T> leastSquaresModel,
-                                           IntConsumer sampleValidator, int rangeStart, int rangeEnd)
+    public final <S, T> void buildMatrices(@NotNull GraphicsStream<S> viewStream, @NotNull LeastSquaresModel<S, T> leastSquaresModel,
+                                           @NotNull IntConsumer sampleValidator, int rangeStart, int rangeEnd)
     {
         Counter counter = new Counter();
 

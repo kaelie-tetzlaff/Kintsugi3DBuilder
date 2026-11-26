@@ -18,6 +18,7 @@ package kintsugi3d.util;
 import kintsugi3d.gl.vecmath.IntVector2;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -32,11 +33,11 @@ import java.util.List;
  */
 public class Potato
 {
-    private final Bump[] bumps;
+    private final Bump @NotNull [] bumps;
 
-    private final List<Vector3> positions;
-    private final List<Vector2> texCoords;
-    private final List<List<IntVector2>> faces;
+    private final @NotNull List<Vector3> positions;
+    private final @NotNull List<Vector2> texCoords;
+    private final @NotNull List<List<IntVector2>> faces;
 
     private static class Bump
     {
@@ -45,7 +46,7 @@ public class Potato
         float height;
     }
 
-    private double computeR(Vector3 direction)
+    private double computeR(@NotNull Vector3 direction)
     {
         double r = 1.0;
 
@@ -169,22 +170,22 @@ public class Potato
             new IntVector2((thetaSubdiv - 1) * phiSubdiv + 1, (thetaSubdiv - 1) * (phiSubdiv + 1) + 1)));
     }
 
-    public final List<Vector3> getPositions()
+    public final @NotNull List<Vector3> getPositions()
     {
         return Collections.unmodifiableList(positions);
     }
 
-    public final List<Vector2> getTexCoords()
+    public final @NotNull List<Vector2> getTexCoords()
     {
         return Collections.unmodifiableList(texCoords);
     }
 
-    public final List<List<IntVector2>> getFaces()
+    public final @NotNull List<List<IntVector2>> getFaces()
     {
         return Collections.unmodifiableList(faces);
     }
 
-    public final void writeToStream(PrintStream out)
+    public final void writeToStream(@NotNull PrintStream out)
     {
         for (Vector3 pos : positions)
         {
@@ -209,7 +210,7 @@ public class Potato
         }
     }
 
-    public static void main(String[] args)
+    public static void main(String @NotNull [] args)
     {
         try(PrintStream out = new PrintStream(args[4], StandardCharsets.UTF_8))
         {

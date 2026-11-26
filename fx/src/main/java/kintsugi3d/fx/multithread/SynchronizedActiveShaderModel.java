@@ -18,16 +18,17 @@ package kintsugi3d.fx.multithread;
 import javafx.application.Platform;
 import kintsugi3d.builder.state.shader.ActiveShaderModel;
 import kintsugi3d.builder.state.shader.ShaderInfo;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
 public class SynchronizedActiveShaderModel implements ActiveShaderModel
 {
-    private final ActiveShaderModel base;
+    private final @NotNull ActiveShaderModel base;
 
-    private final SynchronizedValue<ShaderInfo> activeShader;
+    private final @NotNull SynchronizedValue<ShaderInfo> activeShader;
 
-    public SynchronizedActiveShaderModel(ActiveShaderModel base)
+    public SynchronizedActiveShaderModel(@NotNull ActiveShaderModel base)
     {
         this.base = base;
         activeShader = SynchronizedValue.createFromFunctions(base::getActiveShader, base::setActiveShader);

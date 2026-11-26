@@ -27,27 +27,30 @@ import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.state.shader.ActiveShaderModel;
 import kintsugi3d.fx.core.JavaFXState;
 import kintsugi3d.fx.multithread.*;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public final class MultithreadState implements Kintsugi3DBuilderState
 {
-    private final ManipulableCameraModel cameraModel;
-    private final ManipulableLightingEnvironmentModel lightingModel;
-    private final ManipulableObjectPoseModel objectModel;
-    private final ActiveShaderModel activeShaderModel;
-    private final SelectableViewListModel viewListModel;
-    private final ProjectModel projectModel;
-    private final CarouselModel carouselModel;
+    private final @NotNull ManipulableCameraModel cameraModel;
+    private final @NotNull ManipulableLightingEnvironmentModel lightingModel;
+    private final @NotNull ManipulableObjectPoseModel objectModel;
+    private final @NotNull ActiveShaderModel activeShaderModel;
+    private final @NotNull SelectableViewListModel viewListModel;
+    private final @NotNull ProjectModel projectModel;
+    private final @NotNull CarouselModel carouselModel;
 
-    private final GeneralSettingsModel settingsModel;
-    private final LoadOptionsModel loadOptionsModel;
-    private final CacheModel cacheModel;
+    private final @NotNull GeneralSettingsModel settingsModel;
+    private final @NotNull LoadOptionsModel loadOptionsModel;
+    private final @NotNull CacheModel cacheModel;
 
-    private final TabsModel tabsModel;
+    private final @NotNull TabsModel tabsModel;
 
     private static MultithreadState instance;
 
     // TODO make private
-    public static MultithreadState getInstance()
+    public static @NotNull MultithreadState getInstance()
     {
         if (instance == null)
         {
@@ -57,7 +60,7 @@ public final class MultithreadState implements Kintsugi3DBuilderState
             }
         }
         //noinspection StaticVariableUsedBeforeInitialization
-        return instance;
+        return Objects.requireNonNull(instance, "JavaFX state is not yet loaded.");
     }
 
     public static boolean isInitialized()
@@ -65,7 +68,7 @@ public final class MultithreadState implements Kintsugi3DBuilderState
         return JavaFXApplication.isInitialized();
     }
 
-    private MultithreadState(JavaFXState base)
+    private MultithreadState(@NotNull JavaFXState base)
     {
         cameraModel = new SynchronizedCameraModel(base.getCameraModel());
         objectModel = new SynchronizedObjectPoseModel(base.getObjectModel());
@@ -88,65 +91,65 @@ public final class MultithreadState implements Kintsugi3DBuilderState
     }
 
     @Override
-    public ManipulableCameraModel getCameraModel()
+    public @NotNull ManipulableCameraModel getCameraModel()
     {
         return cameraModel;
     }
 
     @Override
-    public ManipulableLightingEnvironmentModel getLightingModel()
+    public @NotNull ManipulableLightingEnvironmentModel getLightingModel()
     {
         return lightingModel;
     }
 
     @Override
-    public ManipulableObjectPoseModel getObjectModel()
+    public @NotNull ManipulableObjectPoseModel getObjectModel()
     {
         return objectModel;
     }
 
     @Override
-    public ActiveShaderModel getUserShaderModel()
+    public @NotNull ActiveShaderModel getUserShaderModel()
     {
         return activeShaderModel;
     }
 
     @Override
-    public SelectableViewListModel getViewListModel()
+    public @NotNull SelectableViewListModel getViewListModel()
     {
         return viewListModel;
     }
 
     @Override
-    public TabsModel getTabModels() {
+    public @NotNull TabsModel getTabModels() {
         return tabsModel;
     }
 
     @Override
-    public GeneralSettingsModel getSettingsModel()
+    public @NotNull GeneralSettingsModel getSettingsModel()
     {
         return settingsModel;
     }
 
     @Override
-    public ProjectModel getProjectModel()
+    public @NotNull ProjectModel getProjectModel()
     {
         return projectModel;
     }
 
     @Override
-    public CarouselModel getCarouselModel()
+    public @NotNull CarouselModel getCarouselModel()
     {
         return carouselModel;
     }
 
     @Override
-    public CacheModel getCacheModel()
+    public @NotNull CacheModel getCacheModel()
     {
         return cacheModel;
     }
 
-    public LoadOptionsModel getLoadOptionsModel()
+    public @NotNull LoadOptionsModel getLoadOptionsModel()
     {
         return loadOptionsModel;
     }

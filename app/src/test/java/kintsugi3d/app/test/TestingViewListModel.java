@@ -17,6 +17,7 @@ package kintsugi3d.app.test;
 
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.state.SelectableViewListModel;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class TestingViewListModel implements SelectableViewListModel
     }
 
     @Override
-    public final List<View> getViewList()
+    public final @NotNull List<View> getViewList()
     {
         return List.of();
     }

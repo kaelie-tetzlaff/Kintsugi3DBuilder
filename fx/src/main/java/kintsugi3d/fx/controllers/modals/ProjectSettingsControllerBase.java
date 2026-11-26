@@ -25,6 +25,7 @@ import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.fx.controllers.paged.NonDataPageControllerBase;
 import kintsugi3d.fx.internal.ReadonlyObservableGeneralSettingsModel;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 import java.util.function.Function;
@@ -48,7 +49,7 @@ public abstract class ProjectSettingsControllerBase extends NonDataPageControlle
         this.projectSettingsManager = projectSettingsManager;
     }
 
-    protected final ReadonlyObservableGeneralSettingsModel getLocalSettingsModel()
+    protected final @NotNull ReadonlyObservableGeneralSettingsModel getLocalSettingsModel()
     {
         return projectSettingsManager.getLocalSettingsModel();
     }
@@ -58,7 +59,7 @@ public abstract class ProjectSettingsControllerBase extends NonDataPageControlle
         return projectSettingsManager.getProjectSettingsModel();
     }
 
-    protected final Set<String> getTrackedSettings()
+    protected final @NotNull Set<String> getTrackedSettings()
     {
         return projectSettingsManager.getTrackedSettings();
     }
@@ -115,56 +116,56 @@ public abstract class ProjectSettingsControllerBase extends NonDataPageControlle
         projectSettingsManager.trackSetting(settingName);
     }
 
-    protected final void bindFloatSetting(TextField textField, String settingName, float minValue, float maxValue)
+    protected final void bindFloatSetting(@NotNull TextField textField, String settingName, float minValue, float maxValue)
     {
         projectSettingsManager.bindFloatSetting(textField, settingName, minValue, maxValue);
     }
 
-    protected final void bindNormalizedSetting(TextField textField, String settingName)
+    protected final void bindNormalizedSetting(@NotNull TextField textField, String settingName)
     {
         projectSettingsManager.bindNormalizedSetting(textField, settingName);
     }
 
-    protected final void bindIntegerSetting(TextField textField, String settingName, int minValue, int maxValue)
+    protected final void bindIntegerSetting(@NotNull TextField textField, String settingName, int minValue, int maxValue)
     {
         projectSettingsManager.bindIntegerSetting(textField, settingName, minValue, maxValue);
     }
 
-    protected final void bindNumericSetting(Slider slider, String settingName)
+    protected final void bindNumericSetting(@NotNull Slider slider, String settingName)
     {
         projectSettingsManager.bindNumericSetting(slider, settingName);
     }
 
-    protected final void bindBooleanSetting(CheckBox checkBox, String settingName)
+    protected final void bindBooleanSetting(@NotNull CheckBox checkBox, String settingName)
     {
         projectSettingsManager.bindBooleanSetting(checkBox, settingName);
     }
 
-    protected final void bindBooleanSetting(BooleanProperty property, String settingName)
+    protected final void bindBooleanSetting(@NotNull BooleanProperty property, String settingName)
     {
         projectSettingsManager.bindBooleanSetting(property, settingName);
     }
 
-    protected final <T> void bindNumericComboBox(ComboBox<T> comboBox, String settingName,
-                                                 Function<Number, T> choiceConstructor, Function<T, Number> extractNumeric)
+    protected final <T> void bindNumericComboBox(@NotNull ComboBox<T> comboBox, String settingName,
+                                                 @NotNull Function<Number, T> choiceConstructor, @NotNull Function<T, Number> extractNumeric)
     {
         // Manually bind resolution both ways as a combo box.
         projectSettingsManager.bindNumericComboBox(comboBox, settingName, choiceConstructor, extractNumeric);
     }
 
-    protected final <T> void bindTextComboBox(ComboBox<T> comboBox, String settingName,
-                                              Function<String, T> choiceConstructor, Function<T, String> extractText)
+    protected final <T> void bindTextComboBox(@NotNull ComboBox<T> comboBox, String settingName,
+                                              @NotNull Function<String, T> choiceConstructor, @NotNull Function<T, String> extractText)
     {
         // Manually bind resolution both ways as a combo box.
         projectSettingsManager.bindTextComboBox(comboBox, settingName, choiceConstructor, extractText);
     }
 
-    protected final void bindTextComboBox(ComboBox<String> comboBox, String settingName)
+    protected final void bindTextComboBox(@NotNull ComboBox<String> comboBox, String settingName)
     {
         projectSettingsManager.bindTextComboBox(comboBox, settingName);
     }
 
-    protected final <T> void bindObjectComboBox(ComboBox<T> comboBox, String settingName, Class<T> objectClass)
+    protected final <T> void bindObjectComboBox(@NotNull ComboBox<T> comboBox, String settingName, @NotNull Class<T> objectClass)
     {
         projectSettingsManager.bindObjectComboBox(comboBox, settingName, objectClass);
     }

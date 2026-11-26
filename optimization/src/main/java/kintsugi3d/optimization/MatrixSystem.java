@@ -17,6 +17,7 @@ package kintsugi3d.optimization;
 
 import org.ejml.dense.row.CommonOps_DDRM;
 import org.ejml.simple.SimpleMatrix;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.stream.IntStream;
@@ -27,12 +28,12 @@ public class MatrixSystem
     /**
      * LHS
      */
-    public final SimpleMatrix lhs;
+    public final @NotNull SimpleMatrix lhs;
 
     /**
      * RHS
      */
-    public final SimpleMatrix[] rhs;
+    public final SimpleMatrix @NotNull [] rhs;
 
     public MatrixSystem(int matrixSize, int vectorCount, Class<?> matrixType)
     {
@@ -41,7 +42,7 @@ public class MatrixSystem
         Arrays.setAll(rhs, i -> new SimpleMatrix(matrixSize, 1, matrixType));
     }
 
-    public final void addContribution(MatrixSystem contribution)
+    public final void addContribution(@NotNull MatrixSystem contribution)
     {
         // Add the contribution into the main matrix and vectors.
         CommonOps_DDRM.addEquals(lhs.getMatrix(), contribution.lhs.getMatrix());
@@ -66,7 +67,7 @@ public class MatrixSystem
         return lhs.solve(rhs[rhsIndex]);
     }
 
-    public final SimpleMatrix solveNonNegative(int rhsIndex, double toleranceScale)
+    public final @NotNull SimpleMatrix solveNonNegative(int rhsIndex, double toleranceScale)
     {
         double medianATy = IntStream.range(0, rhs[rhsIndex].getNumElements())
                 .mapToDouble(rhs[rhsIndex]::get)

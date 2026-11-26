@@ -27,19 +27,23 @@ import kintsugi3d.builder.resources.project.texture.ReadonlyTextureResourcesBase
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.ManagedResource;
 import kintsugi3d.gl.core.Texture2D;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.EnumMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class SpecularFitBase<ContextType extends Context<ContextType>>
     extends ReadonlyTextureResourcesBase<ContextType> implements ManagedResource
 {
     private final ContextType context;
-    private final BasisResources<ContextType> basisResources;
-    private final BasisWeightResources<ContextType> basisWeightResources;
-    private final RoughnessOptimization<ContextType> roughnessOptimization;
+    private final @Nullable BasisResources<ContextType> basisResources;
+    private final @Nullable BasisWeightResources<ContextType> basisWeightResources;
+    private final @Nullable RoughnessOptimization<ContextType> roughnessOptimization;
 
     /**
      *
@@ -48,8 +52,8 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
      * @throws FileNotFoundException
      */
     protected SpecularFitBase(
-        ContextType context, BasisResources<ContextType> basisResources,
-        BasisWeightResources<ContextType> basisWeightResources, TextureResolution textureResolution)
+        ContextType context, @Nullable BasisResources<ContextType> basisResources,
+        @Nullable BasisWeightResources<ContextType> basisWeightResources, @NotNull TextureResolution textureResolution)
         throws IOException
     {
         this.context = context;
@@ -78,8 +82,8 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
      * @return
      */
     protected SpecularFitBase(
-        ContextType context, BasisResources<ContextType> basisResources,
-        BasisWeightResources<ContextType> basisWeightResources, File priorSolutionDirectory)
+        ContextType context, @Nullable BasisResources<ContextType> basisResources,
+        @Nullable BasisWeightResources<ContextType> basisWeightResources, File priorSolutionDirectory)
         throws IOException
     {
         this.context = context;
@@ -101,7 +105,7 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final ContextType getContext()
+    public final @NotNull ContextType getContext()
     {
         return context;
     }
@@ -141,15 +145,34 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final Map<StandardTexture, Texture2D<ContextType>> getStandardTextures()
+    public final @NotNull Map<StandardTexture, Texture2D<ContextType>> getStandardTextures()
     {
-        return roughnessOptimization == null ? Map.of() :
-            Map.of(StandardTexture.SPECULAR_COLOR, roughnessOptimization.getReflectivityTexture(),
-                StandardTexture.ROUGHNESS, roughnessOptimization.getRoughnessTexture());
+        if (roughnessOptimization != null)
+        {
+            Map<StandardTexture, Texture2D<ContextType>> result = new EnumMap<>(StandardTexture.class);
+
+            Texture2D<ContextType> reflectivityTexture = roughnessOptimization.getReflectivityTexture();
+            if (reflectivityTexture != null)
+            {
+                result.put(StandardTexture.SPECULAR_COLOR, reflectivityTexture);
+            }
+
+            Texture2D<ContextType> roughnessTexture = roughnessOptimization.getRoughnessTexture();
+            if (roughnessTexture != null)
+            {
+                result.put(StandardTexture.ROUGHNESS, roughnessTexture);
+            }
+
+            return result;
+        }
+        else
+        {
+            return Map.of();
+        }
     }
 
     @Override
-    public final Map<TextureInfo, Texture2D<ContextType>> getTextures()
+    public final @NotNull Map<TextureInfo, Texture2D<ContextType>> getTextures()
     {
         return StandardTexture.convertEnumMapToObjectMap(getStandardTextures());
     }
@@ -157,9 +180,9 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
     /**
      * Estimated specular reflectivity and roughness
      */
-    public final RoughnessOptimization<ContextType> getRoughnessOptimization()
+    public final @NotNull RoughnessOptimization<ContextType> getRoughnessOptimization()
     {
-        return roughnessOptimization;
+        return Objects.requireNonNull(roughnessOptimization, "Roughness optimization not available.");
     }
 
     @Override
@@ -172,7 +195,7 @@ public class SpecularFitBase<ContextType extends Context<ContextType>>
      * Basis weights (originally calculated on the CPU)
      */
     @Override
-    public final BasisWeightResources<ContextType> getBasisWeightResources()
+    public final @Nullable BasisWeightResources<ContextType> getBasisWeightResources()
     {
         return basisWeightResources;
     }

@@ -18,6 +18,7 @@ package kintsugi3d.fx.controllers.scene.camera;
 import javafx.beans.property.*;
 import kintsugi3d.builder.state.project.SerializableCameraSettings;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.NotNull;
 
 public class ObservableCameraSettings extends SerializableCameraSettings
 {
@@ -57,7 +58,7 @@ public class ObservableCameraSettings extends SerializableCameraSettings
         }
     }
 
-    public final ObservableCameraSettings duplicate()
+    public final @NotNull ObservableCameraSettings duplicate()
     {
         ObservableCameraSettings newCamera = new ObservableCameraSettings();
         newCamera.setXCenter(xCenter.getValue());
@@ -80,7 +81,7 @@ public class ObservableCameraSettings extends SerializableCameraSettings
         return xCenter.get();
     }
 
-    public final DoubleProperty xCenterProperty()
+    public final @NotNull DoubleProperty xCenterProperty()
     {
         return xCenter;
     }
@@ -97,7 +98,7 @@ public class ObservableCameraSettings extends SerializableCameraSettings
         return yCenter.get();
     }
 
-    public final DoubleProperty yCenterProperty()
+    public final @NotNull DoubleProperty yCenterProperty()
     {
         return yCenter;
     }
@@ -114,7 +115,7 @@ public class ObservableCameraSettings extends SerializableCameraSettings
         return zCenter.get();
     }
 
-    public final DoubleProperty zCenterProperty()
+    public final @NotNull DoubleProperty zCenterProperty()
     {
         return zCenter;
     }
@@ -131,7 +132,7 @@ public class ObservableCameraSettings extends SerializableCameraSettings
         return azimuth.get();
     }
 
-    public final DoubleProperty azimuthProperty()
+    public final @NotNull DoubleProperty azimuthProperty()
     {
         return azimuth;
     }
@@ -148,7 +149,7 @@ public class ObservableCameraSettings extends SerializableCameraSettings
         return inclination.get();
     }
 
-    public final DoubleProperty inclinationProperty()
+    public final @NotNull DoubleProperty inclinationProperty()
     {
         return inclination;
     }
@@ -165,7 +166,7 @@ public class ObservableCameraSettings extends SerializableCameraSettings
         return log10Distance.get();
     }
 
-    public final DoubleProperty log10DistanceProperty()
+    public final @NotNull DoubleProperty log10DistanceProperty()
     {
         return log10Distance;
     }
@@ -182,7 +183,7 @@ public class ObservableCameraSettings extends SerializableCameraSettings
         return twist.get();
     }
 
-    public final DoubleProperty twistProperty()
+    public final @NotNull DoubleProperty twistProperty()
     {
         return twist;
     }
@@ -199,7 +200,7 @@ public class ObservableCameraSettings extends SerializableCameraSettings
         return fov.get();
     }
 
-    public final DoubleProperty fovProperty()
+    public final @NotNull DoubleProperty fovProperty()
     {
         return fov;
     }
@@ -216,7 +217,7 @@ public class ObservableCameraSettings extends SerializableCameraSettings
         return focalLength.get();
     }
 
-    public final DoubleProperty focalLengthProperty()
+    public final @NotNull DoubleProperty focalLengthProperty()
     {
         return focalLength;
     }
@@ -233,7 +234,7 @@ public class ObservableCameraSettings extends SerializableCameraSettings
         return locked.get();
     }
 
-    public final BooleanProperty lockedProperty()
+    public final @NotNull BooleanProperty lockedProperty()
     {
         return locked;
     }
@@ -250,7 +251,7 @@ public class ObservableCameraSettings extends SerializableCameraSettings
         return orthographic.get();
     }
 
-    public final BooleanProperty orthographicProperty()
+    public final @NotNull BooleanProperty orthographicProperty()
     {
         return orthographic;
     }
@@ -267,7 +268,7 @@ public class ObservableCameraSettings extends SerializableCameraSettings
         return name.get();
     }
 
-    public final StringProperty nameProperty()
+    public final @NotNull StringProperty nameProperty()
     {
         return name;
     }

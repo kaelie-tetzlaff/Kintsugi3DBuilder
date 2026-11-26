@@ -25,16 +25,19 @@ import kintsugi3d.gl.window.FramebufferCanvas;
 import kintsugi3d.gl.window.PollableCanvas3D;
 import kintsugi3d.gl.window.PollableWindow;
 import kintsugi3d.gl.window.WindowSpecification;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class Standalone3DWindow<ContextType extends Context<ContextType>> implements PollableWindow
 {
-    private final Stage stage;
-    private final FramebufferView framebufferView;
+    private final @NotNull Stage stage;
+    private final @NotNull FramebufferView framebufferView;
     private final FramebufferCanvas<ContextType> canvas;
     private boolean windowClosing = false;
     private boolean focused;
 
-    Standalone3DWindow(Stage primaryStage, FramebufferCanvas<ContextType> canvas, WindowSpecification windowSpec)
+    Standalone3DWindow(Stage primaryStage, FramebufferCanvas<ContextType> canvas, @NotNull WindowSpecification windowSpec)
     {
         this.canvas = canvas;
 
@@ -147,8 +150,8 @@ public class Standalone3DWindow<ContextType extends Context<ContextType>> implem
     }
 
     @Override
-    public final PollableCanvas3D<? extends Context<?>> getCanvas()
+    public final @NotNull PollableCanvas3D<? extends Context<?>> getCanvas()
     {
-        return framebufferView.getCanvas();
+        return Objects.requireNonNull(framebufferView.getCanvas(), "Canvas has not been initialized.");
     }
 }

@@ -16,12 +16,13 @@
 package kintsugi3d.builder.state;
 
 import kintsugi3d.builder.core.viewset.View;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public interface SelectableViewListModel extends ReadonlySelectableViewListModel
 {
-    void setSelectedView(View cameraView);
+    void setSelectedView(@Nullable View cameraView);
     void setViewList(List<View> cameraViewList);
     void setViewSnapEnabled(boolean cameraViewSnapEnabled);
 }

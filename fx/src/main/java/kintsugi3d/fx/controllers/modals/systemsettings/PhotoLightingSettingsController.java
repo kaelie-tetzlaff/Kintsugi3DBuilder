@@ -19,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.stage.Window;
 import kintsugi3d.fx.core.JavaFXState;
+import org.jetbrains.annotations.NotNull;
 
 public class PhotoLightingSettingsController implements SystemSettingsControllerBase
 {
@@ -29,7 +30,7 @@ public class PhotoLightingSettingsController implements SystemSettingsController
     @FXML private CheckBox visibleLightWidgetsCheckBox;
 
     @Override
-    public final void initializePage(Window parentWindow, JavaFXState state)
+    public final void initializePage(Window parentWindow, @NotNull JavaFXState state)
     {
         // Disable option for light widgets if relighting is disabled.
         visibleLightWidgetsCheckBox.disableProperty().bind(relightingCheckBox.selectedProperty().not());

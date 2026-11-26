@@ -16,6 +16,7 @@
 package kintsugi3d.builder.util;
 
 import kintsugi3d.builder.preferences.GlobalUserPreferencesManager;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +57,7 @@ public final class ApplicationFolders
      *
      * @return application folder
      */
-    public static Path getUserAppDirectory()
+    public static @NotNull Path getUserAppDirectory()
     {
         if (System.getProperty("Kintsugi3D.dataDir") != null)
         {
@@ -91,7 +92,7 @@ public final class ApplicationFolders
      *
      * @return cache application folder
      */
-    public static Path getUserCacheDirectory()
+    public static @NotNull Path getUserCacheDirectory()
     {
         if (System.getProperty("Kintsugi3D.cacheDir") != null)
         {
@@ -121,7 +122,7 @@ public final class ApplicationFolders
      *
      * @return system app folder
      */
-    public static Path getSystemAppDirectory()
+    public static @NotNull Path getSystemAppDirectory()
     {
         if (OS == OperatingSystem.WINDOWS)
         {
@@ -142,7 +143,7 @@ public final class ApplicationFolders
      *
      * @return installation directory
      */
-    public static Path getInstallationDirectory()
+    public static @NotNull Path getInstallationDirectory()
     {
         // TODO create a more robust installation directory solution
         // Technically only gets the working directory of the application
@@ -150,38 +151,38 @@ public final class ApplicationFolders
         return Paths.get(new File("").getAbsolutePath());
     }
 
-    public static Path getAdditionalBinDirectory()
+    public static @NotNull Path getAdditionalBinDirectory()
     {
         return getInstallationDirectory().resolve("bin");
     }
 
-    public static Path getAdditionalScriptsDirectory()
+    public static @NotNull Path getAdditionalScriptsDirectory()
     {
         return getInstallationDirectory().resolve("scripts");
     }
 
-    public static Path getPreviewImagesRootDirectory()
+    public static @NotNull Path getPreviewImagesRootDirectory()
     {
         return Objects.requireNonNullElseGet(
             GlobalUserPreferencesManager.getInstance().getPreferences().getDirectoryPreferences().getPreviewImagesDirectory(),
             () -> getUserCacheDirectory().resolve("preview"));
     }
 
-    public static Path getFitCacheRootDirectory()
+    public static @NotNull Path getFitCacheRootDirectory()
     {
         return Objects.requireNonNullElseGet(
             GlobalUserPreferencesManager.getInstance().getPreferences().getDirectoryPreferences().getFitCacheDirectory(),
             () -> getUserCacheDirectory().resolve("fit"));
     }
 
-    public static Path getExtensionDirectory()
+    public static @NotNull Path getExtensionDirectory()
     {
         return Objects.requireNonNullElseGet(
             GlobalUserPreferencesManager.getInstance().getPreferences().getDirectoryPreferences().getExtensionDirectory(),
             () -> getUserCacheDirectory().resolve("ext"));
     }
 
-    public static Path getLogFileDirectory()
+    public static @NotNull Path getLogFileDirectory()
     {
         return Objects.requireNonNullElseGet(
             GlobalUserPreferencesManager.getInstance().getPreferences().getDirectoryPreferences().getLogFileDirectory(),

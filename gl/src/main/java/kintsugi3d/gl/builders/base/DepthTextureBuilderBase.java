@@ -18,6 +18,7 @@ package kintsugi3d.gl.builders.base;
 import kintsugi3d.gl.builders.DepthTextureBuilder;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Texture;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class DepthTextureBuilderBase<ContextType extends Context<ContextType>, TextureType extends Texture<ContextType>> 
     extends TextureBuilderBase<ContextType, TextureType> implements DepthTextureBuilder<ContextType, TextureType>
@@ -41,49 +42,49 @@ public abstract class DepthTextureBuilderBase<ContextType extends Context<Contex
     }
 
     @Override
-    public final DepthTextureBuilderBase<ContextType, TextureType> setInternalPrecision(int precision)
+    public final @NotNull DepthTextureBuilderBase<ContextType, TextureType> setInternalPrecision(int precision)
     {
         this.precision = precision;
         return this;
     }
 
     @Override
-    public final DepthTextureBuilderBase<ContextType, TextureType> setFloatingPointEnabled(boolean enabled)
+    public final @NotNull DepthTextureBuilderBase<ContextType, TextureType> setFloatingPointEnabled(boolean enabled)
     {
         floatingPoint = enabled;
         return this;
     }
 
     @Override
-    public final DepthTextureBuilderBase<ContextType, TextureType> setMultisamples(int samples, boolean fixedSampleLocations)
+    public final @NotNull DepthTextureBuilderBase<ContextType, TextureType> setMultisamples(int samples, boolean fixedSampleLocations)
     {
         super.setMultisamples(samples, fixedSampleLocations);
         return this;
     }
 
     @Override
-    public final DepthTextureBuilderBase<ContextType, TextureType> setMipmapsEnabled(boolean enabled)
+    public final @NotNull DepthTextureBuilderBase<ContextType, TextureType> setMipmapsEnabled(boolean enabled)
     {
         super.setMipmapsEnabled(enabled);
         return this;
     }
 
     @Override
-    public final DepthTextureBuilderBase<ContextType, TextureType> setMaxMipmapLevel(int maxMipmapLevel)
+    public final @NotNull DepthTextureBuilderBase<ContextType, TextureType> setMaxMipmapLevel(int maxMipmapLevel)
     {
         super.setMaxMipmapLevel(maxMipmapLevel);
         return this;
     }
 
     @Override
-    public final DepthTextureBuilderBase<ContextType, TextureType> setLinearFilteringEnabled(boolean enabled)
+    public final @NotNull DepthTextureBuilderBase<ContextType, TextureType> setLinearFilteringEnabled(boolean enabled)
     {
         super.setLinearFilteringEnabled(enabled);
         return this;
     }
 
     @Override
-    public final DepthTextureBuilderBase<ContextType, TextureType> setMaxAnisotropy(float maxAnisotropy)
+    public final @NotNull DepthTextureBuilderBase<ContextType, TextureType> setMaxAnisotropy(float maxAnisotropy)
     {
         super.setMaxAnisotropy(maxAnisotropy);
         return this;

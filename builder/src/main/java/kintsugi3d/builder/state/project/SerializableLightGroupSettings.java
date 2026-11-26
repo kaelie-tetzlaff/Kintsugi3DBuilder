@@ -15,6 +15,7 @@
 
 package kintsugi3d.builder.state.project;
 
+import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -26,7 +27,7 @@ public abstract class SerializableLightGroupSettings<LightInstanceSettingType ex
 {
 
     @Override
-    public final Element toDOMElement(Document document)
+    public final @NotNull Element toDOMElement(@NotNull Document document)
     {
         Element element = document.createElement("LightGroup");
         element.setAttribute("name", getName());
@@ -41,7 +42,7 @@ public abstract class SerializableLightGroupSettings<LightInstanceSettingType ex
     }
 
     public static <LightGroupSettingType extends SerializableLightGroupSettings<LightInstanceSettingType>, LightInstanceSettingType extends SerializableLightSettings>
-    LightGroupSettingType fromDOMElement(Element element, Supplier<LightGroupSettingType> lightGroupSettingConstructor)
+    @NotNull LightGroupSettingType fromDOMElement(@NotNull Element element, @NotNull Supplier<LightGroupSettingType> lightGroupSettingConstructor)
     {
         LightGroupSettingType lightGroup = lightGroupSettingConstructor.get();
         lightGroup.setName(element.getAttribute("name"));

@@ -16,16 +16,17 @@
 package kintsugi3d.fx.controllers.modals.viewselect;
 
 import kintsugi3d.builder.io.imageset.ImageSetInfo;
+import org.jetbrains.annotations.Nullable;
 
 public interface ViewSelectable
 {
-    String getAdvanceLabelOverride();
+    @Nullable String getAdvanceLabelOverride();
 
     ImageSetInfo getImageSetInfo();
 
     String getViewSelection();
     double getViewRotation();
-    void selectView(String viewName, double viewRotation);
+    void selectView(@Nullable String viewName, double viewRotation);
 
     boolean confirm();
 }

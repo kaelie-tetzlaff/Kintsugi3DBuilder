@@ -21,6 +21,7 @@ import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.window.CanvasSize;
 import kintsugi3d.gl.window.CursorPosition;
+import org.jetbrains.annotations.NotNull;
 
 final class ObjectCenterTool implements DragTool
 {
@@ -38,13 +39,13 @@ final class ObjectCenterTool implements DragTool
     private static class Builder extends ToolBuilderBase<ObjectCenterTool>
     {
         @Override
-        public final ObjectCenterTool create()
+        public final @NotNull ObjectCenterTool create()
         {
             return new ObjectCenterTool(getCameraModel(), getObjectModel());
         }
     }
 
-    static ToolBuilder<ObjectCenterTool> getBuilder()
+    static @NotNull ToolBuilder<ObjectCenterTool> getBuilder()
     {
         return new Builder();
     }
@@ -56,7 +57,7 @@ final class ObjectCenterTool implements DragTool
     }
 
     @Override
-    public void mouseButtonPressed(CursorPosition cursorPosition, CanvasSize canvasSize)
+    public void mouseButtonPressed(CursorPosition cursorPosition, @NotNull CanvasSize canvasSize)
     {
         mouseStart = cursorPosition;
 
@@ -67,7 +68,7 @@ final class ObjectCenterTool implements DragTool
     }
 
     @Override
-    public void cursorDragged(CursorPosition cursorPosition, CanvasSize canvasSize)
+    public void cursorDragged(@NotNull CursorPosition cursorPosition, CanvasSize canvasSize)
     {
         Vector3 moveVector = new Vector3(
                 (float) (cursorPosition.x - mouseStart.x),

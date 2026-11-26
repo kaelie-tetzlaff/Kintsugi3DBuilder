@@ -19,18 +19,21 @@ import javafx.application.Platform;
 import kintsugi3d.builder.state.cards.CardsModel;
 import kintsugi3d.builder.state.cards.ProjectDataCard;
 import kintsugi3d.builder.state.cards.RefreshFunction;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 public class SynchronizedCardsModel<T> implements CardsModel<T>
 {
-    private final CardsModel<T> base;
+    private final @NotNull CardsModel<T> base;
 
-    public SynchronizedCardsModel(CardsModel<T> base)
+    public SynchronizedCardsModel(@Nullable CardsModel<T> base)
     {
-        this.base = base;
+        this.base = Objects.requireNonNull(base, "Base model must not be null");
     }
 
     @Override

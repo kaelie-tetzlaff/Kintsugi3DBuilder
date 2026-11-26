@@ -31,13 +31,20 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 import kintsugi3d.builder.util.FXImageHelper;
 import kintsugi3d.fx.util.ZoomSafeImageView;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public class ImageDetailsController
 {
+    private static final Logger LOG = LoggerFactory.getLogger(ImageDetailsController.class);
+
     @FXML private VBox detailBox;
     @FXML private HBox buttonRow;
 
@@ -61,7 +68,7 @@ public class ImageDetailsController
     private ToggleGroup toggleGroup;
 
     // Current image and its current logical viewport.
-    private Image currentImage;
+    private @Nullable Image currentImage;
     private double currentWidth;
     private double currentHeight;
     private double currentX;
@@ -132,7 +139,7 @@ public class ImageDetailsController
      * If filePath is null it will instead hide the detailsBox
      * @param
      */
-    public final void setImage(String filePath)
+    public final void setImage(@Nullable String filePath)
     {
         if (filePath != null) //If there is a file path
         {
@@ -148,9 +155,17 @@ public class ImageDetailsController
                 currentImage = FXImageHelper.loadFXImage(imageFile);
                 zoomSafeImageView.setFullImage(currentImage); // ImageView is set to currentImage
 
-                // Resets viewport
-                currentWidth = currentImage.getWidth();
-                currentHeight = currentImage.getHeight();
+                if (currentImage != null)
+                {
+                    // Resets viewport
+                    currentWidth = currentImage.getWidth();
+                    currentHeight = currentImage.getHeight();
+                }
+                else
+                {
+                    LOG.warn("Image was not successfully loaded by JavaFX: {}", imageFile);
+                }
+
                 currentX = 0;
                 currentY = 0;
 
@@ -165,7 +180,7 @@ public class ImageDetailsController
             else
             {
                 // System error message if the image is not found
-                System.err.println("Error: File not found at " + imageFile.getAbsolutePath());
+                LOG.error("Error: File not found at {}", imageFile.getAbsolutePath());
             }
         }
         else
@@ -181,7 +196,7 @@ public class ImageDetailsController
      * Creates buttons with events, that are then added to buttonRow.
      * New buttons can be added and automatically given the same properties as current buttons.
      */
-    private Collection<Region> createButtons()
+    private @NotNull Collection<Region> createButtons()
     {
         toggleGroup = new ToggleGroup(); // Toggle group created so only 1 Radio button can be selected at once
 
@@ -209,7 +224,7 @@ public class ImageDetailsController
      * @param name
      * @return Button
      */
-    private RadioButton createButton(String name)
+    private @NotNull RadioButton createButton(String name)
     {
         RadioButton button = new RadioButton(name); //New radio button
 
@@ -268,14 +283,19 @@ public class ImageDetailsController
         refreshViewport();
     }
 
+    private @NotNull Image validateImage()
+    {
+        return Objects.requireNonNull(currentImage, "No image is currently selected.");
+    }
+
     private double calculateViewportWidthFromHeight(double height)
     {
-        return Math.min(currentImage.getWidth(), height * (stackPane.getWidth() / stackPane.getHeight()));
+        return Math.min(validateImage().getWidth(), height * (stackPane.getWidth() / stackPane.getHeight()));
     }
 
     private double calculateViewportHeightFromWidth(double width)
     {
-        return Math.min(currentImage.getHeight(), width * (stackPane.getHeight() / stackPane.getWidth()));
+        return Math.min(validateImage().getHeight(), width * (stackPane.getHeight() / stackPane.getWidth()));
     }
 
     private void refreshViewport()
@@ -296,7 +316,7 @@ public class ImageDetailsController
      * @param event
      */
     @FXML
-    public final void scrollZoom(ScrollEvent event)
+    public final void scrollZoom(@NotNull ScrollEvent event)
     {
         // Will exit this function if we have no image or if canZoom is false
         if (ScrollEvent.SCROLL.equals(event.getEventType()) && event.getDeltaY() != 0.0 && currentImage != null && canZoom)
@@ -394,34 +414,37 @@ public class ImageDetailsController
      * @param event
      */
     @FXML
-    public final void startSelection(MouseEvent event)
+    public final void startSelection(@NotNull MouseEvent event)
     {
         //Event location
         mousePressedX = event.getX();
         mousePressedY = event.getY();
 
-        // Initialize viewport if it hasn't been set yet
-        if (zoomSafeImageView.getLogicalViewport() == null)
+        if (currentImage != null)
         {
-            currentWidth = currentImage.getWidth();
-            currentHeight = currentImage.getHeight();
-            currentX = 0;
-            currentY = 0;
-            refreshViewport();
-        }
+            // Initialize viewport if it hasn't been set yet
+            if (zoomSafeImageView.getLogicalViewport() == null)
+            {
+                currentWidth = currentImage.getWidth();
+                currentHeight = currentImage.getHeight();
+                currentX = 0;
+                currentY = 0;
+                refreshViewport();
+            }
 
-        if (canPan) //If panning is active takes the current x any and assigns it to startViewport x and y
-        {
-            startViewportX = currentX;
-            startViewportY = currentY;
-        }
-        else if (canCrop) //If marquee is active we initiate selectionBox
-        {
-            selectionBox.setTranslateX(mousePressedX);
-            selectionBox.setTranslateY(mousePressedY);
-            selectionBox.setWidth(0);
-            selectionBox.setHeight(0);
-            selectionBox.setVisible(true);
+            if (canPan) //If panning is active takes the current x any and assigns it to startViewport x and y
+            {
+                startViewportX = currentX;
+                startViewportY = currentY;
+            }
+            else if (canCrop) //If marquee is active we initiate selectionBox
+            {
+                selectionBox.setTranslateX(mousePressedX);
+                selectionBox.setTranslateY(mousePressedY);
+                selectionBox.setWidth(0);
+                selectionBox.setHeight(0);
+                selectionBox.setVisible(true);
+            }
         }
     }
 
@@ -430,7 +453,7 @@ public class ImageDetailsController
      * @param event
      */
     @FXML
-    public final void dragSelection(MouseEvent event)
+    public final void dragSelection(@NotNull MouseEvent event)
     {
         if (currentImage != null) // Safeguard if image is there
         {

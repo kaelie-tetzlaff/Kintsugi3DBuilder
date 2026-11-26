@@ -22,6 +22,7 @@ import kintsugi3d.gl.vecmath.DoubleVector4;
 import kintsugi3d.util.SRGB;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.simple.SimpleMatrix;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,12 +41,12 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
 {
     private static final Logger LOG = LoggerFactory.getLogger(SpecularDecompositionBase.class);
 
-    private final SimpleMatrix[] weightsByTexel;
-    private final boolean[] weightsValidity;
+    private final SimpleMatrix @NotNull [] weightsByTexel;
+    private final boolean @NotNull [] weightsValidity;
 
-    private final TextureResolution textureResolution;
+    private final @NotNull TextureResolution textureResolution;
 
-    protected SpecularDecompositionBase(TextureResolution textureResolution, int materialCount)
+    protected SpecularDecompositionBase(@NotNull TextureResolution textureResolution, int materialCount)
     {
         weightsByTexel = IntStream.range(0, textureResolution.width * textureResolution.height)
             .mapToObj(p -> new SimpleMatrix(materialCount, 1, DMatrixRMaj.class))
@@ -56,13 +57,13 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
     }
 
     @Override
-    public final SpecularBasisWeights getWeights()
+    public final @NotNull SpecularBasisWeights getWeights()
     {
         return new SpecularDecompositionWeights(this);
     }
 
     @Override
-    public final TextureResolution getTextureResolution()
+    public final @NotNull TextureResolution getTextureResolution()
     {
         return textureResolution;
     }
@@ -92,7 +93,7 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
     }
 
     @Override
-    public final List<SimpleMatrix> getWeightsList()
+    public final @NotNull List<SimpleMatrix> getWeightsList()
     {
         return Arrays.asList(weightsByTexel);
     }
@@ -238,10 +239,10 @@ public abstract class SpecularDecompositionBase implements SpecularDecomposition
 
     private static class SpecularDecompositionWeights implements SpecularBasisWeights
     {
-        private final SpecularDecompositionBase specularDecomposition;
+        private final @NotNull SpecularDecompositionBase specularDecomposition;
         private final MaterialBasis basis;
 
-        SpecularDecompositionWeights(SpecularDecompositionBase specularDecomposition)
+        SpecularDecompositionWeights(@NotNull SpecularDecompositionBase specularDecomposition)
         {
             this.specularDecomposition = specularDecomposition;
             basis = specularDecomposition.getMaterialBasis();

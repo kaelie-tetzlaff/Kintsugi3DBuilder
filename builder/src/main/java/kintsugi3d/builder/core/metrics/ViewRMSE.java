@@ -15,6 +15,8 @@
 
 package kintsugi3d.builder.core.metrics;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ViewRMSE implements ReadonlyViewRMSE
 {
     private final ColorAppearanceRMSE basisWeights = new ColorAppearanceRMSE();
@@ -26,7 +28,7 @@ public class ViewRMSE implements ReadonlyViewRMSE
      * @return
      */
     @Override
-    public final ColorAppearanceRMSE usingBasisWeights()
+    public final @NotNull ColorAppearanceRMSE usingBasisWeights()
     {
         return basisWeights;
     }
@@ -36,7 +38,7 @@ public class ViewRMSE implements ReadonlyViewRMSE
      * @return
      */
     @Override
-    public final ColorAppearanceRMSE usingReflectivity()
+    public final @NotNull ColorAppearanceRMSE usingReflectivity()
     {
         return reflectivity;
     }
@@ -46,7 +48,7 @@ public class ViewRMSE implements ReadonlyViewRMSE
      * @return
      */
     @Override
-    public final ColorAppearanceRMSE usingMetallicity()
+    public final @NotNull ColorAppearanceRMSE usingMetallicity()
     {
         return metallicity;
     }

@@ -19,6 +19,8 @@ import kintsugi3d.builder.fit.decomposition.BasisResources;
 import kintsugi3d.builder.fit.decomposition.ReadonlyBasisResources;
 import kintsugi3d.builder.fit.decomposition.ReadonlyBasisWeightResources;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +36,7 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
     private static final Pattern TEXTURE_NAME_PROBLEM_CHARS = Pattern.compile("[^A-Za-z0-9]+");
 
     private static <ContextType extends Context<ContextType>> void useTextureSafe(
-        Program<ContextType> program, String textureName, Texture<ContextType> texture)
+        @NotNull Program<ContextType> program, @NotNull String textureName, @Nullable Texture<ContextType> texture)
     {
         if (texture == null)
         {
@@ -47,13 +49,13 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
     }
 
     @Override
-    public final String sanitizeTextureName(CharSequence name)
+    public final String sanitizeTextureName(@NotNull CharSequence name)
     {
         return TEXTURE_NAME_PROBLEM_CHARS.matcher(name).replaceAll("_");
     }
 
     @Override
-    public final void setupShaderProgram(Program<ContextType> program)
+    public final void setupShaderProgram(@NotNull Program<ContextType> program)
     {
         for (var entry : getTextures().entrySet())
         {
@@ -64,19 +66,21 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
                 entry.getValue());
         }
 
-        if (getBasisResources() != null)
+        ReadonlyBasisResources<ContextType> basisResources = getBasisResources();
+        if (basisResources != null)
         {
-            getBasisResources().useWithShaderProgram(program);
+            basisResources.useWithShaderProgram(program);
         }
 
-        if (getBasisWeightResources() != null)
+        ReadonlyBasisWeightResources<ContextType> basisWeightResources = getBasisWeightResources();
+        if (basisWeightResources != null)
         {
-            getBasisWeightResources().useWithShaderProgram(program);
+            basisWeightResources.useWithShaderProgram(program);
         }
     }
 
     @Override
-    public final void saveTexture(String texName, String format, File outputDirectory, String filenameOverride)
+    public final void saveTexture(String texName, String format, File outputDirectory, @Nullable String filenameOverride)
     {
         try
         {
@@ -94,7 +98,7 @@ public abstract class ReadonlyTextureResourcesBase<ContextType extends Context<C
     }
 
     @Override
-    public final void savePackedWeightMaps(String format, File outputDirectory, String filenamePrefix)
+    public final void savePackedWeightMaps(@NotNull String format, File outputDirectory, String filenamePrefix)
     {
         ReadonlyBasisWeightResources<ContextType> weightResources = getBasisWeightResources();
         if (weightResources != null)

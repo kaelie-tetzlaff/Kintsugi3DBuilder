@@ -15,6 +15,8 @@
 
 package kintsugi3d.builder.fit.decomposition;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
@@ -40,7 +42,7 @@ public interface MaterialBasis
      * @param materialName
      * @return
      */
-    BasisMaterialInfo getMaterial(String materialName);
+    @Nullable BasisMaterialInfo getMaterial(String materialName);
 
     int getMaterialCount();
 
@@ -48,7 +50,7 @@ public interface MaterialBasis
 
     int getSpecularResolution();
 
-    void save(File outputDirectory, String filenameOverride);
+    void save(File outputDirectory, @Nullable String filenameOverride);
 
     default void save(File outputDirectory)
     {

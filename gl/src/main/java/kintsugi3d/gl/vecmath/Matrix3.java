@@ -15,6 +15,8 @@
 
 package kintsugi3d.gl.vecmath;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * A 3x3 matrix backed by 32-bit floats.  This is an immutable object.
  *
@@ -26,7 +28,7 @@ public final class Matrix3
     /**
      * The matrix data.
      */
-    private final float[][] m;
+    private final float @NotNull [][] m;
 
     /**
      * Creates a new matrix by specifying each entry.
@@ -57,21 +59,21 @@ public final class Matrix3
         m[2][2] = m33;
     }
 
-    public static Matrix3 fromColumns(Vector3 col1, Vector3 col2, Vector3 col3)
+    public static @NotNull Matrix3 fromColumns(@NotNull Vector3 col1, @NotNull Vector3 col2, @NotNull Vector3 col3)
     {
         return new Matrix3( col1.x, col2.x, col3.x,
                             col1.y, col2.y, col3.y,
                             col1.z, col2.z, col3.z );
     }
 
-    public static Matrix3 fromRows(Vector3 row1, Vector3 row2, Vector3 row3)
+    public static @NotNull Matrix3 fromRows(@NotNull Vector3 row1, @NotNull Vector3 row2, @NotNull Vector3 row3)
     {
         return new Matrix3( row1.x, row1.y, row1.z,
                             row2.x, row2.y, row2.z,
                             row3.x, row3.y, row3.z );
     }
 
-    public static Matrix3 fromDoublePrecision(DoubleMatrix3 m3)
+    public static @NotNull Matrix3 fromDoublePrecision(@NotNull DoubleMatrix3 m3)
     {
         return new Matrix3(    (float)m3.get(0,0),    (float)m3.get(0,1),    (float)m3.get(0,2),
                             (float)m3.get(1,0),    (float)m3.get(1,1),    (float)m3.get(1,2),
@@ -85,7 +87,7 @@ public final class Matrix3
      * @param sz The scale along the z-axis.
      * @return The specified scale matrix.
      */
-    public static Matrix3 scale(float sx, float sy, float sz)
+    public static @NotNull Matrix3 scale(float sx, float sy, float sz)
     {
         return new Matrix3(    sx,     0.0f,     0.0f,
                                     0.0f,    sy,        0.0f,
@@ -97,7 +99,7 @@ public final class Matrix3
      * @param s The scale along all axes.
      * @return The specified scale matrix.
      */
-    public static Matrix3 scale(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") float s)
+    public static @NotNull Matrix3 scale(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") float s)
     {
         return scale(s, s, s);
     }
@@ -107,7 +109,7 @@ public final class Matrix3
      * @param s The scale vector
      * @return The specified scale matrix.
      */
-    public static Matrix3 scale(Vector3 s)
+    public static @NotNull Matrix3 scale(@NotNull Vector3 s)
     {
         return scale(s.x, s.y, s.z);
     }
@@ -117,7 +119,7 @@ public final class Matrix3
      * @param radians The amount of rotation, in radians.
      * @return The specified transformation matrix.
      */
-    public static Matrix3 rotateX(double radians)
+    public static @NotNull Matrix3 rotateX(double radians)
     {
         float sinTheta = (float) StrictMath.sin(radians);
         float cosTheta = (float) StrictMath.cos(radians);
@@ -133,7 +135,7 @@ public final class Matrix3
      * @param radians The amount of rotation, in radians.
      * @return The specified transformation matrix.
      */
-    public static Matrix3 rotateY(double radians)
+    public static @NotNull Matrix3 rotateY(double radians)
     {
         float sinTheta = (float) StrictMath.sin(radians);
         float cosTheta = (float) StrictMath.cos(radians);
@@ -149,7 +151,7 @@ public final class Matrix3
      * @param radians The amount of rotation, in radians.
      * @return The specified transformation matrix.
      */
-    public static Matrix3 rotateZ(double radians)
+    public static @NotNull Matrix3 rotateZ(double radians)
     {
         float sinTheta = (float) StrictMath.sin(radians);
         float cosTheta = (float) StrictMath.cos(radians);
@@ -166,7 +168,7 @@ public final class Matrix3
      * @param radians The amount of rotation, in radians.
      * @return The specified transformation matrix.
      */
-    public static Matrix3 rotateAxis(Vector3 axis, double radians)
+    public static @NotNull Matrix3 rotateAxis(@NotNull Vector3 axis, double radians)
     {
         float sinTheta = (float) StrictMath.sin(radians);
         float cosTheta = (float) StrictMath.cos(radians);
@@ -195,7 +197,7 @@ public final class Matrix3
      * @param w The fourth (identity) component of the quaternion.
      * @return The specified transformation matrix.
      */
-    public static Matrix3 fromQuaternion(float x, float y, float z, float w)
+    public static @NotNull Matrix3 fromQuaternion(float x, float y, float z, float w)
     {
         return new Matrix3(
             1 - 2*y*y - 2*z*z,    2*x*y - 2*z*w,        2*x*z + 2*y*w,
@@ -208,7 +210,7 @@ public final class Matrix3
      * Convert the given matrix (assumed to be a rotation matrix) to a quaternion.
      * @return The quaternion packed in a Vector4
      */
-    public Vector4 toQuaternion()
+    public @NotNull Vector4 toQuaternion()
     {
         // Convert rotation matrix to quaternion
         double[] q = new double[4];
@@ -252,7 +254,7 @@ public final class Matrix3
         return new Vector4((float)q[0], (float)q[1], (float)q[2], (float)q[3]);
     }
 
-    public Matrix4 asMatrix4()
+    public @NotNull Matrix4 asMatrix4()
     {
         return Matrix4.affine(this, 0.0f, 0.0f, 0.0f);
     }
@@ -262,7 +264,7 @@ public final class Matrix3
      * @param other The matrix to add to this one.
      * @return A new matrix that is the sum of the two matrices.
      */
-    public Matrix3 plus(Matrix3 other)
+    public @NotNull Matrix3 plus(@NotNull Matrix3 other)
     {
         return new Matrix3(
             m[0][0] + other.m[0][0],    m[0][1] + other.m[0][1], m[0][2] + other.m[0][2],
@@ -276,7 +278,7 @@ public final class Matrix3
      * @param other The matrix to subtract from this one.
      * @return A new matrix that is the difference of the two matrices.
      */
-    public Matrix3 minus(Matrix3 other)
+    public @NotNull Matrix3 minus(@NotNull Matrix3 other)
     {
         return new Matrix3(
             m[0][0] - other.m[0][0],    m[0][1] - other.m[0][1], m[0][2] - other.m[0][2],
@@ -290,7 +292,7 @@ public final class Matrix3
      * @param other The matrix to transform.
      * @return A new matrix that is the result of transforming the other matrix by this one.
      */
-    public Matrix3 times(Matrix3 other)
+    public @NotNull Matrix3 times(@NotNull Matrix3 other)
     {
         return new Matrix3(
             m[0][0] * other.m[0][0] + m[0][1] * other.m[1][0] + m[0][2] * other.m[2][0],
@@ -310,7 +312,7 @@ public final class Matrix3
      * @param vector The vector to transform.
      * @return A new vector that is the result of transforming the original vector by this matrix.
      */
-    public Vector3 times(Vector3 vector)
+    public @NotNull Vector3 times(@NotNull Vector3 vector)
     {
         return new Vector3(
             m[0][0] * vector.x + m[0][1] * vector.y + m[0][2] * vector.z,
@@ -324,7 +326,7 @@ public final class Matrix3
      * @param factor The factor by which to scale.
      * @return A new matrix that is the result of scaling this matrix by the specified factor.
      */
-    public Matrix3 times(float factor)
+    public @NotNull Matrix3 times(float factor)
     {
         return new Matrix3(
             m[0][0] * factor, m[0][1] * factor, m[0][2] * factor,
@@ -337,7 +339,7 @@ public final class Matrix3
      * Gets a new matrix that is the negation of this matrix.
      * @return A new matrix with the values of this matrix, but negated.
      */
-    public Matrix3 negate()
+    public @NotNull Matrix3 negate()
     {
         return new Matrix3(
             -m[0][0], -m[0][1], -m[0][2],
@@ -350,7 +352,7 @@ public final class Matrix3
      * Gets a new matrix that is the transpose of this matrix.
      * @return A new matrix with the values of this matrix, but with rows and columns interchanged.
      */
-    public Matrix3 transpose()
+    public @NotNull Matrix3 transpose()
     {
         return new Matrix3(
             m[0][0], m[1][0], m[2][0],
@@ -374,7 +376,7 @@ public final class Matrix3
      * Gets the inverse of this matrix.
      * @return The matrix inverse.
      */
-    public Matrix3 inverse()
+    public @NotNull Matrix3 inverse()
     {
         float det = determinant();
 
@@ -400,7 +402,7 @@ public final class Matrix3
      * @param row The index of the row to retrieve.
      * @return The row vector at the specified index.
      */
-    public Vector3 getRow(int row)
+    public @NotNull Vector3 getRow(int row)
     {
         return new Vector3(m[row][0], m[row][1], m[row][2]);
     }
@@ -410,7 +412,7 @@ public final class Matrix3
      * @param col The index of the column to retrieve.
      * @return The column vector at the specified index.
      */
-    public Vector3 getColumn(int col)
+    public @NotNull Vector3 getColumn(int col)
     {
         return new Vector3(m[0][col], m[1][col], m[2][col]);
     }

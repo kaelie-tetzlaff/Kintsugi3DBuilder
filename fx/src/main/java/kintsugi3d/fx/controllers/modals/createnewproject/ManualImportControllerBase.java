@@ -28,6 +28,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import kintsugi3d.builder.io.RecentProjects;
 import kintsugi3d.fx.controllers.modals.createnewproject.inputsources.ManualInputSource;
 import kintsugi3d.fx.core.FrontendIO;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.List;
@@ -81,7 +82,7 @@ class ManualImportControllerBase extends ProjectImportController
     }
 
     @SuppressWarnings("DesignForExtension")
-    protected List<ExtensionFilter> getCameraExtensionFilters()
+    protected @NotNull List<ExtensionFilter> getCameraExtensionFilters()
     {
         return List.of(new ExtensionFilter("Agisoft Metashape XML file", "*.xml"),
             new ExtensionFilter("Reality Capture CSV file", "*.csv"));
@@ -156,7 +157,7 @@ class ManualImportControllerBase extends ProjectImportController
         return cameraFile != null && meshFile != null && photosDir != null;
     }
 
-    private void setHomeDir(File home)
+    private void setHomeDir(@NotNull File home)
     {
         File parentDir = home.getParentFile();
         setInitDirectories(parentDir);
@@ -173,7 +174,7 @@ class ManualImportControllerBase extends ProjectImportController
 
     @SuppressWarnings("DesignForExtension")
     @Override
-    protected ManualInputSource getData()
+    protected @NotNull ManualInputSource getData()
     {
         return new ManualInputSource(() -> FrontendIO.getInstance().showSaveProjectDialog(getPageFrameController().getWindow()))
             .setCameraFile(cameraFile)

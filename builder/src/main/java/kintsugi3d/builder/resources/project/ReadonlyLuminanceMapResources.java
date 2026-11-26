@@ -18,11 +18,12 @@ package kintsugi3d.builder.resources.project;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Program;
 import kintsugi3d.gl.core.ReadonlyTexture1D;
+import org.jetbrains.annotations.Nullable;
 
 public interface ReadonlyLuminanceMapResources<ContextType extends Context<ContextType>>
 {
-    ReadonlyTexture1D<ContextType> getLuminanceMap();
-    ReadonlyTexture1D<ContextType> getInverseLuminanceMap();
+    @Nullable ReadonlyTexture1D<ContextType> getLuminanceMap();
+    @Nullable ReadonlyTexture1D<ContextType> getInverseLuminanceMap();
 
     void setupShaderProgram(Program<ContextType> program);
 }

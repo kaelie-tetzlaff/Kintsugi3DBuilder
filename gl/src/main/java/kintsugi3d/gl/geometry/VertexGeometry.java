@@ -26,6 +26,7 @@ import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
 import org.jengineering.sjmply.PLY;
 import org.jengineering.sjmply.PLYElementList;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +48,7 @@ import static org.jengineering.sjmply.PLYType.*;
 public final class VertexGeometry implements ReadonlyVertexGeometry
 {
     private static final Logger LOG = LoggerFactory.getLogger(VertexGeometry.class);
-    private File filename;
+    private @Nullable File filename;
 
     private boolean hasNormals;
     private boolean hasTexCoords;
@@ -61,10 +62,10 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
     private Vector3 boundingBoxSize;
     private float boundingRadius;
 
-    private String materialFileName;
-    private ImportedMaterial material; // TODO support multiple materials
+    private @Nullable String materialFileName;
+    private @Nullable ImportedMaterial material; // TODO support multiple materials
 
-    private VertexGeometry(File filename)
+    private VertexGeometry(@Nullable File filename)
     {
         this.filename = filename;
     }
@@ -108,7 +109,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
      * @param geometryFile
      * @throws IOException
      */
-    public static @Nullable VertexGeometry createFromGeometryFile(File geometryFile) throws IOException
+    public static @Nullable VertexGeometry createFromGeometryFile(@NotNull File geometryFile) throws IOException
     {
         String fileName = geometryFile.getName();
         String fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
@@ -137,7 +138,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
      * @param stream The stream to load.
      * @throws FileNotFoundException Thrown if any File I/O errors occur.
      */
-    public static VertexGeometry createFromOBJStream(InputStream stream)
+    public static @NotNull VertexGeometry createFromOBJStream(@NotNull InputStream stream)
     {
         try(Scanner scanner = new Scanner(stream, StandardCharsets.UTF_8))
         {
@@ -151,7 +152,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
      * @param file The file to load.
      * @throws FileNotFoundException Thrown if any File I/O errors occur.
      */
-    public static VertexGeometry createFromOBJFile(File file) throws IOException
+    public static @NotNull VertexGeometry createFromOBJFile(@NotNull File file) throws IOException
     {
         try(Scanner scanner = new Scanner(file, StandardCharsets.UTF_8))
         {
@@ -160,7 +161,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         }
     }
 
-    private static VertexGeometry createFromOBJ(File file, Scanner scanner)
+    private static @NotNull VertexGeometry createFromOBJ(@Nullable File file, @NotNull Scanner scanner)
     {
         Date timestamp = new Date();
 
@@ -334,7 +335,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
      * @param stream The stream to load.
      * @throws FileNotFoundException Thrown if any File I/O errors occur.
      */
-    public static VertexGeometry createFromPLYStream(InputStream stream) throws IOException
+    public static @NotNull VertexGeometry createFromPLYStream(InputStream stream) throws IOException
     {
         return createFromPLY(null, PLY.read(stream));
     }
@@ -344,22 +345,22 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
      * @param file The file to load.
      * @throws FileNotFoundException Thrown if any File I/O errors occur.
      */
-    public static VertexGeometry createFromPLYFile(File file) throws IOException
+    public static @NotNull VertexGeometry createFromPLYFile(@NotNull File file) throws IOException
     {
         return createFromPLY(file, PLY.load(file.toPath()));
     }
 
-    public static VertexGeometry createFromZippedPLYFile(File zipFolder, String targetFileName) throws IOException
+    public static @NotNull VertexGeometry createFromZippedPLYFile(File zipFolder, String targetFileName) throws IOException
     {
         return createFromPLY(zipFolder, PLY.loadFromZip(zipFolder, targetFileName));
     }
 
-    public static VertexGeometry createFromZippedPLYStream(InputStream zipStream, File file, String targetFileName) throws IOException
+    public static @NotNull VertexGeometry createFromZippedPLYStream(InputStream zipStream, File file, String targetFileName) throws IOException
     {
         return createFromPLY(file, PLY.loadFromZip(zipStream, targetFileName));
     }
 
-    private static VertexGeometry createFromPLY(File file, PLY ply)
+    private static @NotNull VertexGeometry createFromPLY(@Nullable File file, @NotNull PLY ply)
     {
         PLYElementList vertex = ply.elements("vertex");
         boolean hasNormals = false;
@@ -470,9 +471,9 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
                 normalIndexList, texCoordList, texCoordIndexList);
     }
 
-    private static VertexGeometry createFromArrays(
-        File file, boolean hasNormals, boolean hasTexCoords, List<Vector3> vertexList, List<Integer> vertexIndexList,
-        List<Vector3> normalList, List<Integer> normalIndexList, List<Vector2> texCoordList, List<Integer> texCoordIndexList)
+    private static @NotNull VertexGeometry createFromArrays(
+        @Nullable File file, boolean hasNormals, boolean hasTexCoords, @NotNull List<Vector3> vertexList, @NotNull List<Integer> vertexIndexList,
+        List<Vector3> normalList, List<Integer> normalIndexList, @NotNull List<Vector2> texCoordList, @NotNull List<Integer> texCoordIndexList)
     {
         VertexGeometry inst = new VertexGeometry(file);
         inst.hasNormals = hasNormals;
@@ -609,7 +610,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         }
     }
 
-    private static ComputedNormals computeNormals(List<Vector3> vertexList, List<Integer> vertexIndexList)
+    private static @NotNull ComputedNormals computeNormals(@NotNull List<Vector3> vertexList, @NotNull List<Integer> vertexIndexList)
     {
         List<Vector3> normals = new ArrayList<>(Collections.nCopies(vertexList.size(), Vector3.ZERO));
         List<Integer> normalIndexList = new ArrayList<>(vertexIndexList.size());
@@ -662,9 +663,9 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         return new ComputedNormals(normals, normalIndexList);
     }
 
-    private static Map<NormalTexCoordPair, Vector4> computeTangents(
-        List<Vector3> vertexList, List<Integer> vertexIndexList, List<Vector2> texCoordList, List<Integer> texCoordIndexList,
-        List<Vector3> normalList, List<Integer> normalIndexList)
+    private static @NotNull Map<NormalTexCoordPair, Vector4> computeTangents(
+        @NotNull List<Vector3> vertexList, @NotNull List<Integer> vertexIndexList, @NotNull List<Vector2> texCoordList, @NotNull List<Integer> texCoordIndexList,
+        @NotNull List<Vector3> normalList, @NotNull List<Integer> normalIndexList)
     {
         Map<NormalTexCoordPair, Vector3> tangentMap = new HashMap<>(vertexIndexList.size());
         Map<NormalTexCoordPair, Vector3> bitangentMap = new HashMap<>(vertexIndexList.size());
@@ -724,9 +725,9 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         return orthoTangentsMap;
     }
 
-    private static Vector3[] computeVertexTangents(
-            Vector3 position0, Vector3 position1, Vector3 position2,
-            Vector2 texCoords0, Vector2 texCoords1, Vector2 texCoords2)
+    private static Vector3 @NotNull [] computeVertexTangents(
+        @NotNull Vector3 position0, @NotNull Vector3 position1, @NotNull Vector3 position2,
+        @NotNull Vector2 texCoords0, @NotNull Vector2 texCoords1, @NotNull Vector2 texCoords2)
     {
         Vector3[] tangents = new Vector3[2];
 
@@ -758,7 +759,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
         return tangents;
     }
 
-    private static Vector4 orthogonalizeTangent(Vector3 normal, Vector3 tangent, Vector3 bitangent)
+    private static @NotNull Vector4 orthogonalizeTangent(@NotNull Vector3 normal, @NotNull Vector3 tangent, @NotNull Vector3 bitangent)
     {
         Vector3 orthoTangent;
         Vector3 orthoBitangent;
@@ -783,7 +784,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
     }
 
     @Override
-    public <ContextType extends Context<ContextType>> GeometryResources<ContextType> createGraphicsResources(ContextType context)
+    public <ContextType extends Context<ContextType>> @NotNull GeometryResources<ContextType> createGraphicsResources(@NotNull ContextType context)
     {
         return new GeometryResources<>(context, this);
     }
@@ -837,19 +838,19 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
     }
 
     @Override
-    public String getMaterialFileName()
+    public @Nullable String getMaterialFileName()
     {
         return materialFileName;
     }
 
     @Override
-    public ImportedMaterial getMaterial()
+    public @Nullable ImportedMaterial getMaterial()
     {
         return material;
     }
 
     @Override
-    public File getFilename()
+    public @Nullable File getFilename()
     {
         return filename;
     }
@@ -858,7 +859,7 @@ public final class VertexGeometry implements ReadonlyVertexGeometry
      * Sets the mesh filename.
      * @param filename The new filename of the mesh.
      */
-    public void setFilename(File filename)
+    public void setFilename(@Nullable File filename)
     {
         this.filename = filename;
     }

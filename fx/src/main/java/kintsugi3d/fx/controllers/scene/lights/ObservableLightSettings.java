@@ -19,6 +19,7 @@ import javafx.beans.property.*;
 import javafx.scene.paint.Color;
 import kintsugi3d.builder.state.project.SerializableLightSettings;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.NotNull;
 
 public class ObservableLightSettings extends SerializableLightSettings
 {
@@ -55,7 +56,7 @@ public class ObservableLightSettings extends SerializableLightSettings
     }
 
 
-    public final ObservableLightSettings duplicate()
+    public final @NotNull ObservableLightSettings duplicate()
     {
         ObservableLightSettings dupl = new ObservableLightSettings(name.getValue(), groupLocked);
         dupl.targetX.set(targetX.get());
@@ -222,62 +223,62 @@ public class ObservableLightSettings extends SerializableLightSettings
         color.setValue(value);
     }
 
-    public final DoubleProperty targetX()
+    public final @NotNull DoubleProperty targetX()
     {
         return targetX;
     }
 
-    public final DoubleProperty targetY()
+    public final @NotNull DoubleProperty targetY()
     {
         return targetY;
     }
 
-    public final DoubleProperty targetZ()
+    public final @NotNull DoubleProperty targetZ()
     {
         return targetZ;
     }
 
-    public final DoubleProperty azimuth()
+    public final @NotNull DoubleProperty azimuth()
     {
         return azimuth;
     }
 
-    public final DoubleProperty inclination()
+    public final @NotNull DoubleProperty inclination()
     {
         return inclination;
     }
 
-    public final DoubleProperty log10Distance()
+    public final @NotNull DoubleProperty log10Distance()
     {
         return log10Distance;
     }
 
-    public final DoubleProperty intensity()
+    public final @NotNull DoubleProperty intensity()
     {
         return intensity;
     }
 
-    public final BooleanProperty locked()
+    public final @NotNull BooleanProperty locked()
     {
         return locked;
     }
 
-    public final StringProperty name()
+    public final @NotNull StringProperty name()
     {
         return name;
     }
 
-    public final Property<Color> color()
+    public final @NotNull Property<Color> color()
     {
         return color;
     }
 
-    public final DoubleProperty spotSize()
+    public final @NotNull DoubleProperty spotSize()
     {
         return spotSize;
     }
 
-    public final DoubleProperty spotTaper()
+    public final @NotNull DoubleProperty spotTaper()
     {
         return spotTaper;
     }

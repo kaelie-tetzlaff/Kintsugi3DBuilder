@@ -15,6 +15,9 @@
 
 package kintsugi3d.builder.state.cards;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -23,17 +26,17 @@ import java.util.UUID;
 public class ProjectDataCard
 {
     private final String internalName;
-    private final String fullResImageFilePath;
-    private final UUID cardId;
+    private final @Nullable String fullResImageFilePath;
+    private final @NotNull UUID cardId;
     private final String title;
     private final String thumbnailPath;
-    private final Map<String, String> textFields;
-    private final Collection<? extends Map<String, Runnable>> actionGroups;
+    private final @NotNull Map<String, String> textFields;
+    private final @NotNull Collection<? extends Map<String, Runnable>> actionGroups;
     private boolean isEnabled;
 
     public ProjectDataCard(
-        String internalName, String title, String fullResImageFilePath, String thumbnailPath,
-        Map<String, String> textFields, Collection<? extends Map<String, Runnable>> actionGroups, boolean isEnabled)
+        String internalName, String title, @Nullable String fullResImageFilePath, String thumbnailPath,
+        @NotNull Map<String, String> textFields, @NotNull Collection<? extends Map<String, Runnable>> actionGroups, boolean isEnabled)
     {
         this.internalName = internalName;
         cardId = UUID.randomUUID();
@@ -50,7 +53,7 @@ public class ProjectDataCard
         return internalName;
     }
 
-    public final UUID getCardId()
+    public final @NotNull UUID getCardId()
     {
         return cardId;
     }
@@ -78,12 +81,12 @@ public class ProjectDataCard
         return textFields.get(key);
     }
 
-    public final Map<String, String> getTextContent()
+    public final @NotNull Map<String, String> getTextContent()
     {
         return textFields;
     }
 
-    public final Collection<? extends Map<String, Runnable>> getActions()
+    public final @NotNull Collection<? extends Map<String, Runnable>> getActions()
     {
         return actionGroups;
     }
@@ -92,7 +95,7 @@ public class ProjectDataCard
 
     public final void setIsEnabled(boolean isEnabled) { this.isEnabled = isEnabled; }
 
-    public final String getFullResImageFilePath()
+    public final @Nullable String getFullResImageFilePath()
     {
         return fullResImageFilePath;
     }

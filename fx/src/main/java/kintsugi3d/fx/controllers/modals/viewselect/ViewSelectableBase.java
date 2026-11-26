@@ -15,6 +15,8 @@
 
 package kintsugi3d.fx.controllers.modals.viewselect;
 
+import org.jetbrains.annotations.Nullable;
+
 public abstract class ViewSelectableBase implements ViewSelectable
 {
     private String primaryView;
@@ -22,7 +24,7 @@ public abstract class ViewSelectableBase implements ViewSelectable
 
     @SuppressWarnings("DesignForExtension")
     @Override
-    public String getAdvanceLabelOverride()
+    public @Nullable String getAdvanceLabelOverride()
     {
         return "Skip";
     }

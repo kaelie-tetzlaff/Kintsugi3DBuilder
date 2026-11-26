@@ -15,6 +15,7 @@
 
 package kintsugi3d.builder.util.logging;
 
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.event.Level;
 
 import java.time.Instant;
@@ -26,7 +27,7 @@ public class LogMessage
     private final String sourceClassName;
     private final String message;
 
-    private final Throwable thrown;
+    private final @Nullable Throwable thrown;
 
     public LogMessage(Instant timestamp, Level logLevel, String sourceClassName, String message)
     {
@@ -37,7 +38,7 @@ public class LogMessage
         thrown = null;
     }
 
-    public LogMessage(Instant timestamp, Level logLevel, String sourceClassName, String message, Throwable thrown)
+    public LogMessage(Instant timestamp, Level logLevel, String sourceClassName, String message, @Nullable Throwable thrown)
     {
         this.timestamp = timestamp;
         this.logLevel = logLevel;
@@ -66,7 +67,7 @@ public class LogMessage
         return message;
     }
 
-    public final Throwable getThrown()
+    public final @Nullable Throwable getThrown()
     {
         return thrown;
     }

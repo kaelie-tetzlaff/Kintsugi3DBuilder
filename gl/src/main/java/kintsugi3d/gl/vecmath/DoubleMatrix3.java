@@ -15,6 +15,8 @@
 
 package kintsugi3d.gl.vecmath;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * A 3x3 matrix backed by 64-bit floats.  This is an immutable object.
  *
@@ -26,7 +28,7 @@ public final class DoubleMatrix3
     /**
      * The matrix data.
      */
-    private final double[][] m;
+    private final double @NotNull [][] m;
 
     /**
      * Creates a new matrix by specifying each entry.
@@ -57,26 +59,26 @@ public final class DoubleMatrix3
         m[2][2] = m33;
     }
 
-    public static DoubleMatrix3 fromColumns(DoubleVector3 col1, DoubleVector3 col2, DoubleVector3 col3)
+    public static @NotNull DoubleMatrix3 fromColumns(@NotNull DoubleVector3 col1, @NotNull DoubleVector3 col2, @NotNull DoubleVector3 col3)
     {
         return new DoubleMatrix3( col1.x, col2.x, col3.x,
                                   col1.y, col2.y, col3.y,
                                   col1.z, col2.z, col3.z );
     }
 
-    public static DoubleMatrix3 fromRows(DoubleVector3 row1, DoubleVector3 row2, DoubleVector3 row3)
+    public static @NotNull DoubleMatrix3 fromRows(@NotNull DoubleVector3 row1, @NotNull DoubleVector3 row2, @NotNull DoubleVector3 row3)
     {
         return new DoubleMatrix3( row1.x, row1.y, row1.z,
                             row2.x, row2.y, row2.z,
                             row3.x, row3.y, row3.z );
     }
 
-    public DoubleMatrix4 asMatrix4()
+    public @NotNull DoubleMatrix4 asMatrix4()
     {
         return DoubleMatrix4.affine(this, 0.0, 0.0, 0.0);
     }
 
-    public static DoubleMatrix3 fromSinglePrecision(Matrix3 m3)
+    public static @NotNull DoubleMatrix3 fromSinglePrecision(@NotNull Matrix3 m3)
     {
         return new DoubleMatrix3(    m3.get(0,0),    m3.get(0,1),    m3.get(0,2),
                                     m3.get(1,0),    m3.get(1,1),    m3.get(1,2),
@@ -89,7 +91,7 @@ public final class DoubleMatrix3
      * @param sz The scale along the z-axis.
      * @return The specified scale matrix.
      */
-    public static DoubleMatrix3 scale(double sx, double sy, double sz)
+    public static @NotNull DoubleMatrix3 scale(double sx, double sy, double sz)
     {
         return new DoubleMatrix3(    sx,     0.0,     0.0,
                                     0.0,    sy,        0.0,
@@ -101,7 +103,7 @@ public final class DoubleMatrix3
      * @param s The scale along all axes.
      * @return The specified scale matrix.
      */
-    public static DoubleMatrix3 scale(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") double s)
+    public static @NotNull DoubleMatrix3 scale(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") double s)
     {
         return scale(s, s, s);
     }
@@ -111,7 +113,7 @@ public final class DoubleMatrix3
      * @param s The scale vector
      * @return The specified scale matrix.
      */
-    public static DoubleMatrix3 scale(DoubleVector3 s)
+    public static @NotNull DoubleMatrix3 scale(@NotNull DoubleVector3 s)
     {
         return scale(s.x, s.y, s.z);
     }
@@ -121,7 +123,7 @@ public final class DoubleMatrix3
      * @param radians The amount of rotation, in radians.
      * @return The specified transformation matrix.
      */
-    public static DoubleMatrix3 rotateX(double radians)
+    public static @NotNull DoubleMatrix3 rotateX(double radians)
     {
         double sinTheta = StrictMath.sin(radians);
         double cosTheta = StrictMath.cos(radians);
@@ -137,7 +139,7 @@ public final class DoubleMatrix3
      * @param radians The amount of rotation, in radians.
      * @return The specified transformation matrix.
      */
-    public static DoubleMatrix3 rotateY(double radians)
+    public static @NotNull DoubleMatrix3 rotateY(double radians)
     {
         double sinTheta = StrictMath.sin(radians);
         double cosTheta = StrictMath.cos(radians);
@@ -153,7 +155,7 @@ public final class DoubleMatrix3
      * @param radians The amount of rotation, in radians.
      * @return The specified transformation matrix.
      */
-    public static DoubleMatrix3 rotateZ(double radians)
+    public static @NotNull DoubleMatrix3 rotateZ(double radians)
     {
         double sinTheta = StrictMath.sin(radians);
         double cosTheta = StrictMath.cos(radians);
@@ -170,7 +172,7 @@ public final class DoubleMatrix3
      * @param radians The amount of rotation, in radians.
      * @return The specified transformation matrix.
      */
-    public static DoubleMatrix3 rotateAxis(DoubleVector3 axis, double radians)
+    public static @NotNull DoubleMatrix3 rotateAxis(@NotNull DoubleVector3 axis, double radians)
     {
         double sinTheta = StrictMath.sin(radians);
         double cosTheta = StrictMath.cos(radians);
@@ -199,7 +201,7 @@ public final class DoubleMatrix3
      * @param w The fourth (identity) component of the quaternion.
      * @return The specified transformation matrix.
      */
-    public static DoubleMatrix3 fromQuaternion(double x, double y, double z, double w)
+    public static @NotNull DoubleMatrix3 fromQuaternion(double x, double y, double z, double w)
     {
         return new DoubleMatrix3(
             1 - 2*y*y - 2*z*z,    2*x*y - 2*z*w,        2*x*z + 2*y*w,
@@ -212,7 +214,7 @@ public final class DoubleMatrix3
      * Convert the given matrix (assumed to be a rotation matrix) to a quaternion.
      * @return The quaternion packed in a Vector4
      */
-    public DoubleVector4 toQuaternion()
+    public @NotNull DoubleVector4 toQuaternion()
     {
         // Convert rotation matrix to quaternion
         double[] q = new double[4];
@@ -261,7 +263,7 @@ public final class DoubleMatrix3
      * @param other The matrix to add to this one.
      * @return A new matrix that is the sum of the two matrices.
      */
-    public DoubleMatrix3 plus(DoubleMatrix3 other)
+    public @NotNull DoubleMatrix3 plus(@NotNull DoubleMatrix3 other)
     {
         return new DoubleMatrix3(
             m[0][0] + other.m[0][0],    m[0][1] + other.m[0][1], m[0][2] + other.m[0][2],
@@ -275,7 +277,7 @@ public final class DoubleMatrix3
      * @param other The matrix to subtract from this one.
      * @return A new matrix that is the difference of the two matrices.
      */
-    public DoubleMatrix3 minus(DoubleMatrix3 other)
+    public @NotNull DoubleMatrix3 minus(@NotNull DoubleMatrix3 other)
     {
         return new DoubleMatrix3(
             m[0][0] - other.m[0][0],    m[0][1] - other.m[0][1], m[0][2] - other.m[0][2],
@@ -289,7 +291,7 @@ public final class DoubleMatrix3
      * @param other The matrix to transform.
      * @return A new matrix that is the result of transforming the other matrix by this one.
      */
-    public DoubleMatrix3 times(DoubleMatrix3 other)
+    public @NotNull DoubleMatrix3 times(@NotNull DoubleMatrix3 other)
     {
         return new DoubleMatrix3(
             m[0][0] * other.m[0][0] + m[0][1] * other.m[1][0] + m[0][2] * other.m[2][0],
@@ -309,7 +311,7 @@ public final class DoubleMatrix3
      * @param vector The vector to transform.
      * @return A new vector that is the result of transforming the original vector by this matrix.
      */
-    public DoubleVector3 times(DoubleVector3 vector)
+    public @NotNull DoubleVector3 times(@NotNull DoubleVector3 vector)
     {
         return new DoubleVector3(
             m[0][0] * vector.x + m[0][1] * vector.y + m[0][2] * vector.z,
@@ -323,7 +325,7 @@ public final class DoubleMatrix3
      * @param factor The factor by which to scale.
      * @return A new matrix that is the result of scaling this matrix by the specified factor.
      */
-    public DoubleMatrix3 times(double factor)
+    public @NotNull DoubleMatrix3 times(double factor)
     {
         return new DoubleMatrix3(
             m[0][0] * factor, m[0][1] * factor, m[0][2] * factor,
@@ -336,7 +338,7 @@ public final class DoubleMatrix3
      * Gets a new matrix that is the negation of this matrix.
      * @return A new matrix with the values of this matrix, but negated.
      */
-    public DoubleMatrix3 negate()
+    public @NotNull DoubleMatrix3 negate()
     {
         return new DoubleMatrix3(
             -m[0][0], -m[0][1], -m[0][2],
@@ -349,7 +351,7 @@ public final class DoubleMatrix3
      * Gets a new matrix that is the transpose of this matrix.
      * @return A new matrix with the values of this matrix, but with rows and columns interchanged.
      */
-    public DoubleMatrix3 transpose()
+    public @NotNull DoubleMatrix3 transpose()
     {
         return new DoubleMatrix3(
             m[0][0], m[1][0], m[2][0],
@@ -373,7 +375,7 @@ public final class DoubleMatrix3
      * Gets the inverse of this matrix.
      * @return The matrix inverse.
      */
-    public DoubleMatrix3 inverse()
+    public @NotNull DoubleMatrix3 inverse()
     {
         double det = determinant();
 
@@ -399,7 +401,7 @@ public final class DoubleMatrix3
      * @param row The index of the row to retrieve.
      * @return The row vector at the specified index.
      */
-    public DoubleVector3 getRow(int row)
+    public @NotNull DoubleVector3 getRow(int row)
     {
         return new DoubleVector3(m[row][0], m[row][1], m[row][2]);
     }
@@ -409,7 +411,7 @@ public final class DoubleMatrix3
      * @param col The index of the column to retrieve.
      * @return The column vector at the specified index.
      */
-    public DoubleVector3 getColumn(int col)
+    public @NotNull DoubleVector3 getColumn(int col)
     {
         return new DoubleVector3(m[0][col], m[1][col], m[2][col]);
     }

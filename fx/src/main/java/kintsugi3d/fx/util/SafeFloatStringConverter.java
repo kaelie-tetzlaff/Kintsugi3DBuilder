@@ -17,6 +17,7 @@ package kintsugi3d.fx.util;
 
 import javafx.util.StringConverter;
 import javafx.util.converter.FloatStringConverter;
+import org.jetbrains.annotations.NotNull;
 
 public class SafeFloatStringConverter extends StringConverter<Number>
 {
@@ -29,7 +30,7 @@ public class SafeFloatStringConverter extends StringConverter<Number>
     }
 
     @Override
-    public final String toString(Number object)
+    public final String toString(@NotNull Number object)
     {
         return base.toString(object.floatValue());
     }

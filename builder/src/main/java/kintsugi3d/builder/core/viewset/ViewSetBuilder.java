@@ -22,6 +22,8 @@ import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,18 +37,18 @@ public final class ViewSetBuilder
 {
     private static final Logger LOG = LoggerFactory.getLogger(ViewSetBuilder.class);
 
-    private final ViewSet result;
+    private final @NotNull ViewSet result;
     private boolean needsClipPlanes = true;
 
     private Matrix4 cameraPose;
     private int cameraProjectionIndex = 0;
     private int lightIndex = 0;
-    private File maskFile;
-    private final Map<Integer, File> maskMap;
+    private @Nullable File maskFile;
+    private final @NotNull Map<Integer, File> maskMap;
     private boolean hasUnsupportedCorrections;
 
     private int orientationViewIndex = -1;
-    private String orientationViewName;
+    private @Nullable String orientationViewName;
 
     /**
      * Uses root directory as supporting files directory by default
@@ -59,7 +61,7 @@ public final class ViewSetBuilder
         this(rootDirectory, rootDirectory, initialCapacity);
     }
 
-    ViewSetBuilder(File rootDirectory, File supportingFilesDirectory, int initialCapacity)
+    ViewSetBuilder(File rootDirectory, @Nullable File supportingFilesDirectory, int initialCapacity)
     {
         result = new ViewSet(initialCapacity);
         result.setRootDirectory(rootDirectory);
@@ -71,25 +73,25 @@ public final class ViewSetBuilder
         DefaultSettings.applyProjectDefaults(result.getProjectSettings());
     }
 
-    public ViewSetBuilder setCurrentCameraPose(Matrix4 cameraPose)
+    public @NotNull ViewSetBuilder setCurrentCameraPose(Matrix4 cameraPose)
     {
         this.cameraPose = cameraPose;
         return this;
     }
 
-    public ViewSetBuilder setCurrentCameraProjectionIndex(int cameraProjectionIndex)
+    public @NotNull ViewSetBuilder setCurrentCameraProjectionIndex(int cameraProjectionIndex)
     {
         this.cameraProjectionIndex = cameraProjectionIndex;
         return this;
     }
 
-    public ViewSetBuilder setCurrentLightIndex(int lightIndex)
+    public @NotNull ViewSetBuilder setCurrentLightIndex(int lightIndex)
     {
         this.lightIndex = lightIndex;
         return this;
     }
 
-    public ViewSetBuilder setCurrentMaskFile(File maskFile)
+    public @NotNull ViewSetBuilder setCurrentMaskFile(File maskFile)
     {
         this.maskFile = maskFile;
         return this;
@@ -99,7 +101,7 @@ public final class ViewSetBuilder
      * Image file is required to commit to ensure that no view has a null image file.
      * @param imageFile
      */
-    public ViewSetBuilder commitCurrentView(File imageFile)
+    public @NotNull ViewSetBuilder commitCurrentView(@NotNull File imageFile)
     {
         commitCurrentView(imageFile, true);
         return this;
@@ -109,13 +111,13 @@ public final class ViewSetBuilder
      * Image file is required to commit to ensure that no view has a null image file.
      * @param imageFile
      */
-    public ViewSetBuilder commitCurrentViewAsDisabled(File imageFile)
+    public @NotNull ViewSetBuilder commitCurrentViewAsDisabled(@NotNull File imageFile)
     {
         commitCurrentView(imageFile, false);
         return this;
     }
 
-    private void commitCurrentView(File imageFile, boolean enabled)
+    private void commitCurrentView(@NotNull File imageFile, boolean enabled)
     {
         if (maskFile == null)
         {
@@ -133,7 +135,7 @@ public final class ViewSetBuilder
         maskFile = null;
     }
 
-    public ViewSetBuilder removeViewsByImageFilename(Iterable<File> disabledImageFiles)
+    public @NotNull ViewSetBuilder removeViewsByImageFilename(@NotNull Iterable<File> disabledImageFiles)
     {
         for (File f : disabledImageFiles)
         {
@@ -146,7 +148,7 @@ public final class ViewSetBuilder
         return this;
     }
 
-    public ViewSetBuilder addCameraProjection(Projection projection)
+    public @NotNull ViewSetBuilder addCameraProjection(Projection projection)
     {
         result.addCameraProjection(projection);
         return this;
@@ -157,26 +159,26 @@ public final class ViewSetBuilder
         return result.getCameraProjectionCount();
     }
 
-    public ViewSetBuilder addLight(Vector3 position, Vector3 intensity)
+    public @NotNull ViewSetBuilder addLight(Vector3 position, Vector3 intensity)
     {
         result.addLight(position, intensity);
         return this;
     }
 
-    public ViewSetBuilder setUUID(UUID uuid)
+    public @NotNull ViewSetBuilder setUUID(UUID uuid)
     {
         result.setUUID(uuid);
         return this;
     }
 
-    public ViewSetBuilder setRecommendedClipPlanes(float near, float far)
+    public @NotNull ViewSetBuilder setRecommendedClipPlanes(float near, float far)
     {
         result.setRecommmendedClipPlanes(near, far);
         needsClipPlanes = false;
         return this;
     }
 
-    public ViewSetBuilder setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
+    public @NotNull ViewSetBuilder setTonemapping(double @NotNull [] linearLuminanceValues, byte @NotNull [] encodedLuminanceValues)
     {
         result.setLuminanceEncoding(linearLuminanceValues, encodedLuminanceValues);
         return this;
@@ -187,7 +189,7 @@ public final class ViewSetBuilder
      *
      * @param geometryFile The geometry file.
      */
-    public ViewSetBuilder setGeometryFile(File geometryFile)
+    public @NotNull ViewSetBuilder setGeometryFile(File geometryFile)
     {
         result.setGeometryFile(geometryFile);
         return this;
@@ -198,7 +200,7 @@ public final class ViewSetBuilder
      *
      * @param geometryFileName The name of the geometry file.
      */
-    public ViewSetBuilder setGeometryFileName(String geometryFileName)
+    public @NotNull ViewSetBuilder setGeometryFileName(@Nullable String geometryFileName)
     {
         result.setGeometryFile(
             geometryFileName == null ? null : result.getRootDirectory().toPath().toAbsolutePath().resolve(geometryFileName).toFile());
@@ -210,7 +212,7 @@ public final class ViewSetBuilder
      *
      * @param fullResImageDirectory The full res image directory.
      */
-    public ViewSetBuilder setFullResImageDirectory(File fullResImageDirectory)
+    public @NotNull ViewSetBuilder setFullResImageDirectory(File fullResImageDirectory)
     {
         result.setFullResImageDirectory(fullResImageDirectory);
         return this;
@@ -221,7 +223,7 @@ public final class ViewSetBuilder
      *
      * @param relativePath The path to the full res images.
      */
-    public ViewSetBuilder setRelativeFullResImagePathName(String relativePath)
+    public @NotNull ViewSetBuilder setRelativeFullResImagePathName(@NotNull String relativePath)
     {
         result.setRelativeFullResImagePathName(relativePath);
         return this;
@@ -232,13 +234,13 @@ public final class ViewSetBuilder
      *
      * @param relativePath The file path of the supporting files directory.
      */
-    public ViewSetBuilder setRelativeSupportingFilesPathName(String relativePath)
+    public @NotNull ViewSetBuilder setRelativeSupportingFilesPathName(@NotNull String relativePath)
     {
         result.setSupportingFilesDirectory(result.getRootDirectory().toPath().toAbsolutePath().resolve(relativePath).toFile());
         return this;
     }
 
-    public ViewSetBuilder setRelativePreviewImagePathName(String relativePath)
+    public @NotNull ViewSetBuilder setRelativePreviewImagePathName(@NotNull String relativePath)
     {
         result.setRelativePreviewImagePathName(relativePath);
         return this;
@@ -249,11 +251,12 @@ public final class ViewSetBuilder
      *
      * @param relativePath The path to the mask images.
      */
-    public ViewSetBuilder setRelativeMasksPathName(String relativePath)
+    public @NotNull ViewSetBuilder setRelativeMasksPathName(@NotNull String relativePath)
     {
         result.setRelativeMasksPathName(relativePath);
 
-        if (!result.getMasksDirectory().exists())
+        File masksDirectory = result.getMasksDirectory();
+        if (masksDirectory != null && !masksDirectory.exists())
         {
             // Fallback for older projects where masks were stored as absolute path.
             File pathAsAbsoluteFile = new File(relativePath);
@@ -266,13 +269,13 @@ public final class ViewSetBuilder
         return this;
     }
 
-    public ViewSetBuilder setPreviewImageDirectory(File directory)
+    public @NotNull ViewSetBuilder setPreviewImageDirectory(File directory)
     {
         result.setPreviewImageDirectory(directory);
         return this;
     }
 
-    public ViewSetBuilder setOrientationViewByIndex(int viewIndex)
+    public @NotNull ViewSetBuilder setOrientationViewByIndex(int viewIndex)
     {
         // Defer application until all views have been loaded.
         orientationViewIndex = viewIndex;
@@ -280,7 +283,7 @@ public final class ViewSetBuilder
         return this;
     }
 
-    public ViewSetBuilder setOrientationViewByName(String viewName)
+    public @NotNull ViewSetBuilder setOrientationViewByName(String viewName)
     {
         // Defer application until all views have been loaded.
         orientationViewName = viewName;
@@ -288,61 +291,61 @@ public final class ViewSetBuilder
         return this;
     }
 
-    public ViewSetBuilder setOrientationViewRotation(double rotation)
+    public @NotNull ViewSetBuilder setOrientationViewRotation(double rotation)
     {
         result.setOrientationViewRotationDegrees(rotation);
         return this;
     }
 
-    public ViewSetBuilder setOrientationMatrix(Matrix3 matrix)
+    public @NotNull ViewSetBuilder setOrientationMatrix(Matrix3 matrix)
     {
         result.setOrientationMatrix(matrix);
         return this;
     }
 
-    public ViewSetBuilder setObjectTranslation(Vector3 objectTranslation)
+    public @NotNull ViewSetBuilder setObjectTranslation(Vector3 objectTranslation)
     {
         result.setObjectTranslation(objectTranslation);
         return this;
     }
 
-    public ViewSetBuilder setObjectScale(float objectScale)
+    public @NotNull ViewSetBuilder setObjectScale(float objectScale)
     {
         result.setObjectScale(objectScale);
         return this;
     }
 
-    public ViewSetBuilder setMasksDirectory(File file)
+    public @NotNull ViewSetBuilder setMasksDirectory(@Nullable File file)
     {
         result.setMasksDirectory(file);
         return this;
     }
 
-    public ViewSetBuilder addMask(int camId, String imgFilename)
+    public @NotNull ViewSetBuilder addMask(int camId, @NotNull String imgFilename)
     {
         maskMap.put(camId, new File(imgFilename));
         return this;
     }
 
-    public ViewSetBuilder applySettings(ReadonlyGeneralSettingsModel settings)
+    public @NotNull ViewSetBuilder applySettings(ReadonlyGeneralSettingsModel settings)
     {
         result.getProjectSettings().copyAllFrom(settings);
         return this;
     }
 
-    public ViewSetBuilder addResourceFiles(Map<String, File> resourceMap)
+    public @NotNull ViewSetBuilder addResourceFiles(@NotNull Map<String, File> resourceMap)
     {
         result.putResources(resourceMap);
         return this;
     }
 
-    public ViewSetBuilder setHasUnsupportedCorrections(boolean hasUnsupportedCorrections)
+    public @NotNull ViewSetBuilder setHasUnsupportedCorrections(boolean hasUnsupportedCorrections)
     {
         this.hasUnsupportedCorrections = hasUnsupportedCorrections;
         return this;
     }
 
-    public ViewSet finish()
+    public @NotNull ViewSet finish()
     {
         // Sorted by GPU index, which should be the order the views were added.
         List<View> views = result.getViewsSorted();
@@ -402,7 +405,7 @@ public final class ViewSetBuilder
      * @param viewSetDataList The list of camera data.
      * @return A far plane estimate.
      */
-    private static float findFarPlane(Iterable<View> viewSetDataList)
+    private static float findFarPlane(@NotNull Iterable<View> viewSetDataList)
     {
         float minX = Float.POSITIVE_INFINITY;
         float minY = Float.POSITIVE_INFINITY;

@@ -20,6 +20,7 @@ import kintsugi3d.builder.rendering.RenderedComponent;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
 import kintsugi3d.gl.vecmath.Matrix4;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A component where half of the screen is rendered using one RenderedComponent, and the other half is rendered
@@ -65,8 +66,8 @@ public class SplitScreenComponent<ContextType extends Context<ContextType>> impl
     }
 
     @Override
-    public final void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight,
-                                         CameraViewport cameraViewport)
+    public final void drawInSubdivisions(@NotNull FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight,
+                                         @NotNull CameraViewport cameraViewport)
     {
         for (int x = cameraViewport.getX(); x < cameraViewport.getWidth(); x += subdivWidth)
         {
@@ -123,7 +124,7 @@ public class SplitScreenComponent<ContextType extends Context<ContextType>> impl
     }
 
     @Override
-    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(@NotNull FramebufferObject<ContextType> framebuffer, @NotNull CameraViewport cameraViewport)
     {
         drawInSubdivisions(framebuffer, cameraViewport.getWidth(), cameraViewport.getHeight(), cameraViewport);
     }

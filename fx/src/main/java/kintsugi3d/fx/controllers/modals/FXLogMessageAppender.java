@@ -26,6 +26,7 @@ import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 import org.apache.logging.log4j.core.layout.PatternLayout;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.event.Level;
 
 import java.time.Instant;
@@ -41,7 +42,7 @@ public final class FXLogMessageAppender extends LogMessageAppenderBase
 
     private final ObservableList<LogMessage> messages = FXCollections.observableArrayList();
 
-    private FXLogMessageAppender(String name, Filter filter, Layout<String> layout)
+    private FXLogMessageAppender(@NotNull String name, Filter filter, Layout<String> layout)
     {
         super(name, filter, layout);
 
@@ -50,8 +51,8 @@ public final class FXLogMessageAppender extends LogMessageAppenderBase
     }
 
     @PluginFactory
-    public static FXLogMessageAppender createAppender(
-            @PluginAttribute("name") String name,
+    public static @NotNull FXLogMessageAppender createAppender(
+            @PluginAttribute("name") @NotNull String name,
             @PluginElement("Filter") Filter filter,
             @PluginElement("PatternLayout") PatternLayout layout)
     {
@@ -65,7 +66,7 @@ public final class FXLogMessageAppender extends LogMessageAppenderBase
     }
 
     @Override
-    public void append(LogEvent event)
+    public void append(@NotNull LogEvent event)
     {
         LogMessage message = new LogMessage(
                 Instant.ofEpochMilli(event.getTimeMillis()),
@@ -111,7 +112,7 @@ public final class FXLogMessageAppender extends LogMessageAppenderBase
     }
 
     @Override
-    public ObservableList<LogMessage> getMessages()
+    public @NotNull ObservableList<LogMessage> getMessages()
     {
         return FXCollections.unmodifiableObservableList(messages);
     }

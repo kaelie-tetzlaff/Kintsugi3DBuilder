@@ -15,6 +15,7 @@
 
 package kintsugi3d.builder.state.project;
 
+import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -23,7 +24,7 @@ import java.util.function.Supplier;
 public abstract class SerializableCameraSettings implements DOMConvertable, CameraSettings
 {
     @Override
-    public final Element toDOMElement(Document document)
+    public final @NotNull Element toDOMElement(@NotNull Document document)
     {
         Element element = document.createElement("Camera");
         element.setAttribute("lookAtX", Double.toString(getXCenter()));
@@ -40,8 +41,8 @@ public abstract class SerializableCameraSettings implements DOMConvertable, Came
         return element;
     }
 
-    public static <CameraSettingType extends SerializableCameraSettings> CameraSettingType
-    fromDOMElement(Element element, Supplier<CameraSettingType> cameraSettingConstructor)
+    public static <CameraSettingType extends SerializableCameraSettings> @NotNull CameraSettingType
+    fromDOMElement(@NotNull Element element, @NotNull Supplier<CameraSettingType> cameraSettingConstructor)
     {
         CameraSettingType newCamera = cameraSettingConstructor.get();
         newCamera.setXCenter(Double.parseDouble(element.getAttribute("lookAtX")));

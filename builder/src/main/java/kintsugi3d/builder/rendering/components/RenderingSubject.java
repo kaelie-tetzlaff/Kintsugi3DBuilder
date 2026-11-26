@@ -29,6 +29,7 @@ import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.ShadingParameterMode;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Map;
@@ -38,14 +39,14 @@ public class RenderingSubject<ContextType extends Context<ContextType>> extends 
     private UniformBuffer<ContextType> viewIndexBufferOverride;
     private UniformBuffer<ContextType> weightBuffer;
 
-    public RenderingSubject(ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneViewportModel sceneViewportModel,
-                            SceneModel sceneModel, LightingResources<ContextType> lightingResources)
+    public RenderingSubject(@NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, SceneViewportModel sceneViewportModel,
+                            SceneModel sceneModel, @Nullable LightingResources<ContextType> lightingResources)
     {
         super (resources, sceneViewportModel, "RenderingSubject", sceneModel, lightingResources);
     }
 
     @Override
-    protected final Map<String, VertexBuffer<ContextType>> createVertexBuffers()
+    protected final @NotNull Map<String, VertexBuffer<ContextType>> createVertexBuffers()
     {
         // Vertex buffers come from the GraphicsResources and don't need to be created.
         return Collections.emptyMap();
@@ -58,7 +59,7 @@ public class RenderingSubject<ContextType extends Context<ContextType>> extends 
         return getResources().createDrawable(program);
     }
 
-    private ReadonlyNativeVectorBuffer generateViewWeights(Matrix4 targetView)
+    private @NotNull ReadonlyNativeVectorBuffer generateViewWeights(@NotNull Matrix4 targetView)
     {
         float[] viewWeights = //new PowerViewWeightGenerator(settings.getWeightExponent())
             new KNNViewWeightGenerator(4)
@@ -68,11 +69,11 @@ public class RenderingSubject<ContextType extends Context<ContextType>> extends 
     }
 
     @Override
-    protected final void setupCustom(Program<ContextType> p, Matrix4 modelView)
+    protected final void setupCustom(@NotNull Program<ContextType> p, @NotNull Matrix4 modelView)
     {
         if (!getSceneModel().getSettingsModel().getBoolean("relightingEnabled")
             && !isLightCalibrationMode()
-            && getSceneModel().getSettingsModel().get("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM)
+            && getSceneModel().getSettingsModel().getOrNull("weightMode", ShadingParameterMode.class) == ShadingParameterMode.UNIFORM)
         {
             if (weightBuffer == null)
             {
@@ -90,7 +91,7 @@ public class RenderingSubject<ContextType extends Context<ContextType>> extends 
     }
 
     @Override
-    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(@NotNull FramebufferObject<ContextType> framebuffer, @NotNull CameraViewport cameraViewport)
     {
         getContext().getState().disableBackFaceCulling();
 

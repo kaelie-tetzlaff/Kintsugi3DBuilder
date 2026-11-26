@@ -16,21 +16,22 @@
 package kintsugi3d.fx.multithread;
 
 import kintsugi3d.builder.io.LoadOptionsModel;
+import org.jetbrains.annotations.NotNull;
 
 public class SynchronizedLoadOptionsModel implements LoadOptionsModel
 {
-    private final SynchronizedValue<Boolean> colorImagesRequested;
-    private final SynchronizedValue<Boolean> mipmapsRequested;
-    private final SynchronizedValue<Boolean> compressionRequested;
-    private final SynchronizedValue<Boolean> alphaRequested;
-    private final SynchronizedValue<Integer> maxLoadingThreads;
-    private final SynchronizedValue<Boolean> depthImagesRequested;
-    private final SynchronizedValue<Integer> depthImageWidth;
-    private final SynchronizedValue<Integer> depthImageHeight;
-    private final SynchronizedValue<Integer> previewImageWidth;
-    private final SynchronizedValue<Integer> previewImageHeight;
+    private final @NotNull SynchronizedValue<Boolean> colorImagesRequested;
+    private final @NotNull SynchronizedValue<Boolean> mipmapsRequested;
+    private final @NotNull SynchronizedValue<Boolean> compressionRequested;
+    private final @NotNull SynchronizedValue<Boolean> alphaRequested;
+    private final @NotNull SynchronizedValue<Integer> maxLoadingThreads;
+    private final @NotNull SynchronizedValue<Boolean> depthImagesRequested;
+    private final @NotNull SynchronizedValue<Integer> depthImageWidth;
+    private final @NotNull SynchronizedValue<Integer> depthImageHeight;
+    private final @NotNull SynchronizedValue<Integer> previewImageWidth;
+    private final @NotNull SynchronizedValue<Integer> previewImageHeight;
 
-    public SynchronizedLoadOptionsModel(LoadOptionsModel baseModel)
+    public SynchronizedLoadOptionsModel(@NotNull LoadOptionsModel baseModel)
     {
         colorImagesRequested = SynchronizedValue.createFromFunctions(baseModel::areColorImagesRequested, baseModel::setColorImagesRequested);
         mipmapsRequested = SynchronizedValue.createFromFunctions(baseModel::areMipmapsRequested, baseModel::setMipmapsRequested);

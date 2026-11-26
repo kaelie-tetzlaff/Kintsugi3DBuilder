@@ -29,6 +29,7 @@ import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.fx.controllers.paged.NonDataPageControllerBase;
 import kintsugi3d.fx.internal.ObservableProjectModel;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +49,7 @@ public class SelectToneCalibrationImageController extends NonDataPageControllerB
     @FXML private ToggleButton selectImageFileButton;
     @FXML private Label selectImageFileLabel;
 
-    private final FileChooser imageFileChooser;
+    private final @NotNull FileChooser imageFileChooser;
     private final ObjectProperty<File> selectedImageFile = new SimpleObjectProperty<>(null);
 
     private final ToggleGroup buttonGroup = new ToggleGroup();
@@ -124,19 +125,27 @@ public class SelectToneCalibrationImageController extends NonDataPageControllerB
     @Override
     public final boolean tryAdvance()
     {
-        ViewSet viewSet = Global.io().getLoadedViewSetOrThrow();
+        ViewSet viewSet = Global.io().getLoadedViewSet();
 
         File imageFile = null;
         if (Objects.equals(buttonGroup.getSelectedToggle(), primaryViewImageButton))
         {
             View primaryView = viewSet.getPrimaryView();
-            try
+            if (primaryView != null)
             {
-                imageFile = primaryView.findFullResImageFile();
+                try
+                {
+                    imageFile = primaryView.findFullResImageFile();
+                }
+                catch (FileNotFoundException e)
+                {
+                    error("File not found", String.format("Could not find file: %s", primaryView.getFullResImageFile()));
+                    return false;
+                }
             }
-            catch (FileNotFoundException e)
+            else
             {
-                error("File not found", String.format("Could not find file: %s", primaryView.getFullResImageFile()));
+                error("No primary view selected", "No primary view selected.");
                 return false;
             }
         }
@@ -151,7 +160,7 @@ public class SelectToneCalibrationImageController extends NonDataPageControllerB
             {
                 Dialog<ButtonType> alert = StaticUtilities.createConfirmDialog("This will clear any previous tone calibration values!");
                 alert.setHeaderText("Change tone calibration image?");
-                Optional<ButtonType> confirmResult = alert.showAndWait();
+                Optional<@NotNull ButtonType> confirmResult = alert.showAndWait();
                 if (confirmResult.isEmpty() || !Objects.equals(confirmResult.get(), ButtonType.OK))
                 {
                     return false;
@@ -203,7 +212,7 @@ public class SelectToneCalibrationImageController extends NonDataPageControllerB
         }
         else
         {
-            ViewSet viewSet = Global.io().getLoadedViewSetOrThrow();
+            ViewSet viewSet = Global.io().getLoadedViewSet();
             imageFileChooser.setInitialDirectory(viewSet.getFullResImageDirectory());
         }
         File temp = imageFileChooser.showOpenDialog(rootPane.getScene().getWindow());

@@ -15,6 +15,7 @@
 
 package kintsugi3d.gl.vecmath;
 
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.BufferUtils;
 
 import java.nio.DoubleBuffer;
@@ -23,8 +24,8 @@ public final class DoubleMatrix4
 {
     public static final DoubleMatrix4 IDENTITY = scale(1.0);
 
-    private final double[][] m;
-    private final DoubleBuffer buffer;
+    private final double @NotNull [][] m;
+    private final @NotNull DoubleBuffer buffer;
 
     private DoubleMatrix4(
         double m11, double m12, double m13, double m14,
@@ -70,7 +71,7 @@ public final class DoubleMatrix4
         buffer.flip();
     }
 
-    public static DoubleMatrix4 fromColumns(DoubleVector4 column1, DoubleVector4 column2, DoubleVector4 column3, DoubleVector4 column4)
+    public static @NotNull DoubleMatrix4 fromColumns(@NotNull DoubleVector4 column1, @NotNull DoubleVector4 column2, @NotNull DoubleVector4 column3, @NotNull DoubleVector4 column4)
     {
         return new DoubleMatrix4(    column1.x, column2.x, column3.x, column4.x,
                                     column1.y, column2.y, column3.y, column4.y,
@@ -78,7 +79,7 @@ public final class DoubleMatrix4
                                     column1.w, column2.w, column3.w, column4.w    );
     }
 
-    public static DoubleMatrix4 fromRows(DoubleVector4 row1, DoubleVector4 row2, DoubleVector4 row3, DoubleVector4 row4)
+    public static @NotNull DoubleMatrix4 fromRows(@NotNull DoubleVector4 row1, @NotNull DoubleVector4 row2, @NotNull DoubleVector4 row3, @NotNull DoubleVector4 row4)
     {
         return new DoubleMatrix4(     row1.x, row1.y, row1.z, row1.w,
                                     row2.x, row2.y, row2.z, row2.w,
@@ -86,7 +87,7 @@ public final class DoubleMatrix4
                                     row4.x, row4.y, row4.z, row4.w    );
     }
 
-    public static DoubleMatrix4 affine(DoubleMatrix3 linear, double tx, double ty, double tz)
+    public static @NotNull DoubleMatrix4 affine(@NotNull DoubleMatrix3 linear, double tx, double ty, double tz)
     {
         return new DoubleMatrix4(    linear.get(0,0),    linear.get(0,1),    linear.get(0,2),    tx,
                                     linear.get(1,0),    linear.get(1,1),    linear.get(1,2),    ty,
@@ -94,7 +95,7 @@ public final class DoubleMatrix4
                                     0.0,                0.0,                0.0,                1.0    );
     }
 
-    public static DoubleMatrix4 fromSinglePrecision(Matrix4 m4)
+    public static @NotNull DoubleMatrix4 fromSinglePrecision(@NotNull Matrix4 m4)
     {
         return new DoubleMatrix4(    m4.get(0,0),    m4.get(0,1),    m4.get(0,2),    m4.get(0,3),
                                     m4.get(1,0),    m4.get(1,1),    m4.get(1,2),    m4.get(1,3),
@@ -102,7 +103,7 @@ public final class DoubleMatrix4
                                     m4.get(3,0),    m4.get(3,1),    m4.get(3,2),    m4.get(3,3)    );
     }
 
-    public static DoubleMatrix4 scaleAndTranslate(double sx, double sy, double sz, double tx, double ty, double tz)
+    public static @NotNull DoubleMatrix4 scaleAndTranslate(double sx, double sy, double sz, double tx, double ty, double tz)
     {
         return new DoubleMatrix4(    sx,     0.0,     0.0,     tx,
                                     0.0,    sy,        0.0,    ty,
@@ -110,37 +111,37 @@ public final class DoubleMatrix4
                                     0.0,    0.0,    0.0,    1.0    );
     }
 
-    public static DoubleMatrix4 scaleAndTranslate(DoubleVector3 s, DoubleVector3 t)
+    public static @NotNull DoubleMatrix4 scaleAndTranslate(@NotNull DoubleVector3 s, @NotNull DoubleVector3 t)
     {
         return scaleAndTranslate(s.x, s.y, s.z, t.x, t.y, t.z);
     }
 
-    public static DoubleMatrix4 scale(double sx, double sy, double sz)
+    public static @NotNull DoubleMatrix4 scale(double sx, double sy, double sz)
     {
         return scaleAndTranslate(sx, sy, sz, 0.0, 0.0, 0.0);
     }
 
-    public static DoubleMatrix4 scale(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") double s)
+    public static @NotNull DoubleMatrix4 scale(@SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") double s)
     {
         return scale(s, s, s);
     }
 
-    public static DoubleMatrix4 scale(DoubleVector3 s)
+    public static @NotNull DoubleMatrix4 scale(@NotNull DoubleVector3 s)
     {
         return scale(s.x, s.y, s.z);
     }
 
-    public static DoubleMatrix4 translate(double tx, double ty, double tz)
+    public static @NotNull DoubleMatrix4 translate(double tx, double ty, double tz)
     {
         return scaleAndTranslate(1.0, 1.0, 1.0, tx, ty, tz);
     }
 
-    public static DoubleMatrix4 translate(DoubleVector3 t)
+    public static @NotNull DoubleMatrix4 translate(@NotNull DoubleVector3 t)
     {
         return scaleAndTranslate(1.0, 1.0, 1.0, t.x, t.y, t.z);
     }
 
-    public static DoubleMatrix4 ortho(double left, double right, double bottom, double top, double near, double far)
+    public static @NotNull DoubleMatrix4 ortho(double left, double right, double bottom, double top, double near, double far)
     {
         return new DoubleMatrix4(
             2 / (right - left),    0.0f,                0.0f,                    (right + left) / (left - right),
@@ -150,12 +151,12 @@ public final class DoubleMatrix4
         );
     }
 
-    public static DoubleMatrix4 ortho(double left, double right, double bottom, double top)
+    public static @NotNull DoubleMatrix4 ortho(double left, double right, double bottom, double top)
     {
         return ortho(left, right, bottom, top, -1.0f, 1.0f);
     }
 
-    public static DoubleMatrix4 frustum(double left, double right, double bottom, double top, double near, double far)
+    public static @NotNull DoubleMatrix4 frustum(double left, double right, double bottom, double top, double near, double far)
     {
         return new DoubleMatrix4(
             2 * near / (right - left),    0.0f,                        (right + left) / (right - left),    0.0f,
@@ -165,7 +166,7 @@ public final class DoubleMatrix4
         );
     }
 
-    public static DoubleMatrix4 perspective(double fovy, double aspect, double near, double far)
+    public static @NotNull DoubleMatrix4 perspective(double fovy, double aspect, double near, double far)
     {
         double f = 1.0f / StrictMath.tan(fovy / 2);
         return new DoubleMatrix4(
@@ -176,10 +177,10 @@ public final class DoubleMatrix4
         );
     }
 
-    public static DoubleMatrix4 lookAt(
-            DoubleVector3 eye,
-            DoubleVector3 center,
-            DoubleVector3 up)
+    public static @NotNull DoubleMatrix4 lookAt(
+        @NotNull DoubleVector3 eye,
+        @NotNull DoubleVector3 center,
+        @NotNull DoubleVector3 up)
     {
         DoubleVector3 f = center.minus(eye).normalized();
         DoubleVector3 upNormalized = up.normalized();
@@ -194,7 +195,7 @@ public final class DoubleMatrix4
         ).times(translate(-eye.x, -eye.y, -eye.z));
     }
 
-    public static DoubleMatrix4 lookAt(
+    public static @NotNull DoubleMatrix4 lookAt(
         double eyeX, double eyeY, double eyeZ,
         double centerX, double centerY, double centerZ,
         double upX, double upY, double upZ)
@@ -206,33 +207,33 @@ public final class DoubleMatrix4
         );
     }
 
-    public static DoubleMatrix4 rotateX(double radians)
+    public static @NotNull DoubleMatrix4 rotateX(double radians)
     {
         return DoubleMatrix3.rotateX(radians).asMatrix4();
     }
 
-    public static DoubleMatrix4 rotateY(double radians)
+    public static @NotNull DoubleMatrix4 rotateY(double radians)
     {
         return DoubleMatrix3.rotateY(radians).asMatrix4();
     }
 
-    public static DoubleMatrix4 rotateZ(double radians)
+    public static @NotNull DoubleMatrix4 rotateZ(double radians)
     {
         return DoubleMatrix3.rotateZ(radians).asMatrix4();
     }
 
-    public static DoubleMatrix4 rotateAxis(DoubleVector3 axis, double radians)
+    public static @NotNull DoubleMatrix4 rotateAxis(@NotNull DoubleVector3 axis, double radians)
     {
         return DoubleMatrix3.rotateAxis(axis, radians).asMatrix4();
     }
 
-    public static DoubleMatrix4 fromQuaternion(double x, double y, double z, double w)
+    public static @NotNull DoubleMatrix4 fromQuaternion(double x, double y, double z, double w)
     {
         return DoubleMatrix3.fromQuaternion(x, y, z, w).asMatrix4();
     }
 
 
-    public DoubleMatrix3 getUpperLeft3x3()
+    public @NotNull DoubleMatrix3 getUpperLeft3x3()
     {
         return DoubleMatrix3.fromRows(
                 new DoubleVector3(get(0,0), get(0,1),    get(0,2)),
@@ -240,7 +241,7 @@ public final class DoubleMatrix4
                 new DoubleVector3(get(2,0), get(2,1),    get(2,2)) );
     }
 
-    public DoubleMatrix4 plus(DoubleMatrix4 other)
+    public @NotNull DoubleMatrix4 plus(@NotNull DoubleMatrix4 other)
     {
         return new DoubleMatrix4(
             m[0][0] + other.m[0][0],    m[0][1] + other.m[0][1], m[0][2] + other.m[0][2], m[0][3] + other.m[0][3],
@@ -250,7 +251,7 @@ public final class DoubleMatrix4
         );
     }
 
-    public DoubleMatrix4 minus(DoubleMatrix4 other)
+    public @NotNull DoubleMatrix4 minus(@NotNull DoubleMatrix4 other)
     {
         return new DoubleMatrix4(
             m[0][0] - other.m[0][0],    m[0][1] - other.m[0][1], m[0][2] - other.m[0][2], m[0][3] - other.m[0][3],
@@ -260,7 +261,7 @@ public final class DoubleMatrix4
         );
     }
 
-    public DoubleMatrix4 times(DoubleMatrix4 other)
+    public @NotNull DoubleMatrix4 times(@NotNull DoubleMatrix4 other)
     {
         return new DoubleMatrix4(
             m[0][0] * other.m[0][0] + m[0][1] * other.m[1][0] + m[0][2] * other.m[2][0] + m[0][3] * other.m[3][0],
@@ -282,7 +283,7 @@ public final class DoubleMatrix4
         );
     }
 
-    public DoubleVector4 times(DoubleVector4 vector)
+    public @NotNull DoubleVector4 times(@NotNull DoubleVector4 vector)
     {
         return new DoubleVector4(
             m[0][0] * vector.x + m[0][1] * vector.y + m[0][2] * vector.z + m[0][3] * vector.w,
@@ -292,7 +293,7 @@ public final class DoubleMatrix4
         );
     }
 
-    public DoubleMatrix4 negate()
+    public @NotNull DoubleMatrix4 negate()
     {
         return new DoubleMatrix4(
             -m[0][0], -m[0][1], -m[0][2], -m[0][3],
@@ -302,7 +303,7 @@ public final class DoubleMatrix4
         );
     }
 
-    public DoubleMatrix4 transpose()
+    public @NotNull DoubleMatrix4 transpose()
     {
         return new DoubleMatrix4(
             m[0][0], m[1][0], m[2][0], m[3][0],
@@ -318,7 +319,7 @@ public final class DoubleMatrix4
      * @param tolerance A tolerance for the accuracy of the inverse matrix.
      * @return The inverse of the matrix.
      */
-    public DoubleMatrix4 quickInverse(double tolerance)
+    public @NotNull DoubleMatrix4 quickInverse(double tolerance)
     {
         DoubleMatrix3 rotationScale = getUpperLeft3x3();
         double scaleSquared = StrictMath.pow(rotationScale.determinant(), 2.0 / 3.0);
@@ -358,12 +359,12 @@ public final class DoubleMatrix4
         return m[row][col];
     }
 
-    public DoubleVector4 getRow(int row)
+    public @NotNull DoubleVector4 getRow(int row)
     {
         return new DoubleVector4(m[row][0], m[row][1], m[row][2], m[row][3]);
     }
 
-    public DoubleVector4 getColumn(int col)
+    public @NotNull DoubleVector4 getColumn(int col)
     {
         return new DoubleVector4(m[0][col], m[1][col], m[2][col], m[3][col]);
     }

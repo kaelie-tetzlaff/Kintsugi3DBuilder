@@ -23,6 +23,7 @@ import kintsugi3d.builder.state.project.EnvironmentSettings;
 import kintsugi3d.builder.state.scene.EnvironmentModelFromSettings;
 import kintsugi3d.fx.controllers.scene.environment.ObservableEnvironmentSettings;
 import kintsugi3d.util.EncodableColorImage;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Objects;
@@ -65,7 +66,7 @@ public class ObservableEnvironmentModel extends EnvironmentModelFromSettings
         loadedEnvironmentMapImage.setValue(environmentMapImage);
     }
 
-    public final ObservableValue<EncodableColorImage> loadedEnvironmentMapImageProperty()
+    public final @NotNull ObservableValue<EncodableColorImage> loadedEnvironmentMapImageProperty()
     {
         return loadedEnvironmentMapImage;
     }

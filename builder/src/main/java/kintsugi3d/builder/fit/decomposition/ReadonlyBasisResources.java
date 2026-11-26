@@ -18,6 +18,7 @@ package kintsugi3d.builder.fit.decomposition;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.ContextBound;
 import kintsugi3d.gl.core.Program;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
@@ -39,7 +40,7 @@ public interface ReadonlyBasisResources<ContextType extends Context<ContextType>
 
     int getBasisResolution();
 
-    void save(File outputDirectory, String filenameOverride);
+    void save(File outputDirectory, @Nullable String filenameOverride);
 
     /**
      * Saves basis function textures to the filesystem with a default filename.

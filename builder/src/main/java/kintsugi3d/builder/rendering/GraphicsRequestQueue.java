@@ -17,21 +17,23 @@ package kintsugi3d.builder.rendering;
 
 public interface GraphicsRequestQueue
 {
+    boolean hasBlockingRequest();
+
     boolean isEmpty();
 
     void addRequestAddedListener(Runnable listener);
 
     void addBackgroundImageBasedGraphicsRequest(ImageBasedGraphicsRequest request);
 
-    void addImageBasedGraphicsRequest(ImageBasedGraphicsRequest request);
+    boolean addImageBasedGraphicsRequest(ImageBasedGraphicsRequest request);
 
     void addBackgroundTextureReplacementGraphicsRequest(TextureReplacementGraphicsRequest request);
 
-    void addTextureReplacementGraphicsRequest(TextureReplacementGraphicsRequest request);
+    boolean addTextureReplacementGraphicsRequest(TextureReplacementGraphicsRequest request);
 
     void addBackgroundGraphicsRequest(GraphicsRequest request);
 
-    void addGraphicsRequest(ProgressMonitoredGraphicsRequest request);
+    boolean addGraphicsRequest(ProgressMonitoredGraphicsRequest request);
 
     void clear();
 }

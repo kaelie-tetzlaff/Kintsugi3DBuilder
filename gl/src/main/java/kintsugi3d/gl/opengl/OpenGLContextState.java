@@ -18,6 +18,7 @@ package kintsugi3d.gl.opengl;
 import kintsugi3d.gl.core.BlendFunction;
 import kintsugi3d.gl.core.BlendFunction.Weight;
 import kintsugi3d.gl.core.ContextState;
+import org.jetbrains.annotations.NotNull;
 
 import static org.lwjgl.opengl.GL31.*;
 
@@ -83,7 +84,7 @@ public class OpenGLContextState implements ContextState
         OpenGLContext.errorCheck();
     }
 
-    private static int blendFuncEnumToInt(Weight func)
+    private static int blendFuncEnumToInt(@NotNull Weight func)
     {
         switch(func)
         {
@@ -99,12 +100,12 @@ public class OpenGLContextState implements ContextState
             case SRC_COLOR:
                 return GL_ONE_MINUS_SRC_COLOR;
             case ZERO: return GL_ZERO;
-            default: throw new IllegalArgumentException();
+            default: throw new IllegalArgumentException("Unrecognized / unsupported blend function.");
         }
     }
 
     @Override
-    public final void setBlendFunction(BlendFunction func)
+    public final void setBlendFunction(@NotNull BlendFunction func)
     {
         glEnable(GL_BLEND);
         OpenGLContext.errorCheck();

@@ -16,6 +16,7 @@
 package kintsugi3d.optimization.function;
 
 import kintsugi3d.optimization.MatrixSystem;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.IntToDoubleFunction;
 import java.util.function.ObjIntConsumer;
@@ -71,7 +72,7 @@ public abstract class AbstractBasisFunctions implements BasisFunctions
 
     @Override
     public final void contributeToFittingSystem(int valueCurrent, int valueNext, int instanceCount,
-                                                MatrixBuilderSums sums, MatrixSystem fittingSystem)
+                                                @NotNull MatrixBuilderSums sums, @NotNull MatrixSystem fittingSystem)
     {
         int kFirst = getFirstFunctionIndexForDomainValue(valueCurrent);
         int kLast = getLastFunctionIndexForDomainValue(valueCurrent);
@@ -213,7 +214,7 @@ public abstract class AbstractBasisFunctions implements BasisFunctions
     }
 
     @Override
-    public final void evaluateSolution(double constantTerm, IntToDoubleFunction nonConstantSolution, ObjIntConsumer<Double> functionConsumer)
+    public final void evaluateSolution(double constantTerm, @NotNull IntToDoubleFunction nonConstantSolution, @NotNull ObjIntConsumer<Double> functionConsumer)
     {
         int functionCount = getFunctionCount();
 

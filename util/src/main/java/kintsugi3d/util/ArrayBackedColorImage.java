@@ -16,6 +16,7 @@
 package kintsugi3d.util;
 
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
 
 public class ArrayBackedColorImage implements EncodableColorImage
 {
@@ -44,14 +45,14 @@ public class ArrayBackedColorImage implements EncodableColorImage
     }
 
     @Override
-    public final Vector4 getRawRGBA(int x, int y)
+    public final @NotNull Vector4 getRawRGBA(int x, int y)
     {
         int k = (height - 1 - y) * width + x;
         return new Vector4(pixels[3 * k], pixels[3 * k + 1], pixels[3 * k + 2], 1.0f);
     }
 
     @Override
-    public final Vector4 getSRGBEncodedRGBA(int x, int y)
+    public final @NotNull Vector4 getSRGBEncodedRGBA(int x, int y)
     {
         int k = (height - 1 - y) * width + x;
         return SRGB.fromLinear(new Vector4(pixels[3 * k], pixels[3 * k + 1], pixels[3 * k + 2], 1.0f));

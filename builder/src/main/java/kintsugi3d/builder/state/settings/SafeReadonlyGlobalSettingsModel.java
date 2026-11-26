@@ -15,11 +15,21 @@
 
 package kintsugi3d.builder.state.settings;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
+
 public interface SafeReadonlyGlobalSettingsModel
 {
-    <T> T get(String name, Class<T> settingType);
+    <T> @Nullable T getOrNull(String name, Class<T> settingType);
 
-    default Object getObject(String name)
+    default <T> @NotNull T get(String name, Class<T> settingType)
+    {
+        return Objects.requireNonNull(getOrNull(name, settingType), String.format("Settings is not defined: %s", name));
+    }
+
+    default @Nullable Object getObject(String name)
     {
         return get(name, Object.class);
     }

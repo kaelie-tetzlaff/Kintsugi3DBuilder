@@ -21,6 +21,7 @@ import javafx.beans.value.ObservableValue;
 import kintsugi3d.builder.state.project.SerializableCameraSettings;
 import kintsugi3d.builder.state.scene.CameraModelFromSettings;
 import kintsugi3d.fx.controllers.scene.camera.ObservableCameraSettings;
+import org.jetbrains.annotations.NotNull;
 
 public class ObservableCameraModel extends CameraModelFromSettings
 {
@@ -61,7 +62,7 @@ public class ObservableCameraModel extends CameraModelFromSettings
         return paddingLeft.get();
     }
 
-    public final IntegerProperty paddingLeftProperty()
+    public final @NotNull IntegerProperty paddingLeftProperty()
     {
         return paddingLeft;
     }
@@ -72,7 +73,7 @@ public class ObservableCameraModel extends CameraModelFromSettings
         return paddingRight.get();
     }
 
-    public final IntegerProperty paddingRightProperty()
+    public final @NotNull IntegerProperty paddingRightProperty()
     {
         return paddingRight;
     }
@@ -83,7 +84,7 @@ public class ObservableCameraModel extends CameraModelFromSettings
         return paddingTop.get();
     }
 
-    public final IntegerProperty paddingTopProperty()
+    public final @NotNull IntegerProperty paddingTopProperty()
     {
         return paddingTop;
     }
@@ -94,7 +95,7 @@ public class ObservableCameraModel extends CameraModelFromSettings
         return paddingBottom.get();
     }
 
-    public final IntegerProperty paddingBottomProperty()
+    public final @NotNull IntegerProperty paddingBottomProperty()
     {
         return paddingBottom;
     }

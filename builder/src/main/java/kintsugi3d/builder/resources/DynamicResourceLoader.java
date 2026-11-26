@@ -19,35 +19,37 @@ import kintsugi3d.builder.rendering.components.RenderingSubject;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Cubemap;
 import kintsugi3d.gl.core.Texture2D;
+import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.util.EncodableColorImage;
 import kintsugi3d.util.EnvironmentMap;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 public class DynamicResourceLoader<ContextType extends Context<ContextType>> implements DynamicResourceManager
 {
-    private final ProgressMonitor progressMonitor;
+    private final @NotNull ProgressMonitor progressMonitor;
     private final RenderingSubject<ContextType> subject;
 
     /** Async-loaded resource for environment maps. */
-    private final AsyncLoadedResource<EnvironmentMap, Cubemap<ContextType>> environmentResource;
+    private final @NotNull AsyncLoadedResource<EnvironmentMap, Cubemap<ContextType>> environmentResource;
 
     /** Async-loaded resource for backplate images. */
-    private final AsyncLoadedResource<BufferedImage, Texture2D<ContextType>> backplateResource;
+    private final @NotNull AsyncLoadedResource<BufferedImage, Texture2D<ContextType>> backplateResource;
 
     /** Flag checked by the render thread in {@link #update()}; set by the JavaFX thread in {@link #requestFragmentShader(File)}. */
-    private volatile File desiredShaderFile;
+    private volatile @Nullable File desiredShaderFile;
 
     /** Read by the render thread in {@link #update()}; set by the JavaFX thread in {@link #requestFragmentShader(File)}. */
-    private volatile Supplier<Map<String, Optional<Object>>> shaderDefinesFactory;
+    private volatile Supplier<Map<String, @Nullable Object>> shaderDefinesFactory;
 
-    public DynamicResourceLoader(ProgressMonitor progressMonitor, ContextType context,
+    public DynamicResourceLoader(@NotNull ProgressMonitor progressMonitor, ContextType context,
         RenderingSubject<ContextType> subject, LightingResources<ContextType> lightingResources)
     {
         this.progressMonitor = progressMonitor;
@@ -63,7 +65,7 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
         environmentResource.consume(progressMonitor);
 
         // Delegate backplate consumption to AsyncLoadedResource
-        backplateResource.consume(null);
+        backplateResource.consume(new DefaultProgressMonitor());
 
         if (desiredShaderFile != null)
         {
@@ -82,14 +84,14 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
     }
 
     @Override
-    public final void requestFragmentShader(File shaderFile, Supplier<Map<String, Optional<Object>>> extraDefinesFactory)
+    public final void requestFragmentShader(File shaderFile, Supplier<Map<String, @Nullable Object>> extraDefinesFactory)
     {
         desiredShaderFile = shaderFile;
         shaderDefinesFactory = extraDefinesFactory;
     }
 
     @Override
-    public final EncodableColorImage loadEnvironmentMap(File environmentFile) throws FileNotFoundException
+    public final @Nullable EncodableColorImage loadEnvironmentMap(File environmentFile) throws FileNotFoundException
     {
         return environmentResource.load(environmentFile, progressMonitor);
     }
@@ -97,6 +99,6 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
     @Override
     public final void loadBackplate(File backplateFile) throws FileNotFoundException
     {
-        backplateResource.load(backplateFile, null);
+        backplateResource.load(backplateFile, new DefaultProgressMonitor());
     }
 }

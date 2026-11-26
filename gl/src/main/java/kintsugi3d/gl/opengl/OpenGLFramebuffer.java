@@ -17,6 +17,7 @@ package kintsugi3d.gl.opengl;
 
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.vecmath.IntVector2;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
@@ -34,7 +35,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     }
 
     @Override
-    public final OpenGLContext getContext()
+    public final @NotNull OpenGLContext getContext()
     {
         return context;
     }
@@ -51,7 +52,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
         abstract int getId();
 
         @Override
-        public final OpenGLContext getContext()
+        public final @NotNull OpenGLContext getContext()
         {
             return framebuffer.context;
         }
@@ -303,7 +304,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
     @Override
     public final void blitColorAttachmentFromFramebufferViewport(
         int drawAttachmentIndex, int destX, int destY, int destWidth, int destHeight,
-        FramebufferViewport<OpenGLContext> readFramebuffer, int readAttachmentIndex, boolean linearFiltering)
+        @NotNull FramebufferViewport<OpenGLContext> readFramebuffer, int readAttachmentIndex, boolean linearFiltering)
     {
         getDrawContents().bindSingleAttachmentForDraw(drawAttachmentIndex);
         readFramebuffer.getReadContents().bindForRead(readAttachmentIndex);
@@ -318,7 +319,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
 
     @Override
     public final void blitDepthAttachmentFromFramebufferViewport(
-        int destX, int destY, int destWidth, int destHeight, FramebufferViewport<OpenGLContext> readFramebuffer)
+        int destX, int destY, int destWidth, int destHeight, @NotNull FramebufferViewport<OpenGLContext> readFramebuffer)
     {
         getDrawContents().bindNonColorAttachmentsForDraw();
         readFramebuffer.getReadContents().bindNonColorAttachmentForRead();
@@ -333,7 +334,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
 
     @Override
     public final void blitStencilAttachmentFromFramebufferViewport(
-        int destX, int destY, int destWidth, int destHeight, FramebufferViewport<OpenGLContext> readFramebuffer)
+        int destX, int destY, int destWidth, int destHeight, @NotNull FramebufferViewport<OpenGLContext> readFramebuffer)
     {
         getDrawContents().bindNonColorAttachmentsForDraw();
         readFramebuffer.getReadContents().bindNonColorAttachmentForRead();
@@ -348,7 +349,7 @@ abstract class OpenGLFramebuffer implements Framebuffer<OpenGLContext>
 
     @Override
     public final void blitDepthStencilAttachmentFromFramebufferViewport(
-        int destX, int destY, int destWidth, int destHeight, FramebufferViewport<OpenGLContext> readFramebuffer)
+        int destX, int destY, int destWidth, int destHeight, @NotNull FramebufferViewport<OpenGLContext> readFramebuffer)
     {
         getDrawContents().bindNonColorAttachmentsForDraw();
         readFramebuffer.getReadContents().bindNonColorAttachmentForRead();

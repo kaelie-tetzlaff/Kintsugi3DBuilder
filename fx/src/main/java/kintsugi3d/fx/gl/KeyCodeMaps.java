@@ -17,6 +17,7 @@ package kintsugi3d.fx.gl;
 
 import javafx.scene.input.KeyCode;
 import kintsugi3d.gl.window.Key;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -24,7 +25,7 @@ import java.util.Map;
 final class KeyCodeMaps
 {
     @SuppressWarnings("StaticCollection")
-    private static final Map<KeyCode, Key> CODE_TO_KEY;
+    private static final @NotNull Map<KeyCode, Key> CODE_TO_KEY;
 
     static
     {

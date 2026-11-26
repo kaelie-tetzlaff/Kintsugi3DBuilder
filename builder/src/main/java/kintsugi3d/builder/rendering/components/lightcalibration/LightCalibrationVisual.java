@@ -27,6 +27,7 @@ import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.RadialTextureGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -69,13 +70,13 @@ public class LightCalibrationVisual<ContextType extends Context<ContextType>> ex
     }
 
     @Override
-    protected final Map<String, VertexBuffer<ContextType>> createVertexBuffers()
+    protected final @NotNull Map<String, VertexBuffer<ContextType>> createVertexBuffers()
     {
         return Map.of("position", getContext().createRectangle());
     }
 
     @Override
-    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(@NotNull FramebufferObject<ContextType> framebuffer, @NotNull CameraViewport cameraViewport)
     {
         getContext().getState().disableDepthWrite();
 
@@ -88,8 +89,8 @@ public class LightCalibrationVisual<ContextType extends Context<ContextType>> ex
         // Calculate world space light position.
         Matrix4 snapView = viewSelection.getSelectedMatrix();
         View primaryView = viewSelection.getViewSet().getPrimaryView();
-        Vector3 lightPosition = sceneModel.getSettingsModel().get("currentLightCalibration", Vector2.class).asVector3()
-            .plus(primaryView.getLightPosition());
+        Vector3 baseLightPosition = primaryView != null ? primaryView.getLightPosition() : Vector3.ZERO;
+        Vector3 lightPosition = sceneModel.getSettingsModel().get("currentLightCalibration", Vector2.class).asVector3().plus(baseLightPosition);
         Matrix4 lightTransform = Matrix4.translate(lightPosition.negated());
         Matrix4 lightView = lightTransform.times(snapView);
         Vector3 lightPosWorldSpace = lightView.getUpperLeft3x3().transpose().times(lightView.getColumn(3).getXYZ().negated());

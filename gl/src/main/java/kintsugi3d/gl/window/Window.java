@@ -16,10 +16,11 @@
 package kintsugi3d.gl.window;
 
 import kintsugi3d.gl.core.Context;
+import org.jetbrains.annotations.NotNull;
 
 public interface Window
 {
-    Canvas3D<? extends Context<?>> getCanvas();
+    @NotNull Canvas3D<? extends Context<?>> getCanvas();
 
     void show();
 

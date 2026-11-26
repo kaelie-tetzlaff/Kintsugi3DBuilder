@@ -41,6 +41,8 @@ import kintsugi3d.gl.util.CanvasListener;
 import kintsugi3d.gl.window.*;
 import kintsugi3d.util.KeyPress;
 import kintsugi3d.util.MouseMode;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +73,7 @@ public final class RenderingBootstrap
         return started;
     }
 
-    static SceneViewport getSceneViewport()
+    static @NotNull SceneViewport getSceneViewport()
     {
         return SCENE_VIEWPORT_WRAPPER;
     }
@@ -81,7 +83,7 @@ public final class RenderingBootstrap
         startRenderThread(renderingUI, false, args);
     }
 
-    public static void startRenderThread(RenderingUI renderingUI, boolean standaloneWindow, String... args)
+    public static void startRenderThread(@Nullable RenderingUI renderingUI, boolean standaloneWindow, String... args)
     {
         LOG.info("Starting Render Thread");
         new Thread(() ->
@@ -109,7 +111,7 @@ public final class RenderingBootstrap
         runProgram(renderingUI, false, args);
     }
 
-    public static void runProgram(RenderingUI renderingUI, boolean standaloneWindow, String... args) throws InitializationException
+    public static void runProgram(@Nullable RenderingUI renderingUI, boolean standaloneWindow, String... args) throws InitializationException
     {
         started = true;
 
@@ -165,7 +167,7 @@ public final class RenderingBootstrap
         }
     }
 
-    private static void setup3DWindow(Window window)
+    private static void setup3DWindow(@NotNull Window window)
     {
         SynchronizedWindow glfwSynchronization = new SynchronizedWindow()
         {
@@ -204,7 +206,7 @@ public final class RenderingBootstrap
         window.show();
     }
 
-    private static void runProgram(RenderingUI renderingUI, PollableCanvas3D<OpenGLContext> canvas, String... args) throws InitializationException
+    private static void runProgram(@Nullable RenderingUI renderingUI, @NotNull PollableCanvas3D<OpenGLContext> canvas, String... args) throws InitializationException
     {
         OpenGLContext context = canvas.getContext();
         context.getState().enableDepthTest();
@@ -268,12 +270,19 @@ public final class RenderingBootstrap
         {
             if (key == Key.F11)
             {
-                LOG.info("Reloading program...");
-
                 try
                 {
                     // reload shader programs
-                    renderableManager.getMainRenderable().reloadShaders();
+                    ImageBasedRenderable<OpenGLContext> mainRenderable = renderableManager.getMainRenderable();
+                    if (mainRenderable != null)
+                    {
+                        LOG.info("Reloading shaders...");
+                        mainRenderable.reloadShaders();
+                    }
+                    else
+                    {
+                        LOG.info("Shader reload key pressed but no shaders to reload.");
+                    }
                 }
                 catch (RuntimeException e)
                 {
@@ -302,12 +311,12 @@ public final class RenderingBootstrap
         }
         catch(RuntimeException|InitializationException|Error e)
         {
-            Optional.ofNullable(io.getAggregateProgressMonitor()).ifPresent(monitor -> monitor.fail(e));
+            io.getAggregateProgressMonitor().fail(e);
             throw e;
         }
     }
 
-    private static ToolBindingModel createToolBinding()
+    private static @NotNull ToolBindingModel createToolBinding()
     {
         // Bind tools
         ToolBindingModel toolBindingModel = new ToolBindingModelImpl();
@@ -341,13 +350,13 @@ public final class RenderingBootstrap
         return toolBindingModel;
     }
 
-    private static void processArgs(String... args)
+    private static void processArgs(String @NotNull ... args)
     {
         // Load project if requested
         if (args.length >= 1)
         {
              LOG.debug("Args: {}", Arrays.toString(args));
-             Global.io().loadExistingProject(new File(args[0])); // Should initialize requestQueue
+             Global.io().requestLoadExistingProject(new File(args[0])); // Should initialize requestQueue
         }
 
         // Execute command if requested, using reflection
@@ -372,7 +381,7 @@ public final class RenderingBootstrap
                     {
                         @Override
                         public <ContextType extends Context<ContextType>>
-                        void executeRequest(ReadonlyImageBasedRenderable<ContextType> instance, ProgressMonitor monitor)
+                        void executeRequest(@NotNull ReadonlyImageBasedRenderable<ContextType> instance, @NotNull ProgressMonitor monitor)
                         {
                             WindowSynchronization.getInstance().quitWithoutConfirmation();
                         }

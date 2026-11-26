@@ -15,6 +15,8 @@
 
 package kintsugi3d.builder.io.metashape;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
@@ -26,13 +28,13 @@ public final class MetashapeModel
 {
     private static final Logger LOG = LoggerFactory.getLogger(MetashapeModel.class);
     private final MetashapeChunk chunk;
-    private final Integer id;
-    private final String label;
+    private final @Nullable Integer id;
+    private final @Nullable String label;
     private final String path;
 
     private final LoadPreferences loadPreferences = new LoadPreferences();
 
-    private MetashapeModel(MetashapeChunk chunk, Integer id, String label, String path)
+    private MetashapeModel(MetashapeChunk chunk, @Nullable Integer id, @Nullable String label, String path)
     {
         this.id = id;
         this.label = label;
@@ -40,7 +42,7 @@ public final class MetashapeModel
         this.chunk = chunk;
     }
 
-    public static MetashapeModel parseFromElement(MetashapeChunk chunk, Element elem)
+    public static @NotNull MetashapeModel parseFromElement(@NotNull MetashapeChunk chunk, @NotNull Element elem)
     {
         Integer modelID = null;
         String tempLabel = null;
@@ -67,7 +69,7 @@ public final class MetashapeModel
         return new MetashapeModel(chunk, modelID, tempLabel, path);
     }
 
-    private static String findModelPath(MetashapeChunk chunk, Integer modelID)
+    private static @NotNull String findModelPath(@NotNull MetashapeChunk chunk, @Nullable Integer modelID)
     {
         // TODO Figure out why NullPointException would be thrown, change to explicit null check,
         //  and remove inspection suppression.
@@ -104,7 +106,7 @@ public final class MetashapeModel
         return "";
     }
 
-    public LoadPreferences getLoadPreferences()
+    public @NotNull LoadPreferences getLoadPreferences()
     {
         return loadPreferences;
     }
@@ -113,7 +115,7 @@ public final class MetashapeModel
      * May be null.
      * @return
      */
-    public Integer getId()
+    public @Nullable Integer getId()
     {
         return id;
     }
@@ -123,7 +125,7 @@ public final class MetashapeModel
         return path;
     }
 
-    public String getLabel()
+    public @Nullable String getLabel()
     {
         return label;
     }
@@ -143,8 +145,8 @@ public final class MetashapeModel
 
         MetashapeModel other = (MetashapeModel) obj;
 
-        return id.equals(other.id) &&
-            label.equals(other.label) &&
+        return Objects.equals(id, other.id) &&
+            Objects.equals(label, other.label) &&
             path.equals(other.path);
     }
 

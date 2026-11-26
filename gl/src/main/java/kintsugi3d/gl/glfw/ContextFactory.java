@@ -16,6 +16,7 @@
 package kintsugi3d.gl.glfw;
 
 import kintsugi3d.gl.core.DoubleFramebuffer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
@@ -24,7 +25,7 @@ public interface ContextFactory<ContextType extends WindowContextBase<ContextTyp
     ContextType createContext(long glfwHandle);
     ContextType createContext(long glfwHandle, Function<ContextType, DoubleFramebuffer<ContextType>> createDefaultFramebuffer);
 
-    default CanvasWindowBuilder<ContextType> buildWindow(String title, int width, int height)
+    default @NotNull CanvasWindowBuilder<ContextType> buildWindow(String title, int width, int height)
     {
         return new CanvasWindowBuilder<>(this, title, width, height);
     }

@@ -20,6 +20,8 @@ import kintsugi3d.gl.builders.framebuffer.*;
 import kintsugi3d.gl.core.ColorFormat;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.ReadonlyTexture2D;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,20 +86,20 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     }
 
     @Override
-    public final FramebufferObjectBuilder<ContextType> addEmptyColorAttachment()
+    public final @NotNull FramebufferObjectBuilder<ContextType> addEmptyColorAttachment()
     {
         colorAttachmentFormats.add(null);
         return this;
     }
 
     @Override
-    public final FramebufferObjectBuilder<ContextType> addColorAttachment()
+    public final @NotNull FramebufferObjectBuilder<ContextType> addColorAttachment()
     {
         return addColorAttachment(ColorFormat.RGBA8);
     }
 
     @Override
-    public final FramebufferObjectBuilder<ContextType> addColorAttachment(ColorFormat format)
+    public final @NotNull FramebufferObjectBuilder<ContextType> addColorAttachment(@Nullable ColorFormat format)
     {
         if (format == null)
         {
@@ -111,7 +113,7 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     }
 
     @Override
-    public final FramebufferObjectBuilder<ContextType> addColorAttachment(ColorAttachmentSpec builder)
+    public final @NotNull FramebufferObjectBuilder<ContextType> addColorAttachment(@NotNull ColorAttachmentSpec builder)
     {
         colorAttachmentFormats.add(context.getTextureFactory().build2DColorTexture(width, height)
                 .setInternalFormat(builder.getInternalFormat())
@@ -122,7 +124,7 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     }
 
     @Override
-    public final FramebufferObjectBuilder<ContextType> addEmptyColorAttachments(int count)
+    public final @NotNull FramebufferObjectBuilder<ContextType> addEmptyColorAttachments(int count)
     {
         for (int i = 0; i < count; i++)
         {
@@ -132,13 +134,13 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     }
 
     @Override
-    public final FramebufferObjectBuilder<ContextType> addColorAttachments(int count)
+    public final @NotNull FramebufferObjectBuilder<ContextType> addColorAttachments(int count)
     {
         return addColorAttachments(ColorFormat.RGBA8, count);
     }
 
     @Override
-    public final FramebufferObjectBuilder<ContextType> addColorAttachments(ColorFormat format, int count)
+    public final @NotNull FramebufferObjectBuilder<ContextType> addColorAttachments(ColorFormat format, int count)
     {
         for (int i = 0; i < count; i++)
         {
@@ -148,7 +150,7 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     }
 
     @Override
-    public final FramebufferObjectBuilder<ContextType> addColorAttachments(ColorAttachmentSpec builder, int count)
+    public final @NotNull FramebufferObjectBuilder<ContextType> addColorAttachments(@NotNull ColorAttachmentSpec builder, int count)
     {
         for (int i = 0; i < count; i++)
         {
@@ -158,13 +160,13 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     }
 
     @Override
-    public final FramebufferObjectBuilder<ContextType> addDepthAttachment()
+    public final @NotNull FramebufferObjectBuilder<ContextType> addDepthAttachment()
     {
         return addDepthAttachment(16, false);
     }
 
     @Override
-    public final FramebufferObjectBuilder<ContextType> addDepthAttachment(int precision, boolean floatingPoint)
+    public final @NotNull FramebufferObjectBuilder<ContextType> addDepthAttachment(int precision, boolean floatingPoint)
     {
         if (hasDepthAttachment())
         {
@@ -180,7 +182,7 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     }
 
     @Override
-    public final FramebufferObjectBuilder<ContextType> addDepthAttachment(DepthAttachmentSpec builder)
+    public final @NotNull FramebufferObjectBuilder<ContextType> addDepthAttachment(@NotNull DepthAttachmentSpec builder)
     {
         if (!hasDepthAttachment() && !hasCombinedDepthStencilAttachment())
         {
@@ -199,13 +201,13 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     }
 
     @Override
-    public final FramebufferObjectBuilder<ContextType> addStencilAttachment()
+    public final @NotNull FramebufferObjectBuilder<ContextType> addStencilAttachment()
     {
         return addStencilAttachment(8);
     }
 
     @Override
-    public final FramebufferObjectBuilder<ContextType> addStencilAttachment(int precision)
+    public final @NotNull FramebufferObjectBuilder<ContextType> addStencilAttachment(int precision)
     {
         if (!hasStencilAttachment() && !hasCombinedDepthStencilAttachment())
         {
@@ -219,7 +221,7 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     }
 
     @Override
-    public final FramebufferObjectBuilder<ContextType> addStencilAttachment(StencilAttachmentSpec builder)
+    public final @NotNull FramebufferObjectBuilder<ContextType> addStencilAttachment(@NotNull StencilAttachmentSpec builder)
     {
         if (!hasStencilAttachment() && !hasCombinedDepthStencilAttachment())
         {
@@ -237,7 +239,7 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     }
 
     @Override
-    public final FramebufferObjectBuilder<ContextType> addCombinedDepthStencilAttachment()
+    public final @NotNull FramebufferObjectBuilder<ContextType> addCombinedDepthStencilAttachment()
     {
         if (!hasDepthAttachment() && !hasStencilAttachment() && !hasCombinedDepthStencilAttachment())
         {
@@ -251,7 +253,7 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     }
 
     @Override
-    public final FramebufferObjectBuilder<ContextType> addCombinedDepthStencilAttachment(boolean floatingPointDepth)
+    public final @NotNull FramebufferObjectBuilder<ContextType> addCombinedDepthStencilAttachment(boolean floatingPointDepth)
     {
         if (!hasDepthAttachment() && !hasStencilAttachment() && !hasCombinedDepthStencilAttachment())
         {
@@ -266,7 +268,7 @@ public abstract class FramebufferObjectBuilderBase<ContextType extends Context<C
     }
 
     @Override
-    public final FramebufferObjectBuilder<ContextType> addCombinedDepthStencilAttachment(DepthStencilAttachmentSpec builder)
+    public final @NotNull FramebufferObjectBuilder<ContextType> addCombinedDepthStencilAttachment(@NotNull DepthStencilAttachmentSpec builder)
     {
         if (!hasDepthAttachment() && !hasStencilAttachment() && !hasCombinedDepthStencilAttachment())
         {

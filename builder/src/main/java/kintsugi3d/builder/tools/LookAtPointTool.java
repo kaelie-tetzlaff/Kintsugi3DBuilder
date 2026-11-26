@@ -17,8 +17,10 @@ package kintsugi3d.builder.tools;
 
 import kintsugi3d.builder.rendering.SceneViewport;
 import kintsugi3d.builder.state.scene.ManipulableViewpointModel;
+import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.window.CanvasSize;
 import kintsugi3d.gl.window.CursorPosition;
+import org.jetbrains.annotations.NotNull;
 
 final class LookAtPointTool implements DragTool
 {
@@ -28,13 +30,13 @@ final class LookAtPointTool implements DragTool
     private static class Builder extends ToolBuilderBase<LookAtPointTool>
     {
         @Override
-        public final LookAtPointTool create()
+        public final @NotNull LookAtPointTool create()
         {
             return new LookAtPointTool(getCameraModel(), getSceneViewport());
         }
     }
 
-    static ToolBuilder<LookAtPointTool> getBuilder()
+    static @NotNull ToolBuilder<LookAtPointTool> getBuilder()
     {
         return new Builder();
     }
@@ -46,15 +48,16 @@ final class LookAtPointTool implements DragTool
     }
 
     @Override
-    public void mouseButtonPressed(CursorPosition cursorPosition, CanvasSize canvasSize)
+    public void mouseButtonPressed(@NotNull CursorPosition cursorPosition, @NotNull CanvasSize canvasSize)
     {
         double normalizedX = cursorPosition.x / canvasSize.width;
         double normalizedY = cursorPosition.y / canvasSize.height;
 
         Object clickedObject = sceneViewport.getObjectAtCoordinates(normalizedX, normalizedY);
-        if ("RenderingSubject".equals(clickedObject))
+        Vector3 position = sceneViewport.get3DPositionAtCoordinates(normalizedX, normalizedY);
+        if ("RenderingSubject".equals(clickedObject) && position != null)
         {
-            cameraModel.setTarget(sceneViewport.get3DPositionAtCoordinates(normalizedX, normalizedY));
+            cameraModel.setTarget(position);
         }
     }
 }

@@ -22,6 +22,7 @@ import kintsugi3d.builder.util.AppIcon;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.gl.vecmath.IntVector2;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,19 +37,19 @@ public class PhotoCardFactory extends ProjectDataCardFactoryBase<View>
 {
     private static final Logger LOG = LoggerFactory.getLogger(PhotoCardFactory.class);
 
-    public PhotoCardFactory(ImageBasedGraphicsResources<? extends Context<?>> resources)
+    public PhotoCardFactory(@NotNull ImageBasedGraphicsResources<? extends Context<?>> resources)
     {
         super(resources);
     }
 
     @Override
-    public final Class<View> getDataClass()
+    public final @NotNull Class<View> getDataClass()
     {
         return View.class;
     }
 
     @Override
-    public final @Nullable ProjectDataCard createCard(View view)
+    public final @Nullable ProjectDataCard createCard(@NotNull View view)
     {
         String thumbnailPath;
         try
@@ -93,7 +94,7 @@ public class PhotoCardFactory extends ProjectDataCardFactoryBase<View>
     }
 
     @Override
-    public final List<? extends Map<String, Runnable>> getGlobalActions()
+    public final @NotNull List<? extends Map<String, Runnable>> getGlobalActions()
     {
         return List.of(Map.of(
             "Disable All", () ->
@@ -116,7 +117,7 @@ public class PhotoCardFactory extends ProjectDataCardFactoryBase<View>
     }
 
     @Override
-    public final List<ProjectDataCard> createAllCards()
+    public final @NotNull List<ProjectDataCard> createAllCards()
     {
         List<ProjectDataCard> cardsList = getViewSet().getViews().stream()
             .map(this::createCard)

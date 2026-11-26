@@ -17,6 +17,7 @@ package kintsugi3d.optimization.function;
 
 import kintsugi3d.optimization.MatrixSystem;
 import org.ejml.simple.SimpleMatrix;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.function.ObjIntConsumer;
@@ -56,7 +57,7 @@ public final class OptimizedFunctions
      * @param system The system to solve.
      * @return The solution to the system.
      */
-    public static OptimizedFunctions solveSystem(BasisFunctions basisFunctions, MatrixSystem system)
+    public static @NotNull OptimizedFunctions solveSystem(BasisFunctions basisFunctions, @NotNull MatrixSystem system)
     {
         SimpleMatrix[] solutions = new SimpleMatrix[system.rhs.length];
         Arrays.setAll(solutions, system::solve);
@@ -72,8 +73,8 @@ public final class OptimizedFunctions
      * @param system The system to solve.
      * @return The solution to the system.
      */
-    public static OptimizedFunctions solveSystemNonNegative(
-            BasisFunctions basisFunctions, MatrixSystem system, double toleranceScale)
+    public static @NotNull OptimizedFunctions solveSystemNonNegative(
+        BasisFunctions basisFunctions, @NotNull MatrixSystem system, double toleranceScale)
     {
         SimpleMatrix[] solutions = new SimpleMatrix[system.rhs.length];
         Arrays.setAll(solutions, i -> system.solveNonNegative(i, toleranceScale));

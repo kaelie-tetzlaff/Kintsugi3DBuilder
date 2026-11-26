@@ -22,12 +22,17 @@ import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.fx.controllers.modals.viewselect.ViewSelectController;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 import java.util.Optional;
 
 public class ToneCalibrationViewSelectController extends ViewSelectController
 {
+    private static final Logger LOG = LoggerFactory.getLogger(ToneCalibrationViewSelectController.class);
+
     @Override
     public final boolean tryConfirm()
     {
@@ -37,7 +42,7 @@ public class ToneCalibrationViewSelectController extends ViewSelectController
     @Override
     public final boolean tryAdvance()
     {
-        ViewSet viewSet = Global.io().getLoadedViewSetOrThrow();
+        ViewSet viewSet = Global.io().getLoadedViewSet();
 
         View view = viewSet.findViewByName(getSelectedViewName());
         if (Objects.equals(view, viewSet.getPrimaryView()))
@@ -50,7 +55,7 @@ public class ToneCalibrationViewSelectController extends ViewSelectController
         {
             Dialog<ButtonType> alert = StaticUtilities.createConfirmDialog("This will clear any previous tone calibration values!");
             alert.setHeaderText("Change tone calibration view?");
-            Optional<ButtonType> confirmResult = alert.showAndWait();
+            Optional<@NotNull ButtonType> confirmResult = alert.showAndWait();
             if (confirmResult.isEmpty() || !confirmResult.get().equals(ButtonType.OK))
             {
                 // Stay on this page
@@ -59,12 +64,21 @@ public class ToneCalibrationViewSelectController extends ViewSelectController
         }
 
         viewSet.clearLuminanceEncoding();
-        viewSet.setPrimaryView(view);
-        return true;
+
+        if (view != null)
+        {
+            viewSet.setPrimaryView(view);
+            return true;
+        }
+        else
+        {
+            LOG.warn("No primary view selected.");
+            return false;
+        }
     }
 
     @Override
-    protected final String getHintText()
+    protected final @NotNull String getHintText()
     {
         return "Select tone calibration view";
     }

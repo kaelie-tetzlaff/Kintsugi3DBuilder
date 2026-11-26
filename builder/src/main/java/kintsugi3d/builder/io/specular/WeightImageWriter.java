@@ -18,6 +18,7 @@ package kintsugi3d.builder.io.specular;
 import kintsugi3d.builder.core.texture.TextureResolution;
 import kintsugi3d.builder.fit.decomposition.ReadonlyBasisWeightResources;
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class WeightImageWriter<ContextType extends Context<ContextType>> impleme
     private final DrawableResource<ContextType> drawable;
     private final FramebufferObject<ContextType> framebuffer;
 
-    public WeightImageWriter(ContextType context, TextureResolution resolution, int weightsPerImage) throws IOException
+    public WeightImageWriter(@NotNull ContextType context, @NotNull TextureResolution resolution, int weightsPerImage) throws IOException
     {
         this.weightsPerImage = weightsPerImage;
 
@@ -51,8 +52,8 @@ public class WeightImageWriter<ContextType extends Context<ContextType>> impleme
             .createFramebufferObject();
     }
 
-    public final void saveImages(ReadonlyBasisWeightResources<ContextType> resources, int materialCount,
-                                 String format, File outputDirectory, String... filenames) throws IOException
+    public final void saveImages(@NotNull ReadonlyBasisWeightResources<ContextType> resources, int materialCount,
+                                 String format, File outputDirectory, String @NotNull ... filenames) throws IOException
     {
         resources.useWithShaderProgram(program);
 

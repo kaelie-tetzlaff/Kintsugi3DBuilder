@@ -17,6 +17,7 @@ package kintsugi3d.gl.opengl;
 
 import kintsugi3d.gl.core.DoubleFramebuffer;
 import kintsugi3d.gl.core.FramebufferSize;
+import org.jetbrains.annotations.NotNull;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -30,7 +31,7 @@ class OpenGLDefaultFramebuffer extends OpenGLFramebuffer implements DoubleFrameb
     }
 
     @Override
-    public final FramebufferSize getSize()
+    public final @NotNull FramebufferSize getSize()
     {
         return getContext().getDefaultFramebufferSize();
     }
@@ -48,7 +49,7 @@ class OpenGLDefaultFramebuffer extends OpenGLFramebuffer implements DoubleFrameb
     }
 
     @Override
-    final DefaultFramebufferContents getContents()
+    final @NotNull DefaultFramebufferContents getContents()
     {
         // Lazy initialization
         if (contents == null)

@@ -20,6 +20,7 @@ import kintsugi3d.builder.state.scene.ManipulableViewpointModel;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.window.CanvasSize;
 import kintsugi3d.gl.window.CursorPosition;
+import org.jetbrains.annotations.NotNull;
 
 final class ObjectTwistTool implements DragTool
 {
@@ -37,13 +38,13 @@ final class ObjectTwistTool implements DragTool
     private static class Builder extends ToolBuilderBase<ObjectTwistTool>
     {
         @Override
-        public final ObjectTwistTool create()
+        public final @NotNull ObjectTwistTool create()
         {
             return new ObjectTwistTool(getCameraModel(), getObjectModel());
         }
     }
 
-    static ToolBuilder<ObjectTwistTool> getBuilder()
+    static @NotNull ToolBuilder<ObjectTwistTool> getBuilder()
     {
         return new Builder();
     }
@@ -55,7 +56,7 @@ final class ObjectTwistTool implements DragTool
     }
 
     @Override
-    public void mouseButtonPressed(CursorPosition cursorPosition, CanvasSize canvasSize)
+    public void mouseButtonPressed(CursorPosition cursorPosition, @NotNull CanvasSize canvasSize)
     {
         mouseStart = cursorPosition;
 
@@ -65,7 +66,7 @@ final class ObjectTwistTool implements DragTool
     }
 
     @Override
-    public void cursorDragged(CursorPosition cursorPosition, CanvasSize canvasSize)
+    public void cursorDragged(@NotNull CursorPosition cursorPosition, CanvasSize canvasSize)
     {
         //noinspection FloatingPointEquality
         if (cursorPosition.x != mouseStart.x)

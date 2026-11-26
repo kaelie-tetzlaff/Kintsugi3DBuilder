@@ -19,7 +19,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
-import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.io.RecentProjects;
 import kintsugi3d.builder.rendering.Rendering;
 import kintsugi3d.builder.util.FXWindowHelper;
@@ -65,11 +64,6 @@ public class ScreenshotController
     @FXML
     public final void run()
     {
-        if(Global.io().getAggregateProgressMonitor().isConflictingProcess())
-        {
-            return;
-        }
-
         Rendering.getRequestQueue().addImageBasedGraphicsRequest(
             ScreenshotRequest.getBuilder()
                 .setWidth(Integer.parseInt(widthTextField.getText()))

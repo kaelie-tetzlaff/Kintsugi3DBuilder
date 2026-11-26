@@ -19,12 +19,13 @@ import kintsugi3d.builder.core.viewset.ReadonlyViewSet;
 import kintsugi3d.builder.core.viewset.View;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.Nullable;
 
 public interface ViewSelection
 {
     ReadonlyViewSet getViewSet();
 
-    View getSelectedView();
+    @Nullable View getSelectedView();
 
     /**
      * Gets the view matrix for a particular view index, relative to the world space used by rendered components.

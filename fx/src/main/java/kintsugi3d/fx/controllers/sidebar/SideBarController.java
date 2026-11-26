@@ -31,6 +31,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import kintsugi3d.fx.internal.ObservableCardsModel;
 import kintsugi3d.fx.internal.ObservableTabsModel;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.*;
@@ -38,6 +41,8 @@ import java.util.Map.Entry;
 
 public class SideBarController
 {
+    private static final Logger LOG = LoggerFactory.getLogger(SideBarController.class);
+
     private static final int DEFAULT_WIDTH = 400;
     private static final int MINIMIZED_WIDTH = 23;
 
@@ -71,7 +76,7 @@ public class SideBarController
         return mainBox;
     }
 
-    public final void init(@SuppressWarnings("ParameterHidesMemberVariable") ObservableTabsModel tabModels)
+    public final void init(@SuppressWarnings("ParameterHidesMemberVariable") @NotNull ObservableTabsModel tabModels)
     {
         this.tabModels = tabModels;
 
@@ -153,23 +158,31 @@ public class SideBarController
         }
     }
 
-    private void addTab(ObservableCardsModel<?> model)
+    private void addTab(@NotNull ObservableCardsModel<?> model)
     {
         RadioButton newButton = createButton(model.getLabel());
-        VBox newTab = createTab(model);
 
-        buttonBox.getChildren().add(newButton);
-        mainBox.getChildren().add(newTab);
+        try
+        {
+            VBox newTab = createTab(model);
 
-        buttonMap.put(model.getLabel(), newButton);
-        inverseButtonMap.put(newButton, model);
-        tabMap.put(model.getLabel(), newTab);
+            buttonBox.getChildren().add(newButton);
+            mainBox.getChildren().add(newTab);
 
-        newTab.visibleProperty().bind(newButton.selectedProperty());
-        newTab.managedProperty().bind(newButton.selectedProperty());
+            buttonMap.put(model.getLabel(), newButton);
+            inverseButtonMap.put(newButton, model);
+            tabMap.put(model.getLabel(), newTab);
+
+            newTab.visibleProperty().bind(newButton.selectedProperty());
+            newTab.managedProperty().bind(newButton.selectedProperty());
+        }
+        catch (IOException e)
+        {
+            LOG.error("Error loading FXML for tab.", e);
+        }
     }
 
-    private RadioButton createButton(String name)
+    private @NotNull RadioButton createButton(String name)
     {
         RadioButton button = new RadioButton(name);
 
@@ -198,24 +211,16 @@ public class SideBarController
         return button;
     }
 
-    private VBox createTab(ObservableCardsModel<?> model)
+    private VBox createTab(@NotNull ObservableCardsModel<?> model) throws IOException
     {
-        VBox newTab = null;
         FXMLLoader loader = new FXMLLoader();
-        try
-        {
-            loader.setLocation(getClass().getResource("/fxml/main/leftpanel/CardTab.fxml"));
-            newTab = loader.load();
-            CardTabController newTabController = loader.getController();
+        loader.setLocation(getClass().getResource("/fxml/main/leftpanel/CardTab.fxml"));
+        VBox newTab = loader.load();
+        CardTabController newTabController = loader.getController();
 
-            tabControllers.add(newTabController);
+        tabControllers.add(newTabController);
 
-            newTabController.init(model);
-        }
-        catch (IOException e)
-        {
-            // throw new RuntimeException(e);
-        }
+        newTabController.init(model);
         return newTab;
     }
 
@@ -253,7 +258,7 @@ public class SideBarController
      * If it is, cursor is set to resize cursor. Otherwise, default cursor.
      * @param event
      */
-    public final void mouseMoved(MouseEvent event)
+    public final void mouseMoved(@NotNull MouseEvent event)
     {
         if (event.getX() > (mainBox.getWidth() - RESIZE_WIDTH))
         {
@@ -289,7 +294,7 @@ public class SideBarController
      * @param event
      */
     @FXML
-    public final void mouseDragged(MouseEvent event)
+    public final void mouseDragged(@NotNull MouseEvent event)
     {
         double newWidth = event.getX();
 

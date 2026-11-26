@@ -17,6 +17,7 @@ package kintsugi3d.builder.core;
 
 import kintsugi3d.builder.io.IOModel;
 import kintsugi3d.builder.io.ReadonlyLoadOptionsModel;
+import org.jetbrains.annotations.NotNull;
 
 public final class GlobalBootstrap
 {
@@ -60,7 +61,7 @@ public final class GlobalBootstrap
         }
     }
 
-    static IOModel getIOModel()
+    static @NotNull IOModel getIOModel()
     {
         return IO;
     }

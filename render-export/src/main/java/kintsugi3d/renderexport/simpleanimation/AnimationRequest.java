@@ -22,6 +22,7 @@ import kintsugi3d.gl.core.FramebufferObject;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.vecmath.Matrix4;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,25 +62,25 @@ abstract class AnimationRequest implements ImageBasedGraphicsRequest
             return exportPath;
         }
 
-        public final BuilderBase setWidth(int width)
+        public final @NotNull BuilderBase setWidth(int width)
         {
             this.width = width;
             return this;
         }
 
-        public final BuilderBase setHeight(int height)
+        public final @NotNull BuilderBase setHeight(int height)
         {
             this.height = height;
             return this;
         }
 
-        public final BuilderBase setFrameCount(int frameCount)
+        public final @NotNull BuilderBase setFrameCount(int frameCount)
         {
             this.frameCount = frameCount;
             return this;
         }
 
-        public final BuilderBase setExportPath(File exportPath)
+        public final @NotNull BuilderBase setExportPath(File exportPath)
         {
             this.exportPath = exportPath;
             return this;
@@ -105,7 +106,7 @@ abstract class AnimationRequest implements ImageBasedGraphicsRequest
 
     @Override
     public final <ContextType extends Context<ContextType>> void executeRequest(
-        ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
+        @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @NotNull ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         try
@@ -116,18 +117,13 @@ abstract class AnimationRequest implements ImageBasedGraphicsRequest
                 .createFramebufferObject()
         )
         {
-            if(monitor!=null){
-                monitor.setProcessName("Orbit Animation");
-                monitor.setMaxProgress(frameCount);
-                monitor.setStageCount(1);
-                monitor.setStage(0, "Processing orbit images...");
-            }
+            monitor.setProcessName("Orbit Animation");
+            monitor.setMaxProgress(frameCount);
+            monitor.setStageCount(1);
+            monitor.setStage(0, "Processing orbit images...");
             for (int i = 0; i < frameCount; i++)
             {
-                if (monitor != null)
-                {
-                    monitor.allowUserCancellation();
-                }
+                monitor.allowUserCancellation();
 
                 framebuffer.clearColorBuffer(0, 0.0f, 0.0f, 0.0f, /*1.0f*/0.0f);
                 framebuffer.clearDepthBuffer();
@@ -141,14 +137,9 @@ abstract class AnimationRequest implements ImageBasedGraphicsRequest
                 exportFile.getParentFile().mkdirs();
                 framebuffer.getTextureReaderForColorAttachment(0).saveToFile("PNG", exportFile);
 
-                if (monitor != null)
-                {
-                    monitor.setProgress(i, MessageFormat.format("Frame {0}/{1}", i+1, frameCount));
-                }
+                monitor.setProgress(i, MessageFormat.format("Frame {0}/{1}", i + 1, frameCount));
             }
-            if(monitor != null){
-                monitor.setStage(1, "Finished orbit animation.");
-            }
+            monitor.setStage(1, "Finished orbit animation.");
         }
     }
 }

@@ -15,6 +15,8 @@
 
 package kintsugi3d.gl.builders.framebuffer;
 
+import org.jetbrains.annotations.NotNull;
+
 public final class StencilAttachmentSpec extends AttachmentSpec
 {
     public final int precision;
@@ -24,27 +26,27 @@ public final class StencilAttachmentSpec extends AttachmentSpec
         this.precision = precision;
     }
 
-    public static StencilAttachmentSpec createWithPrecision(int precision)
+    public static @NotNull StencilAttachmentSpec createWithPrecision(int precision)
     {
         return new StencilAttachmentSpec(precision);
     }
 
     @Override
-    public StencilAttachmentSpec setMultisamples(int samples, boolean fixedSampleLocations)
+    public @NotNull StencilAttachmentSpec setMultisamples(int samples, boolean fixedSampleLocations)
     {
         super.setMultisamples(samples, fixedSampleLocations);
         return this;
     }
 
     @Override
-    public StencilAttachmentSpec setMipmapsEnabled(boolean enabled)
+    public @NotNull StencilAttachmentSpec setMipmapsEnabled(boolean enabled)
     {
         super.setMipmapsEnabled(enabled);
         return this;
     }
 
     @Override
-    public StencilAttachmentSpec setLinearFilteringEnabled(boolean enabled)
+    public @NotNull StencilAttachmentSpec setLinearFilteringEnabled(boolean enabled)
     {
         super.setLinearFilteringEnabled(enabled);
         return this;

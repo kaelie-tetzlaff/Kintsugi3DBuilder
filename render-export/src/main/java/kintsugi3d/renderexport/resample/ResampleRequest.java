@@ -25,6 +25,7 @@ import kintsugi3d.gl.core.FramebufferObject;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +50,7 @@ public class ResampleRequest implements ImageBasedGraphicsRequest
 
     @Override
     public final <ContextType extends Context<ContextType>> void executeRequest(
-        ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor) throws IOException, UserCancellationException
+        @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @NotNull ProgressMonitor monitor) throws IOException, UserCancellationException
     {
         ReadonlyViewSet targetViewSet = ViewSetReaderFromVSET.getInstance().readFromFile(resampleVSETFile).finish();
 
@@ -61,18 +62,12 @@ public class ResampleRequest implements ImageBasedGraphicsRequest
                 .createFramebufferObject()
         )
         {
-            if(monitor != null)
-            {
-                monitor.setProcessName("Resample");
-            }
+            monitor.setProcessName("Resample");
 
             int progressCount = 0;
             for (View view : targetViewSet.getEnabledViews())
             {
-                if (monitor != null)
-                {
-                    monitor.allowUserCancellation();
-                }
+                monitor.allowUserCancellation();
 
                 framebuffer.clearColorBuffer(0, 0.0f, 0.0f, 0.0f, /*1.0f*/0.0f);
                 framebuffer.clearDepthBuffer();
@@ -85,12 +80,9 @@ public class ResampleRequest implements ImageBasedGraphicsRequest
                 exportFile.getParentFile().mkdirs();
                 framebuffer.getTextureReaderForColorAttachment(0).saveToFile("PNG", exportFile);
 
-                if (monitor != null)
-                {
-                    monitor.setProgress((double) progressCount / (double) targetViewSet.getEnabledViewCount(),
-                        MessageFormat.format("{0} ({1}/{2})", view,
-                            progressCount + 1, targetViewSet.getEnabledViewCount()));
-                }
+                monitor.setProgress((double) progressCount / (double) targetViewSet.getEnabledViewCount(),
+                    MessageFormat.format("{0} ({1}/{2})", view,
+                        progressCount + 1, targetViewSet.getEnabledViewCount()));
 
                 progressCount++;
             }
@@ -98,9 +90,14 @@ public class ResampleRequest implements ImageBasedGraphicsRequest
             Files.copy(resampleVSETFile.toPath(),
                 new File(resampleExportPath, resampleVSETFile.getName()).toPath(),
                 StandardCopyOption.REPLACE_EXISTING);
-            Files.copy(renderable.getViewSet().getGeometryFile().toPath(),
-                new File(resampleExportPath, renderable.getViewSet().getGeometryFile().getName()).toPath(),
-                StandardCopyOption.REPLACE_EXISTING);
+
+            File geometryFile = renderable.getViewSet().getGeometryFile();
+            if (geometryFile != null)
+            {
+                Files.copy(geometryFile.toPath(),
+                    new File(resampleExportPath, geometryFile.getName()).toPath(),
+                    StandardCopyOption.REPLACE_EXISTING);
+            }
         }
     }
 }

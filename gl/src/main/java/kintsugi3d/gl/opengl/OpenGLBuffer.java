@@ -17,6 +17,7 @@ package kintsugi3d.gl.opengl;
 
 import kintsugi3d.gl.core.ContextBound;
 import kintsugi3d.gl.core.ManagedResource;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 
@@ -40,7 +41,7 @@ abstract class OpenGLBuffer implements ContextBound<OpenGLContext>, ManagedResou
     }
 
     @Override
-    public final OpenGLContext getContext()
+    public final @NotNull OpenGLContext getContext()
     {
         return context;
     }
@@ -57,7 +58,7 @@ abstract class OpenGLBuffer implements ContextBound<OpenGLContext>, ManagedResou
         return hasData;
     }
 
-    public final void setData(ByteBuffer data)
+    public final void setData(@NotNull ByteBuffer data)
     {
         if (data.remaining() > 0) // make sure there is actually data to set (lwjgl's glBufferData uses data.remaining() as the "size" parameter)
         {

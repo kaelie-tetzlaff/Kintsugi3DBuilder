@@ -16,6 +16,7 @@
 package kintsugi3d.fx.experience;
 
 import kintsugi3d.builder.core.texture.ImageReplacer;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -24,7 +25,7 @@ public class ReplaceImage extends ExperienceBase
     private ImageReplacer currentData;
 
     @Override
-    public final String getName() { return "Replace Texture"; }
+    public final @NotNull String getName() { return "Replace Texture"; }
 
     @Override
     protected final void open() throws IOException

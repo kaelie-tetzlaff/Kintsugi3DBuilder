@@ -22,6 +22,7 @@ import kintsugi3d.fx.controllers.modals.workflow.tonecalibration.EyedropperContr
 import kintsugi3d.fx.controllers.modals.workflow.tonecalibration.SelectToneCalibrationImageController;
 import kintsugi3d.fx.controllers.modals.workflow.tonecalibration.ToneCalibrationViewSelectController;
 import kintsugi3d.fx.controllers.paged.SimpleDataReceiverPage;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -33,7 +34,7 @@ public class ToneCalibration extends ExperienceBase
     public static final String EYEDROPPER = "/fxml/modals/workflow/EyedropperColorChecker.fxml";
 
     @Override
-    public final String getName()
+    public final @NotNull String getName()
     {
         return "Tone Calibration";
     }

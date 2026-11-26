@@ -18,11 +18,12 @@ package kintsugi3d.builder.state.scene;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.OrbitPolarConverter;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class ObjectPoseModelBase implements ManipulableObjectPoseModel
 {
     @Override
-    public final Matrix4 getTransformationMatrix()
+    public final @NotNull Matrix4 getTransformationMatrix()
     {
         return getOrbit().times(Matrix4.translate(getCenter()))
                 .times(Matrix4.scale(getScale()));
@@ -35,7 +36,7 @@ public abstract class ObjectPoseModelBase implements ManipulableObjectPoseModel
     }
 
     @Override
-    public final Matrix4 getOrbit()
+    public final @NotNull Matrix4 getOrbit()
     {
         // Intentionally swapping y and x components
         Vector3 polar = new Vector3(getRotationY(), getRotationX(), getRotationZ());
@@ -44,7 +45,7 @@ public abstract class ObjectPoseModelBase implements ManipulableObjectPoseModel
 
     @SuppressWarnings("SuspiciousNameCombination")
     @Override
-    public final void setOrbit(Matrix4 orbit)
+    public final void setOrbit(@NotNull Matrix4 orbit)
     {
         Vector3 polar = OrbitPolarConverter.convertToPolarCoordinates(orbit);
 

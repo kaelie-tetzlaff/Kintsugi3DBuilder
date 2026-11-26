@@ -35,6 +35,8 @@ import kintsugi3d.gl.util.BufferedImageBuilder;
 import kintsugi3d.gl.vecmath.IntVector2;
 import kintsugi3d.gl.vecmath.Vector4;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,18 +59,18 @@ public class ImageCache<ContextType extends Context<ContextType>>
 {
     private static final Logger LOG = LoggerFactory.getLogger(ImageCache.class);
 
-    private final ContextType context;
-    private final ImageBasedGraphicsResourcesBase<ContextType> resources;
-    private final ReadonlyImageCacheSettings settings;
+    private final @NotNull ContextType context;
+    private final @NotNull ImageBasedGraphicsResourcesBase<ContextType> resources;
+    private final @NotNull ReadonlyImageCacheSettings settings;
 
-    private final File cacheDirectory;
+    private final @NotNull File cacheDirectory;
 
-    private final File sampledDir;
-    private final IntVector2[][] sampledPixelCoords;
+    private final @NotNull File sampledDir;
+    private final IntVector2 @NotNull [][] sampledPixelCoords;
 
     private boolean initialized = false;
 
-    ImageCache(ImageBasedGraphicsResourcesBase<ContextType> resources, ReadonlyImageCacheSettings settings)
+    ImageCache(@NotNull ImageBasedGraphicsResourcesBase<ContextType> resources, @NotNull ReadonlyImageCacheSettings settings)
     {
         context = resources.getContext();
         this.resources = resources;
@@ -104,7 +106,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
         }
     }
 
-    private static String getFolderNameFromSettings(String cacheFolderName, ReadonlyImageCacheSettings settings)
+    private static @NotNull String getFolderNameFromSettings(@Nullable String cacheFolderName, @NotNull ReadonlyImageCacheSettings settings)
     {
         if (cacheFolderName != null)
         {
@@ -116,32 +118,32 @@ public class ImageCache<ContextType extends Context<ContextType>>
         }
     }
 
-    public final File getCacheDirectory()
+    public final @NotNull File getCacheDirectory()
     {
         return cacheDirectory;
     }
 
-    public final File getBlockDirectory(int i, int j)
+    public final @NotNull File getBlockDirectory(int i, int j)
     {
         return new File(cacheDirectory, String.format("%d_%d", i, j));
     }
 
-    public final ContextType getContext()
+    public final @NotNull ContextType getContext()
     {
         return context;
     }
 
-    public final ReadonlyViewSet getViewSet()
+    public final @NotNull ReadonlyViewSet getViewSet()
     {
         return resources.getViewSet();
     }
 
-    public final ReadonlyVertexGeometry getGeometry()
+    public final @NotNull ReadonlyVertexGeometry getGeometry()
     {
         return resources.getGeometry();
     }
 
-    public final ReadonlyImageCacheSettings getSettings()
+    public final @NotNull ReadonlyImageCacheSettings getSettings()
     {
         return settings;
     }
@@ -156,7 +158,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
      * As a side effect of this method, the context's state will have back face culling enabled,
      * @throws IOException
      */
-    public final void initialize(ProgressMonitor monitor) throws IOException, UserCancellationException
+    public final void initialize(@NotNull ProgressMonitor monitor) throws IOException, UserCancellationException
     {
         // Create directories to organize the cache
         sampledDir.mkdirs();
@@ -181,7 +183,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
         }
     }
 
-    private void selectSampleLocations(ReadableFramebuffer<ContextType> fbo) throws IOException
+    private void selectSampleLocations(@NotNull ReadableFramebuffer<ContextType> fbo) throws IOException
     {
 
         try (ProgramObject<ContextType> maskProgram = context.getShaderProgramBuilder()
@@ -242,7 +244,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
         }
     }
 
-    private File getSampleLocationsFile()
+    private @NotNull File getSampleLocationsFile()
     {
         return new File(cacheDirectory, "sampleLocations.txt");
     }
@@ -301,7 +303,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
         }
     }
 
-    private void buildCache(ReadableFramebuffer<ContextType> fbo, ProgressMonitor monitor)
+    private void buildCache(@NotNull ReadableFramebuffer<ContextType> fbo, @NotNull ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         LoadOptionsModel loadOptions = new SimpleLoadOptionsModel();
@@ -318,22 +320,16 @@ public class ImageCache<ContextType extends Context<ContextType>>
             DrawableResource<ContextType> texSpaceDrawable = resources.createDrawable(texSpaceProgram))
         {
 
-            if (monitor != null)
-            {
-                monitor.setMaxProgress(resources.getViewSet().getViewCount());
-            }
+            monitor.setMaxProgress(resources.getViewSet().getViewCount());
 
             // Loop over the images, processing each one at a time
             // Includes both enabled and disabled views which will all be included in the cache.
             int progressCount = 0;
             for (View view : resources.getViewSet().getViews())
             {
-                if (monitor != null)
-                {
-                    monitor.setProgress(progressCount, MessageFormat.format("{0} ({1}/{2})",
-                        view, progressCount + 1, resources.getViewSet().getViewCount()));
-                    monitor.allowUserCancellation();
-                }
+                monitor.setProgress(progressCount, MessageFormat.format("{0} ({1}/{2})",
+                    view, progressCount + 1, resources.getViewSet().getViewCount()));
+                monitor.allowUserCancellation();
 
                 try (SingleCalibratedImageResource<ContextType> image = resources.createSingleImageResource(view, loadOptions))
                 {
@@ -431,14 +427,11 @@ public class ImageCache<ContextType extends Context<ContextType>>
                 progressCount++;
             }
 
-            if (monitor != null)
-            {
-                monitor.setProgress(resources.getViewSet().getViewCount(), "All images completed.");
-            }
+            monitor.setProgress(resources.getViewSet().getViewCount(), "All images completed.");
         }
     }
 
-    public final GraphicsResourcesTextureSpace<ContextType> createSampledResources(ProgressMonitor monitor) throws IOException, UserCancellationException
+    public final GraphicsResourcesTextureSpace<ContextType> createSampledResources(@NotNull ProgressMonitor monitor) throws IOException, UserCancellationException
     {
         return createWithRetryAfterCacheRebuild(
             () ->
@@ -465,7 +458,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
      * @throws UserCancellationException
      * @throws IOException
      */
-    public final <T> T createWithRetryAfterCacheRebuild(CacheDependentSupplier<T> supplier, ProgressMonitor monitor)
+    public final <T> T createWithRetryAfterCacheRebuild(@NotNull CacheDependentSupplier<T> supplier, @NotNull ProgressMonitor monitor)
         throws UserCancellationException, IOException
     {
         try
@@ -497,7 +490,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
      *
      * @return A resource (that itself needs to be closed with no longer needed) which in turn creates resources for specific blocks
      */
-    public final TextureBlockResourceFactory<ContextType> createBlockResourceFactory()
+    public final @NotNull TextureBlockResourceFactory<ContextType> createBlockResourceFactory()
     {
         return new TextureBlockResourceFactory<>(resources.getCommonResources(), this);
     }
@@ -509,7 +502,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
         return highResCoords.x + highResCoords.y * settings.getTextureWidth();
     }
 
-    private ReadonlyNativeVectorBuffer sampleHighResBuffer(ReadonlyNativeVectorBuffer highResBuffer)
+    private @NotNull ReadonlyNativeVectorBuffer sampleHighResBuffer(@NotNull ReadonlyNativeVectorBuffer highResBuffer)
     {
         NativeVectorBuffer sampledBuffer = NativeVectorBufferFactory
             .createEmpty(NativeDataType.FLOAT, 3, settings.getSampledSize() * settings.getSampledSize());
@@ -523,7 +516,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
         return sampledBuffer;
     }
 
-    private GeometryTextures<ContextType> createSampledGeometryTextures()
+    private @NotNull GeometryTextures<ContextType> createSampledGeometryTextures()
     {
         try(GeometryFramebuffer<ContextType> geomTexturesFullRes =
             resources.getGeometryResources().createGeometryFramebuffer(settings.getTextureWidth(), settings.getTextureHeight()))

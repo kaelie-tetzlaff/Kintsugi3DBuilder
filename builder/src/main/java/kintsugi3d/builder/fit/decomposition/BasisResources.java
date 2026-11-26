@@ -17,15 +17,16 @@ package kintsugi3d.builder.fit.decomposition;
 
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.ManagedResource;
+import org.jetbrains.annotations.NotNull;
 
 public interface BasisResources<ContextType extends Context<ContextType>> extends ReadonlyBasisResources<ContextType>, ManagedResource
 {
-    static String getBasisFunctionsFilename()
+    static @NotNull String getBasisFunctionsFilename()
     {
         return getBasisFunctionsFilename("");
     }
 
-    static String getBasisFunctionsFilename(String filenamePrefix)
+    static @NotNull String getBasisFunctionsFilename(String filenamePrefix)
     {
         return String.format("%sbasisFunctions.csv", filenamePrefix);
     }

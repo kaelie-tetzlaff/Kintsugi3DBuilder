@@ -17,6 +17,7 @@ package kintsugi3d.fx.util;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Used by UI elements to display resolution in the form DxD where D is both the width and height.
@@ -34,7 +35,7 @@ public class SquareResolution
         this.size.set(size);
     }
 
-    public SquareResolution(Number size)
+    public SquareResolution(@NotNull Number size)
     {
         this.size.set(size.intValue());
     }
@@ -49,7 +50,7 @@ public class SquareResolution
         this.size.set(size);
     }
 
-    public final IntegerProperty sizeProperty()
+    public final @NotNull IntegerProperty sizeProperty()
     {
         return size;
     }
@@ -67,7 +68,7 @@ public class SquareResolution
     }
 
     @Override
-    public final String toString()
+    public final @NotNull String toString()
     {
         return String.format("%dx%d", getSize(), getSize());
     }

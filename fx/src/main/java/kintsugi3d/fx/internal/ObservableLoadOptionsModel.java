@@ -20,6 +20,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import kintsugi3d.builder.io.LoadOptionsModel;
+import org.jetbrains.annotations.NotNull;
 
 public class ObservableLoadOptionsModel implements LoadOptionsModel
 {
@@ -154,51 +155,51 @@ public class ObservableLoadOptionsModel implements LoadOptionsModel
         this.previewImageWidth.setValue(previewImageWidth);
     }
 
-    public final BooleanProperty colorImagesRequestedProperty()
+    public final @NotNull BooleanProperty colorImagesRequestedProperty()
     {
         return colorImagesRequested;
     }
-    public final BooleanProperty mipmapsRequestedProperty()
+    public final @NotNull BooleanProperty mipmapsRequestedProperty()
     {
         return mipmapsRequested;
     }
 
-    public final BooleanProperty compressionRequestedProperty()
+    public final @NotNull BooleanProperty compressionRequestedProperty()
     {
         return compressionRequested;
     }
 
-    public final BooleanProperty alphaRequestedProperty()
+    public final @NotNull BooleanProperty alphaRequestedProperty()
     {
         return alphaRequested;
     }
 
-    public final BooleanProperty depthImagesRequestedProperty()
+    public final @NotNull BooleanProperty depthImagesRequestedProperty()
     {
         return depthImagesRequested;
     }
 
-    public final IntegerProperty depthImageWidthProperty()
+    public final @NotNull IntegerProperty depthImageWidthProperty()
     {
         return depthImageWidth;
     }
 
-    public final IntegerProperty depthImageHeightProperty()
+    public final @NotNull IntegerProperty depthImageHeightProperty()
     {
         return depthImageHeight;
     }
 
-    public final IntegerProperty previewImageWidthProperty()
+    public final @NotNull IntegerProperty previewImageWidthProperty()
     {
         return previewImageWidth;
     }
 
-    public final IntegerProperty previewImageHeightProperty()
+    public final @NotNull IntegerProperty previewImageHeightProperty()
     {
         return previewImageHeight;
     }
 
-    public final IntegerProperty maxLoadingThreadsProperty()
+    public final @NotNull IntegerProperty maxLoadingThreadsProperty()
     {
         return maxLoadingThreads;
     }

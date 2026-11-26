@@ -22,6 +22,7 @@ import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector2;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 
@@ -34,8 +35,8 @@ import java.util.Map;
 
 public class SceneViewportModel implements SceneViewport
 {
-    private final List<String> sceneObjectNameList;
-    private final Map<String, Integer> sceneObjectIDLookup;
+    private final @NotNull List<String> sceneObjectNameList;
+    private final @NotNull Map<String, Integer> sceneObjectIDLookup;
     private IntBuffer pixelObjectIDBuffer;
     private ShortBuffer pixelDepthBuffer;
     private FramebufferSize fboSize;
@@ -66,7 +67,7 @@ public class SceneViewportModel implements SceneViewport
         return sceneObjectIDLookup.get(sceneObjectTag);
     }
 
-    public final <ContextType extends Context<ContextType>> void refreshBuffers(Matrix4 newProjection, ReadableFramebuffer<ContextType> offscreenFBO)
+    public final <ContextType extends Context<ContextType>> void refreshBuffers(Matrix4 newProjection, @NotNull ReadableFramebuffer<ContextType> offscreenFBO)
     {
         projection = newProjection;
         fboSize = offscreenFBO.getSizeForRead();
@@ -118,7 +119,7 @@ public class SceneViewportModel implements SceneViewport
         return null;
     }
 
-    private Matrix4 getProjectionInverse()
+    private @NotNull Matrix4 getProjectionInverse()
     {
         return  Matrix4.fromRows(
                 new Vector4(1.0f / projection.get(0, 0), 0, 0, 0),
@@ -158,7 +159,7 @@ public class SceneViewportModel implements SceneViewport
     }
 
     @Override
-    public final Vector3 getViewingDirection(double x, double y)
+    public final @NotNull Vector3 getViewingDirection(double x, double y)
     {
         Matrix4 projectionInverse = getProjectionInverse();
 
@@ -175,7 +176,7 @@ public class SceneViewportModel implements SceneViewport
     }
 
     @Override
-    public final Vector3 getViewportCenter()
+    public final @NotNull Vector3 getViewportCenter()
     {
         return sceneModel.getCurrentViewMatrix().quickInverse(0.01f)
                 .getColumn(3)
@@ -183,7 +184,7 @@ public class SceneViewportModel implements SceneViewport
     }
 
     @Override
-    public final Vector2 projectPoint(Vector3 point)
+    public final @NotNull Vector2 projectPoint(@NotNull Vector3 point)
     {
         Vector4 projectedPoint =
             projection.times(sceneModel.getCurrentViewMatrix())
@@ -199,7 +200,7 @@ public class SceneViewportModel implements SceneViewport
      * @param size
      * @return
      */
-    public final float computeRawLightWidgetScale(Matrix4 viewMatrix, FramebufferSize size)
+    public final float computeRawLightWidgetScale(@NotNull Matrix4 viewMatrix, @NotNull FramebufferSize size)
     {
         float cameraDistance = viewMatrix
                 .times(sceneModel.getCameraModel().getTarget().times(sceneModel.getScale()).asPosition())

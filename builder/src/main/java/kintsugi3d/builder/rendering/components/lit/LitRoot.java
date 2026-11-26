@@ -22,12 +22,13 @@ import kintsugi3d.builder.resources.LightingResources;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
 import kintsugi3d.gl.core.ReadonlyVertexBuffer;
+import org.jetbrains.annotations.NotNull;
 
 public class LitRoot<ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
     private final ContextType context;
-    private LightingResources<ContextType> lightingResources;
-    private LitContent<ContextType> litContentRoot;
+    private final @NotNull LightingResources<ContextType> lightingResources;
+    private final @NotNull LitContent<ContextType> litContentRoot;
 
     /**
      * x
@@ -35,7 +36,7 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
      * @param sceneModel
      * @param litContentRoot Transfers ownership of the lit content to this object
      */
-    public LitRoot(ContextType context, SceneModel sceneModel, LitContent<ContextType> litContentRoot)
+    public LitRoot(ContextType context, SceneModel sceneModel, @NotNull LitContent<ContextType> litContentRoot)
     {
         this.context = context;
         lightingResources = new LightingResources<>(context, sceneModel);
@@ -44,7 +45,7 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
         litContentRoot.initWithLightingResources(lightingResources);
     }
 
-    public final LightingResources<ContextType> getLightingResources()
+    public final @NotNull LightingResources<ContextType> getLightingResources()
     {
         return lightingResources;
     }
@@ -71,21 +72,21 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
     }
 
     @Override
-    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(FramebufferObject<ContextType> framebuffer, @NotNull CameraViewport cameraViewport)
     {
         setupForDraw(cameraViewport);
         litContentRoot.draw(framebuffer, cameraViewport);
     }
 
     @Override
-    public final void drawInSubdivisions(FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight,
-                                         CameraViewport cameraViewport)
+    public final void drawInSubdivisions(@NotNull FramebufferObject<ContextType> framebuffer, int subdivWidth, int subdivHeight,
+                                         @NotNull CameraViewport cameraViewport)
     {
         setupForDraw(cameraViewport);
         litContentRoot.drawInSubdivisions(framebuffer, subdivWidth, subdivHeight, cameraViewport);
     }
 
-    private void setupForDraw(CameraViewport cameraViewport)
+    private void setupForDraw(@NotNull CameraViewport cameraViewport)
     {
         lightingResources.refreshShadowMaps();
 
@@ -98,20 +99,11 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
     @Override
     public final void close()
     {
-        if (lightingResources != null)
-        {
-            lightingResources.close();
-            lightingResources = null;
-        }
-
-        if (litContentRoot != null)
-        {
-            litContentRoot.close();
-            litContentRoot = null;
-        }
+        lightingResources.close();
+        litContentRoot.close();
     }
 
-    public final RenderedComponent<ContextType> getLitContentRoot()
+    public final @NotNull RenderedComponent<ContextType> getLitContentRoot()
     {
         return litContentRoot;
     }
@@ -120,7 +112,7 @@ public class LitRoot<ContextType extends Context<ContextType>> implements Render
      * Must be called after initialize
      * @param shadowCaster
      */
-    public final void setShadowCaster(ReadonlyVertexBuffer<ContextType> shadowCaster)
+    public final void setShadowCaster(@NotNull ReadonlyVertexBuffer<ContextType> shadowCaster)
     {
         lightingResources.setShadowCastingPositionBuffer(shadowCaster);
     }

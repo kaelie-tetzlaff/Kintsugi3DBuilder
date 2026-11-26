@@ -15,6 +15,9 @@
 
 package kintsugi3d.fx.controllers.paged;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.function.Supplier;
 
 class DataSelectionPageBuilder<T, FinishType> extends SelectionPageBuilder<T, FinishType>
@@ -26,13 +29,13 @@ class DataSelectionPageBuilder<T, FinishType> extends SelectionPageBuilder<T, Fi
 
     @Override
     public final <ControllerType extends SelectionPageController<T>>
-    SelectionPageBuilder<T, FinishType> choiceSubSelect(String choiceLabel, String subprompt, Supplier<ControllerType> controllerConstructorOverride)
+    @NotNull SelectionPageBuilder<T, FinishType> choiceSubSelect(String choiceLabel, String subprompt, @Nullable Supplier<ControllerType> controllerConstructorOverride)
     {
         return choiceSubSelect(choiceLabel, subprompt, SimpleSelectionPage<T, ControllerType>::new, controllerConstructorOverride);
     }
 
     @Override
-    public final SelectionPageBuilder<T, FinishType> choiceSubSelect(String choiceLabel, String subprompt)
+    public final @NotNull SelectionPageBuilder<T, FinishType> choiceSubSelect(String choiceLabel, String subprompt)
     {
         return this.<SelectionPageController<T>>choiceSubSelect(choiceLabel, subprompt, null);
     }

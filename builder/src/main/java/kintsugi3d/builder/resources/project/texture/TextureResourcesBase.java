@@ -25,6 +25,8 @@ import kintsugi3d.builder.util.events.Observable;
 import kintsugi3d.gl.core.Blittable;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.TwoDimensional;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +35,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public abstract class TextureResourcesBase<ContextType extends Context<ContextType>> extends ReadonlyTextureResourcesBase<ContextType>
     implements TextureResources<ContextType>
@@ -42,7 +45,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     private Observable<MappedChange<String, BasisMaterialInfo>> basisObservable;
     private Observable<MappedChange<String, TextureInfo>> texturesObservable;
 
-    protected abstract MutableBasisResources<ContextType> getMutableBasisResources();
+    protected abstract @Nullable MutableBasisResources<ContextType> getMutableBasisResources();
 
     @Override
     public final ReadonlyBasisResources<ContextType> getBasisResources()
@@ -50,7 +53,12 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
         return getMutableBasisResources();
     }
 
-    protected abstract BasisWeightResources<ContextType> getMutableBasisWeightResources();
+    protected abstract @Nullable BasisWeightResources<ContextType> getMutableBasisWeightResources();
+
+    private @NotNull BasisWeightResources<ContextType> validateMutableBasisWeightResources()
+    {
+        return Objects.requireNonNull(getMutableBasisWeightResources(), "Weight maps do not exist.");
+    }
 
     @Override
     public final ReadonlyBasisWeightResources<ContextType> getBasisWeightResources()
@@ -59,14 +67,14 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     }
 
     @Override
-    public final void deleteBasisMaterial(String materialName)
+    public final void deleteBasisMaterial(@NotNull String materialName)
     {
         MutableBasisResources<ContextType> basisResources = getMutableBasisResources();
         if (basisResources != null)
         {
             BasisMaterialInfo removed = basisResources.deleteBasisMaterial(materialName);
 
-            if (basisObservable != null)
+            if (basisObservable != null && removed != null)
             {
                 basisObservable.notify(new MappedChange<>(Type.REMOVED, materialName, removed));
             }
@@ -74,7 +82,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     }
 
     @Override
-    public final void disableBasisMaterials(Collection<String> materialNames)
+    public final void disableBasisMaterials(@NotNull Collection<String> materialNames)
     {
         MutableBasisResources<ContextType> basisResources = getMutableBasisResources();
         if (basisResources != null)
@@ -89,7 +97,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     }
 
     @Override
-    public final void enableBasisMaterials(Collection<String> materialNames)
+    public final void enableBasisMaterials(@NotNull Collection<String> materialNames)
     {
         MutableBasisResources<ContextType> basisResources = getMutableBasisResources();
         if (basisResources != null)
@@ -104,7 +112,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     }
 
     @Override
-    public final void toggleBasisMaterial(String materialName)
+    public final void toggleBasisMaterial(@NotNull String materialName)
     {
         MutableBasisResources<ContextType> basisResources = getMutableBasisResources();
         if (basisResources != null)
@@ -119,7 +127,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     }
 
     @Override
-    public final void replaceTextureWithDefaultFile(TextureInfo key, File parentDirectory) throws IOException
+    public final void replaceTextureWithDefaultFile(@NotNull TextureInfo key, File parentDirectory) throws IOException
     {
         getTextures().get(key).load(new File(parentDirectory, String.format("%s.png", key.name)), true);
 
@@ -130,7 +138,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     }
 
     @Override
-    public final void replaceTextureWithSpecificFile(TextureInfo key, File newTextureFile) throws IOException
+    public final void replaceTextureWithSpecificFile(@NotNull TextureInfo key, File newTextureFile) throws IOException
     {
         getTextures().get(key).load(newTextureFile, true);
 
@@ -146,9 +154,9 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     }
 
     @Override
-    public final void replaceWeightMapWithDefaultFile(BasisMaterialInfo material, File parentDirectory) throws IOException
+    public final void replaceWeightMapWithDefaultFile(@NotNull BasisMaterialInfo material, File parentDirectory) throws IOException
     {
-        getMutableBasisWeightResources().replaceWeightMapWithDefaultFile(material.getName(), parentDirectory);
+        validateMutableBasisWeightResources().replaceWeightMapWithDefaultFile(material.getName(), parentDirectory);
 
         if (texturesObservable != null)
         {
@@ -158,9 +166,9 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     }
 
     @Override
-    public final void replaceWeightMapWithSpecificFile(BasisMaterialInfo material, File newTextureFile) throws IOException
+    public final void replaceWeightMapWithSpecificFile(@NotNull BasisMaterialInfo material, File newTextureFile) throws IOException
     {
-        getMutableBasisWeightResources().replaceWeightMapWithSpecificFile(material.getName(), newTextureFile);
+        validateMutableBasisWeightResources().replaceWeightMapWithSpecificFile(material.getName(), newTextureFile);
 
         // Save project so that the new weightmap is saved to disk and to ensure saved project consistency.
         Global.io().saveProject(() ->
@@ -190,7 +198,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
         {
             for (BasisMaterialInfo material : basisResources.getBasis().getMaterials())
             {
-                getMutableBasisWeightResources().replaceWeightMapWithDefaultFile(material.getName(), parentDirectory);
+                validateMutableBasisWeightResources().replaceWeightMapWithDefaultFile(material.getName(), parentDirectory);
             }
         }
 
@@ -217,8 +225,8 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     }
 
     private <SourceType extends TwoDimensional> void blitCroppedAndScaledSingle(
-        Blittable<SourceType> destTex, int destX, int destY, int destWidth, int destHeight,
-        TwoDimensional readSource, SourceType srcTex, int srcX, int srcY, int srcWidth, int srcHeight,
+        @Nullable Blittable<SourceType> destTex, int destX, int destY, int destWidth, int destHeight,
+        @NotNull TwoDimensional readSource, @Nullable SourceType srcTex, int srcX, int srcY, int srcWidth, int srcHeight,
         boolean linearFiltering)
     {
         if (destTex != null && srcTex != null)
@@ -266,7 +274,7 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
     @Override
     public final void blitCroppedAndScaled(
         int destX, int destY, int destWidth, int destHeight,
-        ReadonlyTextureResources<ContextType> readSource, int srcX, int srcY, int srcWidth, int srcHeight,
+        @NotNull ReadonlyTextureResources<ContextType> readSource, int srcX, int srcY, int srcWidth, int srcHeight,
         boolean linearFiltering)
     {
         // Blit each individual texture -- i.e. diffuse, normal, specular reflectivity, specular roughness
@@ -282,9 +290,10 @@ public abstract class TextureResourcesBase<ContextType extends Context<ContextTy
         // Blit weight maps, weight mask -- handled separately
         if (getBasisWeightResources() != null && readSource.getBasisWeightResources() != null)
         {
-            blitCroppedAndScaledSingle(getMutableBasisWeightResources().getWeightMaps(), destX, destY, destWidth, destHeight,
+            BasisWeightResources<ContextType> validatedBasisWeightResources = validateMutableBasisWeightResources();
+            blitCroppedAndScaledSingle(validatedBasisWeightResources.getWeightMaps(), destX, destY, destWidth, destHeight,
                 readSource, readSource.getBasisWeightResources().getWeightMaps(), srcX, srcY, srcWidth, srcHeight, linearFiltering);
-            blitCroppedAndScaledSingle(getMutableBasisWeightResources().getWeightMask(), destX, destY, destWidth, destHeight,
+            blitCroppedAndScaledSingle(validatedBasisWeightResources.getWeightMask(), destX, destY, destWidth, destHeight,
                 readSource, readSource.getBasisWeightResources().getWeightMask(), srcX, srcY, srcWidth, srcHeight, linearFiltering);
         }
 

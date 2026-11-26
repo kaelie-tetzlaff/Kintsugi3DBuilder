@@ -23,6 +23,7 @@ import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +46,7 @@ final class MultiviewRenderRequest extends RenderRequestBase
         }
 
         @Override
-        public final ImageBasedGraphicsRequest create()
+        public final @NotNull ImageBasedGraphicsRequest create()
         {
             return new MultiviewRenderRequest(getWidth(), getHeight(), getShaderSetupCallback(),
                 getVertexShader(), getFragmentShader(), getOutputDirectory());
@@ -54,7 +55,7 @@ final class MultiviewRenderRequest extends RenderRequestBase
 
     @Override
     public <ContextType extends Context<ContextType>> void executeRequest(
-        ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
+        @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @NotNull ProgressMonitor monitor)
             throws IOException, UserCancellationException
     {
         ReadonlyGraphicsResourcesImageSpace<ContextType> resources = renderable.getResources();
@@ -69,10 +70,7 @@ final class MultiviewRenderRequest extends RenderRequestBase
             int progressCount = 0;
             for (View view : renderable.getViewSet().getEnabledViews())
             {
-                if (monitor != null)
-                {
-                    monitor.allowUserCancellation();
-                }
+                monitor.allowUserCancellation();
 
                 program.setUniform("viewIndex", view.getGPUViewIndex());
                 program.setUniform("model_view", view.getCameraPose());
@@ -87,12 +85,9 @@ final class MultiviewRenderRequest extends RenderRequestBase
                 getOutputDirectory().mkdirs();
                 framebuffer.getTextureReaderForColorAttachment(0).saveToFile("PNG", exportFile);
 
-                if (monitor != null)
-                {
-                    monitor.setProgress((double) progressCount / (double) resources.getViewSet().getEnabledViewCount(),
-                        MessageFormat.format("{0} ({1}/{2})", view,
-                            progressCount + 1, resources.getViewSet().getEnabledViewCount()));
-                }
+                monitor.setProgress((double) progressCount / (double) resources.getViewSet().getEnabledViewCount(),
+                    MessageFormat.format("{0} ({1}/{2})", view,
+                        progressCount + 1, resources.getViewSet().getEnabledViewCount()));
 
                 progressCount++;
             }

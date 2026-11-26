@@ -18,10 +18,7 @@ package kintsugi3d.builder.rendering;
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.fit.settings.ExportSettings;
-import kintsugi3d.builder.io.IOHandler;
-import kintsugi3d.builder.io.ReadonlyLoadOptionsModel;
-import kintsugi3d.builder.io.ViewSetLoadOptions;
-import kintsugi3d.builder.io.ViewSetWriterToVSET;
+import kintsugi3d.builder.io.*;
 import kintsugi3d.builder.io.events.ProjectLoadedEvent;
 import kintsugi3d.builder.io.events.ProjectLoadedListener;
 import kintsugi3d.builder.io.events.ProjectProcessedEvent;
@@ -33,6 +30,7 @@ import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace;
 import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace.Builder;
 import kintsugi3d.builder.resources.project.MeshImportException;
 import kintsugi3d.builder.resources.project.MissingImagesException;
+import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.builder.state.SelectableViewListModel;
 import kintsugi3d.builder.state.scene.ReadonlyCameraModel;
 import kintsugi3d.builder.state.scene.ReadonlyLightingEnvironmentModel;
@@ -51,6 +49,7 @@ import kintsugi3d.gl.vecmath.IntVector2;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.window.FramebufferCanvas;
 import kintsugi3d.util.EncodableColorImage;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,10 +77,10 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     @SuppressWarnings("ThisEscapedInObjectConstruction")
     private final SceneViewport sceneViewport = new ManagedSceneViewport(this);
 
-    private volatile ViewSet loadedViewSet;
-    private volatile VertexGeometry loadedGeometry;
-    private volatile ImageBasedRenderingEngine<ContextType> renderableInstance;
-    private ProgressMonitor progressMonitor;
+    private volatile @Nullable ViewSet loadedViewSet;
+    private volatile @Nullable VertexGeometry loadedGeometry;
+    private volatile @Nullable ImageBasedRenderingEngine<ContextType> renderableInstance;
+    private @NotNull ProgressMonitor progressMonitor = new DefaultProgressMonitor();
 
     private ReadonlyObjectPoseModel objectModel;
     private ReadonlyViewpointModel cameraModel;
@@ -120,13 +119,13 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public final EventListeners<ProjectLoadedListener> projectLoadedListeners()
+    public final @NotNull EventListeners<ProjectLoadedListener> projectLoadedListeners()
     {
         return projectLoaded;
     }
 
     @Override
-    public final EventListeners<ProjectProcessedListener> projectProcessedListeners()
+    public final @NotNull EventListeners<ProjectProcessedListener> projectProcessedListeners()
     {
         return projectProcessed;
     }
@@ -138,18 +137,18 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public final ViewSet getLoadedViewSet()
+    public final @Nullable ViewSet getLoadedViewSet()
     {
         return loadedViewSet;
     }
 
     @Override
-    public final VertexGeometry getLoadedGeometry()
+    public final @Nullable VertexGeometry getLoadedGeometry()
     {
         return loadedGeometry;
     }
 
-    public final SceneViewport getSceneViewport()
+    public final @NotNull SceneViewport getSceneViewport()
     {
         return sceneViewport;
     }
@@ -175,20 +174,23 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
      * @param builder
      * @throws UserCancellationException
      */
-    private void loadInstance(File newProjectFile, String internalName, Builder<ContextType> builder)
+    private void loadInstance(@Nullable File newProjectFile, String internalName, @NotNull Builder<ContextType> builder)
         throws UserCancellationException
     {
-        loadedViewSet = builder.getViewSet();
-        loadedGeometry = builder.getGeometry();
+        ViewSet viewSet = Objects.requireNonNull(builder.getViewSet(), "Builder must have a view set assigned.");
+        loadedViewSet = viewSet;
 
-        int gpuBufferSize = loadedViewSet.getGPUBufferSize();
-        if (gpuBufferSize > 1024 && progressMonitor != null)
+        VertexGeometry geometry = Objects.requireNonNull(builder.getGeometry(), "Builder must have geometry assigned.");
+        loadedGeometry = geometry;
+
+        int gpuBufferSize = viewSet.getGPUBufferSize();
+        if (gpuBufferSize > 1024)
         {
             IOException e = new IOException(String.format("Dataset has %d cameras, which exceeds 1024 and may fail on many graphics cards.", gpuBufferSize));
             progressMonitor.warn(e);
         }
-        boolean hasUnsupportedCorrections = loadedViewSet.hasUnsupportedCorrections();
-        if (hasUnsupportedCorrections && progressMonitor != null)
+        boolean hasUnsupportedCorrections = viewSet.hasUnsupportedCorrections();
+        if (hasUnsupportedCorrections)
         {
             IOException e = new IOException("This project uses 'Fit additional corrections' which are not supported.");
             progressMonitor.warn(e);
@@ -198,7 +200,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         // Grab all views (not just enabled) for light calibration
         // TODO this is for the light calibration sidebar and should probably be migrated to a newer system
         // TODO   for managing the list of photos (like the photos tab)
-        Global.state().getViewListModel().setViewList(loadedViewSet.getViewsSorted());
+        Global.state().getViewListModel().setViewList(viewSet.getViewsSorted());
 
         if (newProjectFile != null)
         {
@@ -219,11 +221,8 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         // Many directory paths have fallbacks that aren't in a supporting files directory.
         // In theory, this shouldn't ever happen since the UI should ideally prevent this.
 
-        if (progressMonitor != null)
-        {
-            progressMonitor.setStageCount(2);
-            progressMonitor.setStage(0, "Generating preview-resolution images...");
-        }
+        progressMonitor.setStageCount(2);
+        progressMonitor.setStage(0, "Generating preview-resolution images...");
 
         try
         {
@@ -243,7 +242,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         newInstanceSceneModel.setCameraModel(cameraModel);
         initializeSceneModel(newInstanceSceneModel);
 
-        newInstance.setProgressMonitor(new BackendProgressMonitor(newInstance, progressMonitor));
+        newInstance.setLoadingMonitor(new BackendProgressMonitor(newInstance, progressMonitor));
 
         // Use the runLater system so that the rendering loop knows that an operation that might take longer is queued.
         Rendering.runLater(() ->
@@ -254,9 +253,10 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                 newInstance.initialize();
 
                 // Check for an old instance just to be safe
-                if (renderableInstance != null)
+                ImageBasedRenderingEngine<ContextType> oldInstance = renderableInstance;
+                if (oldInstance != null)
                 {
-                    renderableInstance.close();
+                    oldInstance.close();
                 }
 
                 // Use the new instance as the active instance if initialization was successful
@@ -275,9 +275,10 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                 }
 
                 // Notify listeners that project has loaded
-                projectLoaded.notify(new ProjectLoadedEvent(loadedGeometry.getBoundingBoxSize()));
+                projectLoaded.notify(new ProjectLoadedEvent(geometry.getBoundingBoxSize()));
 
-                GraphicsResourcesImageSpace<ContextType> resources = newInstance.getResources();
+                GraphicsResourcesImageSpace<ContextType> resources =
+                    Objects.requireNonNull(newInstance.getResources(), "Builder did not yield a valid renderable instance.");
                 if (resources.hasProcessedWeightMaps())
                 {
                     // Project has been processed previously; notify listeners
@@ -321,7 +322,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
      * Does not initialize camera model.
      * @param sceneModel
      */
-    private void initializeSceneModel(SceneModel sceneModel)
+    private void initializeSceneModel(@NotNull SceneModel sceneModel)
     {
         sceneModel.setObjectModel(objectModel);
         sceneModel.setLightingModel(lightingModel);
@@ -331,14 +332,9 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
 
     @Override
     public final void loadFromVSETFile(
-        String internalName, File vsetFile, File supportingFilesDirectory, ReadonlyLoadOptionsModel loadOptions)
+        String internalName, @NotNull File vsetFile, File supportingFilesDirectory, ReadonlyLoadOptionsModel loadOptions)
         throws UserCancellationException, MeshImportException, IOException
     {
-        if (progressMonitor.isConflictingProcess())
-        {
-            return;
-        }
-
         progressMonitor.start();
         progressMonitor.setProcessName("Load from File");
 
@@ -373,15 +369,9 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public final void loadFromMetashapeModel(File newProjectFile, MetashapeModel model, ReadonlyLoadOptionsModel loadOptionsModel)
+    public final void loadFromMetashapeModel(File newProjectFile, @NotNull MetashapeModel model, ReadonlyLoadOptionsModel loadOptionsModel)
         throws UserCancellationException, MissingImagesException, MeshImportException, IOException, XMLStreamException
     {
-
-        if (progressMonitor.isConflictingProcess())
-        {
-            return;
-        }
-
         progressMonitor.start();
         progressMonitor.setProcessName("Load from Agisoft Project");
 
@@ -422,14 +412,10 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public final void loadFromLooseFiles(File newProjectFile, String internalName, File xmlFile,
-                                         ViewSetLoadOptions viewSetLoadOptions, ReadonlyLoadOptionsModel imageLoadOptions)
+    public final void loadFromLooseFiles(File newProjectFile, String internalName, @NotNull File xmlFile,
+                                         @NotNull ViewSetLoadOptions viewSetLoadOptions, ReadonlyLoadOptionsModel imageLoadOptions)
         throws Exception
     {
-        if (progressMonitor.isConflictingProcess())
-        {
-            return;
-        }
         progressMonitor.start();
         progressMonitor.setProcessName("Load from loose files");
 
@@ -461,22 +447,23 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
     }
 
-    public final RefreshableCollection<RenderRefreshable<ContextType, ImageBasedRenderingEngine<ContextType>>> getRenderViews()
+    public final @NotNull RefreshableCollection<RenderRefreshable<ContextType, ImageBasedRenderingEngine<ContextType>>> getRenderViews()
     {
         return renderViews;
     }
 
     @Override
-    public final void addRenderView(ShaderInfo shader, FramebufferSize viewSize,
+    public final void addRenderView(@NotNull ShaderInfo shader, @NotNull FramebufferSize viewSize,
                                     int safeLeftPadding, int safeTopPadding, int safeRightPadding, int safeBottomPadding,
-                                    Consumer<FramebufferCanvas<?>> framebufferCallback)
+                                    @NotNull Consumer<FramebufferCanvas<?>> framebufferCallback)
     {
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
             // Create a new rendering engine instance that references the same resources as the main rendering engine.
             // This can run on any thread, but initialization needs to run on the graphics thread.
             ImageBasedRenderingEngine<ContextType> renderView =
-                new ImageBasedRenderingEngine<>(renderableInstance.getInternalName(), context, renderableInstance.getResources());
+                new ImageBasedRenderingEngine<>(currentInstance.getInternalName(), context, currentInstance.getResources());
 
             RenderViewCameraModel renderViewCameraModel = new RenderViewCameraModel(cameraModel);
             renderViewCameraModel.setPadding(safeLeftPadding, safeTopPadding, safeRightPadding, safeBottomPadding);
@@ -541,22 +528,23 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
     }
 
-    private void requestFragmentShader(ShaderInfo shaderInfo)
+    private void requestFragmentShader(@NotNull ShaderInfo shaderInfo)
     {
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.getDynamicResourceManager().requestFragmentShader(shaderInfo.getFile(), shaderInfo::getDefines);
+            currentInstance.getDynamicResourceManager().requestFragmentShader(shaderInfo.getFile(), shaderInfo::getDefines);
         }
     }
 
     @Override
-    public final ImageBasedRenderable<ContextType> getMainRenderable()
+    public final @Nullable ImageBasedRenderable<ContextType> getMainRenderable()
     {
         return renderableInstance;
     }
 
     @Override
-    public final void setProgressMonitor(ProgressMonitor progressMonitor)
+    public final void setProgressMonitor(@NotNull ProgressMonitor progressMonitor)
     {
         this.progressMonitor = progressMonitor;
     }
@@ -564,40 +552,44 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     public final void setCameraViewListModel(SelectableViewListModel viewListModel)
     {
         this.viewListModel = viewListModel;
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.getSceneModel().setCameraViewListModel(viewListModel);
+            currentInstance.getSceneModel().setCameraViewListModel(viewListModel);
         }
     }
 
     public final void setObjectModel(ReadonlyObjectPoseModel objectModel)
     {
         this.objectModel = objectModel;
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.getSceneModel().setObjectModel(objectModel);
+            currentInstance.getSceneModel().setObjectModel(objectModel);
         }
     }
 
     public final void setCameraModel(ReadonlyViewpointModel cameraModel)
     {
         this.cameraModel = cameraModel;
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.getSceneModel().setCameraModel(cameraModel);
+            currentInstance.getSceneModel().setCameraModel(cameraModel);
         }
     }
 
     public final void setLightingModel(ReadonlyLightingEnvironmentModel lightingModel)
     {
         this.lightingModel = lightingModel;
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.getSceneModel().setLightingModel(lightingModel);
+            currentInstance.getSceneModel().setLightingModel(lightingModel);
         }
     }
 
-    public final void setUserShaderModel(ReadonlyActiveShaderModel userShaderModel)
+    public final void setUserShaderModel(@NotNull ReadonlyActiveShaderModel userShaderModel)
     {
         userShaderModel.registerHandler(this::requestFragmentShader);
     }
@@ -605,18 +597,20 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     public final void setSettingsModel(ReadonlyGeneralSettingsModel settingsModel)
     {
         this.settingsModel = settingsModel;
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.getSceneModel().setSettingsModel(settingsModel);
+            currentInstance.getSceneModel().setSettingsModel(settingsModel);
         }
     }
 
     @Override
     public final @Nullable EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException
     {
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            return renderableInstance.getDynamicResourceManager().loadEnvironmentMap(environmentMapFile);
+            return currentInstance.getDynamicResourceManager().loadEnvironmentMap(environmentMapFile);
         }
         else
         {
@@ -627,23 +621,24 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     @Override
     public final void loadBackplate(File backplateFile) throws FileNotFoundException
     {
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.getDynamicResourceManager().loadBackplate(backplateFile);
+            currentInstance.getDynamicResourceManager().loadBackplate(backplateFile);
         }
     }
 
     @Override
-    public final void saveToVSETFile(File vsetFile) throws IOException
+    public final void saveToVSETFile(@NotNull File vsetFile) throws IOException
     {
-        ViewSetWriterToVSET.getInstance().writeToFile(loadedViewSet, vsetFile);
+        ViewSetWriterToVSET.getInstance().writeToFile(Objects.requireNonNull(loadedViewSet, "No view set is currently loaded."), vsetFile);
     }
 
     @Override
-    public final void saveAllMaterialFiles(File materialDirectory, Runnable finishedCallback)
+    public final void saveAllMaterialFiles(@NotNull File materialDirectory, @Nullable Runnable finishedCallback)
     {
-        if (renderableInstance == null || renderableInstance.getResources() == null
-            || renderableInstance.getResources().getTextureResources() == null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance == null || currentInstance.getResourcesOrNull() == null)
         {
             if (finishedCallback != null)
             {
@@ -652,34 +647,49 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         }
         else
         {
-            Rendering.runLater(() ->
+            TextureResources<ContextType> textureResources = currentInstance.getResources().getTextureResources();
+            if (textureResources == null)
             {
-                renderableInstance.getResources().getTextureResources().saveAll(materialDirectory);
-
                 if (finishedCallback != null)
                 {
                     finishedCallback.run();
                 }
-            });
+            }
+            else
+            {
+                Rendering.runLater(() ->
+                {
+                    textureResources.saveAll(materialDirectory);
+
+                    if (finishedCallback != null)
+                    {
+                        finishedCallback.run();
+                    }
+                });
+            }
         }
     }
 
     @Override
-    public final void saveGLTF(File outputDirectory, ExportSettings settings)
+    public final void saveGLTF(
+        @NotNull File outputDirectory, @NotNull ExportSettings settings,
+        @SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") @NotNull ProgressMonitor saveMonitor)
     {
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.saveGLTF(outputDirectory, settings);
+            currentInstance.saveGLTF(outputDirectory, settings, saveMonitor);
         }
     }
 
     @Override
-    public final void unload(Runnable onUnloadComplete)
+    public final void unload(@NotNull Runnable onUnloadComplete)
     {
         // Use the runLater system so that the rendering loop knows that an operation that might take longer is queued.
         Rendering.runLater(() ->
         {
-            if (renderableInstance != null)
+            ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+            if (currentInstance != null)
             {
                 // Empty sidebar; will be repopulated when another project is opened.
                 // TODO rework this; might be a race condition and also isn't the best dependency
@@ -689,7 +699,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                 renderViewMap.clear();
                 renderViews.clear();
 
-                renderableInstance.close();
+                currentInstance.close();
                 renderableInstance = null;
                 loadedViewSet = null;
                 loadedGeometry = null;
@@ -702,45 +712,41 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     @Override
     public final void initialize() throws InitializationException
     {
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.initialize();
+            currentInstance.initialize();
         }
     }
 
     @Override
     public final void update()
     {
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.update();
+            currentInstance.update();
         }
     }
 
     @Override
     public final void draw(Framebuffer<ContextType> framebuffer)
     {
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.draw(framebuffer);
+            currentInstance.draw(framebuffer);
         }
     }
 
     @Override
     public final void close()
     {
-        if (renderableInstance != null)
+        ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
+        if (currentInstance != null)
         {
-            renderableInstance.close();
+            currentInstance.close();
         }
-    }
-
-    /**
-     * Work around for use in testing only
-     */
-    public final void setLoadedViewSet(ViewSet viewSet)
-    {
-        loadedViewSet = viewSet;
     }
 
     private static final class RenderViewCameraModel implements ReadonlyCameraModel

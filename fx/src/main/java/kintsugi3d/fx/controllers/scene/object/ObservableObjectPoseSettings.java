@@ -18,6 +18,7 @@ package kintsugi3d.fx.controllers.scene.object;
 import javafx.beans.property.*;
 import kintsugi3d.builder.state.project.SerializableObjectPoseSettings;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.NotNull;
 
 public class ObservableObjectPoseSettings extends SerializableObjectPoseSettings
 {
@@ -54,7 +55,7 @@ public class ObservableObjectPoseSettings extends SerializableObjectPoseSettings
         }
     }
 
-    public final ObservableObjectPoseSettings duplicate()
+    public final @NotNull ObservableObjectPoseSettings duplicate()
     {
         ObservableObjectPoseSettings copy = new ObservableObjectPoseSettings();
 
@@ -79,7 +80,7 @@ public class ObservableObjectPoseSettings extends SerializableObjectPoseSettings
         return centerX.get();
     }
 
-    public final DoubleProperty centerXProperty()
+    public final @NotNull DoubleProperty centerXProperty()
     {
         return centerX;
     }
@@ -96,7 +97,7 @@ public class ObservableObjectPoseSettings extends SerializableObjectPoseSettings
         return centerY.get();
     }
 
-    public final DoubleProperty centerYProperty()
+    public final @NotNull DoubleProperty centerYProperty()
     {
         return centerY;
     }
@@ -113,7 +114,7 @@ public class ObservableObjectPoseSettings extends SerializableObjectPoseSettings
         return centerZ.get();
     }
 
-    public final DoubleProperty centerZProperty()
+    public final @NotNull DoubleProperty centerZProperty()
     {
         return centerZ;
     }
@@ -130,7 +131,7 @@ public class ObservableObjectPoseSettings extends SerializableObjectPoseSettings
         return rotateY.get();
     }
 
-    public final DoubleProperty rotateYProperty()
+    public final @NotNull DoubleProperty rotateYProperty()
     {
         return rotateY;
     }
@@ -147,7 +148,7 @@ public class ObservableObjectPoseSettings extends SerializableObjectPoseSettings
         return rotateX.get();
     }
 
-    public final DoubleProperty rotateXProperty()
+    public final @NotNull DoubleProperty rotateXProperty()
     {
         return rotateX;
     }
@@ -164,7 +165,7 @@ public class ObservableObjectPoseSettings extends SerializableObjectPoseSettings
         return rotateZ.get();
     }
 
-    public final DoubleProperty rotateZProperty()
+    public final @NotNull DoubleProperty rotateZProperty()
     {
         return rotateZ;
     }
@@ -181,7 +182,7 @@ public class ObservableObjectPoseSettings extends SerializableObjectPoseSettings
         return locked.get();
     }
 
-    public final BooleanProperty lockedProperty()
+    public final @NotNull BooleanProperty lockedProperty()
     {
         return locked;
     }
@@ -192,7 +193,7 @@ public class ObservableObjectPoseSettings extends SerializableObjectPoseSettings
         this.locked.set(locked);
     }
 
-    public final DoubleProperty scaleProperty(){return scale;}
+    public final @NotNull DoubleProperty scaleProperty(){return scale;}
 
     @Override
     public final double getScale(){return StrictMath.pow(10, scale.get());}
@@ -207,7 +208,7 @@ public class ObservableObjectPoseSettings extends SerializableObjectPoseSettings
         return name.get();
     }
 
-    public final StringProperty nameProperty()
+    public final @NotNull StringProperty nameProperty()
     {
         return name;
     }

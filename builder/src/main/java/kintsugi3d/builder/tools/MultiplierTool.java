@@ -20,6 +20,7 @@ import kintsugi3d.builder.state.scene.ManipulableLightingEnvironmentModel;
 import kintsugi3d.builder.state.scene.ManipulableObjectPoseModel;
 import kintsugi3d.builder.state.scene.ManipulableViewpointModel;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
@@ -56,7 +57,7 @@ public final class MultiplierTool implements KeyPressTool
 
         private final float factor;
 
-        Builder(DoubleSupplier getter, DoubleConsumer setter, Type type)
+        Builder(DoubleSupplier getter, DoubleConsumer setter, @NotNull Type type)
         {
             this.getter = getter;
             this.setter = setter;
@@ -64,43 +65,43 @@ public final class MultiplierTool implements KeyPressTool
         }
 
         @Override
-        public final ToolBuilder<MultiplierTool> setCameraModel(ManipulableViewpointModel cameraModel)
+        public final @NotNull ToolBuilder<MultiplierTool> setCameraModel(ManipulableViewpointModel cameraModel)
         {
             return this;
         }
 
         @Override
-        public final ToolBuilder<MultiplierTool> setLightingEnvironmentModel(ManipulableLightingEnvironmentModel lightingModel)
+        public final @NotNull ToolBuilder<MultiplierTool> setLightingEnvironmentModel(ManipulableLightingEnvironmentModel lightingModel)
         {
             return this;
         }
 
         @Override
-        public final ToolBuilder<MultiplierTool> setObjectModel(ManipulableObjectPoseModel objectModel)
+        public final @NotNull ToolBuilder<MultiplierTool> setObjectModel(ManipulableObjectPoseModel objectModel)
         {
             return this;
         }
 
         @Override
-        public final ToolBuilder<MultiplierTool> setSceneViewport(SceneViewport sceneViewport)
+        public final @NotNull ToolBuilder<MultiplierTool> setSceneViewport(SceneViewport sceneViewport)
         {
             return this;
         }
 
         @Override
-        public final ToolBuilder<MultiplierTool> setSettingsModel(GeneralSettingsModel settingsModel)
+        public final @NotNull ToolBuilder<MultiplierTool> setSettingsModel(GeneralSettingsModel settingsModel)
         {
             return this;
         }
 
         @Override
-        public final MultiplierTool create()
+        public final @NotNull MultiplierTool create()
         {
             return new MultiplierTool(getter, setter, factor);
         }
     }
 
-    static ToolBuilder<MultiplierTool> getBuilder(DoubleSupplier getter, DoubleConsumer setter, Type type)
+    static @NotNull ToolBuilder<MultiplierTool> getBuilder(DoubleSupplier getter, DoubleConsumer setter, @NotNull Type type)
     {
         return new Builder(getter, setter, type);
     }

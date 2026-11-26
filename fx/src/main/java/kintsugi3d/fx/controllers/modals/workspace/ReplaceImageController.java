@@ -30,6 +30,7 @@ import kintsugi3d.builder.core.texture.ImageReplacer;
 import kintsugi3d.builder.rendering.Rendering;
 import kintsugi3d.fx.controllers.paged.DataReceiverPageControllerBase;
 import kintsugi3d.fx.core.ExceptionHandling;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,7 +59,7 @@ public class ReplaceImageController extends DataReceiverPageControllerBase<Image
 
         replacementFileChooser.setTitle("Replace with...");
         replacementFileChooser.getExtensionFilters().add(new ExtensionFilter("Texture image", "*.png"));
-        setCurrentDirectoryFile(Global.io().getLoadedViewSetOrThrow().getSupportingFilesDirectory());
+        setCurrentDirectoryFile(Global.io().getLoadedViewSet().getSupportingFilesDirectory());
 
         setCanConfirm(true);
         setCanAdvance(true);
@@ -108,7 +109,7 @@ public class ReplaceImageController extends DataReceiverPageControllerBase<Image
         }
     }
 
-    private void setCurrentDirectoryFile(File currentDirectoryFile)
+    private void setCurrentDirectoryFile(@Nullable File currentDirectoryFile)
     {
         // Sets FileChooser defaults
         if (currentDirectoryFile != null)

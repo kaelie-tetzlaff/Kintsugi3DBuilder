@@ -25,6 +25,8 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,14 +36,14 @@ public class ZoomSafeImageView
 
     private static final int MAX_CROP_SCREEN_PIXELS = Short.MAX_VALUE;
 
-    private final ImageView imageView;
+    private final @NotNull ImageView imageView;
 
     private final ObjectProperty<Image> fullImage = new SimpleObjectProperty<>();
     private final ObjectProperty<Rectangle2D> logicalViewport = new SimpleObjectProperty<>();
 
-    private Rectangle2D cropBounds;
+    private @Nullable Rectangle2D cropBounds;
 
-    public ZoomSafeImageView(ImageView imageView)
+    public ZoomSafeImageView(@NotNull ImageView imageView)
     {
         this.imageView = imageView;
 
@@ -51,7 +53,7 @@ public class ZoomSafeImageView
         logicalViewport.addListener(
             (observable, oldValue, newValue) ->
         {
-            if (!cropBounds.contains(newValue)
+            if (cropBounds == null || !cropBounds.contains(newValue)
                 || getEffectiveRenderWidth() > MAX_CROP_SCREEN_PIXELS
                 || getEffectiveRenderHeight() > MAX_CROP_SCREEN_PIXELS)
             {
@@ -179,7 +181,7 @@ public class ZoomSafeImageView
         }
     }
 
-    public final Node getImageViewNode()
+    public final @NotNull Node getImageViewNode()
     {
         return imageView;
     }
@@ -189,12 +191,12 @@ public class ZoomSafeImageView
         return fullImage.get();
     }
 
-    public final ObjectProperty<Image> fullImageProperty()
+    public final @NotNull ObjectProperty<Image> fullImageProperty()
     {
         return fullImage;
     }
 
-    public final void setFullImage(Image fullImage)
+    public final void setFullImage(@Nullable Image fullImage)
     {
         this.fullImage.set(fullImage);
     }
@@ -204,12 +206,12 @@ public class ZoomSafeImageView
         return logicalViewport.get();
     }
 
-    public final ObjectProperty<Rectangle2D> logicalViewportProperty()
+    public final @NotNull ObjectProperty<Rectangle2D> logicalViewportProperty()
     {
         return logicalViewport;
     }
 
-    public final void setLogicalViewport(Rectangle2D logicalViewport)
+    public final void setLogicalViewport(@Nullable Rectangle2D logicalViewport)
     {
         this.logicalViewport.set(logicalViewport);
     }

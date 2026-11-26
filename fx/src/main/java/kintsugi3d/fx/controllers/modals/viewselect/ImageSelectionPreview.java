@@ -18,6 +18,7 @@ package kintsugi3d.fx.controllers.modals.viewselect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
+import org.jetbrains.annotations.Nullable;
 
 class ImageSelectionPreview
 {
@@ -47,7 +48,7 @@ class ImageSelectionPreview
         imageViewText.setText(txt);
     }
 
-    public final Image retrieveFromCache(String imageName)
+    public final @Nullable Image retrieveFromCache(String imageName)
     {
         return cache.retrieveFromCache(imageName);
     }

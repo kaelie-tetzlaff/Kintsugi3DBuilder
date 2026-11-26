@@ -17,6 +17,7 @@ package kintsugi3d.gl.glfw;
 
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferSize;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLCapabilities;
@@ -52,7 +53,7 @@ public abstract class WindowContextBase<ContextType extends WindowContextBase<Co
         glfwSwapBuffers(handle);
     }
 
-    public final FramebufferSize getDefaultFramebufferSize()
+    public final @NotNull FramebufferSize getDefaultFramebufferSize()
     {
         IntBuffer widthBuffer = BufferUtils.createByteBuffer(4).asIntBuffer();
         IntBuffer heightBuffer = BufferUtils.createByteBuffer(4).asIntBuffer();

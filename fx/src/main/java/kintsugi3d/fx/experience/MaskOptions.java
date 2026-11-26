@@ -16,13 +16,14 @@
 package kintsugi3d.fx.experience;
 
 import kintsugi3d.fx.controllers.modals.workflow.MaskOptionsController;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
 public class MaskOptions extends ExperienceBase
 {
     @Override
-    public final String getName()
+    public final @NotNull String getName()
     {
         return "Mask / Feather Options";
     }

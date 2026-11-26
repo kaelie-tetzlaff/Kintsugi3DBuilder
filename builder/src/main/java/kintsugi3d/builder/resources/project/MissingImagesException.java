@@ -15,6 +15,9 @@
 
 package kintsugi3d.builder.resources.project;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
@@ -22,29 +25,27 @@ import java.util.List;
 public class MissingImagesException extends Exception
 {
     private static final long serialVersionUID = 4726434475341975631L;
-    private final Collection<File> missingImgs;
-    private final File imgDirectory;
+    private final @NotNull Collection<File> missingImgs;
+    private final @Nullable File imgDirectory;
 
-    public MissingImagesException(String message, Collection<File> missingImgs)
+    public MissingImagesException(String message, @NotNull Collection<File> missingImgs)
     {
-        super(message);
-        this.missingImgs = List.copyOf(missingImgs);
-        imgDirectory = null;
+        this(message, missingImgs, null);
     }
 
-    public MissingImagesException(String message, Collection<File> missingImgs, File imgDirectory)
+    public MissingImagesException(String message, @NotNull Collection<File> missingImgs, @Nullable File imgDirectory)
     {
         super(message);
         this.missingImgs = List.copyOf(missingImgs);
         this.imgDirectory = imgDirectory;
     }
 
-    public final Collection<File> getMissingImgs()
+    public final @NotNull Collection<File> getMissingImgs()
     {
         return missingImgs;
     }
 
-    public final File getImgDirectory()
+    public final @Nullable File getImgDirectory()
     {
         return imgDirectory;
     }

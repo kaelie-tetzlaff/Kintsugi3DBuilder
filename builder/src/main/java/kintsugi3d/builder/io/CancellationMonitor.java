@@ -17,6 +17,7 @@ package kintsugi3d.builder.io;
 
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,7 +37,7 @@ final class CancellationMonitor implements ProgressMonitor
      * @param cancelCallback Guaranteed to run as soon as there are no running tasks
      *                       (even if no tasks are currently running when this method is called).
      */
-    public void requestCancellation(Runnable cancelCallback)
+    public void requestCancellation(@NotNull Runnable cancelCallback)
     {
         synchronized (lock)
         {
@@ -147,8 +148,7 @@ final class CancellationMonitor implements ProgressMonitor
     }
 
     @Override
-    public boolean isConflictingProcess()
+    public void blocked()
     {
-        return false;
     }
 }

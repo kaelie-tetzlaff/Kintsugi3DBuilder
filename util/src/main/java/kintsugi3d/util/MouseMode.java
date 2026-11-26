@@ -16,6 +16,7 @@
 package kintsugi3d.util;
 
 import kintsugi3d.gl.window.ModifierKeys;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -42,7 +43,7 @@ public class MouseMode
         return (MAX_BUTTON_INDEX << 4) | 0xF;
     }
 
-    public static MouseMode fromOrdinal(int ordinal)
+    public static @NotNull MouseMode fromOrdinal(int ordinal)
     {
         return new MouseMode(ordinal >>> 4,
             new ModifierKeys()
@@ -103,7 +104,7 @@ public class MouseMode
     }
 
     @Override
-    public final String toString()
+    public final @NotNull String toString()
     {
         StringBuilder builder = new StringBuilder(25);
 

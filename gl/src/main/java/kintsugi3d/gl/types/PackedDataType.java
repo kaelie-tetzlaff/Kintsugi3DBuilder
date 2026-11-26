@@ -16,6 +16,7 @@
 package kintsugi3d.gl.types;
 
 import kintsugi3d.gl.nativebuffer.NativeDataType;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 import java.util.Iterator;
@@ -92,7 +93,7 @@ public enum PackedDataType implements AbstractDataType<Iterable<? extends Number
         return nativeDataType.getSizeInBytes();
     }
 
-    private int getPackedValue(Iterable<? extends Number> components)
+    private int getPackedValue(@NotNull Iterable<? extends Number> components)
     {
         Iterator<? extends Number> componentIterator = components.iterator();
         int packedValue = ((1 << redBits) - 1) & componentIterator.next().intValue();
@@ -114,7 +115,7 @@ public enum PackedDataType implements AbstractDataType<Iterable<? extends Number
     }
 
     @Override
-    public Consumer<Iterable<? extends Number>> wrapByteBuffer(ByteBuffer baseBuffer)
+    public @NotNull Consumer<Iterable<? extends Number>> wrapByteBuffer(@NotNull ByteBuffer baseBuffer)
     {
         Consumer<Number> packedConsumer = AbstractDataTypeFactory.wrapByteBuffer(baseBuffer, nativeDataType);
         return components -> packedConsumer.accept(getPackedValue(components));
@@ -123,7 +124,7 @@ public enum PackedDataType implements AbstractDataType<Iterable<? extends Number
 
 
     @Override
-    public BiConsumer<Integer, Iterable<? extends Number>> wrapIndexedByteBuffer(ByteBuffer baseBuffer)
+    public @NotNull BiConsumer<Integer, Iterable<? extends Number>> wrapIndexedByteBuffer(@NotNull ByteBuffer baseBuffer)
     {
         BiConsumer<Integer, Number> packedConsumer = AbstractDataTypeFactory.wrapIndexedByteBuffer(baseBuffer, nativeDataType);
         return (index, components) -> packedConsumer.accept(index, getPackedValue(components));

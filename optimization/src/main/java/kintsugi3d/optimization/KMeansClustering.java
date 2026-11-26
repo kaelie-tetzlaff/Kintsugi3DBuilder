@@ -19,6 +19,7 @@ import kintsugi3d.gl.util.ColorArrayList;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
 import org.ejml.simple.SimpleMatrix;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +43,7 @@ public class KMeansClustering
         this.colorMap = colorMap;
     }
 
-    public final List<Vector3> makeClusters(List<SimpleMatrix> solutionOut)
+    public final @NotNull List<Vector3> makeClusters(@NotNull List<SimpleMatrix> solutionOut)
     {
         // k-means++ initialization
         Random random = new SecureRandom();
@@ -172,7 +173,7 @@ public class KMeansClustering
         return Arrays.asList(centers);
     }
 
-    private void buildCDF(Vector3[] centers, int centerCount, double[] cdfOut)
+    private void buildCDF(Vector3[] centers, int centerCount, double @NotNull [] cdfOut)
     {
         cdfOut[0] = 0.0;
 
@@ -197,7 +198,7 @@ public class KMeansClustering
         }
     }
 
-    private int weightedRandomIndex(double[] cdf, Random random)
+    private int weightedRandomIndex(double @NotNull [] cdf, @NotNull Random random)
     {
         double x = random.nextDouble() * cdf[cdf.length - 2];
 

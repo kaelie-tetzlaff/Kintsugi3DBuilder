@@ -16,6 +16,7 @@
 package kintsugi3d.builder.tools;
 
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
+import org.jetbrains.annotations.NotNull;
 
 public final class ToggleSettingTool implements KeyPressTool
 {
@@ -29,13 +30,13 @@ public final class ToggleSettingTool implements KeyPressTool
         }
 
         @Override
-        public final ToggleSettingTool create()
+        public final @NotNull ToggleSettingTool create()
         {
             return new ToggleSettingTool(settingName, getSettingsModel());
         }
     }
 
-    static ToolBuilder<ToggleSettingTool> getBuilder(String settingName)
+    static @NotNull ToolBuilder<ToggleSettingTool> getBuilder(String settingName)
     {
         return new Builder(settingName);
     }

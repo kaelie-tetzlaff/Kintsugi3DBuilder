@@ -15,6 +15,8 @@
 
 package kintsugi3d.gl.core;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface ReadonlyTexture3D<ContextType extends Context<ContextType>>
     extends Texture<ContextType>, Croppable<Texture3D<ContextType>>, ThreeDimensional
 {
@@ -61,7 +63,7 @@ public interface ReadonlyTexture3D<ContextType extends Context<ContextType>>
      * @param cropDepth The depth of the cropped region
      * @return The new cropped texture.
      */
-    default Texture3D<ContextType> crop(int x, int y, int z, int cropWidth, int cropHeight, int cropDepth)
+    default @NotNull Texture3D<ContextType> crop(int x, int y, int z, int cropWidth, int cropHeight, int cropDepth)
     {
         Texture3D<ContextType> cropTexture = createTextureWithMatchingFormat(cropWidth, cropHeight, cropDepth);
         cropTexture.blitCropped(this, x, y, z, cropWidth, cropHeight, cropDepth);
@@ -78,7 +80,7 @@ public interface ReadonlyTexture3D<ContextType extends Context<ContextType>>
      * @return The new cropped texture.
      */
     @Override
-    default Texture3D<ContextType> crop(int x, int y, int cropWidth, int cropHeight)
+    default @NotNull Texture3D<ContextType> crop(int x, int y, int cropWidth, int cropHeight)
     {
         return crop(x, y, 0, cropWidth, cropHeight, getDepth());
     }
@@ -87,7 +89,7 @@ public interface ReadonlyTexture3D<ContextType extends Context<ContextType>>
      * Copies this texture, creating a new resource with identical contents.
      * @return The new resource containing a copy of the texture
      */
-    default Texture3D<ContextType> copy()
+    default @NotNull Texture3D<ContextType> copy()
     {
         return crop(0, 0, getWidth(), getHeight());
     }

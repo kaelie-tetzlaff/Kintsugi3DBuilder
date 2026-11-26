@@ -17,6 +17,7 @@ package kintsugi3d.builder.fit.decomposition;
 
 import kintsugi3d.builder.state.shader.BasisIndexedShaderInfo;
 import kintsugi3d.builder.state.shader.ShaderInfo;
+import org.jetbrains.annotations.NotNull;
 
 public final class VisualizationShaders
 {
@@ -29,7 +30,7 @@ public final class VisualizationShaders
     {
     }
 
-    public static ShaderInfo getForBasisMaterial(String filename, BasisMaterialInfo material, String friendlyNameFormat)
+    public static @NotNull ShaderInfo getForBasisMaterial(String filename, @NotNull BasisMaterialInfo material, String friendlyNameFormat)
     {
         return new BasisIndexedShaderInfo(material.getFriendlyName(), filename, material);
     }

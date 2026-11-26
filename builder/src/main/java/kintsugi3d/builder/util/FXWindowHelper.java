@@ -18,6 +18,8 @@ package kintsugi3d.builder.util;
 import javafx.scene.Node;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This class is intentionally included in kintsugi3d.builder.util rather than kintsugi3d.javafx
@@ -29,12 +31,12 @@ public final class FXWindowHelper
     {
     }
 
-    public static void requestClose(Node node)
+    public static void requestClose(@NotNull Node node)
     {
         requestClose(node.getScene().getWindow());
     }
 
-    public static void requestClose(Window window)
+    public static void requestClose(@Nullable Window window)
     {
         if (window != null)
         {

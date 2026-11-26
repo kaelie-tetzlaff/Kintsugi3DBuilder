@@ -16,6 +16,7 @@
 package kintsugi3d.gl.window;
 
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -27,10 +28,10 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     implements ControllableCanvas3D<ContextType>, PollableCanvas3D<ContextType>,
                 SwapObservable<ReadableFramebuffer<ContextType>>, ResizeObservable<Framebuffer<ContextType>>
 {
-    private final DoubleFramebufferObject<ContextType> framebuffer;
+    private final @NotNull DoubleFramebufferObject<ContextType> framebuffer;
 
     private CanvasSize canvasSize;
-    private CanvasPosition canvasPosition = new CanvasPosition(0, 0);
+    private @NotNull CanvasPosition canvasPosition = new CanvasPosition(0, 0);
 
     private final Map<Key, KeyState> keyStates = new EnumMap<>(Key.class);
     private ModifierKeys lastModifierKeys = ModifierKeys.NONE;
@@ -44,13 +45,13 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
 
     private boolean terminating = false;
 
-    public static <ContextType extends Context<ContextType>> FramebufferCanvas<ContextType>
-        createUsingExistingFramebuffer(DoubleFramebufferObject<ContextType> framebuffer)
+    public static <ContextType extends Context<ContextType>> @NotNull FramebufferCanvas<ContextType>
+        createUsingExistingFramebuffer(@NotNull DoubleFramebufferObject<ContextType> framebuffer)
     {
         return new FramebufferCanvas<>(framebuffer);
     }
 
-    private FramebufferCanvas(DoubleFramebufferObject<ContextType> framebuffer)
+    private FramebufferCanvas(@NotNull DoubleFramebufferObject<ContextType> framebuffer)
     {
         this.framebuffer = framebuffer;
         FramebufferSize fboSize = framebuffer.getSizeForRead();
@@ -76,7 +77,7 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     }
 
     @Override
-    protected WindowListenerManager getListenerManager()
+    protected @NotNull WindowListenerManager getListenerManager()
     {
         return eventCollector.getListenerManager();
     }
@@ -104,7 +105,7 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public ContextType getContext()
+    public @NotNull ContextType getContext()
     {
         return framebuffer.getContext();
     }
@@ -122,14 +123,14 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public CanvasSize getSizeForDisplay()
+    public @NotNull CanvasSize getSizeForDisplay()
     {
         FramebufferSize sizeForRead = framebuffer.getSizeForRead();
         return new CanvasSize(sizeForRead.width, sizeForRead.height);
     }
 
     @Override
-    public CanvasPosition getPosition()
+    public @NotNull CanvasPosition getPosition()
     {
         return canvasPosition;
     }
@@ -187,7 +188,7 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public void moveCursor(CursorPosition position, ModifierKeys modifierKeys)
+    public void moveCursor(@NotNull CursorPosition position, ModifierKeys modifierKeys)
     {
         lastModifierKeys = modifierKeys;
         cursorPosition = position;
@@ -247,7 +248,7 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public void changeBounds(CanvasPosition position, CanvasSize size)
+    public void changeBounds(@NotNull CanvasPosition position, @NotNull CanvasSize size)
     {
         // Store the new size
         canvasSize = size;
@@ -255,7 +256,7 @@ public final class FramebufferCanvas<ContextType extends Context<ContextType>>
         // Report the event on the frontend.
         eventCollector.canvasSize(l -> l.canvasResized(this, size.width, size.height));
 
-        if (canvasPosition == null || position.x != canvasPosition.x || position.y != canvasPosition.y)
+        if (position.x != canvasPosition.x || position.y != canvasPosition.y)
         {
             // Also update position
             canvasPosition = position;

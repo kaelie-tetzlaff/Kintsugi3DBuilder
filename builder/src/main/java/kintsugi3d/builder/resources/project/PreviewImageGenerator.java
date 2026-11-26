@@ -20,6 +20,7 @@ import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,18 +32,18 @@ import java.util.concurrent.atomic.AtomicReference;
 public final class PreviewImageGenerator
 {
     private final ViewSet viewSet;
-    private final ProgressMonitor progressMonitor;
+    private final @NotNull ProgressMonitor progressMonitor;
 
     private final AtomicInteger finishedCount = new AtomicInteger(0);
     private final AtomicInteger failedCount = new AtomicInteger(0);
     private final AtomicReference<UserCancellationException> cancelled = new AtomicReference<>(null);
 
-    static PreviewImageGenerator start(ViewSet viewSet)
+    static @NotNull PreviewImageGenerator start(@NotNull ViewSet viewSet)
     {
         return start(viewSet, new DefaultProgressMonitor());
     }
 
-    static PreviewImageGenerator start(ViewSet viewSet, ProgressMonitor progressMonitor)
+    static @NotNull PreviewImageGenerator start(@NotNull ViewSet viewSet, @NotNull ProgressMonitor progressMonitor)
     {
         if (Objects.equals(viewSet.getRelativePreviewImagePathName(), viewSet.getRelativeFullResImagePathName()))
         {
@@ -57,18 +58,18 @@ public final class PreviewImageGenerator
         return new PreviewImageGenerator(viewSet, progressMonitor);
     }
 
-    private PreviewImageGenerator(ViewSet viewSet, ProgressMonitor progressMonitor)
+    private PreviewImageGenerator(@NotNull ViewSet viewSet, @NotNull ProgressMonitor progressMonitor)
     {
         this.viewSet = viewSet;
         this.progressMonitor = progressMonitor;
     }
 
-    PreviewImages forView(View view)
+    @NotNull PreviewImages forView(@NotNull View view)
     {
         return new PreviewImages(view, progressMonitor, finishedCount, failedCount);
     }
 
-    Collection<View> getViews()
+    @NotNull Collection<View> getViews()
     {
         // Includes both enabled and disabled views, all of which will have preview images generated.
         return viewSet.getViews();
@@ -111,7 +112,7 @@ public final class PreviewImageGenerator
         }
     }
 
-    private static void throwUndistortFailed(ProgressMonitor progressMonitor, int failedCount) throws IOException
+    private static void throwUndistortFailed(@NotNull ProgressMonitor progressMonitor, int failedCount) throws IOException
     {
         IOException e = new IOException("Failed to undistort " + failedCount + " images");
         progressMonitor.warn(e);

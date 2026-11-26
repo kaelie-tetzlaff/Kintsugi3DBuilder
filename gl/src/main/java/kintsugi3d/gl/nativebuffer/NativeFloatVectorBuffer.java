@@ -15,6 +15,7 @@
 
 package kintsugi3d.gl.nativebuffer;
 
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.BufferUtils;
 
 import java.nio.ByteBuffer;
@@ -24,7 +25,7 @@ import java.util.Objects;
 
 class NativeFloatVectorBuffer implements NativeVectorBuffer
 {
-    private final ByteBuffer buffer;
+    private final @NotNull ByteBuffer buffer;
 
     private final int dimensions;
     private final int count;
@@ -45,7 +46,7 @@ class NativeFloatVectorBuffer implements NativeVectorBuffer
         buffer = BufferUtils.createByteBuffer(dimensions * count * 4);
     }
 
-    NativeFloatVectorBuffer(int dimensions, int count, ByteBuffer buffer)
+    NativeFloatVectorBuffer(int dimensions, int count, @NotNull ByteBuffer buffer)
     {
         if (dimensions < 0)
         {
@@ -71,14 +72,14 @@ class NativeFloatVectorBuffer implements NativeVectorBuffer
         this.buffer = buffer;
     }
 
-    NativeFloatVectorBuffer(int dimensions, int count, byte[] buffer)
+    NativeFloatVectorBuffer(int dimensions, int count, byte @NotNull [] buffer)
     {
         this(dimensions, count);
         this.buffer.put(buffer);
         this.buffer.flip();
     }
 
-    NativeFloatVectorBuffer(int dimensions, int count, float[] buffer)
+    NativeFloatVectorBuffer(int dimensions, int count, float @NotNull [] buffer)
     {
         this(dimensions, count);
         this.buffer.asFloatBuffer().put(buffer);
@@ -97,7 +98,7 @@ class NativeFloatVectorBuffer implements NativeVectorBuffer
     }
 
     @Override
-    public final Float get(int index, int dimension)
+    public final @NotNull Float get(int index, int dimension)
     {
         if (index < 0)
         {
@@ -119,7 +120,7 @@ class NativeFloatVectorBuffer implements NativeVectorBuffer
     }
 
     @Override
-    public final void set(int index, int dimension, Number value)
+    public final void set(int index, int dimension, @NotNull Number value)
     {
         if (index < 0)
         {
@@ -141,13 +142,13 @@ class NativeFloatVectorBuffer implements NativeVectorBuffer
     }
 
     @Override
-    public final ByteBuffer getBuffer()
+    public final @NotNull ByteBuffer getBuffer()
     {
         return buffer;
     }
 
     @Override
-    public final NativeDataType getDataType()
+    public final @NotNull NativeDataType getDataType()
     {
         return NativeDataType.FLOAT;
     }

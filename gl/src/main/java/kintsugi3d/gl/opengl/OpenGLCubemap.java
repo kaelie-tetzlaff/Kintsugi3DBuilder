@@ -23,6 +23,7 @@ import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.core.ColorFormat.DataType;
 import kintsugi3d.gl.nativebuffer.NativeDataType;
 import kintsugi3d.gl.nativebuffer.ReadonlyNativeVectorBuffer;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 
@@ -47,7 +48,7 @@ final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGLContext
 
         private final FaceData[] faces = new FaceData[6];
 
-        private static int cubemapFaceToIndex(CubemapFace face)
+        private static int cubemapFaceToIndex(@NotNull CubemapFace face)
         {
             switch(face)
             {
@@ -86,7 +87,7 @@ final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGLContext
         }
 
         @Override
-        public final ColorBuilder loadFace(CubemapFace face, ReadonlyNativeVectorBuffer data)
+        public final @NotNull ColorBuilder loadFace(@NotNull CubemapFace face, @NotNull ReadonlyNativeVectorBuffer data)
         {
             if (data.getCount() != faceSize * faceSize)
             {
@@ -103,13 +104,13 @@ final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGLContext
         }
 
         @Override
-        public final OpenGLCubemap createTexture()
+        public final @NotNull OpenGLCubemap createTexture()
         {
+            ColorFormat internalColorFormat = getInternalColorFormat();
             for (int i = 0; i < 6; i++)
             {
-                if(!isInternalFormatCompressed() &&
-                        (getInternalColorFormat().dataType == DataType.SIGNED_INTEGER
-                            || getInternalColorFormat().dataType == DataType.UNSIGNED_INTEGER))
+                if (internalColorFormat != null &&
+                    (internalColorFormat.dataType == DataType.SIGNED_INTEGER || internalColorFormat.dataType == DataType.UNSIGNED_INTEGER))
                 {
                     if (faces[i].format == 0)
                     {
@@ -143,21 +144,13 @@ final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGLContext
 
             if (isInternalFormatCompressed())
             {
-                return new OpenGLCubemap(
-                    getContext(),
-                        textureTarget,
-                        getInternalCompressionFormat(),
-                        faceSize,
-                        opt);
+                assert getInternalCompressionFormat() != null;
+                return new OpenGLCubemap(getContext(), textureTarget, getInternalCompressionFormat(), faceSize, opt);
             }
             else
             {
-                return new OpenGLCubemap(
-                    getContext(),
-                        textureTarget,
-                        getInternalColorFormat(),
-                        faceSize,
-                        opt);
+                assert internalColorFormat != null;
+                return new OpenGLCubemap(getContext(), textureTarget, internalColorFormat, faceSize, opt);
             }
         }
     }
@@ -175,7 +168,7 @@ final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGLContext
         }
 
         @Override
-        public final OpenGLCubemap createTexture()
+        public final @NotNull OpenGLCubemap createTexture()
         {
             OptionalParameters opt = new OptionalParameters(GL_DEPTH_COMPONENT);
             opt.useLinearFiltering = isLinearFilteringEnabled();
@@ -206,7 +199,7 @@ final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGLContext
         }
 
         @Override
-        public final OpenGLCubemap createTexture()
+        public final @NotNull OpenGLCubemap createTexture()
         {
             OptionalParameters opt = new OptionalParameters(GL_STENCIL_INDEX);
             opt.useLinearFiltering = isLinearFilteringEnabled();
@@ -237,7 +230,7 @@ final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGLContext
         }
 
         @Override
-        public final OpenGLCubemap createTexture()
+        public final @NotNull OpenGLCubemap createTexture()
         {
             OptionalParameters opt = new OptionalParameters(GL_DEPTH_STENCIL);
             opt.useLinearFiltering = isLinearFilteringEnabled();
@@ -286,7 +279,7 @@ final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGLContext
         }
     }
 
-    private OpenGLCubemap(OpenGLContext context, int textureTarget, ColorFormat colorFormat, int faceSize, OptionalParameters opt)
+    private OpenGLCubemap(OpenGLContext context, int textureTarget, @NotNull ColorFormat colorFormat, int faceSize, @NotNull OptionalParameters opt)
     {
         // Create an empty texture to be used as a render target for a framebuffer.
         super(context, textureTarget, colorFormat,
@@ -295,7 +288,7 @@ final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGLContext
         init(OpenGLContext.getInternalColorFormat(colorFormat), opt);
     }
 
-    private OpenGLCubemap(OpenGLContext context, int textureTarget, CompressionFormat compressionFormat, int faceSize, OptionalParameters opt)
+    private OpenGLCubemap(OpenGLContext context, int textureTarget, @NotNull CompressionFormat compressionFormat, int faceSize, @NotNull OptionalParameters opt)
     {
         // Create an empty texture to be used as a render target for a framebuffer.
         super(context, textureTarget, compressionFormat,
@@ -304,7 +297,7 @@ final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGLContext
         init(OpenGLContext.getCompressionFormat(compressionFormat), opt);
     }
 
-    private OpenGLCubemap(OpenGLContext context, int textureTarget, TextureType textureType, int precision, int faceSize, OptionalParameters opt)
+    private OpenGLCubemap(OpenGLContext context, int textureTarget, @NotNull TextureType textureType, int precision, int faceSize, @NotNull OptionalParameters opt)
     {
         // Create an empty texture to be used as a render target for a framebuffer.
         super(context, textureTarget, textureType, precision,
@@ -313,7 +306,7 @@ final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGLContext
         init(getSpecialInternalFormat(textureType, precision), opt);
     }
 
-    private void init(int internalFormat, OptionalParameters opt)
+    private void init(int internalFormat, @NotNull OptionalParameters opt)
     {
         // Create an empty texture to be used as a render target for a framebuffer.
         bind();
@@ -440,7 +433,7 @@ final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGLContext
     }
 
     @Override
-    public void setTextureWrap(TextureWrapMode wrapS, TextureWrapMode wrapT)
+    public void setTextureWrap(@NotNull TextureWrapMode wrapS, @NotNull TextureWrapMode wrapT)
     {
         bind();
         int numericWrapS = translateWrapMode(wrapS);
@@ -460,7 +453,7 @@ final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGLContext
     }
 
     @Override
-    public FramebufferAttachment<OpenGLContext> getFaceAsFramebufferAttachment(CubemapFace face)
+    public @NotNull FramebufferAttachment<OpenGLContext> getFaceAsFramebufferAttachment(@NotNull CubemapFace face)
     {
         int textureId = getTextureId();
 
@@ -495,7 +488,7 @@ final class OpenGLCubemap extends OpenGLTexture implements Cubemap<OpenGLContext
         }
 
         @Override
-        public final OpenGLContext getContext()
+        public final @NotNull OpenGLContext getContext()
         {
             return context;
         }

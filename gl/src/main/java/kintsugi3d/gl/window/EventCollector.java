@@ -16,6 +16,7 @@
 package kintsugi3d.gl.window;
 
 import kintsugi3d.gl.window.listeners.*;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +52,7 @@ class EventCollector
 
     private final WindowListenerManagerInstance listenerManager = new WindowListenerManagerInstance();
 
-    final WindowListenerManager getListenerManager()
+    final @NotNull WindowListenerManager getListenerManager()
     {
         return listenerManager;
     }
@@ -208,7 +209,7 @@ class EventCollector
         }
     }
 
-    private <L> void pollEvents(Queue<Consumer<L>> eventQueue, Iterable<L> listeners)
+    private <L> void pollEvents(@NotNull Queue<Consumer<L>> eventQueue, @NotNull Iterable<L> listeners)
     {
         synchronized (lock)
         {

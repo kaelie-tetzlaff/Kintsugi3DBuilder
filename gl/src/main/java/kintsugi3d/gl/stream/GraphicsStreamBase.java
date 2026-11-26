@@ -15,6 +15,8 @@
 
 package kintsugi3d.gl.stream;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -29,13 +31,13 @@ import java.util.function.Supplier;
 public abstract class GraphicsStreamBase<T> implements GraphicsStream<T>
 {
     @Override
-    public final <R> GraphicsStream<R> map(Function<T, ? extends R> mapper)
+    public final <R> @NotNull GraphicsStream<R> map(Function<T, ? extends R> mapper)
     {
         return new Mapped<>(this, mapper);
     }
 
     @Override
-    public final <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super T> accumulator)
+    public final <R> R collect(@NotNull Supplier<R> supplier, @NotNull BiConsumer<R, ? super T> accumulator)
     {
         R result = supplier.get();
 
@@ -63,19 +65,19 @@ public abstract class GraphicsStreamBase<T> implements GraphicsStream<T>
         }
 
         @Override
-        public final GraphicsStream<T> sequential()
+        public final @NotNull GraphicsStream<T> sequential()
         {
             return new Mapped<>(base.sequential(), mapper);
         }
 
         @Override
-        public final GraphicsStream<T> parallel()
+        public final @NotNull GraphicsStream<T> parallel()
         {
             return new Mapped<>(base.parallel(), mapper);
         }
 
         @Override
-        public final GraphicsStream<T> parallel(int maxRunningThreads)
+        public final @NotNull GraphicsStream<T> parallel(int maxRunningThreads)
         {
             return new Mapped<>(base.parallel(maxRunningThreads), mapper);
         }
@@ -87,7 +89,7 @@ public abstract class GraphicsStreamBase<T> implements GraphicsStream<T>
         }
 
         @Override
-        public final void forEach(Consumer<? super T> action)
+        public final void forEach(@NotNull Consumer<? super T> action)
         {
             // Apply the current mapping before executing the action.
             base.forEach(source -> action.accept(mapper.apply(source)));

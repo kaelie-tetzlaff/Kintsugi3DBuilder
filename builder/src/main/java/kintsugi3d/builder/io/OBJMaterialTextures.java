@@ -18,6 +18,8 @@ package kintsugi3d.builder.io;
 import kintsugi3d.builder.core.texture.StandardTexture;
 import kintsugi3d.gl.material.ReadonlyImportedMaterial;
 import kintsugi3d.gl.material.ReadonlyMaterialTextureMap;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.HashMap;
@@ -35,7 +37,7 @@ public class OBJMaterialTextures implements TextureSupplier
     }
 
     @Override
-    public final Map<String, File> getTextures()
+    public final @NotNull Map<String, File> getTextures()
     {
         Map<String, File> textures = new HashMap<>(8);
 
@@ -57,7 +59,7 @@ public class OBJMaterialTextures implements TextureSupplier
         return textures;
     }
 
-    private void putTextureInMap(Map<String, File> textures, StandardTexture textureType, ReadonlyMaterialTextureMap diffuseMap)
+    private void putTextureInMap(@NotNull Map<String, File> textures, @NotNull StandardTexture textureType, @Nullable ReadonlyMaterialTextureMap diffuseMap)
     {
         if (diffuseMap != null)
         {

@@ -19,6 +19,7 @@ import kintsugi3d.gl.vecmath.DoubleVector3;
 import kintsugi3d.gl.vecmath.DoubleVector4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
 
 public final class SRGB
 {
@@ -48,7 +49,7 @@ public final class SRGB
      * @param sRGBColor
      * @return
      */
-    public static DoubleVector3 toLinear(DoubleVector3 sRGBColor)
+    public static @NotNull DoubleVector3 toLinear(@NotNull DoubleVector3 sRGBColor)
     {
         return sRGBColor.applyOperator(SRGB::toLinear);
     }
@@ -58,7 +59,7 @@ public final class SRGB
      * @param sRGBColor
      * @return
      */
-    public static Vector3 toLinear(Vector3 sRGBColor)
+    public static @NotNull Vector3 toLinear(@NotNull Vector3 sRGBColor)
     {
         return sRGBColor.applyOperator(SRGB::toLinear);
     }
@@ -85,7 +86,7 @@ public final class SRGB
      * @param linearColor
      * @return
      */
-    public static DoubleVector3 fromLinear(DoubleVector3 linearColor)
+    public static @NotNull DoubleVector3 fromLinear(@NotNull DoubleVector3 linearColor)
     {
         return linearColor.applyOperator(SRGB::fromLinear);
     }
@@ -95,7 +96,7 @@ public final class SRGB
      * @param linearColor
      * @return
      */
-    public static Vector3 fromLinear(Vector3 linearColor)
+    public static @NotNull Vector3 fromLinear(@NotNull Vector3 linearColor)
     {
         return linearColor.applyOperator(SRGB::fromLinear);
     }
@@ -105,7 +106,7 @@ public final class SRGB
      * @param linearColor
      * @return
      */
-    public static DoubleVector4 fromLinear(DoubleVector4 linearColor)
+    public static @NotNull DoubleVector4 fromLinear(@NotNull DoubleVector4 linearColor)
     {
         return linearColor.getXYZ().applyOperator(SRGB::fromLinear).asVector4(linearColor.w);
     }
@@ -115,27 +116,27 @@ public final class SRGB
      * @param linearColor
      * @return
      */
-    public static Vector4 fromLinear(Vector4 linearColor)
+    public static @NotNull Vector4 fromLinear(@NotNull Vector4 linearColor)
     {
         return linearColor.getXYZ().applyOperator(SRGB::fromLinear).asVector4(linearColor.w);
     }
 
-    public static double luminanceFromLinear(DoubleVector3 linearColor)
+    public static double luminanceFromLinear(@NotNull DoubleVector3 linearColor)
     {
         return linearColor.dot(new DoubleVector3(0.2126729, 0.7151522, 0.0721750));
     }
 
-    public static float luminanceFromLinear(Vector3 linearColor)
+    public static float luminanceFromLinear(@NotNull Vector3 linearColor)
     {
         return (float)luminanceFromLinear(linearColor.asDoublePrecision());
     }
 
-    public static double luminanceFromSRGB(DoubleVector3 sRGBColor)
+    public static double luminanceFromSRGB(@NotNull DoubleVector3 sRGBColor)
     {
         return luminanceFromLinear(toLinear(sRGBColor));
     }
 
-    public static float luminanceFromSRGB(Vector3 sRGBColor)
+    public static float luminanceFromSRGB(@NotNull Vector3 sRGBColor)
     {
         return luminanceFromLinear(toLinear(sRGBColor));
     }

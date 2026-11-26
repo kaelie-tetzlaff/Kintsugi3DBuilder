@@ -27,6 +27,7 @@ import kintsugi3d.builder.state.settings.DefaultSettings;
 import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.state.settings.SimpleGeneralSettingsModel;
 import kintsugi3d.builder.state.shader.ActiveShaderModel;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -47,19 +48,19 @@ class TestingState implements Kintsugi3DBuilderState
     }
 
     @Override
-    public final ReadonlyCameraModel getCameraModel()
+    public final @NotNull ReadonlyCameraModel getCameraModel()
     {
         return cameraModel;
     }
 
     @Override
-    public final ReadonlyLightingEnvironmentModel getLightingModel()
+    public final @NotNull ReadonlyLightingEnvironmentModel getLightingModel()
     {
         return lightingEnvironmentModel;
     }
 
     @Override
-    public final ReadonlyObjectPoseModel getObjectModel()
+    public final @NotNull ReadonlyObjectPoseModel getObjectModel()
     {
         return objectModel;
     }
@@ -71,13 +72,13 @@ class TestingState implements Kintsugi3DBuilderState
     }
 
     @Override
-    public final SelectableViewListModel getViewListModel()
+    public final @NotNull SelectableViewListModel getViewListModel()
     {
         return viewListModel;
     }
 
     @Override
-    public final TabsModel getTabModels()
+    public final @NotNull TabsModel getTabModels()
     {
         return tabsModel;
     }
@@ -89,29 +90,29 @@ class TestingState implements Kintsugi3DBuilderState
     }
 
     @Override
-    public final GeneralSettingsModel getSettingsModel()
+    public final @NotNull GeneralSettingsModel getSettingsModel()
     {
         return settings;
     }
 
     @Override
-    public final CacheModel getCacheModel()
+    public final @NotNull CacheModel getCacheModel()
     {
         return cacheModel;
     }
 
     @Override
-    public final ProjectModel getProjectModel()
+    public final @NotNull ProjectModel getProjectModel()
     {
         return projectModel;
     }
 
-    public final List<ErrorMessage> getErrors()
+    public final @NotNull List<ErrorMessage> getErrors()
     {
         return projectModel.getErrors();
     }
 
-    public final List<ErrorMessage> getWarnings()
+    public final @NotNull List<ErrorMessage> getWarnings()
     {
         return projectModel.getWarnings();
     }

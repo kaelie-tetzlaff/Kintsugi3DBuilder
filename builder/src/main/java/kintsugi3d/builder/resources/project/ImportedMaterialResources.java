@@ -18,9 +18,10 @@ package kintsugi3d.builder.resources.project;
 import kintsugi3d.builder.core.texture.StandardTexture;
 import kintsugi3d.builder.io.TextureLoadOptions;
 import kintsugi3d.gl.core.*;
-import kintsugi3d.gl.material.ImportedMaterial;
-import kintsugi3d.gl.material.ReadonlyImportedMaterial;
+import kintsugi3d.gl.material.*;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +31,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Objects;
 
 // TODO Use more information from the material.  Currently just pulling texture names.
 // TODO use glTF instead of / in addition to OBJ material?
@@ -37,28 +39,28 @@ public final class ImportedMaterialResources<ContextType extends Context<Context
 {
     private static final Logger LOG = LoggerFactory.getLogger(ImportedMaterialResources.class);
 
-    private final ContextType context;
+    private final @Nullable ContextType context;
 
     private final Map<StandardTexture, Texture2D<ContextType>> textures = new EnumMap<>(StandardTexture.class);
 
     @Override
-    public ContextType getContext()
+    public @NotNull ContextType getContext()
     {
-        return context;
+        return Objects.requireNonNull(context, "Imported material resources are null.");
     }
 
-    public Map<StandardTexture, Texture2D<ContextType>> getTextures()
+    public @NotNull Map<StandardTexture, Texture2D<ContextType>> getTextures()
     {
         return Collections.unmodifiableMap(textures);
     }
 
-    public static <ContextType extends Context<ContextType>> ImportedMaterialResources<ContextType> createNull()
+    public static <ContextType extends Context<ContextType>> @NotNull ImportedMaterialResources<ContextType> createNull()
     {
         return new ImportedMaterialResources<>();
     }
 
-    public static <ContextType extends Context<ContextType>> ImportedMaterialResources<ContextType> createFromMaterial(
-        ContextType context, ImportedMaterial material, File textureDirectory, TextureLoadOptions loadOptions) throws IOException
+    public static <ContextType extends Context<ContextType>> @NotNull ImportedMaterialResources<ContextType> createFromMaterial(
+        @NotNull ContextType context, @NotNull ImportedMaterial material, File textureDirectory, @NotNull TextureLoadOptions loadOptions) throws IOException
     {
         return new ImportedMaterialResources<>(context, material, textureDirectory, loadOptions);
     }
@@ -68,23 +70,29 @@ public final class ImportedMaterialResources<ContextType extends Context<Context
         context = null;
     }
 
-    private ImportedMaterialResources(ContextType context, ReadonlyImportedMaterial material, File textureDirectory, TextureLoadOptions loadOptions) throws IOException
+    private ImportedMaterialResources(
+        @NotNull ContextType context, @NotNull ReadonlyImportedMaterial material, File textureDirectory, @NotNull TextureLoadOptions loadOptions)
+        throws IOException
     {
         this.context = context;
 
         try
         {
-            File diffuseFile = ImageFinder.findImageFile(new File(textureDirectory, material.getDiffuseMap().getMapName()));
-            LOG.info("Diffuse texture found.");
-            Texture2D<ContextType> diffuseTex = context.getTextureFactory().build2DColorTextureFromFile(diffuseFile, true)
-                .setInternalFormat(ColorFormat.RGB8)
-                .setMipmapsEnabled(loadOptions.areMipmapsRequested())
-                .setLinearFilteringEnabled(loadOptions.isLinearFilteringRequested())
-                .createTexture();
+            ReadonlyMaterialColorMap diffuseMap = material.getDiffuseMap();
+            if (diffuseMap != null)
+            {
+                File diffuseFile = ImageFinder.findImageFile(new File(textureDirectory, diffuseMap.getMapName()));
+                LOG.info("Diffuse texture found.");
+                Texture2D<ContextType> diffuseTex = context.getTextureFactory().build2DColorTextureFromFile(diffuseFile, true)
+                    .setInternalFormat(ColorFormat.RGB8)
+                    .setMipmapsEnabled(loadOptions.areMipmapsRequested())
+                    .setLinearFilteringEnabled(loadOptions.isLinearFilteringRequested())
+                    .createTexture();
 
-            // diffuse map from photogrammetry can also be either as a diffuse color map or an albedo map
-            textures.put(StandardTexture.DIFFUSE_COLOR, diffuseTex);
-            textures.put(StandardTexture.ALBEDO, diffuseTex);
+                // diffuse map from photogrammetry can also be either as a diffuse color map or an albedo map
+                textures.put(StandardTexture.DIFFUSE_COLOR, diffuseTex);
+                textures.put(StandardTexture.ALBEDO, diffuseTex);
+            }
         }
         catch (FileNotFoundException ignored)
         {
@@ -93,14 +101,18 @@ public final class ImportedMaterialResources<ContextType extends Context<Context
 
         try
         {
-            File normalFile = ImageFinder.findImageFile(new File(textureDirectory, material.getNormalMap().getMapName()));
-            LOG.info("Normal texture found.");
-            textures.put(StandardTexture.NORMAL_MAP,
-                context.getTextureFactory().build2DColorTextureFromFile(normalFile, true)
-                    .setInternalFormat(ColorFormat.RG8)
-                    .setMipmapsEnabled(loadOptions.areMipmapsRequested())
-                    .setLinearFilteringEnabled(loadOptions.isLinearFilteringRequested())
-                    .createTexture());
+            ReadonlyMaterialTextureMap normalMap = material.getNormalMap();
+            if (normalMap != null)
+            {
+                File normalFile = ImageFinder.findImageFile(new File(textureDirectory, normalMap.getMapName()));
+                LOG.info("Normal texture found.");
+                textures.put(StandardTexture.NORMAL_MAP,
+                    context.getTextureFactory().build2DColorTextureFromFile(normalFile, true)
+                        .setInternalFormat(ColorFormat.RG8)
+                        .setMipmapsEnabled(loadOptions.areMipmapsRequested())
+                        .setLinearFilteringEnabled(loadOptions.isLinearFilteringRequested())
+                        .createTexture());
+            }
         }
         catch (FileNotFoundException ignored)
         {
@@ -109,14 +121,18 @@ public final class ImportedMaterialResources<ContextType extends Context<Context
 
         try
         {
-            File specularFile = ImageFinder.findImageFile(new File(textureDirectory, material.getSpecularMap().getMapName()));
-            LOG.info("Specular texture found.");
-            textures.put(StandardTexture.SPECULAR_COLOR,
-                context.getTextureFactory().build2DColorTextureFromFile(specularFile, true)
-                    .setInternalFormat(ColorFormat.RGB8)
-                    .setMipmapsEnabled(loadOptions.areMipmapsRequested())
-                    .setLinearFilteringEnabled(loadOptions.isLinearFilteringRequested())
-                    .createTexture());
+            ReadonlyMaterialColorMap specularMap = material.getSpecularMap();
+            if (specularMap != null)
+            {
+                File specularFile = ImageFinder.findImageFile(new File(textureDirectory, specularMap.getMapName()));
+                LOG.info("Specular texture found.");
+                textures.put(StandardTexture.SPECULAR_COLOR,
+                    context.getTextureFactory().build2DColorTextureFromFile(specularFile, true)
+                        .setInternalFormat(ColorFormat.RGB8)
+                        .setMipmapsEnabled(loadOptions.areMipmapsRequested())
+                        .setLinearFilteringEnabled(loadOptions.isLinearFilteringRequested())
+                        .createTexture());
+            }
         }
         catch(FileNotFoundException ignored)
         {
@@ -125,14 +141,18 @@ public final class ImportedMaterialResources<ContextType extends Context<Context
 
         try
         {
-            File roughnessFile = ImageFinder.findImageFile(new File(textureDirectory, material.getRoughnessMap().getMapName()));
-            LOG.info("Roughness texture found.");
-            textures.put(StandardTexture.ROUGHNESS,
-                context.getTextureFactory().build2DColorTextureFromFile(roughnessFile, true)
-                    .setInternalFormat(ColorFormat.R8)
-                    .setMipmapsEnabled(loadOptions.areMipmapsRequested())
-                    .setLinearFilteringEnabled(loadOptions.isLinearFilteringRequested())
-                    .createTexture());
+            ReadonlyMaterialScalarMap roughnessMap = material.getRoughnessMap();
+            if (roughnessMap != null)
+            {
+                File roughnessFile = ImageFinder.findImageFile(new File(textureDirectory, roughnessMap.getMapName()));
+                LOG.info("Roughness texture found.");
+                textures.put(StandardTexture.ROUGHNESS,
+                    context.getTextureFactory().build2DColorTextureFromFile(roughnessFile, true)
+                        .setInternalFormat(ColorFormat.R8)
+                        .setMipmapsEnabled(loadOptions.areMipmapsRequested())
+                        .setLinearFilteringEnabled(loadOptions.isLinearFilteringRequested())
+                        .createTexture());
+            }
         }
         catch (FileNotFoundException ignored)
         {
@@ -141,14 +161,18 @@ public final class ImportedMaterialResources<ContextType extends Context<Context
 
         try
         {
-            File occlusionFile = ImageFinder.findImageFile(new File(textureDirectory, material.getAmbientOcclusionMap().getMapName()));
-            LOG.info("Occlusion texture found.");
-            textures.put(StandardTexture.OCCLUSION,
-                context.getTextureFactory().build2DColorTextureFromFile(occlusionFile, true)
-                    .setInternalFormat(ColorFormat.R8)
-                    .setMipmapsEnabled(loadOptions.areMipmapsRequested())
-                    .setLinearFilteringEnabled(loadOptions.isLinearFilteringRequested())
-                    .createTexture());
+            ReadonlyMaterialScalarMap occlusionMap = material.getAmbientOcclusionMap();
+            if (occlusionMap != null)
+            {
+                File occlusionFile = ImageFinder.findImageFile(new File(textureDirectory, occlusionMap.getMapName()));
+                LOG.info("Occlusion texture found.");
+                textures.put(StandardTexture.OCCLUSION,
+                    context.getTextureFactory().build2DColorTextureFromFile(occlusionFile, true)
+                        .setInternalFormat(ColorFormat.R8)
+                        .setMipmapsEnabled(loadOptions.areMipmapsRequested())
+                        .setLinearFilteringEnabled(loadOptions.isLinearFilteringRequested())
+                        .createTexture());
+            }
         }
         catch (FileNotFoundException ignored)
         {

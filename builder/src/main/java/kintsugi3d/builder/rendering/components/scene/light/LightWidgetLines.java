@@ -25,6 +25,7 @@ import kintsugi3d.gl.nativebuffer.NativeVectorBufferFactory;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.gl.vecmath.Vector4;
+import org.jetbrains.annotations.NotNull;
 
 public class LightWidgetLines<ContextType extends Context<ContextType>> implements RenderedComponent<ContextType>
 {
@@ -52,13 +53,13 @@ public class LightWidgetLines<ContextType extends Context<ContextType>> implemen
     {
     }
 
-    public final void setWidgetInfo(LightWidgetInfo[] widgetInfo)
+    public final void setWidgetInfo(LightWidgetInfo @NotNull [] widgetInfo)
     {
         this.widgetInfo = widgetInfo.clone();
     }
 
     @Override
-    public final void draw(FramebufferObject<ContextType> framebuffer, CameraViewport cameraViewport)
+    public final void draw(@NotNull FramebufferObject<ContextType> framebuffer, @NotNull CameraViewport cameraViewport)
     {
         if (sceneModel.getSettingsModel().getBoolean("relightingEnabled")
             && sceneModel.getSettingsModel().getBoolean("visibleLightsEnabled")

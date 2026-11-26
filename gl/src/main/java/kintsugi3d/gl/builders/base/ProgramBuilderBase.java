@@ -19,6 +19,7 @@ import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Shader;
 import kintsugi3d.gl.core.ShaderType;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,9 +39,9 @@ public abstract class ProgramBuilderBase<ContextType extends Context<ContextType
     }
 
     private final ContextType context;
-    private final List<ShaderSupplier<ContextType>> shaderBuilders;
+    private final @NotNull List<ShaderSupplier<ContextType>> shaderBuilders;
 
-    private final Map<String, Object> defines;
+    private final @NotNull Map<String, Object> defines;
 
     protected ProgramBuilderBase(ContextType context)
     {
@@ -49,7 +50,7 @@ public abstract class ProgramBuilderBase<ContextType extends Context<ContextType
         defines = new HashMap<>(16);
     }
 
-    protected final Iterable<Shader<ContextType>> compileShaders() throws IOException
+    protected final @NotNull Iterable<Shader<ContextType>> compileShaders() throws IOException
     {
         Collection<Shader<ContextType>> shaders = new ArrayList<>(shaderBuilders.size());
         for (ShaderSupplier<ContextType> shaderBuilder : shaderBuilders)
@@ -60,21 +61,21 @@ public abstract class ProgramBuilderBase<ContextType extends Context<ContextType
     }
 
     @Override
-    public final ProgramBuilder<ContextType> define(String key, Object value)
+    public final @NotNull ProgramBuilder<ContextType> define(String key, Object value)
     {
         defines.put(key, value);
         return this;
     }
 
     @Override
-    public final ProgramBuilder<ContextType> addShader(Shader<ContextType> shader)
+    public final @NotNull ProgramBuilder<ContextType> addShader(Shader<ContextType> shader)
     {
         shaderBuilders.add(() -> shader);
         return this;
     }
 
     @Override
-    public final ProgramBuilder<ContextType> addShader(ShaderType type, File shaderFile)
+    public final @NotNull ProgramBuilder<ContextType> addShader(ShaderType type, File shaderFile)
     {
         shaderBuilders.add(() -> context.createShader(type, shaderFile, new HashMap<>(defines)) );
 
@@ -82,14 +83,14 @@ public abstract class ProgramBuilderBase<ContextType extends Context<ContextType
     }
 
     @Override
-    public final ProgramBuilder<ContextType> addShader(ShaderType type, String shaderSource)
+    public final @NotNull ProgramBuilder<ContextType> addShader(ShaderType type, String shaderSource)
     {
         shaderBuilders.add(() -> context.createShader(type, shaderSource));
         return this;
     }
 
     @Override
-    public final Map<String, Object> getDefines()
+    public final @NotNull Map<String, Object> getDefines()
     {
         return Collections.unmodifiableMap(defines);
     }

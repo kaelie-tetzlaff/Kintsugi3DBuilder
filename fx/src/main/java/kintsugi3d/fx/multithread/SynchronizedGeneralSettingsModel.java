@@ -35,7 +35,7 @@ public class SynchronizedGeneralSettingsModel extends GeneralSettingsModelBase
         this.baseModel = baseModel;
     }
 
-    private WritableValue<Object> initSetting(String name)
+    private @NotNull WritableValue<Object> initSetting(String name)
     {
         SynchronizedValue<Object> synchronizedValue =
             SynchronizedValue.createFromFunctions(() -> baseModel.getObject(name),  value -> baseModel.set(name, value));
@@ -92,7 +92,7 @@ public class SynchronizedGeneralSettingsModel extends GeneralSettingsModelBase
         return false;
     }
 
-    private Setting getSetting(String settingName)
+    private @NotNull Setting getSetting(String settingName)
     {
         return new GeneralSetting(settingName, getType(settingName), getObject(settingName), shouldSerialize(settingName));
     }
@@ -118,10 +118,10 @@ public class SynchronizedGeneralSettingsModel extends GeneralSettingsModelBase
 
     private static class SynchronizedGeneralSettingsIterator implements Iterator<Setting>
     {
-        private final SynchronizedGeneralSettingsModel settings;
-        private final Iterator<String> base;
+        private final @NotNull SynchronizedGeneralSettingsModel settings;
+        private final @NotNull Iterator<String> base;
 
-        SynchronizedGeneralSettingsIterator(SynchronizedGeneralSettingsModel settingsModel)
+        SynchronizedGeneralSettingsIterator(@NotNull SynchronizedGeneralSettingsModel settingsModel)
         {
             settings = settingsModel;
             base = settingsModel.settings.keySet().iterator();
@@ -134,7 +134,7 @@ public class SynchronizedGeneralSettingsModel extends GeneralSettingsModelBase
         }
 
         @Override
-        public final Setting next()
+        public final @NotNull Setting next()
         {
             return settings.getSetting(base.next());
         }

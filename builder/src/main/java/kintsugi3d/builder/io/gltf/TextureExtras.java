@@ -15,6 +15,8 @@
 
 package kintsugi3d.builder.io.gltf;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +37,7 @@ public class TextureExtras
         return lods.get(resolution);
     }
 
-    public final Map<Integer, Integer> getLods()
+    public final @NotNull Map<Integer, Integer> getLods()
     {
         return Collections.unmodifiableMap(lods);
     }

@@ -90,7 +90,10 @@ public final class MainThreadRenderingTestRunner
         TestExecutionSummary summary = listener.getSummary();
         if (summary != null)
         {
+            //noinspection UseOfSystemOutOrSystemErr
             summary.printTo(new PrintWriter(System.out, true, StandardCharsets.UTF_8));
+
+            //noinspection UseOfSystemOutOrSystemErr
             summary.printFailuresTo(new PrintWriter(System.out, true, StandardCharsets.UTF_8));
 
             if (summary.getTotalFailureCount() > 0)

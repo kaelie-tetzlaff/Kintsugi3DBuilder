@@ -21,16 +21,17 @@ import kintsugi3d.gl.core.ManagedResource;
 import kintsugi3d.gl.geometry.GeometryTextures;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
 public class TextureBlockResourceFactory<ContextType extends Context<ContextType>> implements ManagedResource
 {
-    private final ImageCache<ContextType> imageCache;
-    private final GraphicsResourcesCommon<ContextType> commonResources;
-    private final GeometryTextures<ContextType> fullGeometryTextures;
+    private final @NotNull ImageCache<ContextType> imageCache;
+    private final @NotNull GraphicsResourcesCommon<ContextType> commonResources;
+    private final @NotNull GeometryTextures<ContextType> fullGeometryTextures;
 
-    TextureBlockResourceFactory(GraphicsResourcesCommon<ContextType> commonResources, ImageCache<ContextType> imageCache)
+    TextureBlockResourceFactory(@NotNull GraphicsResourcesCommon<ContextType> commonResources, @NotNull ImageCache<ContextType> imageCache)
     {
         this.imageCache = imageCache;
         this.commonResources = commonResources;
@@ -39,7 +40,7 @@ public class TextureBlockResourceFactory<ContextType extends Context<ContextType
             .createGeometryFramebuffer(imageCache.getSettings().getTextureWidth(), imageCache.getSettings().getTextureHeight());
     }
 
-    public final GraphicsResourcesTextureSpace<ContextType> createBlockResources(int i, int j, ProgressMonitor monitor) throws IOException, UserCancellationException
+    public final GraphicsResourcesTextureSpace<ContextType> createBlockResources(int i, int j, @NotNull ProgressMonitor monitor) throws IOException, UserCancellationException
     {
         return imageCache.createWithRetryAfterCacheRebuild(
             () ->
@@ -64,9 +65,6 @@ public class TextureBlockResourceFactory<ContextType extends Context<ContextType
     @Override
     public final void close()
     {
-        if (fullGeometryTextures != null)
-        {
-            fullGeometryTextures.close();
-        }
+        fullGeometryTextures.close();
     }
 }

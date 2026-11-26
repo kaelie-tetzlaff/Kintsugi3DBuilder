@@ -22,6 +22,7 @@ import kintsugi3d.builder.resources.project.ReadonlyGraphicsResourcesImageSpace;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,7 +51,7 @@ final class MultiframeRenderRequest extends RenderRequestBase
         }
 
         @Override
-        public final ImageBasedGraphicsRequest create()
+        public final @NotNull ImageBasedGraphicsRequest create()
         {
             return new MultiframeRenderRequest(getWidth(), getHeight(), frameCount, getShaderSetupCallback(),
                 getVertexShader(), getFragmentShader(), getOutputDirectory());
@@ -58,7 +59,8 @@ final class MultiframeRenderRequest extends RenderRequestBase
     }
 
     @Override
-    public <ContextType extends Context<ContextType>> void executeRequest(ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
+    public <ContextType extends Context<ContextType>> void executeRequest(
+        @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @NotNull ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         ReadonlyGraphicsResourcesImageSpace<ContextType> resources = renderable.getResources();
@@ -70,15 +72,10 @@ final class MultiframeRenderRequest extends RenderRequestBase
             DrawableResource<ContextType> drawable = createDrawable(program, resources)
         )
         {
-            if(monitor != null){
-                monitor.setProcessName("Generic Export");
-            }
+            monitor.setProcessName("Generic Export");
             for (int i = 0; i < frameCount; i++)
             {
-                if (monitor != null)
-                {
-                    monitor.allowUserCancellation();
-                }
+                monitor.allowUserCancellation();
 
                 program.setUniform("frame", i);
                 program.setUniform("frameCount", frameCount);
@@ -96,11 +93,8 @@ final class MultiframeRenderRequest extends RenderRequestBase
                 getOutputDirectory().mkdirs();
                 framebuffer.getTextureReaderForColorAttachment(0).saveToFile("PNG", exportFile);
 
-                if (monitor != null)
-                {
-                    monitor.setProgress((double) i / (double) frameCount,
-                        MessageFormat.format("Frame {0}/{1}", i+1, frameCount));
-                }
+                monitor.setProgress((double) i / (double) frameCount,
+                    MessageFormat.format("Frame {0}/{1}", i + 1, frameCount));
             }
         }
     }

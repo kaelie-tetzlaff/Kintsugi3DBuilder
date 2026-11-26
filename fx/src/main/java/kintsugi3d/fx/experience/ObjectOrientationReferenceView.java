@@ -19,6 +19,7 @@ import javafx.stage.Window;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.fx.controllers.modals.viewselect.CurrentProjectViewSelectable;
 import kintsugi3d.fx.controllers.modals.viewselect.OrientationViewSelectController;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -31,7 +32,7 @@ public class ObjectOrientationReferenceView extends ExperienceBase
     }
 
     @Override
-    public final String getName()
+    public final @NotNull String getName()
     {
         return "Select Orientation Reference View";
     }

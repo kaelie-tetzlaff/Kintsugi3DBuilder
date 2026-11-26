@@ -17,6 +17,7 @@ package kintsugi3d.gl.glfw;
 
 import kintsugi3d.gl.core.DoubleFramebuffer;
 import kintsugi3d.gl.window.WindowBuilderBase;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
@@ -35,14 +36,14 @@ public class CanvasWindowBuilder<ContextType extends WindowContextBase<ContextTy
         this.contextFactory = contextFactory;
     }
 
-    public final CanvasWindowBuilder<ContextType> setDefaultFramebufferCreator(Function<ContextType, DoubleFramebuffer<ContextType>> createDefaultFramebuffer)
+    public final @NotNull CanvasWindowBuilder<ContextType> setDefaultFramebufferCreator(Function<ContextType, DoubleFramebuffer<ContextType>> createDefaultFramebuffer)
     {
         this.createDefaultFramebuffer = createDefaultFramebuffer;
         return this;
     }
 
     @Override
-    public final CanvasWindow<ContextType> create()
+    public final @NotNull CanvasWindow<ContextType> create()
     {
         return new CanvasWindow<>(contextFactory, createDefaultFramebuffer, this);
     }

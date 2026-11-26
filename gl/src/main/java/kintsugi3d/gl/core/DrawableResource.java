@@ -16,6 +16,7 @@
 package kintsugi3d.gl.core;
 
 import kintsugi3d.gl.vecmath.*;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A drawable entity for a GL context.
@@ -44,7 +45,7 @@ public interface DrawableResource<ContextType extends Context<ContextType>>
      * @param primitiveMode What type of primitives to use when interpreting vertex buffers.
      * @param framebuffer The framebuffer to render to.
      */
-    void draw(PrimitiveMode primitiveMode, Framebuffer<ContextType> framebuffer);
+    void draw(@NotNull PrimitiveMode primitiveMode, @NotNull Framebuffer<ContextType> framebuffer);
 
     /**
      * Draws this to a particular framebuffer within a specified viewport rectangle.
@@ -55,7 +56,7 @@ public interface DrawableResource<ContextType extends Context<ContextType>>
      * @param width The width of the viewport rectangle in pixels.
      * @param height The height of the viewport rectangle in pixels.
      */
-    void draw(PrimitiveMode primitiveMode, Framebuffer<ContextType> framebuffer, int x, int y,
+    void draw(@NotNull PrimitiveMode primitiveMode, @NotNull Framebuffer<ContextType> framebuffer, int x, int y,
             int width, int height);
 
     /**
@@ -65,21 +66,21 @@ public interface DrawableResource<ContextType extends Context<ContextType>>
      * @param width The width of the viewport rectangle in pixels.
      * @param height The height of the viewport rectangle in pixels.
      */
-    void draw(PrimitiveMode primitiveMode, Framebuffer<ContextType> framebuffer, int width,
+    void draw(@NotNull PrimitiveMode primitiveMode, @NotNull Framebuffer<ContextType> framebuffer, int width,
             int height);
 
     /**
      * Draws this to the default framebuffer using the entire framebuffer as the viewport.
      * @param primitiveMode What type of primitives to use when interpreting vertex buffers.
      */
-    void draw(PrimitiveMode primitiveMode);
+    void draw(@NotNull PrimitiveMode primitiveMode);
 
     /**
      * Draws this (using the default primitive mode) to a particular framebuffer using the entire framebuffer as the viewport.
      * @param framebuffer The framebuffer to render to.
      */
     @Override
-    default void draw(Framebuffer<ContextType> framebuffer)
+    default void draw(@NotNull Framebuffer<ContextType> framebuffer)
     {
         draw(getDefaultPrimitiveMode(), framebuffer);
     }
@@ -92,7 +93,7 @@ public interface DrawableResource<ContextType extends Context<ContextType>>
      * @param width The width of the viewport rectangle in pixels.
      * @param height The height of the viewport rectangle in pixels.
      */
-    default void draw(Framebuffer<ContextType> framebuffer, int x, int y, int width, int height)
+    default void draw(@NotNull Framebuffer<ContextType> framebuffer, int x, int y, int width, int height)
     {
         draw(getDefaultPrimitiveMode(), framebuffer, x, y, width, height);
     }
@@ -103,7 +104,7 @@ public interface DrawableResource<ContextType extends Context<ContextType>>
      * @param width The width of the viewport rectangle in pixels.
      * @param height The height of the viewport rectangle in pixels.
      */
-    default void draw(Framebuffer<ContextType> framebuffer, int width, int height)
+    default void draw(@NotNull Framebuffer<ContextType> framebuffer, int width, int height)
     {
         draw(getDefaultPrimitiveMode(), framebuffer, width, height);
     }
@@ -218,7 +219,7 @@ public interface DrawableResource<ContextType extends Context<ContextType>>
      * @param name The name used to reference the vertex attribute within the shaders.
      * @param value The value to set the vertex attribute to.
      */
-    default void setVertexAttrib(String name, IntLike value)
+    default void setVertexAttrib(String name, @NotNull IntLike value)
     {
         setVertexAttrib(name, value.getIntValue());
     }
@@ -326,7 +327,7 @@ public interface DrawableResource<ContextType extends Context<ContextType>>
      * @param location The location of the vertex attribute to set.
      * @param value The value to set the vertex attribute to.
      */
-    default void setVertexAttrib(int location, IntLike value)
+    default void setVertexAttrib(int location, @NotNull IntLike value)
     {
         setVertexAttrib(location, value.getIntValue());
     }
@@ -336,12 +337,12 @@ public interface DrawableResource<ContextType extends Context<ContextType>>
      * @param location The location of the vertex attribute to set.
      * @param buffer The vertex buffer to bind to the vertex attribute.
      */
-    void addVertexBuffer(int location, ReadonlyVertexBuffer<ContextType> buffer);
+    void addVertexBuffer(int location, @NotNull ReadonlyVertexBuffer<ContextType> buffer);
 
     /**
      * Designates a vertex buffer to be used for the vertex attribute with a particular shader name.
      * @param name The name used to reference the vertex attribute within the shaders.
      * @param buffer The vertex buffer to bind to the vertex attribute.
      */
-    void addVertexBuffer(String name, ReadonlyVertexBuffer<ContextType> buffer);
+    void addVertexBuffer(String name, @NotNull ReadonlyVertexBuffer<ContextType> buffer);
 }

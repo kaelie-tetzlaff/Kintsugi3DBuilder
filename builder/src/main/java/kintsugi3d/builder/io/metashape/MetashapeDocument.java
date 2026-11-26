@@ -17,6 +17,8 @@ package kintsugi3d.builder.io.metashape;
 
 import kintsugi3d.builder.io.XMLHelper;
 import kintsugi3d.builder.util.UnzipHelper;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -28,10 +30,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class MetashapeDocument
 {
@@ -71,11 +70,6 @@ public class MetashapeDocument
             //extract project.zip and open the doc.xml
             Document projectZipXML = UnzipHelper.unzipToDocument(new File(documentPathInfo));
 
-            if (projectZipXML == null)
-            {
-                return;
-            }
-
             //set active chunk id if the project has one
             NodeList chunksWrapper = projectZipXML.getElementsByTagName("chunks");
             if (chunksWrapper.getLength() > 0)
@@ -99,9 +93,9 @@ public class MetashapeDocument
         }
     }
 
-    public final String getChunkNameFromID(int id)
+    public final @Nullable String getChunkNameFromID(int id)
     {
-        Optional<MetashapeChunk> chunk = chunks.stream()
+        Optional<@NotNull MetashapeChunk> chunk = chunks.stream()
             .filter(c -> c.getID() == id)
             .findFirst();
 
@@ -112,12 +106,12 @@ public class MetashapeDocument
         return "";
     }
 
-    final String getPSXPathBase()
+    final @NotNull String getPSXPathBase()
     {
         return psxFilePath.substring(0, psxFilePath.length() - 4);
     }
 
-    private void loadChunks(NodeList chunkList) throws IOException
+    private void loadChunks(@NotNull NodeList chunkList) throws IOException
     {
         chunks = new ArrayList<>(chunkList.getLength());
         for (int i = 0; i < chunkList.getLength(); ++i)
@@ -139,18 +133,18 @@ public class MetashapeDocument
         }
     }
 
-    public final Integer getActiveChunkID()
+    public final int getActiveChunkID()
     {
         return activeChunkID;
     }
 
-    private static boolean isValidPSXFilePath(String path)
+    private static boolean isValidPSXFilePath(@NotNull String path)
     {
         File file = new File(path);
         return file.exists() && file.getAbsolutePath().endsWith(".psx");
     }
 
-    public final File getPsxFile()
+    public final @NotNull File getPsxFile()
     {
         return new File(psxFilePath);
     }
@@ -160,26 +154,20 @@ public class MetashapeDocument
         return psxFilePath;
     }
 
-    public final List<MetashapeChunk> getChunks()
+    public final @NotNull List<MetashapeChunk> getChunks()
     {
         return Collections.unmodifiableList(chunks);
     }
 
-    public final void selectChunk(String selectedChunkLabel)
+    public final void selectChunk(@Nullable String selectedChunkLabel)
     {
-        Optional<MetashapeChunk> selectedChunk = chunks.stream()
-            .filter(chunk -> chunk.getLabel().equals(selectedChunkLabel))
-            .findFirst();
-
-        if (selectedChunk.isEmpty())
-        {
-            return;
-        }
-
-        activeChunkID = selectedChunk.get().getID();
+        chunks.stream()
+            .filter(chunk -> Objects.equals(chunk.getLabel(), selectedChunkLabel))
+            .findFirst()
+            .ifPresent(metashapeChunk -> activeChunkID = metashapeChunk.getID());
     }
 
-    public final MetashapeChunk getSelectedChunk()
+    public final @Nullable MetashapeChunk getSelectedChunk()
     {
         return chunks.stream()
             .filter(chunk -> chunk.getID() == activeChunkID)

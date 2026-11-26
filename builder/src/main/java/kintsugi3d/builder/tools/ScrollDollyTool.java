@@ -19,6 +19,7 @@ import kintsugi3d.builder.state.scene.ManipulableViewpointModel;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.window.Canvas3D;
 import kintsugi3d.gl.window.listeners.ScrollListener;
+import org.jetbrains.annotations.NotNull;
 
 public final class ScrollDollyTool implements ScrollListener
 {
@@ -29,13 +30,13 @@ public final class ScrollDollyTool implements ScrollListener
     private static class Builder extends ToolBuilderBase<ScrollDollyTool>
     {
         @Override
-        public final ScrollDollyTool create()
+        public final @NotNull ScrollDollyTool create()
         {
             return new ScrollDollyTool(getCameraModel());
         }
     }
 
-    static ToolBuilder<ScrollDollyTool> getBuilder()
+    static @NotNull ToolBuilder<ScrollDollyTool> getBuilder()
     {
         return new Builder();
     }

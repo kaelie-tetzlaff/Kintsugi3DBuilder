@@ -39,7 +39,7 @@ public final class Kintsugi3DBuilder
     {
     }
 
-    public static void main(String... args) throws IOException, InitializationException
+    public static void main(String @NotNull ... args) throws IOException, InitializationException
     {
         // TODO: temp fix to make file I/O work as expected in an internationalized context
         Locale.setDefault(Locale.ROOT);
@@ -67,6 +67,8 @@ public final class Kintsugi3DBuilder
         }
 
         Configuration.DEBUG.set(true);
+
+        //noinspection UseOfSystemOutOrSystemErr
         Configuration.DEBUG_STREAM.set(System.out);
 
         JavaFXApplication.setArgs(args);
@@ -119,6 +121,7 @@ public final class Kintsugi3DBuilder
 
         private TeeErrorStream(OutputStream redirect)
         {
+            //noinspection UseOfSystemOutOrSystemErr
             original = System.err;
             this.redirect = redirect;
         }

@@ -15,6 +15,8 @@
 
 package kintsugi3d.gl.builders.framebuffer;
 
+import org.jetbrains.annotations.NotNull;
+
 public final class DepthAttachmentSpec extends AttachmentSpec
 {
     public final int precision;
@@ -26,32 +28,32 @@ public final class DepthAttachmentSpec extends AttachmentSpec
         this.floatingPoint = floatingPoint;
     }
 
-    public static DepthAttachmentSpec createFixedPointWithPrecision(int precision)
+    public static @NotNull DepthAttachmentSpec createFixedPointWithPrecision(int precision)
     {
         return new DepthAttachmentSpec(precision, false);
     }
 
-    public static DepthAttachmentSpec createFloatingPointWithPrecision(int precision)
+    public static @NotNull DepthAttachmentSpec createFloatingPointWithPrecision(int precision)
     {
         return new DepthAttachmentSpec(precision, true);
     }
 
     @Override
-    public DepthAttachmentSpec setMultisamples(int samples, boolean fixedSampleLocations)
+    public @NotNull DepthAttachmentSpec setMultisamples(int samples, boolean fixedSampleLocations)
     {
         super.setMultisamples(samples, fixedSampleLocations);
         return this;
     }
 
     @Override
-    public DepthAttachmentSpec setMipmapsEnabled(boolean enabled)
+    public @NotNull DepthAttachmentSpec setMipmapsEnabled(boolean enabled)
     {
         super.setMipmapsEnabled(enabled);
         return this;
     }
 
     @Override
-    public DepthAttachmentSpec setLinearFilteringEnabled(boolean enabled)
+    public @NotNull DepthAttachmentSpec setLinearFilteringEnabled(boolean enabled)
     {
         super.setLinearFilteringEnabled(enabled);
         return this;

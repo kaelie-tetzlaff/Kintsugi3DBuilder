@@ -57,6 +57,7 @@ import kintsugi3d.fx.gl.FramebufferView;
 import kintsugi3d.fx.internal.ObservableActiveShaderModel;
 import kintsugi3d.fx.internal.ObservableCardsModel;
 import kintsugi3d.fx.internal.ObservableProjectModel;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -152,7 +153,7 @@ public class MainWindowController
         return instance;
     }
 
-    public final void init(Stage injectedStage, @SuppressWarnings("ParameterHidesMemberVariable") JavaFXState javaFXState,
+    public final void init(@NotNull Stage injectedStage, @SuppressWarnings("ParameterHidesMemberVariable") @NotNull JavaFXState javaFXState,
                            Runnable injectedUserDocumentationHandler)
     {
         //noinspection AssignmentToStaticFieldFromInstanceMethod
@@ -389,13 +390,13 @@ public class MainWindowController
         }
     }
 
-    private void bindEnabledToProjectProcessed(MenuItem shader)
+    private void bindEnabledToProjectProcessed(@NotNull MenuItem shader)
     {
         shader.disableProperty().bind(
             projectModel.getProjectLoadedProperty().not().or(projectModel.getProjectProcessedProperty().not()));
     }
 
-    private void bindEnabledToProjectLoaded(MenuItem menuItem)
+    private void bindEnabledToProjectLoaded(@NotNull MenuItem menuItem)
     {
         menuItem.disableProperty().bind(projectModel.getProjectLoadedProperty().not());
     }
@@ -423,7 +424,7 @@ public class MainWindowController
      * Send menubar accelerators to another scene
      * @param scene
      */
-    public final void initAccelerators(Scene scene)
+    public final void initAccelerators(@NotNull Scene scene)
     {
         for (Menu menu : mainMenubar.getMenus())
         {
@@ -441,14 +442,14 @@ public class MainWindowController
         }
     }
 
-    private static List<RadioMenuItem> getRadioMenuItems(Menu menu)
+    private static @NotNull List<RadioMenuItem> getRadioMenuItems(@NotNull Menu menu)
     {
         List<RadioMenuItem> list = new ArrayList<>(menu.getItems().size());
         getRadioMenuItemsHelper(list, menu.getItems());
         return list;
     }
 
-    private static void getRadioMenuItemsHelper(List<RadioMenuItem> radioMenuItems, Iterable<MenuItem> menuItems)
+    private static void getRadioMenuItemsHelper(@NotNull List<RadioMenuItem> radioMenuItems, @NotNull Iterable<MenuItem> menuItems)
     {
         for (MenuItem item : menuItems)
         {
@@ -465,7 +466,7 @@ public class MainWindowController
     }
 
     // Populate menu based on a given input number
-    private void updateMaterialShaderList(Iterable<ProjectDataCard> materialCards)
+    private void updateMaterialShaderList(@NotNull Iterable<ProjectDataCard> materialCards)
     {
         paletteMaterialWeightedMenu.getItems().clear();
 
@@ -480,7 +481,7 @@ public class MainWindowController
         }
     }
 
-    private void updateTextureList(Iterable<ProjectDataCard> textureCards)
+    private void updateTextureList(@NotNull Iterable<ProjectDataCard> textureCards)
     {
         texturesMenu.getItems().clear();
         weightmapMenu.getItems().clear();
@@ -505,7 +506,7 @@ public class MainWindowController
         }
     }
 
-    private RadioMenuItem createMenuItemFromShader(ShaderInfo shader)
+    private @NotNull RadioMenuItem createMenuItemFromShader(@NotNull ShaderInfo shader)
     {
         RadioMenuItem item = new RadioMenuItem(shader.getFriendlyName());
         item.setToggleGroup(renderGroup);
@@ -621,7 +622,7 @@ public class MainWindowController
         userDocumentationHandler.run();
     }
 
-    @FXML public final void openExperience(ActionEvent event)
+    @FXML public final void openExperience(@NotNull ActionEvent event)
     {
         if (event.getSource() instanceof MenuItem)
         {
@@ -687,7 +688,7 @@ public class MainWindowController
         return cleanRecentProjectsMenu;
     }
 
-    public final void handleMiniProgressBar(MouseEvent event)
+    public final void handleMiniProgressBar(@NotNull MouseEvent event)
     {
         double relX = event.getX() - swapControlsStackPane.getLayoutX();
         double relY = event.getY() - swapControlsStackPane.getLayoutY();
@@ -714,7 +715,7 @@ public class MainWindowController
         miniProgressLabel.textProperty().bind(labelProperty);
     }
 
-    public final void mouseEnterMiniBar(MouseEvent event)
+    public final void mouseEnterMiniBar(@NotNull MouseEvent event)
     {
         double relX;
         double relY;

@@ -22,6 +22,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
 import java.util.UUID;
@@ -41,7 +42,7 @@ public class UUIDSelectionModel
         return selected.isEmpty();
     }
 
-    public final ObservableMap<UUID, Boolean> getSelected()
+    public final @NotNull ObservableMap<UUID, Boolean> getSelected()
     {
         //noinspection AssignmentOrReturnOfFieldWithMutableType
         return unmodifiableSelected;
@@ -52,7 +53,7 @@ public class UUIDSelectionModel
         return selected.containsKey(id);
     }
 
-    public final BooleanExpression createSelectedBinding(UUID id)
+    public final @NotNull BooleanExpression createSelectedBinding(UUID id)
     {
         return Bindings.createBooleanBinding(
             () -> selected.containsKey(id),
@@ -65,7 +66,7 @@ public class UUIDSelectionModel
         return lastSelected.get();
     }
 
-    public final ObjectExpression<UUID> lastSelectedProperty()
+    public final @NotNull ObjectExpression<UUID> lastSelectedProperty()
     {
         return lastSelected;
     }

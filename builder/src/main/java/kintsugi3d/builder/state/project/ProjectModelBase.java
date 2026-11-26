@@ -16,6 +16,7 @@
 package kintsugi3d.builder.state.project;
 
 import kintsugi3d.builder.io.XMLHelper;
+import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -58,7 +59,7 @@ public abstract class ProjectModelBase<
     protected abstract List<ObjectPoseType> getObjectPoseList();
 
     @Override
-    public final void parseXMLDocument(Document document)
+    public final void parseXMLDocument(@NotNull Document document)
     {
         Node cameraListNode = document.getElementsByTagName("CameraList").item(0);
         if (cameraListNode != null)
@@ -150,7 +151,7 @@ public abstract class ProjectModelBase<
     }
 
     @Override
-    public final Document toXMLDocument() throws ParserConfigurationException
+    public final @NotNull Document toXMLDocument() throws ParserConfigurationException
     {
         Document document = XMLHelper.getDocumentBuilder().newDocument();
         Element rootElement = document.createElement("Project");
@@ -218,7 +219,7 @@ public abstract class ProjectModelBase<
     protected abstract LightGroupType constructLightGroupSetting();
     protected abstract ObjectPoseType constructObjectPoseSetting();
 
-    public final EnvironmentType getNoEnvironment()
+    public final @NotNull EnvironmentType getNoEnvironment()
     {
         return noEnvironment;
     }

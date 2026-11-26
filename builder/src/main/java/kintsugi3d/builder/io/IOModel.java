@@ -35,11 +35,14 @@ import kintsugi3d.builder.util.events.EventDispatcher;
 import kintsugi3d.builder.util.events.EventListeners;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
+import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.material.ReadonlyImportedMaterial;
 import kintsugi3d.gl.util.ImageHelper;
 import kintsugi3d.util.EncodableColorImage;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -73,8 +76,8 @@ public class IOModel implements IO
     // Set defaults just in case the load options model is never set (i.e. testing)
     private ReadonlyLoadOptionsModel loadOptionsModel = new SimpleLoadOptionsModel();
 
-    private File currentProjectFile;
-    private File currentViewSetFile;
+    private @Nullable File currentProjectFile;
+    private @Nullable File currentViewSetFile;
 
     private final EventDispatcher<ProjectOpenedListener, ProjectOpenedEvent> projectOpened
         = new EventDispatcher<>(ProjectOpenedListener::onProjectOpened);
@@ -103,13 +106,13 @@ public class IOModel implements IO
     }
 
     @Override
-    public final ProgressMonitor getAggregateProgressMonitor()
+    public final @NotNull ProgressMonitor getAggregateProgressMonitor()
     {
         return progressMonitor;
     }
 
     @Override
-    public final void addProgressMonitor(ProgressMonitor monitor)
+    public final void addProgressMonitor(@NotNull ProgressMonitor monitor)
     {
         progressMonitor.addSubMonitor(monitor);
     }
@@ -126,13 +129,13 @@ public class IOModel implements IO
     }
 
     @Override
-    public final EventListeners<ProjectOpenedListener> projectOpenedListeners()
+    public final @NotNull EventListeners<ProjectOpenedListener> projectOpenedListeners()
     {
         return projectOpened;
     }
 
     @Override
-    public final EventListeners<ProjectSavedListener> projectSavedListeners()
+    public final @NotNull EventListeners<ProjectSavedListener> projectSavedListeners()
     {
         return projectSaved;
     }
@@ -150,7 +153,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public final EventListeners<ProjectClosedListener> projectClosedListeners()
+    public final @NotNull EventListeners<ProjectClosedListener> projectClosedListeners()
     {
         return projectClosed;
     }
@@ -162,31 +165,31 @@ public class IOModel implements IO
     }
 
     @Override
-    public final ViewSet getLoadedViewSetOrNull()
+    public final @Nullable ViewSet getLoadedViewSetOrNull()
     {
         return handler.getLoadedViewSet();
     }
 
     @Override
-    public final ReadonlyVertexGeometry getLoadedGeometry()
+    public final @Nullable ReadonlyVertexGeometry getLoadedGeometry()
     {
         return handler.getLoadedGeometry();
     }
 
     @Override
-    public final ReadonlyImageBasedRenderable<?> getMainRenderable()
+    public final @Nullable ReadonlyImageBasedRenderable<?> getMainRenderable()
     {
         return handler.getMainRenderable();
     }
 
     @Override
-    public final File getViewSetFile()
+    public final @Nullable File getViewSetFile()
     {
         return currentViewSetFile;
     }
 
     @Override
-    public final File getProjectFile()
+    public final @Nullable File getProjectFile()
     {
         return currentProjectFile;
     }
@@ -197,13 +200,20 @@ public class IOModel implements IO
         return currentProjectFile != null;
     }
 
-    private void load(Runnable loader)
+    private void requestLoad(Runnable loader)
     {
-        load("(Untitled)", loader);
+        requestLoad("(Untitled)", loader);
     }
 
-    private void load(String projectName, Runnable loader)
+    private void requestLoad(String projectName, Runnable loader)
     {
+        // need to check for conflicting process early so crucial info isn't unloaded
+        if (Rendering.hasBlockingRequest())
+        {
+            progressMonitor.blocked();
+            return;
+        }
+
         closeProject(() ->
         {
             projectOpened.notify(new ProjectOpenedEvent(projectName));
@@ -212,9 +222,9 @@ public class IOModel implements IO
     }
 
     @Override
-    public final void loadFromLooseFiles(File newProjectFile, String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions)
+    public final void requestLoadFromLooseFiles(File newProjectFile, String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions)
     {
-        load(() ->
+        requestLoad(() ->
         {
             try
             {
@@ -230,9 +240,9 @@ public class IOModel implements IO
     }
 
     @Override
-    public final void hotSwapLooseFiles(String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions)
+    public final void requestHotSwapLooseFiles(String internalName, File xmlFile, @NotNull ViewSetLoadOptions viewSetLoadOptions)
     {
-        load(() ->
+        requestLoad(() ->
         {
             try
             {
@@ -249,9 +259,9 @@ public class IOModel implements IO
     }
 
     @Override
-    public final void loadFromMetashapeModel(File newProjectFile, MetashapeModel model)
+    public final void requestLoadFromMetashapeModel(File newProjectFile, MetashapeModel model)
     {
-        load(() ->
+        requestLoad(() ->
         {
             try
             {
@@ -267,18 +277,19 @@ public class IOModel implements IO
     }
 
     @Override
-    public final void loadExistingProject(File projectFile)
+    public final void requestLoadExistingProject(@NotNull File projectFile)
     {
-        //need to check for conflicting process early so crucial info isn't unloaded
-        if (progressMonitor.isConflictingProcess())
+        // need to check for conflicting process early so crucial info isn't unloaded
+        if (Rendering.hasBlockingRequest())
         {
+            progressMonitor.blocked();
             return;
         }
 
-        //open the project, update the recent files list & recentDirectory, disable shaders which aren't useful until processing textures
+        // open the project, update the recent files list & recentDirectory, disable shaders which aren't useful until processing textures
         RecentProjects.getInstance().setMostRecentDirectory(projectFile.getParentFile());
 
-        File vsetFile;
+        @Nullable File vsetFile;
 
         if (projectFile.getName().endsWith(".vset"))
         {
@@ -299,14 +310,14 @@ public class IOModel implements IO
             }
         }
 
-        loadExistingProject(projectFile, vsetFile);
+        requestLoadExistingProject(projectFile, vsetFile);
     }
 
-    private void loadExistingProject(File projectFile, File vsetFile)
+    private void requestLoadExistingProject(@NotNull File projectFile, @Nullable File vsetFile)
     {
         if (vsetFile != null)
         {
-            load(projectFile.getName(), () ->
+            requestLoad(projectFile.getName(), () ->
             {
                 try
                 {
@@ -354,12 +365,12 @@ public class IOModel implements IO
     }
 
     @Override
-    public final void saveProject(File projectFile, Runnable finishedCallback) throws IOException
+    public final void saveProject(@NotNull File projectFile, @Nullable Runnable finishedCallback) throws IOException
     {
-        ViewSet viewSet = getLoadedViewSetOrNull();
-
+        ViewSet viewSet = getLoadedViewSet();
         setViewsetDirectories(projectFile, viewSet);
 
+        progressMonitor.setStageCount(1);
         progressMonitor.setStage(0, "Saving project...");
         progressMonitor.setFinishingUpText("This shouldn't take long...");
 
@@ -395,10 +406,12 @@ public class IOModel implements IO
         // Export glTF for Kintsugi 3D Viewer even if not requested
         // TODO: ensure that GLTF texture filenames match default material texture names;
         //  otherwise might not work when launching Kintsugi 3D Viewer from Builder.
-        handler.saveGLTF(getLoadedViewSetOrNull().getSupportingFilesDirectory(), /* defaults */ new ExportSettings());
+        handler.saveGLTF(Objects.requireNonNull(getLoadedViewSet().getSupportingFilesDirectory(),
+                "No supporting files directory specified."),
+            /* defaults */ new ExportSettings(), progressMonitor);
 
         // Save textures and basis funtions (will be deferred to graphics thread).
-        handler.saveAllMaterialFiles(getLoadedViewSetOrNull().getSupportingFilesDirectory(), finishedCallback);
+        handler.saveAllMaterialFiles(getLoadedViewSet().getSupportingFilesDirectory(), finishedCallback);
 
         // Add to recent files
         RecentProjects.getInstance().addToRecentFiles(projectFile.getAbsolutePath());
@@ -407,7 +420,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public final File getViewSetFileForProject(File projectFile) throws IOException
+    public final @NotNull File getViewSetFileForProject(@NotNull File projectFile) throws IOException
     {
         try
         {
@@ -432,7 +445,7 @@ public class IOModel implements IO
         return openProjectFileAsXMLDocument(projectFile, new ErrorLogger());
     }
 
-    private static String getViewSetFilenameFromXMLDocument(Document document) throws IOException
+    private static @NotNull String getViewSetFilenameFromXMLDocument(@NotNull Document document) throws IOException
     {
         Node vsetNode = document.getElementsByTagName("ViewSet").item(0);
         if (vsetNode instanceof Element)
@@ -446,7 +459,7 @@ public class IOModel implements IO
         }
     }
 
-    private static void saveXMLProject(File projectFile, File vsetFile) throws IOException
+    private static void saveXMLProject(@NotNull File projectFile, @NotNull File vsetFile) throws IOException
     {
         try
         {
@@ -473,7 +486,7 @@ public class IOModel implements IO
         }
     }
 
-    private void setViewsetDirectories(File projectFile, ViewSet viewSet)
+    private void setViewsetDirectories(@Nullable File projectFile, @NotNull ViewSet viewSet)
     {
         if (projectFile != null)
         {
@@ -495,7 +508,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public final EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException
+    public final @Nullable EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException
     {
         return handler.loadEnvironmentMap(environmentMapFile);
     }
@@ -506,7 +519,7 @@ public class IOModel implements IO
         handler.loadBackplate(backplateFile);
     }
 
-    private static File getDefaultSupportingFilesDirectory(File projectFile)
+    private static @NotNull File getDefaultSupportingFilesDirectory(@NotNull File projectFile)
     {
         return new File(projectFile.getParentFile(), projectFile.getName() + ".files");
     }
@@ -553,7 +566,7 @@ public class IOModel implements IO
      * @param srcFile
      * @param destDir
      */
-    private static void copyFileSafe(File srcFile, File destDir)
+    private static void copyFileSafe(@Nullable File srcFile, @NotNull File destDir)
     {
         if (srcFile != null)
         {
@@ -577,7 +590,7 @@ public class IOModel implements IO
      */
     private void copyMasks()
     {
-        ViewSet viewSet = getLoadedViewSetOrNull();
+        ViewSet viewSet = getLoadedViewSet();
         File masksSrcDir = viewSet.getMasksDirectory();
         if (masksSrcDir == null)
         {
@@ -594,7 +607,7 @@ public class IOModel implements IO
             try
             {
                 // Just unzip everything for efficiency; could clean up any unused files (i.e. non-masks) but probably not necessary
-                UnzipHelper.unzipToDirectory(masksSrcDir, masksDestinationDir, null);
+                UnzipHelper.unzipToDirectory(masksSrcDir, masksDestinationDir, new DefaultProgressMonitor());
 
                 // Use the destination directory as the masks directory for validating (and thereafter)
                 viewSet.setMasksDirectory(masksDestinationDir);
@@ -627,7 +640,7 @@ public class IOModel implements IO
         }
     }
 
-    private static File getMasksDestinationDirectory(ReadonlyViewSet viewSet)
+    private static @NotNull File getMasksDestinationDirectory(@NotNull ReadonlyViewSet viewSet)
     {
         File masksDestParentDir = viewSet.getSupportingFilesDirectory();
 
@@ -653,7 +666,7 @@ public class IOModel implements IO
      */
     private void copyModelAndTextures()
     {
-        ViewSet viewSet = getLoadedViewSetOrNull();
+        ViewSet viewSet = getLoadedViewSet();
 
         // Grab reference first just in case for thread synchronization.
         File modelDestParentDir = viewSet.getSupportingFilesDirectory();
@@ -675,47 +688,54 @@ public class IOModel implements IO
         // Grab copy for thread synchronization, just in case.
         File geometryFile = viewSet.getGeometryFile();
 
-        // Unzip model and textures if needed
-        if (geometryFile.toString().endsWith(".zip"))
+        if (geometryFile != null)
         {
-            // Assuming a Metashape-zipped PLY model called "mesh.ply".
-            LOG.info("Unzipping model folder...");
-            try
+            // Unzip model and textures if needed
+            if (geometryFile.toString().endsWith(".zip"))
             {
-                // Just unzip everything for efficiency; could clean up any unused files but probably not necessary
-                UnzipHelper.unzipToDirectory(geometryFile, modelDestDir, null);
+                // Assuming a Metashape-zipped PLY model called "mesh.ply".
+                LOG.info("Unzipping model folder...");
+                try
+                {
+                    // Just unzip everything for efficiency; could clean up any unused files but probably not necessary
+                    UnzipHelper.unzipToDirectory(geometryFile, modelDestDir, new DefaultProgressMonitor());
 
-                viewSet.setGeometryFile(new File(modelDestDir, "mesh.ply"));
+                    viewSet.setGeometryFile(new File(modelDestDir, "mesh.ply"));
 
-                // Copy textures from the destination directory.
-                copyTextures(modelDestDir);
+                    // Copy textures from the destination directory.
+                    copyTextures(modelDestDir);
+                }
+                catch (IOException e)
+                {
+                    LOG.error("Failed to unzip model / textures.", e);
+                }
             }
-            catch (IOException e)
+            else
             {
-                LOG.error("Failed to unzip model / textures.", e);
+                copyFileSafe(geometryFile, modelDestDir);
+
+                for (var resource : viewSet.getResourceMap().entrySet())
+                {
+                    if (resource.getKey().startsWith("texture."))
+                    {
+                        copyFileSafe(resource.getValue(), modelDestDir);
+                    }
+                }
+
+                // Use the destination directory as the model directory to use from now on.
+                viewSet.setGeometryFile(new File(modelDestDir, geometryFile.getName()));
+
+                // Copy textures from the "original" file directory
+                copyTextures(geometryFile.getParentFile());
             }
         }
         else
         {
-            copyFileSafe(geometryFile, modelDestDir);
-
-            for (var resource : viewSet.getResourceMap().entrySet())
-            {
-                if (resource.getKey().startsWith("texture."))
-                {
-                    copyFileSafe(resource.getValue(), modelDestDir);
-                }
-            }
-
-            // Use the destination directory as the model directory to use from now on.
-            viewSet.setGeometryFile(new File(modelDestDir, geometryFile.getName()));
-
-            // Copy textures from the "original" file directory
-            copyTextures(geometryFile.getParentFile());
+            LOG.warn("Geometry file is null; no model or textures were copied.");
         }
     }
 
-    private void copyTextures(File textureDirectory)
+    private void copyTextures(@Nullable File textureDirectory)
     {
         if (textureDirectory != null)
         {
@@ -741,7 +761,7 @@ public class IOModel implements IO
         }
     }
 
-    private void copyTexturesFromSupplier(TextureSupplier textureSupplier)
+    private void copyTexturesFromSupplier(@NotNull TextureSupplier textureSupplier)
     {
         for (Entry<String, File> entry : textureSupplier.getTextures().entrySet())
         {
@@ -749,11 +769,11 @@ public class IOModel implements IO
         }
     }
 
-    private void copyTexture(File originalFile, String texName)
+    private void copyTexture(@Nullable File originalFile, String texName)
     {
         if (originalFile != null && originalFile.exists())
         {
-            File outTex = TextureResources.getTextureFile(texName, getLoadedViewSetOrNull().getSupportingFilesDirectory());
+            File outTex = TextureResources.getTextureFile(texName, getLoadedViewSet().getSupportingFilesDirectory());
             try
             {
                 // Force conversion to PNG.

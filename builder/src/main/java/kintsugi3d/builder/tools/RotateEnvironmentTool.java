@@ -18,6 +18,7 @@ package kintsugi3d.builder.tools;
 import kintsugi3d.builder.state.scene.EnvironmentModel;
 import kintsugi3d.gl.window.CanvasSize;
 import kintsugi3d.gl.window.CursorPosition;
+import org.jetbrains.annotations.NotNull;
 
 final class RotateEnvironmentTool implements DragTool
 {
@@ -33,13 +34,13 @@ final class RotateEnvironmentTool implements DragTool
     private static class Builder extends ToolBuilderBase<RotateEnvironmentTool>
     {
         @Override
-        public final RotateEnvironmentTool create()
+        public final @NotNull RotateEnvironmentTool create()
         {
             return new RotateEnvironmentTool(getLightingEnvironmentModel().getEnvironmentModel());
         }
     }
 
-    static ToolBuilder<RotateEnvironmentTool> getBuilder()
+    static @NotNull ToolBuilder<RotateEnvironmentTool> getBuilder()
     {
         return new Builder();
     }
@@ -50,7 +51,7 @@ final class RotateEnvironmentTool implements DragTool
     }
 
     @Override
-    public void mouseButtonPressed(CursorPosition cursorPosition, CanvasSize canvasSize)
+    public void mouseButtonPressed(CursorPosition cursorPosition, @NotNull CanvasSize canvasSize)
     {
         mouseStart = cursorPosition;
 
@@ -59,7 +60,7 @@ final class RotateEnvironmentTool implements DragTool
     }
 
     @Override
-    public void cursorDragged(CursorPosition cursorPosition, CanvasSize canvasSize)
+    public void cursorDragged(@NotNull CursorPosition cursorPosition, CanvasSize canvasSize)
     {
         environmentModel.setEnvironmentRotation((float)(oldEnvironmentRotation + (cursorPosition.x - mouseStart.x) * rotateSensitivityAdjusted));
     }

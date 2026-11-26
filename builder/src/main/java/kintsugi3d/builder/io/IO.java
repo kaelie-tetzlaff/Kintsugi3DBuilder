@@ -24,10 +24,13 @@ import kintsugi3d.builder.util.events.EventListeners;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.util.EncodableColorImage;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Objects;
 
 public interface IO
 {
@@ -38,8 +41,8 @@ public interface IO
 
     ReadonlyLoadOptionsModel getLoadOptionsModel();
 
-    ProgressMonitor getAggregateProgressMonitor();
-    void addProgressMonitor(ProgressMonitor monitor);
+    @NotNull ProgressMonitor getAggregateProgressMonitor();
+    void addProgressMonitor(@NotNull ProgressMonitor monitor);
 
     EventListeners<ProjectOpenedListener> projectOpenedListeners();
     EventListeners<ProjectSavedListener> projectSavedListeners();
@@ -48,36 +51,41 @@ public interface IO
     EventListeners<ProjectClosedListener> projectClosedListeners();
 
     boolean isProjectOpen();
-    File getViewSetFile();
-    File getProjectFile();
+    @Nullable File getViewSetFile();
+    @Nullable File getProjectFile();
+
+    private @NotNull File validateProjectFile()
+    {
+        return Objects.requireNonNull(getProjectFile(), "No project is open.");
+    }
 
     default boolean isProjectProcessed()
     {
-        return hasLoadedRenderable() && getMainRenderable().getResources().hasProcessedWeightMaps();
-    }
-
-    ViewSet getLoadedViewSetOrNull();
-
-    default ViewSet getLoadedViewSetOrThrow()
-    {
-        ViewSet viewSet = getLoadedViewSetOrNull();
-        if (viewSet == null)
+        if (hasLoadedRenderable())
         {
-            throw new IllegalStateException("No project loaded.");
+            ReadonlyImageBasedRenderable<?> mainRenderable = getMainRenderable();
+            return mainRenderable != null && mainRenderable.getResources().hasProcessedWeightMaps();
         }
         else
         {
-            return viewSet;
+            return false;
         }
     }
 
-    ReadonlyVertexGeometry getLoadedGeometry();
-    ReadonlyImageBasedRenderable<?> getMainRenderable();
+    @Nullable ViewSet getLoadedViewSetOrNull();
+
+    default @NotNull ViewSet getLoadedViewSet()
+    {
+        return Objects.requireNonNull(getLoadedViewSetOrNull(), "No project loaded.");
+    }
+
+    @Nullable ReadonlyVertexGeometry getLoadedGeometry();
+    @Nullable ReadonlyImageBasedRenderable<?> getMainRenderable();
     ReadonlyImageBasedRenderable<?> getRenderableForShader(ShaderInfo shader);
-    void loadFromLooseFiles(File newProjectFile, String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions);
-    void hotSwapLooseFiles(String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions);
-    void loadFromMetashapeModel(File newProjectFile, MetashapeModel model);
-    void loadExistingProject(File projectFile);
+    void requestLoadFromLooseFiles(File newProjectFile, String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions);
+    void requestHotSwapLooseFiles(String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions);
+    void requestLoadFromMetashapeModel(File newProjectFile, MetashapeModel model);
+    void requestLoadExistingProject(File projectFile);
     File getViewSetFileForProject(File projectFile) throws IOException;
 
     /**
@@ -92,7 +100,7 @@ public interface IO
      *
      * @throws IOException
      */
-    void saveProject(File projectFile, Runnable finishedCallback) throws IOException;
+    void saveProject(@NotNull File projectFile, @Nullable Runnable finishedCallback) throws IOException;
 
     /**
      * Saves the project, including textures and glTF model.  If the project file is not a .vset, the .vset will be created in a supporting files directory.
@@ -103,7 +111,7 @@ public interface IO
      *
      * @throws IOException
      */
-    default void saveProject(File projectFile) throws IOException
+    default void saveProject(@NotNull File projectFile) throws IOException
     {
         saveProject(projectFile, null);
     }
@@ -121,7 +129,7 @@ public interface IO
      */
     default void saveProject(Runnable finishedCallback) throws IOException
     {
-        saveProject(getProjectFile(), finishedCallback);
+        saveProject(validateProjectFile(), finishedCallback);
     }
 
     /**
@@ -134,10 +142,10 @@ public interface IO
      */
     default void saveProject() throws IOException
     {
-        saveProject(getProjectFile(), null);
+        saveProject(validateProjectFile(), null);
     }
 
-    EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException;
+    @Nullable EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException;
     void loadBackplate(File backplateFile) throws FileNotFoundException;
 
     void closeProject();

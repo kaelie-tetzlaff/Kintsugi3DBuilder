@@ -15,6 +15,8 @@
 
 package kintsugi3d.gl.core;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * An interface for an object that can serve as a texture, an image stored in graphics memory.
  * In addition to the required methods, this interface also serves as a placeholder in the type hierarchy,
@@ -35,13 +37,13 @@ public interface Texture<ContextType extends Context<ContextType>> extends Conte
      * Gets the texture's color format, if it is uncompressed.
      * @return The uncompressed color format, or null if the color format is compressed.
      */
-    ColorFormat getInternalUncompressedColorFormat();
+    @Nullable ColorFormat getInternalUncompressedColorFormat();
 
     /**
      * Gets the texture's compression format, if it is compressed.
      * @return The compression format, or null if the color format is uncompressed.
      */
-    CompressionFormat getInternalCompressedColorFormat();
+    @Nullable CompressionFormat getInternalCompressedColorFormat();
 
     /**
      * Gets whether the internal format is compressed.

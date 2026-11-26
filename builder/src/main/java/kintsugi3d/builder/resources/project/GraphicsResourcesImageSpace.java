@@ -28,6 +28,7 @@ import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.geometry.GeometryMode;
 import kintsugi3d.gl.geometry.VertexGeometry;
+import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.nativebuffer.NativeDataType;
@@ -38,6 +39,8 @@ import kintsugi3d.gl.vecmath.IntVector2;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
 import kintsugi3d.util.ImageFinder;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,10 +49,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ForkJoinPool;
 
 /**
@@ -71,39 +71,39 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
     /**
      * A GPU buffer containing projection transformations defining the intrinsic properties of each camera.
      */
-    private final UniformBuffer<ContextType> cameraProjectionBuffer;
+    private final @Nullable UniformBuffer<ContextType> cameraProjectionBuffer;
 
     /**
      * A GPU buffer containing for every view an index designating the projection transformation that should be used for each view.
      */
-    private final UniformBuffer<ContextType> cameraProjectionIndexBuffer;
+    private final @Nullable UniformBuffer<ContextType> cameraProjectionIndexBuffer;
 
-    private final Texture3D<ContextType> colorTextures;
+    private final @Nullable Texture3D<ContextType> colorTextures;
 
     /**
      * A depth texture array containing a depth image for every view.
      */
-    private final Texture3D<ContextType> depthTextures;
+    private final @Nullable Texture3D<ContextType> depthTextures;
 
     /**
      * A depth texture array containing a shadow map for every view.
      */
-    private final Texture3D<ContextType> shadowTextures;
+    private final @Nullable Texture3D<ContextType> shadowTextures;
 
     /**
      * A GPU buffer containing the matrices that were used for each shadow map in the shadowTextures array.
      */
-    private final UniformBuffer<ContextType> shadowMatrixBuffer;
+    private final @Nullable UniformBuffer<ContextType> shadowMatrixBuffer;
 
 
     public static final class Builder<ContextType extends Context<ContextType>>
     {
         private final ContextType context;
         private ViewSet viewSet;
-        private VertexGeometry geometry;
+        private @Nullable VertexGeometry geometry;
         private File imageDirectoryOverride;
         private ReadonlyLoadOptionsModel imageLoadOptions;
-        private ProgressMonitor progressMonitor;
+        private @NotNull ProgressMonitor progressMonitor = new DefaultProgressMonitor();
         private double[] linearLuminanceValues;
         private byte[] encodedLuminanceValues;
         private String orientationViewName;
@@ -124,14 +124,14 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             }
         }
 
-        public Builder<ContextType> setOrientationView(@SuppressWarnings("ParameterHidesMemberVariable") String orientationViewName, double rotation)
+        public @NotNull Builder<ContextType> setOrientationView(@SuppressWarnings("ParameterHidesMemberVariable") String orientationViewName, double rotation)
         {
             this.orientationViewName = orientationViewName;
             viewSet.setOrientationViewRotationDegrees(rotation);
             return this;
         }
 
-        public Builder<ContextType> setImageLoadOptions(ReadonlyLoadOptionsModel imageLoadOptions)
+        public @NotNull Builder<ContextType> setImageLoadOptions(ReadonlyLoadOptionsModel imageLoadOptions)
         {
             this.imageLoadOptions = imageLoadOptions;
 
@@ -140,21 +140,21 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             return this;
         }
 
-        public Builder<ContextType> setProgressMonitor(ProgressMonitor progressMonitor)
+        public @NotNull Builder<ContextType> setProgressMonitor(@NotNull ProgressMonitor progressMonitor)
         {
             this.progressMonitor = progressMonitor;
             return this;
         }
 
         @SuppressWarnings("ParameterHidesMemberVariable")
-        public Builder<ContextType> setTonemapping(double[] linearLuminanceValues, byte[] encodedLuminanceValues)
+        public @NotNull Builder<ContextType> setTonemapping(double @NotNull [] linearLuminanceValues, byte @NotNull [] encodedLuminanceValues)
         {
             this.linearLuminanceValues = Arrays.copyOf(linearLuminanceValues, linearLuminanceValues.length);
             this.encodedLuminanceValues = Arrays.copyOf(encodedLuminanceValues, encodedLuminanceValues.length);
             return this;
         }
 
-        public Builder<ContextType> loadVSETFile(File vsetFile, File supportingFilesDirectory) throws IOException, MeshImportException
+        public @NotNull Builder<ContextType> loadVSETFile(@NotNull File vsetFile, File supportingFilesDirectory) throws IOException, MeshImportException
         {
             viewSet = ViewSetReaderFromVSET.getInstance().readFromFile(vsetFile, supportingFilesDirectory).finish();
             updateViewSetFromImageLoadOptions();
@@ -162,7 +162,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             return this;
         }
 
-        private static ViewSetReader getReaderForFile(File cameraFile)
+        private static @NotNull ViewSetReader getReaderForFile(@NotNull File cameraFile)
         {
             if (cameraFile.getName().endsWith(".xml")) // Agisoft Metashape
             {
@@ -179,13 +179,13 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         }
 
         // images are defined in the load options
-        public Builder<ContextType> loadLooseFiles(File cameraFile, ViewSetLoadOptions viewSetLoadOptions) throws Exception
+        public @NotNull Builder<ContextType> loadLooseFiles(@NotNull File cameraFile, @NotNull ViewSetLoadOptions viewSetLoadOptions) throws Exception
         {
             return loadLooseFiles(getReaderForFile(cameraFile), cameraFile, viewSetLoadOptions);
         }
 
         // images are defined in the load options
-        public Builder<ContextType> loadLooseFiles(ViewSetReader reader, File cameraFile, ViewSetLoadOptions viewSetLoadOptions) throws Exception
+        public @NotNull Builder<ContextType> loadLooseFiles(@NotNull ViewSetReader reader, @NotNull File cameraFile, @NotNull ViewSetLoadOptions viewSetLoadOptions) throws Exception
         {
             // Load view set
             viewSet = reader.readFromFile(cameraFile, viewSetLoadOptions)
@@ -201,7 +201,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
          * @return
          * @throws IOException
          */
-        public Builder<ContextType> loadFromMetashapeModel(MetashapeModel model)
+        public @NotNull Builder<ContextType> loadFromMetashapeModel(@NotNull MetashapeModel model)
             throws IOException, MeshImportException, XMLStreamException, MissingImagesException
         {
             viewSet = ViewSetReaderFromAgisoftXML
@@ -212,15 +212,16 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             return this;
         }
 
-        private void loadAndValidateGeometry() throws IOException, MeshImportException
+        private @NotNull VertexGeometry loadAndValidateGeometry() throws IOException, MeshImportException
         {
-            if (viewSet.getGeometryFile() != null)
+            File geometryFile = viewSet.getGeometryFile();
+            if (geometryFile != null)
             {
-                geometry = VertexGeometry.createFromGeometryFile(viewSet.getGeometryFile());
+                geometry = VertexGeometry.createFromGeometryFile(geometryFile);
 
                 if (geometry == null)
                 {
-                    throw new MeshImportException(MessageFormat.format("Unsupported geometry file: {0}", viewSet.getGeometryFile()));
+                    throw new MeshImportException(MessageFormat.format("Unsupported geometry file: {0}", geometryFile));
                 }
 
                 if (!geometry.hasNormals())
@@ -232,6 +233,8 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
                 {
                     throw new MeshImportException("Imported Object has no Texture Coordinates");
                 }
+
+                return geometry;
             }
             else
             {
@@ -244,12 +247,12 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             return viewSet;
         }
 
-        public VertexGeometry getGeometry()
+        public @Nullable VertexGeometry getGeometry()
         {
             return geometry;
         }
 
-        public Builder<ContextType> useExistingViewSet(ViewSet existingViewSet)
+        public @NotNull Builder<ContextType> useExistingViewSet(ViewSet existingViewSet)
         {
             viewSet = existingViewSet;
 
@@ -261,7 +264,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             return this;
         }
 
-        public Builder<ContextType> useExistingGeometry(VertexGeometry existingGeometry)
+        public @NotNull Builder<ContextType> useExistingGeometry(VertexGeometry existingGeometry)
         {
             geometry = existingGeometry;
 
@@ -273,7 +276,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             return this;
         }
 
-        public Builder<ContextType> overrideImageDirectory(File imageDirectory)
+        public @NotNull Builder<ContextType> overrideImageDirectory(File imageDirectory)
         {
             imageDirectoryOverride = imageDirectory;
             return this;
@@ -286,7 +289,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
          * @throws IOException
          * @throws UserCancellationException
          */
-        public Builder<ContextType> generateAllPreviewImages() throws IOException, UserCancellationException
+        public @NotNull Builder<ContextType> generateAllPreviewImages() throws IOException, UserCancellationException
         {
             if (viewSet != null)
             {
@@ -297,7 +300,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             return this;
         }
 
-        public GraphicsResourcesImageSpace<ContextType> create() throws IOException, UserCancellationException
+        public @NotNull GraphicsResourcesImageSpace<ContextType> create() throws IOException, MeshImportException, UserCancellationException
         {
             if ((linearLuminanceValues != null) && (encodedLuminanceValues != null))
             {
@@ -314,23 +317,30 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
                 viewSet.setOrientationViewByName(orientationViewName);
             }
 
-            if ((geometry == null) && (viewSet.getGeometryFile() != null))
+            VertexGeometry validatedGeometry;
+            File geometryFile = viewSet.getGeometryFile();
+            if (geometry == null && geometryFile != null)
             {
                 // Load geometry if it wasn't specified but a view set was.
-                geometry = VertexGeometry.createFromGeometryFile(viewSet.getGeometryFile());
+                geometry = VertexGeometry.createFromGeometryFile(geometryFile);
+                validatedGeometry = loadAndValidateGeometry();
+            }
+            else
+            {
+                validatedGeometry = geometry;
             }
 
-            return new GraphicsResourcesImageSpace<>(context, viewSet, geometry, imageLoadOptions, progressMonitor);
+            return new GraphicsResourcesImageSpace<>(context, viewSet, validatedGeometry, imageLoadOptions, progressMonitor);
         }
     }
 
-    public static <ContextType extends Context<ContextType>> Builder<ContextType> getBuilderForContext(ContextType context)
+    public static <ContextType extends Context<ContextType>> @NotNull Builder<ContextType> getBuilderForContext(ContextType context)
     {
         return new Builder<>(context);
     }
 
-    private GraphicsResourcesImageSpace(ContextType context, ViewSet viewSet, VertexGeometry geometry,
-        ReadonlyLoadOptionsModel loadOptions, ProgressMonitor progressMonitor) throws IOException, UserCancellationException
+    private GraphicsResourcesImageSpace(@NotNull ContextType context, @NotNull ViewSet viewSet, @NotNull VertexGeometry geometry,
+                                        @Nullable ReadonlyLoadOptionsModel loadOptions, @NotNull ProgressMonitor progressMonitor) throws IOException, UserCancellationException
     {
         // IAN: This super call should be creating the geometry
         super(new GraphicsResourcesCommon<>(context, viewSet, geometry,
@@ -339,11 +349,11 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
 
         // getViews makes a copy; save it here since we'll need it a couple times.
         // Includes both enabled and disabled views which will all be allocated on the GPU.
-        Collection<View> views = viewSet != null ? viewSet.getViews() : List.of();
+        Collection<View> views = viewSet.getViews();
 
         // Read the images from a file
-        if (loadOptions != null && loadOptions.areColorImagesRequested() &&
-            viewSet != null && viewSet.getFullResImageDirectory() != null && viewSet.getGPUBufferSize() > 0)
+        if (loadOptions != null && loadOptions.areColorImagesRequested() && viewSet.getFullResImageDirectory() != null
+            && viewSet.getGPUBufferSize() > 0)
         {
             Date timestamp = new Date();
 
@@ -353,11 +363,21 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             // Use preview-resolution images for the texture array due to VRAM limitations
             try
             {
-                File imageFile = viewSet.getPrimaryView().findPreviewImageFile();
-                IntVector2 dimensions = ImageHelper.dimensionsOf(imageFile);
+                View primaryView = viewSet.getPrimaryView();
+                if (primaryView != null)
+                {
+                    File imageFile = primaryView.findPreviewImageFile();
+                    IntVector2 dimensions = ImageHelper.dimensionsOf(imageFile);
 
-                width = dimensions.x;
-                height = dimensions.y;
+                    width = dimensions.x;
+                    height = dimensions.y;
+                }
+                else
+                {
+                    // Fallback if there's no primary view (i.e. if there's no views at all)
+                    width = loadOptions.getPreviewImageWidth();
+                    height = loadOptions.getPreviewImageHeight();
+                }
             }
             catch (FileNotFoundException e)
             {
@@ -371,22 +391,16 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             loadOptions.configureColorTextureBuilder(textureArrayBuilder);
             colorTextures = textureArrayBuilder.createTexture();
 
-            if (progressMonitor != null)
-            {
-                progressMonitor.setStage(0, "Loading preview-resolution images...");
-                progressMonitor.setMaxProgress(viewSet.getViewCount());
-            }
+            progressMonitor.setStage(0, "Loading preview-resolution images...");
+            progressMonitor.setMaxProgress(viewSet.getViewCount());
 
             int progressCount = 0;
 
             for (View view : views)
             {
-                if (progressMonitor != null)
-                {
-                    progressMonitor.setProgress(progressCount, MessageFormat.format("{0} ({1}/{2})",
-                        view, progressCount + 1, viewSet.getViewCount()));
-                    progressMonitor.allowUserCancellation();
-                }
+                progressMonitor.setProgress(progressCount, MessageFormat.format("{0} ({1}/{2})",
+                    view, progressCount + 1, viewSet.getViewCount()));
+                progressMonitor.allowUserCancellation();
 
                 try
                 {
@@ -403,10 +417,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
                 progressCount++;
             }
 
-            if (progressMonitor != null)
-            {
-                progressMonitor.setProgress(viewSet.getViewCount(), "All images loaded.");
-            }
+            progressMonitor.setProgress(viewSet.getViewCount(), "All images loaded.");
 
             LOG.info("View Set textures loaded in {} milliseconds.", new Date().getTime() - timestamp.getTime());
         }
@@ -415,13 +426,10 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             colorTextures = null;
         }
 
-        if (progressMonitor != null)
-        {
-            progressMonitor.setStage(1, "Finished loading images.");
-        }
+        progressMonitor.setStage(1, "Finished loading images.");
 
         // Store the camera projections in a uniform buffer
-        if ((viewSet != null) && (viewSet.getCameraProjectionData() != null))
+        if (viewSet.getCameraProjectionData() != null)
         {
             // Create the uniform buffer
             cameraProjectionBuffer = context.createUniformBuffer();
@@ -433,7 +441,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         }
 
         // Store the camera projection indices in a uniform buffer
-        if ((viewSet != null) && (viewSet.getCameraProjectionIndexData() != null))
+        if (viewSet.getCameraProjectionIndexData() != null)
         {
             cameraProjectionIndexBuffer = context.createUniformBuffer();
             cameraProjectionIndexBuffer.setData(viewSet.getCameraProjectionIndexData());
@@ -443,40 +451,33 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             cameraProjectionIndexBuffer = null;
         }
 
-        if (getGeometryResources() != null)
+        if (loadOptions != null && loadOptions.getDepthImageWidth() != 0 && loadOptions.getDepthImageHeight() != 0)
         {
-            if ((viewSet != null) && (loadOptions != null) && (loadOptions.getDepthImageWidth() != 0) && (loadOptions.getDepthImageHeight() != 0))
+            if (loadOptions.areDepthImagesRequested())
             {
-                if (loadOptions.areDepthImagesRequested())
-                {
-                    // Build depth textures for each view
-                    depthTextures = context.getTextureFactory().build2DDepthTextureArray(
-                            loadOptions.getDepthImageWidth(), loadOptions.getDepthImageHeight(), viewSet.getGPUBufferSize())
-                        .createTexture();
-                    
-                    try
-                    (
-                        // Don't automatically generate any texture attachments for this framebuffer object
-                        FramebufferObject<ContextType> depthRenderingFBO =
-                            context.buildFramebufferObject(loadOptions.getDepthImageWidth(), loadOptions.getDepthImageHeight())
-                                .createFramebufferObject();
+                // Build depth textures for each view
+                depthTextures = context.getTextureFactory().build2DDepthTextureArray(
+                        loadOptions.getDepthImageWidth(), loadOptions.getDepthImageHeight(), viewSet.getGPUBufferSize())
+                    .createTexture();
 
-                        // Create a depth map generator -- includes the depth map program and drawable
-                        DepthMapGenerator<ContextType> depthMapGenerator =
-                            DepthMapGenerator.createFromGeometryResources(getGeometryResources())
-                    )
-                    {
-                        // Render each depth texture
-                        for (View view : views)
-                        {
-                            depthRenderingFBO.setDepthAttachment(depthTextures.getLayerAsFramebufferAttachment(view.getGPUViewIndex()));
-                            depthMapGenerator.generateDepthMap(view, depthRenderingFBO);
-                        }
-                    }
-                }
-                else
+                try
+                (
+                    // Don't automatically generate any texture attachments for this framebuffer object
+                    FramebufferObject<ContextType> depthRenderingFBO =
+                        context.buildFramebufferObject(loadOptions.getDepthImageWidth(), loadOptions.getDepthImageHeight())
+                            .createFramebufferObject();
+
+                    // Create a depth map generator -- includes the depth map program and drawable
+                    DepthMapGenerator<ContextType> depthMapGenerator =
+                        DepthMapGenerator.createFromGeometryResources(getGeometryResources())
+                )
                 {
-                    depthTextures = null;
+                    // Render each depth texture
+                    for (View view : views)
+                    {
+                        depthRenderingFBO.setDepthAttachment(depthTextures.getLayerAsFramebufferAttachment(view.getGPUViewIndex()));
+                        depthMapGenerator.generateDepthMap(view, depthRenderingFBO);
+                    }
                 }
             }
             else
@@ -504,29 +505,26 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             shadowMatrixBuffer = null;
         }
 
-        if (viewSet != null)
+        viewSet.lightCalibrationChangedListeners().register(event ->
         {
-            viewSet.lightCalibrationChangedListeners().register(event ->
+            if (event.wereLightPositionsChanged())
             {
-                if (event.wereLightPositionsChanged())
+                Rendering.runLater(() ->
                 {
-                    Rendering.runLater(() ->
+                    try
                     {
-                        try
-                        {
-                            updateShadowTextures();
-                        }
-                        catch (IOException e)
-                        {
-                            LOG.error("Error updating light calibration:", e);
-                        }
-                    });
-                }
-            });
-        }
+                        updateShadowTextures();
+                    }
+                    catch (IOException e)
+                    {
+                        LOG.error("Error updating light calibration:", e);
+                    }
+                });
+            }
+        });
     }
 
-    private double getMinDepthForView(View view) throws IOException
+    private double getMinDepthForView(@NotNull View view) throws IOException
     {
         if (depthTextures == null)
         {
@@ -558,7 +556,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
     }
 
     private static double getMinDepthFromTextureReader(
-        DepthTextureReader textureReader, double nearPlane, double farPlane)
+        @NotNull DepthTextureReader textureReader, double nearPlane, double farPlane)
     {
         double minDepth = farPlane;
 
@@ -576,20 +574,20 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         updateShadowTextures(getViewSet().getViews());
     }
 
-    private void updateShadowTextures(Iterable<View> views) throws IOException
+    private void updateShadowTextures(@NotNull Iterable<View> views) throws IOException
     {
         if (shadowTextures != null)
         {
             try
-                (
-                    // Don't automatically generate any texture attachments for this framebuffer object
-                    FramebufferObject<ContextType> depthRenderingFBO =
-                        getContext().buildFramebufferObject(shadowTextures.getWidth(), shadowTextures.getHeight())
-                            .createFramebufferObject();
+            (
+                // Don't automatically generate any texture attachments for this framebuffer object
+                FramebufferObject<ContextType> depthRenderingFBO =
+                    getContext().buildFramebufferObject(shadowTextures.getWidth(), shadowTextures.getHeight())
+                        .createFramebufferObject();
 
-                    // Load the program
-                    DepthMapGenerator<ContextType> depthMapGenerator = DepthMapGenerator.createFromGeometryResources(getGeometryResources())
-                )
+                // Load the program
+                DepthMapGenerator<ContextType> depthMapGenerator = DepthMapGenerator.createFromGeometryResources(getGeometryResources())
+            )
             {
                 // Flatten the camera pose matrices into 16-component vectors and store them in the vertex list data structure.
                 NativeVectorBuffer flattenedShadowMatrices = NativeVectorBufferFactory.createEmpty(
@@ -613,6 +611,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
                 }
 
                 // Create the uniform buffer
+                assert shadowMatrixBuffer != null;
                 shadowMatrixBuffer.setData(flattenedShadowMatrices);
             }
         }
@@ -672,7 +671,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
     }
 
     @Override
-    public void setupShaderProgram(Program<ContextType> program)
+    public void setupShaderProgram(@NotNull Program<ContextType> program)
     {
         getCommonResources().setupShaderProgram(program);
 
@@ -708,13 +707,13 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
     }
 
     @Override
-    public DrawableResource<ContextType> createDrawable(Program<ContextType> program)
+    public @NotNull DrawableResource<ContextType> createDrawable(@NotNull Program<ContextType> program)
     {
         return getGeometryResources().createDrawable(program);
     }
 
     @Override
-    public Vector3 determineGlobalLightIntensity()
+    public @NotNull Vector3 determineGlobalLightIntensity()
     {
         ReadonlyViewSet viewSet = getViewSet();
         if (viewSet.getProjectSettings().getBoolean("infiniteLightSources"))
@@ -726,7 +725,8 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         {
             try
             {
-                double primaryViewDistance = getMinDepthForView(viewSet.getPrimaryView());
+                double primaryViewDistance = getMinDepthForView(Objects.requireNonNull(viewSet.getPrimaryView(),
+                    "No primary view assigned; cannot determine global light intensity."));
                 return new Vector3((float) (primaryViewDistance * primaryViewDistance));
             }
             catch (IOException e)
@@ -743,7 +743,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
      * @param viewSet
      * @throws IOException
      */
-    private static void generateAllPreviewImages(ViewSet viewSet, ProgressMonitor progressMonitor, int maxLoadingThreads)
+    private static void generateAllPreviewImages(@NotNull ViewSet viewSet, @NotNull ProgressMonitor progressMonitor, int maxLoadingThreads)
         throws IOException, UserCancellationException
     {
         if (viewSet.getPreviewWidth() == 0 || viewSet.getPreviewHeight() == 0)
@@ -774,13 +774,13 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
     }
 
     private static void generateAllPreviewImagesSequential(
-        PreviewImageGenerator previewImageGenerator)
+        @NotNull PreviewImageGenerator previewImageGenerator)
     {
         // Do the undistortion on the rendering thread
         Rendering.runLater(new GraphicsRequest()
         {
             @Override
-            public <ContextType extends Context<ContextType>> void executeRequest(ContextType context) throws UserCancellationException
+            public <ContextType extends Context<ContextType>> void executeRequest(@NotNull ContextType context) throws UserCancellationException
             {
                 for (View view : previewImageGenerator.getViews())
                 {
@@ -797,7 +797,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         LOG.info("Waiting for undistortion to finish on rendering thread");
     }
 
-    private static void generateAllPreviewImagesMultithread(PreviewImageGenerator previewImageGenerator, int maxLoadingThreads)
+    private static void generateAllPreviewImagesMultithread(@NotNull PreviewImageGenerator previewImageGenerator, int maxLoadingThreads)
     {
         // Need to use custom ForkJoinPool so that number of threads doesn't go out of control and use up the Java heap space
         ForkJoinPool customThreadPool = new ForkJoinPool(maxLoadingThreads);
@@ -815,7 +815,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
                         Rendering.runLater(new GraphicsRequest()
                         {
                             @Override
-                            public <ContextType extends Context<ContextType>> void executeRequest(ContextType context)
+                            public <ContextType extends Context<ContextType>> void executeRequest(@NotNull ContextType context)
                             {
                                 previewImages.tryGenerateUndistortedPreviewImage(context);
 
@@ -836,7 +836,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         LOG.info("Finished reading all images; waiting for undistortion to finish on other threads");
     }
 
-    private File findOrGeneratePreviewImageFile(View view) throws IOException
+    private @NotNull File findOrGeneratePreviewImageFile(@NotNull View view) throws IOException
     {
         try
         {

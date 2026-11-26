@@ -77,7 +77,7 @@ public final class Rendering
     }
 
     public static <ContextType extends Context<ContextType>> void initialize(
-        ContextType injectedContext, RenderableManager<ContextType, ImageBasedRenderable<ContextType>> injectedRenderableManager)
+        ContextType injectedContext, @NotNull RenderableManager<ContextType, ImageBasedRenderable<ContextType>> injectedRenderableManager)
     {
         renderingThread = Thread.currentThread();
 
@@ -133,12 +133,17 @@ public final class Rendering
         return newRequestQueue;
     }
 
+    public static boolean hasBlockingRequest()
+    {
+        return getRequestQueue().hasBlockingRequest();
+    }
+
     public static void runLater(GraphicsRequest request)
     {
         getRequestQueue().addBackgroundGraphicsRequest(request);
     }
 
-    public static void runLater(Runnable runnable)
+    public static void runLater(@NotNull Runnable runnable)
     {
         runLater(new GraphicsRequest()
         {
@@ -150,7 +155,7 @@ public final class Rendering
         });
     }
 
-    public static void runNowOrLater(Runnable runnable)
+    public static void runNowOrLater(@NotNull Runnable runnable)
     {
         //noinspection StaticVariableUsedBeforeInitialization
         if (Objects.equals(Thread.currentThread(), renderingThread))

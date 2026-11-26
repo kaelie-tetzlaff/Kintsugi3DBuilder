@@ -23,6 +23,7 @@ import javafx.collections.ObservableMap;
 import kintsugi3d.builder.state.cards.ProjectDataCard;
 import kintsugi3d.builder.state.cards.ProjectDataCardFactory;
 import kintsugi3d.builder.state.cards.TabsModel;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -60,7 +61,7 @@ public class ObservableTabsModel implements TabsModel
         });
     }
 
-    private void registerLastSelectedCardListener(ObservableCardsModel<?> tab)
+    private void registerLastSelectedCardListener(@NotNull ObservableCardsModel<?> tab)
     {
         tab.lastSelectedCardProperty().addListener(
             (obs, oldValue, newValue) ->
@@ -115,23 +116,23 @@ public class ObservableTabsModel implements TabsModel
     }
 
     @Override
-    public final Map<String, ObservableCardsModel<?>> getTabsMap()
+    public final @NotNull Map<String, ObservableCardsModel<?>> getTabsMap()
     {
         return Collections.unmodifiableMap(tabs);
     }
 
-    public final Collection<ObservableCardsModel<?>> getAllTabs()
+    public final @NotNull Collection<ObservableCardsModel<?>> getAllTabs()
     {
         return Collections.unmodifiableCollection(tabs.values());
     }
 
-    public final ObservableMap<String, ObservableCardsModel<?>> getObservableTabsMap()
+    public final @NotNull ObservableMap<String, ObservableCardsModel<?>> getObservableTabsMap()
     {
         //noinspection AssignmentOrReturnOfFieldWithMutableType
         return unmodifiableTabs;
     }
 
-    public final ObjectProperty<ObservableCardsModel<?>> activeTabProperty()
+    public final @NotNull ObjectProperty<ObservableCardsModel<?>> activeTabProperty()
     {
         return activeTab;
     }
@@ -146,7 +147,7 @@ public class ObservableTabsModel implements TabsModel
         this.activeTab.set(activeTab);
     }
 
-    public final ObjectExpression<ProjectDataCard> lastSelectedCardProperty()
+    public final @NotNull ObjectExpression<ProjectDataCard> lastSelectedCardProperty()
     {
         return lastSelectedCard;
     }
@@ -160,7 +161,7 @@ public class ObservableTabsModel implements TabsModel
      * Returns the observable list of selected cards across all tabs
      * @return
      */
-    public final Collection<ProjectDataCard> getSelectedCards()
+    public final @NotNull Collection<ProjectDataCard> getSelectedCards()
     {
         return tabs.values().stream()
             .flatMap(tab -> tab.getSelectedCards().stream())

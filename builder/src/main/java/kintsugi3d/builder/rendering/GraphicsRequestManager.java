@@ -19,6 +19,7 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +28,7 @@ import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class GraphicsRequestManager<ContextType extends Context<ContextType>> implements GraphicsRequestQueue
 {
@@ -36,15 +38,23 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     public static final String ERROR_MESSAGE = "An error occurred during the operation.";
 
     private final ContextType context;
-    private final Queue<Runnable> requestList;
+    private final @NotNull Queue<Runnable> requestList;
     private final Collection<Runnable> requestAddedListeners = new CopyOnWriteArrayList<>();
     private volatile RenderableManager<ContextType, ImageBasedRenderable<ContextType>> renderableManager;
-    private volatile ProgressMonitor progressMonitor;
+    private volatile @NotNull ProgressMonitor progressMonitor = new DefaultProgressMonitor();
 
-    public GraphicsRequestManager(ContextType context)
+    private final AtomicReference<Object> currentBlockingRequest = new AtomicReference<>();
+
+    GraphicsRequestManager(ContextType context)
     {
         this.context = context;
         requestList = new LinkedList<>();
+    }
+
+    @Override
+    public final boolean hasBlockingRequest()
+    {
+        return currentBlockingRequest.get() != null;
     }
 
     /**
@@ -60,7 +70,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
      * Should be called once by Rendering.
      * @param progressMonitor
      */
-    final void setProgressMonitor(ProgressMonitor progressMonitor)
+    final void setProgressMonitor(@NotNull ProgressMonitor progressMonitor)
     {
         this.progressMonitor = progressMonitor;
     }
@@ -82,14 +92,10 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     private void handleCancellation(UserCancellationException e)
     {
         logCancellation(e);
-
-        if (progressMonitor != null)
-        {
-            progressMonitor.cancelComplete(e);
-        }
+        progressMonitor.cancelComplete(e);
     }
 
-    private static void logException(Throwable e)
+    private static void logException(@NotNull Throwable e)
     {
         Throwable cause = e.getCause();
         if (cause instanceof UserCancellationException)
@@ -102,7 +108,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
         }
     }
 
-    private void handleException(Throwable e)
+    private void handleException(@NotNull Throwable e)
     {
         Throwable cause = e.getCause();
         if (cause instanceof UserCancellationException)
@@ -112,11 +118,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
         else
         {
             logException(e);
-
-            if (progressMonitor != null)
-            {
-                progressMonitor.fail(e);
-            }
+            progressMonitor.fail(e);
         }
     }
 
@@ -127,7 +129,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public final void addBackgroundImageBasedGraphicsRequest(ImageBasedGraphicsRequest request)
+    public final void addBackgroundImageBasedGraphicsRequest(@NotNull ImageBasedGraphicsRequest request)
     {
         if (renderableManager.getMainRenderable() == null)
         {
@@ -141,7 +143,8 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
                 requestList.add(() ->
                 {
                     // Check again for null, just in case
-                    if (renderableManager.getMainRenderable() == null)
+                    ImageBasedRenderable<ContextType> mainRenderable = renderableManager.getMainRenderable();
+                    if (mainRenderable == null)
                     {
                         // Instance is currently null, wait for a load and then call this function again (recursive-ish)
                         renderableManager.addMainRenderableLoadCallback(instance -> addBackgroundImageBasedGraphicsRequest(request));
@@ -153,7 +156,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
                         //noinspection ErrorNotRethrown
                         try
                         {
-                            request.executeRequest(renderableManager.getMainRenderable(), new DefaultProgressMonitor());
+                            request.executeRequest(mainRenderable, new DefaultProgressMonitor());
                         }
                         catch (UserCancellationException e)
                         {
@@ -176,13 +179,8 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public final void addImageBasedGraphicsRequest(ImageBasedGraphicsRequest request)
+    public final boolean addImageBasedGraphicsRequest(@NotNull ImageBasedGraphicsRequest request)
     {
-        if (progressMonitor.isConflictingProcess())
-        {
-            return;
-        }
-
         if (renderableManager.getMainRenderable() == null)
         {
             // Instance is currently null, wait for a load and then call this function again (recursive-ish)
@@ -190,18 +188,30 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
         }
         else
         {
+            synchronized (currentBlockingRequest)
+            {
+                if (currentBlockingRequest.get() != null)
+                {
+                    progressMonitor.blocked();
+                    return false;
+                }
+                else
+                {
+                    currentBlockingRequest.set(request);
+                }
+            }
+
             synchronized (requestList)
             {
                 requestList.add(() ->
                 {
-                    if (progressMonitor != null)
-                    {
-                        progressMonitor.start();
-                    }
-
                     // Check again for null, just in case
-                    if (renderableManager.getMainRenderable() == null)
+                    ImageBasedRenderable<ContextType> mainRenderable = renderableManager.getMainRenderable();
+                    if (mainRenderable == null)
                     {
+                        // Clear blocking request so that it can be registered again on the reattempt.
+                        currentBlockingRequest.set(null);
+
                         // Instance is currently null, wait for a load and then call this function again (recursive-ish)
                         renderableManager.addMainRenderableLoadCallback(instance -> addImageBasedGraphicsRequest(request));
                     }
@@ -212,12 +222,9 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
                         //noinspection ErrorNotRethrown
                         try
                         {
-                            request.executeRequest(renderableManager.getMainRenderable(), progressMonitor);
-
-                            if (progressMonitor != null)
-                            {
-                                progressMonitor.complete();
-                            }
+                            progressMonitor.start();
+                            request.executeRequest(mainRenderable, progressMonitor);
+                            progressMonitor.complete();
                         }
                         catch (UserCancellationException e)
                         {
@@ -226,6 +233,10 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
                         catch (Exception | AssertionError e)
                         {
                             handleException(e);
+                        }
+                        finally
+                        {
+                            currentBlockingRequest.set(null);
                         }
                     }
                 });
@@ -237,10 +248,12 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
         {
             r.run();
         }
+
+        return true;
     }
 
     @Override
-    public final void addBackgroundTextureReplacementGraphicsRequest(TextureReplacementGraphicsRequest request)
+    public final void addBackgroundTextureReplacementGraphicsRequest(@NotNull TextureReplacementGraphicsRequest request)
     {
         if (renderableManager.getMainRenderable() == null)
         {
@@ -255,7 +268,8 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
                 requestList.add(() ->
                 {
                     // Check again for null, just in case
-                    if (renderableManager.getMainRenderable() == null)
+                    ImageBasedRenderable<ContextType> mainRenderable = renderableManager.getMainRenderable();
+                    if (mainRenderable == null)
                     {
                         // Instance is currently null, wait for a load and then call this function again (recursive-ish)
                         renderableManager.addMainRenderableLoadCallback(
@@ -268,8 +282,8 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
                         //noinspection ErrorNotRethrown
                         try
                         {
-                            renderableManager.getMainRenderable().getResources().replaceTextureResources(
-                                request.executeRequest(renderableManager.getMainRenderable(), new DefaultProgressMonitor()));
+                            mainRenderable.getResources().replaceTextureResources(
+                                request.executeRequest(mainRenderable, new DefaultProgressMonitor()));
                         }
                         catch (UserCancellationException e)
                         {
@@ -292,13 +306,8 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
     }
 
     @Override
-    public final void addTextureReplacementGraphicsRequest(TextureReplacementGraphicsRequest request)
+    public final boolean addTextureReplacementGraphicsRequest(@NotNull TextureReplacementGraphicsRequest request)
     {
-        if (progressMonitor.isConflictingProcess())
-        {
-            return;
-        }
-
         if (renderableManager.getMainRenderable() == null)
         {
             // Instance is currently null, wait for a load and then call this function again (recursive-ish)
@@ -307,18 +316,32 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
         }
         else
         {
+            // Return early if another blocking request is already queued.
+            // Otherwise, register this request as a blocking request.
+            synchronized (currentBlockingRequest)
+            {
+                if (currentBlockingRequest.get() != null)
+                {
+                    progressMonitor.blocked();
+                    return false;
+                }
+                else
+                {
+                    currentBlockingRequest.set(request);
+                }
+            }
+
             synchronized (requestList)
             {
                 requestList.add(() ->
                 {
-                    if (progressMonitor != null)
-                    {
-                        progressMonitor.start();
-                    }
-
                     // Check again for null, just in case
-                    if (renderableManager.getMainRenderable() == null)
+                    ImageBasedRenderable<ContextType> mainRenderable = renderableManager.getMainRenderable();
+                    if (mainRenderable == null)
                     {
+                        // Clear blocking request so that it can be registered again on the reattempt.
+                        currentBlockingRequest.set(null);
+
                         // Instance is currently null, wait for a load and then call this function again (recursive-ish)
                         renderableManager.addMainRenderableLoadCallback(
                             instance -> addTextureReplacementGraphicsRequest(request));
@@ -330,14 +353,9 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
                         //noinspection ErrorNotRethrown
                         try
                         {
-
-                            renderableManager.getMainRenderable().getResources().replaceTextureResources(
-                                request.executeRequest(renderableManager.getMainRenderable(), progressMonitor));
-
-                            if (progressMonitor != null)
-                            {
-                                progressMonitor.complete();
-                            }
+                            progressMonitor.start();
+                            mainRenderable.getResources().replaceTextureResources(request.executeRequest(mainRenderable, progressMonitor));
+                            progressMonitor.complete();
                         }
                         catch (UserCancellationException e)
                         {
@@ -347,9 +365,15 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
                         {
                             handleException(e);
                         }
+                        finally
+                        {
+                            currentBlockingRequest.set(null);
+                        }
                     }
                 });
             }
+
+            return true;
         }
 
         // Notify listeners
@@ -357,6 +381,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
         {
             r.run();
         }
+        return false;
     }
 
     /**
@@ -365,7 +390,7 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
      * @param request
      */
     @Override
-    public final void addBackgroundGraphicsRequest(GraphicsRequest request)
+    public final void addBackgroundGraphicsRequest(@NotNull GraphicsRequest request)
     {
         synchronized (requestList)
         {
@@ -390,40 +415,42 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
         }
 
         // Notify listeners
-        for (Runnable r :  requestAddedListeners)
+        for (Runnable r : requestAddedListeners)
         {
             r.run();
         }
     }
 
     @Override
-    public final void addGraphicsRequest(ProgressMonitoredGraphicsRequest request)
+    public final boolean addGraphicsRequest(@NotNull ProgressMonitoredGraphicsRequest request)
     {
+        // Return early if another blocking request is already queued.
+        // Otherwise, register this request as a blocking request.
+        synchronized (currentBlockingRequest)
+        {
+            if (currentBlockingRequest.get() != null)
+            {
+                progressMonitor.blocked();
+                return false;
+            }
+            else
+            {
+                currentBlockingRequest.set(request);
+            }
+        }
+
         synchronized (requestList)
         {
             requestList.add(() ->
             {
-                if (progressMonitor != null)
-                {
-                    if (progressMonitor.isConflictingProcess())
-                    {
-                        return;
-                    }
-
-                    progressMonitor.start();
-                }
-
                 // Suppress warning about catching and not rethrowing AssertionError.
                 // The request should effectively be regarded a "sandbox" where a critical logic error should not result in the application terminating.
                 // noinspection ErrorNotRethrown
                 try
                 {
+                    progressMonitor.start();
                     request.executeRequest(context, progressMonitor);
-
-                    if (progressMonitor != null)
-                    {
-                        progressMonitor.complete();
-                    }
+                    progressMonitor.complete();
                 }
                 catch (UserCancellationException e)
                 {
@@ -433,6 +460,10 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
                 {
                     handleException(e);
                 }
+                finally
+                {
+                    currentBlockingRequest.set(null);
+                }
             });
         }
 
@@ -441,6 +472,8 @@ public class GraphicsRequestManager<ContextType extends Context<ContextType>> im
         {
             r.run();
         }
+
+        return true;
     }
 
     @Override

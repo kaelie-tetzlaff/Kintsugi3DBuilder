@@ -17,6 +17,7 @@ package kintsugi3d.builder.core.texture;
 
 import kintsugi3d.builder.fit.decomposition.BasisMaterialInfo;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,11 +26,10 @@ public class WeightmapReplacer extends ImageReplacer
 {
     private final BasisMaterialInfo material;
 
-    public WeightmapReplacer(TextureResources<?> resources, BasisMaterialInfo material, File currentImage)
+    public WeightmapReplacer(@NotNull TextureResources<?> resources, BasisMaterialInfo material, @NotNull File currentImage)
     {
-        super(resources);
+        super(resources, currentImage);
         this.material = material;
-        setCurrentImage(currentImage);
     }
 
     @Override

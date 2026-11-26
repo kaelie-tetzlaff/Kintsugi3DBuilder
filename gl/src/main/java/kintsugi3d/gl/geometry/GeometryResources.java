@@ -16,39 +16,44 @@
 package kintsugi3d.gl.geometry;
 
 import kintsugi3d.gl.core.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class GeometryResources<ContextType extends Context<ContextType>>
     implements ReadonlyGeometryResources<ContextType>, ManagedResource
 {
     private static final Logger LOG = LoggerFactory.getLogger(GeometryResources.class);
 
-    private final ContextType context;
+    private static final String NULL_MESSAGE = "Geometry resources are null.";
 
-    private final ReadonlyVertexGeometry geometry;
+    private final @Nullable ContextType context;
+
+    private final @Nullable ReadonlyVertexGeometry geometry;
 
     /**
      * A vertex buffer containing vertex positions.
      */
-    private final VertexBuffer<ContextType> positionBuffer;
+    private final @Nullable VertexBuffer<ContextType> positionBuffer;
 
     /**
      * A vertex buffer containing texture coordinates.
      */
-    private final VertexBuffer<ContextType> texCoordBuffer;
+    private final @Nullable VertexBuffer<ContextType> texCoordBuffer;
 
     /**
      * A vertex buffer containing surface normals.
      */
-    private final VertexBuffer<ContextType> normalBuffer;
+    private final @Nullable VertexBuffer<ContextType> normalBuffer;
 
     /**
      * A vertex buffer containing tangent vectors.
      */
-    private final VertexBuffer<ContextType> tangentBuffer;
+    private final @Nullable VertexBuffer<ContextType> tangentBuffer;
 
     /**
      * Default constructor: create null object
@@ -63,7 +68,7 @@ public class GeometryResources<ContextType extends Context<ContextType>>
         tangentBuffer = null;
     }
 
-    public static <ContextType extends Context<ContextType>> GeometryResources<ContextType> createNullResources()
+    public static <ContextType extends Context<ContextType>> @NotNull GeometryResources<ContextType> createNullResources()
     {
         return new GeometryResources<>();
     }
@@ -71,7 +76,7 @@ public class GeometryResources<ContextType extends Context<ContextType>>
     /**
      * package-visible constructor, called by VertexGeometry.createGraphicsResources
      */
-    GeometryResources(ContextType context, ReadonlyVertexGeometry geometry)
+    GeometryResources(@NotNull ContextType context, @NotNull ReadonlyVertexGeometry geometry)
     {
         this.context = context;
         this.geometry = geometry;
@@ -106,36 +111,53 @@ public class GeometryResources<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final ContextType getContext()
+    public final @NotNull ContextType getContext()
     {
-        return context;
+        return Objects.requireNonNull(context, NULL_MESSAGE);
     }
 
     @Override
-    public final ReadonlyVertexGeometry getGeometry()
+    public final @NotNull ReadonlyVertexGeometry getGeometry()
     {
-        return geometry;
+        return Objects.requireNonNull(geometry, NULL_MESSAGE);
     }
 
     @Override
-    public final ReadonlyVertexBuffer<ContextType> getPositionBuffer()
+    public final @Nullable ReadonlyVertexBuffer<ContextType> getPositionBuffer()
     {
         return positionBuffer;
     }
 
     @Override
-    public final DrawableResource<ContextType> createDrawable(Program<ContextType> program)
+    public final @NotNull DrawableResource<ContextType> createDrawable(@NotNull Program<ContextType> program)
     {
         DrawableResource<ContextType> drawable = program.getContext().createDrawable(program);
-        drawable.addVertexBuffer("position", positionBuffer);
-        drawable.addVertexBuffer("texCoord", texCoordBuffer);
-        drawable.addVertexBuffer("normal", normalBuffer);
-        drawable.addVertexBuffer("tangent", tangentBuffer);
+
+        if (positionBuffer != null)
+        {
+            drawable.addVertexBuffer("position", positionBuffer);
+        }
+
+        if (texCoordBuffer != null)
+        {
+            drawable.addVertexBuffer("texCoord", texCoordBuffer);
+        }
+
+        if (normalBuffer != null)
+        {
+            drawable.addVertexBuffer("normal", normalBuffer);
+        }
+
+        if (tangentBuffer != null)
+        {
+            drawable.addVertexBuffer("tangent", tangentBuffer);
+        }
+
         return drawable;
     }
 
     @Override
-    public final GeometryFramebuffer<ContextType> createGeometryFramebuffer(int width, int height)
+    public final @NotNull GeometryFramebuffer<ContextType> createGeometryFramebuffer(int width, int height)
     {
         try
         {

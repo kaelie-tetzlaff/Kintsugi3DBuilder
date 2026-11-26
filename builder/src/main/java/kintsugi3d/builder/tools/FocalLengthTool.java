@@ -18,6 +18,7 @@ package kintsugi3d.builder.tools;
 import kintsugi3d.builder.state.scene.ManipulableViewpointModel;
 import kintsugi3d.gl.window.CanvasSize;
 import kintsugi3d.gl.window.CursorPosition;
+import org.jetbrains.annotations.NotNull;
 
 final class FocalLengthTool implements DragTool
 {
@@ -33,13 +34,13 @@ final class FocalLengthTool implements DragTool
     private static class Builder extends ToolBuilderBase<FocalLengthTool>
     {
         @Override
-        public final FocalLengthTool create()
+        public final @NotNull FocalLengthTool create()
         {
             return new FocalLengthTool(getCameraModel());
         }
     }
 
-    static ToolBuilder<FocalLengthTool> getBuilder()
+    static @NotNull ToolBuilder<FocalLengthTool> getBuilder()
     {
         return new Builder();
     }
@@ -50,7 +51,7 @@ final class FocalLengthTool implements DragTool
     }
 
     @Override
-    public void mouseButtonPressed(CursorPosition cursorPosition, CanvasSize canvasSize)
+    public void mouseButtonPressed(CursorPosition cursorPosition, @NotNull CanvasSize canvasSize)
     {
         mouseStart = cursorPosition;
         oldLog10FocalLength = StrictMath.log10(cameraModel.getFocalLength());
@@ -58,7 +59,7 @@ final class FocalLengthTool implements DragTool
     }
 
     @Override
-    public void cursorDragged(CursorPosition cursorPosition, CanvasSize canvasSize)
+    public void cursorDragged(@NotNull CursorPosition cursorPosition, CanvasSize canvasSize)
     {
         cameraModel.setFocalLength((float) StrictMath.pow(10,
             oldLog10FocalLength - (float) Math.toDegrees((cursorPosition.y - mouseStart.y) * 0.5 * focalLengthSensitivityAdjusted)));

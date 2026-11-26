@@ -17,6 +17,7 @@ package kintsugi3d.builder.io.specular;
 
 import kintsugi3d.builder.fit.decomposition.*;
 import kintsugi3d.gl.vecmath.DoubleVector3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +42,7 @@ public final class SpecularFitSerializer
     {
     }
 
-    public static void saveWeightImages(MaterialBasis basis, int width, int height, SpecularBasisWeights basisWeights, File outputDirectory)
+    public static void saveWeightImages(@NotNull MaterialBasis basis, int width, int height, @NotNull SpecularBasisWeights basisWeights, File outputDirectory)
     {
         for (BasisMaterialInfo material : basis.getMaterials())
         {
@@ -72,7 +73,7 @@ public final class SpecularFitSerializer
     }
 
     public static void serializeBasisFunctions(
-        int microfacetDistributionResolution, MaterialBasis basis, File outputDirectory, String filenameOverride)
+        int microfacetDistributionResolution, @NotNull MaterialBasis basis, File outputDirectory, @Nullable String filenameOverride)
     {
         // Text file format
         try (PrintStream out = new PrintStream(new File(outputDirectory,
@@ -325,7 +326,7 @@ public final class SpecularFitSerializer
         }
     }
 
-    private static int getNumElements(File basisFile) throws IOException
+    private static int getNumElements(@NotNull File basisFile) throws IOException
     {
         int numElements; // Technically this is "microfacetDistributionResolution + 1" the way it's defined elsewhere
         try (Scanner in = new Scanner(basisFile, StandardCharsets.UTF_8))
@@ -347,14 +348,14 @@ public final class SpecularFitSerializer
         return numElements;
     }
 
-    private static double[] readBasisLine(Scanner in, int numElements)
+    private static double[] readBasisLine(@NotNull Scanner in, int numElements)
     {
         double[] newBasis = new double[numElements];
         Arrays.setAll(newBasis, m -> in.nextDouble());
         return newBasis;
     }
 
-    private static Map<String, String> nameSetToMap(Collection<String> set)
+    private static @NotNull Map<String, String> nameSetToMap(@NotNull Collection<String> set)
     {
         Map<String, String> map = new HashMap<>(set.size());
         for (String name : set)

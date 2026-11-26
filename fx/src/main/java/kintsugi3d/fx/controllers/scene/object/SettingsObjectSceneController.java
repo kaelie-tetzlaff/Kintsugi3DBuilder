@@ -29,6 +29,7 @@ import kintsugi3d.fx.experience.ObjectOrientationReferenceView;
 import kintsugi3d.fx.util.SafeLogScaleNumberStringConverter;
 import kintsugi3d.fx.util.SafeNumberStringConverter;
 import kintsugi3d.fx.util.StaticUtilities;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -75,7 +76,7 @@ public class SettingsObjectSceneController implements Initializable
 
         scaleSlider.setLabelFormatter(new StringConverter<>() {
             @Override
-            public String toString(Double object) {
+            public @NotNull String toString(@NotNull Double object) {
                 String out = log10converter.toString(object);
                 if (out.length() >= 4) {
                     return out.substring(0, 4);
@@ -110,7 +111,7 @@ public class SettingsObjectSceneController implements Initializable
         }
     };
 
-    public final ChangeListener<ObservableObjectPoseSettings> getChangeListener()
+    public final @NotNull ChangeListener<ObservableObjectPoseSettings> getChangeListener()
     {
         return changeListener;
     }
@@ -120,7 +121,7 @@ public class SettingsObjectSceneController implements Initializable
         root.setDisable(disabled);
     }
 
-    public final void bind(ObservableObjectPoseSettings objectPose)
+    public final void bind(@NotNull ObservableObjectPoseSettings objectPose)
     {
         xCenterTextField.textProperty().bindBidirectional(objectPose.centerXProperty(), converter);
         yCenterTextField.textProperty().bindBidirectional(objectPose.centerYProperty(), converter);
@@ -142,7 +143,7 @@ public class SettingsObjectSceneController implements Initializable
         scaleSlider.valueProperty().bindBidirectional(objectPose.scaleProperty());
     }
 
-    public final void unbind(ObservableObjectPoseSettings objectPose)
+    public final void unbind(@NotNull ObservableObjectPoseSettings objectPose)
     {
 
         xCenterTextField.textProperty().unbindBidirectional(objectPose.centerXProperty());

@@ -18,15 +18,16 @@ package kintsugi3d.fx.multithread;
 import kintsugi3d.builder.state.scene.DiscreteLightModel;
 import kintsugi3d.builder.state.scene.DiscreteLightModelBase;
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 public class SynchronizedDiscreteLightModel extends DiscreteLightModelBase
 {
-    private final DiscreteLightModel baseModel;
-    private final SynchronizedValue<Vector3> color;
-    private final SynchronizedValue<Float> spotSize;
-    private final SynchronizedValue<Float> spotTaper;
+    private final @NotNull DiscreteLightModel baseModel;
+    private final @NotNull SynchronizedValue<Vector3> color;
+    private final @NotNull SynchronizedValue<Float> spotSize;
+    private final @NotNull SynchronizedValue<Float> spotTaper;
 
-    public SynchronizedDiscreteLightModel(DiscreteLightModel baseModel)
+    public SynchronizedDiscreteLightModel(@NotNull DiscreteLightModel baseModel)
     {
         super(new SynchronizedViewpointModel(baseModel));
         this.baseModel = baseModel;

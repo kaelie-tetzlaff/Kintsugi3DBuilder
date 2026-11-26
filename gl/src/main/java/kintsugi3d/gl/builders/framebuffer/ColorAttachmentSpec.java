@@ -16,6 +16,7 @@
 package kintsugi3d.gl.builders.framebuffer;
 
 import kintsugi3d.gl.core.ColorFormat;
+import org.jetbrains.annotations.NotNull;
 
 public final class ColorAttachmentSpec extends AttachmentSpec
 {
@@ -26,27 +27,27 @@ public final class ColorAttachmentSpec extends AttachmentSpec
         this.internalFormat = internalFormat;
     }
 
-    public static ColorAttachmentSpec createWithInternalFormat(ColorFormat internalFormat)
+    public static @NotNull ColorAttachmentSpec createWithInternalFormat(ColorFormat internalFormat)
     {
         return new ColorAttachmentSpec(internalFormat);
     }
 
     @Override
-    public ColorAttachmentSpec setMultisamples(int samples, boolean fixedSampleLocations)
+    public @NotNull ColorAttachmentSpec setMultisamples(int samples, boolean fixedSampleLocations)
     {
         super.setMultisamples(samples, fixedSampleLocations);
         return this;
     }
 
     @Override
-    public ColorAttachmentSpec setMipmapsEnabled(boolean enabled)
+    public @NotNull ColorAttachmentSpec setMipmapsEnabled(boolean enabled)
     {
         super.setMipmapsEnabled(enabled);
         return this;
     }
 
     @Override
-    public ColorAttachmentSpec setLinearFilteringEnabled(boolean enabled)
+    public @NotNull ColorAttachmentSpec setLinearFilteringEnabled(boolean enabled)
     {
         super.setLinearFilteringEnabled(enabled);
         return this;

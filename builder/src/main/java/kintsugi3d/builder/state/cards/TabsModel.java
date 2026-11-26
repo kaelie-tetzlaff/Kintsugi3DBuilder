@@ -15,6 +15,8 @@
 
 package kintsugi3d.builder.state.cards;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Map;
 
 public interface TabsModel
@@ -26,10 +28,10 @@ public interface TabsModel
      * @param path
      * @param <T> The backend type that the associated data cards represent.
      */
-    <T> void addTab(String tabName, ProjectDataCardFactory<T> cardFactory, String path);
+    <T> void addTab(String tabName, ProjectDataCardFactory<T> cardFactory, @Nullable String path);
 
     void clearTabs();
     CardsModel<?> getTab(String label);
-    <T> CardsModel<T> getTab(String label, Class<T> dataClass);
+    <T> @Nullable CardsModel<T> getTab(String label, Class<T> dataClass);
     Map<String, ? extends CardsModel<?>> getTabsMap();
 }

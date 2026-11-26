@@ -15,6 +15,7 @@
 
 package kintsugi3d.builder.io;
 
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.ErrorHandler;
@@ -36,7 +37,7 @@ public final class XMLHelper
     {
     }
 
-    public static DocumentBuilder getDocumentBuilder(ErrorHandler errorHandler) throws ParserConfigurationException
+    public static @NotNull DocumentBuilder getDocumentBuilder(ErrorHandler errorHandler) throws ParserConfigurationException
     {
         // Taken from https://www.digitalocean.com/community/tutorials/java-convert-string-to-xml-document-and-xml-document-to-string
         // TODO: MAY BE PRONE TO XXE ATTACKS?
@@ -45,7 +46,7 @@ public final class XMLHelper
         return builder;
     }
 
-    public static DocumentBuilder getDocumentBuilder() throws ParserConfigurationException
+    public static @NotNull DocumentBuilder getDocumentBuilder() throws ParserConfigurationException
     {
         return getDocumentBuilder(new ErrorLogger());
     }

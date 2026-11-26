@@ -27,6 +27,8 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.util.EncodableColorImage;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,12 +36,12 @@ import java.io.IOException;
 
 public interface IOHandler
 {
-    ViewSet getLoadedViewSet();
-    ReadonlyVertexGeometry getLoadedGeometry();
+    @Nullable ViewSet getLoadedViewSet();
+    @Nullable ReadonlyVertexGeometry getLoadedGeometry();
 
 
     boolean isRenderableLoaded();
-    ReadonlyImageBasedRenderable<?> getMainRenderable();
+    @Nullable ReadonlyImageBasedRenderable<?> getMainRenderable();
     ReadonlyImageBasedRenderable<? extends Context<?>> getRenderableForShader(ShaderInfo shader);
 
     EventListeners<ProjectLoadedListener> projectLoadedListeners();
@@ -62,7 +64,7 @@ public interface IOHandler
      * @param viewSetLoadOptions
      * @param imageLoadOptions
      */
-    void loadFromLooseFiles(File newProjectFile, String internalName, File xmlFile,
+    void loadFromLooseFiles(@Nullable File newProjectFile, String internalName, File xmlFile,
                             ViewSetLoadOptions viewSetLoadOptions, ReadonlyLoadOptionsModel imageLoadOptions)
         throws Exception;
 
@@ -74,7 +76,7 @@ public interface IOHandler
     void loadFromMetashapeModel(File newProjectFile, MetashapeModel model, ReadonlyLoadOptionsModel loadOptionsModel)
         throws Exception;
 
-    EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException;
+    @Nullable EncodableColorImage loadEnvironmentMap(File environmentMapFile) throws FileNotFoundException;
     void loadBackplate(File backplateFile) throws FileNotFoundException;
 
     void saveToVSETFile(File vsetFile) throws IOException;
@@ -84,9 +86,9 @@ public interface IOHandler
      * @param materialDirectory
      * @param finishedCallback No guarantees are made about which thread the callback will run on.
      */
-    void saveAllMaterialFiles(File materialDirectory, Runnable finishedCallback);
+    void saveAllMaterialFiles(@NotNull File materialDirectory, @Nullable Runnable finishedCallback);
 
-    void saveGLTF(File outputDirectory, ExportSettings settings);
+    void saveGLTF(@NotNull File outputDirectory, @NotNull ExportSettings settings, @NotNull ProgressMonitor progressMonitor);
 
     /**
      *
@@ -97,5 +99,5 @@ public interface IOHandler
      */
     void unload(Runnable onUnloadComplete);
 
-    void setProgressMonitor(ProgressMonitor progressMonitor);
+    void setProgressMonitor(@NotNull ProgressMonitor progressMonitor);
 }

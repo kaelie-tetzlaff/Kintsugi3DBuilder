@@ -20,6 +20,7 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferSize;
 import kintsugi3d.gl.interactive.InteractiveRenderable;
 import kintsugi3d.gl.window.FramebufferCanvas;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -28,7 +29,7 @@ public interface RenderableManager<ContextType extends Context<ContextType>, Ren
 {
     boolean isRenderableLoaded();
 
-    RenderableType getMainRenderable();
+    @Nullable RenderableType getMainRenderable();
     void addMainRenderableLoadCallback(Consumer<InteractiveRenderable<? extends Context<?>>> callback);
 
     void addRenderView(ShaderInfo shader, FramebufferSize viewSize,

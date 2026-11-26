@@ -17,7 +17,7 @@ package kintsugi3d.builder.io.metashape;
 
 import kintsugi3d.builder.io.TextureSupplier;
 import kintsugi3d.builder.io.XMLHelper;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -42,7 +42,7 @@ public class MetashapeTextures implements TextureSupplier
     }
 
     @Override
-    public final @Nullable Map<String, File> getTextures()
+    public final @NotNull Map<String, File> getTextures()
     {
         try
         {
@@ -75,7 +75,7 @@ public class MetashapeTextures implements TextureSupplier
         catch (ParserConfigurationException | IOException | SAXException e)
         {
             LOG.error("Could not copy textures from Metashape project using model XML {}.", modelXMLFile);
-            return null;
+            return Map.of();
         }
     }
 }

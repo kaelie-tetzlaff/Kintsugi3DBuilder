@@ -15,6 +15,8 @@
 
 package kintsugi3d.renderexport.general;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 
 public final class RequestFactoryImplementation implements RequestFactory
@@ -23,13 +25,13 @@ public final class RequestFactoryImplementation implements RequestFactory
     {
     }
 
-    public static RequestFactoryImplementation create()
+    public static @NotNull RequestFactoryImplementation create()
     {
         return new RequestFactoryImplementation();
     }
 
     @Override
-    public RenderRequestBuilder buildSingleFrameRenderRequest(
+    public @NotNull RenderRequestBuilder buildSingleFrameRenderRequest(
             File fragmentShader, File outputDirectory, String outputImageName)
     {
         //noinspection UnnecessarilyQualifiedInnerClassAccess
@@ -37,7 +39,7 @@ public final class RequestFactoryImplementation implements RequestFactory
     }
 
     @Override
-    public RenderRequestBuilder buildMultiframeRenderRequest(
+    public @NotNull RenderRequestBuilder buildMultiframeRenderRequest(
             File fragmentShader, File outputDirectory, int frameCount)
     {
         //noinspection UnnecessarilyQualifiedInnerClassAccess
@@ -45,7 +47,7 @@ public final class RequestFactoryImplementation implements RequestFactory
     }
 
     @Override
-    public RenderRequestBuilder buildMultiviewRenderRequest(
+    public @NotNull RenderRequestBuilder buildMultiviewRenderRequest(
             File fragmentShader, File outputDirectory)
     {
         //noinspection UnnecessarilyQualifiedInnerClassAccess
@@ -53,7 +55,7 @@ public final class RequestFactoryImplementation implements RequestFactory
     }
 
     @Override
-    public RenderRequestBuilder buildMultiviewRetargetRenderRequest(
+    public @NotNull RenderRequestBuilder buildMultiviewRetargetRenderRequest(
             File fragmentShader, File outputDirectory, File retargetViewSet)
     {
         //noinspection UnnecessarilyQualifiedInnerClassAccess

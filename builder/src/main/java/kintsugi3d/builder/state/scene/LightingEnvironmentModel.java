@@ -16,6 +16,7 @@
 package kintsugi3d.builder.state.scene;
 
 import kintsugi3d.gl.vecmath.Vector3;
+import org.jetbrains.annotations.NotNull;
 
 public interface LightingEnvironmentModel extends ReadonlyLightingEnvironmentModel
 {
@@ -30,5 +31,5 @@ public interface LightingEnvironmentModel extends ReadonlyLightingEnvironmentMod
     void setAmbientLightIntensity(float environmentIntensity);
     void setBackgroundIntensity(float backgroundIntensity);
 
-    void setLightCenter(int i, Vector3 lightCenter);
+    void setLightCenter(int i, @NotNull Vector3 lightCenter);
 }

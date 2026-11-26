@@ -16,27 +16,28 @@
 package kintsugi3d.builder.state.shader;
 
 import kintsugi3d.builder.core.texture.TextureInfo;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 public class TextureVisualizationShaderInfo extends SimpleShaderInfo
 {
-    private final TextureInfo texture;
+    private final @NotNull TextureInfo texture;
 
-    public TextureVisualizationShaderInfo(TextureInfo texture, String shaderFilename)
+    public TextureVisualizationShaderInfo(@NotNull TextureInfo texture, String shaderFilename)
     {
         super(texture.friendlyName, shaderFilename);
         this.texture = texture;
     }
 
     @Override
-    public final Map<String, Optional<Object>> getDefines()
+    public final @NotNull Map<String, @Nullable Object> getDefines()
     {
-        Map<String, Optional<Object>> defines = new HashMap<>(super.getDefines());
-        defines.put("VIEW_TEX", Optional.of(String.format("tex_%s", texture.name)));
+        Map<String, @Nullable Object> defines = new HashMap<>(super.getDefines());
+        defines.put("VIEW_TEX", String.format("tex_%s", texture.name));
         return defines;
     }
 
