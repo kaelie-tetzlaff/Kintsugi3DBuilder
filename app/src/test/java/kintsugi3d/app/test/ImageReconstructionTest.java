@@ -161,6 +161,7 @@ class ImageReconstructionTest
         @Override
         public final void blocked()
         {
+            LOG.error("BLOCKED!");
         }
     }
 

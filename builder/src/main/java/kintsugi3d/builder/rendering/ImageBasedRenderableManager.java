@@ -338,12 +338,6 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         String internalName, @NotNull File vsetFile, File supportingFilesDirectory, ReadonlyLoadOptionsModel loadOptions)
         throws UserCancellationException, MeshImportException, IOException
     {
-        if (Rendering.isProcessingRequest())
-        {
-            progressMonitor.blocked();
-            return;
-        }
-
         progressMonitor.start();
         progressMonitor.setProcessName("Load from File");
 
@@ -381,12 +375,6 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     public final void loadFromMetashapeModel(File newProjectFile, @NotNull MetashapeModel model, ReadonlyLoadOptionsModel loadOptionsModel)
         throws UserCancellationException, MissingImagesException, MeshImportException, IOException, XMLStreamException
     {
-        if (Rendering.isProcessingRequest())
-        {
-            progressMonitor.blocked();
-            return;
-        }
-
         progressMonitor.start();
         progressMonitor.setProcessName("Load from Agisoft Project");
 
@@ -431,11 +419,6 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                                          @NotNull ViewSetLoadOptions viewSetLoadOptions, ReadonlyLoadOptionsModel imageLoadOptions)
         throws Exception
     {
-        if (Rendering.isProcessingRequest())
-        {
-            progressMonitor.blocked();
-            return;
-        }
         progressMonitor.start();
         progressMonitor.setProcessName("Load from loose files");
 

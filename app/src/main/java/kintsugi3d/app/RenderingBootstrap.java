@@ -356,7 +356,7 @@ public final class RenderingBootstrap
         if (args.length >= 1)
         {
              LOG.debug("Args: {}", Arrays.toString(args));
-             Global.io().loadExistingProject(new File(args[0])); // Should initialize requestQueue
+             Global.io().requestLoadExistingProject(new File(args[0])); // Should initialize requestQueue
         }
 
         // Execute command if requested, using reflection

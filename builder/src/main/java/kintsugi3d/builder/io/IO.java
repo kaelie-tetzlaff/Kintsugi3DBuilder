@@ -82,10 +82,10 @@ public interface IO
     @Nullable ReadonlyVertexGeometry getLoadedGeometry();
     @Nullable ReadonlyImageBasedRenderable<?> getMainRenderable();
     ReadonlyImageBasedRenderable<?> getRenderableForShader(ShaderInfo shader);
-    void loadFromLooseFiles(File newProjectFile, String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions);
-    void hotSwapLooseFiles(String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions);
-    void loadFromMetashapeModel(File newProjectFile, MetashapeModel model);
-    void loadExistingProject(File projectFile);
+    void requestLoadFromLooseFiles(File newProjectFile, String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions);
+    void requestHotSwapLooseFiles(String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions);
+    void requestLoadFromMetashapeModel(File newProjectFile, MetashapeModel model);
+    void requestLoadExistingProject(File projectFile);
     File getViewSetFileForProject(File projectFile) throws IOException;
 
     /**

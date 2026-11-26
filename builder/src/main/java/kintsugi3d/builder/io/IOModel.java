@@ -199,13 +199,20 @@ public class IOModel implements IO
         return currentProjectFile != null;
     }
 
-    private void load(Runnable loader)
+    private void requestLoad(Runnable loader)
     {
-        load("(Untitled)", loader);
+        requestLoad("(Untitled)", loader);
     }
 
-    private void load(String projectName, Runnable loader)
+    private void requestLoad(String projectName, Runnable loader)
     {
+        // need to check for conflicting process early so crucial info isn't unloaded
+        if (Rendering.hasBlockingRequest())
+        {
+            progressMonitor.blocked();
+            return;
+        }
+
         closeProject(() ->
         {
             projectOpened.notify(new ProjectOpenedEvent(projectName));
@@ -214,9 +221,9 @@ public class IOModel implements IO
     }
 
     @Override
-    public final void loadFromLooseFiles(File newProjectFile, String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions)
+    public final void requestLoadFromLooseFiles(File newProjectFile, String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions)
     {
-        load(() ->
+        requestLoad(() ->
         {
             try
             {
@@ -232,9 +239,9 @@ public class IOModel implements IO
     }
 
     @Override
-    public final void hotSwapLooseFiles(String internalName, File xmlFile, @NotNull ViewSetLoadOptions viewSetLoadOptions)
+    public final void requestHotSwapLooseFiles(String internalName, File xmlFile, @NotNull ViewSetLoadOptions viewSetLoadOptions)
     {
-        load(() ->
+        requestLoad(() ->
         {
             try
             {
@@ -251,9 +258,9 @@ public class IOModel implements IO
     }
 
     @Override
-    public final void loadFromMetashapeModel(File newProjectFile, MetashapeModel model)
+    public final void requestLoadFromMetashapeModel(File newProjectFile, MetashapeModel model)
     {
-        load(() ->
+        requestLoad(() ->
         {
             try
             {
@@ -269,16 +276,16 @@ public class IOModel implements IO
     }
 
     @Override
-    public final void loadExistingProject(@NotNull File projectFile)
+    public final void requestLoadExistingProject(@NotNull File projectFile)
     {
-        //need to check for conflicting process early so crucial info isn't unloaded
-        if (Rendering.isProcessingRequest())
+        // need to check for conflicting process early so crucial info isn't unloaded
+        if (Rendering.hasBlockingRequest())
         {
             progressMonitor.blocked();
             return;
         }
 
-        //open the project, update the recent files list & recentDirectory, disable shaders which aren't useful until processing textures
+        // open the project, update the recent files list & recentDirectory, disable shaders which aren't useful until processing textures
         RecentProjects.getInstance().setMostRecentDirectory(projectFile.getParentFile());
 
         @Nullable File vsetFile;
@@ -302,14 +309,14 @@ public class IOModel implements IO
             }
         }
 
-        loadExistingProject(projectFile, vsetFile);
+        requestLoadExistingProject(projectFile, vsetFile);
     }
 
-    private void loadExistingProject(@NotNull File projectFile, @Nullable File vsetFile)
+    private void requestLoadExistingProject(@NotNull File projectFile, @Nullable File vsetFile)
     {
         if (vsetFile != null)
         {
-            load(projectFile.getName(), () ->
+            requestLoad(projectFile.getName(), () ->
             {
                 try
                 {

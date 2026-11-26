@@ -136,17 +136,6 @@ public class AsyncLoadedResource<CPUResourceType, GPUResourceType>
                 if (Objects.equals(file, desiredFile) &&
                     (!Objects.equals(file, currentFile) || lastModifiedNew != lastModified))
                 {
-                    // Check for conflicting process only when we are about to do work
-                    if (Rendering.isProcessingRequest())
-                    {
-                        if (progressMonitor != null)
-                        {
-                            progressMonitor.blocked();
-                        }
-
-                        return previewImage;
-                    }
-
                     if (progressMonitor != null)
                     {
                         progressMonitor.start();
