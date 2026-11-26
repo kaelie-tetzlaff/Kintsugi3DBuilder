@@ -22,7 +22,6 @@ import kintsugi3d.builder.resources.project.ReadonlyGraphicsResourcesImageSpace;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,7 +58,7 @@ final class SingleFrameRenderRequest extends RenderRequestBase
 
     @Override
     public <ContextType extends Context<ContextType>> void executeRequest(
-        @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @Nullable ProgressMonitor monitor) throws IOException
+        @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @NotNull ProgressMonitor monitor) throws IOException
     {
         ReadonlyGraphicsResourcesImageSpace<ContextType> resources = renderable.getResources();
 
@@ -70,10 +69,7 @@ final class SingleFrameRenderRequest extends RenderRequestBase
             DrawableResource<ContextType> drawable = createDrawable(program, resources)
         )
         {
-            if(monitor != null)
-            {
-                monitor.setProcessName("Generic Export");
-            }
+            monitor.setProcessName("Generic Export");
 
             View repView = renderable.getViewSet().getRepresentativeView();
             if (repView != null)

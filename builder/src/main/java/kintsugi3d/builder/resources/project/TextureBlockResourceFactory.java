@@ -40,7 +40,7 @@ public class TextureBlockResourceFactory<ContextType extends Context<ContextType
             .createGeometryFramebuffer(imageCache.getSettings().getTextureWidth(), imageCache.getSettings().getTextureHeight());
     }
 
-    public final GraphicsResourcesTextureSpace<ContextType> createBlockResources(int i, int j, ProgressMonitor monitor) throws IOException, UserCancellationException
+    public final GraphicsResourcesTextureSpace<ContextType> createBlockResources(int i, int j, @NotNull ProgressMonitor monitor) throws IOException, UserCancellationException
     {
         return imageCache.createWithRetryAfterCacheRebuild(
             () ->

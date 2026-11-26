@@ -27,7 +27,6 @@ import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.vecmath.IntVector2;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -72,5 +71,5 @@ public interface ReadonlyImageBasedGraphicsResources<ContextType extends Context
         return new GraphicsStreamFactory<>(this);
     }
 
-    ImageCache<ContextType> cache(ReadonlyImageCacheSettings settings, @Nullable ProgressMonitor monitor) throws IOException, UserCancellationException;
+    ImageCache<ContextType> cache(ReadonlyImageCacheSettings settings, @NotNull ProgressMonitor monitor) throws IOException, UserCancellationException;
 }

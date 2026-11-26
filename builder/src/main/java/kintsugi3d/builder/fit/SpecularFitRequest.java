@@ -164,7 +164,8 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
      */
     @Override
     public <ContextType extends Context<ContextType>>
-    @NotNull TextureResources<ContextType> executeRequest(@NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @Nullable ProgressMonitor monitor)
+    @NotNull TextureResources<ContextType> executeRequest(
+        @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @NotNull ProgressMonitor monitor)
         throws UserCancellationException, IOException
     {
         if (outputDirectory == null) // If the output directory wasn't overridden
@@ -173,10 +174,7 @@ public final class SpecularFitRequest implements TextureReplacementGraphicsReque
             outputDirectory = renderable.getViewSet().getSupportingFilesDirectory();
         }
 
-        if (monitor != null)
-        {
-            monitor.setProcessName("Process Textures");
-        }
+        monitor.setProcessName("Process Textures");
 
         // Perform the specular fit
         ReadonlyImageBasedGraphicsResources<ContextType> resources = renderable.getResources();

@@ -26,7 +26,6 @@ import kintsugi3d.gl.interactive.CancellationPassthroughMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +40,7 @@ public class ReoptimizeTexturesProcess extends SpecularFitProcess
     }
 
     public final <ContextType extends Context<ContextType>> @NotNull TextureResources<ContextType> reoptimizeTexturesWithCache(
-        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, @Nullable ProgressMonitor monitor)
+        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, @NotNull ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         // Get cache (should already be generated).
@@ -52,7 +51,7 @@ public class ReoptimizeTexturesProcess extends SpecularFitProcess
     }
 
     private <ContextType extends Context<ContextType>> @NotNull TextureResources<ContextType> reoptimizeTexturesWithCache(
-        @NotNull ImageCache<ContextType> cache, @NotNull ReadonlyTextureResources<ContextType> original, @Nullable ProgressMonitor monitor)
+        @NotNull ImageCache<ContextType> cache, @NotNull ReadonlyTextureResources<ContextType> original, @NotNull ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         Instant start = Instant.now();
@@ -63,11 +62,8 @@ public class ReoptimizeTexturesProcess extends SpecularFitProcess
         // (should be the case already from generating the cache, but good to do just in case)
         context.getState().disableBackFaceCulling();
 
-        if (monitor != null)
-        {
-            monitor.setStageCount(1);
-            monitor.setStage(0, "Performing high-res fit...");
-        }
+        monitor.setStageCount(1);
+        monitor.setStage(0, "Performing high-res fit...");
 
         MaterialBasis basis = Objects.requireNonNull(original.getBasisResources(), "No prior material basis exists.").getBasis();
         return optimizeFullResTexturesWithCache(cache, monitor, original, basis, start);

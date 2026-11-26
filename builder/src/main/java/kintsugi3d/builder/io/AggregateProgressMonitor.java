@@ -17,6 +17,7 @@ package kintsugi3d.builder.io;
 
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,7 +26,7 @@ class AggregateProgressMonitor implements ProgressMonitor
 {
     private final Collection<ProgressMonitor> subMonitors = new ArrayList<>(8);
 
-    final void addSubMonitor(ProgressMonitor monitor)
+    final void addSubMonitor(@NotNull ProgressMonitor monitor)
     {
         subMonitors.add(monitor);
     }

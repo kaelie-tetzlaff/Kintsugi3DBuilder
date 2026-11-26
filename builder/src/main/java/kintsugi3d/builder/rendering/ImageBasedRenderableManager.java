@@ -80,7 +80,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     private volatile @Nullable ViewSet loadedViewSet;
     private volatile @Nullable VertexGeometry loadedGeometry;
     private volatile @Nullable ImageBasedRenderingEngine<ContextType> renderableInstance;
-    private ProgressMonitor progressMonitor;
+    private @NotNull ProgressMonitor progressMonitor = new DefaultProgressMonitor();
 
     private ReadonlyObjectPoseModel objectModel;
     private ReadonlyViewpointModel cameraModel;
@@ -184,13 +184,13 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         loadedGeometry = geometry;
 
         int gpuBufferSize = viewSet.getGPUBufferSize();
-        if (gpuBufferSize > 1024 && progressMonitor != null)
+        if (gpuBufferSize > 1024)
         {
             IOException e = new IOException(String.format("Dataset has %d cameras, which exceeds 1024 and may fail on many graphics cards.", gpuBufferSize));
             progressMonitor.warn(e);
         }
         boolean hasUnsupportedCorrections = viewSet.hasUnsupportedCorrections();
-        if (hasUnsupportedCorrections && progressMonitor != null)
+        if (hasUnsupportedCorrections)
         {
             IOException e = new IOException("This project uses 'Fit additional corrections' which are not supported.");
             progressMonitor.warn(e);
@@ -221,11 +221,8 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         // Many directory paths have fallbacks that aren't in a supporting files directory.
         // In theory, this shouldn't ever happen since the UI should ideally prevent this.
 
-        if (progressMonitor != null)
-        {
-            progressMonitor.setStageCount(2);
-            progressMonitor.setStage(0, "Generating preview-resolution images...");
-        }
+        progressMonitor.setStageCount(2);
+        progressMonitor.setStage(0, "Generating preview-resolution images...");
 
         try
         {
@@ -547,7 +544,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public final void setProgressMonitor(ProgressMonitor progressMonitor)
+    public final void setProgressMonitor(@NotNull ProgressMonitor progressMonitor)
     {
         this.progressMonitor = progressMonitor;
     }
@@ -674,12 +671,14 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public final void saveGLTF(@NotNull File outputDirectory, @NotNull ExportSettings settings, @NotNull ProgressMonitor progressMonitor)
+    public final void saveGLTF(
+        @NotNull File outputDirectory, @NotNull ExportSettings settings,
+        @SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") @NotNull ProgressMonitor saveMonitor)
     {
         ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
         if (currentInstance != null)
         {
-            currentInstance.saveGLTF(outputDirectory, settings, progressMonitor);
+            currentInstance.saveGLTF(outputDirectory, settings, saveMonitor);
         }
     }
 

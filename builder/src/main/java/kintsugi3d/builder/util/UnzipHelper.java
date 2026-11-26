@@ -19,7 +19,6 @@ import javafx.scene.image.Image;
 import kintsugi3d.builder.io.XMLHelper;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -248,7 +247,7 @@ public final class UnzipHelper
     }
 
     //   Adapted from https://www.baeldung.com/java-compress-and-uncompress
-    public static void unzipToDirectory(@NotNull File zippedDir, File destinationDir, @Nullable ProgressMonitor monitor) throws IOException
+    public static void unzipToDirectory(@NotNull File zippedDir, File destinationDir, @NotNull ProgressMonitor monitor) throws IOException
     {
         byte[] buffer = new byte[1024];
 
@@ -257,20 +256,14 @@ public final class UnzipHelper
         ZipEntry zipEntry = zis.getNextEntry();
 
         int numEntries = zf.size();
-        if (monitor != null)
-        {
-            monitor.setMaxProgress(numEntries);
-        }
+        monitor.setMaxProgress(numEntries);
         int idx = 0;
         while (zipEntry != null)
         {
             //ignore directories for now
             if (!zipEntry.isDirectory())
             {
-                if (monitor != null)
-                {
-                    monitor.setProgress(idx, zipEntry.getName());
-                }
+                monitor.setProgress(idx, zipEntry.getName());
                 FileOutputStream fos = new FileOutputStream(new File(destinationDir, zipEntry.getName()));
                 int len;
                 //noinspection NestedAssignment

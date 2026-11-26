@@ -41,8 +41,8 @@ public interface IO
 
     ReadonlyLoadOptionsModel getLoadOptionsModel();
 
-    ProgressMonitor getAggregateProgressMonitor();
-    void addProgressMonitor(ProgressMonitor monitor);
+    @NotNull ProgressMonitor getAggregateProgressMonitor();
+    void addProgressMonitor(@NotNull ProgressMonitor monitor);
 
     EventListeners<ProjectOpenedListener> projectOpenedListeners();
     EventListeners<ProjectSavedListener> projectSavedListeners();

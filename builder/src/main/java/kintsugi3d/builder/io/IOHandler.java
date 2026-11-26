@@ -99,5 +99,5 @@ public interface IOHandler
      */
     void unload(Runnable onUnloadComplete);
 
-    void setProgressMonitor(ProgressMonitor progressMonitor);
+    void setProgressMonitor(@NotNull ProgressMonitor progressMonitor);
 }

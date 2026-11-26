@@ -72,7 +72,7 @@ public class ExportTexturesRequest implements ImageBasedGraphicsRequest
 
     @Override
     public final <ContextType extends Context<ContextType>> void executeRequest(
-        @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
+        @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @NotNull ProgressMonitor monitor)
     {
         // Includes textures is shouldSaveTextures is true
         renderable.saveGLTF(

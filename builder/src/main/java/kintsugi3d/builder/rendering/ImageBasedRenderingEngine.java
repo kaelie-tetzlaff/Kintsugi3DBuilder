@@ -49,10 +49,7 @@ import kintsugi3d.gl.builders.framebuffer.ColorAttachmentSpec;
 import kintsugi3d.gl.builders.framebuffer.DepthAttachmentSpec;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
-import kintsugi3d.gl.interactive.InitializationException;
-import kintsugi3d.gl.interactive.InteractiveRenderableBase;
-import kintsugi3d.gl.interactive.ProgressMonitor;
-import kintsugi3d.gl.interactive.UserCancellationException;
+import kintsugi3d.gl.interactive.*;
 import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
@@ -76,7 +73,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
     private final ContextType context;
 
-    private volatile ProgressMonitor loadingMonitor;
+    private volatile @NotNull ProgressMonitor loadingMonitor = new DefaultProgressMonitor();
     private boolean logErrors = true;
 
     private final @Nullable Builder<ContextType> resourceBuilder;
@@ -312,20 +309,14 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         {
             LOG.info("User cancelled operation while initializing ProjectRenderingEngine:", e);
             close();
-            if (loadingMonitor != null)
-            {
-                loadingMonitor.cancelComplete(e);
-            }
+            loadingMonitor.cancelComplete(e);
             throw new InitializationException(e);
         }
         catch (RuntimeException|IOException|MeshImportException e)
         {
             LOG.error("Error occurred initializing ProjectRenderingEngine:", e);
             close();
-            if (loadingMonitor != null)
-            {
-                loadingMonitor.fail(e);
-            }
+            loadingMonitor.fail(e);
             throw new InitializationException(e);
         }
     }
@@ -536,10 +527,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
                         validatedResources.getViewSet().setAllLightIntensities(validatedResources.determineGlobalLightIntensity());
                     }
 
-                    if (loadingMonitor != null)
-                    {
-                        loadingMonitor.complete();
-                    }
+                    loadingMonitor.complete();
                 }
             }
         }
@@ -589,7 +577,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         }
     }
 
-    final void setLoadingMonitor(ProgressMonitor loadingMonitor)
+    final void setLoadingMonitor(@NotNull ProgressMonitor loadingMonitor)
     {
         this.loadingMonitor = loadingMonitor;
     }

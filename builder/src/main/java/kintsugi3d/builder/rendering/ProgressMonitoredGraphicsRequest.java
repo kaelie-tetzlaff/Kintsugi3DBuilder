@@ -18,6 +18,7 @@ package kintsugi3d.builder.rendering;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An interface for an executable that only requires a graphics context (no pre-loaded data)
@@ -33,7 +34,7 @@ public interface ProgressMonitoredGraphicsRequest extends GraphicsRequest
      * @param <ContextType> The type of the graphics context that the renderer implementation uses.
      * @throws Exception An exception may be thrown by the executable that will be caught and logged by Kintsugi 3D Builder.
      */
-    <ContextType extends Context<ContextType>> void executeRequest(ContextType context, ProgressMonitor monitor) throws Exception;
+    <ContextType extends Context<ContextType>> void executeRequest(ContextType context, @NotNull ProgressMonitor monitor) throws Exception;
 
     @Override
     default <ContextType extends Context<ContextType>> void executeRequest(ContextType context) throws Exception

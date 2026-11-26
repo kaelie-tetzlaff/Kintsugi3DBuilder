@@ -35,6 +35,7 @@ import kintsugi3d.builder.util.events.EventDispatcher;
 import kintsugi3d.builder.util.events.EventListeners;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
+import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.material.ReadonlyImportedMaterial;
@@ -111,7 +112,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public final void addProgressMonitor(ProgressMonitor monitor)
+    public final void addProgressMonitor(@NotNull ProgressMonitor monitor)
     {
         progressMonitor.addSubMonitor(monitor);
     }
@@ -606,7 +607,7 @@ public class IOModel implements IO
             try
             {
                 // Just unzip everything for efficiency; could clean up any unused files (i.e. non-masks) but probably not necessary
-                UnzipHelper.unzipToDirectory(masksSrcDir, masksDestinationDir, null);
+                UnzipHelper.unzipToDirectory(masksSrcDir, masksDestinationDir, new DefaultProgressMonitor());
 
                 // Use the destination directory as the masks directory for validating (and thereafter)
                 viewSet.setMasksDirectory(masksDestinationDir);
@@ -697,7 +698,7 @@ public class IOModel implements IO
                 try
                 {
                     // Just unzip everything for efficiency; could clean up any unused files but probably not necessary
-                    UnzipHelper.unzipToDirectory(geometryFile, modelDestDir, null);
+                    UnzipHelper.unzipToDirectory(geometryFile, modelDestDir, new DefaultProgressMonitor());
 
                     viewSet.setGeometryFile(new File(modelDestDir, "mesh.ply"));
 
