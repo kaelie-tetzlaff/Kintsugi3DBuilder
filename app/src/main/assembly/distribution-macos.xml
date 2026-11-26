@@ -70,10 +70,9 @@
             <fileMode>0755</fileMode>
             <lineEnding>unix</lineEnding>
         </fileSet>
+        <!-- jlink-generated runtime image (flat layout, JavaFX modules linked in) -->
         <fileSet>
-            <!-- Intentionally flatten the root "Contents" directory for the bundled jlink runtime image
-                 (JavaFX modules are linked in, so no separate lib/javafx jars are needed) -->
-            <directory>${project.build.directory}/jre/Contents</directory>
+            <directory>${project.build.directory}/jre</directory>
             <outputDirectory>Kintsugi 3D Builder.app/Contents/Resources/jre</outputDirectory>
             <fileMode>0755</fileMode>
         </fileSet>
