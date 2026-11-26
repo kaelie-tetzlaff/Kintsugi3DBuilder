@@ -49,10 +49,7 @@ import kintsugi3d.gl.builders.framebuffer.ColorAttachmentSpec;
 import kintsugi3d.gl.builders.framebuffer.DepthAttachmentSpec;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
-import kintsugi3d.gl.interactive.InitializationException;
-import kintsugi3d.gl.interactive.InteractiveRenderableBase;
-import kintsugi3d.gl.interactive.ProgressMonitor;
-import kintsugi3d.gl.interactive.UserCancellationException;
+import kintsugi3d.gl.interactive.*;
 import kintsugi3d.gl.vecmath.Matrix3;
 import kintsugi3d.gl.vecmath.Matrix4;
 import kintsugi3d.gl.vecmath.Vector3;
@@ -76,7 +73,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
 
     private final ContextType context;
 
-    private volatile ProgressMonitor progressMonitor;
+    private volatile @NotNull ProgressMonitor loadingMonitor = new DefaultProgressMonitor();
     private boolean logErrors = true;
 
     private final @Nullable Builder<ContextType> resourceBuilder;
@@ -225,7 +222,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
             if (resourceBuilder != null)
             {
                 resources = resourceBuilder
-                    .setProgressMonitor(progressMonitor) // Use the progress monitor that offsets the stage count if generating preview images
+                    .setProgressMonitor(loadingMonitor) // Use the progress monitor that offsets the stage count if generating preview images
 //                .generateUndistortedPreviewImages()
                     .create();
 
@@ -260,7 +257,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
             lightCalibrationSplitScreen = new SplitScreenComponent<>(lightCalibration, lightCalibration3DRoot);
 
             subject = scene.getSubject();
-            dynamicResourceLoader = new DynamicResourceLoader<>(progressMonitor,
+            dynamicResourceLoader = new DynamicResourceLoader<>(loadingMonitor,
                 context, subject, litRoot.getLightingResources());
 
             updateWorldSpaceDefinition();
@@ -312,20 +309,14 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         {
             LOG.info("User cancelled operation while initializing ProjectRenderingEngine:", e);
             close();
-            if (progressMonitor != null)
-            {
-                progressMonitor.cancelComplete(e);
-            }
+            loadingMonitor.cancelComplete(e);
             throw new InitializationException(e);
         }
         catch (RuntimeException|IOException|MeshImportException e)
         {
             LOG.error("Error occurred initializing ProjectRenderingEngine:", e);
             close();
-            if (progressMonitor != null)
-            {
-                progressMonitor.fail(e);
-            }
+            loadingMonitor.fail(e);
             throw new InitializationException(e);
         }
     }
@@ -536,10 +527,7 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
                         validatedResources.getViewSet().setAllLightIntensities(validatedResources.determineGlobalLightIntensity());
                     }
 
-                    if (progressMonitor != null)
-                    {
-                        progressMonitor.complete();
-                    }
+                    loadingMonitor.complete();
                 }
             }
         }
@@ -589,9 +577,9 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
         }
     }
 
-    final void setProgressMonitor(ProgressMonitor progressMonitor)
+    final void setLoadingMonitor(@NotNull ProgressMonitor loadingMonitor)
     {
-        this.progressMonitor = progressMonitor;
+        this.loadingMonitor = loadingMonitor;
     }
 
     @Override
@@ -645,14 +633,14 @@ public class ImageBasedRenderingEngine<ContextType extends Context<ContextType>>
     }
 
     @Override
-    public final void saveGLTF(@NotNull File outputDirectory, @NotNull String filename, @NotNull ExportSettings settings, @Nullable Runnable finishedCallback)
+    public final void saveGLTF(
+        @NotNull File outputDirectory, @NotNull String filename, @NotNull ExportSettings settings, @Nullable Runnable finishedCallback,
+        @NotNull ProgressMonitor progressMonitor)
     {
         LOG.info("Starting glTF export...");
 
-        if(progressMonitor != null)
-        {
-            progressMonitor.setProcessName("Model Export");
-        }
+        progressMonitor.setProcessName("Model Export");
+        progressMonitor.setStageCount(1);
 
         try
         {

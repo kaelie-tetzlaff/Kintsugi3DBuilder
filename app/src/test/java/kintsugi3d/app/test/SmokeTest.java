@@ -39,6 +39,8 @@ import kintsugi3d.builder.state.settings.GeneralSettingsModel;
 import kintsugi3d.builder.util.ApplicationFolders;
 import kintsugi3d.builder.util.logging.LogMessage;
 import kintsugi3d.builder.util.logging.LogMessageListener;
+import kintsugi3d.gl.interactive.ProgressMonitor;
+import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.vecmath.Vector3;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
@@ -86,6 +88,8 @@ public class SmokeTest
     private static final AtomicBoolean EXPORT_FINISHED = new AtomicBoolean(false);
     private static final AtomicInteger PROCESSED_COUNTER = new AtomicInteger(0);
     private static final AtomicInteger SAVE_COUNTER = new AtomicInteger(0);
+    private static final AtomicBoolean BLOCKED = new AtomicBoolean(false);
+
     private static final long TIMEOUT = TimeUnit.SECONDS.toNanos(600);
     
     private static final ClassLoader CLASS_LOADER = SmokeTest.class.getClassLoader();
@@ -181,6 +185,7 @@ public class SmokeTest
         // Clear errors and warnings for next test.
         TESTING_STATE.clearErrorsAndWarnings();
         LOG_ERROR.set(null);
+        BLOCKED.set(false);
 
         // Make sure there is no project open.
         if (Global.io().getLoadedViewSetOrNull() != null)
@@ -234,6 +239,70 @@ public class SmokeTest
             LOG.info("Project Saved");
             SAVE_COUNTER.incrementAndGet();
         });
+
+        Global.io().addProgressMonitor(new ProgressMonitor()
+        {
+            @Override
+            public void allowUserCancellation()
+            {
+            }
+
+            @Override
+            public void cancelComplete(UserCancellationException e)
+            {
+            }
+
+            @Override
+            public void start()
+            {
+            }
+
+            @Override
+            public void setProcessName(String processName)
+            {
+            }
+
+            @Override
+            public void setStageCount(int count)
+            {
+            }
+
+            @Override
+            public void setStage(int stage, String message)
+            {
+            }
+
+            @Override
+            public void advanceStage(String message)
+            {
+            }
+
+            @Override
+            public void setMaxProgress(double maxProgress)
+            {
+            }
+
+            @Override
+            public void setProgress(double progress, String message)
+            {
+            }
+
+            @Override
+            public void complete()
+            {
+            }
+
+            @Override
+            public void fail(Throwable e)
+            {
+            }
+
+            @Override
+            public void blocked()
+            {
+                BLOCKED.set(true);
+            }
+        });
     }
 
     private static void waitFor(@NotNull BooleanSupplier finished, String operation)
@@ -255,6 +324,11 @@ public class SmokeTest
             if (System.nanoTime() - start > TIMEOUT)
             {
                 fail(String.format("Timed out waiting for project %s", operation));
+            }
+
+            if (BLOCKED.get())
+            {
+                fail("Process blocked.");
             }
 
             Thread.onSpinWait();
@@ -731,7 +805,7 @@ public class SmokeTest
         LOAD_FINISHED.set(false);
         File newFile = new File(TEST_OUTPUT_DIR,String.format("%s.k3d", testName));
 
-        Global.io().loadFromLooseFiles(newFile, testName,
+        Global.io().requestLoadFromLooseFiles(newFile, testName,
             getTestResource(cameras), viewSetLoadOptions);
         waitForLoad();
 
@@ -752,7 +826,7 @@ public class SmokeTest
 
         LOAD_FINISHED.set(false);
         File newFile = new File(TEST_OUTPUT_DIR,String.format("%s.k3d", testName));
-        Global.io().loadFromMetashapeModel(newFile, model);
+        Global.io().requestLoadFromMetashapeModel(newFile, model);
         waitForLoad();
 
         runSpecularFit();
@@ -763,7 +837,7 @@ public class SmokeTest
     {
         // --- FIRST LOAD ---
         LOAD_FINISHED.set(false);
-        Global.io().loadExistingProject(projectFile);
+        Global.io().requestLoadExistingProject(projectFile);
         waitForLoad();
 
         File imgDir = getTestResource(imageDirectory);
@@ -780,7 +854,7 @@ public class SmokeTest
 
         // --- SECOND LOAD ---
         LOAD_FINISHED.set(false);
-        Global.io().loadExistingProject(projectFile);
+        Global.io().requestLoadExistingProject(projectFile);
         waitForLoad();
 
         // --- SECOND PROCESS ---
@@ -800,7 +874,7 @@ public class SmokeTest
 
         // --- LOAD ---
         LOAD_FINISHED.set(false);
-        Global.io().loadExistingProject(projectFile);
+        Global.io().requestLoadExistingProject(projectFile);
         waitForLoad();
 
         File imgDir = getTestResource(imageDirectory);
@@ -825,7 +899,7 @@ public class SmokeTest
     {
         // --- LOAD ---
         LOAD_FINISHED.set(false);
-        Global.io().loadExistingProject(projectFile);
+        Global.io().requestLoadExistingProject(projectFile);
         waitForLoad();
 
         ViewSet viewSet = Global.io().getLoadedViewSetOrNull();

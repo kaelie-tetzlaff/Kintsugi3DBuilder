@@ -72,12 +72,12 @@ public class ExportTexturesRequest implements ImageBasedGraphicsRequest
 
     @Override
     public final <ContextType extends Context<ContextType>> void executeRequest(
-        @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor)
+        @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @NotNull ProgressMonitor monitor)
     {
         // Includes textures is shouldSaveTextures is true
-        renderable.saveGLTF(Objects.requireNonNull(exportLocationFile.getParentFile(),
-                "Export location must be an absolute file path.")
-            , exportLocationFile.getName(), settings, this::onSaveComplete);
+        renderable.saveGLTF(
+            Objects.requireNonNull(exportLocationFile.getParentFile(), "Export location must be an absolute file path."),
+            exportLocationFile.getName(), settings, this::onSaveComplete, monitor);
     }
 
     private void onSaveComplete()

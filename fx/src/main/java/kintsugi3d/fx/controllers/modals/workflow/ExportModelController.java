@@ -114,18 +114,12 @@ public class ExportModelController extends ProjectSettingsControllerBase
     {
         applySettings();
 
-        if (Global.io().getAggregateProgressMonitor().isConflictingProcess())
-        {
-            error("Failed to export model", "Another process is already running.");
-            return false;
-        }
-
         try
         {
             exportLocationFile = objFileChooser.showSaveDialog(root.getScene().getWindow());
             if (exportLocationFile != null)
             {
-                Rendering.getRequestQueue().addImageBasedGraphicsRequest(new ExportTexturesRequest(
+                return Rendering.getRequestQueue().addImageBasedGraphicsRequest(new ExportTexturesRequest(
                     exportLocationFile,
                     () ->
                     {
@@ -140,8 +134,6 @@ public class ExportModelController extends ProjectSettingsControllerBase
                             saveInfo.show();
                         });
                     }));
-
-                return true;
             }
             else
             {

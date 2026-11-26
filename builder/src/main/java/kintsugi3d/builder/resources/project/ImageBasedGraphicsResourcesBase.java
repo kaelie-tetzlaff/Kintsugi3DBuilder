@@ -100,7 +100,7 @@ abstract class ImageBasedGraphicsResourcesBase<ContextType extends Context<Conte
     }
 
     @Override
-    public final @NotNull ImageCache<ContextType> cache(@NotNull ReadonlyImageCacheSettings settings, ProgressMonitor monitor)
+    public final @NotNull ImageCache<ContextType> cache(@NotNull ReadonlyImageCacheSettings settings, @NotNull ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         ImageCache<ContextType> cache = new ImageCache<>(this, settings);

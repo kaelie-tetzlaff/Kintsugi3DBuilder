@@ -133,6 +133,11 @@ public final class Rendering
         return newRequestQueue;
     }
 
+    public static boolean hasBlockingRequest()
+    {
+        return getRequestQueue().hasBlockingRequest();
+    }
+
     public static void runLater(GraphicsRequest request)
     {
         getRequestQueue().addBackgroundGraphicsRequest(request);

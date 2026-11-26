@@ -174,7 +174,7 @@ public class ManualInputSource extends NonValidatedInputSourceBase
         {
             if (original.hotSwap)
             {
-                Global.io().hotSwapLooseFiles(original.cameraFile.getPath(), original.cameraFile, getViewSetLoadOptions());
+                Global.io().requestHotSwapLooseFiles(original.cameraFile.getPath(), original.cameraFile, getViewSetLoadOptions());
                 return true;
             }
             else
@@ -183,7 +183,7 @@ public class ManualInputSource extends NonValidatedInputSourceBase
 
                 if (projectFileToSave != null)
                 {
-                    Global.io().loadFromLooseFiles(projectFileToSave, original.cameraFile.getPath(), original.cameraFile, getViewSetLoadOptions());
+                    Global.io().requestLoadFromLooseFiles(projectFileToSave, original.cameraFile.getPath(), original.cameraFile, getViewSetLoadOptions());
                     return true;
                 }
                 else

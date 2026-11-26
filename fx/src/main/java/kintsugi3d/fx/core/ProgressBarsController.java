@@ -529,7 +529,8 @@ public class ProgressBarsController
         @Override
         public final void advanceStage(String message)
         {
-            setStage(currentStage + 1, message);
+            // setStage already increments whatever is passed in.
+            setStage(currentStage, message);
         }
 
         @Override
@@ -644,13 +645,8 @@ public class ProgressBarsController
         }
 
         @Override
-        public final boolean isConflictingProcess()
+        public final void blocked()
         {
-            if (!isProcessing())
-            {
-                return false;
-            }
-
             Platform.runLater(() ->
             {
                 ButtonType ok = new ButtonType("OK", ButtonData.OK_DONE);
@@ -671,8 +667,6 @@ public class ProgressBarsController
 
                 alert.showAndWait();
             });
-
-            return true;
         }
     }
 }

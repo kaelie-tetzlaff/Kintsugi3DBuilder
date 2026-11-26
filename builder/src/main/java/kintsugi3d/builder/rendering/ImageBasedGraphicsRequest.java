@@ -18,7 +18,6 @@ package kintsugi3d.builder.rendering;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * An interface for an executable that requires a loaded model instance and can be observed by a loading monitor
@@ -36,5 +35,5 @@ public interface ImageBasedGraphicsRequest
      * @throws Exception An exception may be thrown by the executable that will be caught and logged by Kintsugi 3D Builder.
      */
     <ContextType extends Context<ContextType>>
-    void executeRequest(@NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @Nullable ProgressMonitor monitor) throws Exception;
+    void executeRequest(@NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @NotNull ProgressMonitor monitor) throws Exception;
 }

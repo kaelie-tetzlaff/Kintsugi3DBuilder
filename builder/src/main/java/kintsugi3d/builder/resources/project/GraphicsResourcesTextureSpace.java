@@ -27,7 +27,6 @@ import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.util.ImageFinder;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +70,7 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
      */
     GraphicsResourcesTextureSpace(@NotNull GraphicsResourcesCommon<ContextType> sharedResources,
                                   @NotNull Supplier<GeometryTextures<ContextType>> geometryTextureFactory, File textureDirectory,
-                                  @NotNull TextureLoadOptions loadOptions, int texWidth, int texHeight, @Nullable ProgressMonitor progressMonitor)
+                                  @NotNull TextureLoadOptions loadOptions, int texWidth, int texHeight, @NotNull ProgressMonitor progressMonitor)
             throws IOException, UserCancellationException
     {
         super(sharedResources, false);
@@ -99,11 +98,8 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
                 .createTexture();
         }
 
-        if(progressMonitor != null)
-        {
-            progressMonitor.setMaxProgress(getViewSet().getViewCount());
-            progressMonitor.setStage(0, "Loading textures...");
-        }
+        progressMonitor.setMaxProgress(getViewSet().getViewCount());
+        progressMonitor.setStage(0, "Loading textures...");
 
         try
         {
@@ -112,12 +108,9 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
             int progressCount = 0;
             for (View view : getViewSet().getViews())
             {
-                if (progressMonitor != null)
-                {
-                    progressMonitor.setProgress(progressCount, MessageFormat.format("{0} ({1}/{2})",
-                        view, progressCount + 1, getViewSet().getViewCount()));
-                    progressMonitor.allowUserCancellation();
-                }
+                progressMonitor.setProgress(progressCount, MessageFormat.format("{0} ({1}/{2})",
+                    view, progressCount + 1, getViewSet().getViewCount()));
+                progressMonitor.allowUserCancellation();
 
                 textureArray.loadLayer(view.getGPUViewIndex(),
                     ImageFinder.findImageFile(new File(textureDirectory, view.getImageFile().getName())),
@@ -126,10 +119,7 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
                 progressCount++;
             }
 
-            if (progressMonitor != null)
-            {
-                progressMonitor.setProgress(getViewSet().getViewCount(), "All images loaded.");
-            }
+            progressMonitor.setProgress(getViewSet().getViewCount(), "All images loaded.");
         }
         catch (IOException e)
         {
@@ -141,10 +131,7 @@ public class GraphicsResourcesTextureSpace<ContextType extends Context<ContextTy
 
         LOG.info("View Set textures loaded in {} milliseconds.", new Date().getTime() - timestamp.getTime());
 
-        if (progressMonitor != null)
-        {
-            progressMonitor.setStage(1, "Finished loading textures.");
-        }
+        progressMonitor.setStage(1, "Finished loading textures.");
 
         geometryTextures = geometryTextureFactory.get();
         rectangle = sharedResources.getContext().createRectangle();

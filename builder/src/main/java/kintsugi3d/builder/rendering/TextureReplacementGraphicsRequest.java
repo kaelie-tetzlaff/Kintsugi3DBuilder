@@ -18,6 +18,7 @@ package kintsugi3d.builder.rendering;
 import kintsugi3d.builder.resources.project.texture.TextureResources;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.ProgressMonitor;
+import org.jetbrains.annotations.NotNull;
 
 public interface TextureReplacementGraphicsRequest
 {
@@ -32,5 +33,5 @@ public interface TextureReplacementGraphicsRequest
      * @throws Exception An exception may be thrown by the executable that will be caught and logged by Kintsugi 3D Builder.
      */
     <ContextType extends Context<ContextType>>
-    TextureResources<ContextType> executeRequest(ReadonlyImageBasedRenderable<ContextType> renderable, ProgressMonitor monitor) throws Exception;
+    TextureResources<ContextType> executeRequest(ReadonlyImageBasedRenderable<ContextType> renderable, @NotNull ProgressMonitor monitor) throws Exception;
 }

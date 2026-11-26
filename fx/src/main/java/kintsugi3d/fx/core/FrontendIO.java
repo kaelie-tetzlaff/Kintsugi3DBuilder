@@ -161,7 +161,7 @@ public final class FrontendIO
             if (selectedFile != null)
             {
                 //opens project and also updates the recently opened files list
-                Global.io().loadExistingProject(selectedFile);
+                Global.io().requestLoadExistingProject(selectedFile);
             }
         }
     }
@@ -170,7 +170,7 @@ public final class FrontendIO
     {
         if (confirmClose("Are you sure you want to open another project?"))
         {
-            Global.io().loadExistingProject(file);
+            Global.io().requestLoadExistingProject(file);
         }
     }
 

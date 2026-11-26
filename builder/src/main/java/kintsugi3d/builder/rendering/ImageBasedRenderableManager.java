@@ -18,10 +18,7 @@ package kintsugi3d.builder.rendering;
 import kintsugi3d.builder.core.Global;
 import kintsugi3d.builder.core.viewset.ViewSet;
 import kintsugi3d.builder.fit.settings.ExportSettings;
-import kintsugi3d.builder.io.IOHandler;
-import kintsugi3d.builder.io.ReadonlyLoadOptionsModel;
-import kintsugi3d.builder.io.ViewSetLoadOptions;
-import kintsugi3d.builder.io.ViewSetWriterToVSET;
+import kintsugi3d.builder.io.*;
 import kintsugi3d.builder.io.events.ProjectLoadedEvent;
 import kintsugi3d.builder.io.events.ProjectLoadedListener;
 import kintsugi3d.builder.io.events.ProjectProcessedEvent;
@@ -83,7 +80,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     private volatile @Nullable ViewSet loadedViewSet;
     private volatile @Nullable VertexGeometry loadedGeometry;
     private volatile @Nullable ImageBasedRenderingEngine<ContextType> renderableInstance;
-    private ProgressMonitor progressMonitor;
+    private @NotNull ProgressMonitor progressMonitor = new DefaultProgressMonitor();
 
     private ReadonlyObjectPoseModel objectModel;
     private ReadonlyViewpointModel cameraModel;
@@ -187,13 +184,13 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         loadedGeometry = geometry;
 
         int gpuBufferSize = viewSet.getGPUBufferSize();
-        if (gpuBufferSize > 1024 && progressMonitor != null)
+        if (gpuBufferSize > 1024)
         {
             IOException e = new IOException(String.format("Dataset has %d cameras, which exceeds 1024 and may fail on many graphics cards.", gpuBufferSize));
             progressMonitor.warn(e);
         }
         boolean hasUnsupportedCorrections = viewSet.hasUnsupportedCorrections();
-        if (hasUnsupportedCorrections && progressMonitor != null)
+        if (hasUnsupportedCorrections)
         {
             IOException e = new IOException("This project uses 'Fit additional corrections' which are not supported.");
             progressMonitor.warn(e);
@@ -224,11 +221,8 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         // Many directory paths have fallbacks that aren't in a supporting files directory.
         // In theory, this shouldn't ever happen since the UI should ideally prevent this.
 
-        if (progressMonitor != null)
-        {
-            progressMonitor.setStageCount(2);
-            progressMonitor.setStage(0, "Generating preview-resolution images...");
-        }
+        progressMonitor.setStageCount(2);
+        progressMonitor.setStage(0, "Generating preview-resolution images...");
 
         try
         {
@@ -248,7 +242,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         newInstanceSceneModel.setCameraModel(cameraModel);
         initializeSceneModel(newInstanceSceneModel);
 
-        newInstance.setProgressMonitor(new BackendProgressMonitor(newInstance, progressMonitor));
+        newInstance.setLoadingMonitor(new BackendProgressMonitor(newInstance, progressMonitor));
 
         // Use the runLater system so that the rendering loop knows that an operation that might take longer is queued.
         Rendering.runLater(() ->
@@ -341,11 +335,6 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         String internalName, @NotNull File vsetFile, File supportingFilesDirectory, ReadonlyLoadOptionsModel loadOptions)
         throws UserCancellationException, MeshImportException, IOException
     {
-        if (progressMonitor.isConflictingProcess())
-        {
-            return;
-        }
-
         progressMonitor.start();
         progressMonitor.setProcessName("Load from File");
 
@@ -383,12 +372,6 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     public final void loadFromMetashapeModel(File newProjectFile, @NotNull MetashapeModel model, ReadonlyLoadOptionsModel loadOptionsModel)
         throws UserCancellationException, MissingImagesException, MeshImportException, IOException, XMLStreamException
     {
-
-        if (progressMonitor.isConflictingProcess())
-        {
-            return;
-        }
-
         progressMonitor.start();
         progressMonitor.setProcessName("Load from Agisoft Project");
 
@@ -433,10 +416,6 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
                                          @NotNull ViewSetLoadOptions viewSetLoadOptions, ReadonlyLoadOptionsModel imageLoadOptions)
         throws Exception
     {
-        if (progressMonitor.isConflictingProcess())
-        {
-            return;
-        }
         progressMonitor.start();
         progressMonitor.setProcessName("Load from loose files");
 
@@ -565,7 +544,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public final void setProgressMonitor(ProgressMonitor progressMonitor)
+    public final void setProgressMonitor(@NotNull ProgressMonitor progressMonitor)
     {
         this.progressMonitor = progressMonitor;
     }
@@ -692,12 +671,14 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public final void saveGLTF(@NotNull File outputDirectory, @NotNull ExportSettings settings)
+    public final void saveGLTF(
+        @NotNull File outputDirectory, @NotNull ExportSettings settings,
+        @SuppressWarnings("ParameterNameDiffersFromOverriddenParameter") @NotNull ProgressMonitor saveMonitor)
     {
         ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
         if (currentInstance != null)
         {
-            currentInstance.saveGLTF(outputDirectory, settings);
+            currentInstance.saveGLTF(outputDirectory, settings, saveMonitor);
         }
     }
 

@@ -15,16 +15,16 @@
 
 package kintsugi3d.gl.interactive;
 
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Allows for cancellation events to be forwarded without otherwise affecting progress presentation.
  */
 public final class CancellationPassthroughMonitor extends DefaultProgressMonitor
 {
-    private final @Nullable ProgressMonitor monitor;
+    private final @NotNull ProgressMonitor monitor;
 
-    public CancellationPassthroughMonitor(@Nullable ProgressMonitor monitor)
+    public CancellationPassthroughMonitor(@NotNull ProgressMonitor monitor)
     {
         this.monitor = monitor;
     }
@@ -32,9 +32,6 @@ public final class CancellationPassthroughMonitor extends DefaultProgressMonitor
     @Override
     public void allowUserCancellation() throws UserCancellationException
     {
-        if (monitor != null)
-        {
-            monitor.allowUserCancellation();
-        }
+        monitor.allowUserCancellation();
     }
 }

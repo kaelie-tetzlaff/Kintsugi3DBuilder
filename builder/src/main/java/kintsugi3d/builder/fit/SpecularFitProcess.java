@@ -141,7 +141,7 @@ public abstract class SpecularFitProcess
     }
 
     protected final <ContextType extends Context<ContextType>> @NotNull SpecularFitFinal<ContextType> optimizeFullResTexturesWithCache(
-        @NotNull ImageCache<ContextType> cache, @Nullable ProgressMonitor monitor, @NotNull ReadonlyTextureResources<ContextType> original,
+        @NotNull ImageCache<ContextType> cache, @NotNull ProgressMonitor monitor, @NotNull ReadonlyTextureResources<ContextType> original,
         @NotNull MaterialBasis basis, @NotNull Temporal start) throws IOException, UserCancellationException
     {
         // Create space for the solution.
@@ -165,11 +165,8 @@ public abstract class SpecularFitProcess
             // Optimize weight maps and normal maps by blocks to fill the full resolution textures
             optimizeBlocks(fullResolution, cache, basis, inputNormalMap, monitor);
 
-            if (monitor != null)
-            {
-                // Go back to indeterminate for wrap-up stuff
-                monitor.advanceStage("Texture processing complete.");
-            }
+            // Go back to indeterminate for wrap-up stuff
+            monitor.advanceStage("Texture processing complete.");
 
             // Generate albedo / ORM maps at full resolution (does not require loaded source images)
             AlbedoORMOptimization<ContextType> albedoORMOptimization = fullResolution.getAlbedoORMOptimization();
@@ -248,7 +245,7 @@ public abstract class SpecularFitProcess
         @NotNull ImageCache<ContextType> cache,
         @NotNull MaterialBasis basis,
         @Nullable File inputNormalMapFile,
-        @Nullable ProgressMonitor monitor)
+        @NotNull ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         SpecularFitResourcesWrapper<ContextType> resourcesWrapper = getResourcesWrapper();
@@ -259,10 +256,7 @@ public abstract class SpecularFitProcess
                 OptionalManagedResource.of(loadInitialNormalMap(cache.getContext(),
                     fullResolutionDestination.getWidth(), fullResolutionDestination.getHeight(), inputNormalMapFile)))
         {
-            if (monitor != null)
-            {
-                monitor.setMaxProgress(cache.getSettings().getTextureSubdiv() * cache.getSettings().getTextureSubdiv());
-            }
+            monitor.setMaxProgress(cache.getSettings().getTextureSubdiv() * cache.getSettings().getTextureSubdiv());
 
             // Optimize each block of the texture map at full resolution.
             for (int i = 0; i < cache.getSettings().getTextureSubdiv(); i++)
@@ -271,11 +265,8 @@ public abstract class SpecularFitProcess
                 {
                     int blockProgress = i * cache.getSettings().getTextureSubdiv() + j;
 
-                    if (monitor != null)
-                    {
-                        monitor.setProgress(blockProgress, MessageFormat.format("Block ({0}, {1})", i, j));
-                        monitor.allowUserCancellation();
-                    }
+                    monitor.setProgress(blockProgress, MessageFormat.format("Block ({0}, {1})", i, j));
+                    monitor.allowUserCancellation();
 
                     try (GraphicsResourcesTextureSpace<ContextType> blockResources =
                              blockResourceFactory.createBlockResources(i, j, new BlockResourcesProgressMonitor(monitor)))
@@ -349,7 +340,7 @@ public abstract class SpecularFitProcess
         @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources,
         @NotNull TextureResolution resolution,
         @NotNull OptimizationMethod<ContextType> optimizationMethod,
-        @Nullable ProgressMonitor monitor) throws IOException, UserCancellationException
+        @NotNull ProgressMonitor monitor) throws IOException, UserCancellationException
     {
         SpecularFitResourcesWrapper<ContextType> resourcesWrapper = getResourcesWrapper();
 
@@ -409,10 +400,10 @@ public abstract class SpecularFitProcess
 
     private static final class BlockResourcesProgressMonitor extends DefaultProgressMonitor
     {
-        private final @Nullable ProgressMonitor monitor;
+        private final @NotNull ProgressMonitor monitor;
         private double maxProgress;
 
-        private BlockResourcesProgressMonitor(@Nullable ProgressMonitor monitor)
+        private BlockResourcesProgressMonitor(@NotNull ProgressMonitor monitor)
         {
             this.monitor = monitor;
             maxProgress = 0.0;
@@ -421,10 +412,7 @@ public abstract class SpecularFitProcess
         @Override
         public void allowUserCancellation() throws UserCancellationException
         {
-            if (monitor != null)
-            {
-                monitor.allowUserCancellation();
-            }
+            monitor.allowUserCancellation();
         }
 
         @Override
@@ -442,11 +430,11 @@ public abstract class SpecularFitProcess
 
     private static final class OptimizationProgressMonitor extends DefaultProgressMonitor
     {
-        private final @Nullable ProgressMonitor monitor;
+        private final @NotNull ProgressMonitor monitor;
         private final int blockProgress;
         private double maxProgress;
 
-        private OptimizationProgressMonitor(@Nullable ProgressMonitor monitor, int blockProgress)
+        private OptimizationProgressMonitor(@NotNull ProgressMonitor monitor, int blockProgress)
         {
             this.monitor = monitor;
             this.blockProgress = blockProgress;
@@ -456,10 +444,7 @@ public abstract class SpecularFitProcess
         @Override
         public void allowUserCancellation() throws UserCancellationException
         {
-            if (monitor != null)
-            {
-                monitor.allowUserCancellation();
-            }
+            monitor.allowUserCancellation();
         }
 
         @Override
@@ -471,28 +456,19 @@ public abstract class SpecularFitProcess
         @Override
         public void setProgress(double progress, String message)
         {
-            if (monitor != null)
-            {
-                monitor.setProgress(blockProgress + progress / maxProgress, message);
-            }
+            monitor.setProgress(blockProgress + progress / maxProgress, message);
         }
 
         @Override
         public void complete()
         {
-            if (monitor != null)
-            {
-                monitor.setProgress(blockProgress + 1, "Block complete.");
-            }
+            monitor.setProgress(blockProgress + 1, "Block complete.");
         }
 
         @Override
         public void fail(Throwable e)
         {
-            if (monitor != null)
-            {
-                monitor.fail(e);
-            }
+            monitor.fail(e);
         }
     }
 }

@@ -19,6 +19,7 @@ import kintsugi3d.builder.rendering.components.RenderingSubject;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.Cubemap;
 import kintsugi3d.gl.core.Texture2D;
+import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.util.EncodableColorImage;
 import kintsugi3d.util.EnvironmentMap;
@@ -33,7 +34,7 @@ import java.util.function.Supplier;
 
 public class DynamicResourceLoader<ContextType extends Context<ContextType>> implements DynamicResourceManager
 {
-    private final ProgressMonitor progressMonitor;
+    private final @NotNull ProgressMonitor progressMonitor;
     private final RenderingSubject<ContextType> subject;
 
     /** Async-loaded resource for environment maps. */
@@ -48,7 +49,7 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
     /** Read by the render thread in {@link #update()}; set by the JavaFX thread in {@link #requestFragmentShader(File)}. */
     private volatile Supplier<Map<String, @Nullable Object>> shaderDefinesFactory;
 
-    public DynamicResourceLoader(ProgressMonitor progressMonitor, ContextType context,
+    public DynamicResourceLoader(@NotNull ProgressMonitor progressMonitor, ContextType context,
         RenderingSubject<ContextType> subject, LightingResources<ContextType> lightingResources)
     {
         this.progressMonitor = progressMonitor;
@@ -64,7 +65,7 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
         environmentResource.consume(progressMonitor);
 
         // Delegate backplate consumption to AsyncLoadedResource
-        backplateResource.consume(null);
+        backplateResource.consume(new DefaultProgressMonitor());
 
         if (desiredShaderFile != null)
         {
@@ -98,6 +99,6 @@ public class DynamicResourceLoader<ContextType extends Context<ContextType>> imp
     @Override
     public final void loadBackplate(File backplateFile) throws FileNotFoundException
     {
-        backplateResource.load(backplateFile, null);
+        backplateResource.load(backplateFile, new DefaultProgressMonitor());
     }
 }

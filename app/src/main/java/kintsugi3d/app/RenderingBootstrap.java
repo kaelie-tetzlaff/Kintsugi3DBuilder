@@ -311,7 +311,7 @@ public final class RenderingBootstrap
         }
         catch(RuntimeException|InitializationException|Error e)
         {
-            Optional.ofNullable(io.getAggregateProgressMonitor()).ifPresent(monitor -> monitor.fail(e));
+            io.getAggregateProgressMonitor().fail(e);
             throw e;
         }
     }
@@ -356,7 +356,7 @@ public final class RenderingBootstrap
         if (args.length >= 1)
         {
              LOG.debug("Args: {}", Arrays.toString(args));
-             Global.io().loadExistingProject(new File(args[0])); // Should initialize requestQueue
+             Global.io().requestLoadExistingProject(new File(args[0])); // Should initialize requestQueue
         }
 
         // Execute command if requested, using reflection
@@ -381,7 +381,7 @@ public final class RenderingBootstrap
                     {
                         @Override
                         public <ContextType extends Context<ContextType>>
-                        void executeRequest(@NotNull ReadonlyImageBasedRenderable<ContextType> instance, ProgressMonitor monitor)
+                        void executeRequest(@NotNull ReadonlyImageBasedRenderable<ContextType> instance, @NotNull ProgressMonitor monitor)
                         {
                             WindowSynchronization.getInstance().quitWithoutConfirmation();
                         }
