@@ -271,7 +271,7 @@ public abstract class CacheModelBase implements CacheModel
                 }
                 if (!sampleLocations.delete())
                 {
-                    throw new IOException(String.format("File couldn't be deleted: %s", sampleLocations.getAbsolutePath()));
+                    LOG.warn("Sample locations files couldn't be deleted: {}", sampleLocations.getAbsolutePath());
                 }
 
                 // Everything left should be chunks folders (including the sampled folder)
