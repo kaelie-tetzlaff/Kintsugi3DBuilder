@@ -88,7 +88,7 @@ public interface IOHandler
      */
     void saveAllMaterialFiles(@NotNull File materialDirectory, @Nullable Runnable finishedCallback);
 
-    void saveGLTF(@NotNull File outputDirectory, @NotNull ExportSettings settings);
+    void saveGLTF(@NotNull File outputDirectory, @NotNull ExportSettings settings, @NotNull ProgressMonitor progressMonitor);
 
     /**
      *

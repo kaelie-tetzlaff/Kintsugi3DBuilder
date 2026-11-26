@@ -369,6 +369,7 @@ public class IOModel implements IO
         ViewSet viewSet = getLoadedViewSet();
         setViewsetDirectories(projectFile, viewSet);
 
+        progressMonitor.setStageCount(1);
         progressMonitor.setStage(0, "Saving project...");
         progressMonitor.setFinishingUpText("This shouldn't take long...");
 
@@ -406,7 +407,7 @@ public class IOModel implements IO
         //  otherwise might not work when launching Kintsugi 3D Viewer from Builder.
         handler.saveGLTF(Objects.requireNonNull(getLoadedViewSet().getSupportingFilesDirectory(),
                 "No supporting files directory specified."),
-            /* defaults */ new ExportSettings());
+            /* defaults */ new ExportSettings(), progressMonitor);
 
         // Save textures and basis funtions (will be deferred to graphics thread).
         handler.saveAllMaterialFiles(getLoadedViewSet().getSupportingFilesDirectory(), finishedCallback);

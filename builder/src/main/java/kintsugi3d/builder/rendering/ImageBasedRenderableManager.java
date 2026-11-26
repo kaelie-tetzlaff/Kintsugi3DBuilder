@@ -245,7 +245,7 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
         newInstanceSceneModel.setCameraModel(cameraModel);
         initializeSceneModel(newInstanceSceneModel);
 
-        newInstance.setProgressMonitor(new BackendProgressMonitor(newInstance, progressMonitor));
+        newInstance.setLoadingMonitor(new BackendProgressMonitor(newInstance, progressMonitor));
 
         // Use the runLater system so that the rendering loop knows that an operation that might take longer is queued.
         Rendering.runLater(() ->
@@ -674,12 +674,12 @@ public class ImageBasedRenderableManager<ContextType extends Context<ContextType
     }
 
     @Override
-    public final void saveGLTF(@NotNull File outputDirectory, @NotNull ExportSettings settings)
+    public final void saveGLTF(@NotNull File outputDirectory, @NotNull ExportSettings settings, @NotNull ProgressMonitor progressMonitor)
     {
         ImageBasedRenderingEngine<ContextType> currentInstance = renderableInstance;
         if (currentInstance != null)
         {
-            currentInstance.saveGLTF(outputDirectory, settings);
+            currentInstance.saveGLTF(outputDirectory, settings, progressMonitor);
         }
     }
 
