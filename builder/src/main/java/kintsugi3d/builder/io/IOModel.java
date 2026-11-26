@@ -35,6 +35,7 @@ import kintsugi3d.builder.util.events.EventDispatcher;
 import kintsugi3d.builder.util.events.EventListeners;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.geometry.ReadonlyVertexGeometry;
+import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.material.ReadonlyImportedMaterial;
@@ -111,7 +112,7 @@ public class IOModel implements IO
     }
 
     @Override
-    public final void addProgressMonitor(ProgressMonitor monitor)
+    public final void addProgressMonitor(@NotNull ProgressMonitor monitor)
     {
         progressMonitor.addSubMonitor(monitor);
     }
@@ -199,13 +200,20 @@ public class IOModel implements IO
         return currentProjectFile != null;
     }
 
-    private void load(Runnable loader)
+    private void requestLoad(Runnable loader)
     {
-        load("(Untitled)", loader);
+        requestLoad("(Untitled)", loader);
     }
 
-    private void load(String projectName, Runnable loader)
+    private void requestLoad(String projectName, Runnable loader)
     {
+        // need to check for conflicting process early so crucial info isn't unloaded
+        if (Rendering.hasBlockingRequest())
+        {
+            progressMonitor.blocked();
+            return;
+        }
+
         closeProject(() ->
         {
             projectOpened.notify(new ProjectOpenedEvent(projectName));
@@ -214,9 +222,9 @@ public class IOModel implements IO
     }
 
     @Override
-    public final void loadFromLooseFiles(File newProjectFile, String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions)
+    public final void requestLoadFromLooseFiles(File newProjectFile, String internalName, File xmlFile, ViewSetLoadOptions viewSetLoadOptions)
     {
-        load(() ->
+        requestLoad(() ->
         {
             try
             {
@@ -232,9 +240,9 @@ public class IOModel implements IO
     }
 
     @Override
-    public final void hotSwapLooseFiles(String internalName, File xmlFile, @NotNull ViewSetLoadOptions viewSetLoadOptions)
+    public final void requestHotSwapLooseFiles(String internalName, File xmlFile, @NotNull ViewSetLoadOptions viewSetLoadOptions)
     {
-        load(() ->
+        requestLoad(() ->
         {
             try
             {
@@ -251,9 +259,9 @@ public class IOModel implements IO
     }
 
     @Override
-    public final void loadFromMetashapeModel(File newProjectFile, MetashapeModel model)
+    public final void requestLoadFromMetashapeModel(File newProjectFile, MetashapeModel model)
     {
-        load(() ->
+        requestLoad(() ->
         {
             try
             {
@@ -269,16 +277,16 @@ public class IOModel implements IO
     }
 
     @Override
-    public final void loadExistingProject(@NotNull File projectFile)
+    public final void requestLoadExistingProject(@NotNull File projectFile)
     {
-        //need to check for conflicting process early so crucial info isn't unloaded
-        if (Rendering.isProcessingRequest())
+        // need to check for conflicting process early so crucial info isn't unloaded
+        if (Rendering.hasBlockingRequest())
         {
             progressMonitor.blocked();
             return;
         }
 
-        //open the project, update the recent files list & recentDirectory, disable shaders which aren't useful until processing textures
+        // open the project, update the recent files list & recentDirectory, disable shaders which aren't useful until processing textures
         RecentProjects.getInstance().setMostRecentDirectory(projectFile.getParentFile());
 
         @Nullable File vsetFile;
@@ -302,14 +310,14 @@ public class IOModel implements IO
             }
         }
 
-        loadExistingProject(projectFile, vsetFile);
+        requestLoadExistingProject(projectFile, vsetFile);
     }
 
-    private void loadExistingProject(@NotNull File projectFile, @Nullable File vsetFile)
+    private void requestLoadExistingProject(@NotNull File projectFile, @Nullable File vsetFile)
     {
         if (vsetFile != null)
         {
-            load(projectFile.getName(), () ->
+            requestLoad(projectFile.getName(), () ->
             {
                 try
                 {
@@ -362,6 +370,7 @@ public class IOModel implements IO
         ViewSet viewSet = getLoadedViewSet();
         setViewsetDirectories(projectFile, viewSet);
 
+        progressMonitor.setStageCount(1);
         progressMonitor.setStage(0, "Saving project...");
         progressMonitor.setFinishingUpText("This shouldn't take long...");
 
@@ -399,7 +408,7 @@ public class IOModel implements IO
         //  otherwise might not work when launching Kintsugi 3D Viewer from Builder.
         handler.saveGLTF(Objects.requireNonNull(getLoadedViewSet().getSupportingFilesDirectory(),
                 "No supporting files directory specified."),
-            /* defaults */ new ExportSettings());
+            /* defaults */ new ExportSettings(), progressMonitor);
 
         // Save textures and basis funtions (will be deferred to graphics thread).
         handler.saveAllMaterialFiles(getLoadedViewSet().getSupportingFilesDirectory(), finishedCallback);
@@ -598,7 +607,7 @@ public class IOModel implements IO
             try
             {
                 // Just unzip everything for efficiency; could clean up any unused files (i.e. non-masks) but probably not necessary
-                UnzipHelper.unzipToDirectory(masksSrcDir, masksDestinationDir, null);
+                UnzipHelper.unzipToDirectory(masksSrcDir, masksDestinationDir, new DefaultProgressMonitor());
 
                 // Use the destination directory as the masks directory for validating (and thereafter)
                 viewSet.setMasksDirectory(masksDestinationDir);
@@ -689,7 +698,7 @@ public class IOModel implements IO
                 try
                 {
                     // Just unzip everything for efficiency; could clean up any unused files but probably not necessary
-                    UnzipHelper.unzipToDirectory(geometryFile, modelDestDir, null);
+                    UnzipHelper.unzipToDirectory(geometryFile, modelDestDir, new DefaultProgressMonitor());
 
                     viewSet.setGeometryFile(new File(modelDestDir, "mesh.ply"));
 

@@ -29,7 +29,6 @@ import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,16 +53,13 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
     }
 
     public final <ContextType extends Context<ContextType>> @NotNull TextureResources<ContextType> optimizeFitWithCache(
-        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, @Nullable ProgressMonitor monitor)
+        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, @NotNull ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         Instant start = Instant.now();
 
-        if (monitor != null)
-        {
-            monitor.setStageCount(3);
-            monitor.setStage(0, "Building cache...");
-        }
+        monitor.setStageCount(3);
+        monitor.setStage(0, "Building cache...");
 
         // Generate cache
         ImageCache<ContextType> cache = resources.cache(getSettings().getImageCacheSettings(), monitor);
@@ -76,15 +72,12 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
     }
 
     private <ContextType extends Context<ContextType>> @NotNull TextureResources<ContextType> optimizeFitWithCache(
-        @NotNull ImageCache<ContextType> cache, @Nullable ProgressMonitor monitor)
+        @NotNull ImageCache<ContextType> cache, @NotNull ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         Instant start = Instant.now();
 
-        if (monitor != null)
-        {
-            monitor.setStage(1, "Performing low-res fit...");
-        }
+        monitor.setStage(1, "Performing low-res fit...");
 
         try (GraphicsResourcesTextureSpace<ContextType> sampled = cache.createSampledResources(new CacheProgressMonitor(monitor)))
         {
@@ -99,10 +92,7 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
 
             try (SpecularFitOptimizable<ContextType> sampledFit = optimizeFit(sampled, sampledDecomposition, monitor)) // low-res fit happens here; takes a while
             {
-                if (monitor != null)
-                {
-                    monitor.setStage(2, "Performing high-res fit...");
-                }
+                monitor.setStage(2, "Performing high-res fit...");
 
                 return optimizeFullResTexturesWithCache(cache, monitor, sampledFit, sampledDecomposition.getMaterialBasis(), start);
             }
@@ -110,7 +100,7 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
     }
 
     public final <ContextType extends Context<ContextType>> @NotNull SpecularFitOptimizable<ContextType> optimizeFit(
-        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, ProgressMonitor monitor)
+        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, @NotNull ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         SpecularDecompositionFromScratch decomposition =
@@ -120,7 +110,8 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
     }
 
     private <ContextType extends Context<ContextType>> @NotNull SpecularFitOptimizable<ContextType> optimizeFit(
-        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, @NotNull SpecularDecompositionFromScratch decomposition, @Nullable ProgressMonitor monitor)
+        @NotNull ReadonlyImageBasedGraphicsResources<ContextType> resources, @NotNull SpecularDecompositionFromScratch decomposition,
+        @NotNull ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         SpecularFitResourcesWrapper<ContextType> programFactory = getResourcesWrapper();
@@ -191,10 +182,10 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
      */
     private static final class CacheProgressMonitor extends DefaultProgressMonitor
     {
-        private final @Nullable ProgressMonitor monitor;
+        private final @NotNull ProgressMonitor monitor;
         private double maxProgress;
 
-        private CacheProgressMonitor(@Nullable ProgressMonitor monitor)
+        private CacheProgressMonitor(@NotNull ProgressMonitor monitor)
         {
             this.monitor = monitor;
             maxProgress = 0.0;
@@ -203,10 +194,7 @@ public class BasisAndTexturesOptimizationProcess extends SpecularFitProcess
         @Override
         public void allowUserCancellation() throws UserCancellationException
         {
-            if (monitor != null)
-            {
-                monitor.allowUserCancellation();
-            }
+            monitor.allowUserCancellation();
         }
 
         @Override

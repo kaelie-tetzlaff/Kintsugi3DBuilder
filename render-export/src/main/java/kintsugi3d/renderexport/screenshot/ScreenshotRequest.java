@@ -21,7 +21,6 @@ import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.core.FramebufferObject;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -96,7 +95,7 @@ public final class ScreenshotRequest implements ImageBasedGraphicsRequest
 
     @Override
     public <ContextType extends Context<ContextType>> void executeRequest(
-        @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @Nullable ProgressMonitor monitor) throws IOException
+        @NotNull ReadonlyImageBasedRenderable<ContextType> renderable, @NotNull ProgressMonitor monitor) throws IOException
     {
         try
         (
@@ -106,9 +105,7 @@ public final class ScreenshotRequest implements ImageBasedGraphicsRequest
                 .createFramebufferObject()
         )
         {
-            if(monitor != null){
-                monitor.setProcessName("Screenshot");
-            }
+            monitor.setProcessName("Screenshot");
             framebuffer.clearColorBuffer(0, 0.0f, 0.0f, 0.0f, /*1.0f*/0.0f);
             framebuffer.clearDepthBuffer();
 
@@ -125,10 +122,7 @@ public final class ScreenshotRequest implements ImageBasedGraphicsRequest
                 framebuffer.getTextureReaderForColorAttachment(0).saveToFile("JPEG", exportFile);
             }
 
-            if (monitor != null)
-            {
-                monitor.setProgress(1.0, "Screenshot complete.");
-            }
+            monitor.setProgress(1.0, "Screenshot complete.");
         }
     }
 }

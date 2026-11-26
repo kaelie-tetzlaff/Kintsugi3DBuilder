@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public final class PreviewImageGenerator
 {
     private final ViewSet viewSet;
-    private final ProgressMonitor progressMonitor;
+    private final @NotNull ProgressMonitor progressMonitor;
 
     private final AtomicInteger finishedCount = new AtomicInteger(0);
     private final AtomicInteger failedCount = new AtomicInteger(0);
@@ -58,7 +58,7 @@ public final class PreviewImageGenerator
         return new PreviewImageGenerator(viewSet, progressMonitor);
     }
 
-    private PreviewImageGenerator(ViewSet viewSet, ProgressMonitor progressMonitor)
+    private PreviewImageGenerator(@NotNull ViewSet viewSet, @NotNull ProgressMonitor progressMonitor)
     {
         this.viewSet = viewSet;
         this.progressMonitor = progressMonitor;

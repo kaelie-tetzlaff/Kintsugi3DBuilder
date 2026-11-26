@@ -86,7 +86,7 @@ class ImageReconstructionTest
     private Consumer<Program<OpenGLContext>> setupColor;
     private Consumer<Program<OpenGLContext>> setupMetallic;
 
-    private ProgressMonitor progressMonitor;
+    private @NotNull ProgressMonitor progressMonitor;
 
     private static class ProgressMonitorImpl implements ProgressMonitor
     {
@@ -161,6 +161,7 @@ class ImageReconstructionTest
         @Override
         public final void blocked()
         {
+            LOG.error("BLOCKED!");
         }
     }
 

@@ -104,19 +104,11 @@ abstract class SpecularFitControllerBase extends ProjectSettingsControllerBase
         // Apply settings so they're seen by the SpecularFitRequest and also remembered for later.
         applySettings();
 
-        if (Rendering.isProcessingRequest())
-        {
-            error("Failed to start process", "Another process is already running.");
-            return false;
-        }
-
-        // Run as a graphics request that optimizes from scratch.
+        // Run as a graphics request.
         // Automatically pulls settings from project settings.
         SpecularFitRequest request = shouldOptimizeBasis() ?
             SpecularFitRequest.createBasisAndTexturesOptimizationRequest() :
             SpecularFitRequest.createReoptimizeTexturesRequest();
-        Rendering.getRequestQueue().addTextureReplacementGraphicsRequest(request);
-
-        return true;
+        return Rendering.getRequestQueue().addTextureReplacementGraphicsRequest(request);
     }
 }

@@ -28,6 +28,7 @@ import kintsugi3d.gl.builders.ProgramBuilder;
 import kintsugi3d.gl.core.*;
 import kintsugi3d.gl.geometry.GeometryMode;
 import kintsugi3d.gl.geometry.VertexGeometry;
+import kintsugi3d.gl.interactive.DefaultProgressMonitor;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.UserCancellationException;
 import kintsugi3d.gl.nativebuffer.NativeDataType;
@@ -102,7 +103,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
         private @Nullable VertexGeometry geometry;
         private File imageDirectoryOverride;
         private ReadonlyLoadOptionsModel imageLoadOptions;
-        private ProgressMonitor progressMonitor;
+        private @NotNull ProgressMonitor progressMonitor = new DefaultProgressMonitor();
         private double[] linearLuminanceValues;
         private byte[] encodedLuminanceValues;
         private String orientationViewName;
@@ -139,7 +140,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             return this;
         }
 
-        public @NotNull Builder<ContextType> setProgressMonitor(ProgressMonitor progressMonitor)
+        public @NotNull Builder<ContextType> setProgressMonitor(@NotNull ProgressMonitor progressMonitor)
         {
             this.progressMonitor = progressMonitor;
             return this;
@@ -339,7 +340,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
     }
 
     private GraphicsResourcesImageSpace(@NotNull ContextType context, @NotNull ViewSet viewSet, @NotNull VertexGeometry geometry,
-                                        @Nullable ReadonlyLoadOptionsModel loadOptions, @Nullable ProgressMonitor progressMonitor) throws IOException, UserCancellationException
+                                        @Nullable ReadonlyLoadOptionsModel loadOptions, @NotNull ProgressMonitor progressMonitor) throws IOException, UserCancellationException
     {
         // IAN: This super call should be creating the geometry
         super(new GraphicsResourcesCommon<>(context, viewSet, geometry,
@@ -390,22 +391,16 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             loadOptions.configureColorTextureBuilder(textureArrayBuilder);
             colorTextures = textureArrayBuilder.createTexture();
 
-            if (progressMonitor != null)
-            {
-                progressMonitor.setStage(0, "Loading preview-resolution images...");
-                progressMonitor.setMaxProgress(viewSet.getViewCount());
-            }
+            progressMonitor.setStage(0, "Loading preview-resolution images...");
+            progressMonitor.setMaxProgress(viewSet.getViewCount());
 
             int progressCount = 0;
 
             for (View view : views)
             {
-                if (progressMonitor != null)
-                {
-                    progressMonitor.setProgress(progressCount, MessageFormat.format("{0} ({1}/{2})",
-                        view, progressCount + 1, viewSet.getViewCount()));
-                    progressMonitor.allowUserCancellation();
-                }
+                progressMonitor.setProgress(progressCount, MessageFormat.format("{0} ({1}/{2})",
+                    view, progressCount + 1, viewSet.getViewCount()));
+                progressMonitor.allowUserCancellation();
 
                 try
                 {
@@ -422,10 +417,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
                 progressCount++;
             }
 
-            if (progressMonitor != null)
-            {
-                progressMonitor.setProgress(viewSet.getViewCount(), "All images loaded.");
-            }
+            progressMonitor.setProgress(viewSet.getViewCount(), "All images loaded.");
 
             LOG.info("View Set textures loaded in {} milliseconds.", new Date().getTime() - timestamp.getTime());
         }
@@ -434,10 +426,7 @@ public final class GraphicsResourcesImageSpace<ContextType extends Context<Conte
             colorTextures = null;
         }
 
-        if (progressMonitor != null)
-        {
-            progressMonitor.setStage(1, "Finished loading images.");
-        }
+        progressMonitor.setStage(1, "Finished loading images.");
 
         // Store the camera projections in a uniform buffer
         if (viewSet.getCameraProjectionData() != null)

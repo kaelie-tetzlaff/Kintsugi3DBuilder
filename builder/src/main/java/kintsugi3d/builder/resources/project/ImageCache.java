@@ -158,7 +158,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
      * As a side effect of this method, the context's state will have back face culling enabled,
      * @throws IOException
      */
-    public final void initialize(ProgressMonitor monitor) throws IOException, UserCancellationException
+    public final void initialize(@NotNull ProgressMonitor monitor) throws IOException, UserCancellationException
     {
         // Create directories to organize the cache
         sampledDir.mkdirs();
@@ -303,7 +303,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
         }
     }
 
-    private void buildCache(@NotNull ReadableFramebuffer<ContextType> fbo, @Nullable ProgressMonitor monitor)
+    private void buildCache(@NotNull ReadableFramebuffer<ContextType> fbo, @NotNull ProgressMonitor monitor)
         throws IOException, UserCancellationException
     {
         LoadOptionsModel loadOptions = new SimpleLoadOptionsModel();
@@ -320,22 +320,16 @@ public class ImageCache<ContextType extends Context<ContextType>>
             DrawableResource<ContextType> texSpaceDrawable = resources.createDrawable(texSpaceProgram))
         {
 
-            if (monitor != null)
-            {
-                monitor.setMaxProgress(resources.getViewSet().getViewCount());
-            }
+            monitor.setMaxProgress(resources.getViewSet().getViewCount());
 
             // Loop over the images, processing each one at a time
             // Includes both enabled and disabled views which will all be included in the cache.
             int progressCount = 0;
             for (View view : resources.getViewSet().getViews())
             {
-                if (monitor != null)
-                {
-                    monitor.setProgress(progressCount, MessageFormat.format("{0} ({1}/{2})",
-                        view, progressCount + 1, resources.getViewSet().getViewCount()));
-                    monitor.allowUserCancellation();
-                }
+                monitor.setProgress(progressCount, MessageFormat.format("{0} ({1}/{2})",
+                    view, progressCount + 1, resources.getViewSet().getViewCount()));
+                monitor.allowUserCancellation();
 
                 try (SingleCalibratedImageResource<ContextType> image = resources.createSingleImageResource(view, loadOptions))
                 {
@@ -433,14 +427,11 @@ public class ImageCache<ContextType extends Context<ContextType>>
                 progressCount++;
             }
 
-            if (monitor != null)
-            {
-                monitor.setProgress(resources.getViewSet().getViewCount(), "All images completed.");
-            }
+            monitor.setProgress(resources.getViewSet().getViewCount(), "All images completed.");
         }
     }
 
-    public final GraphicsResourcesTextureSpace<ContextType> createSampledResources(ProgressMonitor monitor) throws IOException, UserCancellationException
+    public final GraphicsResourcesTextureSpace<ContextType> createSampledResources(@NotNull ProgressMonitor monitor) throws IOException, UserCancellationException
     {
         return createWithRetryAfterCacheRebuild(
             () ->
@@ -467,7 +458,7 @@ public class ImageCache<ContextType extends Context<ContextType>>
      * @throws UserCancellationException
      * @throws IOException
      */
-    public final <T> T createWithRetryAfterCacheRebuild(@NotNull CacheDependentSupplier<T> supplier, ProgressMonitor monitor)
+    public final <T> T createWithRetryAfterCacheRebuild(@NotNull CacheDependentSupplier<T> supplier, @NotNull ProgressMonitor monitor)
         throws UserCancellationException, IOException
     {
         try

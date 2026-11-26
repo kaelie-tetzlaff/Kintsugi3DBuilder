@@ -529,7 +529,8 @@ public class ProgressBarsController
         @Override
         public final void advanceStage(String message)
         {
-            setStage(currentStage + 1, message);
+            // setStage already increments whatever is passed in.
+            setStage(currentStage, message);
         }
 
         @Override

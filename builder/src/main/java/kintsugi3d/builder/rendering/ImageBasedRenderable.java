@@ -21,6 +21,7 @@ import kintsugi3d.builder.resources.DynamicResourceManager;
 import kintsugi3d.builder.resources.project.GraphicsResourcesImageSpace;
 import kintsugi3d.gl.core.Context;
 import kintsugi3d.gl.interactive.InteractiveRenderableResource;
+import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.ShaderBasedRenderable;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,14 +51,15 @@ public interface ImageBasedRenderable<ContextType extends Context<ContextType>>
     DynamicResourceManager getDynamicResourceManager();
 
     @Override
-    default void saveGLTF(@NotNull File outputDirectory, @NotNull ExportSettings settings)
+    default void saveGLTF(@NotNull File outputDirectory, @NotNull ExportSettings settings, @NotNull ProgressMonitor progressMonitor)
     {
-        saveGLTF(outputDirectory, "model.glb", settings);
+        saveGLTF(outputDirectory, "model.glb", settings, progressMonitor);
     }
 
     @Override
-    default void saveGLTF(@NotNull File outputDirectory, @NotNull String filename, @NotNull ExportSettings settings)
+    default void saveGLTF(
+        @NotNull File outputDirectory, @NotNull String filename, @NotNull ExportSettings settings, @NotNull ProgressMonitor progressMonitor)
     {
-        saveGLTF(outputDirectory, filename, settings, null);
+        saveGLTF(outputDirectory, filename, settings, null, progressMonitor);
     }
 }

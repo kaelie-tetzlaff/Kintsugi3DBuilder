@@ -18,13 +18,14 @@ package kintsugi3d.builder.rendering;
 import kintsugi3d.gl.interactive.ProgressMonitor;
 import kintsugi3d.gl.interactive.ShaderBasedRenderable;
 import kintsugi3d.gl.interactive.UserCancellationException;
+import org.jetbrains.annotations.NotNull;
 
 class BackendProgressMonitor implements ProgressMonitor
 {
     private final ShaderBasedRenderable<?> instance;
-    private final ProgressMonitor base;
+    private final @NotNull ProgressMonitor base;
 
-    BackendProgressMonitor(ShaderBasedRenderable<?> instance, ProgressMonitor base)
+    BackendProgressMonitor(ShaderBasedRenderable<?> instance, @NotNull ProgressMonitor base)
     {
         this.instance = instance;
         this.base = base;
@@ -33,85 +34,58 @@ class BackendProgressMonitor implements ProgressMonitor
     @Override
     public final void allowUserCancellation() throws UserCancellationException
     {
-        if (base != null)
-        {
-            base.allowUserCancellation();
-        }
+        base.allowUserCancellation();
     }
 
     @Override
     public final void cancelComplete(UserCancellationException e)
     {
-        if (base != null)
-        {
-            base.cancelComplete(e);
-        }
+        base.cancelComplete(e);
     }
 
     @Override
     public final void start()
     {
-        if (base != null)
-        {
-            base.start();
-        }
+        base.start();
     }
 
     @Override
     public final void setProcessName(String processName)
     {
-        if (base != null)
-        {
-            base.setProcessName(processName);
-        }
+        base.setProcessName(processName);
     }
 
     @Override
     public final void setStageCount(int count)
     {
-        if (base != null)
-        {
-            // Add one for the preview image generation step already completed.
-            base.setStageCount(count + 1);
-        }
+        // Add one for the preview image generation step already completed.
+        base.setStageCount(count + 1);
     }
 
     @Override
     public final void setStage(int stage, String message)
     {
-        if (base != null)
-        {
-            // Add one for the preview image generation step already completed.
-            base.setStage(stage + 1, message);
-        }
+        // Add one for the preview image generation step already completed.
+        base.setStage(stage + 1, message);
     }
 
     @Override
     public final void advanceStage(String message)
     {
-        if (base != null)
-        {
-            // Add one for the preview image generation step already completed.
-            base.advanceStage(message);
-        }
+        // Add one for the preview image generation step already completed.
+        base.advanceStage(message);
     }
 
     @Override
     public final void setMaxProgress(double maxProgress)
     {
-        if (base != null)
-        {
-            base.setMaxProgress(maxProgress);
-        }
+        base.setMaxProgress(maxProgress);
     }
 
     @Override
     public final void setProgress(double progress, String message)
     {
-        if (base != null)
-        {
-            base.setProgress(progress, message);
-        }
+        base.setProgress(progress, message);
     }
 
     @Override
@@ -119,36 +93,24 @@ class BackendProgressMonitor implements ProgressMonitor
     {
         instance.reloadShaders();
 
-        if (base != null)
-        {
-            base.complete();
-        }
+        base.complete();
     }
 
     @Override
     public final void fail(Throwable e)
     {
-        if (base != null)
-        {
-            base.fail(e);
-        }
+        base.fail(e);
     }
 
     @Override
     public final void warn(Throwable e)
     {
-        if (base != null)
-        {
-            base.warn(e);
-        }
+        base.warn(e);
     }
 
     @Override
     public final void blocked()
     {
-        if (base != null)
-        {
-            base.blocked();
-        }
+        base.blocked();
     }
 }
