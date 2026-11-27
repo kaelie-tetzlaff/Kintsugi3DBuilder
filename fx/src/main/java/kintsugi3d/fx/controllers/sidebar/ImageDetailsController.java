@@ -16,6 +16,7 @@
 package kintsugi3d.fx.controllers.sidebar;
 
 import javafx.application.Platform;
+import javafx.beans.binding.BooleanExpression;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -62,9 +63,9 @@ public class ImageDetailsController
     private ZoomSafeImageView zoomSafeImageView;
 
     // Determines which mode we're in
-    private boolean canZoom = false;
-    private boolean canCrop = false;
-    private boolean canPan = false;
+    private BooleanExpression canZoom;
+    private BooleanExpression canCrop;
+    private BooleanExpression canPan;
     private ToggleGroup toggleGroup;
 
     // Current image and its current logical viewport.
@@ -201,20 +202,37 @@ public class ImageDetailsController
         toggleGroup = new ToggleGroup(); // Toggle group created so only 1 Radio button can be selected at once
 
         RadioButton zoom = createButton("Zoom"); // Zoom button created using createButton() method
-        zoom.setOnAction(e -> zoom()); // Zoom action
         buttonRow.getChildren().add(zoom); // Zoom added to buttonRow
 
         RadioButton pan = createButton("Pan");
-        pan.setOnAction(e -> pan());
         buttonRow.getChildren().add(pan);
 
         RadioButton marquee = createButton("Marquee");
-        marquee.setOnAction(e -> marquee());
         buttonRow.getChildren().add(marquee);
 
         RadioButton reset = createButton("Reset");
-        reset.setOnAction(e -> reset());
         buttonRow.getChildren().add(reset);
+
+        canZoom = toggleGroup.selectedToggleProperty().isEqualTo(zoom);
+        canPan = toggleGroup.selectedToggleProperty().isEqualTo(pan);
+        canCrop = toggleGroup.selectedToggleProperty().isEqualTo(marquee);
+
+        canCrop.addListener((observable, oldValue, newValue) ->
+        {
+            if (!newValue)
+            {
+                // Hide selection box while not cropping.
+                selectionBox.setVisible(false);
+            }
+        });
+
+        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) ->
+        {
+            if (Objects.equals(newValue, reset))
+            {
+                resetViewport();
+            }
+        });
 
         return List.of(zoom, pan, marquee, reset);
     }
@@ -319,7 +337,7 @@ public class ImageDetailsController
     public final void scrollZoom(@NotNull ScrollEvent event)
     {
         // Will exit this function if we have no image or if canZoom is false
-        if (ScrollEvent.SCROLL.equals(event.getEventType()) && event.getDeltaY() != 0.0 && currentImage != null && canZoom)
+        if (ScrollEvent.SCROLL.equals(event.getEventType()) && event.getDeltaY() != 0.0 && currentImage != null && canZoom.get())
         {
             // Gets base dimensions for the image and its aspect ratio
             double imgOrigWidth = currentImage.getWidth();
@@ -432,12 +450,12 @@ public class ImageDetailsController
                 refreshViewport();
             }
 
-            if (canPan) //If panning is active takes the current x any and assigns it to startViewport x and y
+            if (canPan.get()) //If panning is active takes the current x any and assigns it to startViewport x and y
             {
                 startViewportX = currentX;
                 startViewportY = currentY;
             }
-            else if (canCrop) //If marquee is active we initiate selectionBox
+            else if (canCrop.get()) //If marquee is active we initiate selectionBox
             {
                 selectionBox.setTranslateX(mousePressedX);
                 selectionBox.setTranslateY(mousePressedY);
@@ -463,7 +481,7 @@ public class ImageDetailsController
 
             Bounds bounds = zoomSafeImageView.getImageViewNode().getBoundsInParent();
 
-            if (canPan) //If panning
+            if (canPan.get()) //If panning
             {
                 //Gets pixel difference amount from pan
                 double deltaX = currentMouseX - mousePressedX;
@@ -491,7 +509,7 @@ public class ImageDetailsController
                 //Sets new viewport
                 refreshViewport();
             }
-            else if (canCrop) // If cropping
+            else if (canCrop.get()) // If cropping
             {
                 // Gets the max and min X and Y we can be at
                 double imageMinX = bounds.getMinX();
@@ -524,16 +542,16 @@ public class ImageDetailsController
 
     /**
      * This method handles operations after the drag ends.
-     * @param event
+     * @param ignoredEvent
      */
     @FXML
-    private void endSelection(MouseEvent event)
+    private void endSelection(MouseEvent ignoredEvent)
     {
         try //Does this if it can, will always do finally statement
         {
             //Checks to see if cropping is enabled (marquee) and looks for if the selection
             //box is wide and tall enough
-            if (canCrop && selectionBox.isVisible() && (selectionBox.getWidth() > 5.0) && (selectionBox.getHeight() > 5.0))
+            if (canCrop.get() && selectionBox.isVisible() && (selectionBox.getWidth() > 5.0) && (selectionBox.getHeight() > 5.0))
             {
                 if (currentImage != null) // Exits method if there is no image
                 {
@@ -623,58 +641,6 @@ public class ImageDetailsController
             selectionBox.setWidth(0);
             selectionBox.setHeight(0);
         }
-    }
-
-    /**
-     * Method to handle zoom button.
-     * Sets booleans for crop and pan to false and true for zoom.
-     * Sets selectionBox to invisible.
-     */
-    private void zoom()
-    {
-        canCrop = false;
-        canPan = false;
-        canZoom = true;
-        selectionBox.setVisible(false);
-    }
-
-    /**
-     * Method to handle pan button.
-     * Sets booleans for crop and zoom to false and true for pan.
-     * Sets selectionBox to invisible.
-     */
-    private void pan()
-    {
-        canCrop = false;
-        canPan = true;
-        canZoom = false;
-        selectionBox.setVisible(false);
-    }
-
-    /**
-     * Method to handle marquee button.
-     * Sets booleans for zoom and pan to false and true for crop.
-     */
-    private void marquee()
-    {
-        canCrop = true;
-        canPan = false;
-        canZoom = false;
-    }
-
-    /**
-     * Method to handle reset button.
-     * Sets booleans for crop, pan, and zoom to false.
-     * Resets viewport.
-     * Sets selectionBox to invisible and currentImage to originalImage.
-     */
-    private void reset()
-    {
-        canCrop = false;
-        canPan = false;
-        canZoom = false;
-        resetViewport();
-        selectionBox.setVisible(false);
     }
 
     /**
