@@ -25,6 +25,14 @@
 
     <packaging>jar</packaging>
 
+    <properties>
+        <!-- Defaults for the jlink tooling path so the POM model is complete on any platform
+             (Qodana analyzes on Linux where no OS profile activates). The macos/windows
+             profiles override these for packaged builds. -->
+        <jdk.home>${java.home}</jdk.home>
+        <jdk.exe.suffix></jdk.exe.suffix>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -45,11 +53,43 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Copy the OpenJFX jars (classifier matched to the current OS profile) to
+                 target/lib/javafx. These jars are consumed by the jlink step below: the
+                 JavaFX modules are linked into the bundled runtime image, which is why
+                 this runs in generate-resources, ahead of the prepare-package jlink. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.8.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-javafx</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>org.openjfx</includeGroupIds>
+                            <outputDirectory>${project.build.directory}/lib/javafx</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
+                    <!-- Keep JavaFX out of the shaded jar; JavaFX modules are linked into the
+                         bundled runtime image by the jlink step below instead. -->
+                    <filters>
+                        <filter>
+                            <artifact>org.openjfx:*</artifact>
+                            <excludes>
+                                <exclude>**</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
                     <transformers>
                         <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                             <mainClass>kintsugi3d.app.Kintsugi3DBuilder</mainClass>
@@ -83,21 +123,25 @@
                 <artifactId>download-maven-plugin</artifactId>
                 <version>1.13.0</version>
                 <executions>
-                    <!-- Download JRE -->
+                    <!-- Download a JDK image. The JDK is build tooling only: it provides the jmods
+                         and jlink binary used to assemble the custom bundled runtime below, and is
+                         NOT shipped to end users. A JRE download cannot be used here because the
+                         trimmed Temurin JRE image is missing jdk.unsupported.desktop, which
+                         javafx.swing requires. -->
                     <execution>
-                        <id>download-jre</id>
+                        <id>download-jdk</id>
                         <phase>prepare-package</phase>
                         <goals>
                             <goal>wget</goal>
                         </goals>
                         <configuration>
                             <url>
-                                https://api.adoptium.net/v3/binary/latest/${java.version}/ga/${jre.os}/${jre.arch}/jre/hotspot/normal/eclipse
+                                https://api.adoptium.net/v3/binary/latest/${java.version}/ga/${jre.os}/${jre.arch}/jdk/hotspot/normal/eclipse
                             </url>
                             <outputDirectory>
                                 ${project.build.directory}
                             </outputDirectory>
-                            <outputFileName>jre.tar.gz</outputFileName>
+                            <outputFileName>jdk.tar.gz</outputFileName>
                         </configuration>
                     </execution>
                     <!-- Download latest published build of Kinsugi 3D Viewer -->
@@ -124,9 +168,35 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>3.1.0</version>
                 <executions>
-                    <!-- Unzip JRE - explicitly invoking tar so that we can use strip-components  -->
+                    <!-- Unpack the JDK - explicitly invoking tar so that we can use strip-components  -->
                     <execution>
-                        <id>unpack-jre</id>
+                        <id>unpack-jdk</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <delete dir="${project.build.directory}/jdk"/>
+                                <mkdir dir="${project.build.directory}/jdk"/>
+                                <exec executable="tar" failonerror="true">
+                                    <arg value="-xzf"/>
+                                    <arg value="${project.build.directory}/jdk.tar.gz"/>
+                                    <arg value="--strip-components=1"/>
+                                    <arg value="-C"/>
+                                    <arg value="${project.build.directory}/jdk"/>
+                                </exec>
+                                <delete file="${project.build.directory}/jdk.tar.gz"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <!-- Assemble the custom bundled runtime with jlink. The resulting image goes
+                         to target/jre (the same directory the distribution assemblies collect) and
+                         contains java.se plus the jdk modules the application needs, INCLUDING
+                         jdk.unsupported.desktop (required by javafx.swing) and the JavaFX modules
+                         themselves, so the launchers need no module-path flags at all. -->
+                    <execution>
+                        <id>jlink-runtime</id>
                         <phase>prepare-package</phase>
                         <goals>
                             <goal>run</goal>
@@ -134,15 +204,18 @@
                         <configuration>
                             <target>
                                 <delete dir="${project.build.directory}/jre"/>
-                                <mkdir dir="${project.build.directory}/jre"/>
-                                <exec executable="tar" failonerror="true">
-                                    <arg value="-xzf"/>
-                                    <arg value="${project.build.directory}/jre.tar.gz"/>
-                                    <arg value="--strip-components=1"/>
-                                    <arg value="-C"/>
+                                <exec executable="${jdk.home}/bin/jlink${jdk.exe.suffix}" failonerror="true">
+                                    <arg value="--add-modules"/>
+                                    <arg value="java.se,jdk.unsupported,jdk.unsupported.desktop,jdk.crypto.ec,jdk.crypto.cryptoki,jdk.zipfs,jdk.localedata,javafx.base,javafx.graphics,javafx.controls,javafx.swing,javafx.fxml"/>
+                                    <arg value="--module-path"/>
+                                    <arg value="${jdk.home}/jmods${path.separator}${project.build.directory}/lib/javafx"/>
+                                    <arg value="--output"/>
                                     <arg value="${project.build.directory}/jre"/>
+                                    <arg value="--strip-debug"/>
+                                    <arg value="--no-man-pages"/>
+                                    <arg value="--no-header-files"/>
+                                    <arg value="--compress=2"/>
                                 </exec>
-                                <delete file="${project.build.directory}/jre.tar.gz"/>
                             </target>
                         </configuration>
                     </execution>
@@ -209,6 +282,11 @@
                     <family>mac</family>
                 </os>
             </activation>
+            <properties>
+                <!-- macOS JDK archives unpack to <top>/Contents/Home -->
+                <jdk.home>${project.build.directory}/jdk/Contents/Home</jdk.home>
+                <jdk.exe.suffix></jdk.exe.suffix>
+            </properties>
             <build>
                 <!-- MacOS: Needs a Maven assembly for MacOS and then the disk image script -->
                 <plugins>
@@ -306,6 +384,11 @@
                     <arch>amd64</arch>
                 </os>
             </activation>
+            <properties>
+                <!-- Windows JDK archives unpack directly into <top> -->
+                <jdk.home>${project.build.directory}/jdk</jdk.home>
+                <jdk.exe.suffix>.exe</jdk.exe.suffix>
+            </properties>
             <build>
                 <!-- Windows: Needs Launch4J, a Maven assembly for Windows, and NSIS installer -->
                 <plugins>

@@ -19,4 +19,4 @@
 #
 
 cd "$(dirname "$0")/../Resources" || exit
-jre/Home/bin/java -Xdock:icon=Kintsugi3D.icns -jar Kintsugi3DBuilder-shaded.jar "$@"
+jre/bin/java -Xdock:icon=Kintsugi3D.icns -jar Kintsugi3DBuilder-shaded.jar "$@"
