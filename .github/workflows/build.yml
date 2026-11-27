@@ -271,6 +271,7 @@ jobs:
             TIMER="$3"
             CHECK_ERRORS="${4:-false}"
             PROJECT="${5:-}"
+            CHECK_STDERR="${6:-true}"
           
             LOG="$(mktemp)"
             ERRLOG="$(mktemp)"
@@ -304,7 +305,7 @@ jobs:
             sleep 1
           
             # Require stderr to be completely empty.
-            if [ -s "$ERRLOG" ]; then
+            if [ "$CHECK_STDERR" = true ] && [ -s "$ERRLOG" ]; then
               echo "$LABEL: Application wrote to stderr; stderr must be empty."
               cat "$ERRLOG"
               rm -f "$LOG" "$ERRLOG"
@@ -369,9 +370,9 @@ jobs:
           test -n "$VIEWER" || { echo "Kintsugi3DViewer.exe not found"; exit 1; }
           echo "$VIEWER"
           
-          # Intentionally omit checking for errors since Godot has a tendency to spam errors 
+          # Intentionally omit checking for errors and stderr since Godot has a tendency to spam errors 
           # especially when there's no GPU like on GitHub actions.
-          test_launch "$VIEWER" "Installed Viewer" 30
+          test_launch "$VIEWER" "Installed Viewer" 30 false "" false
           
           ## Check for any processes still running from the installation directory.
           #INSTALL_DIR_WIN="$(cygpath -m "$installDir")"
@@ -494,6 +495,7 @@ jobs:
             TIMER="$4"
             CHECK_ERRORS="${5:-false}"
             PROJECT="${6:-}"
+            CHECK_STDERR="${7:-true}"
 
             if [ "$EXE" != "-" ]; then
               test -x "$EXE" || { echo "$LABEL: executable not found or not executable"; exit 1; }
@@ -527,12 +529,18 @@ jobs:
               # Allow tee to finish writing buffered output.
               sleep 1
             
-              # Require stderr to be completely empty.
-              if [ -s "$ERRLOG" ]; then
-                echo "$LABEL: Application wrote to stderr; stderr must be empty."
-                cat "$ERRLOG"
-                rm -f "$LOG" "$ERRLOG"
-                exit 1
+              # Require stderr to be completely empty, ignoring known-benign system
+              # noise such as CGLChoosePixelFormat messages emitted by macOS's
+              # OpenGL stack when there is no GPU (these cannot be suppressed at
+              # the application level).
+              if [ "$CHECK_STDERR" = true ]; then
+                FILTERED_ERR="$(grep -v 'CGLChoosePixelFormat:' "$ERRLOG" || true)"
+                if [ -n "$FILTERED_ERR" ]; then
+                  echo "$LABEL: Application wrote to stderr; stderr must be empty."
+                  cat "$ERRLOG"
+                  rm -f "$LOG" "$ERRLOG"
+                  exit 1
+                fi
               fi
               rm -f "$ERRLOG"
             
@@ -609,13 +617,13 @@ jobs:
             300 true "$katrinaFullerProject"
 
           # Test 3: Viewer extracted from the DMG
-          # Intentionally omit checking for errors since Godot has a tendency to spam errors 
+          # Intentionally omit checking for errors and stderr since Godot has a tendency to spam errors 
           # especially when there's no GPU like on GitHub actions.
           VIEWER_EXTRACTED="$EXTRACT_DIR/Kintsugi 3D Viewer.app"
           echo "$VIEWER_EXTRACTED"
           smoke_test_app "$VIEWER_EXTRACTED" \
             "$VIEWER_EXTRACTED/Contents/MacOS/Kintsugi 3D Viewer" \
-            "Viewer (DMG)" 30
+            "Viewer (DMG)" 30 false "" false
 
           echo "All macOS smoke tests passed successfully."
 
