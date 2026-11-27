@@ -273,11 +273,12 @@ jobs:
             PROJECT="${5:-}"
           
             LOG="$(mktemp)"
+            ERRLOG="$(mktemp)"
           
             if [ -n "$PROJECT" ]; then
-              "$EXE" "$PROJECT" > >(tee "$LOG") 2>&1 &
+              "$EXE" "$PROJECT" > >(tee "$LOG") 2> "$ERRLOG" &
             else
-              "$EXE" > >(tee "$LOG") 2>&1 &
+              "$EXE" > >(tee "$LOG") 2> "$ERRLOG" &
             fi
           
             PID=$!
@@ -294,13 +295,23 @@ jobs:
               if wait "$PID"; then STATUS=0; else STATUS=$?; fi
               echo "$LABEL: Process exited within ${TIMER} seconds (code $STATUS)."
               cat "$LOG"
-              rm -f "$LOG"
+              rm -f "$LOG" "$ERRLOG"
               LOG=""
               exit 1
             fi
           
             # Allow tee to finish writing buffered output.
             sleep 1
+          
+            # Require stderr to be completely empty.
+            if [ -s "$ERRLOG" ]; then
+              echo "$LABEL: Application wrote to stderr; stderr must be empty."
+              cat "$ERRLOG"
+              rm -f "$LOG" "$ERRLOG"
+              LOG=""
+              exit 1
+            fi
+            rm -f "$ERRLOG"
           
             if [ "$CHECK_ERRORS" = true ] && grep -Eq 'ERROR|Exception in thread "' "$LOG"; then
               echo "$LABEL: ERROR or uncaught exception found in application output."
@@ -493,12 +504,13 @@ jobs:
             fi
 
             if [ "$EXE" != "-" ]; then
-              # Test 1: Run the executable directly, piping stdout and stderr to a log file.
+              # Test 1: Run the executable directly, piping stdout to a log file and stderr to a separate log.
               LOG="$(mktemp)"
+              ERRLOG="$(mktemp)"
               if [ -n "$PROJECT" ]; then
-                "$EXE" "$PROJECT" > >(tee "$LOG") 2>&1 &
+                "$EXE" "$PROJECT" > >(tee "$LOG") 2> "$ERRLOG" &
               else
-                "$EXE" > >(tee "$LOG") 2>&1 &
+                "$EXE" > >(tee "$LOG") 2> "$ERRLOG" &
               fi
               PID=$!
               sleep $TIMER
@@ -515,7 +527,16 @@ jobs:
               # Allow tee to finish writing buffered output.
               sleep 1
             
-              # Check for errors in stdout / stderr.
+              # Require stderr to be completely empty.
+              if [ -s "$ERRLOG" ]; then
+                echo "$LABEL: Application wrote to stderr; stderr must be empty."
+                cat "$ERRLOG"
+                rm -f "$LOG" "$ERRLOG"
+                exit 1
+              fi
+              rm -f "$ERRLOG"
+            
+              # Check for errors in stdout.
               if [ "$CHECK_ERRORS" = true ] && grep -Eq 'ERROR|Exception in thread "' "$LOG"; then
                 echo "$LABEL: ERROR or uncaught exception found in application output."
                 cat "$LOG"
