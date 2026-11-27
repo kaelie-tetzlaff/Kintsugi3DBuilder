@@ -66,9 +66,6 @@ Section "Kintsugi 3D Builder (required)" SectionApp
     ; Remove any pre-existing JRE (i.e. old versions)
     RMDir /r "$INSTDIR\jre"
 
-    ; Remove any pre-existing JavaFX module jars (i.e. old versions)
-    RMDir /r "$INSTDIR\lib"
-
     ; Remove any pre-existing binary files (i.e. old versions)
     RMDir /r "$INSTDIR\bin"
 

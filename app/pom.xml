@@ -54,11 +54,9 @@
                 </executions>
             </plugin>
             <!-- Copy the OpenJFX jars (classifier matched to the current OS profile) to
-                 target/lib/javafx. These jars are an input to the jlink step below (JavaFX
-                 modules are linked into the bundled runtime image) and are also used by the
-                 IDE run configuration's JPMS module path.
-                 Runs in generate-resources so the IDE run configuration (whose BeforeRunTask
-                 invokes this goal) has the module-path jars available without a full package. -->
+                 target/lib/javafx. These jars are consumed by the jlink step below: the
+                 JavaFX modules are linked into the bundled runtime image, which is why
+                 this runs in generate-resources, ahead of the prepare-package jlink. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
