@@ -16,8 +16,7 @@
 #
 
 #  kintsugi3d.sh
+#
 
 cd "$(dirname "$0")/../Resources" || exit
-# The bundled runtime is a jlink image (flat layout) with the JavaFX modules
-# linked in, so no module-path flags are needed.
 jre/bin/java -Xdock:icon=Kintsugi3D.icns -jar Kintsugi3DBuilder-shaded.jar "$@"

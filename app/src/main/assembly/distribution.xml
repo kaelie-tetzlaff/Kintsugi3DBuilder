@@ -47,7 +47,6 @@
             <directory>${maven.multiModuleProjectDirectory}/shaders</directory>
             <outputDirectory>shaders</outputDirectory>
         </fileSet>
-        <!-- jlink-generated runtime image, with the JavaFX modules linked in -->
         <fileSet>
             <directory>${project.build.directory}/jre</directory>
             <outputDirectory>jre</outputDirectory>

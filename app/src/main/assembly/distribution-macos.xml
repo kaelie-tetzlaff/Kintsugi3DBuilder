@@ -70,7 +70,6 @@
             <fileMode>0755</fileMode>
             <lineEnding>unix</lineEnding>
         </fileSet>
-        <!-- jlink-generated runtime image (flat layout, JavaFX modules linked in) -->
         <fileSet>
             <directory>${project.build.directory}/jre</directory>
             <outputDirectory>Kintsugi 3D Builder.app/Contents/Resources/jre</outputDirectory>
