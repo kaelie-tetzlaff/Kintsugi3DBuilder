@@ -15,7 +15,6 @@
 
 package kintsugi3d.fx.controllers.modals.workspace;
 
-import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -55,8 +54,7 @@ public class ReplaceImageController extends DataReceiverPageControllerBase<Image
     @Override
     public final void initPage()
     {
-        newFileButton.pseudoClassStateChanged(PseudoClass.getPseudoClass("dark-button"), true);
-
+        newFileButton.getStyleClass().add("dark-button");
         replacementFileChooser.setTitle("Replace with...");
         replacementFileChooser.getExtensionFilters().add(new ExtensionFilter("Texture image", "*.png"));
         setCurrentDirectoryFile(Global.io().getLoadedViewSet().getSupportingFilesDirectory());

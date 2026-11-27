@@ -124,15 +124,14 @@
 /********************************************************************************/
 
 .modal-root,
-.button:dark-button,
 .content-root,
 .cameraviewlist,
 .mainwindow-root {
     -fx-background-color: #202020;
 }
 
-.stripped-radio-button > .radio,
-.right-stripped-radio-button > .radio {
+.tab-stripped-radio-button > .radio,
+.stripped-radio-button > .radio {
     -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-background-radius: 0px;
@@ -143,12 +142,12 @@
     -fx-max-width: 0;
 }
 
-.stripped-radio-button:selected > .radio > .dot,
-.right-stripped-radio-button:selected > .radio > .dot {
+.tab-stripped-radio-button:selected > .radio > .dot,
+.stripped-radio-button:selected > .radio > .dot {
     -fx-background-color: transparent;
 }
 
-.right-stripped-radio-button {
+.stripped-radio-button {
     -fx-background-insets:
             1,
             3,
@@ -206,7 +205,7 @@
     -fx-alignment: CENTER;
 }
 
-.card-button, .dark-button, .stripped-radio-button, .right-stripped-radio-button {
+.card-button, .button.dark-button, .tab-stripped-radio-button, .stripped-radio-button {
     -fx-text-fill: #CECECE;
     -fx-background-color:
             #202020,
@@ -217,17 +216,34 @@
 /* This card-button.activated is for future "selected" use. See Card Controller for more */
 .card-button.activated,
 .card-button:selected,
+.card-button:default:selected,
 .card-button:pressed,
 .card-button:pressed:hover,
-.dark-button:selected,
-.dark-button:pressed,
-.dark-button:pressed:hover,
-.right-stripped-radio-button:pressed,
-.right-stripped-radio-button:selected,
-.right-stripped-radio-button:selected:hover,
-.right-stripped-radio-button:pressed:hover,
-.right-stripped-radio-button:selected:hover:focused,
-.right-stripped-radio-button:pressed:hover:focused {
+.card-button.activated:focused,
+.card-button:selected:focused,
+.card-button:default:selected:focused,
+.card-button:pressed:focused,
+.card-button:pressed:hover:focused,
+.button.dark-button:selected,
+.button.dark-button:default:selected,
+.button.dark-button:pressed,
+.button.dark-button:pressed:hover,
+.button.dark-button:selected:focused,
+.button.dark-button:default:selected:focused,
+.button.dark-button:pressed:focused,
+.button.dark-button:pressed:hover:focused,
+.stripped-radio-button:pressed,
+.stripped-radio-button:selected,
+.stripped-radio-button:default:selected,
+.stripped-radio-button:selected:hover,
+.stripped-radio-button:default:selected:hover,
+.stripped-radio-button:pressed:hover,
+.stripped-radio-button:pressed:focused,
+.stripped-radio-button:selected:focused,
+.stripped-radio-button:default:selected:focused,
+.stripped-radio-button:selected:hover:focused,
+.stripped-radio-button:default:selected:hover:focused,
+.stripped-radio-button:pressed:hover:focused {
     -fx-text-fill: #EEEEEE;
     -fx-background-color:
             #ADADAD,
@@ -235,15 +251,27 @@
             #383838;
 }
 
+.card-button:focused,
+.button.dark-button:focused,
+.stripped-radio-button:focused,
+.card-button:default:focused,
+.button.dark-button:default:focused,
+.stripped-radio-button:default:focused {
+    -fx-background-color:
+            #ADADAD,
+            #202020,
+            #202020;
+}
+
 .card-button:hover,
-.dark-button:hover,
-.stripped-radio-button:selected,
+.button.dark-button:hover,
+.tab-stripped-radio-button:selected,
+.tab-stripped-radio-button:hover,
 .stripped-radio-button:hover,
-.right-stripped-radio-button:hover,
 .card-button:hover:focused,
-.dark-button:hover:focused,
-.stripped-radio-button:hover:focused,
-.right-stripped-radio-button:hover:focused {
+.button.dark-button:hover:focused,
+.tab-stripped-radio-button:hover:focused,
+.stripped-radio-button:hover:focused {
     -fx-text-fill: #EEEEEE;
     -fx-background-color:
             #383838,
@@ -252,46 +280,14 @@
 }
 
 .card-button:disabled,
-.dark-button:disabled,
-.stripped-radio-button:disabled,
-.right-stripped-radio-button:disabled {
+.button.dark-button:disabled,
+.tab-stripped-radio-button:disabled,
+.stripped-radio-button:disabled {
     -fx-text-fill: #383838;
     -fx-background-color:
             #202020,
             #202020,
             #202020;
-}
-
-.tab-button {
-    -fx-background-color:
-            #CECECE,
-            #CECECE,
-            #CECECE;
-}
-
-.tab-button:hover {
-    -fx-background-color:
-            #EEEEEE,
-            #EEEEEE,
-            #EEEEEE;
-}
-
-.tab-button:pressed {
-    -fx-background-color:
-            #838383,
-            #CECECE,
-            #CECECE;
-}
-
-.button:dark-button {
-    -fx-text-fill: #CECECE;
-    -fx-background-radius: 0;
-    -fx-padding: 0 4 0 4;
-}
-
-.button:dark-button:hover {
-    -fx-text-fill: #CECECE;
-    -fx-background-color: #383838;
 }
 
 .content-root {

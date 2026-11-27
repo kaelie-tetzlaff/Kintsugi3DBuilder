@@ -67,9 +67,9 @@
 
 .button {
     -fx-background-insets:
-            1,
-            3,
-            5;
+            2,
+            4,
+            6;
 }
 
 .button,
@@ -203,6 +203,10 @@
     -fx-background-color: transparent;
 }
 
+.button, .toggle-button {
+    -fx-padding: 8 16 8 16; /* top right bottom left */
+}
+
 .button, .toggle-button,
 .button:selected, .toggle-button:selected,
 .button:hover, .toggle-button:hover,
@@ -214,7 +218,6 @@
 .button:default:selected, .toggle-button:default:selected,
 .button:disabled, .toggle-button:disabled {
     -fx-background-radius: 0;
-    -fx-padding: 8 16 8 16; /* top right bottom left */
 }
 
 .scroll-bar .increment-button,

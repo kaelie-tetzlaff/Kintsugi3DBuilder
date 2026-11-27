@@ -26,6 +26,11 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 public class SelectionPageController<T> extends PageControllerBase<T, SelectionPage<T>>
 {
     private static final double BUTTON_MIN_WIDTH = 400.0;
@@ -66,7 +71,10 @@ public class SelectionPageController<T> extends PageControllerBase<T, SelectionP
         buttons.getToggles().clear();
         optionsRoot.getChildren().clear();
 
-        for (var choice : getPage().getChoices())
+        Set<Entry<String, Page<? super T, ?>>> choices = getPage().getChoices();
+        Map<Toggle, Page<? super T,?>> toggleMapping = new HashMap<>(choices.size());
+
+        for (var choice : choices)
         {
             // create button
             ToggleButton button = new ToggleButton();
@@ -92,7 +100,12 @@ public class SelectionPageController<T> extends PageControllerBase<T, SelectionP
             {
                 buttons.selectToggle(button);
             }
+
+            toggleMapping.put(button, choice.getValue());
         }
+
+        buttons.selectedToggleProperty().addListener((observable, oldValue, newValue) ->
+            onButtonAction(newValue, toggleMapping.get(newValue)));
     }
 
     private void onButtonAction(@NotNull Toggle button, Page<? super T, ?> page)

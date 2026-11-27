@@ -197,7 +197,7 @@ public class SideBarController
         button.setMnemonicParsing(false);
         button.setSelected(false);
         button.setStyle("-fx-alignment: center;");
-        button.getStyleClass().add("stripped-radio-button");
+        button.getStyleClass().add("tab-stripped-radio-button");
         button.setTextAlignment(TextAlignment.CENTER);
 
         // Add to ToggleGroup
