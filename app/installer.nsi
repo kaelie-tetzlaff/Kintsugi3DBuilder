@@ -246,6 +246,7 @@ Function un.CachePageCreate
     ${NSD_CreateCheckbox} 10u 40u 100% 12u "Clear Kintsugi 3D Viewer preferences, logs, and local files list"
     Pop $Checkbox_ClearViewerPreferences
     ${NSD_Check} $Checkbox_ClearViewerPreferences
+    ${NSD_OnClick} $Checkbox_ClearViewerPreferences un.OnViewerPreferences
 
     ${NSD_CreateCheckbox} 10u 55u 100% 12u "Clear Kintsugi 3D Viewer cache"
     Pop $Checkbox_ClearViewerCache
