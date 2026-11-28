@@ -271,13 +271,15 @@ jobs:
             TIMER="$3"
             CHECK_ERRORS="${4:-false}"
             PROJECT="${5:-}"
+            CHECK_STDERR="${6:-true}"
           
             LOG="$(mktemp)"
+            ERRLOG="$(mktemp)"
           
             if [ -n "$PROJECT" ]; then
-              "$EXE" "$PROJECT" > >(tee "$LOG") 2>&1 &
+              "$EXE" "$PROJECT" > >(tee "$LOG") 2> "$ERRLOG" &
             else
-              "$EXE" > >(tee "$LOG") 2>&1 &
+              "$EXE" > >(tee "$LOG") 2> "$ERRLOG" &
             fi
           
             PID=$!
@@ -294,13 +296,23 @@ jobs:
               if wait "$PID"; then STATUS=0; else STATUS=$?; fi
               echo "$LABEL: Process exited within ${TIMER} seconds (code $STATUS)."
               cat "$LOG"
-              rm -f "$LOG"
+              rm -f "$LOG" "$ERRLOG"
               LOG=""
               exit 1
             fi
           
             # Allow tee to finish writing buffered output.
             sleep 1
+          
+            # Require stderr to be completely empty.
+            if [ "$CHECK_STDERR" = true ] && [ -s "$ERRLOG" ]; then
+              echo "$LABEL: Application wrote to stderr; stderr must be empty."
+              cat "$ERRLOG"
+              rm -f "$LOG" "$ERRLOG"
+              LOG=""
+              exit 1
+            fi
+            rm -f "$ERRLOG"
           
             if [ "$CHECK_ERRORS" = true ] && grep -Eq 'ERROR|Exception in thread "' "$LOG"; then
               echo "$LABEL: ERROR or uncaught exception found in application output."
@@ -358,9 +370,9 @@ jobs:
           test -n "$VIEWER" || { echo "Kintsugi3DViewer.exe not found"; exit 1; }
           echo "$VIEWER"
           
-          # Intentionally omit checking for errors since Godot has a tendency to spam errors 
+          # Intentionally omit checking for errors and stderr since Godot has a tendency to spam errors 
           # especially when there's no GPU like on GitHub actions.
-          test_launch "$VIEWER" "Installed Viewer" 30
+          test_launch "$VIEWER" "Installed Viewer" 30 false "" false
           
           ## Check for any processes still running from the installation directory.
           #INSTALL_DIR_WIN="$(cygpath -m "$installDir")"
@@ -483,6 +495,7 @@ jobs:
             TIMER="$4"
             CHECK_ERRORS="${5:-false}"
             PROJECT="${6:-}"
+            CHECK_STDERR="${7:-true}"
 
             if [ "$EXE" != "-" ]; then
               test -x "$EXE" || { echo "$LABEL: executable not found or not executable"; exit 1; }
@@ -493,12 +506,13 @@ jobs:
             fi
 
             if [ "$EXE" != "-" ]; then
-              # Test 1: Run the executable directly, piping stdout and stderr to a log file.
+              # Test 1: Run the executable directly, piping stdout to a log file and stderr to a separate log.
               LOG="$(mktemp)"
+              ERRLOG="$(mktemp)"
               if [ -n "$PROJECT" ]; then
-                "$EXE" "$PROJECT" > >(tee "$LOG") 2>&1 &
+                "$EXE" "$PROJECT" > >(tee "$LOG") 2> "$ERRLOG" &
               else
-                "$EXE" > >(tee "$LOG") 2>&1 &
+                "$EXE" > >(tee "$LOG") 2> "$ERRLOG" &
               fi
               PID=$!
               sleep $TIMER
@@ -515,7 +529,22 @@ jobs:
               # Allow tee to finish writing buffered output.
               sleep 1
             
-              # Check for errors in stdout / stderr.
+              # Require stderr to be completely empty, ignoring known-benign system
+              # noise such as CGLChoosePixelFormat messages emitted by macOS's
+              # OpenGL stack when there is no GPU (these cannot be suppressed at
+              # the application level).
+              if [ "$CHECK_STDERR" = true ]; then
+                FILTERED_ERR="$(grep -v 'CGLChoosePixelFormat:' "$ERRLOG" || true)"
+                if [ -n "$FILTERED_ERR" ]; then
+                  echo "$LABEL: Application wrote to stderr; stderr must be empty."
+                  cat "$ERRLOG"
+                  rm -f "$LOG" "$ERRLOG"
+                  exit 1
+                fi
+              fi
+              rm -f "$ERRLOG"
+            
+              # Check for errors in stdout.
               if [ "$CHECK_ERRORS" = true ] && grep -Eq 'ERROR|Exception in thread "' "$LOG"; then
                 echo "$LABEL: ERROR or uncaught exception found in application output."
                 cat "$LOG"
@@ -588,13 +617,13 @@ jobs:
             300 true "$katrinaFullerProject"
 
           # Test 3: Viewer extracted from the DMG
-          # Intentionally omit checking for errors since Godot has a tendency to spam errors 
+          # Intentionally omit checking for errors and stderr since Godot has a tendency to spam errors 
           # especially when there's no GPU like on GitHub actions.
           VIEWER_EXTRACTED="$EXTRACT_DIR/Kintsugi 3D Viewer.app"
           echo "$VIEWER_EXTRACTED"
           smoke_test_app "$VIEWER_EXTRACTED" \
             "$VIEWER_EXTRACTED/Contents/MacOS/Kintsugi 3D Viewer" \
-            "Viewer (DMG)" 30
+            "Viewer (DMG)" 30 false "" false
 
           echo "All macOS smoke tests passed successfully."
 
