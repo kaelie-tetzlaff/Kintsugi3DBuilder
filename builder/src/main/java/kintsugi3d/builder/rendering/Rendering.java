@@ -135,7 +135,7 @@ public final class Rendering
 
     public static boolean hasBlockingRequest()
     {
-        return getRequestQueue().hasBlockingRequest();
+        return requestQueue != null && getRequestQueue().hasBlockingRequest();
     }
 
     public static void runLater(GraphicsRequest request)
