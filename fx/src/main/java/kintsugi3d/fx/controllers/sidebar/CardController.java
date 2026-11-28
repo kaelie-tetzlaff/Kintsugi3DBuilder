@@ -24,6 +24,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
@@ -68,6 +69,9 @@ public class CardController
     private final ObjectProperty<Image> previewImage = new SimpleObjectProperty<>(AppIcon.getImage());
     private File currentPreviewImageFile;
     private @Nullable File loadedPreviewImageFile;
+
+    /** True while any ButtonBase child of the card (e.g. a dynamically added card-button) is pressed. */
+    private static final PseudoClass CHILD_PRESSED_PSEUDOCLASS = PseudoClass.getPseudoClass("child-pressed");
 
     public final void init(@SuppressWarnings("ParameterHidesMemberVariable") ObservableCardsModel<?> cardsModel, @NotNull ProjectDataCard dataCard)
     {
@@ -166,8 +170,14 @@ public class CardController
             VBox.setMargin(caption, new Insets(0, 0, 8, 4));
         });
 
-        ActionButtonFactory.createActionButtons(refreshedDataCard.getActions(), buttonBox,
-            "card-button", "card-separator");
+        ActionButtonFactory.createActionButtons(refreshedDataCard.getActions(), buttonBox, "card-button", "card-separator");
+
+        // Pressing a button shouldn't give the "pressed" appearance to the containing card.
+        for (Node button : buttonBox.getChildren())
+        {
+            button.pressedProperty().addListener((observable, wasPressed, isPressed) ->
+                dataCardPane.pseudoClassStateChanged(CHILD_PRESSED_PSEUDOCLASS, isPressed));
+        }
 
         currentPreviewImageFile = new File(refreshedDataCard.getThumbnailPath());
 

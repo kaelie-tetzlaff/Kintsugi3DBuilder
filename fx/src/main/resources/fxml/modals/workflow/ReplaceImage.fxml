@@ -54,8 +54,9 @@
                             </VBox>
                            <!-- Tile pane prevents button from being resized -->
                             <TilePane prefColumns="1">
-                                <Button fx:id="newFileButton" onAction="#openFileBrowser" styleClass="wireframeBodyLarge"
-                                        textOverrun="CLIP" textAlignment="CENTER" text="Open" style="fx-padding: 0px"/>
+                                <padding><Insets fx:constant="EMPTY"/></padding>
+                                <Button fx:id="newFileButton" onAction="#openFileBrowser" styleClass="wireframeBodyStrong"
+                                        textOverrun="CLIP" textAlignment="CENTER" text="Open"/>
                             </TilePane>
                         </HBox>
                     </VBox>

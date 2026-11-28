@@ -257,7 +257,7 @@ public class ImageDetailsController
         button.setMnemonicParsing(false); //No keyboard shortcuts
         button.setSelected(false); //No button selected
         button.setStyle("-fx-alignment: center;"); //Alignment of text
-        button.getStyleClass().add("right-stripped-radio-button"); //Button css (kintsugi.css)
+        button.getStyleClass().add("stripped-radio-button"); //Button css (kintsugi.css)
         button.setTextAlignment(TextAlignment.CENTER); //Alignment of text wrapping
 
         HBox.setHgrow(button, Priority.ALWAYS); //Allow the button to grow horizontally in an HBox

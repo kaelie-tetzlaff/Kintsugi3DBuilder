@@ -30,6 +30,9 @@
  * kintsugi-modena-overrides.css (which loads in the user-agent layer,
  * BEFORE this file).
  *
+ * Palette constants (-kintsugi3d-palette-N) are defined on .root in
+ * kintsugi-modena-overrides.css.
+ *
  * NOTE: some rules below use generic JavaFX selectors, but are kept here
  * on purpose: they live in this scene/author stylesheet so they always
  * win against the user-agent layer regardless of specificity (rules in
@@ -77,62 +80,17 @@
     -fx-font-size: 68px;
 }
 
-.kintsugi-3D-1 {
-    -fx-fill: #FFE790; /* light yellow */
-}
-
-.kintsugi-3D-2 {
-    -fx-fill: #EFCB5C; /* kintsugi yellow */
-}
-
-.kintsugi-3D-3 {
-    -fx-fill: #383838; /* med gray */
-}
-
-.kintsugi-3D-4 {
-    -fx-fill: #202020; /* dark gray */
-}
-
-.kintsugi-3D-5 {
-    -fx-fill: #030305; /* off-black. */
-}
-
-.kintsugi-3D-Wireframe-0 {
-    -fx-fill: #EEEEEE; /* near-white */
-}
-
-.kintsugi-3D-Wireframe-1 {
-    -fx-fill: #CECECE; /* off-white */
-}
-
-.kintsugi-3D-Wireframe-2 {
-    -fx-fill: #ADADAD; /* light gray */
-}
-
-.kintsugi-3D-Wireframe-3 {
-    -fx-fill: #383838; /* med gray */
-}
-
-.kintsugi-3D-Wireframe-4 {
-    -fx-fill: #202020; /* dark gray */
-}
-
-.kintsugi-3D-Wireframe-5 {
-    -fx-fill: #030303; /* off-black */
-}
-
 /********************************************************************************/
 
 .modal-root,
-.button:dark-button,
 .content-root,
 .cameraviewlist,
 .mainwindow-root {
-    -fx-background-color: #202020;
+    -fx-background-color: -kintsugi3d-palette-4;
 }
 
-.stripped-radio-button > .radio,
-.right-stripped-radio-button > .radio {
+.tab-stripped-radio-button > .radio,
+.stripped-radio-button > .radio {
     -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-background-radius: 0px;
@@ -143,12 +101,12 @@
     -fx-max-width: 0;
 }
 
-.stripped-radio-button:selected > .radio > .dot,
-.right-stripped-radio-button:selected > .radio > .dot {
+.tab-stripped-radio-button:selected > .radio > .dot,
+.stripped-radio-button:selected > .radio > .dot {
     -fx-background-color: transparent;
 }
 
-.right-stripped-radio-button {
+.stripped-radio-button {
     -fx-background-insets:
             1,
             3,
@@ -156,45 +114,53 @@
 }
 
 .card-background .label {
-    -fx-text-fill: #202020;
+    -fx-text-fill: -kintsugi3d-palette-4;
 }
 
 .card-background:disabled .label:disabled {
-    -fx-text-fill: #383838;
+    -fx-text-fill: -kintsugi3d-palette-3;
 }
 
 /* Card Component */
 .card-background {
     -fx-background-color:
-            #CECECE,
-            #CECECE,
-            #CECECE;
+            -kintsugi3d-palette-1,
+            -kintsugi3d-palette-1,
+            -kintsugi3d-palette-1;
     -fx-background-insets:
             2,
             4,
             6;
 }
 
-.card-background:hover {
-    -fx-background-color:
-            #EEEEEE,
-            #EEEEEE,
-            #EEEEEE;
-}
-
 .card-background:disabled {
-    -fx-background-color: #ADADAD;
+    -fx-background-color: -kintsugi3d-palette-2;
 }
 
-.card-background:disabled:hover {
-    -fx-background-color: #EEEEEE;
+.card-background:hover{
+    -fx-background-color:
+            -kintsugi3d-palette-0,
+            -kintsugi3d-palette-0,
+            -kintsugi3d-palette-0;
 }
 
 .card-background:pressed {
     -fx-background-color:
-            #383838,
-            #CECECE,
-            #CECECE;
+            -kintsugi3d-palette-3,
+            -kintsugi3d-palette-1,
+            -kintsugi3d-palette-1;
+}
+
+/* Pressing a card button inside the card must not make the whole card look
+ * pressed: the controller toggles :child-pressed while any ButtonBase child
+ * is held down, and this rule retains the card's normal hover look in that case
+ * (JavaFX CSS has no :has()-style relational selector, so the state is set
+ * from CardController). */
+.card-background:child-pressed {
+    -fx-background-color:
+            -kintsugi3d-palette-0,
+            -kintsugi3d-palette-0,
+            -kintsugi3d-palette-0;
 }
 
 .card-button, .tab-button {
@@ -206,92 +172,70 @@
     -fx-alignment: CENTER;
 }
 
-.card-button, .dark-button, .stripped-radio-button, .right-stripped-radio-button {
-    -fx-text-fill: #CECECE;
+.card-button, .button.dark-button, .tab-stripped-radio-button, .stripped-radio-button {
+    -fx-text-fill: -kintsugi3d-palette-1;
     -fx-background-color:
-            #202020,
-            #202020,
-            #202020;
+            -kintsugi3d-palette-4,
+            -kintsugi3d-palette-4,
+            -kintsugi3d-palette-4;
 }
 
-/* This card-button.activated is for future "selected" use. See Card Controller for more */
+/* Button/card-button/radio-button state styling.
+ * States are ordered least- to most-specific (rest, focused, hover,
+ * selected/activated/pressed, disabled) so the cascade resolves overlap
+ * without enumerating pseudo-class combinations: a later rule wins for
+ * properties it sets, and pseudo-classes add specificity so compound
+ * states like pressed+focused resolve to the pressed rule's values.
+ * Colors match the previous explicit-combination rules exactly. */
+
+/* focused only: keep resting fill, accent top layer */
+.card-button:focused,
+.button.dark-button:focused,
+.stripped-radio-button:focused {
+    -fx-background-color:
+            -kintsugi3d-palette-2,
+            -kintsugi3d-palette-4,
+            -kintsugi3d-palette-4;
+}
+
+/* hover (must precede selected/pressed so those win on top) */
+.card-button:hover,
+.button.dark-button:hover,
+.tab-stripped-radio-button:selected,
+.tab-stripped-radio-button:hover,
+.stripped-radio-button:hover {
+    -fx-text-fill: -kintsugi3d-palette-0;
+    -fx-background-color:
+            -kintsugi3d-palette-3,
+            -kintsugi3d-palette-3,
+            -kintsugi3d-palette-3;
+}
+
+/* selected / activated / pressed - strongest state, last among enabled states */
 .card-button.activated,
 .card-button:selected,
 .card-button:pressed,
-.card-button:pressed:hover,
-.dark-button:selected,
-.dark-button:pressed,
-.dark-button:pressed:hover,
-.right-stripped-radio-button:pressed,
-.right-stripped-radio-button:selected,
-.right-stripped-radio-button:selected:hover,
-.right-stripped-radio-button:pressed:hover,
-.right-stripped-radio-button:selected:hover:focused,
-.right-stripped-radio-button:pressed:hover:focused {
-    -fx-text-fill: #EEEEEE;
+.button.dark-button:selected,
+.button.dark-button:pressed,
+.stripped-radio-button:pressed,
+.stripped-radio-button:selected {
+    -fx-text-fill: -kintsugi3d-palette-0;
     -fx-background-color:
-            #ADADAD,
-            #383838,
-            #383838;
+            -kintsugi3d-palette-2,
+            -kintsugi3d-palette-3,
+            -kintsugi3d-palette-3;
 }
 
-.card-button:hover,
-.dark-button:hover,
-.stripped-radio-button:selected,
-.stripped-radio-button:hover,
-.right-stripped-radio-button:hover,
-.card-button:hover:focused,
-.dark-button:hover:focused,
-.stripped-radio-button:hover:focused,
-.right-stripped-radio-button:hover:focused {
-    -fx-text-fill: #EEEEEE;
-    -fx-background-color:
-            #383838,
-            #383838,
-            #383838;
-}
-
+/* disabled - last, wins over every enabled state */
 .card-button:disabled,
-.dark-button:disabled,
-.stripped-radio-button:disabled,
-.right-stripped-radio-button:disabled {
-    -fx-text-fill: #383838;
+.button.dark-button:disabled,
+.tab-stripped-radio-button:disabled,
+.stripped-radio-button:disabled {
+    -fx-text-fill: -kintsugi3d-palette-3;
     -fx-background-color:
-            #202020,
-            #202020,
-            #202020;
-}
-
-.tab-button {
-    -fx-background-color:
-            #CECECE,
-            #CECECE,
-            #CECECE;
-}
-
-.tab-button:hover {
-    -fx-background-color:
-            #EEEEEE,
-            #EEEEEE,
-            #EEEEEE;
-}
-
-.tab-button:pressed {
-    -fx-background-color:
-            #838383,
-            #CECECE,
-            #CECECE;
-}
-
-.button:dark-button {
-    -fx-text-fill: #CECECE;
-    -fx-background-radius: 0;
-    -fx-padding: 0 4 0 4;
-}
-
-.button:dark-button:hover {
-    -fx-text-fill: #CECECE;
-    -fx-background-color: #383838;
+            -kintsugi3d-palette-4,
+            -kintsugi3d-palette-4,
+            -kintsugi3d-palette-4;
 }
 
 .content-root {
@@ -303,7 +247,7 @@
 }
 
 .sidebar-root {
-    -fx-background-color: #383838;
+    -fx-background-color: -kintsugi3d-palette-3;
 }
 
 .toggleButtonLarge {
@@ -311,11 +255,11 @@
 }
 
 .cache-settings-root {
-    -fx-background-color: #383838;
+    -fx-background-color: -kintsugi3d-palette-3;
 }
 
 .cameraviewlist {
-    -fx-border-color: #202020;
+    -fx-border-color: -kintsugi3d-palette-4;
 }
 
 .progress-bar {
@@ -323,11 +267,11 @@
 }
 
 .progress-bar .track {
-    -fx-background-color: #CECECE; /* color of incomplete portion */
+    -fx-background-color: -kintsugi3d-palette-1; /* color of incomplete portion */
 }
 
 .desaturated-progress-bar {
-    -fx-accent: #383838; /* color of completed portion */
+    -fx-accent: -kintsugi3d-palette-3; /* color of completed portion */
 }
 
 .card-separator .line,
@@ -337,11 +281,11 @@
 }
 
 .card-separator .line {
-    -fx-background-color: #383838;
+    -fx-background-color: -kintsugi3d-palette-3;
 }
 
 .tab-separator .line {
-    -fx-background-color: #CECECE;
+    -fx-background-color: -kintsugi3d-palette-1;
 }
 
 .black-line .line {
@@ -352,7 +296,7 @@
 
 /* Styling for the scroll bar in left pane */
 .left-bar > scroll-pane {
-    -fx-background-color: #202020;
+    -fx-background-color: -kintsugi3d-palette-4;
 }
 
 .left-bar .scroll-bar:vertical {
@@ -410,7 +354,7 @@
 }
 
 .selectionBox:selected .mark {
-    -fx-background-color: #CECECE; /* Check mark background when selected */
+    -fx-background-color: -kintsugi3d-palette-1; /* Check mark background when selected */
     -fx-effect: dropshadow(three-pass-box, black, .75, .75, 0, 0); /* Check mark black outline */
 }
 
@@ -437,7 +381,7 @@
 .table-view,
 .table-view .column-header,
 .table-view .column-header-background .filler {
-    -fx-background-color: #202020;
+    -fx-background-color: -kintsugi3d-palette-4;
 }
 
 .list-view {
@@ -449,25 +393,25 @@
 }
 
 .list-view:focused {
-    -fx-background-color: #202020;
+    -fx-background-color: -kintsugi3d-palette-4;
     -fx-background-insets: 0;
 }
 
 .list-view, .list-cell,
 .table-view .cell, .table-row-cell {
-    -fx-text-fill: #CECECE;
+    -fx-text-fill: -kintsugi3d-palette-1;
 }
 
 .list-cell:even,
 .table-row-cell:even,
 .tree-cell:even {
-    -fx-background-color: #383838;
+    -fx-background-color: -kintsugi3d-palette-3;
 }
 
 .list-cell:odd,
 .table-row-cell:odd,
 .tree-cell:odd {
-    -fx-background-color: #202020;
+    -fx-background-color: -kintsugi3d-palette-4;
 }
 
 .list-cell:selected,
@@ -475,27 +419,26 @@
 .table-row-cell:selected,
 .table-row-cell:selected .cell,
 .tree-cell:selected {
-    -fx-background-color: #EEEEEE;
-    -fx-text-fill: #383838;
+    -fx-background-color: -kintsugi3d-palette-0;
+    -fx-text-fill: -kintsugi3d-palette-3;
 }
 
 .list-cell:selected {
-    -fx-background-color: #EEEEEE;
-    -fx-text-fill: #383838;
+    -fx-background-color: -kintsugi3d-palette-0;
+    -fx-text-fill: -kintsugi3d-palette-3;
 }
 
 .list-cell:selected .label,
 .table-view .cell:selected .label,
 .table-row-cell:selected .label,
-.table-row-cell:selected .cell .label,
 .tree-cell:selected .label {
-    -fx-text-fill: #383838;
+    -fx-text-fill: -kintsugi3d-palette-3;
 }
 
 .table-view {
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
-    -fx-table-cell-border-color: #CECECE;
+    -fx-table-cell-border-color: -kintsugi3d-palette-1;
 }
 
 .table-row-cell:focused {
@@ -516,15 +459,15 @@
 }
 
 .tree-view {
-    -fx-background-color: #383838;
+    -fx-background-color: -kintsugi3d-palette-3;
 }
 
 .tree-cell:empty {
-    -fx-background-color: #202020;
+    -fx-background-color: -kintsugi3d-palette-4;
 }
 
 .tree-cell:expanded, .tree-cell:sub-tree-item {
-    -fx-background-color: #383838;
+    -fx-background-color: -kintsugi3d-palette-3;
 }
 
 .tree-cell:selected {
@@ -553,40 +496,40 @@
 .menu .label,
 .tab,
 .tab .tab-label {
-    -fx-text-fill: #CECECE;
+    -fx-text-fill: -kintsugi3d-palette-1;
 }
 
 .menu {
-    -fx-background-color: #383838;
+    -fx-background-color: -kintsugi3d-palette-3;
     -fx-background-radius: 0 0 0 0;
 }
 
 .menu:hover {
-    -fx-background-color: #EEEEEE;
+    -fx-background-color: -kintsugi3d-palette-0;
 }
 
 .menu:hover .label {
-    -fx-text-fill: #383838;
+    -fx-text-fill: -kintsugi3d-palette-3;
 }
 
 .menu-bar {
-    -fx-background-color: #383838;
+    -fx-background-color: -kintsugi3d-palette-3;
 }
 
 .menu-item {
-    -fx-background-color: #202020;
+    -fx-background-color: -kintsugi3d-palette-4;
 }
 
 .menu-item .label {
-    -fx-text-fill: #CECECE !important;
+    -fx-text-fill: -kintsugi3d-palette-1 !important;
 }
 
 .menu-item:hover {
-    -fx-background-color: #EEEEEE;
+    -fx-background-color: -kintsugi3d-palette-0;
 }
 
 .menu-item:hover .label {
-    -fx-text-fill: #383838 !important;
+    -fx-text-fill: -kintsugi3d-palette-3 !important;
 }
 
 /* JavaFX TabPane tab styling.
@@ -596,7 +539,7 @@
  * (.tab-button, .left-bar) and are styled above; these rules are for the
  * JavaFX TabPane control itself. */
 .tab {
-    -fx-background-color: #202020;
+    -fx-background-color: -kintsugi3d-palette-4;
     -fx-background-radius: 0;
     -fx-padding: 8 16 8 16; /* top right bottom left */
     -fx-effect: none;
@@ -608,17 +551,17 @@
 }
 
 .tab:selected {
-    -fx-background-color: #383838;
+    -fx-background-color: -kintsugi3d-palette-3;
 }
 
 .tab:selected .tab-label {
-    -fx-text-fill: #EEEEEE;
+    -fx-text-fill: -kintsugi3d-palette-0;
 }
 
 .tab:hover {
-    -fx-background-color: #EEEEEE;
+    -fx-background-color: -kintsugi3d-palette-0;
 }
 
 .tab:hover .tab-label {
-    -fx-text-fill: #383838;
+    -fx-text-fill: -kintsugi3d-palette-3;
 }
