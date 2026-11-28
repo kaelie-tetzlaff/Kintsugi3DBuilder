@@ -30,6 +30,10 @@
  * kintsugi-modena-overrides.css (which loads in the user-agent layer,
  * BEFORE this file).
  *
+ * Palette constants (-k3d-wireframe-N) are defined on .root in
+ * kintsugi-modena-overrides.css; the looked-up colors mirror the
+ * .kintsugi-3D-Wireframe-* classes below.
+ *
  * NOTE: some rules below use generic JavaFX selectors, but are kept here
  * on purpose: they live in this scene/author stylesheet so they always
  * win against the user-agent layer regardless of specificity (rules in
@@ -86,11 +90,11 @@
 }
 
 .kintsugi-3D-3 {
-    -fx-fill: #383838; /* med gray */
+    -fx-fill: -k3d-wireframe-3; /* med gray */
 }
 
 .kintsugi-3D-4 {
-    -fx-fill: #202020; /* dark gray */
+    -fx-fill: -k3d-wireframe-4; /* dark gray */
 }
 
 .kintsugi-3D-5 {
@@ -98,27 +102,27 @@
 }
 
 .kintsugi-3D-Wireframe-0 {
-    -fx-fill: #EEEEEE; /* near-white */
+    -fx-fill: -k3d-wireframe-0; /* near-white */
 }
 
 .kintsugi-3D-Wireframe-1 {
-    -fx-fill: #CECECE; /* off-white */
+    -fx-fill: -k3d-wireframe-1; /* off-white */
 }
 
 .kintsugi-3D-Wireframe-2 {
-    -fx-fill: #ADADAD; /* light gray */
+    -fx-fill: -k3d-wireframe-2; /* light gray */
 }
 
 .kintsugi-3D-Wireframe-3 {
-    -fx-fill: #383838; /* med gray */
+    -fx-fill: -k3d-wireframe-3; /* med gray */
 }
 
 .kintsugi-3D-Wireframe-4 {
-    -fx-fill: #202020; /* dark gray */
+    -fx-fill: -k3d-wireframe-4; /* dark gray */
 }
 
 .kintsugi-3D-Wireframe-5 {
-    -fx-fill: #030303; /* off-black */
+    -fx-fill: -k3d-wireframe-5; /* off-black */
 }
 
 /********************************************************************************/
@@ -127,7 +131,7 @@
 .content-root,
 .cameraviewlist,
 .mainwindow-root {
-    -fx-background-color: #202020;
+    -fx-background-color: -k3d-wireframe-4;
 }
 
 .tab-stripped-radio-button > .radio,
@@ -155,19 +159,19 @@
 }
 
 .card-background .label {
-    -fx-text-fill: #202020;
+    -fx-text-fill: -k3d-wireframe-4;
 }
 
 .card-background:disabled .label:disabled {
-    -fx-text-fill: #383838;
+    -fx-text-fill: -k3d-wireframe-3;
 }
 
 /* Card Component */
 .card-background {
     -fx-background-color:
-            #CECECE,
-            #CECECE,
-            #CECECE;
+            -k3d-wireframe-1,
+            -k3d-wireframe-1,
+            -k3d-wireframe-1;
     -fx-background-insets:
             2,
             4,
@@ -176,24 +180,24 @@
 
 .card-background:hover {
     -fx-background-color:
-            #EEEEEE,
-            #EEEEEE,
-            #EEEEEE;
+            -k3d-wireframe-0,
+            -k3d-wireframe-0,
+            -k3d-wireframe-0;
 }
 
 .card-background:disabled {
-    -fx-background-color: #ADADAD;
+    -fx-background-color: -k3d-wireframe-2;
 }
 
 .card-background:disabled:hover {
-    -fx-background-color: #EEEEEE;
+    -fx-background-color: -k3d-wireframe-0;
 }
 
 .card-background:pressed {
     -fx-background-color:
-            #383838,
-            #CECECE,
-            #CECECE;
+            -k3d-wireframe-3,
+            -k3d-wireframe-1,
+            -k3d-wireframe-1;
 }
 
 .card-button, .tab-button {
@@ -206,51 +210,22 @@
 }
 
 .card-button, .button.dark-button, .tab-stripped-radio-button, .stripped-radio-button {
-    -fx-text-fill: #CECECE;
+    -fx-text-fill: -k3d-wireframe-1;
     -fx-background-color:
-            #202020,
-            #202020,
-            #202020;
+            -k3d-wireframe-4,
+            -k3d-wireframe-4,
+            -k3d-wireframe-4;
 }
 
-/* This card-button.activated is for future "selected" use. See Card Controller for more */
-.card-button.activated,
-.card-button:selected,
-.card-button:default:selected,
-.card-button:pressed,
-.card-button:pressed:hover,
-.card-button.activated:focused,
-.card-button:selected:focused,
-.card-button:default:selected:focused,
-.card-button:pressed:focused,
-.card-button:pressed:hover:focused,
-.button.dark-button:selected,
-.button.dark-button:default:selected,
-.button.dark-button:pressed,
-.button.dark-button:pressed:hover,
-.button.dark-button:selected:focused,
-.button.dark-button:default:selected:focused,
-.button.dark-button:pressed:focused,
-.button.dark-button:pressed:hover:focused,
-.stripped-radio-button:pressed,
-.stripped-radio-button:selected,
-.stripped-radio-button:default:selected,
-.stripped-radio-button:selected:hover,
-.stripped-radio-button:default:selected:hover,
-.stripped-radio-button:pressed:hover,
-.stripped-radio-button:pressed:focused,
-.stripped-radio-button:selected:focused,
-.stripped-radio-button:default:selected:focused,
-.stripped-radio-button:selected:hover:focused,
-.stripped-radio-button:default:selected:hover:focused,
-.stripped-radio-button:pressed:hover:focused {
-    -fx-text-fill: #EEEEEE;
-    -fx-background-color:
-            #ADADAD,
-            #383838,
-            #383838;
-}
+/* Button/card-button/radio-button state styling.
+ * States are ordered least- to most-specific (rest, focused, hover,
+ * selected/activated/pressed, disabled) so the cascade resolves overlap
+ * without enumerating pseudo-class combinations: a later rule wins for
+ * properties it sets, and pseudo-classes add specificity so compound
+ * states like pressed+focused resolve to the pressed rule's values.
+ * Colors match the previous explicit-combination rules exactly. */
 
+/* focused only: keep resting fill, accent top layer */
 .card-button:focused,
 .button.dark-button:focused,
 .stripped-radio-button:focused,
@@ -258,11 +233,12 @@
 .button.dark-button:default:focused,
 .stripped-radio-button:default:focused {
     -fx-background-color:
-            #ADADAD,
-            #202020,
-            #202020;
+            -k3d-wireframe-2,
+            -k3d-wireframe-4,
+            -k3d-wireframe-4;
 }
 
+/* hover (must precede selected/pressed so those win on top) */
 .card-button:hover,
 .button.dark-button:hover,
 .tab-stripped-radio-button:selected,
@@ -272,22 +248,41 @@
 .button.dark-button:hover:focused,
 .tab-stripped-radio-button:hover:focused,
 .stripped-radio-button:hover:focused {
-    -fx-text-fill: #EEEEEE;
+    -fx-text-fill: -k3d-wireframe-0;
     -fx-background-color:
-            #383838,
-            #383838,
-            #383838;
+            -k3d-wireframe-3,
+            -k3d-wireframe-3,
+            -k3d-wireframe-3;
 }
 
+/* selected / activated / pressed - strongest state, last among enabled states */
+.card-button.activated,
+.card-button:selected,
+.card-button:default:selected,
+.card-button:pressed,
+.button.dark-button:selected,
+.button.dark-button:default:selected,
+.button.dark-button:pressed,
+.stripped-radio-button:pressed,
+.stripped-radio-button:selected,
+.stripped-radio-button:default:selected {
+    -fx-text-fill: -k3d-wireframe-0;
+    -fx-background-color:
+            -k3d-wireframe-2,
+            -k3d-wireframe-3,
+            -k3d-wireframe-3;
+}
+
+/* disabled - last, wins over every enabled state */
 .card-button:disabled,
 .button.dark-button:disabled,
 .tab-stripped-radio-button:disabled,
 .stripped-radio-button:disabled {
-    -fx-text-fill: #383838;
+    -fx-text-fill: -k3d-wireframe-3;
     -fx-background-color:
-            #202020,
-            #202020,
-            #202020;
+            -k3d-wireframe-4,
+            -k3d-wireframe-4,
+            -k3d-wireframe-4;
 }
 
 .content-root {
@@ -299,7 +294,7 @@
 }
 
 .sidebar-root {
-    -fx-background-color: #383838;
+    -fx-background-color: -k3d-wireframe-3;
 }
 
 .toggleButtonLarge {
@@ -307,11 +302,11 @@
 }
 
 .cache-settings-root {
-    -fx-background-color: #383838;
+    -fx-background-color: -k3d-wireframe-3;
 }
 
 .cameraviewlist {
-    -fx-border-color: #202020;
+    -fx-border-color: -k3d-wireframe-4;
 }
 
 .progress-bar {
@@ -319,11 +314,11 @@
 }
 
 .progress-bar .track {
-    -fx-background-color: #CECECE; /* color of incomplete portion */
+    -fx-background-color: -k3d-wireframe-1; /* color of incomplete portion */
 }
 
 .desaturated-progress-bar {
-    -fx-accent: #383838; /* color of completed portion */
+    -fx-accent: -k3d-wireframe-3; /* color of completed portion */
 }
 
 .card-separator .line,
@@ -333,11 +328,11 @@
 }
 
 .card-separator .line {
-    -fx-background-color: #383838;
+    -fx-background-color: -k3d-wireframe-3;
 }
 
 .tab-separator .line {
-    -fx-background-color: #CECECE;
+    -fx-background-color: -k3d-wireframe-1;
 }
 
 .black-line .line {
@@ -348,7 +343,7 @@
 
 /* Styling for the scroll bar in left pane */
 .left-bar > scroll-pane {
-    -fx-background-color: #202020;
+    -fx-background-color: -k3d-wireframe-4;
 }
 
 .left-bar .scroll-bar:vertical {
@@ -406,7 +401,7 @@
 }
 
 .selectionBox:selected .mark {
-    -fx-background-color: #CECECE; /* Check mark background when selected */
+    -fx-background-color: -k3d-wireframe-1; /* Check mark background when selected */
     -fx-effect: dropshadow(three-pass-box, black, .75, .75, 0, 0); /* Check mark black outline */
 }
 
@@ -433,7 +428,7 @@
 .table-view,
 .table-view .column-header,
 .table-view .column-header-background .filler {
-    -fx-background-color: #202020;
+    -fx-background-color: -k3d-wireframe-4;
 }
 
 .list-view {
@@ -445,25 +440,25 @@
 }
 
 .list-view:focused {
-    -fx-background-color: #202020;
+    -fx-background-color: -k3d-wireframe-4;
     -fx-background-insets: 0;
 }
 
 .list-view, .list-cell,
 .table-view .cell, .table-row-cell {
-    -fx-text-fill: #CECECE;
+    -fx-text-fill: -k3d-wireframe-1;
 }
 
 .list-cell:even,
 .table-row-cell:even,
 .tree-cell:even {
-    -fx-background-color: #383838;
+    -fx-background-color: -k3d-wireframe-3;
 }
 
 .list-cell:odd,
 .table-row-cell:odd,
 .tree-cell:odd {
-    -fx-background-color: #202020;
+    -fx-background-color: -k3d-wireframe-4;
 }
 
 .list-cell:selected,
@@ -471,13 +466,13 @@
 .table-row-cell:selected,
 .table-row-cell:selected .cell,
 .tree-cell:selected {
-    -fx-background-color: #EEEEEE;
-    -fx-text-fill: #383838;
+    -fx-background-color: -k3d-wireframe-0;
+    -fx-text-fill: -k3d-wireframe-3;
 }
 
 .list-cell:selected {
-    -fx-background-color: #EEEEEE;
-    -fx-text-fill: #383838;
+    -fx-background-color: -k3d-wireframe-0;
+    -fx-text-fill: -k3d-wireframe-3;
 }
 
 .list-cell:selected .label,
@@ -485,13 +480,13 @@
 .table-row-cell:selected .label,
 .table-row-cell:selected .cell .label,
 .tree-cell:selected .label {
-    -fx-text-fill: #383838;
+    -fx-text-fill: -k3d-wireframe-3;
 }
 
 .table-view {
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
-    -fx-table-cell-border-color: #CECECE;
+    -fx-table-cell-border-color: -k3d-wireframe-1;
 }
 
 .table-row-cell:focused {
@@ -512,15 +507,15 @@
 }
 
 .tree-view {
-    -fx-background-color: #383838;
+    -fx-background-color: -k3d-wireframe-3;
 }
 
 .tree-cell:empty {
-    -fx-background-color: #202020;
+    -fx-background-color: -k3d-wireframe-4;
 }
 
 .tree-cell:expanded, .tree-cell:sub-tree-item {
-    -fx-background-color: #383838;
+    -fx-background-color: -k3d-wireframe-3;
 }
 
 .tree-cell:selected {
@@ -549,40 +544,40 @@
 .menu .label,
 .tab,
 .tab .tab-label {
-    -fx-text-fill: #CECECE;
+    -fx-text-fill: -k3d-wireframe-1;
 }
 
 .menu {
-    -fx-background-color: #383838;
+    -fx-background-color: -k3d-wireframe-3;
     -fx-background-radius: 0 0 0 0;
 }
 
 .menu:hover {
-    -fx-background-color: #EEEEEE;
+    -fx-background-color: -k3d-wireframe-0;
 }
 
 .menu:hover .label {
-    -fx-text-fill: #383838;
+    -fx-text-fill: -k3d-wireframe-3;
 }
 
 .menu-bar {
-    -fx-background-color: #383838;
+    -fx-background-color: -k3d-wireframe-3;
 }
 
 .menu-item {
-    -fx-background-color: #202020;
+    -fx-background-color: -k3d-wireframe-4;
 }
 
 .menu-item .label {
-    -fx-text-fill: #CECECE !important;
+    -fx-text-fill: -k3d-wireframe-1 !important;
 }
 
 .menu-item:hover {
-    -fx-background-color: #EEEEEE;
+    -fx-background-color: -k3d-wireframe-0;
 }
 
 .menu-item:hover .label {
-    -fx-text-fill: #383838 !important;
+    -fx-text-fill: -k3d-wireframe-3 !important;
 }
 
 /* JavaFX TabPane tab styling.
@@ -592,7 +587,7 @@
  * (.tab-button, .left-bar) and are styled above; these rules are for the
  * JavaFX TabPane control itself. */
 .tab {
-    -fx-background-color: #202020;
+    -fx-background-color: -k3d-wireframe-4;
     -fx-background-radius: 0;
     -fx-padding: 8 16 8 16; /* top right bottom left */
     -fx-effect: none;
@@ -604,17 +599,17 @@
 }
 
 .tab:selected {
-    -fx-background-color: #383838;
+    -fx-background-color: -k3d-wireframe-3;
 }
 
 .tab:selected .tab-label {
-    -fx-text-fill: #EEEEEE;
+    -fx-text-fill: -k3d-wireframe-0;
 }
 
 .tab:hover {
-    -fx-background-color: #EEEEEE;
+    -fx-background-color: -k3d-wireframe-0;
 }
 
 .tab:hover .tab-label {
-    -fx-text-fill: #383838;
+    -fx-text-fill: -k3d-wireframe-3;
 }
