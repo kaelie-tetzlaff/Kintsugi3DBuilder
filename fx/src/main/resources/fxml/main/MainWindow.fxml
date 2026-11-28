@@ -44,7 +44,7 @@
                     </MenuItem>
                     <MenuItem fx:id="saveAsMenuItem" mnemonicParsing="false" onAction="#saveProjectAs" text="Save As">
                         <accelerator>
-                            <KeyCodeCombination alt="UP" code="F12" control="ANY" meta="UP" shift="UP" shortcut="UP" />
+                            <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
                         </accelerator>
                     </MenuItem>
                     <MenuItem fx:id="closeProjectMenuItem" mnemonicParsing="false" onAction="#closeProject" text="Close Project">
