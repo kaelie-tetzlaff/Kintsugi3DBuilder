@@ -25,8 +25,7 @@
  * rules cannot reliably beat on specificity alone.
  */
 
-/* Named palette constants, mirroring the .kintsugi-3D-Wireframe-* classes
- * defined in fxml/kintsugi.css. Defined here on .root so they are available
+/* Named palette constants. Defined here on .root so they are available
  * to this stylesheet wherever it loads (user-agent or author layer). */
 .root {
     -kintsugi3d-palette-0: #EEEEEE; /* near-white */
