@@ -27,10 +27,8 @@ import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.ButtonBase;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -173,8 +171,14 @@ public class CardController
             VBox.setMargin(caption, new Insets(0, 0, 8, 4));
         });
 
-        ActionButtonFactory.createActionButtons(refreshedDataCard.getActions(), buttonBox,
-            "card-button", "card-separator");
+        ActionButtonFactory.createActionButtons(refreshedDataCard.getActions(), buttonBox, "card-button", "card-separator");
+
+        // Pressing a button shouldn't give the "pressed" appearance to the containing card.
+        for (Node button : buttonBox.getChildren())
+        {
+            button.pressedProperty().addListener((observable, wasPressed, isPressed) ->
+                dataCardPane.pseudoClassStateChanged(CHILD_PRESSED_PSEUDOCLASS, isPressed));
+        }
 
         currentPreviewImageFile = new File(refreshedDataCard.getThumbnailPath());
 
@@ -190,47 +194,6 @@ public class CardController
 
         createBindings(cardIcon, selectionBox); //easy method to bind Checkbox to ImageView
         createBindings(cardIcon, hoverRectangle);//easy method to bind Rectangle to ImageView
-
-        watchChildPressState();
-    }
-
-    /**
-     * Keeps the card's :child-pressed pseudo-class in sync with the pressed state of any
-     * ButtonBase descendant (current or added later), so that pressing a card button does
-     * not make the whole card appear pressed.
-     */
-    private void watchChildPressState()
-    {
-        addPressListeners(dataCardPane);
-
-        dataCardPane.getChildrenUnmodifiable().addListener((ListChangeListener<Node>) change ->
-        {
-            while (change.next())
-            {
-                change.getAddedSubList().forEach(CardController.this::addPressListeners);
-            }
-        });
-    }
-
-    private void addPressListeners(@NotNull Node node)
-    {
-        if (node instanceof ButtonBase button)
-        {
-            button.pressedProperty().addListener((observable, wasPressed, isPressed) ->
-                dataCardPane.pseudoClassStateChanged(CHILD_PRESSED_PSEUDOCLASS, isPressed));
-        }
-        else if (node instanceof javafx.scene.Parent parent)
-        {
-            ObservableList<Node> children = parent.getChildrenUnmodifiable();
-            children.forEach(this::addPressListeners);
-            children.addListener((ListChangeListener<Node>) change ->
-            {
-                while (change.next())
-                {
-                    change.getAddedSubList().forEach(CardController.this::addPressListeners);
-                }
-            });
-        }
     }
 
     public final void setCardVisibility(boolean visibility)
