@@ -5,7 +5,11 @@
     <envs>
       <env name="KINTSUGI3D_LOG_LEVEL" value="debug" />
     </envs>
-    <option name="VM_PARAMETERS" value="-XstartOnFirstThread -Djava.awt.headless=true" />
+      <option name="ALTERNATIVE_JRE_PATH" value="temurin-11" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <!-- JavaFX jars are loaded from the JPMS module path instead of the classpath, which avoids the
+           'Unsupported JavaFX configuration: classes were loaded from unnamed module' warning. -->
+      <option name="VM_PARAMETERS" value="-XstartOnFirstThread -Djava.awt.headless=true --module-path $PROJECT_DIR$/app/target/lib/javafx --add-modules javafx.base,javafx.graphics,javafx.controls,javafx.swing,javafx.fxml" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="kintsugi3d.app.test.*" />
