@@ -31,8 +31,7 @@
  * BEFORE this file).
  *
  * Palette constants (-kintsugi3d-palette-N) are defined on .root in
- * kintsugi-modena-overrides.css; the looked-up colors mirror the
- * .kintsugi-3D-Wireframe-* classes below.
+ * kintsugi-modena-overrides.css.
  *
  * NOTE: some rules below use generic JavaFX selectors, but are kept here
  * on purpose: they live in this scene/author stylesheet so they always

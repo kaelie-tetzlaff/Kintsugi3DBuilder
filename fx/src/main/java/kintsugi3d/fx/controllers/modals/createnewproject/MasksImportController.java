@@ -15,9 +15,7 @@
 
 package kintsugi3d.fx.controllers.modals.createnewproject;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
@@ -29,6 +27,7 @@ import kintsugi3d.fx.controllers.paged.DataReceiverPageControllerBase;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.Objects;
 
 public class MasksImportController
     extends DataReceiverPageControllerBase<ValidatedInputSource>
@@ -62,7 +61,13 @@ public class MasksImportController
 
         getCanAdvanceObservable().bind(toggleGroup.selectedToggleProperty().isNotNull());
 
-        customMasksDirButton.setOnAction(this::chooseMasksDir);
+        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) ->
+        {
+            if (Objects.equals(newValue, useProjectMasksButton))
+            {
+                chooseMasksDir((Stage) rootPane.getScene().getWindow());
+            }
+        });
 
         setCanConfirm(true);
     }
@@ -97,7 +102,7 @@ public class MasksImportController
     }
 
     @FXML
-    private void chooseMasksDir(@NotNull ActionEvent e)
+    private void chooseMasksDir(@NotNull Stage stage)
     {
         // Don't show directory chooser when deselecting
         if (!customMasksDirButton.isSelected())
@@ -105,7 +110,6 @@ public class MasksImportController
             return;
         }
 
-        Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
         File file = masksDirectoryChooser.showDialog(stage.getOwner());
         if (file != null)
         {

@@ -25,13 +25,24 @@
  * rules cannot reliably beat on specificity alone.
  */
 
+/* Named palette constants. Defined here on .root so they are available
+ * to this stylesheet wherever it loads (user-agent or author layer). */
+.root {
+    -kintsugi3d-palette-0: #EEEEEE; /* near-white */
+    -kintsugi3d-palette-1: #CECECE; /* off-white */
+    -kintsugi3d-palette-2: #ADADAD; /* light gray */
+    -kintsugi3d-palette-3: #383838; /* med gray */
+    -kintsugi3d-palette-4: #202020; /* dark gray */
+    -kintsugi3d-palette-5: #030303; /* off-black */
+}
+
 .context-menu,
 .tab-pane .tab-header-area .tab-header-background,
 .tool-bar,
 .dialog-pane,
 .dialog-pane:header,
 .dialog-pane:header .header-panel {
-    -fx-background-color: #202020;
+    -fx-background-color: -kintsugi3d-palette-4;
 }
 
 .dialog-pane {
@@ -67,9 +78,9 @@
 
 .button {
     -fx-background-insets:
-            1,
-            3,
-            5;
+            2,
+            4,
+            6;
 }
 
 .button,
@@ -79,7 +90,7 @@
 .color-picker .color-picker-label,
 .split-menu-button .label,
 .titled-pane > .title {
-    -fx-text-fill: #202020;
+    -fx-text-fill: -kintsugi3d-palette-4;
 }
 
 .button:disabled,
@@ -88,7 +99,7 @@
 .toggle-button:default:disabled,
 .split-menu-button:disabled .label:disabled,
 .titled-pane:disabled > .title {
-    -fx-text-fill: #383838;
+    -fx-text-fill: -kintsugi3d-palette-3;
 }
 
 .button, .toggle-button,
@@ -101,19 +112,27 @@
 .thumb,
 .titled-pane > .title,
 .split-menu-button > * {
-    -fx-background-color: #CECECE;
+    -fx-background-color: -kintsugi3d-palette-1;
     -fx-focus-color: transparent;        /* removes blue focus line */
     -fx-faint-focus-color: transparent;  /* removes faint glow when not fully focused */
 }
 
+/* Focused */
+.button:focused,
+.toggle-button:focused,
+.button:default:focused,
+.toggle-button:default:focused {
+    -fx-background-color:
+            -kintsugi3d-palette-2,
+            -kintsugi3d-palette-1,
+            -kintsugi3d-palette-1;
+}
+
+/* Hover */
 .button:hover,
 .toggle-button:hover,
 .button:default:hover,
 .toggle-button:default:hover,
-.button:hover:focused,
-.toggle-button:hover:focused,
-.button:default:hover:focused,
-.toggle-button:default:hover:focused,
 .scroll-bar .increment-button:hover,
 .scroll-bar .decrement-button:hover,
 .check-box:hover .box,
@@ -122,14 +141,14 @@
 .thumb:hover,
 .titled-pane > .title:hover,
 .split-menu-button:hover > * {
-    -fx-background-color: #EEEEEE;
+    -fx-background-color:
+            -kintsugi3d-palette-0,
+            -kintsugi3d-palette-0,
+            -kintsugi3d-palette-0;
+    -fx-text-fill: -kintsugi3d-palette-3;
 }
 
-.button:hover,
-.button:default:hover {
-    -fx-text-fill: #383838;
-}
-
+/* Pressed */
 .button:pressed,
 .toggle-button:pressed,
 .button:default:pressed,
@@ -141,52 +160,31 @@
 .color-picker:pressed,
 .thumb:pressed,
 .titled-pane > .title:pressed,
-.split-menu-button:pressed > *,
-.button:pressed:hover,
-.toggle-button:pressed:hover,
-.button:default:pressed:hover,
-.toggle-button:default:pressed:hover,
-.scroll-bar .increment-button:pressed:hover,
-.scroll-bar .decrement-button:pressed:hover,
-.check-box:pressed:hover .box,
-.combo-box:pressed:hover,
-.color-picker:pressed:hover,
-.thumb:pressed:hover,
-.titled-pane > .title:pressed:hover,
-.split-menu-button:pressed:hover > * {
+.split-menu-button:pressed > * {
     -fx-background-color:
-            #ADADAD,
-            #EEEEEE,
-            #EEEEEE;
+            -kintsugi3d-palette-2,
+            -kintsugi3d-palette-0,
+            -kintsugi3d-palette-0;
 }
 
+/* Selected */
 .button:selected,
 .toggle-button:selected,
+.button:default:selected,
+.toggle-button:default:selected,
 .check-box:selected .box,
 .titled-pane > .title:selected {
     -fx-background-color:
-            #383838,
-            #CECECE,
-            #CECECE;
+            -kintsugi3d-palette-3,
+            -kintsugi3d-palette-1,
+            -kintsugi3d-palette-1;
     -fx-font-weight: bold;
-}
-
-.button:default:selected,
-.toggle-button:default:selected,
-.button:focused,
-.toggle-button:focused,
-.button:default:focused,
-.toggle-button:default:focused {
-    -fx-background-color:
-            #ADADAD,
-            #CECECE,
-            #CECECE;
 }
 
 .check-box,
 .label,
 .text-field {
-    -fx-text-fill: #CECECE;
+    -fx-text-fill: -kintsugi3d-palette-1;
 }
 
 .accordion .content {
@@ -203,6 +201,10 @@
     -fx-background-color: transparent;
 }
 
+.button, .toggle-button {
+    -fx-padding: 8 16 8 16; /* top right bottom left */
+}
+
 .button, .toggle-button,
 .button:selected, .toggle-button:selected,
 .button:hover, .toggle-button:hover,
@@ -214,13 +216,12 @@
 .button:default:selected, .toggle-button:default:selected,
 .button:disabled, .toggle-button:disabled {
     -fx-background-radius: 0;
-    -fx-padding: 8 16 8 16; /* top right bottom left */
 }
 
 .scroll-bar .increment-button,
 .scroll-bar .decrement-button {
     -fx-background-insets: 0;
-    -fx-border-color: #CECECE;
+    -fx-border-color: -kintsugi3d-palette-1;
     -fx-background-radius: 0;
     -fx-border-radius: 0;
     -fx-focus-color: transparent;
@@ -229,18 +230,18 @@
 
 .scroll-bar .increment-button:hover,
 .scroll-bar .decrement-button:hover {
-    -fx-border-color: #EEEEEE;
+    -fx-border-color: -kintsugi3d-palette-0;
 }
 
 .scroll-bar .increment-button:pressed,
 .scroll-bar .decrement-button:pressed {
-    -fx-border-color: #ADADAD;
+    -fx-border-color: -kintsugi3d-palette-2;
 }
 
 .scroll-bar .increment-arrow,
 .scroll-bar .decrement-arrow {
-    -fx-background-color: #202020;
-    -fx-border-color: #202020;
+    -fx-background-color: -kintsugi3d-palette-4;
+    -fx-border-color: -kintsugi3d-palette-4;
 }
 
 .check-box .box {
@@ -257,19 +258,19 @@
 }
 
 .choice-box {
-    -fx-background-color: #202020;
+    -fx-background-color: -kintsugi3d-palette-4;
 }
 
 .track {
-    -fx-background-color: #383838;
+    -fx-background-color: -kintsugi3d-palette-3;
 }
 
 .axis {
-    -fx-tick-label-fill: #CECECE;
+    -fx-tick-label-fill: -kintsugi3d-palette-1;
 }
 
 .text-field {
-    -fx-background-color: #383838;
+    -fx-background-color: -kintsugi3d-palette-3;
     -fx-background-radius: 0;
 }
 
@@ -279,7 +280,7 @@
 }
 
 .titled-pane > .title > .arrow-button > .arrow {
-    -fx-background-color: #202020;
+    -fx-background-color: -kintsugi3d-palette-4;
     -fx-background-insets: 0;
     -fx-effect: none;
 }
@@ -380,7 +381,7 @@
 }
 
 .corner {
-    -fx-background-color: #202020;
+    -fx-background-color: -kintsugi3d-palette-4;
 }
 
 .scroll-pane, .scroll-pane > .viewport {
@@ -390,7 +391,7 @@
 }
 
 .separator:vertical .line {
-    -fx-border-color: #CECECE;
+    -fx-border-color: -kintsugi3d-palette-1;
     -fx-border-width: 0 1 0 0;
 }
 
@@ -411,11 +412,11 @@
 
 .split-menu-button .arrow-button {
     -fx-border-width: 0 0 0 1;
-    -fx-border-color: #202020;
+    -fx-border-color: -kintsugi3d-palette-4;
 }
 
 .split-menu-button .arrow {
-    -fx-background-color: #202020;
+    -fx-background-color: -kintsugi3d-palette-4;
 }
 
 .slider .thumb .thumb-label .label {

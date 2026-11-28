@@ -17,7 +17,6 @@ package kintsugi3d.fx.controllers.modals.workflow.tonecalibration;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
@@ -75,17 +74,23 @@ public class SelectToneCalibrationImageController extends NonDataPageControllerB
 
         buttonGroup.selectToggle(primaryViewImageButton);
 
-        selectImageFileButton.setOnAction(this::selectImageFileAction);
-        previousImageButton.setOnAction(e ->
+        buttonGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) ->
         {
-            if (hasPreviousColorCheckerImage())
+            if (Objects.equals(newValue, selectImageFileButton))
             {
-                selectedImageFile.set(getState().getProjectModel().getColorCheckerFile());
-                refreshImageLabel();
+                selectImageFileAction();
             }
-            else
+            else if (Objects.equals(newValue, previousImageButton))
             {
-                selectedImageFile.set(null);
+                if (hasPreviousColorCheckerImage())
+                {
+                    selectedImageFile.set(getState().getProjectModel().getColorCheckerFile());
+                    refreshImageLabel();
+                }
+                else
+                {
+                    selectedImageFile.set(null);
+                }
             }
         });
 
@@ -196,7 +201,7 @@ public class SelectToneCalibrationImageController extends NonDataPageControllerB
         return true;
     }
 
-    private void selectImageFileAction(ActionEvent ignoredEvent)
+    private void selectImageFileAction()
     {
         // Don't show file chooser when deselecting
         if (!selectImageFileButton.isSelected())
