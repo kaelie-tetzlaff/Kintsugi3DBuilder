@@ -534,7 +534,7 @@ jobs:
               # OpenGL stack when there is no GPU (these cannot be suppressed at
               # the application level).
               if [ "$CHECK_STDERR" = true ]; then
-                FILTERED_ERR="$(grep -v 'CGLChoosePixelFormat:' "$ERRLOG" || true)"
+                FILTERED_ERR="$(grep -v 'CGLChoosePixelFormat:|GL pipe is running in software mode' "$ERRLOG" || true)"
                 if [ -n "$FILTERED_ERR" ]; then
                   echo "$LABEL: Application wrote to stderr; stderr must be empty."
                   cat "$ERRLOG"
