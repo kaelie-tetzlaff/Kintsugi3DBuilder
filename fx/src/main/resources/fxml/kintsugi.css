@@ -144,23 +144,23 @@
             -kintsugi3d-palette-0;
 }
 
-/* Pressing a card button inside the card must not make the whole card look
- * pressed: the controller toggles :child-pressed while any ButtonBase child
- * is held down, and this rule gives the card its resting look in that case
- * (JavaFX CSS has no :has()-style relational selector, so the state is set
- * from CardController). */
-.card-background:child-pressed {
-    -fx-background-color:
-            -kintsugi3d-palette-1,
-            -kintsugi3d-palette-1,
-            -kintsugi3d-palette-1;
-}
-
-.card-background:pressed:not(:child-pressed) {
+.card-background:pressed {
     -fx-background-color:
             -kintsugi3d-palette-3,
             -kintsugi3d-palette-1,
             -kintsugi3d-palette-1;
+}
+
+/* Pressing a card button inside the card must not make the whole card look
+ * pressed: the controller toggles :child-pressed while any ButtonBase child
+ * is held down, and this rule retains the card's normal hover look in that case
+ * (JavaFX CSS has no :has()-style relational selector, so the state is set
+ * from CardController). */
+.card-background:child-pressed {
+    -fx-background-color:
+            -kintsugi3d-palette-0,
+            -kintsugi3d-palette-0,
+            -kintsugi3d-palette-0;
 }
 
 .card-button, .tab-button {
