@@ -277,9 +277,9 @@ jobs:
             ERRLOG="$(mktemp)"
           
             if [ -n "$PROJECT" ]; then
-              "$EXE" "$PROJECT" > >(tee "$LOG") 2> "$ERRLOG" &
+              "$EXE" "$PROJECT" > >(tee "$LOG") 2> >(tee "$ERRLOG" >&2) &
             else
-              "$EXE" > >(tee "$LOG") 2> "$ERRLOG" &
+              "$EXE" > >(tee "$LOG") 2> >(tee "$ERRLOG" >&2) &
             fi
           
             PID=$!
@@ -506,13 +506,13 @@ jobs:
             fi
 
             if [ "$EXE" != "-" ]; then
-              # Test 1: Run the executable directly, piping stdout to a log file and stderr to a separate log.
+              # Test 1: Run the executable directly, piping stdout and stderr to log files.
               LOG="$(mktemp)"
               ERRLOG="$(mktemp)"
               if [ -n "$PROJECT" ]; then
-                "$EXE" "$PROJECT" > >(tee "$LOG") 2> "$ERRLOG" &
+                "$EXE" "$PROJECT" > >(tee "$LOG") 2> >(tee "$ERRLOG" >&2) &
               else
-                "$EXE" > >(tee "$LOG") 2> "$ERRLOG" &
+                "$EXE" > >(tee "$LOG") 2> >(tee "$ERRLOG" >&2) &
               fi
               PID=$!
               sleep $TIMER
@@ -531,10 +531,12 @@ jobs:
             
               # Require stderr to be completely empty, ignoring known-benign system
               # noise such as CGLChoosePixelFormat messages emitted by macOS's
-              # OpenGL stack when there is no GPU (these cannot be suppressed at
-              # the application level).
+              # OpenGL stack when there is no GPU, the AppKit warning about
+              # NSEventModifierFlagFunction used by the Save As accelerator, and
+              # JavaFX's software-rendering notice. None of these can be
+              # suppressed at the application level.
               if [ "$CHECK_STDERR" = true ]; then
-                FILTERED_ERR="$(grep -v 'CGLChoosePixelFormat:|GL pipe is running in software mode' "$ERRLOG" || true)"
+                FILTERED_ERR="$(grep -Ev 'CGLChoosePixelFormat:|NSEventModifierFlagFunction|GL pipe is running in software mode' "$ERRLOG" || true)"
                 if [ -n "$FILTERED_ERR" ]; then
                   echo "$LABEL: Application wrote to stderr; stderr must be empty."
                   cat "$ERRLOG"
